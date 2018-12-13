@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
+
+
+<meta name="date" content="2018-12-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="pvalues.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>3</b> The Big Picture</a><ul>
+<li class="chapter" data-level="3.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>3.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>3.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>3.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="3.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>3.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="3.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>3.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>4.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>4.1.1</b> A simple test to define the experimental unit</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sampling.html"><a href="sampling.html#blocking"><i class="fa fa-check"></i><b>4.1.2</b> Blocking</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>4.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>4.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>4.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>4.3</b> Random process</a></li>
+<li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>4.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>4.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="4.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>4.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="4.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>4.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="4.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>4.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>4.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>5</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="5.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>5.1</b> The decision process</a></li>
+<li class="chapter" data-level="5.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>5.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="5.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>5.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>6</b> Error</a><ul>
+<li class="chapter" data-level="6.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>6.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>6.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="6.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>6.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>6.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="6.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>6.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>7</b> P Values</a><ul>
+<li class="chapter" data-level="7.1" data-path="pvalues.html"><a href="pvalues.html#how-p-values-are-calculated"><i class="fa fa-check"></i><b>7.1</b> How p-values are calculated</a></li>
+<li class="chapter" data-level="7.2" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>7.2</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="7.3" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>7.3</b> Interpretation</a></li>
+<li class="chapter" data-level="7.4" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>7.4</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>8</b> Data Classification</a><ul>
+<li class="chapter" data-level="8.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>8.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>8.1.1</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>8.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>8.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="8.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>8.2.2</b> Discrete categorical and ordinal variables</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="data" class="section level1">
+<h1><span class="header-section-number">Chapter 8</span> Data Classification</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(datapasta)
+<span class="kw">library</span>(tidyverse)</code></pre></div>
+<p>The starting point in any experimental design is to understand the types of data that are involved. Ask yourself whether the variables are discrete or continuous. Then ask if they measured, ordered or sorted?</p>
+<p>If you don’t understand those two questions, just read on.</p>
+<p>Because those answers will point you in the proper analytical direction.</p>
+<p>This is one of the most important things to learn in this course. If you don’t get the concept that not all data types are equivalent, you won’t get statistics. You’ll be flying by the seat of your pants when it comes time to designing and analyzing experiments.</p>
+<p>In this section data classification will be discussed. This material will sound simplistic or even obvious to you, but I cannot emphasize enough the importance of data classification in mastering a statistical framework. People who overlook these basic concepts of data classification do so at their peril.</p>
+<p>If for no other reason, understanding how data are classified is crucial in selecting the most appropriate statistical analysis. If you were to approach me to ask, “here’s my stuff, what statistical test should I do?” I would ask, “tell me more about your data.” And we would probably spend a lot of time with you answering my questions until I was sure I understood your data classification.</p>
+<p>Therefore, a major learning objective for you is, given a data set, to know which variables are dependent and which are independent, and whether the variables involved are continuous (measured) or discrete (ordered or sorted).</p>
+<div id="dependent-and-independent-variables" class="section level2">
+<h2><span class="header-section-number">8.1</span> Dependent and independent variables</h2>
+<p>For the experimental researcher there are two basic types of variables.</p>
+<p>An independent variable is the predictor or explanatory variable imposed by the researcher upon a system. Independent variables have values, the levels of which are determined by the researcher. For example, in a blood glucose drug study, the independent variable “Treatment” would come in two levels, “Placebo” and “Drug”. In R, we’d call treatment a factor variable with two levels.</p>
+<p>Conventionally, the independent variable is plotted on the abcissa, or x-axis, scale of some graph.</p>
+<p>A dependent variable is the response or outcome variable collected in an experiment. The values that dependent variables take on are determined by, or dependent upon, the level of the independent variables. For example, the dependent variable in the blood glucose drug study would be a measurement called “blood_glucose”.</p>
+<p>Most of the time the dependent variable is plotted on the ordinate, or y-axis, scale.</p>
+<p>In statistical notation the dependent variable is usually depicted by the uppercase symbol <span class="math inline">\(Y\)</span>. The values that variable can assume are symbolically represented as lowercase symbol <span class="math inline">\(y_i\)</span>, where <span class="math inline">\(i\)</span> is the sample size, ranging from 1 to <span class="math inline">\(n\)</span> independent replicates.</p>
+<p>Similarly, the indepedent variable is usually depicted by uppercase <span class="math inline">\(X\)</span> (or some other letter) and its values are lowercase <span class="math inline">\(x_i\)</span>.</p>
+<p>I’m going to use that convention but with a twist. Independent variables denoted using <span class="math inline">\(X\)</span> will represent continuous scaled variables, whereas independent variables denoted using <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span>, or <span class="math inline">\(C\)</span>, will represent discrete, factoral variables. These will take on values denoted by lowercases, eg, <span class="math inline">\(a_i\)</span>, <span class="math inline">\(b_i\)</span>, <span class="math inline">\(c_i\)</span>) .</p>
+<p>To illustrate dependent and independent variables think about a linear relationship between two continuous variables, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> . This relationship can be expressed using the model <span class="math inline">\(Y=\beta_0 + \beta_1 X\)</span>. <span class="math inline">\(X\)</span> would be a variable the researcher manipulates, such as time or the concentration of a substance. <span class="math inline">\(Y\)</span> would be a variable that the researcher measures, such as absorption or binding or fluorescence. The parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are constants that modify the relationship between the two variables, which I’m sure you recognize as representing the y-intercept and slope, respectively, of the regression line between the two variables.</p>
+<p>Thus, <span class="math inline">\(Y\)</span> takes on different values as the researcher manipulates the levels of <span class="math inline">\(X\)</span>. Which explains why <span class="math inline">\(Y\)</span> depends on <span class="math inline">\(X\)</span>.</p>
+<p>For example, here’s how the data for a protein standard curve experiment would be depicted. In the R script below the variable <span class="math inline">\(X\)</span> represents known concentrations of an immunoglobulin protein standard in <span class="math inline">\(\mu g/ml\)</span>. The researcher builds this dilution series from a known stock, thus it is the independent variable. The variable <span class="math inline">\(Y\)</span> represents <span class="math inline">\(A_{595}\)</span>, light absorption in a spectrophotometer for each of the values of the standard protein. The <span class="math inline">\(A_{595}\)</span> values depend upon the immmunoglobulin concentration. Estimates for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are derived from running a linear regression on the data with the <code>lm(Y~X)</code> script. Thus, for every one unit increment in the value of <span class="math inline">\(X\)</span>, there is a 0.02497 increment in the value of <span class="math inline">\(Y\)</span>. Again, <span class="math inline">\(Y\)</span> depends upon <span class="math inline">\(X\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Protein assay data, X units ug/ml, Y units A595.</span>
+X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.25</span>, <span class="fl">2.5</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)
+Y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.000</span>, <span class="fl">0.029</span>, <span class="fl">0.060</span>, <span class="fl">0.129</span>, <span class="fl">0.250</span>, <span class="fl">0.371</span>, <span class="fl">0.491</span>, <span class="fl">0.630</span>)
+<span class="co">#derive the slope and intercept by linear regression</span>
+<span class="kw">lm</span>(Y<span class="op">~</span>X)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ X)
+## 
+## Coefficients:
+## (Intercept)            X  
+##  -0.0008033    0.0249705</code></pre>
+<div id="when-there-is-no-independent-variable" class="section level3">
+<h3><span class="header-section-number">8.1.1</span> When there is no independent variable</h3>
+<p>This is a course for experimental biologists. In other types of research, particularly in the public health, behavioral and social science fields, studies are often not strictly experimental. Researchers in these fields generally work with data sets lacking true, experimentally-manipulated independent variables as defined above. Yet these researchers are still very interested learning whether certain phenomena cause other phenomena.</p>
+<p>The problem of drawing causal inference from studies in which all of the variables are observed is beyond the scope of this course. Pearl offers an excellent primer on considerations that must be applied to extract causality from observational data <a href="http://ftp.cs.ucla.edu/pub/stat_ser/r350.pdf">here</a>.</p>
+</div>
+</div>
+<div id="discrete-or-continuous-variables" class="section level2">
+<h2><span class="header-section-number">8.2</span> Discrete or continuous variables</h2>
+<p>At their most fundamental level, the dependent and independent variables of experiments can each be subclassified further into two categories. They are either discrete or continuous.</p>
+<p>Discrete variables can only take on discrete values, while continuous variables can take on values over a continuous range. If that’s not clear just yet, it should become more clear by reading below.</p>
+<p>Variables can be subclassified further as either <strong>measured</strong>, <strong>ordered</strong>, or <strong>sorted</strong>. This subdivision fulfills a few purposes.</p>
+<p>First, it’s alliterative so hopefully easier to remember. It reminds me of Waffle House hashbrowns, which can be either scattered, smothered or covered, and that is just something you’ll never forget once you’ve visited a Waffle House.</p>
+<p>Second, it covers all types of data and statistical testing, and thus forms the basis for drawing a pragmatic statistical modeling heuristic.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/testing_heuristic.jpg&quot;</span>)</code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-25"></span>
+<img src="images/testing_heuristic.jpg" alt="The type of data dictates how it should be modeled."  />
+<p class="caption">
+Figure 8.1: The type of data dictates how it should be modeled.
+</p>
+</div>
+<p>Third, the “measured, ordered, sorted” scheme classifies variables on the basis of their information density, where measured &gt;&gt; ordered &gt;&gt; sorted.</p>
+<p>Different authors/softwares give these three types of variables different names, which creates some confusion. In SPSS, for example, when setting up variables you can choose to classify it as scalar, ordinal, or nominal, which correspond to measured, ordered and sorted. Another fairly common descriptive set for the three types is interval, ordinal, and categorical. These correspond to measured, ordered, and sorted, too.</p>
+<p>Though they are named differently, for the most part everybody seems to agree that all variables can be reduced to 3 subtypes, even if they can’t agree on what to name them.</p>
+<div id="measured-variables" class="section level3">
+<h3><span class="header-section-number">8.2.1</span> Measured variables</h3>
+<p>Because everything is measured in some sense of the word “measured”&quot; is probably not an ideal choice to describe what is meant when refering to a continuous variable. My rationale for the choice is that it almost always requires some kind of measuring instrument to grab this type of data.</p>
+<p>For the present purposes let’s considered the terms measured variables and continuous variables as synonymous. Measured variables are fairly easy to spot. Any derivative of one of the <a href="https://www.nist.gov/pml/weights-and-measures/metric-si/si-units">seven base SI units</a> will be a measured variable.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/si_units.jpg&quot;</span>)</code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-26"></span>
+<img src="images/si_units.jpg" alt="The seven SI units"  />
+<p class="caption">
+Figure 8.2: The seven SI units
+</p>
+</div>
+<p>Take mass as an example. The masses of physical objects can be measured on a continuous scale of sizes ranging from super-galaxian to subatomic. Variables that are in units of mass take on a smooth continuum of values over this entire range because mass scales are infinitesimily divisible.</p>
+<p>Here’s a thought experiment for what infinitesimily divisible means. Take an object that weighs a kilogram, cut it in half and measure what’s left. You have two objects that are each one half a kilogram. Now repeat that process again and again. After each split something always remains whose mass can be measured. Even though it gets smaller and smaller. Even when you arrive at the point where only a single atom remains it can be smashed into yet even smaller pieces in a supercollider, yielding trails of subatomic particles….most of which have observable masses.</p>
+<p>But here’s what’s important about continuous variables: That continuity between gradations means that continuous variables can carry more information than other types of variables. That’s what I meant by information density, in the comment above.</p>
+<p>On a scale of micrograms, an object weighing one kilogram would have one billion subdivisions. If you have an instrument that can accurately weigh the mass of kilogram-sized objects to the microgram level, and each microgam would be informative, you would say that one kilogram is comprised of a billion bits of information.</p>
+<p>All of that possible information explains why the distinction between continuous and discrete variables is so important. You’ll see that discrete variables lack this kind of information density between their units. As you read on below as discrete variables are discussed, think about how continuous variables carry more information than discrete variables.</p>
+<p>More pragmatically, this difference is the basis for why discrete and continuous data behave so differently. And because of this inherent basis for why they behave differently, statisticians have devised statistical models that are more appropriate for one kind of data vs some other.</p>
+</div>
+<div id="discrete-categorical-and-ordinal-variables" class="section level3">
+<h3><span class="header-section-number">8.2.2</span> Discrete categorical and ordinal variables</h3>
+<p>Discrete variables are discontinuous. The units of discrete variables are indivisible. Unlike continuous variables, discrete variables offer no information between their unit scale boundaries.</p>
+<p>There are two types of discrete variables. These are called <strong>ordinal</strong> and <strong>categorical</strong>. I like to call these ordered and sorted, respectively, again for alliterative purposes.</p>
+<div id="sorted-data" class="section level4">
+<h4><span class="header-section-number">8.2.2.1</span> Sorted data</h4>
+<p>Categorical variables are a bit easier to understand so let’s start with those. These variables represent objects that are counted. Because they have certain features they are sorted into categories or, as I like to say, buckets.</p>
+<p>For example, a biostats class might be comprised of 50 students, 15 of whom are men and the rest are women. The name of the variable is <code>sex</code>. The values that the “sex” variable can take on is either <code>male</code> or <code>female</code>. The variable <code>sex</code> is a factoral variable at two levels.</p>
+<p>If we count all of the men and woman in a class we arrive at another variable called <code>count</code> which represents the discrete counts of people who are sorted into either of the two sex categories.</p>
+<p>The variable <code>count</code> is an integer varible. It cannot take on any values other than integer values. There cannot be a case that has less than a whole student. A partial biostats student would be absurd!</p>
+<p>So our data set has two variables. One is <code>sex</code>, a factoral variable that has two levels. The other is <code>count</code>, an integer variable that has $$50 levels.</p>
+<p>Of course, the categorization of sex is sometimes ambiguous. If it is important to accomodate more, we would add additional categories to account for all possible outcomes. For example, the <code>sex</code> variable could be set to take on values of <code>man</code>, <code>woman</code>, and <code>other</code>.</p>
+<p>Take a moment to also think about the values of that <code>sex</code> variable. This is to emphasize that <code>man</code>, <code>woman</code> and <code>other</code> are not numeric values. Variables can have non-numeric values. R reads those levels as character values and “coerces” to classify <code>sex</code> as a factoral variable with three levels, <code>man</code>, <code>woman</code> and <code>other</code>.</p>
+<p>Let’s use R to create a summary table for the composition by sex of the biostats class. Inspection of the code shows the table has two variables, <code>sex</code> as described, and <code>count</code>. The function <code>str(ibs538)</code> reveals that the former variable is a “Factor w/ 3 levels”&quot; and the later is a integer variable. We used the <code>is.integer</code> function in the code to ensure that <code>count</code> would be an integer variable. Had we not, R wanted to coerce it as a numeric variable.</p>
+<p>Finally, notice how the variable <code>count</code> is only comprised of discrete integer values. These discrete counts are why sorted data is classified as discrete.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sex &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;man&quot;</span>, <span class="st">&quot;woman&quot;</span>, <span class="st">&quot;other&quot;</span>)
+count &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">35</span>, <span class="dv">0</span>))
+ibs538 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(sex, count); ibs538</code></pre></div>
+<pre><code>##     sex count
+## 1   man    15
+## 2 woman    35
+## 3 other     0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(ibs538)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    3 obs. of  2 variables:
+##  $ sex  : Factor w/ 3 levels &quot;man&quot;,&quot;other&quot;,..: 1 3 2
+##  $ count: int  15 35 0</code></pre>
+<p>Obviously, there’s nothing experimental about counting the sex of biostats students. However, many biomedical experiments generate discrete categorical data, too. Imagine the following:</p>
+<ul>
+<li>Neurons are poked with an electrode. Counts are recorded of the number of times they depolarize over a certain time period, in response to an depolarizing agent and its control.</li>
+<li>Cells are stained for expression of a marker protein. The number of cells in which the protein is detected are counted. Counts of a knockdown condition are compared to a control.</li>
+<li>By some criteria, cells are judged to be either alive or dead and counted as such. The number of alive cells are counted after manipulating expression of a tumor suppressor gene, and compared to a control.</li>
+<li>By some criteria, mice are judged to either show a disease phenotype or not, and counted as such. Disease incidence is counted in response to levels of a therapeutic agent, or a background genotype, or in response to some stressor.</li>
+</ul>
+<p>There are an infinite number of examples for experiments that can be performed in which a dependent variable is categorized and each of the replicates are sorted into one or some other level of that category. In the end, sometimes even after some fairly sophisticated instrumentation or biochemical analysis, all the researcher does is count objects that have a characteristic or some other.</p>
+<p>Unlike continuous variables, discrete variables don’t possess any information between their units. In each of the cases above the replicate either possesses a level of the variable or it does not. It belongs in one bucket or some other.</p>
+</div>
+<div id="ordered-data" class="section level4">
+<h4><span class="header-section-number">8.2.2.2</span> Ordered data</h4>
+<p>Ordered data is, in one sense, a hybrid cross of sorted and measured data.</p>
+<p>If you’ve ever taken a poll in which you’ve been asked to evaluate something on a scale ranging from something akin to “don’t like at all” to “couldn’t live without”…then you’ve experienced ordinal scaling (such scales are called Likert scales). The precourse survey for this course is chock full of questions that generate data on an ordered scale.</p>
+<p>Ordered variables are structured to have levels which are quantitatively related to each other.</p>
+<p>Each experimental replicate is evaluated and then categorized to one of the values of the ordinal variable. It is true there is an element of sorting, but the key difference is these aren’t nominal categories as in sorted data. There are underlying gradations of the variable’s scale. This is not just the absence or presence of an attribute, but rather some amount of the attribute relative to other possible amounts the scale allows for.</p>
+<p>These gradations within the levels of the ordered variable make them somewhat like measured data. The data strucure has intervals. But ordinal data are discrete because only certain values for the measurement are allowed, depending upon the structure of the scale or scoring system for a given attribute. There is no information between the intervals.</p>
+<p>Disability status scales represent classic ordinal scales. These are used to assess neurologic abnormalities, for example, those associated with experimental multiple sclerosis. Each replicate in a study is evaluated by trained researchers and assigned the most appropriate value given its condition: 0 for no disease, 1 for limp tail, 2 for mild paraparesis, 3 for moderate paraparesis, 4 for complete hindlimb paralysis, and 5 for moribound.</p>
+<p>Obviously, in this ordinal scale, as the numeric value increases so to does the severity of the subject’s condition.</p>
+<p>Here’s what a very small set of ordinal data might look like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genotype &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))
+DSS_score &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))
+results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(genotype, DSS_score); results</code></pre></div>
+<pre><code>##   genotype DSS_score
+## 1       wt         0
+## 2       wt         1
+## 3       wt         1
+## 4      ND4         5
+## 5      ND4         3
+## 6      ND4         5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(results)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    6 obs. of  2 variables:
+##  $ genotype : Factor w/ 2 levels &quot;ND4&quot;,&quot;wt&quot;: 2 2 2 1 1 1
+##  $ DSS_score: int  0 1 1 5 3 5</code></pre>
+<p><code>genotype</code> is an indepedent, factoral variable that comes in two levels, <code>wt</code> or <code>ND4</code>. <code>DSS_score</code> is a dependent variable that comes in 6 levels, the integer values ranging from 0 to 5. We need to force R to read <code>DSS_score</code> for what it is, an integer rather than as a numeric.</p>
+<p>One of the key issues of ordinal scales is that they are not necessarily guassian. As a general rule they tend to be skewed (though there is no inherent reason for this to be the case).</p>
+<p>For example, in my precourse survey I ask students how excited they are, on a scale of 1 to 10, to take a biostats class. The result is decidedly mixed. There’s a bit of a lean towards good enthusiasm, but a fairly pronounced unenthusiastic tail.</p>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>The data on this ordinal scale are not normally distributed. Any analysis would need to be with a statistical procedure that does not assume normally distributed dependent variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">score =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">25</span>)), 
+       <span class="kw">aes</span>(score)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">mean=</span><span class="dv">13</span>, <span class="fl">2.4</span>)) </code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">score=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>), <span class="dt">y=</span><span class="kw">dpois</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>, <span class="dv">13</span>))
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(score, y))<span class="op">+</span>
+<span class="st">       </span><span class="kw">geom_col</span>()</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-30-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">score=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>), <span class="dt">y=</span><span class="kw">dbinom</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>, <span class="dv">25</span>, <span class="fl">0.55</span>))
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(score, y))<span class="op">+</span>
+<span class="st">       </span><span class="kw">geom_col</span>()</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-30-3.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="pvalues.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
