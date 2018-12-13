@@ -44,7 +44,17 @@ Statistical models are ways of simplifying or summarizing data so that they can 
 
 For example, if we have a sample in which blood glucose levels are measured in each of many subjects, clarity demands we explain those results in terms of summary statistics. Thus, we use parameters like the sample mean and standard deviation, or median and ranges or percentiles. The alternative is unthinkable today (but common long ago), which is to discuss each replicate individually.
 
-Statistical tests also have a descriptive element in that they convey information about the experimental design. If you say, "I'm working on analyzing a two-tailed paired t-test," say no more. From that alone I know something about your hypothesis, how replication was handled, the number of groups, and the type of data you're measuring. 
+To emphasize that sample parameters differ from population parameters, the standard in statistical notation is to use roman characters to indicate samples and greek characters to indicate the population. For example,
+
+| parameter| sample | population |
+|---------:|-------:|-----------:|
+| mean | $\bar y$ | $\mu$ |
+| standard deviation | $s$ | $\sigma$ |
+| variance | $s^2$ | $\sigma^2$ |
+
+Thus, the sample mean, $\bar y$ is an estimate of the population mean, $\mu$.   
+
+Statistical tests also have a descriptive element in that they convey information about the experimental design. If you say, "I'm working up a two-tailed paired t-test," say no more. From that alone I know something about your hypothesis, how your replicates are handled, the number of predictor groups, and the type of data you're measuring. 
 
 Regression models also describe data. For example, here is the well-known Michaelis-Menten model that describes product formation as a function of substrate concentration.  
 \[[P]=\frac{[S][Vmax]}{[S]+Km}\]
@@ -55,7 +65,7 @@ In fact, mathematical statistics is actually just modeling. Modeling is the proc
 
 Take a simple example of two groups shown here. Each group has been fit to a simple model: that for the mean and standard deviation. Clearly, that model fits the control group much better than it fits the treatment group. 
 
-```{r echo=FALSE, fig.height=3, fig.width=3, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="How good of a descriptive model is the mean for each these groups?"}
+```{r echo=FALSE, fig.height=3, fig.align = "center", fig.width=3, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="Is the mean for each these groups a good descriptive model?"}
 
 Control <- c(111, 113, 92, 103, 91, 101, 90, 93, 105, 91)
 Treatment <- c(111, 113, 92, 103, 91, 101, 90, 93, 1, 2)
@@ -74,13 +84,24 @@ This is to point out that learning statistics is about learning to make judgment
 
 ### Statistical inference
 
-There are two types of inference researchers make. 
+There are two main types of inference researchers make. 
 
-One type is to infer whether an experiment “worked” or not. This familiar process involves calculating a test statistic from the data (eg, t-test, F-tests, etc) and then applying a threshold rule to its value. If the test passes the rule, we conclude the experiment worked. 
+One type is to infer whether an experiment “worked” or not...the so-called "significance test". This familiar process involves calculating a test statistic from the data (eg, t-test, F-tests, etc) and then applying a threshold rule to its value. If the test passes the rule, we conclude the experiment worked. I cover this type of inference in much more detail in the p-value chapter \@ref(pvalues), and we'll talk about it over and again throughout the course. 
 
 A second type of inference is to extrapolate from a sample some **estimate** for the values of the variables within the population that was sampled. 
 
-Both types of inference are subject to error. By random chance alone our sample could be way off the mark, even with perfectly calibrated instrumentation. In those cases our inferences would be wrong. The real difficulty with inference is we can never know for certain whether we are right or wrong. 
+Both descriptive and statistical inference are subject to error. By random chance alone our sample could be way off the mark, even with perfectly calibrated instrumentation.
+
+The real difficulty with inference is we can never know for certain whether we are right or wrong. 
+
+They are called random variables for a reason. It pays to have a very healthy respect for the role played by random chance in determining the values of our parameter estimates. If we were to completely redo a fully replicated experiment once more, we would almost certainly arrive at different numbers. In a well behaved system, they'd likely be in the same ballpark as those of the first experiment. But they would still differ.
+
+To illustrate, copy and paste the code chunk below. It replicates a random triplicate sample six times, taking six means. Unlike in real life, the population parameters are known (because I coded them in): $\mu=2$ and $\sigma=0.4$. You can run that chunk tens of thousands of times and never get a "sample" with one mean that has a value of exactly 2, even though that's the true mean of the population that was sampled. 
+
+```{r}
+x <- replicate(6, rnorm(3, 2, 0.4))
+apply(x, 2, mean)
+```
 
 ### Experimental design
 
