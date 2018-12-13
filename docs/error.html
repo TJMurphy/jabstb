@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
+
+
+<meta name="date" content="2018-12-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="hypotheses.html">
+<link rel="next" href="pvalues.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>3</b> The Big Picture</a><ul>
+<li class="chapter" data-level="3.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>3.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>3.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>3.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="3.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>3.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="3.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>3.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>4.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>4.1.1</b> A simple test to define the experimental unit</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sampling.html"><a href="sampling.html#blocking"><i class="fa fa-check"></i><b>4.1.2</b> Blocking</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>4.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>4.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>4.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>4.3</b> Random process</a></li>
+<li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>4.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>4.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="4.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>4.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="4.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>4.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="4.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>4.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>4.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>5</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="5.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>5.1</b> The decision process</a></li>
+<li class="chapter" data-level="5.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>5.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="5.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>5.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>6</b> Error</a><ul>
+<li class="chapter" data-level="6.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>6.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>6.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="6.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>6.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>6.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="6.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>6.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>7</b> P Values</a><ul>
+<li class="chapter" data-level="7.1" data-path="pvalues.html"><a href="pvalues.html#how-p-values-are-calculated"><i class="fa fa-check"></i><b>7.1</b> How p-values are calculated</a></li>
+<li class="chapter" data-level="7.2" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>7.2</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="7.3" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>7.3</b> Interpretation</a></li>
+<li class="chapter" data-level="7.4" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>7.4</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="error" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Error</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(treemapify)
+<span class="kw">library</span>(pwr)</code></pre></div>
+<p>In a jury trial under the American system of justice the defendant stands accused of a crime by a prosecutor. Both sides present evidence before a jury. The jury’s duty is to weigh the evidence then vote in favor of or against a conviction.</p>
+<p>The jury doesn’t know the truth.</p>
+<p>A jury is at risk of making two types of mistakes: An innocent person might be convicted, or a guilty person might be acquitted. They can also make two correct calls: Convict a guilty person or acquit someone who is innocent.</p>
+<p>Without ever knowing for sure what is actually true, they are instructed by the judge to record their decision on the basis of a threshold rule. In a trial the rule is vote to convict only when you believe “it is beyond a reasonable doubt” the accused is guilty.</p>
+<p>In science the researcher is like a jury. The experiment is like a trial. At the end, the researcher has the same problem that jurors face. There is a need to conclude whether the experiment worked or not. And there’s no way to know with absolute certainty. Mistaken judgments are possible.</p>
+<p>Whereas the jury works within the “beyond a reasonable doubt” framework, researchers operate within a framework that establishes tolerance limits for error.</p>
+<p>Every hypothesis tested risks two types of error. A type 1 error is committed when the researcher rejects the null when in fact there is no effect. This is also known as a false positive. A type 2 error is not rejecting the null when it should be rejected, which is known as a false negative.</p>
+<p>Or the researcher might not make an error at all. The sensitivity of an experiment is conclude correctly there is no effect, and power (also known as specificity) is concluding correctly there is an effect. Sensitivity and power are the complements of type 1 and type 2 error, respectively</p>
+<div id="setting-type-1-and-type-2-error-thresholds" class="section level2">
+<h2><span class="header-section-number">6.1</span> Setting type 1 and type 2 error thresholds</h2>
+<p>In the planning stages of an experiment the researcher establishes tolerance for these errors. A balance has to be struck between aversion for each error type, the ability to make the right call, and the costs involved for being either wrong or right.</p>
+<div id="setting-alpha-the-type-1-error" class="section level3">
+<h3><span class="header-section-number">6.1.1</span> Setting alpha-the type 1 error</h3>
+<p>In the biological sciences the standard for type 1 error is 5%, meaning in any given experiment (no matter the number of comparisons to be made), the chance of generating a false positive should be limited to 5%.</p>
+<p>The acceptable type 1 error limit is labeled alpha, or <span class="math inline">\(\alpha\)</span>. In several R statistical functions, it is controlled by adjusting its complement, the confidence level.</p>
+<p>Why is <span class="math inline">\(\alpha\)</span> 5% and not some other value? Credit for that is owed largely to R.A. Fisher who offered that a 1 in 20 chance of making such a mistake seemed reasonable. That number seems to have stuck, at least in the biological sciences.</p>
+<p>The researcher is always free to establish, and defend, some other level of <span class="math inline">\(\alpha\)</span>. In the field of psychology, for example, <span class="math inline">\(\alpha\)</span> is historically 10%.</p>
+<p>There is nothing to stop a researcher from selecting a threshold below or above 5%. She just needs to be prepared to defend the choice.</p>
+<div id="the-decision-rule" class="section level4">
+<h4><span class="header-section-number">6.1.1.1</span> The decision rule</h4>
+<p>The <span class="math inline">\(\alpha\)</span> is stated before an experiment begins, but operationalized during the final statistical analysis on the basis of p-values generated from statistical tests. <strong>The null hypothesis is rejected when a p-value is less than this preset <span class="math inline">\(\alpha\)</span>.</strong></p>
+</div>
+<div id="experimentwise-error" class="section level4">
+<h4><span class="header-section-number">6.1.1.2</span> Experimentwise error</h4>
+<p>An experiment that just compares two groups (eg, placebo vs drug) generates only one hypothesis. An experiment comparing <span class="math inline">\(k\)</span> groups (eg, placebo vs drug1, vs drug2…drugk-1) generates <span class="math inline">\(m=\frac{k(k-1)}{2}\)</span> hypotheses.</p>
+<p>For experiments that generate multiple hypotheses it is important to maintain the overall <span class="math inline">\(\alpha\)</span> for the experiment at 5%. If not checked, the experiment-wise error would inflate with each hypothesis tested.</p>
+<p>Several methods have been devised to maintain experiment-wise <span class="math inline">\(\alpha\)</span> for multiple comparisons. The most conservative of these is the Bonferroni correction <span class="math inline">\(\alpha_m=\frac{\alpha}{m}\)</span>. Thus, if <span class="math inline">\(m = 10\)</span> hypotheses are tested, the adjusted threshold for each, <span class="math inline">\(\alpha_m\)</span>, is 0.5%, or a p-value of 0.005. If 1000 hypotheses are tested, such as in a mini-gene screen, the p-value threshold for each would be 0.00005.</p>
+</div>
+</div>
+<div id="power-setting-beta-the-type-2-error" class="section level3">
+<h3><span class="header-section-number">6.1.2</span> Power: Setting beta-the type 2 error</h3>
+<p>In the biological sciences the tolerance for type 2 error, otherwise symbolized as <span class="math inline">\(\beta\)</span>, is generally in the neighborhood of 20%.</p>
+<p>It’s a bit easier to discuss <span class="math inline">\(\beta\)</span> through its complement, <span class="math inline">\(1-\beta\)</span> or power. Thus, experiments run at 80% power, which are generally regarded as well-designed, run at 20% risk of type 2 error.</p>
+<p>Operationally, an experiment is designed to hit a specific level of power via planning of the sample size. “Power calculations” return sample size by integrating intended power, <span class="math inline">\(\alpha\)</span>, and an estimated effect size.</p>
+<p>Students tend to fret over effect size estimates. They are nothing more than a best guess of what to expect. A crude estimate. The researcher should use values representing a minimum for a scientific meaningful effect size. The effect size is estimated on the basis of scientific judgment and preliminary data or published information.</p>
+<p>If the effect size estimate turns out to be accurate, an experiment run at that sample size should be close to the intended power.</p>
+<p>In a perfect world, we might consider powering up every experiment to 99%, completely minimizing the risk of <span class="math inline">\(\beta\)</span>. As you’ll see in the simulation below, the incremental gain in power beyond ~80% diminishes with sample size. In other words, perfect power and very low <span class="math inline">\(\beta\)</span> comes at a high cost. The choice of what power to run an experiment should strike the right balance between the risk of missing out on a real effect against the cost burden of additional resources and time.</p>
+<p>R’s <code>pwr</code> package has a handful of functions to run power calculations for given statistical tests. These, unfortunately, do not cover all of the statistical tests, particularly for the most common experimental designs (eg, ANOVA).</p>
+<p>In this course, we’ll emphasize performing power calculations using custom Monte Carlo functions, which can be custom adapted for any type of experiment involving a statistical test.</p>
+<p>Here’s a custom Monte Carlo-based power function for a t-test. To illustrate the diminishing returns argument, the function calculates power comparing samples drawn from <span class="math inline">\(N(0,1)\)</span> to samples drawn from <span class="math inline">\(N(1,1)\)</span>. The graph is generated by passing a range of sample sizes into the function. Note how the gain in power plateaus.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t.pwr &lt;-<span class="st"> </span><span class="cf">function</span>(n){
+  <span class="co">#Intitializers. Means and SD&#39;s of populations compared.</span>
+  m1=<span class="dv">1</span>; sd1=<span class="dv">1</span>; m2=<span class="st"> </span><span class="dv">0</span>; sd2=<span class="dv">1</span>
+  <span class="co"># the monte carlo</span>
+  ssims=<span class="dv">1000</span>
+  p.values &lt;-<span class="st"> </span><span class="kw">c</span>()
+  i &lt;-<span class="st"> </span><span class="dv">1</span>
+  <span class="cf">repeat</span>{
+    x=<span class="kw">rnorm</span>(n, m1, sd1); 
+    y=<span class="kw">rnorm</span>(n, m2, sd2);
+    p &lt;-<span class="st"> </span><span class="kw">t.test</span>(x, y, 
+                <span class="dt">paired=</span>F, 
+                <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, 
+                <span class="dt">var.equal=</span>F,
+                <span class="dt">conf.level=</span><span class="fl">0.95</span>)<span class="op">$</span>p.value
+    p.values[i] &lt;-<span class="st"> </span>p
+    <span class="cf">if</span> (i<span class="op">==</span>ssims) <span class="cf">break</span>
+    i =<span class="st"> </span>i<span class="op">+</span><span class="dv">1</span>
+    pwr &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(p.values<span class="op">&lt;</span><span class="fl">0.05</span>))<span class="op">/</span>ssims
+  }
+  <span class="kw">return</span>(pwr)
+}
+<span class="co">#Run t.pwr over a range of sample sizes and plot results</span>
+frame &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">n=</span><span class="dv">2</span><span class="op">:</span><span class="dv">50</span>)
+data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(frame, 
+                  <span class="dt">power=</span><span class="kw">apply</span>(frame, <span class="dv">1</span>, t.pwr))
+<span class="co">#plot</span>
+<span class="kw">ggplot</span>(data, <span class="kw">aes</span>(n, power))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">2</span>)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;n per group&quot;</span>)</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Validation by comparisonC to pwr package results
+<span class="kw">pwr.t.test</span>(<span class="dt">d=</span><span class="dv">1</span>, 
+           <span class="dt">sig.level=</span><span class="fl">0.05</span>, 
+           <span class="dt">power=</span><span class="fl">0.8</span>, 
+           <span class="dt">type=</span><span class="st">&quot;two.sample&quot;</span>)</code></pre></div>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 16.71472
+##               d = 1
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+</div>
+</div>
+<div id="striking-the-right-balance" class="section level2">
+<h2><span class="header-section-number">6.2</span> Striking the right balance</h2>
+<p>The script below provides a way to visualize how the relationship between correct (green) and incorrect (red) decisions varies with error thresholds.</p>
+<p>The idea is to run experiments under conditions by which green is the dominant color.</p>
+<p>Unfortunately, most published biomedical research appears to be <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5367316/">severely underpowered findings</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>
+beta &lt;-<span class="st"> </span><span class="fl">0.20</span>
+
+panel &lt;-<span class="st"> </span><span class="kw">data.frame</span>(alpha, 
+                    <span class="dt">sensitivity=</span><span class="dv">1</span><span class="op">-</span>alpha, 
+                    <span class="dt">power=</span><span class="dv">1</span><span class="op">-</span>beta, 
+                    beta)
+panel &lt;-<span class="st"> </span><span class="kw">gather</span>(panel, <span class="dt">key=</span><span class="st">&quot;threshold&quot;</span>, 
+         <span class="dt">value=</span><span class="st">&quot;percent&quot;</span>) 
+
+panel &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(panel, 
+                   <span class="dt">truth=</span><span class="kw">c</span>(<span class="st">&quot;no effect&quot;</span>, <span class="st">&quot;no effect&quot;</span>, <span class="st">&quot;effective&quot;</span>, <span class="st">&quot;effective&quot;</span>), 
+                   <span class="dt">decision=</span><span class="kw">c</span>(<span class="st">&quot;effective&quot;</span>, <span class="st">&quot;no effect&quot;</span>, <span class="st">&quot;effective&quot;</span>, <span class="st">&quot;no effect&quot;</span>), 
+                   <span class="dt">choice=</span><span class="kw">c</span>(<span class="st">&quot;error&quot;</span>, <span class="st">&quot;correct&quot;</span>, <span class="st">&quot;correct&quot;</span>, <span class="st">&quot;error&quot;</span>))
+panel</code></pre></div>
+<pre><code>##     threshold percent     truth  decision  choice
+## 1       alpha    0.05 no effect effective   error
+## 2 sensitivity    0.95 no effect no effect correct
+## 3       power    0.80 effective effective correct
+## 4        beta    0.20 effective no effect   error</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(panel, <span class="kw">aes</span>(<span class="dt">area=</span>percent, <span class="dt">fill=</span>choice, <span class="dt">label=</span>threshold))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_treemap</span>(<span class="dt">color=</span><span class="st">&quot;white&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_treemap_text</span>(
+    <span class="dt">fontface =</span> <span class="st">&quot;italic&quot;</span>,
+    <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>,
+    <span class="dt">place =</span> <span class="st">&quot;centre&quot;</span>,
+    <span class="dt">grow =</span> F
+  )<span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">alpha</span>(<span class="kw">c</span>(<span class="st">&quot;green3&quot;</span>, <span class="st">&quot;red&quot;</span>), .<span class="dv">3</span>))</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="false-discovery-rate" class="section level2">
+<h2><span class="header-section-number">6.3</span> False discovery rate</h2>
+<p>The false discover rate, or FDR is another way to estimate experimental error. <span class="math display">\[FDR=\frac{false\ positives}{false\ positives + false\ negatives}\]</span></p>
+<p>FDR varies given <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> and <a href="http://rsos.royalsocietypublishing.org/content/1/3/140216">the probability of the effect</a>. The probability of the effect bears some comment. Think of it as a prior probability, or the likelihood that an effect being studied is “real”. It takes some scientific judgment to estimate these probability values.</p>
+<p>The graph below illustrates how FDR inflates, particularly when running experiments for low probability effects when tested at low power, even at a standard <span class="math inline">\(\alpha\)</span>.</p>
+<p>These relationships clearly show that the lower the likelihood of some effect that you would like to test in an experiment, the higher the stringency by which it should be tested.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">px &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>, <span class="fl">1.0</span>, <span class="fl">0.1</span>) <span class="co">#a range of prior probabilities</span>
+tests &lt;-<span class="st"> </span><span class="dv">10000</span>
+fdr_gen &lt;-<span class="st"> </span><span class="cf">function</span>(beta, alpha){
+  real_effect &lt;-<span class="st"> </span>px<span class="op">*</span>tests
+  true_pos &lt;-<span class="st"> </span>real_effect<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>beta)
+  false_neg &lt;-<span class="st"> </span>real_effect<span class="op">*</span>beta
+  no_effect &lt;-<span class="st"> </span>tests<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>px)
+  true_neg &lt;-<span class="st"> </span>tests<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>alpha)
+  false_pos &lt;-<span class="st"> </span>no_effect<span class="op">*</span>alpha
+  FDR &lt;-<span class="st"> </span>false_pos<span class="op">/</span>(true_pos <span class="op">+</span><span class="st"> </span>false_pos)
+  <span class="kw">return</span>(FDR)
+}
+upss &lt;-<span class="st"> </span><span class="kw">fdr_gen</span>(<span class="fl">0.6</span>, <span class="fl">0.05</span>)<span class="co">#under-powered, standard specificity</span>
+wpss &lt;-<span class="st"> </span><span class="kw">fdr_gen</span>(<span class="fl">0.2</span>, <span class="fl">0.05</span>)<span class="co">#well-powered, standard specificity</span>
+uphs &lt;-<span class="st"> </span><span class="kw">fdr_gen</span>(<span class="fl">0.6</span>, <span class="fl">0.01</span>)<span class="co">#under-powered, high specificity</span>
+wphs &lt;-<span class="st"> </span><span class="kw">fdr_gen</span>(<span class="fl">0.2</span>, <span class="fl">0.01</span>)<span class="co">#well-powered, high specificity</span>
+fdrates &lt;-<span class="st"> </span><span class="kw">data.frame</span>(px,upss, wpss, uphs, wphs)
+<span class="kw">colnames</span>(fdrates) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Probability&quot;</span>,
+                       <span class="st">&quot;5% alpha, 60% beta&quot;</span>, 
+                       <span class="st">&quot;5% alpha, 20% beta&quot;</span>, 
+                       <span class="st">&quot;1% alpha, 60% beta&quot;</span>, 
+                       <span class="st">&quot;1% alpha, 20% beta&quot;</span>)
+
+<span class="co">#convert to long format</span>
+fdrates &lt;-<span class="st"> </span><span class="kw">gather</span>(fdrates, tests, FDR, <span class="op">-</span>Probability)
+<span class="kw">ggplot</span>(fdrates, <span class="kw">aes</span>(Probability,FDR, <span class="dt">group=</span>tests))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color=</span><span class="kw">factor</span>(tests)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color=</span><span class="kw">factor</span>(tests)))</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="hypotheses.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pvalues.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
