@@ -25,7 +25,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
 
 
-<meta name="date" content="2018-12-13">
+<meta name="date" content="2018-12-23">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="pvalues.html">
-
+<link rel="next" href="statistics-for-categorical-data.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,41 +50,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -117,7 +143,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Statistical Sampling</a><ul>
 <li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>4.1</b> Experimental units</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>4.1.1</b> A simple test to define the experimental unit</a></li>
-<li class="chapter" data-level="4.1.2" data-path="sampling.html"><a href="sampling.html#blocking"><i class="fa fa-check"></i><b>4.1.2</b> Blocking</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>4.2</b> Independent Replicates</a><ul>
 <li class="chapter" data-level="4.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>4.2.1</b> A simple test for independence</a></li>
@@ -160,6 +185,46 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>8.2.2</b> Discrete categorical and ordinal variables</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="9" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html"><i class="fa fa-check"></i><b>9</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="9.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#types-of-categorical-data"><i class="fa fa-check"></i><b>9.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#proportions"><i class="fa fa-check"></i><b>9.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="9.1.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#frequencies"><i class="fa fa-check"></i><b>9.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="9.1.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#associations"><i class="fa fa-check"></i><b>9.1.3</b> Associations</a></li>
+<li class="chapter" data-level="9.1.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#statistics-covered-here"><i class="fa fa-check"></i><b>9.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>9.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>9.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>9.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#proportion-analysis"><i class="fa fa-check"></i><b>9.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="9.3.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>9.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="9.3.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#contingency-analysis"><i class="fa fa-check"></i><b>9.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#comparing-proportions"><i class="fa fa-check"></i><b>9.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>9.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="9.4.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#calculating-proportions"><i class="fa fa-check"></i><b>9.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="9.4.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>9.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="9.4.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>9.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="9.4.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>9.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="9.4.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#comparing-two-proportions"><i class="fa fa-check"></i><b>9.4.6</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>9.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="9.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>9.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>9.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="9.6.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>9.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#contingency-testing"><i class="fa fa-check"></i><b>9.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="9.7.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#intepretation-of-contingency-results"><i class="fa fa-check"></i><b>9.7.1</b> Intepretation of Contingency Results</a></li>
+<li class="chapter" data-level="9.7.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#write-up-3"><i class="fa fa-check"></i><b>9.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="9.7.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#interpretation-of-chi2-output"><i class="fa fa-check"></i><b>9.7.3</b> Interpretation of <span class="math inline">\(\chi^2\)</span> output</a></li>
+<li class="chapter" data-level="9.7.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#write-up-4"><i class="fa fa-check"></i><b>9.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="9.7.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>9.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="9.7.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>9.7.6</b> Higher dimension contingency analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="9.8" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#doing-a-priori-power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>9.8</b> Doing <em>a priori</em> power analysis for proportion tests</a></li>
+<li class="chapter" data-level="9.9" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>9.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="9.10" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#graphing-proportions"><i class="fa fa-check"></i><b>9.10</b> Graphing Proportions</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -182,13 +247,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="data" class="section level1">
 <h1><span class="header-section-number">Chapter 8</span> Data Classification</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(datapasta)
-<span class="kw">library</span>(tidyverse)</code></pre></div>
-<p>The starting point in any experimental design is to understand the types of data that are involved. Ask yourself whether the variables are discrete or continuous. Then ask if they measured, ordered or sorted?</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">library</span>(datapasta)</a>
+<a class="sourceLine" id="cb32-2" title="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<p>The starting point in any statistical design is to understand the types of data that are involved. Ask yourself whether the variables are discrete or continuous. Then ask if they measured, ordered or sorted?</p>
 <p>If you don’t understand those two questions, just read on.</p>
-<p>Because those answers will point you in the proper analytical direction.</p>
-<p>This is one of the most important things to learn in this course. If you don’t get the concept that not all data types are equivalent, you won’t get statistics. You’ll be flying by the seat of your pants when it comes time to designing and analyzing experiments.</p>
-<p>In this section data classification will be discussed. This material will sound simplistic or even obvious to you, but I cannot emphasize enough the importance of data classification in mastering a statistical framework. People who overlook these basic concepts of data classification do so at their peril.</p>
+<p>Because the answers will point you in the proper analytical direction.</p>
+<p>This is one of the most important things to learn in this course. If you don’t get the concept that not all data types are equivalent, you won’t get statistics.</p>
+<p>In this section data classification will be discussed. In all likelihood this material will sound simplistic or even obvious to you, but I cannot emphasize enough the importance of data classification in mastering a statistical framework.</p>
 <p>If for no other reason, understanding how data are classified is crucial in selecting the most appropriate statistical analysis. If you were to approach me to ask, “here’s my stuff, what statistical test should I do?” I would ask, “tell me more about your data.” And we would probably spend a lot of time with you answering my questions until I was sure I understood your data classification.</p>
 <p>Therefore, a major learning objective for you is, given a data set, to know which variables are dependent and which are independent, and whether the variables involved are continuous (measured) or discrete (ordered or sorted).</p>
 <div id="dependent-and-independent-variables" class="section level2">
@@ -204,11 +269,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>To illustrate dependent and independent variables think about a linear relationship between two continuous variables, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> . This relationship can be expressed using the model <span class="math inline">\(Y=\beta_0 + \beta_1 X\)</span>. <span class="math inline">\(X\)</span> would be a variable the researcher manipulates, such as time or the concentration of a substance. <span class="math inline">\(Y\)</span> would be a variable that the researcher measures, such as absorption or binding or fluorescence. The parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are constants that modify the relationship between the two variables, which I’m sure you recognize as representing the y-intercept and slope, respectively, of the regression line between the two variables.</p>
 <p>Thus, <span class="math inline">\(Y\)</span> takes on different values as the researcher manipulates the levels of <span class="math inline">\(X\)</span>. Which explains why <span class="math inline">\(Y\)</span> depends on <span class="math inline">\(X\)</span>.</p>
 <p>For example, here’s how the data for a protein standard curve experiment would be depicted. In the R script below the variable <span class="math inline">\(X\)</span> represents known concentrations of an immunoglobulin protein standard in <span class="math inline">\(\mu g/ml\)</span>. The researcher builds this dilution series from a known stock, thus it is the independent variable. The variable <span class="math inline">\(Y\)</span> represents <span class="math inline">\(A_{595}\)</span>, light absorption in a spectrophotometer for each of the values of the standard protein. The <span class="math inline">\(A_{595}\)</span> values depend upon the immmunoglobulin concentration. Estimates for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are derived from running a linear regression on the data with the <code>lm(Y~X)</code> script. Thus, for every one unit increment in the value of <span class="math inline">\(X\)</span>, there is a 0.02497 increment in the value of <span class="math inline">\(Y\)</span>. Again, <span class="math inline">\(Y\)</span> depends upon <span class="math inline">\(X\)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Protein assay data, X units ug/ml, Y units A595.</span>
-X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.25</span>, <span class="fl">2.5</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)
-Y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.000</span>, <span class="fl">0.029</span>, <span class="fl">0.060</span>, <span class="fl">0.129</span>, <span class="fl">0.250</span>, <span class="fl">0.371</span>, <span class="fl">0.491</span>, <span class="fl">0.630</span>)
-<span class="co">#derive the slope and intercept by linear regression</span>
-<span class="kw">lm</span>(Y<span class="op">~</span>X)</code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="co">#Protein assay data, X units ug/ml, Y units A595.</span></a>
+<a class="sourceLine" id="cb33-2" title="2">X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.25</span>, <span class="fl">2.5</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb33-3" title="3">Y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.000</span>, <span class="fl">0.029</span>, <span class="fl">0.060</span>, <span class="fl">0.129</span>, <span class="fl">0.250</span>, <span class="fl">0.371</span>, <span class="fl">0.491</span>, <span class="fl">0.630</span>)</a>
+<a class="sourceLine" id="cb33-4" title="4"><span class="co">#derive the slope and intercept by linear regression</span></a>
+<a class="sourceLine" id="cb33-5" title="5"><span class="kw">lm</span>(Y<span class="op">~</span>X)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -229,7 +294,7 @@ Y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.000
 <p>Variables can be subclassified further as either <strong>measured</strong>, <strong>ordered</strong>, or <strong>sorted</strong>. This subdivision fulfills a few purposes.</p>
 <p>First, it’s alliterative so hopefully easier to remember. It reminds me of Waffle House hashbrowns, which can be either scattered, smothered or covered, and that is just something you’ll never forget once you’ve visited a Waffle House.</p>
 <p>Second, it covers all types of data and statistical testing, and thus forms the basis for drawing a pragmatic statistical modeling heuristic.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/testing_heuristic.jpg&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/testing_heuristic.jpg&quot;</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-25"></span>
 <img src="images/testing_heuristic.jpg" alt="The type of data dictates how it should be modeled."  />
 <p class="caption">
@@ -241,9 +306,9 @@ Figure 8.1: The type of data dictates how it should be modeled.
 <p>Though they are named differently, for the most part everybody seems to agree that all variables can be reduced to 3 subtypes, even if they can’t agree on what to name them.</p>
 <div id="measured-variables" class="section level3">
 <h3><span class="header-section-number">8.2.1</span> Measured variables</h3>
-<p>Because everything is measured in some sense of the word “measured”&quot; is probably not an ideal choice to describe what is meant when refering to a continuous variable. My rationale for the choice is that it almost always requires some kind of measuring instrument to grab this type of data.</p>
+<p>Because everything is measured in some sense of the word “measured”" is probably not an ideal choice to describe what is meant when refering to a continuous variable. My rationale for the choice is that it almost always requires some kind of measuring instrument to grab this type of data.</p>
 <p>For the present purposes let’s considered the terms measured variables and continuous variables as synonymous. Measured variables are fairly easy to spot. Any derivative of one of the <a href="https://www.nist.gov/pml/weights-and-measures/metric-si/si-units">seven base SI units</a> will be a measured variable.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/si_units.jpg&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/si_units.jpg&quot;</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-26"></span>
 <img src="images/si_units.jpg" alt="The seven SI units"  />
 <p class="caption">
@@ -270,16 +335,16 @@ Figure 8.2: The seven SI units
 <p>So our data set has two variables. One is <code>sex</code>, a factoral variable that has two levels. The other is <code>count</code>, an integer variable that has $$50 levels.</p>
 <p>Of course, the categorization of sex is sometimes ambiguous. If it is important to accomodate more, we would add additional categories to account for all possible outcomes. For example, the <code>sex</code> variable could be set to take on values of <code>man</code>, <code>woman</code>, and <code>other</code>.</p>
 <p>Take a moment to also think about the values of that <code>sex</code> variable. This is to emphasize that <code>man</code>, <code>woman</code> and <code>other</code> are not numeric values. Variables can have non-numeric values. R reads those levels as character values and “coerces” to classify <code>sex</code> as a factoral variable with three levels, <code>man</code>, <code>woman</code> and <code>other</code>.</p>
-<p>Let’s use R to create a summary table for the composition by sex of the biostats class. Inspection of the code shows the table has two variables, <code>sex</code> as described, and <code>count</code>. The function <code>str(ibs538)</code> reveals that the former variable is a “Factor w/ 3 levels”&quot; and the later is a integer variable. We used the <code>is.integer</code> function in the code to ensure that <code>count</code> would be an integer variable. Had we not, R wanted to coerce it as a numeric variable.</p>
+<p>Let’s use R to create a summary table for the composition by sex of the biostats class. Inspection of the code shows the table has two variables, <code>sex</code> as described, and <code>count</code>. The function <code>str(ibs538)</code> reveals that the former variable is a “Factor w/ 3 levels”" and the later is a integer variable. We used the <code>is.integer</code> function in the code to ensure that <code>count</code> would be an integer variable. Had we not, R wanted to coerce it as a numeric variable.</p>
 <p>Finally, notice how the variable <code>count</code> is only comprised of discrete integer values. These discrete counts are why sorted data is classified as discrete.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sex &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;man&quot;</span>, <span class="st">&quot;woman&quot;</span>, <span class="st">&quot;other&quot;</span>)
-count &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">35</span>, <span class="dv">0</span>))
-ibs538 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(sex, count); ibs538</code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">sex &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;man&quot;</span>, <span class="st">&quot;woman&quot;</span>, <span class="st">&quot;other&quot;</span>)</a>
+<a class="sourceLine" id="cb37-2" title="2">count &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">35</span>, <span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb37-3" title="3">ibs538 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(sex, count); ibs538</a></code></pre></div>
 <pre><code>##     sex count
 ## 1   man    15
 ## 2 woman    35
 ## 3 other     0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(ibs538)</code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="kw">str</span>(ibs538)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    3 obs. of  2 variables:
 ##  $ sex  : Factor w/ 3 levels &quot;man&quot;,&quot;other&quot;,..: 1 3 2
 ##  $ count: int  15 35 0</code></pre>
@@ -303,9 +368,9 @@ ibs538 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(sex, cou
 <p>Disability status scales represent classic ordinal scales. These are used to assess neurologic abnormalities, for example, those associated with experimental multiple sclerosis. Each replicate in a study is evaluated by trained researchers and assigned the most appropriate value given its condition: 0 for no disease, 1 for limp tail, 2 for mild paraparesis, 3 for moderate paraparesis, 4 for complete hindlimb paralysis, and 5 for moribound.</p>
 <p>Obviously, in this ordinal scale, as the numeric value increases so to does the severity of the subject’s condition.</p>
 <p>Here’s what a very small set of ordinal data might look like:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genotype &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))
-DSS_score &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))
-results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(genotype, DSS_score); results</code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">genotype &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb41-2" title="2">DSS_score &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb41-3" title="3">results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(genotype, DSS_score); results</a></code></pre></div>
 <pre><code>##   genotype DSS_score
 ## 1       wt         0
 ## 2       wt         1
@@ -313,7 +378,7 @@ results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(genotyp
 ## 4      ND4         5
 ## 5      ND4         3
 ## 6      ND4         5</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(results)</code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">str</span>(results)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    6 obs. of  2 variables:
 ##  $ genotype : Factor w/ 2 levels &quot;ND4&quot;,&quot;wt&quot;: 2 2 2 1 1 1
 ##  $ DSS_score: int  0 1 1 5 3 5</code></pre>
@@ -322,17 +387,17 @@ results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(genotyp
 <p>For example, in my precourse survey I ask students how excited they are, on a scale of 1 to 10, to take a biostats class. The result is decidedly mixed. There’s a bit of a lean towards good enthusiasm, but a fairly pronounced unenthusiastic tail.</p>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <p>The data on this ordinal scale are not normally distributed. Any analysis would need to be with a statistical procedure that does not assume normally distributed dependent variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">score =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">25</span>)), 
-       <span class="kw">aes</span>(score)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">mean=</span><span class="dv">13</span>, <span class="fl">2.4</span>)) </code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">score =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">25</span>)), </a>
+<a class="sourceLine" id="cb45-2" title="2">       <span class="kw">aes</span>(score)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb45-3" title="3"><span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">mean=</span><span class="dv">15</span>, <span class="dt">sd=</span><span class="fl">1.5</span>)) </a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">score=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>), <span class="dt">y=</span><span class="kw">dpois</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>, <span class="dv">13</span>))
-<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(score, y))<span class="op">+</span>
-<span class="st">       </span><span class="kw">geom_col</span>()</code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">score=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>), <span class="dt">y=</span><span class="kw">dpois</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>, <span class="dv">15</span>))</a>
+<a class="sourceLine" id="cb46-2" title="2"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(score, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb46-3" title="3"><span class="st">       </span><span class="kw">geom_col</span>()</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-30-2.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">score=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>), <span class="dt">y=</span><span class="kw">dbinom</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>, <span class="dv">25</span>, <span class="fl">0.55</span>))
-<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(score, y))<span class="op">+</span>
-<span class="st">       </span><span class="kw">geom_col</span>()</code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">score=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>), <span class="dt">y=</span><span class="kw">dbinom</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25</span>, <span class="dv">25</span>, <span class="fl">0.6</span>))</a>
+<a class="sourceLine" id="cb47-2" title="2"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(score, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb47-3" title="3"><span class="st">       </span><span class="kw">geom_col</span>()</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-30-3.png" width="672" /></p>
 
 </div>
@@ -344,8 +409,8 @@ results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(genotyp
           </div>
         </div>
       </div>
-<a href="pvalues.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="pvalues.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="statistics-for-categorical-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -391,7 +456,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
