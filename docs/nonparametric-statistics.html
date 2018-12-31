@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chapter 14 Nonparametric statistics | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Chapter 14 Nonparametric statistics | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 14 Nonparametric statistics | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
+
+
+<meta name="date" content="2018-12-31">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="chisquare.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>3</b> The Big Picture</a><ul>
+<li class="chapter" data-level="3.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>3.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>3.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>3.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="3.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>3.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="3.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>3.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>4.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>4.1.1</b> A simple test to define the experimental unit</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>4.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>4.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>4.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>4.3</b> Random process</a></li>
+<li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>4.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>4.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="4.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>4.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="4.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>4.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="4.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>4.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>4.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>5</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="5.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>5.1</b> The decision process</a></li>
+<li class="chapter" data-level="5.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>5.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="5.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>5.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>6</b> Error</a><ul>
+<li class="chapter" data-level="6.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>6.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>6.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="6.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>6.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>6.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="6.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>6.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>7</b> P Values</a><ul>
+<li class="chapter" data-level="7.1" data-path="pvalues.html"><a href="pvalues.html#how-p-values-are-calculated"><i class="fa fa-check"></i><b>7.1</b> How p-values are calculated</a></li>
+<li class="chapter" data-level="7.2" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>7.2</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="7.3" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>7.3</b> Interpretation</a></li>
+<li class="chapter" data-level="7.4" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>7.4</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>8</b> Data Classification</a><ul>
+<li class="chapter" data-level="8.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>8.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>8.1.1</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>8.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>8.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="8.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>8.2.2</b> Discrete categorical and ordinal variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="the-binomial-distribution.html"><a href="the-binomial-distribution.html"><i class="fa fa-check"></i><b>9</b> The Binomial Distribution—</a><ul>
+<li class="chapter" data-level="9.1" data-path="the-binomial-distribution.html"><a href="the-binomial-distribution.html#dbinom---probability-mass-function"><i class="fa fa-check"></i><b>9.1</b> dbinom -&gt; probability mass function</a></li>
+<li class="chapter" data-level="9.2" data-path="the-binomial-distribution.html"><a href="the-binomial-distribution.html#pbinom---cumulative-distribution-function"><i class="fa fa-check"></i><b>9.2</b> pbinom -&gt; cumulative distribution function</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html"><i class="fa fa-check"></i><b>10</b> The Poisson Distribution</a><ul>
+<li class="chapter" data-level="10.1" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#poisson-events"><i class="fa fa-check"></i><b>10.1</b> Poisson Events</a></li>
+<li class="chapter" data-level="10.2" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#dpois"><i class="fa fa-check"></i><b>10.2</b> dpois</a></li>
+<li class="chapter" data-level="10.3" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#ppois"><i class="fa fa-check"></i><b>10.3</b> ppois</a></li>
+<li class="chapter" data-level="10.4" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#rpois"><i class="fa fa-check"></i><b>10.4</b> rpois</a></li>
+<li class="chapter" data-level="10.5" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#overdispersion"><i class="fa fa-check"></i><b>10.5</b> Overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="the-normal-distribution.html"><a href="the-normal-distribution.html"><i class="fa fa-check"></i><b>11</b> The Normal Distribution</a><ul>
+<li class="chapter" data-level="11.0.1" data-path="the-normal-distribution.html"><a href="the-normal-distribution.html#the-standard-normal"><i class="fa fa-check"></i><b>11.0.1</b> The Standard Normal</a></li>
+<li class="chapter" data-level="11.0.2" data-path="the-normal-distribution.html"><a href="the-normal-distribution.html#rs-four-normal-distribution-functions-dnorm-pnorm-qnorm-rnorm"><i class="fa fa-check"></i><b>11.0.2</b> R’s Four Normal Distribution Functions (dnorm, pnorm, qnorm, rnorm)</a></li>
+<li class="chapter" data-level="11.0.3" data-path="the-normal-distribution.html"><a href="the-normal-distribution.html#plotting-histograms-of-some-rnorm-samples"><i class="fa fa-check"></i><b>11.0.3</b> Plotting histograms of some rnorm samples</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html"><i class="fa fa-check"></i><b>12</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="12.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#types-of-categorical-data"><i class="fa fa-check"></i><b>12.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#proportions"><i class="fa fa-check"></i><b>12.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="12.1.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#frequencies"><i class="fa fa-check"></i><b>12.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="12.1.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#associations"><i class="fa fa-check"></i><b>12.1.3</b> Associations</a></li>
+<li class="chapter" data-level="12.1.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#statistics-covered-here"><i class="fa fa-check"></i><b>12.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>12.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>12.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>12.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#proportion-analysis"><i class="fa fa-check"></i><b>12.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="12.3.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>12.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="12.3.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#contingency-analysis"><i class="fa fa-check"></i><b>12.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#comparing-proportions"><i class="fa fa-check"></i><b>12.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>12.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="12.4.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#calculating-proportions"><i class="fa fa-check"></i><b>12.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="12.4.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>12.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="12.4.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>12.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="12.4.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>12.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="12.4.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#comparing-two-proportions"><i class="fa fa-check"></i><b>12.4.6</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>12.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="12.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>12.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>12.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="12.6.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>12.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#contingency-testing"><i class="fa fa-check"></i><b>12.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="12.7.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#intepretation-of-contingency-results"><i class="fa fa-check"></i><b>12.7.1</b> Intepretation of Contingency Results</a></li>
+<li class="chapter" data-level="12.7.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#write-up-3"><i class="fa fa-check"></i><b>12.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="12.7.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#interpretation-of-chi2-output"><i class="fa fa-check"></i><b>12.7.3</b> Interpretation of <span class="math inline">\(\chi^2\)</span> output</a></li>
+<li class="chapter" data-level="12.7.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#write-up-4"><i class="fa fa-check"></i><b>12.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="12.7.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>12.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="12.7.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>12.7.6</b> Higher dimension contingency analysis</a></li>
+<li class="chapter" data-level="12.7.7" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#other-experimental-designs-involving-categorical-data"><i class="fa fa-check"></i><b>12.7.7</b> Other experimental designs involving categorical data</a></li>
+</ul></li>
+<li class="chapter" data-level="12.8" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#doing-a-priori-power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>12.8</b> Doing <em>a priori</em> power analysis for proportion tests</a></li>
+<li class="chapter" data-level="12.9" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>12.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="12.10" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#graphing-proportions"><i class="fa fa-check"></i><b>12.10</b> Graphing Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="chisquare.html"><a href="chisquare.html"><i class="fa fa-check"></i><b>13</b> The Chi-square Distribution</a><ul>
+<li class="chapter" data-level="13.1" data-path="chisquare.html"><a href="chisquare.html#background"><i class="fa fa-check"></i><b>13.1</b> Background</a></li>
+<li class="chapter" data-level="13.2" data-path="chisquare.html"><a href="chisquare.html#dchisq"><i class="fa fa-check"></i><b>13.2</b> dchisq</a></li>
+<li class="chapter" data-level="13.3" data-path="chisquare.html"><a href="chisquare.html#pchisq"><i class="fa fa-check"></i><b>13.3</b> pchisq</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="chisquare.html"><a href="chisquare.html#calculating-p-values-from-pchisq"><i class="fa fa-check"></i><b>13.3.1</b> Calculating p-values from pchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="chisquare.html"><a href="chisquare.html#qchisq"><i class="fa fa-check"></i><b>13.4</b> qchisq</a></li>
+<li class="chapter" data-level="13.5" data-path="chisquare.html"><a href="chisquare.html#rchisq"><i class="fa fa-check"></i><b>13.5</b> rchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html"><i class="fa fa-check"></i><b>14</b> Nonparametric statistics</a><ul>
+<li class="chapter" data-level="14.1" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#experiments-involving-discrete-data"><i class="fa fa-check"></i><b>14.1</b> Experiments involving discrete data</a></li>
+<li class="chapter" data-level="14.2" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#deviant-data"><i class="fa fa-check"></i><b>14.2</b> Deviant Data</a></li>
+<li class="chapter" data-level="14.3" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#sign-test"><i class="fa fa-check"></i><b>14.3</b> Sign Test</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#interpretation-1"><i class="fa fa-check"></i><b>14.3.1</b> Interpretation</a></li>
+<li class="chapter" data-level="14.3.2" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#write-up-5"><i class="fa fa-check"></i><b>14.3.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>14.4</b> Wilcoxon Sign Rank Test for One Group</a><ul>
+<li class="chapter" data-level="14.4.1" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>14.4.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
+<li class="chapter" data-level="14.4.2" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#interpretation-2"><i class="fa fa-check"></i><b>14.4.2</b> Interpretation</a></li>
+<li class="chapter" data-level="14.4.3" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#write-up-6"><i class="fa fa-check"></i><b>14.4.3</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.5" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>14.5</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
+<li class="chapter" data-level="14.5.1" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#interpretation-3"><i class="fa fa-check"></i><b>14.5.1</b> Interpretation</a></li>
+<li class="chapter" data-level="14.5.2" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#write-up-7"><i class="fa fa-check"></i><b>14.5.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>14.6</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
+<li class="chapter" data-level="14.6.1" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#interpretation-4"><i class="fa fa-check"></i><b>14.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="14.6.2" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#write-up-8"><i class="fa fa-check"></i><b>14.6.2</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.7" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#kruskal-wallas"><i class="fa fa-check"></i><b>14.7</b> Kruskal-Wallas</a><ul>
+<li class="chapter" data-level="14.7.1" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#write-up-9"><i class="fa fa-check"></i><b>14.7.1</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.8" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#friedman-test"><i class="fa fa-check"></i><b>14.8</b> Friedman test</a></li>
+<li class="chapter" data-level="14.9" data-path="nonparametric-statistics.html"><a href="nonparametric-statistics.html#summary"><i class="fa fa-check"></i><b>14.9</b> Summary</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="nonparametric-statistics" class="section level1">
+<h1><span class="header-section-number">Chapter 14</span> Nonparametric statistics</h1>
+<p>Non-parametric statistical tests are versatile with respect to the dependent variables they tolerate.</p>
+<p>They are typically applied to datasets involving ordered data. One nonparametric test is used to assess simple proportions. They can also be for data on measured, equal interval scales, for which the normality and equal variance assumptions of parametric statistical testing are not satisfied or cannot be assumed.</p>
+<p>Nonparametric statistics are parameter-less. They don’t compare means, or medians (though people frequently treat nonparametrics as tests of medians), or standard deviations, or variance. They do compare distributions of data, but only after the data has been transformed into a standardized measure of ranks–either signs, sign ranks or rank sums.</p>
+<p><strong>The tests, essentially, evaluate whether the distribution of ranks in an experimental outcome differs from a null distribution of ranks, given a sample size. That can seem pretty abstract. But it’s actually a simple and elegant way to think about these tests.</strong></p>
+<p>With the exception of the Sign Test, which has a probability as an effect size, strictly speaking there really isn’t an effect size that describes non-parametric outcomes other than the value of the test statistic.</p>
+<p>However, it is possible to use confidence interval arguments in R’s tests to coerce them into providing effect size output as estimates of medians. This can be sometimes useful.</p>
+<p>Non-parametric analogs exist for each of the major parametric statistical tests (t-tests and one-way anova. Which analog to use for a given dataset analysis depends entirely upon the experimental design.</p>
+<ul>
+<li>Sign Test -&gt; analog to the binomial Test -&gt; when events are categorized as either successes or failures.</li>
+<li>Wilcoxon Sign Rank Test for one group -&gt; analog to the one sample t-test -&gt; compare a one group dataset to a standard value.</li>
+<li>Mann Whitney Rank Sum Test for 2 independent groups -&gt; analog to the unpaired t test -&gt; for comparing two groups in a dataset.</li>
+<li>Wilcoxon Sign Rank Test for paired groups -&gt; analog to the paired t-test -&gt; comparing a group of paired outcomes in a dataset to no effect null.</li>
+<li>Kruskal-Wallis Test -&gt; analog to one way completely randomized ANOVA -&gt; comparing 3 or more groups</li>
+<li>Friedman Test -&gt; analog to one way related measures ANOVA -&gt; comparing 2 two factors, each at two or more levels.</li>
+</ul>
+<p>In R, the <code>wilcox.test</code>function is a work horse for non-parametric analysis. By simply changing the function’s arguments it can do either a WSRT, or Mw, or a WSRT for paired groups analysis.</p>
+<div id="experiments-involving-discrete-data" class="section level2">
+<h2><span class="header-section-number">14.1</span> Experiments involving discrete data</h2>
+<p>Discrete data arises from counting objects or events, as opposed to measuring attributes of the study subjects. Counted objects are easy to spot—they are indivisible. Discrete data can be either sorted or ordered.</p>
+<p>When planning an experiment ask whether the data will be sorted into categories on the basis of nominal characteristics (eg, dead vs alive, in vs out).</p>
+<p>Or will the data be categorized on some ordered basis. For example, a score of 1 = the attribute, a score of 2 = more of the attribute, a score of 3= even more of the attribute…and so on.</p>
+<p>The discrete counts within one category of an ordered scale mean that they have more or less of some feature than do the counts in another category in the ordered group.</p>
+<p>Thus, compared to nominal data, ordered data have more information. Whereas nominal events are just sorted into one bucket or another, ordered events are inherently categorized by rank.</p>
+<p>Ordered data are common in survey instruments and polling. Certain experimental designs generate inherently ordered data as well.</p>
+<p>For example, imagine a test that scores dermal inflammatory responses.</p>
+<p>Given a subject,
+* Score 1 if we don’t see any signs of inflammation.
+* Score 2 if there was a faint red spot.
+* Score 3 for a raised pustle.
+* Score 4 for a large swollen area that feels hot to the touch.
+* Score 5 for anything worse than that, if it is possible!</p>
+<p>Using that ordered scale system, we’d run experiments, for example, to compare a steroid treatment that might reduce inflammation compared to a vehicle control. Or we’d look at a gene knockout, or CRISP-R fix, or whatever, and score an outcome response.</p>
+<p>In quantifying effect sizes for such studies, a mistake you often see is parametric analysis. The researcher uses parameters such as means, standard deviations, performs t-tests, and so forth on the score rank values.</p>
+<p>This isn’t always bad, but it assumes a couple of things. First, the distribution of the data is approximately normal, as is the population that was sampled. Second, the scoring scale is equal interval. That is to say, “the difference between inflammation scores of 1 and 2 is the same as the difference between scores 2 and 3, and so on…”.</p>
+<p>Suffice to say that researchers should validate whether these assumptions are true before resorting to parametric tests. Or they can just use nonparametric tests and save themselves from all that validation work!</p>
+<p>Sometimes we take measurements of some variable on a perfectly good measurement scale, one that satisfies these assumptions, but then break the data out to some ordered scale.</p>
+<p>Take blood pressure, for example. We might measure it’s value for each subject, but on the basis of that measurement sort the subjects into ordered categories of low, medium and high. Our scientific experitise drives what blood pressure values match those categories. And we should have good reasons to throw away perfect good scalar information by doing this.</p>
+<p>It is on this ordered scale, of discrete events, rather than the original measurements on a continous scale, that we might then run statistical tests.</p>
+<p>My point is, of course, that not all ordered scales are based upon subjective assessments.</p>
+</div>
+<div id="deviant-data" class="section level2">
+<h2><span class="header-section-number">14.2</span> Deviant Data</h2>
+<p>Any scale can yield deviant data. Deviant data is non-normal, skewed, has unequal variances among groups, has outliers, and is just plain ugly.</p>
+<p>When data are deviant there are two options:</p>
+<ol style="list-style-type: decimal">
+<li>Use recipricol or log transform functions to transform the data distribution into something more normal-like. Run the statistical tests on the transformed values.</li>
+<li>Run non-parametric statistical tests on the data, which transforms the data into a rank-based distribution, which are normal-like.</li>
+<li>Tossing outliers is almost always a bad option because it introduces bias!</li>
+</ol>
+</div>
+<div id="sign-test" class="section level2">
+<h2><span class="header-section-number">14.3</span> Sign Test</h2>
+<p>The Sign Test is a non-parametric way of saying a binomial test.</p>
+<p>An experiment is conducted on a group of subjects, who are graded in some way for either passing (+) or failing (- ) some test. Did a cell depolarize, or not? Is a stain in the cell nucleus, or not? Did the animal move fast enough, or not? Did the subject meet some other threshold you’ve established as a success, or not?</p>
+<p>Simply count the number that passed..or received a “+” sign, and the number that failed (received a “-” sign). Using scientific judgement, assume a probability for the frequency of successes under the null hypothesis. For example, the null might be to expect 50% successes. If after analyzing the data and the number of successes differs from this null proportion, you may have a winner!</p>
+<p>Here’s an analysis of a behavioral test, the latency to exit a dark chamber, as an index of anxiety. Let’s say that exiting a chamber in less than 60 seconds is a threshold for what we’d consider “non-anxious” behavior. Fifteeen subjects are given an anti-anxiety drug.</p>
+<p>The null probability of exiting the chamber is 0.5. Which is to say there is a 50/50 chance a mouse will, at random, exit the chamber at any given time before or after 60 sec. Or put another way, under the null, neither exiting nor remaining in the chamber by 60 seconds is favored.</p>
+<p>The results are that twelve exited the chamber in less than 60 seconds, and 5 did not. We have not recorded times. Let’s imagine we have an alarm set to go off 60 seconds after placing the subject in the chamber. When the alarm sounds, we score the subject as either (+) or (-).</p>
+<p>Scientifically, we predict the subjects on an anti-anxiety drug is are more likely to exit before this mark.</p>
+<p>This experiment tests the null hypothesis that the probability of successes are less than or equal to 50%. If something is not less than or equal to another, it can only be greater. Thus, we choose the “greater” for the alternative hypothesis argument in the binomial test function. We think on an anti-anxiety drug the probability is greater that the subjects will successfully exit the chamber!</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">binom.test</span>(<span class="dt">x=</span><span class="dv">12</span>, <span class="dt">n=</span><span class="dv">15</span>, <span class="dt">p=</span><span class="fl">0.5</span>, <span class="dt">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="dt">conf.level=</span><span class="fl">0.95</span> )</code></pre>
+<pre><code>## 
+##  Exact binomial test
+## 
+## data:  12 and 15
+## number of successes = 12, number of trials = 15, p-value = 0.01758
+## alternative hypothesis: true probability of success is greater than 0.5
+## 95 percent confidence interval:
+##  0.5602156 1.0000000
+## sample estimates:
+## probability of success 
+##                    0.8</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scoreci</span>(<span class="dt">x=</span><span class="dv">12</span>, <span class="dt">n=</span><span class="dv">15</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</code></pre>
+<pre><code>## 
+## 
+## 
+## data:  
+## 
+## 95 percent confidence interval:
+##  0.5481 0.9295</code></pre>
+<div id="interpretation-1" class="section level3">
+<h3><span class="header-section-number">14.3.1</span> Interpretation</h3>
+<p>The effect size is 0.8, which represents the fraction of subjects that left the chamber prior to the 60 second threshold we set. The p-value is the probability of observing an effect size this large, if the null hypothesis is actually true. There is a 95% chance the true effect size is within the range of 0.56 to 1.</p>
+<p>To get a clear sense of what’s going on, here is the distribution of the binomial function for the null hypothesis.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># I&#39;ll use the rbinom function to simulate </span>
+data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>),<span class="dt">y=</span><span class="kw">dbinom</span>(<span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>), <span class="dv">15</span>, <span class="dt">prob=</span><span class="fl">0.5</span>))
+<span class="kw">ggplot</span>(data, <span class="kw">aes</span>(x, y))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;exits before 60s&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;prob of that many exits&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span>.<span class="dv">20</span>, <span class="dt">label=</span><span class="st">&quot;H0 distribution&quot;</span>))</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-107-1.png" width="672" /></p>
+<p>And here is the distribution for the alternate hypothesis:</p>
+<pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>),<span class="dt">y=</span><span class="kw">dbinom</span>(<span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>), <span class="dv">15</span>, <span class="dt">prob=</span><span class="fl">0.8</span>))
+<span class="kw">ggplot</span>(data, <span class="kw">aes</span>(x, y))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">fill=</span><span class="st">&quot;green&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;exits before 60s&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;prob of that many exits&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span>.<span class="dv">20</span>, <span class="dt">label=</span><span class="st">&quot;H1 distribution&quot;</span>))</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-108-1.png" width="672" /></p>
+<p>This is to emphasize that the binomial distribution is used here as a model of the experimental effect. Thus, we might also conclude that our data is consistent with a binomial distribution of 15 trials wherein the probability of event success is 80%.</p>
+<p>In effect, our p-value allows us to conclude this alternate distribution is a better model for the population than is the null distribution. This is subject to a 1.758% chance that this might be a false positive conclusion….an acceptable risk of being wrong.</p>
+<p>This also is a way to visualize the confidence interval, which says we should expect more than 8 successes 95% of the time…an assertion that covers all but two of the lower bins in this distribution!</p>
+</div>
+<div id="write-up-5" class="section level3">
+<h3><span class="header-section-number">14.3.2</span> Write Up</h3>
+<p><em>Drug treatment increases fearlessness (one-sided binomial test, p = 0.01759). The fraction exiting the chamber (0.8) is greater than expected for the null of 0.5 (95% CI = 0.55 to 1.0, Wilson’s CI)</em></p>
+</div>
+</div>
+<div id="wilcoxon-sign-rank-test-for-one-group" class="section level2">
+<h2><span class="header-section-number">14.4</span> Wilcoxon Sign Rank Test for One Group</h2>
+<p>The test statistic for the Wilcoxon Sign Rank is determined as follows.
+1. Calculate the difference between the theoretical median or threshold value and the values recorded for each independent replicate.
+2. Rank those differences from lowest (rank = 1) to highest (rank = n).
+3. Assign a negative value to the replicate values that are less than the median.
+4. The test statistic <code>V</code> is the sum of the postive values. (software other than <code>wilcox.test</code> in R may calculate W, the sum of the positive and negative values).</p>
+<p>The test statistic V has an approximately normal discrete distribution, whose cumulative function <code>psignrank</code> can be used to compute p-values.</p>
+<div id="wilcoxon-sign-rank-experimental-designs" class="section level3">
+<h3><span class="header-section-number">14.4.1</span> Wilcoxon Sign Rank Experimental Designs</h3>
+<p>This experimental design is similar to the Sign Rank test except in one important detail: <strong>We actually measure the time it takes for the subjects to exit the chamber.</strong> No alarm sounds to end the game at 60 sec. If subjects dawdle about and take longer than 60 sec to exit, we wait and record that time!</p>
+<p>Thus, because the dataset is comprised of the actual values for the latency variable, rather than counts of a simple (+) or (-) score, the Wilcoxon Sign Rank design collects more information than does the Sign Rank Test.</p>
+<p>Let’s say we have a chamber test on 7 subjects who’ve all been given an anti-anxiety drug. After placement in the chamber, their exit times (in seconds) are 3, 5, 8, 15, 19, 21 and 108. Based upon scientific judgement, we think exiting sooner than 60 would represent fearlessness (less anxiety).</p>
+<p>This test ranks each subject’s performance relative to that reference time and then “signs” it as negative or positive based on whether it’s original value was below or above the 60 second threshold. In our data, only one subject exceeded that value…108 sec.</p>
+<p>Our prediction is that less anxious subjects should exit the comfort of the dark chamber sooner than would be expected. The null hypothesis is that the “location”" of the null distribution is greater than or equal to 60 seconds. The alternate is the location is “less” than 60 seconds, since less is everything that greater than or equal to cannot be.</p>
+<p>We run the Wilcoxon Sign Rank test to test this hypothesis using the arguments below.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">wilcox.test</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">15</span>,<span class="dv">19</span>,<span class="dv">21</span>,<span class="dv">108</span>), <span class="dt">mu=</span><span class="dv">60</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>, <span class="dt">conf.int =</span> <span class="fl">0.95</span>)</code></pre>
+<pre><code>## 
+##  Wilcoxon signed rank test
+## 
+## data:  c(3, 5, 8, 15, 19, 21, 108)
+## V = 4, p-value = 0.05469
+## alternative hypothesis: true location is less than 60
+## 95 percent confidence interval:
+##  -Inf 61.5
+## sample estimates:
+## (pseudo)median 
+##             14</code></pre>
+</div>
+<div id="interpretation-2" class="section level3">
+<h3><span class="header-section-number">14.4.2</span> Interpretation</h3>
+<p>The value of the test statistic, V is four. How extreme is that? It is pretty far to the left on the test statistic distribution (see below) for this sample size. The p-value is above the threshold of 5%. The evidence is not enough to reject the null hypothesis. Otherwise, the probability of making an error doing so would be 0.05469.</p>
+<p>That V = 4 means it is the value corresponding to the sum of the positively signed ranks in the sample. The pseudo-median of the latency time is 14 seconds. The one-sided 95% confidence ranges from -infinity to 61.5.</p>
+<p>Here’s a null signrank distribution for a sample size of 7. The values of the x scale are V, the test statistic. These are all the possible values that V can take on, given the sample size. For example, if all the signed ranks were positive…if every subject took longer than 60 sec to exit)…then V would equal 28. If all subjects exited before 60 sec, then V would equal zero.</p>
+<p>Which is to say the location of this distribution is, by coincidence, also centered on 14. The value of 4 is less than this location, but not extremely-enough lower to be considered as belonging to some other distribution with a different location!
+The 95% confidence interval of the location on the V test statistic ranges from -infinity to 62.5.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">psignrank</span>(<span class="dt">q=</span><span class="dv">4</span>, <span class="dt">n=</span><span class="dv">7</span>)</code></pre>
+<pre><code>## [1] 0.0546875</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">psignrank</span>(<span class="dt">q=</span><span class="dv">1</span>, <span class="dt">n=</span><span class="dv">7</span>)</code></pre>
+<pre><code>## [1] 0.015625</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">upper &lt;-<span class="st"> </span><span class="dv">28</span>
+n &lt;-<span class="st"> </span><span class="dv">7</span>
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span>upper, <span class="dt">y=</span><span class="kw">dsignrank</span>(<span class="dv">0</span><span class="op">:</span>upper, n))
+<span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;V&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>(<span class="kw">seq</span>(<span class="dv">0</span>,upper,<span class="dv">1</span>)))</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-111-1.png" width="672" /></p>
+</div>
+<div id="write-up-6" class="section level3">
+<h3><span class="header-section-number">14.4.3</span> Write Up</h3>
+<p><em>Analysis of the chamber test results indicates the anti-anxiety drug has no effect (Wilcoxon Signed Rank test, V = 4, n = 7, p= 0.0547)</em></p>
+</div>
+</div>
+<div id="wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups" class="section level2">
+<h2><span class="header-section-number">14.5</span> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</h2>
+<p>This nonparametric test, often referred to simply as the Mann-Whitney test, is analogous to the parametric unpaired t-test.</p>
+<p>It is for comparing two groups that receive either of 2 levels of a predictor variable. For example, in an experiment where one group of <code>m</code> independent replicates is exposed to some control or null condition, while a second group with <code>n</code> independent replicates is exposed to some treatment. More generally, the two groups represent two levels of a predictor variable given to <code>m+n</code>independent replicates.</p>
+<p>The rank sum is calculated as follows:</p>
+<ol style="list-style-type: decimal">
+<li>The data are collected from any scale, combined into a single list, whose values are ranked from lowest (rank 1) to highest (rank <code>m+n</code>), irrespective of the level of the predictor variable.</li>
+<li>Let <span class="math inline">\(R_1\)</span> represent the sum of the ranks for the one level of the predictor variable (eg, group2).</li>
+<li>Let <span class="math inline">\(U_1\)</span> represent the number of times a data value from group2 is less than a data point from group1.</li>
+<li><span class="math inline">\(U_1=m*n+\frac{m(m+1)}{2}-R_1\)</span></li>
+<li>And <span class="math inline">\(U_2=m*n-U_1\)</span></li>
+</ol>
+<p>The rank sum test computes two test statistics, <span class="math inline">\(U_1\)</span> and <span class="math inline">\(U_2\)</span> that are complementary to each other.</p>
+<p>Here’s another in the line of the mighty mouse experiments.</p>
+<p>55 independent subjects were split into two groups. One group received an anti-anxiety drug and the second a vehicle as control. The subjects were run through the dark chamber test. The scientific prediction is the drug will reduce anxiety levels and so the drug treated mice will exit the chamber more quickly compared to the control mice.</p>
+<p>Since this is a parameter-less test, the null hypothesis is that location of the distribution of the drug-treated population is greater than or equal to the location of the vehicle distribution. The alternative hypothesis is that the location of the distribution of the drug-treated population is less than that of the vehicle distribution. The alternative is consisent with our scientific prediction and represents an outcome that is exclusive and comprehensive of the null!</p>
+<p>We choose the “less” option for the alternative argument in the test.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mightymouse &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/mightymouse.csv&quot;</span>)
+<span class="kw">wilcox.test</span>(Time <span class="op">~</span><span class="st"> </span>Group, <span class="dt">data =</span> mightymouse, <span class="dt">alternative =</span><span class="st">&quot;less&quot;</span>, <span class="dt">conf.level=</span><span class="fl">0.95</span>, <span class="dt">conf.int=</span>T)</code></pre>
+<pre><code>## 
+##  Wilcoxon rank sum test
+## 
+## data:  Time by Group
+## W = 55, p-value = 0.1804
+## alternative hypothesis: true location shift is less than 0
+## 95 percent confidence interval:
+##  -Inf    6
+## sample estimates:
+## difference in location 
+##                   -9.8</code></pre>
+<div id="interpretation-3" class="section level3">
+<h3><span class="header-section-number">14.5.1</span> Interpretation</h3>
+<p>The test statistic you see in the output, W, warrants some discussion. W is equal to <span class="math inline">\(U_2\)</span> as defined above.</p>
+<p>By default, R produces <span class="math inline">\(U_2\)</span> (labeled W!) as the test statistic. Most other software packages use <span class="math inline">\(U_1\)</span>, which in this case would be 88 (easy to compute in the console given <span class="math inline">\(U_2\)</span>).</p>
+<p>Think of W as a value on the x axis of a rank sum distribution for a sample size of <code>m+n</code>. The rank sum distribution has a function in R called <code>dwilcox</code>. Here it is (note the large value this distribution can take on is <code>m*n</code> and the smallest is zero):</p>
+<pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span><span class="dv">143</span>, <span class="dt">y=</span><span class="kw">dwilcox</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">143</span>, <span class="dv">11</span>, <span class="dv">13</span>))
+<span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;W&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">55</span>, <span class="dv">88</span>))</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-113-1.png" width="672" /></p>
+<p>All this can seem confusing, but it is very elegant. First, the rank sums of samples, like the rank signs of samples, take on symmetrical, normal-like distributions. The greater the sample sizes, the more normal-like they become.</p>
+<p>Second, the bottom line is the same as for all other statistical tests: test statistic values at either extreme of these null distributions are associated with large effect sizes.</p>
+<p>The non-extreme-ness of the test statistic value for our sample is illustrated in that plot. Clearly, W=55, it is well within the null distribution. I calculated it’s symmetrical counterpart, <span class="math inline">\(U_1\)</span> = 88, from the relationship above. As you can see, the value of the test statistic and 88 frame the central location of this null ranksum distribution null quite nicely:</p>
+<p>The p-value for W=55 indicates that the probability of creating a false positive by rejecting the null is 18.04%, well above the 5% type1 error threshold. So we should not reject the null given we’d have a 1 in 5 chance of being wrong if we did!</p>
+<p>The “effect size” is in the output is the magnitude of the difference between the location parameters (pseudo-medians) of the two groups, on the scale of the original data.</p>
+<p>The 95% confidence interval indicates there is a 95% chance the difference in locations is between negative infinity and 6. Since the 95% confidence interval includes zero, the possibility exists that there is zero difference between the two locations. That provides additional statistical reasoning not to reject the null.</p>
+</div>
+<div id="write-up-7" class="section level3">
+<h3><span class="header-section-number">14.5.2</span> Write Up</h3>
+<p><em>There is no difference in performance using the closed chamber test between subjects randomized to anti-anxiety drug (n=11) or to vehicle (n=13) (Mann-Whitney test, W = 55, p = 0.1804).</em></p>
+</div>
+</div>
+<div id="wilcoxon-sign-rank-test-for-paired-groups" class="section level2">
+<h2><span class="header-section-number">14.6</span> Wilcoxon Sign Rank Test for paired groups</h2>
+<p>The classic paired experimental design happens when two measurements are taken from a single independent subject.</p>
+<p>For example, we take a mouse, give it a sham treatment, and measure it’s latency in the chamber test. Later on we take the same mouse, give it an anti-anxiety drug treatment, and then measure its latency once again.</p>
+<p>This kind of design can control for confounding factors, like inter-subject variability. But it can also introduce other confounds. For example, what if the mouse “remembers” that there is no real risk of leaving the dark chamber?</p>
+<p>Pairing can happen in many other ways. A classic pairing paradigm is the use of identical twins. Individuals of inbred mouse strains are all immortal clones. Two littermates would be identical twins and would also be, essentially, clones of their parents and their brothers and sisters from prior litters! Two dishes of cultured cells, passed together and now side-by-side on a bench are intrinsically-linked. All of these can be treated, statistically, as pairs.</p>
+<p>In this example, we take a pair of mice from each of 6 independent litters produced by mating two heterozygots of a nogo receptor knockout. One of the pair is nogo(-/-). The other is nogo(+/+). We think the nogo receptor causes the animals to be fearful, and predict animals in which the receptor is knocked out will be more fearless.</p>
+<p>The independent experimental unit in this design is a pair. We have six pairs, Therefore, the sample size is 6 (even though 12 animals will be used!)</p>
+<p>We’ll measure latency in the dark chamber test. Our random variable will be the difference in latency time between the knockout and the wild type, for each pair.</p>
+<p>Here’s the data, latency times are in sec units:</p>
+<pre class="sourceCode r"><code class="sourceCode r">mmko &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">knockout=</span><span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">24</span>, <span class="dv">4</span>, <span class="dv">22</span>, <span class="dv">15</span>, <span class="dv">18</span>), <span class="dt">wildtype=</span><span class="kw">c</span>(<span class="dv">99</span>, <span class="dv">81</span>, <span class="dv">70</span>, <span class="dv">62</span>, <span class="dv">120</span>, <span class="dv">55</span>))
+<span class="co">#create a long data fram to do formula arguments in wilcox test</span>
+mmkotidy &lt;-<span class="st"> </span><span class="kw">gather</span>(mmko, genotype, latency )</code></pre>
+<p>Scientifically, we predict there will be a difference in latency times within the pairs. Specifically, the knockout will have lower times than their paired wild-type. The null hypothesis is that the difference within pairs will be greater than or equal to zero. The alternative hypothesis is the difference will be less than zero.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">wilcox.test</span>(latency <span class="op">~</span><span class="st"> </span>genotype, <span class="dt">data=</span>mmkotidy, <span class="dt">paired=</span>T, <span class="dt">conf.level=</span><span class="fl">0.95</span>, <span class="dt">conf.int=</span>T, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</code></pre>
+<pre><code>## 
+##  Wilcoxon signed rank test
+## 
+## data:  latency by genotype
+## V = 0, p-value = 0.01563
+## alternative hypothesis: true location shift is less than 0
+## 95 percent confidence interval:
+##  -Inf  -40
+## sample estimates:
+## (pseudo)median 
+##          -61.5</code></pre>
+<div id="interpretation-4" class="section level3">
+<h3><span class="header-section-number">14.6.1</span> Interpretation</h3>
+<p>Note that this is not a rank sum test as for the Mann-Whitney, but a signed rank test.</p>
+<p>So we have seen the V test statistic before. It’s value of 0 is as extreme as can be had on the null distribution, as is evident in the distribution below! That happened because in each of the six pairs, the knockout had a lower latency time than its paired wildtype. All of the signed ranks were negative!</p>
+<p>In terms of position differences, it is as strong of an effect size as possible.</p>
+<pre class="sourceCode r"><code class="sourceCode r">upper &lt;-<span class="st"> </span><span class="dv">21</span>
+n &lt;-<span class="st"> </span><span class="dv">6</span>
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span>upper, <span class="dt">y=</span><span class="kw">dsignrank</span>(<span class="dv">0</span><span class="op">:</span>upper, n))
+<span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;V&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>(<span class="kw">seq</span>(<span class="dv">0</span>,upper,<span class="dv">1</span>)))</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-116-1.png" width="672" /></p>
+<p>The p-value is exact…and it can never be lower, given this sample size. We can reject the null since it is below our 5% threshold and it says the probably that we are accepting a type1 erro is 1.563%.</p>
+<p>The pseudo-median is in units of latency time. It represents the median for the differences in latency within the pairs. In other words, there are six values of differences, one difference value for each pair. -61.5 is the median of those 6 differences.</p>
+<p>There is a 95% chance the true median of the differences lies between negative infinity and -40. Note that the 95% CI does not include the value of zero.</p>
+</div>
+<div id="write-up-8" class="section level3">
+<h3><span class="header-section-number">14.6.2</span> Write up</h3>
+<p><em>Dark chamber test latency differs markedly within pairs of knockout and wildtype subjects (Wilcoxon Signed Rank Test for pairs, n=6, V = 0, p=0.01563)</em></p>
+</div>
+</div>
+<div id="kruskal-wallas" class="section level2">
+<h2><span class="header-section-number">14.7</span> Kruskal-Wallas</h2>
+<p>The <code>kruskal.test</code> is a non-parametric method for comparing 3 or more treatment groups. It serves as an omnibus test for the null hypothesis that each of the treatment groups belong to the same population. If the null is rejected, post hoc comparison tests are then used to determine which groups differ from each other.</p>
+<p>A post hoc test for this purpose in base R is <code>pairwise.wilcox.test</code>. The <code>PMCMRplus</code> package has others. Documentation within the <code>PMCMR</code>package vignette provides excellent background and instructions for these tests.</p>
+<p>The Kruska-Wallas test statistic is computed as follows. Values of the outcome variables across the groups are first converted into ranks, from high to low. Tied values are rank-averaged. The test can be corrected for large numbers of tied values.</p>
+<p>The Kruskal-Wallas rank sum test statistic is:</p>
+<p><span class="math display">\[H=\frac{12}{n(n+1)}\sum_{i=1}^k\frac{R_{i}^2}{n_i}-3(n+1)\]</span></p>
+<p><span class="math inline">\(n\)</span> is the total sample size, <span class="math inline">\(k\)</span> is the number of treatment groups, <span class="math inline">\(n_i\)</span> is the sample size in the <span class="math inline">\(ith\)</span> group and <span class="math inline">\(R_i^2\)</span> is the squared rank sum of the <span class="math inline">\(ith\)</span> group. Under the null, <span class="math inline">\(\bar{R_i} = (n+1)/2\)</span>.</p>
+<p>The <code>H</code> statistic is approximated using the <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(k-1\)</span> degrees of freedom to produce p-values.</p>
+<p>Let’s analyze the InsectSprays dataset, it comes with the <code>PMCMRplus</code> package. This is a multifactorial experiment in which insects were counted in agricultural field plots that had been sprayed with 1 of 6 different insecticides. Each row in the dataset represents an independent field plot.</p>
+<p>Do the insecticides differ?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(InsectSprays, <span class="kw">aes</span>(spray, count))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_violin</span>()</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-117-1.png" width="672" /></p>
+<p>The violin plots (modern day versions of box plots) illustrate how the groups have unequal variance. Such data are appropriate for non-parametric analysis.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#insectsprays &lt;- read.csv(&quot;insectsprays.csv&quot;)</span>
+<span class="kw">kruskal.test</span>(count <span class="op">~</span><span class="st"> </span>spray, <span class="dt">data=</span>InsectSprays)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  count by spray
+## Kruskal-Wallis chi-squared = 54.691, df = 5, p-value = 1.511e-10</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(insectsprays)
+<span class="kw">pairwise.wilcox.test</span>(InsectSprays<span class="op">$</span>count, InsectSprays<span class="op">$</span>spray, <span class="dt">p.adjust.method=</span><span class="st">&quot;bonferroni&quot;</span>, <span class="dt">alternative =</span><span class="st">&quot;two.sided&quot;</span>)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using Wilcoxon rank sum test 
+## 
+## data:  InsectSprays$count and InsectSprays$spray 
+## 
+##   A       B       C       D       E      
+## B 1.00000 -       -       -       -      
+## C 0.00058 0.00058 -       -       -      
+## D 0.00117 0.00104 0.03977 -       -      
+## E 0.00051 0.00051 0.78860 1.00000 -      
+## F 1.00000 1.00000 0.00052 0.00105 0.00052
+## 
+## P value adjustment method: bonferroni</code></pre>
+<p>We first do a Kruskal-Wallas rank sum omnibus test to test the null hypothesis that the locations of the groups within the dataset are the same.</p>
+<p>The null is rejected given the large <span class="math inline">\(\chi^2\)</span> test statistic, which has a p-value well below the threshold.</p>
+<p>That’s followed by a pairwise Wilcoxon rank sum test…think of it as running a Mann-Whitney test on all possible pairs in the group. The number of pairwise tests for 6 groups is <code>choose(6, 2)</code>= 15.</p>
+<p>Each pairwise test is a single hypothesis test associated with 5% type1 error risk. If we don’t make a correction for doing the multiple comparisons, the family-wise type1 error would inflate to <span class="math inline">\(15 x 5% = 75%\)</span>!</p>
+<p>The Bonferroni adjustment is the most conservative and simple to understand. It multiples every unadjusted p-value by 15, the number of comparisons made. Thus, each of the p-values in the grid is 15X larger than had the adjustment not been made.</p>
+<p>Every p-value less than 0.05 in the grid is therefore cause for rejecting the null hypothesis that the pair does not differ. The highest among these is the comparisons between sprays C and D, which has a p-value of 0.03977.</p>
+<p>More generally, the Bonferroni correction is <span class="math inline">\(adjusted\ type1\ threshold = 0.05/C\)</span> where C is the number of comparisons to make.</p>
+<div id="write-up-9" class="section level3">
+<h3><span class="header-section-number">14.7.1</span> Write Up</h3>
+<p><em>A non-parametric omnibus test establishes that the locations of the insecticide effects of the six sprays differ (Kruskal-Wallas, <span class="math inline">\(\Chi^2\)</span> = 54.69, df=5, p=1.511e-10). Posthoc pairwise multiple comparisons by the Mann-Whitney test (Bonferroni adjusted p-values) indicate the following sprays differ from each other: A vC(0.00058), D(0.00117), E(0.0051), …and so on</em></p>
+</div>
+</div>
+<div id="friedman-test" class="section level2">
+<h2><span class="header-section-number">14.8</span> Friedman test</h2>
+</div>
+<div id="summary" class="section level2">
+<h2><span class="header-section-number">14.9</span> Summary</h2>
+<p>If you’re used to comparing means of groups, non-parametrics can be somewhat disorienting. There are no parameters to compare! And the concept of location shifts or differences seems rather abstract.</p>
+<p>The tests transform the values of experimental outcome variables into either sign rank or into rank sum units. That abstraction can be disorientating, too. But it is important to recognize that sign ranks and rank sum distributions are approximately normal.</p>
+<p>Therefore, perhaps its best to think of non-parametrics as a way to transform non-normal data into more normal data.</p>
+<p>The non-parametrics are powerful statistical tests that should be used more widely than they are.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="chisquare.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

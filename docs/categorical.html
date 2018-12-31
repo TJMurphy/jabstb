@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chapter 13 Statistics for Categorical Data | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Chapter 13 Statistics for Categorical Data | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 13 Statistics for Categorical Data | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
+
+
+<meta name="date" content="2018-12-31">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="normal.html">
+<link rel="next" href="chisquare.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>3</b> The Big Picture</a><ul>
+<li class="chapter" data-level="3.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>3.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>3.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>3.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="3.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>3.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="3.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>3.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>4.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>4.1.1</b> A simple test to define the experimental unit</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>4.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>4.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>4.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>4.3</b> Random process</a></li>
+<li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>4.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>4.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="4.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>4.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="4.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>4.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="4.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>4.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>4.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>5</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="5.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>5.1</b> The decision process</a></li>
+<li class="chapter" data-level="5.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>5.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="5.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>5.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>6</b> Error</a><ul>
+<li class="chapter" data-level="6.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>6.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>6.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="6.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>6.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>6.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="6.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>6.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>7</b> P Values</a><ul>
+<li class="chapter" data-level="7.1" data-path="pvalues.html"><a href="pvalues.html#how-p-values-are-calculated"><i class="fa fa-check"></i><b>7.1</b> How p-values are calculated</a></li>
+<li class="chapter" data-level="7.2" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>7.2</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="7.3" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>7.3</b> Interpretation</a></li>
+<li class="chapter" data-level="7.4" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>7.4</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>8</b> Data Classification</a><ul>
+<li class="chapter" data-level="8.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>8.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>8.1.1</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>8.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>8.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="8.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>8.2.2</b> Discrete categorical and ordinal variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>9</b> Reproducible Data Munging in R</a><ul>
+<li class="chapter" data-level="9.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-glucose-data"><i class="fa fa-check"></i><b>9.1</b> Jaxwest7 glucose data</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="jaxwest7.html"><a href="jaxwest7.html#inspect-the-jaxwest7-data"><i class="fa fa-check"></i><b>9.1.1</b> Inspect the Jaxwest7 data</a></li>
+<li class="chapter" data-level="9.1.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-concentration-data-into-r"><i class="fa fa-check"></i><b>9.1.2</b> Munge the glucose concentration data into R</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="jaxwest7.html"><a href="jaxwest7.html#explore-the-jaxwest7-data"><i class="fa fa-check"></i><b>9.2</b> Explore the Jaxwest7 data</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>10</b> The Binomial Distribution</a><ul>
+<li class="chapter" data-level="10.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>10.1</b> dbinom</a></li>
+<li class="chapter" data-level="10.2" data-path="binomial.html"><a href="binomial.html#pbinom"><i class="fa fa-check"></i><b>10.2</b> pbinom</a></li>
+<li class="chapter" data-level="10.3" data-path="binomial.html"><a href="binomial.html#qbinom"><i class="fa fa-check"></i><b>10.3</b> qbinom</a></li>
+<li class="chapter" data-level="10.4" data-path="binomial.html"><a href="binomial.html#rbinom"><i class="fa fa-check"></i><b>10.4</b> rbinom</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="poisson.html"><a href="poisson.html"><i class="fa fa-check"></i><b>11</b> The Poisson Distribution</a><ul>
+<li class="chapter" data-level="11.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>11.1</b> Poisson Events</a></li>
+<li class="chapter" data-level="11.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>11.2</b> dpois</a></li>
+<li class="chapter" data-level="11.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>11.3</b> ppois</a></li>
+<li class="chapter" data-level="11.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>11.4</b> rpois</a></li>
+<li class="chapter" data-level="11.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>11.5</b> Overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>12</b> The Normal Distribution</a><ul>
+<li class="chapter" data-level="12.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>12.0.1</b> The Standard Normal</a></li>
+<li class="chapter" data-level="12.1" data-path="normal.html"><a href="normal.html#dnorm"><i class="fa fa-check"></i><b>12.1</b> dnorm</a></li>
+<li class="chapter" data-level="12.2" data-path="normal.html"><a href="normal.html#pnorm"><i class="fa fa-check"></i><b>12.2</b> pnorm</a><ul>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-p-values-using-pnorm"><i class="fa fa-check"></i>Calculating “p-values”" using pnorm</a></li>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-percentiles-using-pnorm"><i class="fa fa-check"></i>Calculating percentiles using pnorm</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="normal.html"><a href="normal.html#qnorm"><i class="fa fa-check"></i><b>12.3</b> qnorm</a></li>
+<li class="chapter" data-level="12.4" data-path="normal.html"><a href="normal.html#rnorm"><i class="fa fa-check"></i><b>12.4</b> rnorm</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="normal.html"><a href="normal.html#plotting-histograms-of-some-rnorm-samples"><i class="fa fa-check"></i><b>12.4.1</b> Plotting histograms of some rnorm samples</a></li>
+<li class="chapter" data-level="12.4.2" data-path="normal.html"><a href="normal.html#bins-and-binwidth"><i class="fa fa-check"></i><b>12.4.2</b> Bins and Binwidth</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="categorical.html"><a href="categorical.html"><i class="fa fa-check"></i><b>13</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="13.1" data-path="categorical.html"><a href="categorical.html#types-of-categorical-data"><i class="fa fa-check"></i><b>13.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="categorical.html"><a href="categorical.html#proportions"><i class="fa fa-check"></i><b>13.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="13.1.2" data-path="categorical.html"><a href="categorical.html#frequencies"><i class="fa fa-check"></i><b>13.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="13.1.3" data-path="categorical.html"><a href="categorical.html#associations"><i class="fa fa-check"></i><b>13.1.3</b> Associations</a></li>
+<li class="chapter" data-level="13.1.4" data-path="categorical.html"><a href="categorical.html#statistics-covered-here"><i class="fa fa-check"></i><b>13.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="categorical.html"><a href="categorical.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>13.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="13.2.1" data-path="categorical.html"><a href="categorical.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>13.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="categorical.html"><a href="categorical.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>13.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="categorical.html"><a href="categorical.html#proportion-analysis"><i class="fa fa-check"></i><b>13.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="13.3.2" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>13.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="13.3.3" data-path="categorical.html"><a href="categorical.html#contingency-analysis"><i class="fa fa-check"></i><b>13.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="categorical.html"><a href="categorical.html#comparing-proportions"><i class="fa fa-check"></i><b>13.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="13.4.1" data-path="categorical.html"><a href="categorical.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>13.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="13.4.2" data-path="categorical.html"><a href="categorical.html#calculating-proportions"><i class="fa fa-check"></i><b>13.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="13.4.3" data-path="categorical.html"><a href="categorical.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>13.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="13.4.4" data-path="categorical.html"><a href="categorical.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>13.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="13.4.5" data-path="categorical.html"><a href="categorical.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>13.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="13.4.6" data-path="categorical.html"><a href="categorical.html#comparing-two-proportions"><i class="fa fa-check"></i><b>13.4.6</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="13.5" data-path="categorical.html"><a href="categorical.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>13.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="13.6" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>13.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="categorical.html"><a href="categorical.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>13.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="13.6.2" data-path="categorical.html"><a href="categorical.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>13.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="categorical.html"><a href="categorical.html#contingency-testing"><i class="fa fa-check"></i><b>13.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="13.7.1" data-path="categorical.html"><a href="categorical.html#intepretation-of-contingency-results"><i class="fa fa-check"></i><b>13.7.1</b> Intepretation of Contingency Results</a></li>
+<li class="chapter" data-level="13.7.2" data-path="categorical.html"><a href="categorical.html#write-up-3"><i class="fa fa-check"></i><b>13.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="13.7.3" data-path="categorical.html"><a href="categorical.html#interpretation-of-chi2-output"><i class="fa fa-check"></i><b>13.7.3</b> Interpretation of <span class="math inline">\(\chi^2\)</span> output</a></li>
+<li class="chapter" data-level="13.7.4" data-path="categorical.html"><a href="categorical.html#write-up-4"><i class="fa fa-check"></i><b>13.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="13.7.5" data-path="categorical.html"><a href="categorical.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>13.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="13.7.6" data-path="categorical.html"><a href="categorical.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>13.7.6</b> Higher dimension contingency analysis</a></li>
+<li class="chapter" data-level="13.7.7" data-path="categorical.html"><a href="categorical.html#other-experimental-designs-involving-categorical-data"><i class="fa fa-check"></i><b>13.7.7</b> Other experimental designs involving categorical data</a></li>
+</ul></li>
+<li class="chapter" data-level="13.8" data-path="categorical.html"><a href="categorical.html#doing-a-priori-power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>13.8</b> Doing <em>a priori</em> power analysis for proportion tests</a></li>
+<li class="chapter" data-level="13.9" data-path="categorical.html"><a href="categorical.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>13.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="13.10" data-path="categorical.html"><a href="categorical.html#graphing-proportions"><i class="fa fa-check"></i><b>13.10</b> Graphing Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="chisquare.html"><a href="chisquare.html"><i class="fa fa-check"></i><b>14</b> The Chi-square Distribution</a><ul>
+<li class="chapter" data-level="14.1" data-path="chisquare.html"><a href="chisquare.html#background"><i class="fa fa-check"></i><b>14.1</b> Background</a></li>
+<li class="chapter" data-level="14.2" data-path="chisquare.html"><a href="chisquare.html#dchisq"><i class="fa fa-check"></i><b>14.2</b> dchisq</a></li>
+<li class="chapter" data-level="14.3" data-path="chisquare.html"><a href="chisquare.html#pchisq"><i class="fa fa-check"></i><b>14.3</b> pchisq</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="chisquare.html"><a href="chisquare.html#calculating-p-values-from-pchisq"><i class="fa fa-check"></i><b>14.3.1</b> Calculating p-values from pchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="chisquare.html"><a href="chisquare.html#qchisq"><i class="fa fa-check"></i><b>14.4</b> qchisq</a></li>
+<li class="chapter" data-level="14.5" data-path="chisquare.html"><a href="chisquare.html#rchisq"><i class="fa fa-check"></i><b>14.5</b> rchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="nonparametrics.html"><a href="nonparametrics.html"><i class="fa fa-check"></i><b>15</b> Nonparametric Statistical Tests</a><ul>
+<li class="chapter" data-level="15.1" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-discrete-data"><i class="fa fa-check"></i><b>15.1</b> Experiments involving discrete data</a></li>
+<li class="chapter" data-level="15.2" data-path="nonparametrics.html"><a href="nonparametrics.html#deviant-data"><i class="fa fa-check"></i><b>15.2</b> Deviant Data</a></li>
+<li class="chapter" data-level="15.3" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>15.3</b> Sign Test</a><ul>
+<li class="chapter" data-level="15.3.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>15.3.1</b> Interpretation</a></li>
+<li class="chapter" data-level="15.3.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-5"><i class="fa fa-check"></i><b>15.3.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>15.4</b> Wilcoxon Sign Rank Test for One Group</a><ul>
+<li class="chapter" data-level="15.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>15.4.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
+<li class="chapter" data-level="15.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>15.4.2</b> Interpretation</a></li>
+<li class="chapter" data-level="15.4.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>15.4.3</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>15.5</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
+<li class="chapter" data-level="15.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>15.5.1</b> Interpretation</a></li>
+<li class="chapter" data-level="15.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>15.5.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="15.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>15.6</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
+<li class="chapter" data-level="15.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>15.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="15.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>15.6.2</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="15.7" data-path="nonparametrics.html"><a href="nonparametrics.html#kruskal-wallas"><i class="fa fa-check"></i><b>15.7</b> Kruskal-Wallas</a><ul>
+<li class="chapter" data-level="15.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>15.7.1</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="15.8" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>15.8</b> Friedman test</a></li>
+<li class="chapter" data-level="15.9" data-path="nonparametrics.html"><a href="nonparametrics.html#summary"><i class="fa fa-check"></i><b>15.9</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>16</b> Signed Rank Distribution</a><ul>
+<li class="chapter" data-level="16.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>16.1</b> Transformation of data into sign ranks</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="signrank.html"><a href="signrank.html#for-a-one-group-sample"><i class="fa fa-check"></i><b>16.1.1</b> For a one group sample</a></li>
+<li class="chapter" data-level="16.1.2" data-path="signrank.html"><a href="signrank.html#for-a-paired-sample"><i class="fa fa-check"></i><b>16.1.2</b> For a paired sample</a></li>
+<li class="chapter" data-level="16.1.3" data-path="signrank.html"><a href="signrank.html#the-sign-rank-test-statistic-in-r"><i class="fa fa-check"></i><b>16.1.3</b> The sign rank test statistic in R</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="signrank.html"><a href="signrank.html#rs-four-sign-rank-distribution-functions"><i class="fa fa-check"></i><b>16.2</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="16.2.1" data-path="signrank.html"><a href="signrank.html#dsignrank"><i class="fa fa-check"></i><b>16.2.1</b> dsignrank</a></li>
+<li class="chapter" data-level="16.2.2" data-path="signrank.html"><a href="signrank.html#psignrank"><i class="fa fa-check"></i><b>16.2.2</b> psignrank</a></li>
+<li class="chapter" data-level="16.2.3" data-path="signrank.html"><a href="signrank.html#qsignrank"><i class="fa fa-check"></i><b>16.2.3</b> qsignrank</a></li>
+<li class="chapter" data-level="16.2.4" data-path="signrank.html"><a href="signrank.html#rsignrank"><i class="fa fa-check"></i><b>16.2.4</b> rsignrank</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="ranksum.html"><a href="ranksum.html"><i class="fa fa-check"></i><b>17</b> Rank Sum Distribution</a><ul>
+<li class="chapter" data-level="17.0.1" data-path="ranksum.html"><a href="ranksum.html#transformation-of-data-into-rank-summs"><i class="fa fa-check"></i><b>17.0.1</b> Transformation of data into rank summs</a></li>
+<li class="chapter" data-level="17.0.2" data-path="ranksum.html"><a href="ranksum.html#the-sign-rank-test-statistic-in-r-1"><i class="fa fa-check"></i><b>17.0.2</b> The sign rank test statistic in R</a></li>
+<li class="chapter" data-level="17.1" data-path="ranksum.html"><a href="ranksum.html#rs-four-sign-rank-distribution-functions-1"><i class="fa fa-check"></i><b>17.1</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="ranksum.html"><a href="ranksum.html#dwilcox"><i class="fa fa-check"></i><b>17.1.1</b> dwilcox</a></li>
+<li class="chapter" data-level="17.1.2" data-path="ranksum.html"><a href="ranksum.html#pwilcox"><i class="fa fa-check"></i><b>17.1.2</b> pwilcox</a></li>
+<li class="chapter" data-level="17.1.3" data-path="ranksum.html"><a href="ranksum.html#qwilcox"><i class="fa fa-check"></i><b>17.1.3</b> qwilcox</a></li>
+<li class="chapter" data-level="17.1.4" data-path="ranksum.html"><a href="ranksum.html#rwilcox"><i class="fa fa-check"></i><b>17.1.4</b> rwilcox</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>18</b> The t-tests</a><ul>
+<li class="chapter" data-level="18.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>18.1</b> Data assumptions for t-tests</a></li>
+<li class="chapter" data-level="18.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>18.2</b> The t Statistic</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>18.2.1</b> One sample t tests</a></li>
+<li class="chapter" data-level="18.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>18.2.2</b> Unpaired t tests</a></li>
+<li class="chapter" data-level="18.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>18.2.3</b> Paired t tests</a></li>
+</ul></li>
+<li class="chapter" data-level="18.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>18.3</b> t Test Hypotheses</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>18.3.1</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="18.3.2" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>18.3.2</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="18.3.3" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>18.3.3</b> Paired hypotheses</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>18.4</b> Confidence Intervals of Means</a></li>
+<li class="chapter" data-level="18.5" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>18.5</b> t Tests: Running the analysis</a><ul>
+<li class="chapter" data-level="18.5.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>18.5.1</b> One sample t test</a></li>
+<li class="chapter" data-level="18.5.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>18.5.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="18.5.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>18.5.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="18.6" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>18.6</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="18.6.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>18.6.1</b> Unpaired</a></li>
+<li class="chapter" data-level="18.6.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>18.6.2</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="18.7" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>18.7</b> t Test Power</a><ul>
+<li class="chapter" data-level="18.7.1" data-path="ttests.html"><a href="ttests.html#interpretation-7"><i class="fa fa-check"></i><b>18.7.1</b> Interpretation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>19</b> Statistical design of t-tests</a><ul>
+<li class="chapter" data-level="19.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>19.1</b> About this chapter</a><ul>
+<li class="chapter" data-level="19.1.1" data-path="ttestmc.html"><a href="ttestmc.html#scenario"><i class="fa fa-check"></i><b>19.1.1</b> Scenario</a></li>
+</ul></li>
+<li class="chapter" data-level="19.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>19.2</b> One sample t-test Monte Carlo</a></li>
+<li class="chapter" data-level="19.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>19.3</b> Unpaired t-test Monte Carlo</a></li>
+<li class="chapter" data-level="19.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>19.4</b> Paired t-test Monte Carlo</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="categorical" class="section level1">
+<h1><span class="header-section-number">Chapter 13</span> Statistics for Categorical Data</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(PropCIs)
+<span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(binom)
+<span class="kw">library</span>(pwr)
+<span class="kw">library</span>(statmod)
+<span class="kw">library</span>(EMT)</code></pre>
+<p>Biomedical research is full of studies that count discrete events.</p>
+<p>A common mistake made by many researchers is to use statistics designed for measured variables on discrete count variables. For example, they transform count data into scaler measures (eg, percents, folds etc) and then apply statistics designed for continuous variables to events that are fundamentally discrete by nature. The problem with that is there are inherent differences in the behaviors of continuous and discrete variables. Therefore, it is important to recognize</p>
+<div id="types-of-categorical-data" class="section level2">
+<h2><span class="header-section-number">13.1</span> Types of categorical data</h2>
+<p>What proportion of cells express a specific antigen and does an experimental treatment cause that proportion to change? What proportion of rats treated with an anxiolytic drug choose one chamber over others in a maze test? How many people who express a certain marker go on to have cancer?</p>
+<p>In these three scenarios the primary data are counts. All of the study results have integer values. The counts are categorized with variable attributes, thus they are called categorical data.</p>
+<p>In fact, the three scenarios above are very different experimental designs. The first represent experiments that compare simple proportions. The second compare freqeuncies, and the third is an association study. The analysis of these require using a common suite of statistical tools in slightly different ways.</p>
+<p>Broadly, all of these tools boil down to dealing with proportions. A few types of proportions (eg, odds ratio, relative risk) that can be calculated from these datasets are sometimes used as effect size parameters. Other times we’d use a confidence interval as a way of conveying an effect size. Statistical tests are then used to evaluate whether these effect sizes, or frequencies, or simple proportions, are extreme enough relative to null counterparts so that we can conclude the experimental variable had some sort of effect.</p>
+<div id="proportions" class="section level3">
+<h3><span class="header-section-number">13.1.1</span> Proportions</h3>
+<p>We might…</p>
+<ul>
+<li><p>Inactivate a gene hypothesized to function in the reproductive pathway. To test it, mating triangles would be set up to count the number of female mice that become pregnant or not.</p></li>
+<li><p>Implant a tumor in mice, before counting the number of survivors and non-survivors at a given point later.</p></li>
+<li><p>Mutate a protein that we hypothesize moves in and out of an intracellular compartment, before staining cells to count the number of cells where it is and is not located in a compartment of interest.</p></li>
+</ul>
+<p>Each of the examples above have <code>binomial</code> outcomes…pregnant vs not, dead vs alive, or inside vs outside.</p>
+<p>In each case above, both the succesful and the failed events are counted in the experiment. A proportion is a simple ratio of counts of success to counts of failures.</p>
+</div>
+<div id="frequencies" class="section level3">
+<h3><span class="header-section-number">13.1.2</span> Frequencies</h3>
+<p>Other kinds of counted data occur randomly in space and time. The examples below illustrate this. Note how only the number of events are recorded, rather than categorizing them as successes or failures. These counts therefore have the statistical property of frequency, such as counts per time or counts per volume or counts per area.</p>
+<p>We can…</p>
+<ul>
+<li><p>Expose a neuron to an excitatory neurotransmitter, then count the number of times it depolarizes over a given period of time.</p></li>
+<li><p>In a model of asthma, count the number of immune cells that are washed out in a pulmonary lavage protocol after an immunosuppressive agent.</p></li>
+</ul>
+<p>The key difference for these are that their non-event counterparts are meaningless. For example, it is not possible to measure the number of depolarizations that don’t occur, or know the number of immune cells that don’t wash out in the lavage.</p>
+</div>
+<div id="associations" class="section level3">
+<h3><span class="header-section-number">13.1.3</span> Associations</h3>
+<p>Lastly, the examples below illustrate the design of association studies, which are based upon, according to the null hypothesis, independent predictors and outcomes.</p>
+<p>Here are some examples of association study designs:</p>
+<p>You might wish to</p>
+<ul>
+<li><p>identify causal alleles associated with a specific disease phenotype by counting the number of people with and without the disease, who have or don’t have a particular allelic variants.</p></li>
+<li><p>determine if a history of exposure to certain carcinogens is associated with a higher risk of cancer by counting people with cancer who have been exposed.</p></li>
+<li><p>know if a drug treatment causes a higher than expected frequency of a side-effect by counting the people on the drug with the side-effect.</p></li>
+</ul>
+<p>In the simplest (and most general) case, association studies are 2X2 in design: A predictor is either present or absent as the row factor, and an outcome was either a success for a failure as the column factor. Subjects are categorized into groups on the basis of where they fall in the 4 possible combinations that such 2X2’s allow for.</p>
+<p>It should be noted that higher order association studies are also possible, which can be either symmetric (eg, 3x3) or non-symmetric (eg,) 9X2, 2x3, and so on.</p>
+</div>
+<div id="statistics-covered-here" class="section level3">
+<h3><span class="header-section-number">13.1.4</span> Statistics Covered Here</h3>
+<ul>
+<li>Confidence intervals of proportions</li>
+<li>One-sample proportions test</li>
+<li>Two-sample proportions test</li>
+<li>Goodness of fit tests</li>
+<li>Tests of associations</li>
+<li>Power analysis of proportions (including Monte Carlo simulation)</li>
+<li>Plotting proportions with ggplot2</li>
+</ul>
+</div>
+</div>
+<div id="exact-v-asymptotic-calculations-of-p-values" class="section level2">
+<h2><span class="header-section-number">13.2</span> Exact v Asymptotic Calculations of p-values</h2>
+<p>The statistical tests for hypotheses on categorical data fall into two broad categories: exact tests (<code>binom.test</code>, <code>fisher.test</code>, <code>multinomial.test</code>) and asymptotic tests (<code>prop.test</code> <code>chisq.test</code>).</p>
+<p>Exact tests calculate exact p-values. That’s made possible using factorial math. The <code>prop.test</code> and <code>chisq.test</code> generate asymptotic (aka, approximate) p-values. They calculate a <span class="math inline">\(\chi^2\)</span> test statistic from the data before mapping it to a <span class="math inline">\(\chi^2\)</span> probability density function. Because that function is continuous, the p-values it generates are asymptotically-estimated, rather than exactly calculated.</p>
+<div id="choosing-exact-or-asymptotic" class="section level3">
+<h3><span class="header-section-number">13.2.1</span> Choosing exact or asymptotic</h3>
+<p>As a general rule, given the same datasets and arguments, exact and approximate hypothesis test functions will almost always give you p-values that differ, but only slightly.</p>
+<p>That’s usually not a problem unless you’re near a threshold value. Typically, an integrity crisis is evoked when that happens: “Which is”right???" Do you p-hack and choose the favorable one or not?</p>
+<p>You should use the test you said you’d use when you first designed the experiment. And if you didn’t pre-plan…or at least have some idea about where you are going…recognize that the exact tests are more accurate.</p>
+<p>Another issue that arises is how well the tests perform with low count numbers. For example, as a rule of thumb, avoid using the <code>chisq.test</code> when the data have counts less than 5 in more than 20% of the cells because the accuracy of the <code>chisq.test</code> is less at low cell counts. Use an exact test instead.</p>
+</div>
+</div>
+<div id="overview-of-the-types-of-hypothesis-testing" class="section level2">
+<h2><span class="header-section-number">13.3</span> Overview of the types of hypothesis testing</h2>
+<p>We’ll go through each below in more detail, emphasizing practical experimental design and interpretation principles.</p>
+<div id="proportion-analysis" class="section level3">
+<h3><span class="header-section-number">13.3.1</span> Proportion analysis</h3>
+<p>You can learn a lot about experimental statistics by thinking about proportions. So a lot of time is spent on it. Proportions are derived from events that can be classified as either successes or failures. Sometimes we want to compare simple proportions to decide if they are the same or not.</p>
+</div>
+<div id="goodness-of-fit-testing" class="section level3">
+<h3><span class="header-section-number">13.3.2</span> Goodness of fit testing</h3>
+<p>We do this when we want to compare the frequency distribution we observe in an experiment to the null expectation for that frequency distribution.</p>
+</div>
+<div id="contingency-analysis" class="section level3">
+<h3><span class="header-section-number">13.3.3</span> Contingency Analysis</h3>
+<p>Contingency analysis, otherwise known as tests of independence, are very different from goodness-of-fit test and simple proportion tests, in design and in purpose. They allow us to ask if two (or more) variables are associated with each other. Unlike a lot of the statistics we’ll deal with, there is a hint of a predictive element associated with these types of studies because the effect sizes we use to explain their results are related to odds and risk and likelihood. Which is not to say that we couldn’t use the same predictive concepts in proportions and goodness of fit testing.</p>
+<p>Contingency tests are very common in epidemiology and in clinical science. You recognize by their names as cohort studies, case control studies, and so forth.</p>
+</div>
+</div>
+<div id="comparing-proportions" class="section level2">
+<h2><span class="header-section-number">13.4</span> Comparing proportions</h2>
+<p>In their simplest use, the tests here can be used to compare one proportion to another. Is the proportion of successes to failures that results from a treatment different from the proportion that results from control? We’ll dive into this further below.</p>
+<div id="a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin" class="section level3">
+<h3><span class="header-section-number">13.4.1</span> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</h3>
+<p>Let’s imagine a small pilot experiment to see how a cytokine affects T cells. This is a very crude experiment designed mostly to illustrate some principles.</p>
+<p>A cytokine is injected into a single mouse. There is no control injection, just one mouse/one cytokine injection. A time later, blood is harvested from the mouse to measure an antigen on T cells. Let’s call the antigen gradstudin.</p>
+<p>Assume a method exists to detect T cells in the sample that express gradstudin and don’t express gradstudin.</p>
+<p>That method implies some <code>nominal</code> criteria are established to <code>categorize</code> T cells as either expressing gradstudin or not. FACS machines are very useful for this. The machine typically produces <code>continuous</code> fluorescent data, where intensity is proportional to gradstudin levels. But we don’t care about the magnitude of the expression level, we just care whether it is there or not.</p>
+<p>Based upon our scientific expertise, we establish cutoff gating criteria above which fluoresence == gradstudin is present.</p>
+<p>The machine therefore returns simple counts of both gradstudin-positive and gradstudin-negative cells.</p>
+</div>
+<div id="calculating-proportions" class="section level3">
+<h3><span class="header-section-number">13.4.2</span> Calculating Proportions</h3>
+<p>Here’s the data, counts of cells expressing and not expressing gradstudin. It is a very simple dataset:</p>
+<pre class="sourceCode r"><code class="sourceCode r">pos &lt;-<span class="st"> </span><span class="dv">5042</span>
+neg &lt;-<span class="st"> </span><span class="dv">18492</span></code></pre>
+<p><strong>A proportion is the count of a particular outcome relative to the total number of events.</strong> It’s customary to use the number of successes as the numerator. Whereas its customary to refer to the total number of events, <code>n</code>, as the trial number rather than as sample size, but they mean the same thing.</p>
+<pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span>pos<span class="op">+</span>neg <span class="co">#trial size</span>
+prop &lt;-<span class="st"> </span>pos<span class="op">/</span>n
+prop</code></pre>
+<pre><code>## [1] 0.2142432</code></pre>
+</div>
+<div id="what-a-proportion-estimates" class="section level3">
+<h3><span class="header-section-number">13.4.3</span> What A Proportion Estimates</h3>
+<p>This sample proportion is descriptive statistic. It serves as a <code>point estimate</code> of the true proportion of the population we sampled. The only way to know the true proportion would be to count every T cell in every drop of the subjects blood!</p>
+<p>This point estimate is statistically valid if our sample meets two conditions. First, that this is a random sample of the T cells in the subject’s blood. Second, if we consider every T cell in the sample as statistically independent of every other T cell.</p>
+<p>We can safely assume those conditions are met. Strictly, as an estimate this proportion only infers the population of blood borne T cells in that one subject. We really can’t generalize much further than that, including the composition of T cells in sequesterd compartments (thymus, nodes, etc).</p>
+<p>Which is fine for our purposes now because we’re trying to keep this simple.</p>
+</div>
+<div id="confidence-intervals-of-proportions" class="section level3">
+<h3><span class="header-section-number">13.4.4</span> Confidence Intervals of Proportions</h3>
+<p>Confidence intervals (CI) have features of both descriptive and inferential statistics.</p>
+<div id="definition-of-a-95-ci" class="section level4">
+<h4><span class="header-section-number">13.4.4.1</span> Definition of a 95% CI</h4>
+<p><strong>The 95% CI for a sample proportion represents a range of proportions within which 95% of the time we would expect the true population proportion.</strong></p>
+<p>There’s a lot going on there.</p>
+<p>The value of the proportion we measured in the sample is a mathematical fact that is not in dispute. It is what it is. The question is, what does it represent?</p>
+<p>Although there might be some error associated with measuring it, our single sample offers no real information about what that error might be. As an n=1 sample, there is no variation!</p>
+<p><strong>What is unknown is the true proportion of gradstudin+ T cells in the population we sampled.</strong></p>
+<p>CI’s are designed to give us some insights into that unknown.</p>
+<p>95% CI’s are a <code>range estimate</code> of what that true population proportion might be. CI’s are calculated in part upon the quality of the point estimate. In the case of proportions, the quality of the point estimate is driven by the size of the sample, the number of counts that are involved in calculating the proportion.</p>
+<p>As you might imagine intuitively, the more counts we have in the sample, the more confidence we should have that our proportion provides a good estimate of the population’s proportion.</p>
+</div>
+<div id="calculating-ci-with-r" class="section level4">
+<h4><span class="header-section-number">13.4.4.2</span> Calculating CI with R</h4>
+<p>The <code>PropCIs</code> package offers several ways to calculate a CI. Is one better than the other? Sometimes, yes. For now, let’s not worry about that. <a href="http://www.ucl.ac.uk/english-usage/staff/sean/resources/binomialpoisson.pdf">Wilson’s score interval with continuity correction</a>] is suggested as the most accurate for proportions.</p>
+<p>When publishing it is important is to state which CI method is used. Other methods are more commonly used than Wilson’s because they gained traction as being easier to compute by hand, and old habits die slowly.</p>
+<p>Taking the data on cytokine induced gradstudin+ T cells, the chunk below illustrates how to use <code>PropCIs</code> to derive a Wilscon score interval-based 95% CI:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scoreci</span>(pos, n, <span class="dt">conf.level=</span><span class="fl">0.95</span>)</code></pre>
+<pre><code>## 
+## 
+## 
+## data:  
+## 
+## 95 percent confidence interval:
+##  0.2090 0.2195</code></pre>
+</div>
+<div id="interpretation-of-a-ci" class="section level4">
+<h4><span class="header-section-number">13.4.4.3</span> Interpretation of a CI</h4>
+<p>The value of our sample proportion, 0.214, falls within this 95% CI. That’s not a big surprise, given the 95% CI was calculated from our proportion!</p>
+<p>On the basis of the sample proportion, we can conclude from this CI that there is a 95% chance the true proportion of gradstudin positive T cells falls within this very narrow range.</p>
+</div>
+<div id="using-the-ci-as-a-quick-test-of-statistical-significance." class="section level4">
+<h4><span class="header-section-number">13.4.4.4</span> Using the CI as a quick test of statistical significance.</h4>
+<p>Let’s say, for example, that we have tremendous experience and great scientific reason to expect to see under normal conditions that only 15% of T cells would be gradstudin-positive normally. Does our sample proportion differ from that expectation?</p>
+<p>Since a proportion of 0.15 is not within the 95% CI calculated above, we can conclude that the cytokine-induced sample proportion differs from this expectation at the 5% level of statistical significance.</p>
+<p>We just did a statistical test, without running any software (sorta) or generating any p-values!! And it is perfectly valid inference.</p>
+</div>
+</div>
+<div id="a-one-sample-proportion-test" class="section level3">
+<h3><span class="header-section-number">13.4.5</span> A One-Sample Proportion Test</h3>
+<p>We’ll use <code>prop.test</code> to run a test that generates a p-value to decide if the sample proportion we have above differs from 0.15.</p>
+<div id="hypothesis-tested-in-a-one-sample-proportion-test" class="section level4">
+<h4><span class="header-section-number">13.4.5.1</span> Hypothesis Tested in a One-Sample Proportion Test</h4>
+<p>In this test the sample antigen-positive proportion is compared to a theoretical proportion. If the typical proportion of antigen-positive T cells within a blood sample is 15%, is the result after cytokine treatment different from this proportion?</p>
+<p>Let’s say that our scientific hypothesis going into all this is that the cytokine induces the antigen on T cells. Since we are predicting an increase, we should establish a one-sided alternative (thus using <code>greater</code> as an argument in <code>prop.test</code> below) as our statistical hypothesis.</p>
+<p>Our statistical hypothesis is the null. We’ll decide whether or not to reject the null on the basis of the test results. Philosophically, we’re using a falsification method.</p>
+<ul>
+<li><p>The statistical alternate hypothesis: <span class="math inline">\(\pi&gt;15\%\)</span></p></li>
+<li><p>The statistical null hypothesis: <span class="math inline">\(\pi\le15\%\)</span></p></li>
+</ul>
+<p>We use Greek notation to represent the ‘true’ population proportion. This reminds us that a statistical hypothesis is an inferential test about the population proportion.</p>
+<p>Again, there is no question that the sample proportion differs from a proportion of 15%. 21% != 15%. That’s a simple numerical fact. Statistical tests are not necessary to make that assertion.</p>
+<p>On the basis of the sample proportion p, we’d like to draw inference on the composition of all of the T cells in the blood of the subject. Thus, the sample p is only an estimate of a true <span class="math inline">\(\pi\)</span> (which we notate using Greek letters).</p>
+<p>Statistical testing allows us to generate some insight into the reliability of our estimate.</p>
+<p>The chunk below lays out these arguments using R’s <code>prop.test</code> function:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#pos and n in the test arguments are objects that were defined above!</span>
+<span class="kw">prop.test</span>(
+  pos, n, <span class="dt">p=</span><span class="fl">0.15</span>, 
+  <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, 
+  <span class="dt">conf.level =</span> <span class="fl">0.95</span>, 
+  <span class="dt">correct =</span> <span class="ot">TRUE</span>
+  )</code></pre>
+<pre><code>## 
+##  1-sample proportions test with continuity correction
+## 
+## data:  pos out of n, null probability 0.15
+## X-squared = 761.29, df = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: true p is greater than 0.15
+## 95 percent confidence interval:
+##  0.2098559 1.0000000
+## sample estimates:
+##         p 
+## 0.2142432</code></pre>
+</div>
+<div id="interpreting-one-sample-prop.test-output" class="section level4">
+<h4><span class="header-section-number">13.4.5.2</span> Interpreting one-sample prop.test output</h4>
+<p>Like all statistical tests, this one is evaluated under the assumption that the null hypothesis is true. We use the test outcome to decide whether the null hypothesis should be rejected.</p>
+<p>The <code>prop.test</code> conducts a chi-square analysis. The value of <span class="math inline">\(\chi^2\)</span> for this sample is very large.</p>
+<p><strong>The p-value represents the probability of obtaining a <span class="math inline">\(\chi^2\)</span> value as larger or larger then what is calculated from our sample.</strong></p>
+<p>If the null hypothesis is true in this case, the probability of a <span class="math inline">\(\chi^2\)</span> value as large or larger than we obtained is 2.2e-16, which is very, very low.</p>
+<p>The 95% CI is 0.2098 to 1.0. There is a 95% chance the population proportion is greater than 0.2098. The reason it differs from the Wilson’s CI calculated above is that we used <code>greater</code>as a one-sided hypothesis argument in the prop.test.</p>
+</div>
+<div id="how-to-write-this-up" class="section level4">
+<h4><span class="header-section-number">13.4.5.3</span> How to write this up</h4>
+<p><em>The proportion of gradstudin positive T cells after cytokine treatment in the subject differs from an expected value of 0.15 (one-sided one-sample proportions test, p-value=2.2e-16, 95% CI = 0.209 to 1.0)</em></p>
+<p>Notice how I didn’t say “significantly” or “statistically significantly” or some such. Whether an outcome is signficant or not should be a scientific assertion, rather than statistical.</p>
+</div>
+<div id="an-exact-test-for-one-proportion" class="section level4">
+<h4><span class="header-section-number">13.4.5.4</span> An exact test for one proportion</h4>
+<p>R’s <code>binom.test</code> function is an exact test for whether a proportion differs from a theoretical expectation. It compares proportions using an entirely different procedure.</p>
+<p>As a <strong>one-proportion test</strong> the <code>binom.test</code> gives an exact p-value derived from the binomial distribution, whereas the <code>prop.test</code> gives approximate p-values because it uses the chi-square distribution.</p>
+<p>That distinction is hard to see with our examples here, but the differences will become more noticable when analyzing samples with far fewer events.</p>
+<p>Here’s the binomial test run on two different proportions. In each, the test is comparing the experimental proportion to the proportion value of 0.15.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">binom.test</span>(pos, n, <span class="dt">p=</span><span class="fl">0.15</span>)</code></pre>
+<pre><code>## 
+##  Exact binomial test
+## 
+## data:  pos and n
+## number of successes = 5042, number of trials = 23534, p-value &lt;
+## 2.2e-16
+## alternative hypothesis: true probability of success is not equal to 0.15
+## 95 percent confidence interval:
+##  0.2090155 0.2195416
+## sample estimates:
+## probability of success 
+##              0.2142432</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">binom.test</span>(<span class="dt">x=</span><span class="dv">567</span>, <span class="dt">n=</span><span class="dv">1778</span>, <span class="dt">p=</span><span class="fl">0.15</span>)</code></pre>
+<pre><code>## 
+##  Exact binomial test
+## 
+## data:  567 and 1778
+## number of successes = 567, number of trials = 1778, p-value &lt;
+## 2.2e-16
+## alternative hypothesis: true probability of success is not equal to 0.15
+## 95 percent confidence interval:
+##  0.2972673 0.3411272
+## sample estimates:
+## probability of success 
+##              0.3188976</code></pre>
+</div>
+</div>
+<div id="comparing-two-proportions" class="section level3">
+<h3><span class="header-section-number">13.4.6</span> Comparing Two Proportions</h3>
+<p>We can stick with the T cell-cytokine-gradstudin scenario, but let’s change up the experiment a tad.</p>
+<p>Let’s imagine we’ve withdrawn a sample of blood from a subject and enriched for T cells. Half of the sample is exposed in vitro to a cytokine for a few hours. The other half is exposed to vehicle as a control. We count the gradstudin-positive and gradstudin-negative T cells in both groups.</p>
+<p>We now have a predictor group at two levels (treatment = vehicle or cytokine) and an outcome group at two levels (antigen = positive or negative)</p>
+<div id="hypothesis-tested" class="section level4">
+<h4><span class="header-section-number">13.4.6.1</span> Hypothesis Tested</h4>
+<p>Let’s test the hypothesis that the proportion of postive T cells in the two samples differ. The choice is not to test whether one proportion is greater than the other. We just want to know if they differ.</p>
+<p>The statistical hypotheses here differs from the one sample hypotheses in two ways.</p>
+<p>First, notice how we’re comparing the population proportion of cytokine- to that for vehicle-treatment.</p>
+<p>Second, we’re making this a two-tailed (<code>two.sided</code>) test instead of one-tailed (<code>greater</code>).</p>
+<ul>
+<li><p>The statistical alterate hypothesis: <span class="math inline">\(\pi_c\ne\pi_v\)</span></p></li>
+<li><p>The statistical null hypothesis: <span class="math inline">\(\pi_c=\pi_v\)</span></p></li>
+</ul>
+<p>A second way of writing these hypotheses to say the same thing:</p>
+<ul>
+<li><p>Alternate: <span class="math inline">\(\pi_c-\pi_v\ne0\)</span></p></li>
+<li><p>Null: <span class="math inline">\(\pi_c-\pi_v=0\)</span></p></li>
+</ul>
+</div>
+<div id="running-the-test" class="section level4">
+<h4><span class="header-section-number">13.4.6.2</span> Running the test</h4>
+<p>Let’s say that here are the outcome data:
+gradstudin-positive, gradstudin-negative, total
+Cytokine-treated: 567, 1211, 1778
+Vehicle-treated: 412, 1485, 1897</p>
+<p>The data can be dumped directly into <code>prop.test</code>. Normally we’d run this at 0.95 confidence level (type1 error of 5%). Let’s say we have good scientific reasons to run this test at a much more stringet threshold level for type1 error, because we’re really hoping to avoid a false positive:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prop.test</span>(
+  <span class="dt">x=</span><span class="kw">c</span>(<span class="dv">567</span>, <span class="dv">412</span>),
+  <span class="dt">n=</span><span class="kw">c</span>(<span class="dv">1778</span>, <span class="dv">1897</span>),
+  <span class="dt">conf.level=</span><span class="fl">0.9999999</span>
+  )</code></pre>
+<pre><code>## 
+##  2-sample test for equality of proportions with continuity
+##  correction
+## 
+## data:  c(567, 412) out of c(1778, 1897)
+## X-squared = 48.066, df = 1, p-value = 4.121e-12
+## alternative hypothesis: two.sided
+## 99.99999 percent confidence interval:
+##  0.02364902 0.17977620
+## sample estimates:
+##    prop 1    prop 2 
+## 0.3188976 0.2171850</code></pre>
+</div>
+<div id="interpretion-of-two-sample-proportions-test-output" class="section level4">
+<h4><span class="header-section-number">13.4.6.3</span> Interpretion of Two-Sample proportions test output</h4>
+<p>This test is evaluated under the assumption that the null hypothesis is true. The test results helps us decide whether the null hypothesis should be rejected. We’ll do that if the p-value is less than our type1 error threshold.</p>
+<p>The <code>prop.test</code> conducts a chi-square analysis using the Yates continuity correction. This <span class="math inline">\(\chi^2\)</span> value is very large; extremely large.</p>
+<p>The p-value represents the probability of obtaining a <span class="math inline">\(\chi^2\)</span> value as larger or larger than that by chance. If the null hypothesis is true in this case, the probability of that sized <span class="math inline">\(\chi^2\)</span> value is 4.12e-12, which is very low, and still much lower than our type1 error threshold.</p>
+<p>We can reject the null.</p>
+<p>If we subtract prop2 from prop1 we get a value of about 0.1017, as a point estimate for the difference between the two proportions.</p>
+<p>The 99.99999% CI for the difference between two proportions does not include the value of 0. Since the 99.99999% CI does not overlap with 0, we can conclude from it alone that there is a difference between the two proportions. Even at this extremely high confidence level!!</p>
+</div>
+<div id="write-up" class="section level4">
+<h4><span class="header-section-number">13.4.6.4</span> Write Up</h4>
+<p><em>The proportion of gradstudin positive T cells after cytokine differs from that in vehicle treated cells (two-sided two-sample proportions test, p-value=4.12e-12, 99.99999% CI for proportion difference = 0.023 to 0.179)</em></p>
+<p>Note how we don’t say “statistically significantly different”.</p>
+</div>
+</div>
+</div>
+<div id="exact-tests-for-two-proportions" class="section level2">
+<h2><span class="header-section-number">13.5</span> Exact tests for two proportions</h2>
+<p>An alternative to <code>prop.test</code> to <strong>compare two proportions</strong> is the <code>fisher.test</code>, which like the <code>binom.test</code> calculates exact p-values. The <code>fisher.test</code> requires that data be input as a matrix or table of the successes and failures.</p>
+<p>We need to make a matrix of the data first, then perform the <code>fisher.test</code> on that matrix:
+gradstudin-positive, gradstudin-negative, total
+Cytokine-treated: 567, 1211, 1778
+Vehicle-treated: 412, 1485, 1897</p>
+<p>Notice below that here we’re entering the successes and the failures in the matrix. We’re tagging the matrix with some dimension names so it doesn’t get confusing.</p>
+<pre class="sourceCode r"><code class="sourceCode r">M &lt;-<span class="st"> </span><span class="kw">matrix</span>(
+  <span class="kw">c</span>(<span class="dv">567</span>, <span class="dv">412</span>, <span class="dv">1211</span>, <span class="dv">1485</span>), 
+  <span class="dt">nrow=</span><span class="dv">2</span>, 
+  <span class="dt">dimnames =</span> <span class="kw">list</span>(
+    <span class="dt">Treat=</span><span class="kw">c</span>(<span class="st">&quot;Cytokine&quot;</span>, <span class="st">&quot;Vehicle&quot;</span>), 
+    <span class="dt">Antigen=</span><span class="kw">c</span>(<span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Negative&quot;</span>)
+    )
+  )
+M</code></pre>
+<pre><code>##           Antigen
+## Treat      Positive Negative
+##   Cytokine      567     1211
+##   Vehicle       412     1485</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fisher.test</span>(M)</code></pre>
+<pre><code>## 
+##  Fisher&#39;s Exact Test for Count Data
+## 
+## data:  M
+## p-value = 3.433e-12
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##  1.451760 1.962188
+## sample estimates:
+## odds ratio 
+##   1.687312</code></pre>
+<p>Notice the output differs from the prop.test. In adddition to a p-value, the Fisher test produces an odds ratio and its confidence interval. The p-value leads to the same result and write-up as for the two proportion test. The odds ratio could be interpreted like this:</p>
+<p><em>The cytokine increases the odds of gradstudin+ T cells by 1.687 compared to vehicle treatment (Fisher’s Exact Tet for Count Data, p = 3.433e-12, OR 95% CI = 1.45 to 1.96)</em>.</p>
+</div>
+<div id="goodness-of-fit-tests" class="section level2">
+<h2><span class="header-section-number">13.6</span> Goodness of fit Tests</h2>
+<p>Goodness-of-fit tests are useful for testing hypotheses about patterns of counts in time or space…whether the distribution of their observed frequencies differs from expectations of a null case. In other words, do they occur in a non-random pattern?</p>
+<p>There is no independent variable in these tests.</p>
+<p>The shape of these datasets is either as 1 row or 1 column, where every cell is a time or space and the cell value is the the number of counts that occured in that time or space.</p>
+<p>Either the <code>multinomial.test</code> (for exact p-values) or the <code>chisq.test</code> (for approximate p-values) can be used for Goodness-of-fit testing. The latter is most commonly used.</p>
+<p>These designs compare the disribution of events to a hypothetical (or expected) model null distribution of those events.</p>
+<p>These expected counts are entered in the test script as a <code>prop</code> or <code>p</code> argument. <em>This can be confusing. It’s important to recognize you should enter a vector of null probabilities in p or prop! Don’t enter the counts you hope to see if the test were positive!!!</em></p>
+<p>Say we had a spatial memory test in which 28 independent subjects are placed into a maze for testing (one at a time) and we count which of 4 chambers they enter first. They do so at the following frequencies: A=14, B=3, C=7, D=4. Does this frequency distribution differ from the null expectation, A=7, B=7, C=7, D=7, where no chamber is more likely to be entered than another?</p>
+<p>Failure is not an option in this design! Only successes are counted. Given enough time, a subject will always choose a chamber. If one fails the task, it must be censured. Let’s test this at the 5% type1 error threshold:</p>
+<div id="an-exact-goodness-of-fit-test" class="section level3">
+<h3><span class="header-section-number">13.6.1</span> An Exact Goodness of Fit test</h3>
+<p>NB:The multinomial.test function requires you to assert the null frequency distribution explicitly and as fractions whose sum is 1.</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">A=</span><span class="dv">14</span>, <span class="dt">B=</span><span class="dv">3</span>, <span class="dt">C=</span><span class="dv">7</span>, <span class="dt">D=</span><span class="dv">4</span>)
+prob &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">A=</span>.<span class="dv">25</span>, <span class="dt">B=</span>.<span class="dv">25</span>, <span class="dt">C=</span>.<span class="dv">25</span>, <span class="dt">D=</span>.<span class="dv">25</span>)
+
+<span class="kw">multinomial.test</span>(
+  x, 
+  <span class="dt">prob=</span>prob
+  )</code></pre>
+<pre><code>## 
+##  Exact Multinomial Test, distance measure: p
+## 
+##     Events    pObs    p.value
+##       4495   1e-04     0.0235</code></pre>
+<p>Note on the <code>multinomial.test</code>output: <a href="http://rinterested.github.io/statistics/multinomial_exact.html">Please see this site</a> for further information on what is represented by events (its a combination result–a metric of the computation it took to do this) and pObs (its a multinomial probability).</p>
+<p>We’re only intersted in the p-value, since we’re using this function as an exact goodness-of-fit hypothesis test for the null hypothesis.</p>
+<p>Why use an exact test rather than a <code>chisq.test</code>? Because we have two cells in the dataset with counts &lt; 5! An exact p-value will be more accurate.</p>
+<p>The test compares our sample frequency distribution to that in the null model. We actually wrote the latter explicitly in the function argument: null is uniform distribution–the subjects are equally likely to enter each chamber.</p>
+<p>H0: The probability of choice is equal for each chamber.
+<span class="math inline">\(\pi_A=\pi_B=\pi_C=\pi_D\)</span>
+H1: The probability of choice is not equal for each chamber.
+<span class="math inline">\(\pi_A\ne\pi_B\ne\pi_C\ne\pi_D\)</span></p>
+<p>(Note: this is an omnibus test. It doesn’t explicity tell us which chambers are preferred by the subjects.)</p>
+<p>Because the p-value is less than 0.05, we reject the null hypothesis and conclude that the chamber choice is not equitable across the four options.</p>
+<div id="write-up-1" class="section level4">
+<h4><span class="header-section-number">13.6.1.1</span> Write up</h4>
+<p><em>In a 4 chamber maze test, the subjects displayed a clear, non-uniform chamber preference (Exact Multinomial Test, n=28, p=0.0235)</em> Note how this implies the null hypothesis.</p>
+</div>
+</div>
+<div id="an-approximate-goodness-of-fit-test" class="section level3">
+<h3><span class="header-section-number">13.6.2</span> An Approximate Goodness of Fit test</h3>
+<p>The <span class="math inline">\(\chi^2\)</span> test of the same data is really simple to execute. It offers the same conclusion, but note how the p-value is very different.</p>
+<p>Note also that we didn’t enter the null frequency argument. The <code>chisq.test</code>function will coerce the null distribution if it is not entered as an argument explicitly, as you can see from the output for the second line. If for some reason to test against a non-uniform null distribution, you’ll need to write that in your argument explicitly (eg, p = c(A=0.5, B=0.25, C &amp; D = 0.125).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(x)</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  x
+## X-squared = 10.571, df = 3, p-value = 0.01428</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(x)<span class="op">$</span>expected</code></pre>
+<pre><code>## A B C D 
+## 7 7 7 7</code></pre>
+<div id="write-up-2" class="section level4">
+<h4><span class="header-section-number">13.6.2.1</span> Write up</h4>
+<p>The interpretation is no different than for the exact test. The write up is:</p>
+<p><em>In a 4 chamber maze test, the subjects displayed a clear chamber preference (Chi square test for uniform probabilities, <span class="math inline">\(\chi^2\)</span>=10.571, df=3, p=0.01428)</em></p>
+</div>
+</div>
+</div>
+<div id="contingency-testing" class="section level2">
+<h2><span class="header-section-number">13.7</span> Contingency Testing</h2>
+<p>Contingency testing is for deciding whether two or more variables are associated or not. These either explicitly (ie, when using <code>fisher.text</code>) or implicity (ie, when using <code>chisq.test</code>) use ratio’s of proportions–the odds ratio, or relative risk, or the likelihood ratio, or sometimes other proportions–as parameters that express the magnitude of these associations.</p>
+<p>In other words, the hypothesis test asks whether these ratio’s of proportions are more extreme than the null (which would be 1).</p>
+<p>Let’s take the cancer marker data from the contingency analysis lecture. As you recall, a marker has been discovered that is hoped to be strongly associated with cancer. 100 people were tested for whether or not they have the marker, and whether or not they go on to have cancer.</p>
+<p>We’ll create a simple matrix then pass it through the <code>fisher.test</code> function to illustrate the procedure and interpretation.</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">matrix</span>(
+  <span class="kw">c</span>(<span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">6</span>, <span class="dv">64</span>), 
+  <span class="dt">ncol=</span><span class="dv">2</span>, 
+  <span class="dt">dimnames =</span> <span class="kw">list</span>(
+    <span class="dt">Marker=</span><span class="kw">c</span>(<span class="st">&quot;Present&quot;</span>, <span class="st">&quot;Absent&quot;</span>), 
+    <span class="dt">Cancer =</span> <span class="kw">c</span>(<span class="st">&quot;Present&quot;</span>, <span class="st">&quot;Absent&quot;</span>)
+    )
+  )
+x</code></pre>
+<pre><code>##          Cancer
+## Marker    Present Absent
+##   Present      14      6
+##   Absent       16     64</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fisher.test</span>(x) </code></pre>
+<pre><code>## 
+##  Fisher&#39;s Exact Test for Count Data
+## 
+## data:  x
+## p-value = 3.934e-05
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##   2.762514 33.678765
+## sample estimates:
+## odds ratio 
+##   9.061278</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#more argument customization than this is possible </span></code></pre>
+<div id="intepretation-of-contingency-results" class="section level3">
+<h3><span class="header-section-number">13.7.1</span> Intepretation of Contingency Results</h3>
+<p>The odds of a person with the marker having cancer are 9.06 times greater than that for those who don’t have the marker.</p>
+<p>There is a 95% chance the true odds ratio in the population is between 2.76 and 33.68.</p>
+<p>There is an association between the presence of this marker and the probability that cancer occurs.</p>
+</div>
+<div id="write-up-3" class="section level3">
+<h3><span class="header-section-number">13.7.2</span> Write Up</h3>
+<p><em>The large OR indicates the presence of this marker is strongly associated with cancer (n=100, OR = 9.06, 95% CI = 2.76 to 33.68, Fisher’s Exact Test for Count Data, p = 3.934e-05).</em></p>
+<p>The word “strongly” is used to emphasize the effect size, which is OR, not the smallness of the p-value.</p>
+<p>Here are the other tests you might use to conduct for a contingency analysis, to illustrate how they differ: `</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">matrix</span>(
+  <span class="kw">c</span>(<span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">6</span>, <span class="dv">64</span>), 
+  <span class="dt">ncol=</span><span class="dv">2</span>, 
+  <span class="dt">dimnames =</span> <span class="kw">list</span>(
+    <span class="dt">Marker=</span><span class="kw">c</span>(<span class="st">&quot;Present&quot;</span>, <span class="st">&quot;Absent&quot;</span>), 
+    <span class="dt">Cancer =</span> <span class="kw">c</span>(<span class="st">&quot;Present&quot;</span>, <span class="st">&quot;Absent&quot;</span>)
+    )
+  )
+x</code></pre>
+<pre><code>##          Cancer
+## Marker    Present Absent
+##   Present      14      6
+##   Absent       16     64</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prop.test</span>(x)</code></pre>
+<pre><code>## 
+##  2-sample test for equality of proportions with continuity
+##  correction
+## 
+## data:  x
+## X-squared = 16.741, df = 1, p-value = 4.284e-05
+## alternative hypothesis: two.sided
+## 95 percent confidence interval:
+##  0.2496194 0.7503806
+## sample estimates:
+## prop 1 prop 2 
+##    0.7    0.2</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(x)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  x
+## X-squared = 16.741, df = 1, p-value = 4.284e-05</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(x, <span class="dt">correct=</span>F)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  x
+## X-squared = 19.048, df = 1, p-value = 1.275e-05</code></pre>
+<p>First, note that the prop.test is just the chisq.test. You get the same <span class="math inline">\(\chi^2\)</span> value and p-value for each. They just differ in parameter output and input options.</p>
+<p>Second, note how turning off the Yates continuity correction changes the <span class="math inline">\(\chi^2\)</span> value and p-value. That’s to be expected, it changes the calculation! Both the prop.test and chisq.test use Yates by default. The best way to think about Yate’s is that it acts as a smoothing function to take off some of the jigger in the calculation of the <span class="math inline">\(\chi^2\)</span> value.</p>
+</div>
+<div id="interpretation-of-chi2-output" class="section level3">
+<h3><span class="header-section-number">13.7.3</span> Interpretation of <span class="math inline">\(\chi^2\)</span> output</h3>
+<p>There is an association between the presence of this marker and the probability that cancer occurs.</p>
+<p>We <em>could</em> take the prop test’s calculation of the proportions and their difference, along with the 95% CI of their difference and make some hay out of that (the probability of getting cancer with the marker is 70%, and without the marker is 20%). But it’s more customary to use the odds ratio or relative risk rather than differences between probabilities to make effect size assertions.</p>
+</div>
+<div id="write-up-4" class="section level3">
+<h3><span class="header-section-number">13.7.4</span> Write Up</h3>
+<p>You would want to derive the odds ratio and its 95% CI, even though the <span class="math inline">\(\chi^2\)</span> test doesn’t produce it for you. The easiest way to do that is with <code>fisher.test</code>.</p>
+<p>Having that:</p>
+<p><em>The large OR indicates the presence of this marker is strongly associated with cancer (n=100, OR = 9.06, 95% CI = 2.76 to 33.68, Pearson’s Chi-square test with Yate’s continuity correction, p = 4.284e-05).</em></p>
+<p>As before, the word “strongly” is used to emphasize the effect size, which is the OR, rather than the extremeness of the p-value.</p>
+</div>
+<div id="which-contingency-test-is-best" class="section level3">
+<h3><span class="header-section-number">13.7.5</span> Which contingency test is best?</h3>
+<p>With so many options, the question that always arises is which is best to use for contingency analysis?</p>
+<p>The answer is,
+* make this decision in advance and use what you said you would use before you started the experiment.
+* when it comes to p-values, are you an exactophile or an exactophobe?
+* for datasets with low cell numbers (eg, counts less than 5 in a cell), exact tests tend to provide more accurate p-values.
+* the fact that <code>fisher.test</code> generates the OR and its CI is very, very convenient.</p>
+<p>I prefer the fisher.exact test. However, in R you’ll need to understand how to configure its arguments to get it to work on higher dimension contingency tables (eg, 2x3, 3x2, 3x3, etc).</p>
+</div>
+<div id="higher-dimension-contingency-analysis" class="section level3">
+<h3><span class="header-section-number">13.7.6</span> Higher dimension contingency analysis</h3>
+<p>Not infrequently we have studies with many levels of a predictor variable and two outcomes (eg, 7x2), or two predictors and more than two outcomes (eg, 2x3). For these, you’ll find the <code>chisq.test</code> works fairly automagically. In contrast, you’ll need to customize arguments in <code>fisher.test</code> for it to pass in anything other than a 2x2 matrix.</p>
+<p>Furthermore, with dimensions higher than 2x2 there is more than a single odds ratio or relative risk or likelihood ratio in higher dimensions to be computed.</p>
+<p>A step-wise approach for these more complex analyses is to first run an omnibus <code>chisq.test</code> on the intact dimension. If the test is positive (low p-value), analyze 2x2 segments of the grid post hoc using the <code>fisher.test</code> to derive odds ratios and to see which of the proportion ratio’s explain the significance. Such post hoc analyses must include correction for multiple comparisons (eg, the Bonferroni correction) when drawing inference. To do this, pass a vector of p-values into the <code>p.adjust</code> function.</p>
+</div>
+<div id="other-experimental-designs-involving-categorical-data" class="section level3">
+<h3><span class="header-section-number">13.7.7</span> Other experimental designs involving categorical data</h3>
+<p>Imagine an experiment to compare two or more conditions (eg, placebo v drug, wildtype vs mutant) and the outcome variable is discrete (eg, frequency counts or success and failure counts). The experiment involves several independent replications.</p>
+<p>For example, cell depolarizations are counted both in the absence or presence of a condition on several different occassions.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-105">Table 13.1: </span>Hypothetical replicates comparing depolarizations in mutant and wildtype cells should be analyzed using poisson regression.</caption>
+<thead>
+<tr class="header">
+<th align="left">replicate</th>
+<th align="left">predictor</th>
+<th align="right">counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">one</td>
+<td align="left">wildtype</td>
+<td align="right">87</td>
+</tr>
+<tr class="even">
+<td align="left">two</td>
+<td align="left">wildtype</td>
+<td align="right">102</td>
+</tr>
+<tr class="odd">
+<td align="left">three</td>
+<td align="left">wildtype</td>
+<td align="right">105</td>
+</tr>
+<tr class="even">
+<td align="left">one</td>
+<td align="left">mutant</td>
+<td align="right">125</td>
+</tr>
+<tr class="odd">
+<td align="left">two</td>
+<td align="left">mutant</td>
+<td align="right">126</td>
+</tr>
+<tr class="even">
+<td align="left">three</td>
+<td align="left">mutant</td>
+<td align="right">139</td>
+</tr>
+</tbody>
+</table>
+<p>Alternately, the fraction of cells in a culture dish that have died in the absence or presence of a condition is repeated a handful of times.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-106">Table 13.2: </span>Hypothetical replicates comparing in mutant and wildtype cells should be analyzed using poisson regression.</caption>
+<thead>
+<tr class="header">
+<th align="left">replicate</th>
+<th align="left">predictor</th>
+<th align="right">alive</th>
+<th align="right">dead</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">one</td>
+<td align="left">wildtype</td>
+<td align="right">30</td>
+<td align="right">67</td>
+</tr>
+<tr class="even">
+<td align="left">two</td>
+<td align="left">wildtype</td>
+<td align="right">33</td>
+<td align="right">73</td>
+</tr>
+<tr class="odd">
+<td align="left">three</td>
+<td align="left">wildtype</td>
+<td align="right">37</td>
+<td align="right">76</td>
+</tr>
+<tr class="even">
+<td align="left">one</td>
+<td align="left">mutant</td>
+<td align="right">65</td>
+<td align="right">38</td>
+</tr>
+<tr class="odd">
+<td align="left">two</td>
+<td align="left">mutant</td>
+<td align="right">56</td>
+<td align="right">36</td>
+</tr>
+<tr class="even">
+<td align="left">three</td>
+<td align="left">mutant</td>
+<td align="right">62</td>
+<td align="right">42</td>
+</tr>
+</tbody>
+</table>
+<p>The key distinction here, compared to what’s been discussed in this chapter up to this point, is that within each replicate, all of the events are intrinsically-linked. Through replication we’re establishing whether the events are repeatable.</p>
+<p>Logistic (for dichotomous data) or poisson (for frequency data) regression are the appropriate analytical tools for these designs. These involve using the generalized linear model, conducted with the function <code>glm</code> or the function <code>glmer</code> (for so-called mixed models). These are discussed in the logistic regression chapter.</p>
+</div>
+</div>
+<div id="doing-a-priori-power-analysis-for-proportion-tests" class="section level2">
+<h2><span class="header-section-number">13.8</span> Doing <em>a priori</em> power analysis for proportion tests</h2>
+<p>Power analysis should be done before starting an experiment. The purpose of a conducting power calculations a priori is to determine the number of trials, or subjects or sample size, to use for the study.</p>
+<p>This is a two step process.</p>
+<p>Step 1: Using scientific judgement, decide what is the value of a null proportion and an alternate that you think would be a scientifically meaningful proportion to observe. You need to have some insight into the system you’re studying to make these calls. What’s important is to establish an expectation of what a minimally scientifically significant outcome would look like.</p>
+<p>Step 2: Calculate the number of subjects (or trials) you’ll need to study, given these proportions (and also given some type1 and type2 error tolerances).</p>
+<p>There are several options in R for the second step.</p>
+<p>In the examples below, we’re declaring a 5% difference between the null (0.15) and alternate (0.20) proportions would be a scientifically meaningful. We’re also using 5% for type1 error and 20% for type2 error (80% power) as tolerance thresholds.</p>
+</div>
+<div id="power-analysis-functions-for-proportion-tests" class="section level2">
+<h2><span class="header-section-number">13.9</span> Power analysis functions for proportion tests</h2>
+<p>The function <code>pwr.p.test</code> is for one-sample proportion tests. The calculations below return a sample size n that should be used in the study, given a null and an alternate proportions, in addition to error rates.</p>
+<p>NB: Since takes a Cohen’s effect size as an argument, you 1st must calculate a Cohen effect size, h, given the alternate and null proportions you expect, using <code>Es.h()</code>. Then plug that effect size into the power calculator.</p>
+<pre class="sourceCode r"><code class="sourceCode r">h &lt;-<span class="st"> </span><span class="kw">ES.h</span>(<span class="fl">0.2</span>, <span class="fl">0.15</span>)
+h</code></pre>
+<pre><code>## [1] 0.1318964</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pwr.p.test</span>(
+  h, 
+  <span class="dt">sig.level=</span><span class="fl">0.05</span>, 
+  <span class="dt">power=</span><span class="fl">0.8</span>, 
+  <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>
+  )</code></pre>
+<pre><code>## 
+##      proportion power calculation for binomial distribution (arcsine transformation) 
+## 
+##               h = 0.1318964
+##               n = 451.1706
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided</code></pre>
+<p><code>binom.power</code> is a function from the <code>binom</code> package. Instead of returning sample size, this function returns power, given sample size. You iterate through (by hand) entering sample sizes until it returns an acceptable power. Then run the experiment at that sample size.</p>
+<p>Note that it doesn’t give <em>exactly</em> the same result as <code>pwr.p.test</code>. The calculation differs, but the result is close.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">binom.power</span>(
+  <span class="fl">0.2</span>, 
+  <span class="dt">n=</span><span class="dv">451</span>, 
+  <span class="dt">p=</span><span class="fl">0.15</span>, 
+  <span class="dt">alpha=</span><span class="fl">0.05</span>, 
+  <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, 
+  <span class="dt">method=</span><span class="st">&quot;exact&quot;</span>
+  )</code></pre>
+<pre><code>## [1] 0.7908632</code></pre>
+<p>To estimate sample size needed for a two-sample proportion test design, use the <code>power.prop.test</code> function.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">power.prop.test</span>(
+  <span class="dt">p1=</span><span class="fl">0.15</span>, 
+  <span class="dt">p2=</span><span class="fl">0.2</span>, 
+  <span class="dt">sig.level =</span> <span class="fl">0.05</span>, 
+  <span class="dt">power=</span><span class="fl">0.8</span>
+  )</code></pre>
+<pre><code>## 
+##      Two-sample comparison of proportions power calculation 
+## 
+##               n = 905.3658
+##              p1 = 0.15
+##              p2 = 0.2
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+<p>Finally, the <code>statmod</code> package has the <code>power.fisher.test</code>, which returns the power for a Fisher’s exact test, given arguments of proportion, trial size and type1 error. Note how it is in close but not exact agreement with <code>power.prop.test</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">power.fisher.test</span>(
+  <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="dv">905</span>, <span class="dv">905</span>, <span class="fl">0.05</span>, 
+  <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span>
+  )</code></pre>
+<pre><code>## [1] 0.81</code></pre>
+<div id="monte-carlo-power-simulations" class="section level4">
+<h4><span class="header-section-number">13.9.0.1</span> Monte Carlo power simulations</h4>
+<p>Monte Carlo’s are very simple.</p>
+<p>The basic gist is to simulate and test a very large number of experiments. Each of these experiments is comprised of a random sample of some size, corresponding to your minimal effect size you define as scientifically meritorious.</p>
+<p>These are run through the test of significance, to calculate a p-value. The fraction of simulations that are “hits”–for example, that have p-values &lt; 0.05, is the power!</p>
+<p>Simulations are re-run by adjusting the sample size until a desired power is achieved. That’s the sample size you’d use in a real experiment!</p>
+<p>The question the script addresses is this: What is the power of an experiment, given this trial size n, the null and alternate proportions evaluated, and the type1 error threshold?</p>
+<p>If n is too low, the test will return a power below 0.8 meaning it is not adequetely powered to test the difference between the null and alternate proportions.</p>
+<p>Iterate through some a few sample sizes (n) until you arrive at an acceptable value for power.</p>
+<div id="monte-carlo-simulation-for-prop.test-power" class="section level5">
+<h5><span class="header-section-number">13.9.0.1.1</span> monte carlo simulation for prop.test power</h5>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#these are the initializers</span>
+
+<span class="co">#number of experiments to simulate, each of trial size n</span>
+sims &lt;-<span class="st"> </span><span class="dv">1000</span>
+<span class="co">#expected null proportion</span>
+null &lt;-<span class="st"> </span><span class="fl">0.15</span>
+<span class="co">#expected minimal effect proportion</span>
+alternate &lt;-<span class="st"> </span><span class="fl">0.20</span> 
+
+<span class="co">#binomial trial size, just a guess</span>
+n &lt;-<span class="st"> </span><span class="dv">450</span> 
+<span class="co">#type 1 error threshold</span>
+alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>
+
+<span class="co">#s1 is a random sample vector </span>
+<span class="co">#each value is the number of </span>
+<span class="co">#successes observed in a trial </span>
+<span class="co">#of size n, given the alternate proportion.</span>
+<span class="co">#it simulates the outcome of one experiment &quot;sims&quot; times</span>
+
+s1 &lt;-<span class="st"> </span><span class="kw">rbinom</span>(sims, n, alternate)
+
+<span class="co">#t1 is a vector of p-values, </span>
+<span class="co">#derived from a one sample proportion test </span>
+<span class="co">#on each of the values in s1. </span>
+<span class="co">#read from inside the function to see the logic</span>
+
+t1 &lt;-<span class="st"> </span><span class="kw">unlist</span>(
+  <span class="kw">lapply</span>(
+    s1, 
+    <span class="cf">function</span>(s1){
+      <span class="kw">prop.test</span>(
+        s1, n, null,
+        <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, 
+        <span class="dt">conf.level=</span><span class="dv">1</span><span class="op">-</span>alpha, 
+        <span class="dt">correct=</span>T)<span class="op">$</span>p.value
+      }
+    )
+  )
+
+power &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(t1 <span class="op">&lt;</span><span class="st"> </span>alpha))<span class="op">/</span>sims
+power</code></pre>
+<pre><code>## [1] 0.789</code></pre>
+</div>
+</div>
+</div>
+<div id="graphing-proportions" class="section level2">
+<h2><span class="header-section-number">13.10</span> Graphing Proportions</h2>
+<p>(needs improvement…add mosaic plots)</p>
+<p>Here’s a few ggplot2-based ways of visualizing proportion data.</p>
+<p>First thing is to create a dataframe of the proportion data since data fed into ggplot2 must be in dataframe format.</p>
+<pre class="sourceCode r"><code class="sourceCode r">prop.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">group=</span><span class="kw">c</span>(<span class="st">&quot;positive&quot;</span>, <span class="st">&quot;negative&quot;</span>), 
+  <span class="dt">value=</span><span class="kw">c</span>(pos, neg)
+  )
+prop.df</code></pre>
+<pre><code>##      group value
+## 1 positive  5042
+## 2 negative 18492</code></pre>
+<div id="simple-stacked-bar-chart" class="section level5">
+<h5><span class="header-section-number">13.10.0.0.1</span> Simple stacked bar chart</h5>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(
+  prop.df,
+  (<span class="kw">aes</span>(<span class="dt">x=</span><span class="st">&quot;&quot;</span>, 
+       <span class="dt">y=</span>value, 
+       <span class="dt">fill=</span>group)
+   )
+  ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>)</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-113-1.png" width="672" /></p>
+</div>
+<div id="side-by-side-bar-chart" class="section level5">
+<h5><span class="header-section-number">13.10.0.0.2</span> Side-by-side bar chart</h5>
+<p>Note: There is no error to report. There’s no variation. Cells were classified as either having or not having the antigen.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(
+  prop.df, 
+  (<span class="kw">aes</span>(
+    <span class="dt">x=</span>group, 
+    <span class="dt">y=</span>value, 
+    <span class="dt">fill=</span>group)
+   )
+  ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>)</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
+<p>..</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="normal.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chisquare.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
