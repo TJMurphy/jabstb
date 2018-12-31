@@ -1,4 +1,4 @@
-# Statistics for Categorical Data
+# Statistics for Categorical Data {#categorical}
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 library(PropCIs)
@@ -499,37 +499,73 @@ Second, note how turning off the Yates continuity correction changes the $\chi^2
 
 There is an association between the presence of this marker and the probability that cancer occurs.
 
-We *could* take the prop test's calculation of the proportions and their difference, along with the 95% CI of their difference and make some hay out of that (the probability of getting cancer with the marker is 70%, and without the marker is 20%). But it's more customary to use the odds ratio or relative risk ratherr than differences between probabilities to make effect size assertions.
+We *could* take the prop test's calculation of the proportions and their difference, along with the 95% CI of their difference and make some hay out of that (the probability of getting cancer with the marker is 70%, and without the marker is 20%). But it's more customary to use the odds ratio or relative risk rather than differences between probabilities to make effect size assertions.
 
 ### Write Up
 
-You would want to derive the odds ratio and its 95% CI, even though the $\chi^2$ test doesn't produce it for you. The easiest way to do that is with `fisher.test`! 
+You would want to derive the odds ratio and its 95% CI, even though the $\chi^2$ test doesn't produce it for you. The easiest way to do that is with `fisher.test`.
 
 Having that:
 
 *The large OR indicates the presence of this marker is strongly associated with cancer (n=100, OR = 9.06, 95% CI = 2.76 to 33.68, Pearson's Chi-square test with Yate's continuity correction, p = 4.284e-05).*  
 
-As before, the word "strongly" is used to emphasize the effect size, which is the OR, not the p-value. 
+As before, the word "strongly" is used to emphasize the effect size, which is the OR, rather than the extremeness of the p-value. 
 
 ### Which contingency test is best?
 
 With so many options, the question that always arises is which is best to use for contingency analysis? 
 
 The answer is, 
-* use what you said you would use before you started the experiment.
+* make this decision in advance and use what you said you would use before you started the experiment.
 * when it comes to p-values, are you an exactophile or an exactophobe? 
 * for datasets with low cell numbers (eg, counts less than 5 in a cell), exact tests tend to provide more accurate p-values.
-* the fact that `fisher.test` generates the OR and its CI is very convenient.
+* the fact that `fisher.test` generates the OR and its CI is very, very convenient.
 
 I prefer the fisher.exact test. However, in R you'll need to understand how to configure its arguments to get it to work on higher dimension contingency tables (eg, 2x3, 3x2, 3x3, etc). 
 
 ### Higher dimension contingency analysis
 
-Not infrequently we have studies with many levels of a predictor variable and two outcomes (eg, 7x2), or two predictors and more than two outcomes (eg, 2x3). For these, you'll find the `chisq.test` works fairly automagically. In contrast, you'll need to customize arguments in `fisher.test` for to pass in anything other than a 2x2 matrix.
+Not infrequently we have studies with many levels of a predictor variable and two outcomes (eg, 7x2), or two predictors and more than two outcomes (eg, 2x3). For these, you'll find the `chisq.test` works fairly automagically. In contrast, you'll need to customize arguments in `fisher.test` for it to pass in anything other than a 2x2 matrix.
 
 Furthermore, with dimensions higher than 2x2 there is more than a single odds ratio or relative risk or likelihood ratio in  higher dimensions to be computed. 
 
-A step-wise approach for these more complex analyses is to first run an omnibus `chisq.test` on the intact dimension. If the test is positive (low p-value), analyze 2x2 segments of the grid using the `fisher.test` to derive odds ratios and to see which of the proportion ratio's explain the significance. Such post hoc analyses must include correction for multiple comparisons (eg, the Bonferroni correction) when drawing inference.  
+A step-wise approach for these more complex analyses is to first run an omnibus `chisq.test` on the intact dimension. If the test is positive (low p-value), analyze 2x2 segments of the grid post hoc using the `fisher.test` to derive odds ratios and to see which of the proportion ratio's explain the significance. Such post hoc analyses must include correction for multiple comparisons (eg, the Bonferroni correction) when drawing inference. To do this, pass a vector of p-values into the `p.adjust` function.
+
+### Other experimental designs involving categorical data
+
+Imagine an experiment to compare two or more conditions (eg, placebo v drug, wildtype vs mutant) and the outcome variable is discrete (eg, frequency counts or success and failure counts). The experiment involves several independent replications.
+
+For example, cell depolarizations are counted both in the absence or presence of a condition on several different occassions. 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+predictor <- rep(c("wildtype", "mutant"), each=3)
+replicate <- rep(c("one", "two", "three"), 2)
+
+counts <- c(rpois(3, 100), rpois(3, 150))
+
+depol <- data.frame(replicate, predictor, counts)
+
+knitr::kable( depol, booktabs = TRUE,  caption = 'Hypothetical replicates comparing depolarizations in mutant and wildtype cells should be analyzed using poisson regression.')
+```
+
+Alternately, the fraction of cells in a culture dish that have died in the absence or presence of a condition is repeated a handful of times.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+predictor <- rep(c("wildtype", "mutant"), each=3)
+replicate <- rep(c("one", "two", "three"), 2)
+
+alive <- c(rbinom(3, 100, 0.3), rbinom(3, 100, 0.6))
+dead <- c(rbinom(3, 100, 0.7), rbinom(3, 100, 0.4))
+
+apop <- data.frame(replicate, predictor, alive, dead)
+
+knitr::kable( apop, booktabs = TRUE,  caption = 'Hypothetical replicates comparing in mutant and wildtype cells should be analyzed using poisson regression.')
+```
+
+The key distinction here, compared to what's been discussed in this chapter up to this point, is that within each replicate, all of the events are intrinsically-linked. Through replication we're establishing whether the events are repeatable. 
+
+Logistic (for dichotomous data) or poisson (for frequency data) regression are the appropriate analytical tools for these designs. These involve using the generalized linear model, conducted with the function `glm` or the function `glmer` (for so-called mixed models). These are discussed in the logistic regression chapter.
+
 
 ## Doing *a priori* power analysis for proportion tests
 

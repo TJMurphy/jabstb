@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chapter 11 The Normal Distribution | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Chapter 11 The Normal Distribution | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 The Normal Distribution | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
+
+
+<meta name="date" content="2018-12-31">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="the-poisson-distribution.html">
+<link rel="next" href="statistics-for-categorical-data.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>3</b> The Big Picture</a><ul>
+<li class="chapter" data-level="3.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>3.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>3.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="3.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>3.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="3.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>3.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="3.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>3.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>4</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="4.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>4.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>4.1.1</b> A simple test to define the experimental unit</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>4.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>4.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="4.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>4.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>4.3</b> Random process</a></li>
+<li class="chapter" data-level="4.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>4.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>4.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="4.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>4.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="4.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>4.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="4.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>4.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>4.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>5</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="5.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>5.1</b> The decision process</a></li>
+<li class="chapter" data-level="5.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>5.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="5.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>5.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>6</b> Error</a><ul>
+<li class="chapter" data-level="6.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>6.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>6.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="6.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>6.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>6.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="6.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>6.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>7</b> P Values</a><ul>
+<li class="chapter" data-level="7.1" data-path="pvalues.html"><a href="pvalues.html#how-p-values-are-calculated"><i class="fa fa-check"></i><b>7.1</b> How p-values are calculated</a></li>
+<li class="chapter" data-level="7.2" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>7.2</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="7.3" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>7.3</b> Interpretation</a></li>
+<li class="chapter" data-level="7.4" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>7.4</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>8</b> Data Classification</a><ul>
+<li class="chapter" data-level="8.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>8.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>8.1.1</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>8.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>8.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="8.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>8.2.2</b> Discrete categorical and ordinal variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="the-binomial-distribution.html"><a href="the-binomial-distribution.html"><i class="fa fa-check"></i><b>9</b> The Binomial Distribution—</a><ul>
+<li class="chapter" data-level="9.1" data-path="the-binomial-distribution.html"><a href="the-binomial-distribution.html#dbinom---probability-mass-function"><i class="fa fa-check"></i><b>9.1</b> dbinom -&gt; probability mass function</a></li>
+<li class="chapter" data-level="9.2" data-path="the-binomial-distribution.html"><a href="the-binomial-distribution.html#pbinom---cumulative-distribution-function"><i class="fa fa-check"></i><b>9.2</b> pbinom -&gt; cumulative distribution function</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html"><i class="fa fa-check"></i><b>10</b> The Poisson Distribution</a><ul>
+<li class="chapter" data-level="10.1" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#poisson-events"><i class="fa fa-check"></i><b>10.1</b> Poisson Events</a></li>
+<li class="chapter" data-level="10.2" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#dpois"><i class="fa fa-check"></i><b>10.2</b> dpois</a></li>
+<li class="chapter" data-level="10.3" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#ppois"><i class="fa fa-check"></i><b>10.3</b> ppois</a></li>
+<li class="chapter" data-level="10.4" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#rpois"><i class="fa fa-check"></i><b>10.4</b> rpois</a></li>
+<li class="chapter" data-level="10.5" data-path="the-poisson-distribution.html"><a href="the-poisson-distribution.html#overdispersion"><i class="fa fa-check"></i><b>10.5</b> Overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="the-normal-distribution.html"><a href="the-normal-distribution.html"><i class="fa fa-check"></i><b>11</b> The Normal Distribution</a><ul>
+<li class="chapter" data-level="11.0.1" data-path="the-normal-distribution.html"><a href="the-normal-distribution.html#the-standard-normal"><i class="fa fa-check"></i><b>11.0.1</b> The Standard Normal</a></li>
+<li class="chapter" data-level="11.0.2" data-path="the-normal-distribution.html"><a href="the-normal-distribution.html#rs-four-normal-distribution-functions-dnorm-pnorm-qnorm-rnorm"><i class="fa fa-check"></i><b>11.0.2</b> R’s Four Normal Distribution Functions (dnorm, pnorm, qnorm, rnorm)</a></li>
+<li class="chapter" data-level="11.0.3" data-path="the-normal-distribution.html"><a href="the-normal-distribution.html#plotting-histograms-of-some-rnorm-samples"><i class="fa fa-check"></i><b>11.0.3</b> Plotting histograms of some rnorm samples</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html"><i class="fa fa-check"></i><b>12</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="12.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#types-of-categorical-data"><i class="fa fa-check"></i><b>12.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#proportions"><i class="fa fa-check"></i><b>12.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="12.1.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#frequencies"><i class="fa fa-check"></i><b>12.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="12.1.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#associations"><i class="fa fa-check"></i><b>12.1.3</b> Associations</a></li>
+<li class="chapter" data-level="12.1.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#statistics-covered-here"><i class="fa fa-check"></i><b>12.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>12.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>12.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>12.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#proportion-analysis"><i class="fa fa-check"></i><b>12.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="12.3.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>12.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="12.3.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#contingency-analysis"><i class="fa fa-check"></i><b>12.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#comparing-proportions"><i class="fa fa-check"></i><b>12.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>12.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="12.4.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#calculating-proportions"><i class="fa fa-check"></i><b>12.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="12.4.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>12.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="12.4.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>12.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="12.4.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>12.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="12.4.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#comparing-two-proportions"><i class="fa fa-check"></i><b>12.4.6</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>12.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="12.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>12.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>12.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="12.6.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>12.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#contingency-testing"><i class="fa fa-check"></i><b>12.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="12.7.1" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#intepretation-of-contingency-results"><i class="fa fa-check"></i><b>12.7.1</b> Intepretation of Contingency Results</a></li>
+<li class="chapter" data-level="12.7.2" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#write-up-3"><i class="fa fa-check"></i><b>12.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="12.7.3" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#interpretation-of-chi2-output"><i class="fa fa-check"></i><b>12.7.3</b> Interpretation of <span class="math inline">\(\chi^2\)</span> output</a></li>
+<li class="chapter" data-level="12.7.4" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#write-up-4"><i class="fa fa-check"></i><b>12.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="12.7.5" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>12.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="12.7.6" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>12.7.6</b> Higher dimension contingency analysis</a></li>
+<li class="chapter" data-level="12.7.7" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#other-experimental-designs-involving-categorical-data"><i class="fa fa-check"></i><b>12.7.7</b> Other experimental designs involving categorical data</a></li>
+</ul></li>
+<li class="chapter" data-level="12.8" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#doing-a-priori-power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>12.8</b> Doing <em>a priori</em> power analysis for proportion tests</a></li>
+<li class="chapter" data-level="12.9" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>12.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="12.10" data-path="statistics-for-categorical-data.html"><a href="statistics-for-categorical-data.html#graphing-proportions"><i class="fa fa-check"></i><b>12.10</b> Graphing Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="chisquare.html"><a href="chisquare.html"><i class="fa fa-check"></i><b>13</b> The Chi-square Distribution</a><ul>
+<li class="chapter" data-level="13.1" data-path="chisquare.html"><a href="chisquare.html#background"><i class="fa fa-check"></i><b>13.1</b> Background</a></li>
+<li class="chapter" data-level="13.2" data-path="chisquare.html"><a href="chisquare.html#dchisq"><i class="fa fa-check"></i><b>13.2</b> dchisq</a></li>
+<li class="chapter" data-level="13.3" data-path="chisquare.html"><a href="chisquare.html#pchisq"><i class="fa fa-check"></i><b>13.3</b> pchisq</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="chisquare.html"><a href="chisquare.html#calculating-p-values-from-pchisq"><i class="fa fa-check"></i><b>13.3.1</b> Calculating p-values from pchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="chisquare.html"><a href="chisquare.html#qchisq"><i class="fa fa-check"></i><b>13.4</b> qchisq</a></li>
+<li class="chapter" data-level="13.5" data-path="chisquare.html"><a href="chisquare.html#rchisq"><i class="fa fa-check"></i><b>13.5</b> rchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="nonparametrics.html"><a href="nonparametrics.html"><i class="fa fa-check"></i><b>14</b> Nonparametric Statistical Tests</a><ul>
+<li class="chapter" data-level="14.1" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-discrete-data"><i class="fa fa-check"></i><b>14.1</b> Experiments involving discrete data</a></li>
+<li class="chapter" data-level="14.2" data-path="nonparametrics.html"><a href="nonparametrics.html#deviant-data"><i class="fa fa-check"></i><b>14.2</b> Deviant Data</a></li>
+<li class="chapter" data-level="14.3" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>14.3</b> Sign Test</a><ul>
+<li class="chapter" data-level="14.3.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>14.3.1</b> Interpretation</a></li>
+<li class="chapter" data-level="14.3.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-5"><i class="fa fa-check"></i><b>14.3.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>14.4</b> Wilcoxon Sign Rank Test for One Group</a><ul>
+<li class="chapter" data-level="14.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>14.4.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
+<li class="chapter" data-level="14.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>14.4.2</b> Interpretation</a></li>
+<li class="chapter" data-level="14.4.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>14.4.3</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>14.5</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
+<li class="chapter" data-level="14.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>14.5.1</b> Interpretation</a></li>
+<li class="chapter" data-level="14.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>14.5.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>14.6</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
+<li class="chapter" data-level="14.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>14.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="14.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>14.6.2</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.7" data-path="nonparametrics.html"><a href="nonparametrics.html#kruskal-wallas"><i class="fa fa-check"></i><b>14.7</b> Kruskal-Wallas</a><ul>
+<li class="chapter" data-level="14.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>14.7.1</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="14.8" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>14.8</b> Friedman test</a></li>
+<li class="chapter" data-level="14.9" data-path="nonparametrics.html"><a href="nonparametrics.html#summary"><i class="fa fa-check"></i><b>14.9</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>15</b> Signed Rank Distribution</a><ul>
+<li class="chapter" data-level="15.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>15.1</b> Transformation of data into sign ranks</a><ul>
+<li class="chapter" data-level="15.1.1" data-path="signrank.html"><a href="signrank.html#for-a-one-group-sample"><i class="fa fa-check"></i><b>15.1.1</b> For a one group sample</a></li>
+<li class="chapter" data-level="15.1.2" data-path="signrank.html"><a href="signrank.html#for-a-paired-sample"><i class="fa fa-check"></i><b>15.1.2</b> For a paired sample</a></li>
+<li class="chapter" data-level="15.1.3" data-path="signrank.html"><a href="signrank.html#the-sign-rank-test-statistic-in-r"><i class="fa fa-check"></i><b>15.1.3</b> The sign rank test statistic in R</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="signrank.html"><a href="signrank.html#rs-four-sign-rank-distribution-functions"><i class="fa fa-check"></i><b>15.2</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="15.2.1" data-path="signrank.html"><a href="signrank.html#dsignrank"><i class="fa fa-check"></i><b>15.2.1</b> dsignrank</a></li>
+<li class="chapter" data-level="15.2.2" data-path="signrank.html"><a href="signrank.html#psignrank"><i class="fa fa-check"></i><b>15.2.2</b> psignrank</a></li>
+<li class="chapter" data-level="15.2.3" data-path="signrank.html"><a href="signrank.html#qsignrank"><i class="fa fa-check"></i><b>15.2.3</b> qsignrank</a></li>
+<li class="chapter" data-level="15.2.4" data-path="signrank.html"><a href="signrank.html#rsignrank"><i class="fa fa-check"></i><b>15.2.4</b> rsignrank</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="ranksum.html"><a href="ranksum.html"><i class="fa fa-check"></i><b>16</b> Rank Sum Distribution</a><ul>
+<li class="chapter" data-level="16.0.1" data-path="ranksum.html"><a href="ranksum.html#transformation-of-data-into-rank-summs"><i class="fa fa-check"></i><b>16.0.1</b> Transformation of data into rank summs</a></li>
+<li class="chapter" data-level="16.0.2" data-path="ranksum.html"><a href="ranksum.html#the-sign-rank-test-statistic-in-r-1"><i class="fa fa-check"></i><b>16.0.2</b> The sign rank test statistic in R</a></li>
+<li class="chapter" data-level="16.1" data-path="ranksum.html"><a href="ranksum.html#rs-four-sign-rank-distribution-functions-1"><i class="fa fa-check"></i><b>16.1</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="ranksum.html"><a href="ranksum.html#dwilcox"><i class="fa fa-check"></i><b>16.1.1</b> dwilcox</a></li>
+<li class="chapter" data-level="16.1.2" data-path="ranksum.html"><a href="ranksum.html#pwilcox"><i class="fa fa-check"></i><b>16.1.2</b> pwilcox</a></li>
+<li class="chapter" data-level="16.1.3" data-path="ranksum.html"><a href="ranksum.html#qwilcox"><i class="fa fa-check"></i><b>16.1.3</b> qwilcox</a></li>
+<li class="chapter" data-level="16.1.4" data-path="ranksum.html"><a href="ranksum.html#rwilcox"><i class="fa fa-check"></i><b>16.1.4</b> rwilcox</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="the-normal-distribution" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> The Normal Distribution</h1>
+<div id="the-standard-normal" class="section level3">
+<h3><span class="header-section-number">11.0.1</span> The Standard Normal</h3>
+<p>If the variable <span class="math inline">\(X\)</span> represents a population of normally distributed values with a mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, then the variable <span class="math inline">\(Z\)</span> <span class="math display">\[Z=\frac{X-\mu}{\sigma}\]</span> has a standard normal distribution with a mean of 0 and a standard deviation of 1.</p>
+<p>Converting experimental sample data to standard normal z-scores is very common. Assume we have a sample of 210 peoples heights, whose sample mean = 169.9 and sd = 10.5.</p>
+<p>The tallest height in the sample is 205. The z-score of the tallest individual is derived using the sample parameters and is (205-169.9)/10.5 = 3.34.</p>
+<p>The z-score could be interpreted this way: the tallest individual is said to be 3.34 standard deviations taller than the mean height of the students in the sample.</p>
+</div>
+<div id="rs-four-normal-distribution-functions-dnorm-pnorm-qnorm-rnorm" class="section level3">
+<h3><span class="header-section-number">11.0.2</span> R’s Four Normal Distribution Functions (dnorm, pnorm, qnorm, rnorm)</h3>
+<div id="dnorm" class="section level4">
+<h4><span class="header-section-number">11.0.2.1</span> 1. dnorm</h4>
+<p><code>dnorm</code> is the normal probability density function in R: <span class="math inline">\(p(x)=\frac{e^\frac{-(x-\mu)^2}{2\sigma^2}}{\sigma\sqrt{2\pi}}\)</span></p>
+<p><code>dnorm</code> takes i) the scalar <span class="math inline">\(x\)</span>, ii) a mean and iii) sd as arguments and returns the value of the probability, or otherwise known as the probability density, for that scalar. <span class="math inline">\(x\)</span> can be either a single value, or a vector comprised of many values.</p>
+<p>For example, assume the average height of an adult in the US is 168.8 cm with a standard deviation of 7.1 cm.</p>
+<p>Use <code>dnorm</code> to calculate the probability that a randomly selected US adult will be 176 cm tall:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dnorm</span>(<span class="dt">x=</span><span class="dv">176</span>, <span class="dt">mean=</span><span class="fl">168.8</span>, <span class="dt">sd=</span><span class="fl">7.1</span> )</code></pre>
+<pre><code>## [1] 0.03360041</code></pre>
+<p>Therefore, the probability that a randomly selected US adult would be 176 cm tall is 3.36%.</p>
+<p>The probable height of one specfic individual is usually not very useful or interesting to calculate. What’s a bit more useful is to see how the function operates over a range of values.</p>
+<p>For example, we can model the distribution of adult heights using <code>dnorm</code>. We might be interested in the fraction of adults whose heights are 176cm and taller compared to the rest of the population.</p>
+<p>To illustrate the answer with a plot, we pass a range of x values <code>range = c(130, 210)</code> into the <code>dnorm</code> function, rather than a single value. <code>dnorm</code> calculates probabilities over that full range. We can make a plot to visualize the answer, shading anybody as tall or taller than 176 in blue:</p>
+<pre class="sourceCode r"><code class="sourceCode r">range &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">130</span>,<span class="dv">210</span>)
+pop &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">mean=</span><span class="fl">168.8</span>, <span class="dt">sd=</span><span class="fl">7.1</span>)
+auc &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">176</span>,<span class="dv">210</span>)
+<span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">x=</span>range), <span class="kw">aes</span>(x)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>dnorm, <span class="dt">args =</span> pop, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>dnorm, <span class="dt">args =</span> pop, <span class="dt">xlim =</span> auc, <span class="dt">geom=</span><span class="st">&quot;area&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;heights, cm&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;p(heights)&quot;</span>)</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
+<p>Later on, we’ll use other functions to quantify the blue shaded area.</p>
+<p>Here’s plot of the standard normal distribution over a range of z-values that are 4 SD’s below and above the mean:</p>
+<pre class="sourceCode r"><code class="sourceCode r">z &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">4</span>,<span class="dv">4</span>,<span class="fl">0.1</span>)
+mean &lt;-<span class="st"> </span><span class="dv">0</span>
+sd &lt;-<span class="st"> </span><span class="dv">1</span>
+
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(z, <span class="dt">pz=</span><span class="kw">dnorm</span>(z, mean, sd))
+
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span>z,<span class="dt">y=</span>pz)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;z&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;p(z)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste</span>(<span class="st">&quot;dnorm&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;mean=&quot;</span>, mean,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;sd=&quot;</span>,sd,<span class="st">&quot;)&quot;</span>))</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
+</div>
+<div id="pnorm" class="section level4">
+<h4><span class="header-section-number">11.0.2.2</span> 2. pnorm</h4>
+<p>When a height value is given, calculating the probabilities for heights up to or greater than than that limit can be of considerable interest.</p>
+<p><code>pnorm</code> is the R function for that…give it the value of a normally-distributed variable, such as height, and it returns a cumulative probability for the distribution on either side of that value.</p>
+<p>Thus, <code>pnorm</code> is called the normal cumulative distribution function in R:</p>
+<p><span class="math display">\[p(x)=\int^x_{-\inf}\frac{e^\frac{-x^2}{2}}{\sqrt{2\pi}}\]</span></p>
+<p>By default <code>pnorm</code> will return the cumulative value of the normal pdf up to the value of the input scalar. In otherwords, given the value of a variable, <code>pnorm</code> returns the probability of that value or less.</p>
+<p>However, this can be reversed by changing to the <code>lower.tail=FALSE</code> argument. <em>In this case, <code>pnorm</code> returns something akin to a p-value.</em> Given some value of a variable, <code>pnorm</code> returns the probability of that value or greater.</p>
+<p>The first line in the script below calculates the probability that a US adult will be less than or equal to 175.9 tall, which in this instance turns out to be 1 sd taller than the mean height. It returns a value of about 84%.</p>
+<p>The second line calculates the probability that a US adult will be greater than or equal to 175.9 cm tall. It returns a value of about 16%.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="dt">lower.tail =</span> T)</code></pre>
+<pre><code>## [1] 0.8413447</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="dt">lower.tail =</span> F)</code></pre>
+<pre><code>## [1] 0.1586553</code></pre>
+<p>Subtracting the latter from the form illustrates that about 68% of US adults will be within 1 standard deviation of the average US adult height:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="dt">lower.tail =</span> T) <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="dt">lower.tail =</span> F)</code></pre>
+<pre><code>## [1] 0.6826895</code></pre>
+<p>About 95% of the values for any continuous, normally-distributed variable will be between 2 standard deviations of the mean:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dt">q=</span><span class="dv">2</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>, <span class="dt">lower.tail=</span>T)</code></pre>
+<pre><code>## [1] 0.9772499</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">lower.tail=</span>F)</code></pre>
+<pre><code>## [1] 0.02275013</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dv">2</span>) <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">2</span>, <span class="dt">lower.tail=</span>F)</code></pre>
+<pre><code>## [1] 0.9544997</code></pre>
+<p>(The script above illustrates a few of the different shorthands that can be taken working with R’s probability functions).</p>
+<div id="calculating-p-values-using-pnorm" class="section level5">
+<h5><span class="header-section-number">11.0.2.2.1</span> Calculating “p-values”" using pnorm</h5>
+<p>Let’s go back to human heights. What’s the probability of an US adult being as tall or taller than 205 cm? Notice the <code>lower.tail=F</code> argument:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dv">205</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="dt">lower.tail=</span>F)</code></pre>
+<pre><code>## [1] 1.71095e-07</code></pre>
+<p>That’s a very low probability value, because the height is so extreme.</p>
+</div>
+<div id="calculating-percentiles-using-pnorm" class="section level5">
+<h5><span class="header-section-number">11.0.2.2.2</span> Calculating percentiles using pnorm</h5>
+<p>What is the height percentile of a 205 cm tall US adult?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dv">205</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)<span class="op">*</span><span class="dv">100</span></code></pre>
+<pre><code>## [1] 99.99998</code></pre>
+</div>
+</div>
+<div id="qnorm" class="section level4">
+<h4><span class="header-section-number">11.0.2.3</span> 3. qnorm</h4>
+<p><code>qnorm</code> is the inverse of the cumulative distribution function of a continuous normally-distributed variable.</p>
+<p>By default, <code>qnorm</code> takes a cumulative probability value (eg, a percentile) as an argument (along with the mean and sd of the variable) and returns a limit value for that continuous random variable.</p>
+<p>Here’s what the <code>qnorm</code> distribution looks like:</p>
+<pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.01</span>)
+mean &lt;-<span class="st"> </span><span class="dv">0</span>
+sd &lt;-<span class="st"> </span><span class="dv">1</span>
+
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(p, <span class="dt">z=</span><span class="kw">qnorm</span>(p, mean, sd))
+
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(p, z)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;p(z)&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;z&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste</span>(<span class="st">&quot;qnorm&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;mean=&quot;</span>, mean,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;sd=&quot;</span>,sd,<span class="st">&quot;)&quot;</span>))</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
+<p>You’re probably very familiar with quantiles since percentiles are a class of quantiles. For example, if your standardized exam score is in the 90th percentile, then you did as well or better than 90% of test takers.</p>
+<p>If you forgot your score, but remember your percentile, you could use <code>qnorm</code> to return your specific test score…so long as you also know the mean and sd values of the test scores.</p>
+<p>Back to heights.</p>
+<p>What’s the height in cm of a US adult who is at the 99th percentile? What about the 5th percentile?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qnorm</span>(<span class="fl">0.99</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)</code></pre>
+<pre><code>## [1] 185.3171</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qnorm</span>(<span class="fl">0.05</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)</code></pre>
+<pre><code>## [1] 157.1215</code></pre>
+<p>The first script below returns the height of the 84th% quantile of US adults. 84% are about 175.9 cm tall or less. The 84th is the upper 1 SD quantile.</p>
+<p>The second script returns the height of the <em>complement</em> of the 84th quantile of US adults, by switching the default <code>lower.tail</code> argument. This complement is the lower 1 SD quantile.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qnorm</span>(<span class="fl">0.84</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="dt">lower.tail =</span> T)</code></pre>
+<pre><code>## [1] 175.8607</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qnorm</span>(<span class="fl">0.84</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="dt">lower.tail =</span> F)</code></pre>
+<pre><code>## [1] 161.7393</code></pre>
+<p>About two thirds of US adults are between 161.7 and 175.9 cm tall.</p>
+<div id="confidence-interval-limits-and-qnorm" class="section level5">
+<h5><span class="header-section-number">11.0.2.3.1</span> Confidence interval limits and qnorm</h5>
+<p>The <code>qnorm</code> distributon has pragmatic utility for finding the limits for confidence intervals when using the normal distribution as a model for the data.</p>
+<p>In a standard normal distribution, the limits for the lower and upper 2.5% of the distribution are about <span class="math inline">\(\pm\)</span> 1.96 standard deviation units. Thus, the 95% confidence interval for standard normal z-values is -1.96 to 1.96.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qnorm</span>(<span class="fl">0.025</span>)</code></pre>
+<pre><code>## [1] -1.959964</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qnorm</span>(<span class="fl">0.025</span>, <span class="dt">lower.tail=</span>F)</code></pre>
+<pre><code>## [1] 1.959964</code></pre>
+<p>Based upon the average height and sd of US adults, the 95% confidence interval for US adult height is:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">paste</span>(<span class="kw">round</span>(<span class="kw">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>),<span class="dv">1</span>), <span class="st">&quot;to&quot;</span>, <span class="kw">round</span>(<span class="kw">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="dt">lower.tail=</span>F),<span class="dv">1</span>))</code></pre>
+<pre><code>## [1] &quot;154.9 to 182.7&quot;</code></pre>
+<p>The confidence interval means there is a 95% chance the true average US adult is within that range.</p>
+<p>Rember that height sample from near the very start of this document?</p>
+<p>It had 210 replicates, a mean = 169.9, sd = 10.5.</p>
+<p>What is the 95% confidence interval of US adult heights, based upon that sample?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">paste</span>(<span class="kw">round</span>(<span class="kw">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">169.9</span>, <span class="fl">10.5</span>),<span class="dv">1</span>), <span class="st">&quot;to&quot;</span>, <span class="kw">round</span>(<span class="kw">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">169.9</span>, <span class="fl">10.5</span>, <span class="dt">lower.tail=</span>F),<span class="dv">1</span>))</code></pre>
+<pre><code>## [1] &quot;149.3 to 190.5&quot;</code></pre>
+<p>Drawing inference to the whole population on the basis of this sample, and assuming a normal model, there is a 95% chance the true US adult height is within this slightly wider range.</p>
+<p>The truth is, a better model to derive confidence intervals for normally-distributed samples is the t-distribution.</p>
+</div>
+</div>
+<div id="rnorm" class="section level4">
+<h4><span class="header-section-number">11.0.2.4</span> 4. rnorm</h4>
+<p>R’s <code>rnorm</code> is the random number generator function for the normal distribution. This has a lot of utlity in synthesizing data sets, for example, when running simulations.</p>
+<p>It returns random normally distributed values given size, mean and standard deviation arguments.</p>
+<p>For example, here is a randomly generated sample of 10 US adult heights, rounded to 1 significant digit.</p>
+<p>We’ll use this function a LOT in this course to generate normally-distributed data for various purposes.</p>
+<p>Here’s 10 random, simulated heights of US adults, rounded to the first digit to make it cleaner looking:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">round</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>), <span class="dv">1</span>)</code></pre>
+<pre><code>##  [1] 168.8 177.2 174.7 175.9 168.6 177.4 172.1 165.0 164.3 172.1</code></pre>
+</div>
+</div>
+<div id="plotting-histograms-of-some-rnorm-samples" class="section level3">
+<h3><span class="header-section-number">11.0.3</span> Plotting histograms of some rnorm samples</h3>
+<p>Histograms are a powerful way to explore the underlying structure in a dataset. They are a descriptive tool. Adjusting the bin parameters provides a way to evaluate the data.</p>
+<p>A histogram takes one variable, plotting its values on the x-axis while displaying the counts or the density of those values on the y-axis. The distribution of the data in a histogram is controlled by adjusting the number of bins, or by adjusting the binwidth.</p>
+<div id="bins-and-binwidth" class="section level4">
+<h4><span class="header-section-number">11.0.3.1</span> Bins and Binwidth</h4>
+<p>Think of <code>bins</code> as compartments.</p>
+<p>If using, for example 100 bins as a plotting argument, the range of the sample values are split, from the shortest to the tallest heights, into 100 evenly spaced…compartments. For normally distributed variables, the central bins are more dense or have more counts then those on the tails of the histogram, because values near the average are more common.</p>
+<p>A <code>binwidth</code> argument can be used instead of <code>bin</code>. Setting the binwidth to 10 on the graph below would look the same as setting the number of bins to 6.</p>
+<p>Adjusting bins or binwidths has the effect of rescaling the y-axis.</p>
+</div>
+<div id="histograms-of-counts-vs-density" class="section level4">
+<h4><span class="header-section-number">11.0.3.2</span> Histograms of counts vs density</h4>
+<p>Because histograms are so common<code>ggplot2</code> has a <code>geom_histogram</code> function to simplify creating the plots. The default argument creates a histogram of values of a random variable of interest. To create a histogram of densities, use a density <code>aes</code> argument in the function, instead as you’ll see below.</p>
+<p>Counts are the number of cases within a given bin. Density is the fraction of all counts within a given bin.</p>
+<p>Here are 1000 random, simulated heights, plotted as a histogram of counts.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">s=</span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">1000</span>, <span class="dt">mean=</span><span class="fl">168.8</span>, <span class="dt">sd=</span><span class="fl">7.1</span>))
+
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(s)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">100</span>)</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
+<p>Same thing, plotted as a probability density:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">s=</span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">1000</span>, <span class="dt">mean=</span><span class="fl">168.8</span>, <span class="dt">sd=</span><span class="fl">7.1</span>))
+
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(s)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..), <span class="dt">bins=</span><span class="dv">100</span>)</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+</div>
+<div id="histogram-with-distribution" class="section level4">
+<h4><span class="header-section-number">11.0.3.3</span> Histogram with Distribution</h4>
+<p>For an example of plotting a model along with the raw data, here’s a density histogram of the rnorm sample, plotted along with a dnorm distribution model, given the population mean and sd.</p>
+<p>By eyeball, the model seems to be a decent fit for the sample. But it is not a perfect fit.</p>
+<p>It’s not the model’s fault. Models are perfect, data are not.</p>
+<p>How does the sample size affect how well the model fits the data?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">s=</span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">1000</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>))
+
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(s)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..), <span class="dt">bins=</span><span class="dv">100</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm,
+                <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>),
+                <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>)</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="the-poisson-distribution.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="statistics-for-categorical-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
