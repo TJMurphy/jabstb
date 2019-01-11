@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 4 The Big Picture | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <title>Chapter 3 Software | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 4 The Big Picture | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:title" content="Chapter 3 Software | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 The Big Picture | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta name="twitter:title" content="Chapter 3 Software | JABSTB: Statistical Design and Analysis of Experiments with R" />
   
   <meta name="twitter:description" content="Experimental biostatistics using R." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="software.html">
-<link rel="next" href="sampling.html">
+<link rel="prev" href="history.html">
+<link rel="next" href="bigpic.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -420,128 +420,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="bigpic" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> The Big Picture</h1>
-<p><em>To call in the statistician after the experiment is done may be no more than asking him to perform a post-mortem examination: he may be able to say what the experiment died of. ~ Sir Ronald Aylmer Fisher</em></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(Hmisc)</code></pre>
-<p>Let’s start by listing out some key characteristics that most biomedical experiments share in common.</p>
-<p>They…</p>
+<div id="software" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Software</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(swirl)
+<span class="kw">library</span>(tidyverse)</code></pre>
+<p>The course requires that you use the latest version of R and also using the RStudio integrated development environment to run R. R and RStudio have to be downloaded and installed separately.</p>
+<p>RStudio simplifies reading, writing and running scripts in R.</p>
+<p>R itself is a collection of packages. Individual packages have the functions that you’ll need. Once a package is installed on your machine, you’ll need to load its library for those functions to be available for your work.</p>
+<p>After installing R you’ll have a library of system packages. These are known colloquilly as the “base” packages. The libraries for these base packages are automagically loaded each time you run R. Thus, you won’t need to “call” base package librarly prior to running functions within them.</p>
+<p>From time to time you’ll need to run other functions that are only found in other packages. Over time, you’ll create a user library of these packages. Any time you need to get its functions to run you’ll need to load the package into your environment using the <code>library()</code> function.</p>
+<p>At the beginning of each chapter I list the libraries that will be necessary to run the scripts in that chapter. Those will be packages you’ll need to install if you don’t have them already.</p>
+<div id="my-code-is-your-code" class="section level2">
+<h2><span class="header-section-number">3.1</span> My code is your code</h2>
+<p>I want you to read everything in these chapters, including the R code. Especially the R code. If you’re able to see the code that leads to some output, that means I think it is important for you to understand that code, how it works. You’ll need it as a basis to write your own custom scripts…for class work, home work, and beyond.</p>
+<p>If you are new to R, at first it will seem…unintelligible. But it will make sense to you with a bit of time.</p>
+<p>The other stuff I’ve written in the chapters is about statistics. Understanding the code is no less important than understanding the statistics.</p>
+</div>
+<div id="install-r-and-rstudio" class="section level2">
+<h2><span class="header-section-number">3.2</span> Install R and RStudio</h2>
+<p>Installation of R and RStudio is pretty straight forward but not idiot proof. One sign you are doing it wrong is when you find yourself about to purchase something. Step away if that’s the case. These are free.</p>
+<p>A second sign you are doing it wrong (unless you really know what you are doing) is if you are compiling source code.</p>
+<p>Note for Windows users: If you have a 64bit processor, it is a very good idea to install and run the 64bit R version.</p>
+<p>To get started do the following <strong>in this sequence</strong>:</p>
+<ol style="list-style-type: decimal">
+<li>Step 1. Install version 3.5.2 (Eggshell Igloo) of R.</li>
+</ol>
 <ul>
-<li>tend to involve the use of relatively small sample sizes.</li>
-<li>are usually highly exploratory in nature.</li>
-<li>generate data that are either discrete counts or measurements of continuous scalars.</li>
-<li>are structured by a small group of fairly common experimental designs.</li>
-<li>are usually interpreted in a binary way; as having “worked”, or not.</li>
-<li>test hypotheses (though too often these are unstated).</li>
-<li>aspire for rigor, replicability and reproducibility.</li>
-<li>aspire to be unbiased.</li>
+<li><a href="https://mirrors.nics.utk.edu/cran/">Go here</a>. Select the appropriate precompiled binary distribution for your machine. Unless you know what you’re doing, don’t select the source code.</li>
 </ul>
-<p>The stakes of our work can be pretty high. These include the higher ideals such as the validation of novel scientific paradigms, the steady advancement of knowledge, and opening the door to create impactful solutions, particularly in the realm of human diseases and suffering.</p>
-<p>But no less motivating are the issues more related to the professional practice of science. These include ego, the completely natural impulse to seek out validation for an idea, publication and/or commercialization, time to degree, career viability, scientific reputations, and coveted research/investment funds.</p>
-<p>The point is that the process of scientific discovery is driven both by ideals and by biases. This is nothing new.</p>
-<p>The one big concept that I hope you embrace is that the statistical design and analysis of experiments serves as a working framework within which the biomedical researcher can conduct reasonably unbiased work. The statistical approaches covered in this course, it turns out, were invented long ago with all of these drivers in mind.</p>
-<div id="what-are-experimental-statistics" class="section level2">
-<h2><span class="header-section-number">4.1</span> What are experimental statistics?</h2>
-<p>Experimental statistics are used</p>
-<ul>
-<li>to summarize data into simpler descriptive models.</li>
-<li>as procedures to draw inferences from samples.</li>
-<li>as procedures that guide the design of experiments.</li>
-<li>to serve as framework for conducting unbiased research.</li>
-</ul>
-<p>Chances are you thought biostats was just one or two of those bullets, and probably not the latter two.</p>
-<div id="descriptive-modeling" class="section level3">
-<h3><span class="header-section-number">4.1.1</span> Descriptive modeling</h3>
-<p>Statistical models are ways of simplifying or summarizing data so that they can be more readily described and interpreted.</p>
-<p>For example, if we have a sample in which blood glucose levels are measured in each of many subjects, clarity demands we explain those results in terms of summary statistics. Thus, we use parameters like the sample mean and standard deviation, or median and ranges or percentiles. The alternative is unthinkable today (but common long ago), which is to discuss each replicate individually.</p>
-<p>To emphasize that sample parameters differ from population parameters, the standard in statistical notation is to use roman characters to indicate samples and greek characters to indicate the population. For example,</p>
-<table>
-<thead>
-<tr class="header">
-<th align="right">parameter</th>
-<th align="right">sample</th>
-<th align="right">population</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">mean</td>
-<td align="right"><span class="math inline">\(\bar y\)</span></td>
-<td align="right"><span class="math inline">\(\mu\)</span></td>
-</tr>
-<tr class="even">
-<td align="right">standard deviation</td>
-<td align="right"><span class="math inline">\(s\)</span></td>
-<td align="right"><span class="math inline">\(\sigma\)</span></td>
-</tr>
-<tr class="odd">
-<td align="right">variance</td>
-<td align="right"><span class="math inline">\(s^2\)</span></td>
-<td align="right"><span class="math inline">\(\sigma^2\)</span></td>
-</tr>
-</tbody>
-</table>
-<p>Thus, the sample mean, <span class="math inline">\(\bar y\)</span> is an estimate of the population mean, <span class="math inline">\(\mu\)</span>.</p>
-<p>Statistical tests also have a descriptive element in that they convey information about the experimental design. If you say, “I’m working up a two-tailed paired t-test,” say no more. From that alone I know something about your hypothesis, how your replicates are handled, the number of predictor groups, and the type of data you’re measuring.</p>
-<p>Regression models also describe data. For example, here is the well-known Michaelis-Menten model that describes product formation as a function of substrate concentration.<br />
-<span class="math display">\[[P]=\frac{[S][Vmax]}{[S]+Km}\]</span></p>
-<p>That’s a model we might fit to certain kinds of enzyme kinetic data, because we use it to estimate scientifically meaningful parameters, like <span class="math inline">\(V_{max}\)</span> and <span class="math inline">\(K_m\)</span>.</p>
-<p>In fact, mathematical statistics is actually just modeling. Modeling is the process of simplifying data into something more coherent.</p>
-<p>Take a simple example of two groups shown here. Each group has been fit to a simple model: that for the mean and standard deviation. Clearly, that model fits the control group much better than it fits the treatment group.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-2-1.png" alt="Is the mean for each these groups a good descriptive model?" width="288" />
-<p class="caption">
-Figure 4.1: Is the mean for each these groups a good descriptive model?
-</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Step 2. Run the installer function after downloading so that you have a running version of R on your machine</p></li>
+<li><p>Step 3. Install version 1.1.x of RStudio only after you have completed installing R. <a href="https://www.rstudio.com/products/rstudio/download/">Go here</a>. Select the free option and choose the appropriate installer for your platform from the list. In all likelihood, you DO NOT want to choose a zip/tarball or source code.</p></li>
+<li><p>Step 4. Run the RStudio installer so that you have a running version of it.</p></li>
+</ol>
+<p>If you installed R prior to RStudio as instructed, launching RStudio on your machine should automagically configure R to work within the RStudio.</p>
+<p>Poke around with the RStudio menu bar and the RStudio panes. Under <code>Tools</code> select <code>Global Options</code> and experiment with an appearance configuration to your liking.</p>
 </div>
-<p>Why do I say that? The treatment group data are much more skewed. Most of the data values are greater than the mean of the group. Sure, a mean can be calculated for that group, but it serves as a fairly crappy summary. Perhaps some other model (or group of statistical parameters) would better convey how these data behave?</p>
-<p>This is to point out that learning statistics is about learning to make judgments about which models are best for describing a given data set.</p>
+<div id="getting-started-with-r" class="section level2">
+<h2><span class="header-section-number">3.3</span> Getting started with R</h2>
+<p>Once you have R and RStudio up and running a class assignment will be to wrok on the R Programming module in the interactive <a href="https://swirlstats.com/">swirl package</a>. Install and load the swirl library by typing the following into the R console within R studio.</p>
+<pre><code>install.packages(&quot;swirl&quot;)
+library(swirl)</code></pre>
+<p>Swirl does a quick overview of the basics. But there are a lot of basics, most of which you’ll forget! But that’s ok. As you go through swirl I suggest you go to the source pane to open up a fresh R script or R markdown file to take notes (eg, copy/paste code snippets) for a custom cheatsheet.</p>
 </div>
-<div id="statistical-inference" class="section level3">
-<h3><span class="header-section-number">4.1.2</span> Statistical inference</h3>
-<p>There are two main types of inference researchers make.</p>
-<p>One type is to infer whether an experiment “worked” or not…the so-called “significance test”. This familiar process involves calculating a test statistic from the data (eg, t-test, F-tests, etc) and then applying a threshold rule to its value. If the test passes the rule, we conclude the experiment worked. I cover this type of inference in much more detail in the p-value chapter <a href="pvalues.html#pvalues">8</a>, and we’ll talk about it over and again throughout the course.</p>
-<p>A second type of inference is to extrapolate from a sample some <strong>estimate</strong> for the values of the variables within the population that was sampled.</p>
-<p>Both descriptive and statistical inference are subject to error. By random chance alone our sample could be way off the mark, even with perfectly calibrated instrumentation.</p>
-<p>The real difficulty with inference is we can never know for certain whether we are right or wrong.</p>
-<p>They are called random variables for a reason. It pays to have a very healthy respect for the role played by random chance in determining the values of our parameter estimates. If we were to completely redo a fully replicated experiment once more, we would almost certainly arrive at different numbers. In a well behaved system, they’d likely be in the same ballpark as those of the first experiment. But they would still differ.</p>
-<p>To illustrate, copy and paste the code chunk below. It replicates a random triplicate sample six times, taking six means. Unlike in real life, the population parameters are known (because I coded them in): <span class="math inline">\(\mu=2\)</span> and <span class="math inline">\(\sigma=0.4\)</span>. You can run that chunk tens of thousands of times and never get a “sample” with one mean that has a value of exactly 2, even though that’s the true mean of the population that was sampled.</p>
-<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">6</span>, <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="fl">0.4</span>))
-<span class="kw">apply</span>(x, <span class="dv">2</span>, mean)</code></pre>
-<pre><code>## [1] 1.410112 2.000452 2.230028 2.386327 2.214937 2.412259</code></pre>
-</div>
-<div id="experimental-design" class="section level3">
-<h3><span class="header-section-number">4.1.3</span> Experimental design</h3>
-<p>Experimental planning that involves dealing with statistical issues is referred here as experimental design.</p>
-<p>This involves stating a testable statistical hypothesis and establishing a series of decision rules in advance of data collection. These rules range from subject selection and arrangement, predetermination of sample size using <em>a priori</em> power analysis, setting some data exclusion criteria, defining error tolerance, specifying how the data will be transformed and analyzed, declaring a primary outcome, on up to what statistical analysis will be performed on the data.</p>
-<p>Experimental design is very common in <a href="https://clinicaltrials.gov/ct2/home">prospective clinical research</a>. Unfortunately, very few basic biomedical scientists practice anything remotely like this. Most biomedical researchers begin experiments with only vague ideas about the statistical analysis, which is usually settled on after the fact. Much of the published work today is therefore retrospective, rather than prospective. Yet, most researchers tend to use statistics that are largely intended for prospective designs. That’s a problem.</p>
-</div>
-<div id="statistics-as-an-anti-bias-framework" class="section level3">
-<h3><span class="header-section-number">4.1.4</span> Statistics as an anti-bias framework</h3>
-<p>If you are ever asked (for example, in an examination) what purpose is served by a given statistical procedure, and you’re not exactly sure, you would be wise to simply offer that it exists to prevent bias. That may not be the answer the grader was hunting for, but it is almost surely correct.</p>
-<p>The main purpose of “doing” statistical design and analysis of experiments is to control for bias. Humans are intrinsically prone to bias and scientists are as human as anybody else. Holding or working on a PhD degree doesn’t provide us a magic woo-woo cloak to protect us from our biases.</p>
-<p>Therefore, whether we choose to admit it or not, bias infects everything we do as scientists. This happens in subtle and in not so subtle ways. We work hard on our brilliant ideas and, sometimes, desperately wishing to see them realized, we open the door to all manner of bias.</p>
-<p>Here are some of the more important biases.</p>
-<div id="cognitive-biases" class="section level4">
-<h4><span class="header-section-number">4.1.4.1</span> Cognitive biases</h4>
-<p>From a statistical point of view biases can be classified into two major groupings. The first are <a href="https://en.wikipedia.org/wiki/List_of_cognitive_biases">Cognitive biases</a>. These are how we think (or fail to think) about our experiments and our data.</p>
-<p>These frequently cause us to make assumptions that we would not if we only knew better or were wired differently. If you ever find yourself declaring, “how could this not work!” you are in the throes of a pretty deep cognitive bias. In bench research, cognitive biases can prevent us from building adequate controls into experiments or lead us to draw the wrong interpretation of results, or prevent us from spotting confounding variables or recognizing telling glitches in the data as meaningful.</p>
-</div>
-<div id="systematic-biases" class="section level4">
-<h4><span class="header-section-number">4.1.4.2</span> Systematic biases</h4>
-<p>The second are systematic biases. Systematic biases are inherent to our experimental protocols, the equipment and materials we use, the timing and order by which tasks are done, the subjects we select and, yes (metaphorically), even whether the data are collected left-handed or right-handed, and how data is handled or transformed.</p>
-<p>Systematic biases can yield the full gamut of unintended outcomes, ranging between nuisance artifacts to false negatives or false positives. For example, poorly calibrated equipment will bias data towards taking inaccurate values. Working forever on an observed phenomenon using only one strain of mouse or cell line may blind us from realizing it might be a phenomenon that only occurs in that strain of mouse or cell line.</p>
-</div>
-<div id="scientific-misconduct" class="section level4">
-<h4><span class="header-section-number">4.1.4.3</span> Scientific misconduct</h4>
-<p>More malicious biases exist, too. These include <a href="https://grants.nih.gov/policy/research_integrity/index.htm">forbidden practices such as data fabrication and falsification</a>. This is obviously a problem of integrity. Very few scientists working today are immune from the high stakes issues that pose threats to our sense of integrity.</p>
-<p>In the big picture, particularly for the biomedical PhD student, I like to call bias the event horizon of rabbit holes. A rabbit hole is that place in a scientific career where it is easy to get lost for a long, long time. You want to avoid them.</p>
-<p>The application of statistical principles to experimental design provides some structure to avoid making many of the mistakes that are associated with these biases. Following a well-considered, statistically designed protocol enforces some integrity onto the process of experimentation. Most scientists find a statistical framework quite livable.</p>
-<p>If you give it some thought, the only thing worse than a negative result from a statistically rigorous experiment is a negative result from a statistically weak experiment. With the former at least you know you’ve given it your best shot. That is hard to conclude when the latter occurs.</p>
+<div id="other-resources" class="section level2">
+<h2><span class="header-section-number">3.4</span> Other resources</h2>
+<p>There are many, many other resources with which to get started. Try some, if you wish.</p>
+<p><a href="https://www.r-bloggers.com/the-5-most-effective-ways-to-learn-r/">If you are ready to roll up your sleaves and play with R go here</a>.</p>
+<p>As you work with R you’ll make mistakes. Of these, &gt;90% will be typos, especially missing commas and unclosed parentheses. If you didn’t mistype a command, just copy and paste error messages into your browser search bar. Most of the errors you will make have happened before. Most of what you want to do someone has done before. Almost always, the best documented solutions are usually found in StackOverflow.</p>
+<p>Code camps are nice, but by far the best way to learn R is to just start using it to solve the problems you need to solve. I’ll provide you the problems you need to solve in this course. They are about learning statistics, but you’ll end up learning how to use R as a side benefit.</p>
+<p>By the way, after you install the <code>swirl</code> package, go ahead and install the <code>tidyverse</code> package.</p>
 
-</div>
-</div>
 </div>
 </div>
             </section>
@@ -549,8 +478,8 @@ Figure 4.1: Is the mean for each these groups a good descriptive model?
           </div>
         </div>
       </div>
-<a href="software.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sampling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="history.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bigpic.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

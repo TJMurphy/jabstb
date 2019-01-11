@@ -25,7 +25,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -203,8 +203,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>11.1</b> Poisson Events</a></li>
 <li class="chapter" data-level="11.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>11.2</b> dpois</a></li>
 <li class="chapter" data-level="11.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>11.3</b> ppois</a></li>
-<li class="chapter" data-level="11.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>11.4</b> rpois</a></li>
-<li class="chapter" data-level="11.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>11.5</b> Overdispersion</a></li>
+<li class="chapter" data-level="11.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>11.4</b> qpois</a></li>
+<li class="chapter" data-level="11.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>11.5</b> rpois</a></li>
+<li class="chapter" data-level="11.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>11.6</b> Overdispersion</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>12</b> The Normal Distribution</a><ul>
 <li class="chapter" data-level="12.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>12.0.1</b> The Standard Normal</a></li>
@@ -377,11 +378,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="21.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>21.1</b> Background</a><ul>
 <li class="chapter" data-level="21.1.1" data-path="fdistr.html"><a href="fdistr.html#sample-variance-and-fs-pdf"><i class="fa fa-check"></i><b>21.1.1</b> Sample Variance and F’s PDF</a></li>
 </ul></li>
-<li class="chapter" data-level="21.2" data-path="fdistr.html"><a href="fdistr.html#df"><i class="fa fa-check"></i><b>21.2</b> df</a><ul>
-<li class="chapter" data-level="21.2.1" data-path="fdistr.html"><a href="fdistr.html#pf"><i class="fa fa-check"></i><b>21.2.1</b> pf</a></li>
-<li class="chapter" data-level="21.2.2" data-path="fdistr.html"><a href="fdistr.html#qf"><i class="fa fa-check"></i><b>21.2.2</b> qf</a></li>
-<li class="chapter" data-level="21.2.3" data-path="fdistr.html"><a href="fdistr.html#rf"><i class="fa fa-check"></i><b>21.2.3</b> rf</a></li>
-</ul></li>
+<li class="chapter" data-level="21.2" data-path="fdistr.html"><a href="fdistr.html#df"><i class="fa fa-check"></i><b>21.2</b> df</a></li>
+<li class="chapter" data-level="21.3" data-path="fdistr.html"><a href="fdistr.html#pf"><i class="fa fa-check"></i><b>21.3</b> pf</a></li>
+<li class="chapter" data-level="21.4" data-path="fdistr.html"><a href="fdistr.html#qf"><i class="fa fa-check"></i><b>21.4</b> qf</a></li>
+<li class="chapter" data-level="21.5" data-path="fdistr.html"><a href="fdistr.html#rf"><i class="fa fa-check"></i><b>21.5</b> rf</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -410,7 +410,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">21.1</span> Background</h2>
 <p>George Snedecor once said that Student’s t distribution is the “distribution that revolutionized the statistics of small samples.” As the inventor of the F distribution, nobody would have faulted Snedecor for praising himself the same way.</p>
 <p>The F distribution is heavily used in parametric statistics.</p>
-<p>The most common use of the F statistic is to examine ratios for two estimators of population variance. In particular, F-tests in ANOVA are ratios of model variances, at given degrees of freedom, to residual variances, a some other given degrees of freedom.</p>
+<p>The most common use of the F statistic is to examine ratios for two estimators of population variance. In particular, F-tests in ANOVA are ratios of model variances, at given degrees of freedom, to residual variances, a some other given degrees of freedom. Another common use is to F-test nested regression models to determine if the more complex model provides a better fit for the data.</p>
 <p>When the value of this ratio is extreme, the variances are not equivalent, meaning the variance in an experiment is better explained by factor effects than by residual error.</p>
 <p>An F distribution represents the null probability distribution for such ratios and is therefore used to test hypotheses involving variances.</p>
 <p>F is used widely in statistics to answer a simple question: Are two samples drawn from populations that have the same variance? For example, the F statistic serves as an omnibus test for ANOVA, and is used in regression to determine which of two models best fit a dataset, and is also used for normality tests.</p>
@@ -442,21 +442,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>For example, let’s imagine the 3 curves below correspond to each of 3 different one-way ANOVA experimental designs. The red distribution represents a null distribution for F for an ANOVA experiment having 3 predictor groups with a sample size of 5 independent subjects per group. The blue distribution represents the null of F for an experiment of 10 groups with 3 replicates per group. The green distribution is the null of F for an experiment with 20 groups, each with 4 replicates.</p>
 <p>Thus, since the numerator and denominator of the F statistic represent two different populations, the F distribution is extraordinarily flexible in terms of the comparisons that can be made using it!</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">6</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>df, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>), <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>df, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">9</span>, <span class="dt">df2=</span><span class="dv">20</span>), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>df, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">19</span>, <span class="dt">df2=</span><span class="dv">60</span>), <span class="dt">color=</span><span class="st">&quot;green&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;df&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>), <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;df&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">9</span>, <span class="dt">df2=</span><span class="dv">20</span>), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;df&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">19</span>, <span class="dt">df2=</span><span class="dv">60</span>), <span class="dt">color=</span><span class="st">&quot;green&quot;</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span><span class="st">&quot;F&quot;</span>, <span class="dt">y=</span><span class="st">&quot;p(F)&quot;</span>)</code></pre>
-<pre><code>## Warning: Computation failed in `stat_function()`:
-## &#39;what&#39; must be a function or character string
-
-## Warning: Computation failed in `stat_function()`:
-## &#39;what&#39; must be a function or character string
-
-## Warning: Computation failed in `stat_function()`:
-## &#39;what&#39; must be a function or character string</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-213-1.png" width="672" /></p>
-<div id="pf" class="section level3">
-<h3><span class="header-section-number">21.2.1</span> pf</h3>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="pf" class="section level2">
+<h2><span class="header-section-number">21.3</span> pf</h2>
 <p>The cumulative distribution function for F returns the cumulative probability under the F distribution for a value of the F statistic and a given pair of degrees of freedom.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pf</span>(<span class="dt">q=</span><span class="dv">4</span>, <span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>)</code></pre>
 <pre><code>## [1] 0.953344</code></pre>
@@ -464,14 +457,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pf</span>(<span class="dt">q=</span><span class="dv">4</span>, <span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>, <span class="dt">lower.tail=</span>F)</code></pre>
 <pre><code>## [1] 0.046656</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">6</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>pf, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>), <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>pf, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">9</span>, <span class="dt">df2=</span><span class="dv">20</span>), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>pf, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">19</span>, <span class="dt">df2=</span><span class="dv">40</span>), <span class="dt">color=</span><span class="st">&quot;green&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;pf&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>), <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;pf&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">9</span>, <span class="dt">df2=</span><span class="dv">20</span>), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;pf&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">19</span>, <span class="dt">df2=</span><span class="dv">40</span>), <span class="dt">color=</span><span class="st">&quot;green&quot;</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span><span class="st">&quot;F&quot;</span>, <span class="dt">y=</span><span class="st">&quot;p(F)&quot;</span>)</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-216-1.png" width="672" /></p>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
-<div id="qf" class="section level3">
-<h3><span class="header-section-number">21.2.2</span> qf</h3>
+<div id="qf" class="section level2">
+<h2><span class="header-section-number">21.4</span> qf</h2>
 <p>The inverse cumulative probability function for the F distribution is <code>qf</code>. This function will take a probability as an argument, and return the corresponding value of the F statistic for a given pair of degrees of freedom.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qf</span>(<span class="dt">p=</span><span class="fl">0.95</span>, <span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>)</code></pre>
 <pre><code>## [1] 3.885294</code></pre>
@@ -479,20 +472,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qf</span>(<span class="dt">p=</span><span class="fl">0.05</span>, <span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>, <span class="dt">lower.tail=</span>F)</code></pre>
 <pre><code>## [1] 3.885294</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>qf, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>), <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>qf, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">9</span>, <span class="dt">df2=</span><span class="dv">20</span>), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span>qf, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">19</span>, <span class="dt">df2=</span><span class="dv">40</span>), <span class="dt">color=</span><span class="st">&quot;green&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;qf&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>), <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;qf&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">9</span>, <span class="dt">df2=</span><span class="dv">20</span>), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun=</span><span class="st">&quot;qf&quot;</span>, <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">df1=</span><span class="dv">19</span>, <span class="dt">df2=</span><span class="dv">40</span>), <span class="dt">color=</span><span class="st">&quot;green&quot;</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span><span class="st">&quot;p(F)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;F&quot;</span>)</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-219-1.png" width="672" /></p>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
-<div id="rf" class="section level3">
-<h3><span class="header-section-number">21.2.3</span> rf</h3>
+<div id="rf" class="section level2">
+<h2><span class="header-section-number">21.5</span> rf</h2>
 <p>The <code>rf</code> function can be used to generate n random F statistic values for a given pair of degrees of freedom.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rf</span>(<span class="dt">n=</span><span class="dv">10</span>, <span class="dt">df1=</span><span class="dv">2</span>, <span class="dt">df2=</span><span class="dv">12</span>)</code></pre>
-<pre><code>##  [1] 0.5597275 0.9402234 0.5752848 1.8002392 0.6221102 0.2859954 1.4767106
-##  [8] 2.2144931 1.4721874 2.4914325</code></pre>
+<pre><code>##  [1] 0.6812873 2.5672756 0.7688356 2.2156055 0.3956137 1.4452316 9.9173252
+##  [8] 0.9420764 2.0920675 2.5951673</code></pre>
 
-</div>
 </div>
 </div>
             </section>

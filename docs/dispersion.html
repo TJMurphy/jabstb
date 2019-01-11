@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chapter 6 Variability, Accuracy and Precision | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Chapter 6 Variability, Accuracy and Precision | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Variability, Accuracy and Precision | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
+
+
+<meta name="date" content="2019-01-11">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="sampling.html">
+<link rel="next" href="key-take-aways.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Software</a><ul>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#my-code-is-your-code"><i class="fa fa-check"></i><b>3.1</b> My code is your code</a></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#install-r-and-rstudio"><i class="fa fa-check"></i><b>3.2</b> Install R and RStudio</a></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#getting-started-with-r"><i class="fa fa-check"></i><b>3.3</b> Getting started with R</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#other-resources"><i class="fa fa-check"></i><b>3.4</b> Other resources</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>4</b> The Big Picture</a><ul>
+<li class="chapter" data-level="4.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>4.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>4.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="4.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>4.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="4.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>4.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="4.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>4.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>5</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>5.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>5.1.1</b> A simple test to define the experimental unit</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>5.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>5.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="5.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>5.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>5.3</b> Random process</a></li>
+<li class="chapter" data-level="5.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>5.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>5.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="5.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>5.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="5.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>5.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="5.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>5.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>5.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>6</b> Variability, Accuracy and Precision</a><ul>
+<li class="chapter" data-level="6.1" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>6.1</b> Variance: Quantifying variation by least squares</a></li>
+<li class="chapter" data-level="6.2" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>6.2</b> Standard deviation</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>6.2.1</b> What does the standard deviation tell us</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="dispersion.html"><a href="dispersion.html#other-ways-of-describing-variability"><i class="fa fa-check"></i><b>6.3</b> Other ways of describing variability</a></li>
+<li class="chapter" data-level="6.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>6.4</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="6.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>6.5</b> Standard error</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>6.5.1</b> What exactly does the standard error represent?</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>6.6</b> Confidence intervals</a><ul>
+<li class="chapter" data-level="6.6.1" data-path="dispersion.html"><a href="dispersion.html#simulations"><i class="fa fa-check"></i><b>6.6.1</b> Simulations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="key-take-aways.html"><a href="key-take-aways.html"><i class="fa fa-check"></i><b>7</b> Key take aways</a></li>
+<li class="chapter" data-level="8" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>8</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="8.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>8.1</b> The decision process</a></li>
+<li class="chapter" data-level="8.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>8.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="8.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>8.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>9</b> Error</a><ul>
+<li class="chapter" data-level="9.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>9.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>9.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="9.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>9.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>9.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="9.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>9.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>10</b> P Values</a><ul>
+<li class="chapter" data-level="10.1" data-path="pvalues.html"><a href="pvalues.html#how-p-values-are-calculated"><i class="fa fa-check"></i><b>10.1</b> How p-values are calculated</a></li>
+<li class="chapter" data-level="10.2" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>10.2</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="10.3" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>10.3</b> Interpretation</a></li>
+<li class="chapter" data-level="10.4" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>10.4</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>11</b> Data Classification</a><ul>
+<li class="chapter" data-level="11.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>11.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>11.1.1</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>11.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>11.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="11.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>11.2.2</b> Discrete categorical and ordinal variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>12</b> Reproducible Data Munging in R</a><ul>
+<li class="chapter" data-level="12.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-glucose-data"><i class="fa fa-check"></i><b>12.1</b> Jaxwest7 glucose data</a><ul>
+<li class="chapter" data-level="12.1.1" data-path="jaxwest7.html"><a href="jaxwest7.html#inspect-the-jaxwest7-data"><i class="fa fa-check"></i><b>12.1.1</b> Inspect the Jaxwest7 data</a></li>
+<li class="chapter" data-level="12.1.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-concentration-data-into-r"><i class="fa fa-check"></i><b>12.1.2</b> Munge the glucose concentration data into R</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="jaxwest7.html"><a href="jaxwest7.html#explore-the-jaxwest7-data"><i class="fa fa-check"></i><b>12.2</b> Explore the Jaxwest7 data</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>13</b> The Binomial Distribution</a><ul>
+<li class="chapter" data-level="13.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>13.1</b> dbinom</a></li>
+<li class="chapter" data-level="13.2" data-path="binomial.html"><a href="binomial.html#pbinom"><i class="fa fa-check"></i><b>13.2</b> pbinom</a></li>
+<li class="chapter" data-level="13.3" data-path="binomial.html"><a href="binomial.html#qbinom"><i class="fa fa-check"></i><b>13.3</b> qbinom</a></li>
+<li class="chapter" data-level="13.4" data-path="binomial.html"><a href="binomial.html#rbinom"><i class="fa fa-check"></i><b>13.4</b> rbinom</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="poisson.html"><a href="poisson.html"><i class="fa fa-check"></i><b>14</b> The Poisson Distribution</a><ul>
+<li class="chapter" data-level="14.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>14.1</b> Poisson Events</a></li>
+<li class="chapter" data-level="14.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>14.2</b> dpois</a></li>
+<li class="chapter" data-level="14.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>14.3</b> ppois</a></li>
+<li class="chapter" data-level="14.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>14.4</b> qpois</a></li>
+<li class="chapter" data-level="14.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>14.5</b> rpois</a></li>
+<li class="chapter" data-level="14.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>14.6</b> Overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>15</b> The Normal Distribution</a><ul>
+<li class="chapter" data-level="15.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>15.0.1</b> The Standard Normal</a></li>
+<li class="chapter" data-level="15.1" data-path="normal.html"><a href="normal.html#dnorm"><i class="fa fa-check"></i><b>15.1</b> dnorm</a></li>
+<li class="chapter" data-level="15.2" data-path="normal.html"><a href="normal.html#pnorm"><i class="fa fa-check"></i><b>15.2</b> pnorm</a><ul>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-p-values-using-pnorm"><i class="fa fa-check"></i>Calculating “p-values”" using pnorm</a></li>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-percentiles-using-pnorm"><i class="fa fa-check"></i>Calculating percentiles using pnorm</a></li>
+</ul></li>
+<li class="chapter" data-level="15.3" data-path="normal.html"><a href="normal.html#qnorm"><i class="fa fa-check"></i><b>15.3</b> qnorm</a></li>
+<li class="chapter" data-level="15.4" data-path="normal.html"><a href="normal.html#rnorm"><i class="fa fa-check"></i><b>15.4</b> rnorm</a><ul>
+<li class="chapter" data-level="15.4.1" data-path="normal.html"><a href="normal.html#plotting-histograms-of-some-rnorm-samples"><i class="fa fa-check"></i><b>15.4.1</b> Plotting histograms of some rnorm samples</a></li>
+<li class="chapter" data-level="15.4.2" data-path="normal.html"><a href="normal.html#bins-and-binwidth"><i class="fa fa-check"></i><b>15.4.2</b> Bins and Binwidth</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="categorical.html"><a href="categorical.html"><i class="fa fa-check"></i><b>16</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="16.1" data-path="categorical.html"><a href="categorical.html#types-of-categorical-data"><i class="fa fa-check"></i><b>16.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="categorical.html"><a href="categorical.html#proportions"><i class="fa fa-check"></i><b>16.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="16.1.2" data-path="categorical.html"><a href="categorical.html#frequencies"><i class="fa fa-check"></i><b>16.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="16.1.3" data-path="categorical.html"><a href="categorical.html#associations"><i class="fa fa-check"></i><b>16.1.3</b> Associations</a></li>
+<li class="chapter" data-level="16.1.4" data-path="categorical.html"><a href="categorical.html#statistics-covered-here"><i class="fa fa-check"></i><b>16.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="categorical.html"><a href="categorical.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>16.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="16.2.1" data-path="categorical.html"><a href="categorical.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>16.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="categorical.html"><a href="categorical.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>16.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="categorical.html"><a href="categorical.html#proportion-analysis"><i class="fa fa-check"></i><b>16.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="16.3.2" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>16.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="16.3.3" data-path="categorical.html"><a href="categorical.html#contingency-analysis"><i class="fa fa-check"></i><b>16.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="categorical.html"><a href="categorical.html#comparing-proportions"><i class="fa fa-check"></i><b>16.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="16.4.1" data-path="categorical.html"><a href="categorical.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>16.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="16.4.2" data-path="categorical.html"><a href="categorical.html#calculating-proportions"><i class="fa fa-check"></i><b>16.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="16.4.3" data-path="categorical.html"><a href="categorical.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>16.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="16.4.4" data-path="categorical.html"><a href="categorical.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>16.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="16.4.5" data-path="categorical.html"><a href="categorical.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>16.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="16.4.6" data-path="categorical.html"><a href="categorical.html#comparing-two-proportions"><i class="fa fa-check"></i><b>16.4.6</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="16.5" data-path="categorical.html"><a href="categorical.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>16.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="16.6" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>16.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="16.6.1" data-path="categorical.html"><a href="categorical.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>16.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="16.6.2" data-path="categorical.html"><a href="categorical.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>16.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="16.7" data-path="categorical.html"><a href="categorical.html#contingency-testing"><i class="fa fa-check"></i><b>16.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="16.7.1" data-path="categorical.html"><a href="categorical.html#intepretation-of-contingency-results"><i class="fa fa-check"></i><b>16.7.1</b> Intepretation of Contingency Results</a></li>
+<li class="chapter" data-level="16.7.2" data-path="categorical.html"><a href="categorical.html#write-up-3"><i class="fa fa-check"></i><b>16.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="16.7.3" data-path="categorical.html"><a href="categorical.html#interpretation-of-chi2-output"><i class="fa fa-check"></i><b>16.7.3</b> Interpretation of <span class="math inline">\(\chi^2\)</span> output</a></li>
+<li class="chapter" data-level="16.7.4" data-path="categorical.html"><a href="categorical.html#write-up-4"><i class="fa fa-check"></i><b>16.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="16.7.5" data-path="categorical.html"><a href="categorical.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>16.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="16.7.6" data-path="categorical.html"><a href="categorical.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>16.7.6</b> Higher dimension contingency analysis</a></li>
+<li class="chapter" data-level="16.7.7" data-path="categorical.html"><a href="categorical.html#other-experimental-designs-involving-categorical-data"><i class="fa fa-check"></i><b>16.7.7</b> Other experimental designs involving categorical data</a></li>
+</ul></li>
+<li class="chapter" data-level="16.8" data-path="categorical.html"><a href="categorical.html#doing-a-priori-power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>16.8</b> Doing <em>a priori</em> power analysis for proportion tests</a></li>
+<li class="chapter" data-level="16.9" data-path="categorical.html"><a href="categorical.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>16.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="16.10" data-path="categorical.html"><a href="categorical.html#graphing-proportions"><i class="fa fa-check"></i><b>16.10</b> Graphing Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="chisquare.html"><a href="chisquare.html"><i class="fa fa-check"></i><b>17</b> The Chi-square Distribution</a><ul>
+<li class="chapter" data-level="17.1" data-path="chisquare.html"><a href="chisquare.html#background"><i class="fa fa-check"></i><b>17.1</b> Background</a></li>
+<li class="chapter" data-level="17.2" data-path="chisquare.html"><a href="chisquare.html#dchisq"><i class="fa fa-check"></i><b>17.2</b> dchisq</a></li>
+<li class="chapter" data-level="17.3" data-path="chisquare.html"><a href="chisquare.html#pchisq"><i class="fa fa-check"></i><b>17.3</b> pchisq</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="chisquare.html"><a href="chisquare.html#calculating-p-values-from-pchisq"><i class="fa fa-check"></i><b>17.3.1</b> Calculating p-values from pchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="chisquare.html"><a href="chisquare.html#qchisq"><i class="fa fa-check"></i><b>17.4</b> qchisq</a></li>
+<li class="chapter" data-level="17.5" data-path="chisquare.html"><a href="chisquare.html#rchisq"><i class="fa fa-check"></i><b>17.5</b> rchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="nonparametrics.html"><a href="nonparametrics.html"><i class="fa fa-check"></i><b>18</b> Nonparametric Statistical Tests</a><ul>
+<li class="chapter" data-level="18.1" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-discrete-data"><i class="fa fa-check"></i><b>18.1</b> Experiments involving discrete data</a></li>
+<li class="chapter" data-level="18.2" data-path="nonparametrics.html"><a href="nonparametrics.html#deviant-data"><i class="fa fa-check"></i><b>18.2</b> Deviant Data</a></li>
+<li class="chapter" data-level="18.3" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>18.3</b> Sign Test</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>18.3.1</b> Interpretation</a></li>
+<li class="chapter" data-level="18.3.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-5"><i class="fa fa-check"></i><b>18.3.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>18.4</b> Wilcoxon Sign Rank Test for One Group</a><ul>
+<li class="chapter" data-level="18.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>18.4.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
+<li class="chapter" data-level="18.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>18.4.2</b> Interpretation</a></li>
+<li class="chapter" data-level="18.4.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>18.4.3</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="18.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>18.5</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
+<li class="chapter" data-level="18.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>18.5.1</b> Interpretation</a></li>
+<li class="chapter" data-level="18.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>18.5.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="18.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>18.6</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
+<li class="chapter" data-level="18.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>18.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="18.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>18.6.2</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="18.7" data-path="nonparametrics.html"><a href="nonparametrics.html#kruskal-wallas"><i class="fa fa-check"></i><b>18.7</b> Kruskal-Wallas</a><ul>
+<li class="chapter" data-level="18.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>18.7.1</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="18.8" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>18.8</b> Friedman test</a></li>
+<li class="chapter" data-level="18.9" data-path="nonparametrics.html"><a href="nonparametrics.html#summary"><i class="fa fa-check"></i><b>18.9</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>19</b> Signed Rank Distribution</a><ul>
+<li class="chapter" data-level="19.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>19.1</b> Transformation of data into sign ranks</a><ul>
+<li class="chapter" data-level="19.1.1" data-path="signrank.html"><a href="signrank.html#for-a-one-group-sample"><i class="fa fa-check"></i><b>19.1.1</b> For a one group sample</a></li>
+<li class="chapter" data-level="19.1.2" data-path="signrank.html"><a href="signrank.html#for-a-paired-sample"><i class="fa fa-check"></i><b>19.1.2</b> For a paired sample</a></li>
+<li class="chapter" data-level="19.1.3" data-path="signrank.html"><a href="signrank.html#the-sign-rank-test-statistic-in-r"><i class="fa fa-check"></i><b>19.1.3</b> The sign rank test statistic in R</a></li>
+</ul></li>
+<li class="chapter" data-level="19.2" data-path="signrank.html"><a href="signrank.html#rs-four-sign-rank-distribution-functions"><i class="fa fa-check"></i><b>19.2</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="signrank.html"><a href="signrank.html#dsignrank"><i class="fa fa-check"></i><b>19.2.1</b> dsignrank</a></li>
+<li class="chapter" data-level="19.2.2" data-path="signrank.html"><a href="signrank.html#psignrank"><i class="fa fa-check"></i><b>19.2.2</b> psignrank</a></li>
+<li class="chapter" data-level="19.2.3" data-path="signrank.html"><a href="signrank.html#qsignrank"><i class="fa fa-check"></i><b>19.2.3</b> qsignrank</a></li>
+<li class="chapter" data-level="19.2.4" data-path="signrank.html"><a href="signrank.html#rsignrank"><i class="fa fa-check"></i><b>19.2.4</b> rsignrank</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="ranksum.html"><a href="ranksum.html"><i class="fa fa-check"></i><b>20</b> Rank Sum Distribution</a><ul>
+<li class="chapter" data-level="20.0.1" data-path="ranksum.html"><a href="ranksum.html#transformation-of-data-into-rank-summs"><i class="fa fa-check"></i><b>20.0.1</b> Transformation of data into rank summs</a></li>
+<li class="chapter" data-level="20.0.2" data-path="ranksum.html"><a href="ranksum.html#the-sign-rank-test-statistic-in-r-1"><i class="fa fa-check"></i><b>20.0.2</b> The sign rank test statistic in R</a></li>
+<li class="chapter" data-level="20.1" data-path="ranksum.html"><a href="ranksum.html#rs-four-sign-rank-distribution-functions-1"><i class="fa fa-check"></i><b>20.1</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="ranksum.html"><a href="ranksum.html#dwilcox"><i class="fa fa-check"></i><b>20.1.1</b> dwilcox</a></li>
+<li class="chapter" data-level="20.1.2" data-path="ranksum.html"><a href="ranksum.html#pwilcox"><i class="fa fa-check"></i><b>20.1.2</b> pwilcox</a></li>
+<li class="chapter" data-level="20.1.3" data-path="ranksum.html"><a href="ranksum.html#qwilcox"><i class="fa fa-check"></i><b>20.1.3</b> qwilcox</a></li>
+<li class="chapter" data-level="20.1.4" data-path="ranksum.html"><a href="ranksum.html#rwilcox"><i class="fa fa-check"></i><b>20.1.4</b> rwilcox</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>21</b> The t-tests</a><ul>
+<li class="chapter" data-level="21.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>21.1</b> Data assumptions for t-tests</a></li>
+<li class="chapter" data-level="21.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>21.2</b> The t Statistic</a><ul>
+<li class="chapter" data-level="21.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>21.2.1</b> One sample t tests</a></li>
+<li class="chapter" data-level="21.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>21.2.2</b> Unpaired t tests</a></li>
+<li class="chapter" data-level="21.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>21.2.3</b> Paired t tests</a></li>
+</ul></li>
+<li class="chapter" data-level="21.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>21.3</b> t Test Hypotheses</a><ul>
+<li class="chapter" data-level="21.3.1" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>21.3.1</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="21.3.2" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>21.3.2</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="21.3.3" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>21.3.3</b> Paired hypotheses</a></li>
+</ul></li>
+<li class="chapter" data-level="21.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>21.4</b> Confidence Intervals of Means</a></li>
+<li class="chapter" data-level="21.5" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>21.5</b> t Tests: Running the analysis</a><ul>
+<li class="chapter" data-level="21.5.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>21.5.1</b> One sample t test</a></li>
+<li class="chapter" data-level="21.5.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>21.5.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="21.5.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>21.5.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="21.6" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>21.6</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="21.6.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>21.6.1</b> Unpaired</a></li>
+<li class="chapter" data-level="21.6.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>21.6.2</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="21.7" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>21.7</b> t Test Power</a><ul>
+<li class="chapter" data-level="21.7.1" data-path="ttests.html"><a href="ttests.html#interpretation-7"><i class="fa fa-check"></i><b>21.7.1</b> Interpretation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>22</b> Statistical design of t-tests</a><ul>
+<li class="chapter" data-level="22.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>22.1</b> About this chapter</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="ttestmc.html"><a href="ttestmc.html#scenario"><i class="fa fa-check"></i><b>22.1.1</b> Scenario</a></li>
+</ul></li>
+<li class="chapter" data-level="22.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>22.2</b> One sample t-test Monte Carlo</a></li>
+<li class="chapter" data-level="22.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>22.3</b> Unpaired t-test Monte Carlo</a></li>
+<li class="chapter" data-level="22.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>22.4</b> Paired t-test Monte Carlo</a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html"><i class="fa fa-check"></i><b>23</b> Introduction to ANOVA</a><ul>
+<li class="chapter" data-level="23.1" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#factors-and-levels"><i class="fa fa-check"></i><b>23.1</b> Factors and levels</a></li>
+<li class="chapter" data-level="23.2" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>23.2</b> ANOVA models: One-, Two-, and Three-way</a></li>
+<li class="chapter" data-level="23.3" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#anova-inference-protocol"><i class="fa fa-check"></i><b>23.3</b> ANOVA inference protocol</a></li>
+<li class="chapter" data-level="23.4" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#anova-calculations"><i class="fa fa-check"></i><b>23.4</b> ANOVA calculations</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#sums-of-squares-partitioning"><i class="fa fa-check"></i><b>23.4.1</b> Sums of Squares partitioning</a></li>
+<li class="chapter" data-level="23.4.2" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#degrees-of-freedom"><i class="fa fa-check"></i><b>23.4.2</b> Degrees of freedom</a></li>
+<li class="chapter" data-level="23.4.3" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#the-mean-squares"><i class="fa fa-check"></i><b>23.4.3</b> The mean squares</a></li>
+<li class="chapter" data-level="23.4.4" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#the-anova-table"><i class="fa fa-check"></i><b>23.4.4</b> The ANOVA table</a></li>
+<li class="chapter" data-level="23.4.5" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#the-f-test"><i class="fa fa-check"></i><b>23.4.5</b> The F-test</a></li>
+<li class="chapter" data-level="23.4.6" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#the-problem-of-lost-data-in-related-measures-designs"><i class="fa fa-check"></i><b>23.4.6</b> The problem of lost data in related measures designs</a></li>
+</ul></li>
+<li class="chapter" data-level="23.5" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#completely-randomized-or-related-measures"><i class="fa fa-check"></i><b>23.5</b> Completely randomized or related measures</a></li>
+<li class="chapter" data-level="23.6" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#two-way-anova"><i class="fa fa-check"></i><b>23.6</b> Two-way ANOVA</a></li>
+<li class="chapter" data-level="23.7" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#other-anova-models"><i class="fa fa-check"></i><b>23.7</b> Other ANOVA models</a><ul>
+<li class="chapter" data-level="23.7.1" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#r-and-anova"><i class="fa fa-check"></i><b>23.7.1</b> R and ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="23.8" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>23.8</b> Alternatives to ANOVA</a><ul>
+<li class="chapter" data-level="23.8.1" data-path="introduction-to-anova.html"><a href="introduction-to-anova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>23.8.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>24</b> The F distribution</a><ul>
+<li class="chapter" data-level="24.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>24.1</b> Background</a><ul>
+<li class="chapter" data-level="24.1.1" data-path="fdistr.html"><a href="fdistr.html#sample-variance-and-fs-pdf"><i class="fa fa-check"></i><b>24.1.1</b> Sample Variance and F’s PDF</a></li>
+</ul></li>
+<li class="chapter" data-level="24.2" data-path="fdistr.html"><a href="fdistr.html#df"><i class="fa fa-check"></i><b>24.2</b> df</a></li>
+<li class="chapter" data-level="24.3" data-path="fdistr.html"><a href="fdistr.html#pf"><i class="fa fa-check"></i><b>24.3</b> pf</a></li>
+<li class="chapter" data-level="24.4" data-path="fdistr.html"><a href="fdistr.html#qf"><i class="fa fa-check"></i><b>24.4</b> qf</a></li>
+<li class="chapter" data-level="24.5" data-path="fdistr.html"><a href="fdistr.html#rf"><i class="fa fa-check"></i><b>24.5</b> rf</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html"><i class="fa fa-check"></i><b>25</b> One-way ANOVA CR</a><ul>
+<li class="chapter" data-level="25.1" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html#using-ezanova"><i class="fa fa-check"></i><b>25.1</b> Using <code>ezANOVA</code></a></li>
+<li class="chapter" data-level="25.2" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html#the-chickwt-data-set"><i class="fa fa-check"></i><b>25.2</b> The chickwt data set</a><ul>
+<li class="chapter" data-level="25.2.1" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html#inspect-the-data"><i class="fa fa-check"></i><b>25.2.1</b> Inspect the data</a></li>
+<li class="chapter" data-level="25.2.2" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html#run-the-anova"><i class="fa fa-check"></i><b>25.2.2</b> Run the ANOVA</a></li>
+<li class="chapter" data-level="25.2.3" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html#run-the-chickwts-one-way-anova"><i class="fa fa-check"></i><b>25.2.3</b> Run the chickwts One Way ANOVA</a></li>
+<li class="chapter" data-level="25.2.4" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html#interpreting-the-one-way-cr-anova-output"><i class="fa fa-check"></i><b>25.2.4</b> Interpreting the One-Way CR ANOVA Output</a></li>
+<li class="chapter" data-level="25.2.5" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html#post-hoc-pairwise-comparisons"><i class="fa fa-check"></i><b>25.2.5</b> Post hoc pairwise comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="25.3" data-path="one-way-anova-cr.html"><a href="one-way-anova-cr.html#reporting-the-result"><i class="fa fa-check"></i><b>25.3</b> Reporting the result</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="dispersion" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Variability, Accuracy and Precision</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(ggformula)</code></pre>
+<p>One of my favorite sayings is “models are perfect, data are not”, because it’s a simple way to express the statistical way of thinking. In statistics, the population parameters that interest us are held to have true, fixed values. The models we conjure up to estimate these parameters are also perfect. Unfortunately, the data that we generate and fit these models to are usually pretty crappy and messy.</p>
+<p>Therefore, a major focus of statistics is to evaluate how well our perfect models fit these messy data. Quantifying that fit is the basis for asserting how reliable our parameter estimates are. Which in turn means how well we think we understand a system.</p>
+<p>All of this points to the fact that it is not possible to understand statistical analysis without wrapping our heads around the concepts of variability, accuracy and precision.</p>
+<p>The reason data are messy is that sample data possess inherent variability. This means there is always some ‘error’ between the true values of the population parameters and their estimated values within the model. That error is held to be random. In statistics, random error is defined as the variation that we can’t account for in our model.</p>
+<p>In running experiments on biological systems we think about two main contributors to this error. The first is biological variation. There are confounding factors inherent within the sampled specimens that are driving the observed variation, but we don’t understand them and are not controlling for them. The second source is so-called systematic error, having to do with our technique and equipment, the way we measure the sample.</p>
+<p>As you recall from middle school, a straight line drawn between two variables is described by the linear model <span class="math inline">\(Y=\beta_0+\beta_1 X\)</span>. This model has two parameters, <span class="math inline">\(\beta_0\)</span> represents the y-intercept while <span class="math inline">\(\beta_1\)</span> represents the slope of the line. The predictor variable is <span class="math inline">\(X\)</span>. Thus, passing values of <span class="math inline">\(X\)</span> into this model generates values for the response variable, <span class="math inline">\(Y\)</span>.</p>
+<p>I mention this so I can illustrate randomness, perfect models, and all of that.</p>
+<p>Here’s a simulation of response data from two linear models, <span class="math inline">\(Y1\)</span> and <span class="math inline">\(Y2\)</span>.</p>
+<p>Reading the code, you notice that one of the models, <span class="math inline">\(Y1\)</span> has no error term, so it is perfect, which is to say the values of <span class="math inline">\(Y1\)</span> are perfectly predicted by the model’s intercept and slope parameters. A linear regression goes through every data point and the output of that regression yields the exact same parameter values that were input (a bit of a circular proof, if you will). The model perfectly fits its data.</p>
+<p>The other model (<span class="math inline">\(Y2\)</span>) has an error term tacked onto it. As a result it yields imperfect values of <span class="math inline">\(Y2\)</span> even when given the exact same model parameters as for <span class="math inline">\(Y1\)</span>. Applying a linear regression to this data yields an imperfect fit…the line doesn’t go through all of the data points. Error is associated with the estimate (the gray shade), and the intercept and slope parameters estimated through linear regression differ somewhat from the parameter input values.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#intital model parameter values</span>
+
+b0 &lt;-<span class="st"> </span><span class="dv">0</span>
+b1 &lt;-<span class="st"> </span><span class="dv">5</span>
+X &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">10</span>,<span class="dv">1</span>)
+
+error &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(X), <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">10</span>)
+
+<span class="co">#models</span>
+
+Y1 &lt;-<span class="st"> </span>b0<span class="op">+</span>b1<span class="op">*</span>X
+Y2 &lt;-<span class="st"> </span>b0<span class="op">+</span>b1<span class="op">*</span>X <span class="op">+</span><span class="st"> </span>error
+
+<span class="co">#put the simulations into a data frame so it can be plotted</span>
+
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X, Y1, Y2) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gather</span>(model, response, <span class="op">-</span>X)
+
+<span class="co">#plotting function</span>
+
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(X, response))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(X, response), <span class="dt">method=</span>lm)<span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(<span class="dt">cols=</span><span class="kw">vars</span>(model))</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-2"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-2-1.png" alt="Models are perfect, data are not." width="480" />
+<p class="caption">
+Figure 6.1: Models are perfect, data are not.
+</p>
+</div>
+<p>You can appreciate how the second model, with the random error term, is more real life. What’s even more interesting is that every time you run the second model you’ll generate a completely different result. Copy and paste that code chunk into R and see for yourself. That error term is just a simulation of a random process. And that’s just how random processes behave!</p>
+<p>(Play with that code if you don’t understand how it works. Run it on your machine. Change the initializers)</p>
+<p>In real life, unlike in this simulation, we wouldn’t know the true values of the parameters (as we know them in this simulation). In real life we sample and fit a perfect model to imperfect data.</p>
+<p>The resulting output provides estimates of the true parameter values. But the output also includes several bits of information that summarizes all of the variability in the data. Interpreting that tells us whether or not the model is a good way to explain the data.</p>
+<p>At this point in the course it’s not important to interpret what all of this error analysis means.</p>
+<p>The point I’m making right now, and that hopefully you’ll grow to appreciate, is that to a large extent, statistics is mostly about residual error analysis. It’s actually sketchy if there is no residual error. I mean, look at the automagic warning message R barks out below for the summary of the first of these linear regressions…the perfect model:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">lm</span>(Y1<span class="op">~</span>X)) </code></pre>
+<pre><code>## Warning in summary.lm(lm(Y1 ~ X)): essentially perfect fit: summary may be
+## unreliable</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Y1 ~ X)
+## 
+## Residuals:
+##        Min         1Q     Median         3Q        Max 
+## -4.756e-15 -1.193e-15 -2.021e-16  1.623e-15  3.315e-15 
+## 
+## Coefficients:
+##               Estimate Std. Error    t value Pr(&gt;|t|)    
+## (Intercept) -4.494e-15  1.736e-15 -2.588e+00   0.0322 *  
+## X            5.000e+00  2.798e-16  1.787e+16   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.541e-15 on 8 degrees of freedom
+## Multiple R-squared:      1,  Adjusted R-squared:      1 
+## F-statistic: 3.193e+32 on 1 and 8 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">lm</span>(Y2<span class="op">~</span>X))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Y2 ~ X)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -17.6867  -8.7552  -0.0305   9.2730  15.8521 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)    3.297      8.620   0.382   0.7121  
+## X              4.321      1.389   3.110   0.0144 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 12.62 on 8 degrees of freedom
+## Multiple R-squared:  0.5474, Adjusted R-squared:  0.4908 
+## F-statistic: 9.675 on 1 and 8 DF,  p-value: 0.01444</code></pre>
+<p>In some respects, you can say that what we do as researchers is iterate through discovery problems. Each time we improve our understanding of a system, in essence, we’re explaining just a little bit more of what we previously classified as residual error.</p>
+<p>Is there a biological cause for the variation I see in some assay? Can I explain it by testing a new predictor variable? If I use better technique or different equipment can I “clean up” some of the variation in the results, so that I can get a better handle on some ideas I have about what causes that biological variation?</p>
+<p>In big picture words, the signals that we are looking for as biological researchers are actually within all of that noise.</p>
+<p>Irrespective of the statistical variables and tests that you will use, every null hypothesis that you will ever test is, basically, stating “This data can only be explained by random noise.”</p>
+<div id="variance-quantifying-variation-by-least-squares" class="section level2">
+<h2><span class="header-section-number">6.1</span> Variance: Quantifying variation by least squares</h2>
+<p>The two primary methods to quantify variation are termed “ordinary least squares” and “maximum likelihood estimation”. Mathematically they are distinct, and that difference is beyond the scope of this course. It would require teaching math.</p>
+<p>What is important is that, in most cases, either method will arrive at roughly the same solution.</p>
+<p>Ordinary least squares is the method used for quantifying variation for most of the statistics discussed in this course. The only exception is when we get to generalized linear models. So we’ll omit consideration of maximum likelihood estimation until then.</p>
+<p>Ordinary least squares arises from the theoretical basis of variance, and is a deceptively simple concept.</p>
+<p>It can be shown (by mathematicians) that the variance of a random variable, <span class="math inline">\(Y\)</span>, with an expected value equivalent to its mean, <span class="math inline">\(E(Y) = \mu\)</span>, is the difference between it’s squared expected value and its expected value squared. <span class="math display">\[Var(Y) = E(Y^2)-E(Y)^2 \]</span></p>
+<p>Imagine a sample of size <span class="math inline">\(n\)</span> replicates drawn from a population of the continuous random variable, <span class="math inline">\(Y\)</span>. The replicate sample values for <span class="math inline">\(Y\)</span> are <span class="math inline">\(y_1, y_2, ...y_n\)</span>.</p>
+<p>The mean of these replicate values provides an estimate for the mean of the sampled population, <span class="math inline">\(\mu\)</span>, and is <span class="math display">\[\bar y = \frac{{\sum_{i=1}^n}y_i}{n}\]</span></p>
+<p>The value by which each replicate within the sample varies from the mean is described alternately as deviate or as a residual. Each represents the same thing: <span class="math inline">\(y_i-\bar y\)</span>. A vector of sample replicates will have values that are smaller than and larger than the mean. Thus, some variate values are positive, while others are negative.</p>
+<p>In a random sample we would expect that the values for replicates are roughly equally dispersed above and below a mean. Thus, if we were to sum up the deviates (or residuals) we’d expect that that sum’s value to approach zero. <span class="math display">\[E(\sum_{i=1}^n(yi-\bar y))=0\]</span></p>
+<p>By squaring the deviates, negative values are removed, providing a parameter that paves the way to more capably describe the variation within the sample than can the sum of the deviates. This parameter is called the “sum of squares”: <span class="math display">\[SS=\sum_{i=1}^n(yi-\bar y)^2\]</span></p>
+<p>A sample’s variance is the sum of the squared deviates divided by the sample degrees of freedom, <span class="math inline">\(df=n-1\)</span>. <span class="math display">\[s^2=\frac{\sum_{i=1}^n(yi-\bar y)^2}{n-1}\]</span></p>
+<p>A sample’s variance, <span class="math inline">\(s^2\)</span> is an estimate of the variance, <span class="math inline">\(\sigma^2\)</span>, of the population that was sampled, in the same way <span class="math inline">\(y_bar\)</span> estimates <span class="math inline">\(\mu\)</span>.</p>
+<p>You can think of variance as an approximate average of <span class="math inline">\(SS\)</span>. The reason <span class="math inline">\(s^2\)</span> is arrived at through dividing by degrees of freedom, <span class="math inline">\(n-1\)</span>, rather than by <span class="math inline">\(n\)</span> is because doing so produces a better estimate of the population variance, <span class="math inline">\(\sigma^2\)</span>. <a href="https://stats.stackexchange.com/questions/100041/how-exactly-did-statisticians-agree-to-using-n-1-as-the-unbiased-estimator-for">Mathematical proofs of that assertion</a> can be found all over the internet.</p>
+<p>Variance is a hard parameter to wrap the brain around. It describes the variability within a data set, but geometrically: The units of <span class="math inline">\(s^2\)</span> are squared. For example, if your response variable is measured by the <span class="math inline">\(gram\)</span> mass of objects, then the variance units are in <span class="math inline">\(grams^2\)</span>.
+That’s weird.</p>
+<p>Later in the course, we’ll discuss statistical testing using analysis of variance (ANOVA) procedures. The fundamental idea of ANOVA is to test for group effects by “partitioning the error”. That’s done with <span class="math inline">\(SS\)</span>. When a factor causes some effect, the <span class="math inline">\(SS\)</span> associated with that factor get larger…by the square of the variation. Statistical testing is then done on the variance in groups, which in ANOVA jargon is called the “mean square”, or <span class="math inline">\(MS\)</span>. <span class="math inline">\(MS\)</span> is just another way for saying <span class="math inline">\(s^2\)</span>.</p>
+</div>
+<div id="standard-deviation" class="section level2">
+<h2><span class="header-section-number">6.2</span> Standard deviation</h2>
+<p>The sample standard deviation solves the problem of working with an unintuitive squared parameter. The standard deviation is a more pragmatic descriptive statistic than is variance.</p>
+<p>The standard deviation is the square root of the sample variance: <span class="math display">\[sd=\sqrt{\frac{\sum_{i=1}^n(y_i-\bar y)^2}{n-1}}\]</span></p>
+<div id="what-does-the-standard-deviation-tell-us" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> What does the standard deviation tell us</h3>
+<p>The sample standard deviation is two things at once. It is
+* a statistical parameter that expresses the variability within the sample.
+* an estimate of the variability within the population that was sampled.</p>
+<p>There aren’t many factoids in statistics worth committing to memory, but this one on the standard deviation is one of them: A bit over two thirds of the values for a normally-distributed variable will lie between one standard deviation below and above the mean of that variable.</p>
+<p>Here’s one way to calculate that using R’s <code>pnorm</code> function, the cumulative distribution function:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dt">lower.tail =</span> T) <span class="co">#Calculates the AUC below a zscore of -1.</span></code></pre>
+<pre><code>## [1] 0.1586553</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pnorm</span>(<span class="dv">1</span>, <span class="dt">lower.tail =</span> F) <span class="co">#Calculates the AUC above a zscore of 1</span></code></pre>
+<pre><code>## [1] 0.1586553</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span><span class="op">-</span><span class="kw">pnorm</span>(<span class="op">-</span><span class="dv">1</span>)<span class="op">-</span><span class="kw">pnorm</span>(<span class="dv">1</span>, <span class="dt">lower.tail =</span> F) <span class="co">#The middle range</span></code></pre>
+<pre><code>## [1] 0.6826895</code></pre>
+<p>Explore: Use <code>pnorm</code> to calculate the AUC between z scores of -2 and 2.</p>
+<div class="figure"><span id="fig:unnamed-chunk-5"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-5-1.png" alt="About 86% of the values for a normally distributed variable are within +/- one standard deviation from the mean." width="672" />
+<p class="caption">
+Figure 6.2: About 86% of the values for a normally distributed variable are within +/- one standard deviation from the mean.
+</p>
+</div>
+<p>No matter the scale for the variable, the relative proportion of values within 1 standard deviation for normally distributed variables will always behave this way. Here’s the distribution of serum glucose concentration values, where the average is 100 mg/dl and the standard deviation is 10 mg/dl:</p>
+<div class="figure"><span id="fig:unnamed-chunk-6"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-6-1.png" alt="Modeling the distribution of a blood glucose variable." width="672" />
+<p class="caption">
+Figure 6.3: Modeling the distribution of a blood glucose variable.
+</p>
+</div>
+</div>
+</div>
+<div id="other-ways-of-describing-variability" class="section level2">
+<h2><span class="header-section-number">6.3</span> Other ways of describing variability</h2>
+<p>*Just show all of the data as scatter plots! There’s no need to hide the variability in bar plots with “error bars”.</p>
+<p>*Violin plots are pretty ways to illustrate the spread and density of variation graphically.</p>
+<p>*The coefficient of variation, <span class="math inline">\(cv=\frac{sd}{mean}\)</span>, is a dimensionless index. If you tell me, “My cv is 60%,” then my response would be, “Mmmm, that sounds pretty noisy.” That is, the more cv’s you pay attention to, the better you appreciate the physical implications of a given value.</p>
+<p>*Percentiles and ranges. In particular, the innerquartile range. This is usually reserved for non-normal data, particularly discrete data. The IQR illustrates the spread of the middle 50% of data values, from the 25th to the 75th percentiles, and is usually accompanied by the use of the median as the centrality parameter.</p>
+</div>
+<div id="precision-and-accuracy" class="section level2">
+<h2><span class="header-section-number">6.4</span> Precision and Accuracy</h2>
+<p>Even with well-behaved subjects, state-of-the-art equipment, and the best of technique and intentions, samples can yield wildly inaccurate estimates, even while measuring something precisely. My favorite illustration of this is how <a href="https://unbiasedresearch.blogspot.com/2018/02/accuracy-v-precision.html">estimates for the masses of subatomic particles have evolved over time</a>. We can probably assume that the real masses of these particles have remained constant. Yet, note all the quantum jumps, pun intended, in their estimated values.</p>
+<p>Ways of measuring things change. What seems very accurate today could prove to be wildly inaccurate tomorrow. And just because you’ve measured something precisely doesn’t mean you know its true value.</p>
+<p>If there is one clear take away from this it’s that all such statistical estimates are provisional.</p>
+</div>
+<div id="standard-error" class="section level2">
+<h2><span class="header-section-number">6.5</span> Standard error</h2>
+<p>This will sound counter-intuitive, but we can actually know how precise our estimate of some parameter is without knowing the true value. That’s because precision is the repeatability of a measurement, and it is possible to repeat something very, very reliably but inaccurately.</p>
+<p><strong>The standard error is the statistical parameter used to express sample precision. Standard error is calculated from standard deviation</strong>
+<span class="math display">\[precision:\ SE = \frac{sd}{\sqrt n}\]</span></p>
+<p>In contrast, as the history of subatomic particle estimates illustrates, we can never know for sure whether an estimate derived from a sample accurately estimates the sampled population. We will always be uncertain.</p>
+<div id="what-exactly-does-the-standard-error-represent" class="section level3">
+<h3><span class="header-section-number">6.5.1</span> What exactly does the standard error represent?</h3>
+<p>The central limit theorem predicts a few important things:
+1) A distribution of many sample means will be normally distributed, even if a non-normal distribution is sampled.
+2) A distribution of sample means will have less dispersion with larger sample sizes.
+3) If a sample population has a mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, the distribution of sample means of sample size <span class="math inline">\(n\)</span> drawn from that population will have a mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\frac{\sigma}{\sqrt n}\)</span>.</p>
+<p>These features are illustrated below, as a prelude to further defining standard error.</p>
+<p>The first graph showing a big black box simply plots out a uniform distribution of the random variable <span class="math inline">\(Y\)</span> ranging in values from 0 to 1, using the <code>dunif</code>function. It just means that any value, <span class="math inline">\(y\)</span>, plucked from that distribution is as equally likely as all other values.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(
+  <span class="kw">data.frame</span>(
+    <span class="dt">x=</span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)),
+  <span class="kw">aes</span>(x))<span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_function</span>(
+    <span class="dt">fun=</span>dunif, 
+    <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>),
+    <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),
+    <span class="dt">geom=</span><span class="st">&quot;area&quot;</span>, 
+    <span class="dt">fill=</span><span class="st">&quot;black&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;p(y)&quot;</span>, <span class="dt">x=</span><span class="st">&quot;Y&quot;</span>)</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-7"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" alt="A variable with a uniform distribution." width="672" />
+<p class="caption">
+Figure 6.4: A variable with a uniform distribution.
+</p>
+</div>
+<p>The probability of sampling any one of these values is equivalent to that for all other values. Uniform distributions arise from time-to-time. For example, important actually, the distribution of p-values from null hypothesis tests is uniform.</p>
+<p>As you might imagine, the mean of this particular uniform distribution is 0.5 (because it is halfway between the value limits 0 and 1). Probably less obvious is the standard deviation for a uniform distribution with limits <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> is <span class="math inline">\(\frac{b-a}{\sqrt{12}}\)</span>. So the standard deviation for this particular uniform distribution <span class="math inline">\(\sigma\)</span> = 0.2887.</p>
+<p>Just so you trust me, these assertions pass the following simulation test:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(<span class="kw">runif</span>(<span class="dt">n=</span><span class="dv">100000</span>, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>))</code></pre>
+<pre><code>## [1] 0.4996349</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(<span class="kw">runif</span>(<span class="dt">n=</span><span class="dv">100000</span>, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>))</code></pre>
+<pre><code>## [1] 0.2887626</code></pre>
+<p>The next graph illustrates the behavior of the central limit theorem.</p>
+<p>In the following script, random samples are taken from this uniform distribution many times. It takes either 1000 small random samples (n=3) or 1000 large random samples (n=30).</p>
+<p>It then calculates the means for each one of those samples before finally plotting out a histogram showing the distribution of all of those sample means.</p>
+<p>Notice how the distributions of sample means are normally distributed, even though they comes from a uniform distribution! That validates the first prediction of the CLT, made above.</p>
+<p>Note also that the distribution of means corresponding to the larger sample sizes has much less dispersion than that for the smaller sample sizes. That validates the second CLT prediction made above.</p>
+<pre class="sourceCode r"><code class="sourceCode r">meanMaker &lt;-<span class="st"> </span><span class="cf">function</span>(n){
+ <span class="kw">mean</span>(<span class="kw">runif</span>(n))
+}
+small.sample &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>,<span class="kw">meanMaker</span>(<span class="dv">3</span>))
+large.sample &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">meanMaker</span>(<span class="dv">30</span>))
+
+<span class="kw">ggplot</span>(<span class="kw">data.frame</span>(small.sample, large.sample))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(small.sample), <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(large.sample), <span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.5</span> )<span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;n=3 (red) or n=30 (blue&quot;</span>)</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-9"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-9-1.png" alt="The central limit theorem in action, distributions of sample means of small (red) and large (blue) sample sizes." width="672" />
+<p class="caption">
+Figure 6.5: The central limit theorem in action, distributions of sample means of small (red) and large (blue) sample sizes.
+</p>
+</div>
+<p>As for the third point, the code below calculates a mean of all these means, and the SD of all these means, for each of the groups.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(small.sample)</code></pre>
+<pre><code>## [1] 0.4985857</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(small.sample)</code></pre>
+<pre><code>## [1] 0.1659609</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(large.sample)</code></pre>
+<pre><code>## [1] 0.4997081</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(large.sample)</code></pre>
+<pre><code>## [1] 0.05233302</code></pre>
+<p>Irrespective of sample size, the mean of the means is a great estimator of the mean of the uniform distribution.</p>
+<p>But passing the sample means into the <code>sd</code> function shows that neither provides a good estimate of the <span class="math inline">\(\sigma\)</span> for the population sampled, which we know for a fact has a value of 0.2887.</p>
+<p>Obviously, the standard deviation <strong>of a group of means</strong> is not an estimator of the population standard deviation. So what is it? The standard deviation of the distribution of sample means is what is known as the standard error of the mean.</p>
+<p><strong>This goes a long way to illustrate what the standard error of the mean of a sample, SEM, actually represents. It is an estimator of the theoretical standard deviation of the distribution of sample means,</strong><span class="math inline">\(\sigma_{\bar y}\)</span>.</p>
+<p>Now what are the implications of THAT?</p>
+<p>There are a few.</p>
+<p>First, SEM is not a measure of dispersion. It is a measure that describes the precision by which a mean has been estimated. The SEM for the large sample size group above is much lower than that for the small sample size group. Meaning, <span class="math inline">\(\mu\)</span> is estimated more precisely by using large sample sizes.</p>
+<p>Second, statistically naive researchers use SEM to illustrate dispersion in their data (eg, using SEM as “error bars”). Ugh. They do this because, invariably, the SEM will be lower than the SD. And that looks cleaner.</p>
+<p>But they shouldn’t do this, because SEM is not an estimator of <span class="math inline">\(\sigma\)</span>. Rather, SEM estimates <span class="math inline">\(\sigma_{\bar y}\)</span>. Those are two very different things.</p>
+<p>I suggest you use SEM if it is important to illustrate the precision by which something is measured. That’s usually only important for parameters that are physical constants.</p>
+<p>Third, when we do experiments we sample only once (with <span class="math inline">\(n\)</span> independent replicates) and draw inferences about the population under study on that bases of that one sample.</p>
+<p>We don’t have the luxury or resources to re-sample again and again, as we can in simulations. However, these simulations illustrate that, due to the central limit theorem, a long run of sampling is predictably well-behaved. This predictability is actually the foundation of statistical sampling methodology.</p>
+<p>The SEM estimates a theoretical parameter (<span class="math inline">\(\sigma_{\bar y}\)</span> that we would rarely, if ever, attempt to validate. Yet, on the basis of one sample it serves a purpose by providing an estimator of precision.</p>
+</div>
+</div>
+<div id="confidence-intervals" class="section level2">
+<h2><span class="header-section-number">6.6</span> Confidence intervals</h2>
+<p>Confidence intervals are the range of values within which we predict is the true value of a parameter, with some confidence.</p>
+<p>We just need to pick a level within which to be confident. 90%? 95%? 99%? Once that is decided, we can calculate the range within which that true value likely lies.</p>
+<p><strong>The confidence interval serves as the statistical parameter used to express sample accuracy.</strong></p>
+<p>Standard errors and confidence intervals are calculated from the same sample data. So there is a bit of a circular argument at play here. We use the variability within the sample to generate two related parameters, standard error and confidence intervals. The former tells us about the precision and the latter tells us about the accuracy.</p>
+<div id="simulations" class="section level3">
+<h3><span class="header-section-number">6.6.1</span> Simulations</h3>
+<p>The random sampler is a script that <strong>generates a random sample from a known distribution</strong> before calculating several sample parameters, including the confidence interval.</p>
+<p>It’s particularly useful to illustrate the relationships between confidence intervals, sample sizes, standard deviations, and confidence levels.</p>
+<p>When the confidence interval is accurate, a blue-colored bar appears. When the confidence interval is not accurate, you get a red bar.</p>
+<p>The confidence interval for a sample mean is calculated as follows:</p>
+<p><span class="math display">\[CI=\bar x \pm t_{df(n-1)}\cdot\frac{sd}{\sqrt{n}}\]</span></p>
+<pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="dv">5</span>
+pop.mean &lt;-<span class="st"> </span><span class="dv">100</span>
+pop.sd &lt;-<span class="st"> </span><span class="dv">25</span>
+sig.dig &lt;-<span class="st"> </span><span class="dv">2</span>
+conf.level &lt;-<span class="st"> </span><span class="fl">0.95</span>
+x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="fl">0.1</span>))
+<span class="co">#draw sample and calculate its descriptive stats</span>
+mysample &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, pop.mean, pop.sd)
+mean &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">mean</span>(mysample), sig.dig)
+sd &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">sd</span>(mysample), sig.dig)
+sem &lt;-<span class="st"> </span><span class="kw">round</span>(sd<span class="op">/</span><span class="kw">sqrt</span>(n), sig.dig)
+ll &lt;-<span class="st"> </span><span class="kw">round</span>(mean<span class="op">-</span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span>conf.level)<span class="op">/</span><span class="dv">2</span>, 
+                    n<span class="dv">-1</span>)<span class="op">*</span>sem, sig.dig)
+ul &lt;-<span class="st"> </span><span class="kw">round</span>(mean<span class="op">+</span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span>conf.level)<span class="op">/</span><span class="dv">2</span>, 
+                    n<span class="dv">-1</span>)<span class="op">*</span>sem, sig.dig)
+<span class="co">#print to console</span>
+<span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">round</span>(mysample, sig.dig), 
+        <span class="kw">paste</span>(
+          <span class="st">&quot;mean=&quot;</span>, mean, <span class="st">&quot;sd=&quot;</span>, sd, 
+          <span class="st">&quot;sem=&quot;</span>, sem, <span class="st">&quot;CIll=&quot;</span>, ll, 
+          <span class="st">&quot;CIul=&quot;</span>, ul)))</code></pre>
+<pre><code>## [1] &quot;125.53&quot;                                                 
+## [2] &quot;66.87&quot;                                                  
+## [3] &quot;91.68&quot;                                                  
+## [4] &quot;91.78&quot;                                                  
+## [5] &quot;96.14&quot;                                                  
+## [6] &quot;mean= 94.4 sd= 20.88 sem= 9.34 CIll= 68.47 CIul= 120.33&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># graph the sample confidence interval on the population</span>
+
+pretty &lt;-<span class="st"> </span><span class="kw">ifelse</span>(ll <span class="op">&gt;</span><span class="st"> </span>pop.mean <span class="op">|</span><span class="st"> </span>ul <span class="op">&lt;</span><span class="st"> </span>pop.mean, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)
+
+<span class="co">#graph (note: using ggformula package)</span>
+<span class="kw">gf_line</span>(<span class="kw">dnorm</span>(x, pop.mean, pop.sd)<span class="op">~</span>x)<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_segment</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>ll <span class="op">+</span><span class="st"> </span>ul, 
+             <span class="dt">size =</span> <span class="dv">2</span>, 
+             <span class="dt">color =</span> pretty)<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">subtitle =</span> 
+            <span class="kw">paste</span>(<span class="dv">100</span><span class="op">*</span>conf.level,
+                  <span class="st">&quot;% CI =&quot;</span>,ll,
+                  <span class="st">&quot;to&quot;</span>,ul))</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-11"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-11-1.png" alt="Confidence interval illustrator" width="672" />
+<p class="caption">
+Figure 6.6: Confidence interval illustrator
+</p>
+</div>
+<p>Here’s a script that compares the confidence intervals of two means, from random <strong>samples of known distributions</strong>.</p>
+<p>When two CI’s don’t overlap, they remain colored blue and green, and the two means they correspond to are unequal. It’s the same as a test of significance without the formal hypothesis.</p>
+<p>If the two CI’s overlap, one of them turns red. It’s a sign the two samples are indistinguishable, since the 95% CI of one sample includes values in the 95% CI of the other. It’s also the same as a test of significance, for a null outcome.</p>
+<p>What’s should be done with this simulator is to use it to gain an intuitive understanding about how confidence intervals operate. Practice changing the sample size (n), the population means and standard deviations, and even the confidence level. Under what conditions are overlapping intervals diminished? What factors influence narrower intervals?</p>
+<pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="dv">5</span>
+m &lt;-<span class="st"> </span><span class="dv">100</span>
+conf.level=<span class="fl">0.95</span>
+t &lt;-<span class="st"> </span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span><span class="st"> </span>conf.level)<span class="op">/</span><span class="dv">2</span>, n<span class="dv">-1</span>)
+pop.mean.A &lt;-<span class="st"> </span><span class="dv">125</span>
+pop.mean.B &lt;-<span class="st"> </span><span class="dv">200</span>
+pop.sd.A &lt;-<span class="st"> </span><span class="dv">25</span> 
+pop.sd.B &lt;-<span class="st"> </span><span class="dv">25</span>
+x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">300</span>, <span class="fl">0.1</span>))
+y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.0005</span>, m<span class="op">*</span><span class="fl">0.0005</span>, <span class="fl">0.0005</span>)
+
+<span class="co">#simulate  </span>
+mydat.A &lt;-<span class="st"> </span><span class="kw">replicate</span>(
+  m, <span class="kw">rnorm</span>(
+    n, pop.mean.A, pop.sd.A
+    )
+  )
+ldat.A &lt;-<span class="st"> </span><span class="kw">apply</span>(
+  mydat.A, 
+  <span class="dv">2</span>, 
+  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">-</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)
+  )
+udat.A &lt;-<span class="st"> </span><span class="kw">apply</span>(
+  mydat.A, 
+  <span class="dv">2</span>, 
+  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">+</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)
+  )
+
+mydat.B &lt;-<span class="st"> </span><span class="kw">replicate</span>(
+  m, <span class="kw">rnorm</span>(
+    n, pop.mean.B, pop.sd.B
+    )
+  )
+ldat.B &lt;-<span class="st"> </span><span class="kw">apply</span>(
+  mydat.B, 
+  <span class="dv">2</span>, 
+  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">-</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)
+  )
+udat.B &lt;-<span class="st"> </span><span class="kw">apply</span>(
+  mydat.B, 
+  <span class="dv">2</span>, 
+  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">+</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)
+  )  
+
+ci &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  y, ldat.A, udat.A, ldat.B, udat.B
+  )
+
+alt &lt;-<span class="st"> </span><span class="kw">ifelse</span>(
+  udat.A <span class="op">&gt;=</span><span class="st"> </span>ldat.B, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>
+  )
+
+<span class="co">#plots made with ggformula package</span>
+
+<span class="kw">gf_line</span>(<span class="kw">dnorm</span>(
+  x, pop.mean.A, pop.sd.A)<span class="op">~</span>x, 
+  <span class="dt">color =</span> <span class="st">&quot;dark green&quot;</span>
+  )<span class="op">%&gt;%</span>
+<span class="st">  </span>
+<span class="st">  </span><span class="kw">gf_line</span>(<span class="kw">dnorm</span>(
+    x, pop.mean.B, pop.sd.B)<span class="op">~</span>x, 
+    <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>
+    )<span class="op">%&gt;%</span>
+<span class="st">  </span>
+<span class="st">  </span><span class="kw">gf_segment</span>(
+    y<span class="op">+</span>y <span class="op">~</span><span class="st"> </span>ldat.A <span class="op">+</span><span class="st"> </span>udat.A, 
+    <span class="dt">data =</span> ci, 
+    <span class="dt">color =</span> <span class="st">&quot;dark green&quot;</span>
+    )<span class="op">%&gt;%</span>
+<span class="st">  </span>
+<span class="st">  </span><span class="kw">gf_segment</span>(
+    y<span class="op">+</span>y <span class="op">~</span><span class="st"> </span>ldat.B <span class="op">+</span><span class="st"> </span>udat.B, 
+    <span class="dt">data =</span> ci, 
+    <span class="dt">color =</span> alt
+    )<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gf_labs</span>(
+    <span class="dt">y =</span> <span class="st">&quot;dnorm(x, pop.mean, sd.mean&quot;</span>
+    )</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-12"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-12-1.png" alt="Comparing two samples using confidence intervals. Red-colored indicates the two CI overlap, meaning the two groups for that sample test out as no different." width="672" />
+<p class="caption">
+Figure 6.7: Comparing two samples using confidence intervals. Red-colored indicates the two CI overlap, meaning the two groups for that sample test out as no different.
+</p>
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sampling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="key-take-aways.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
