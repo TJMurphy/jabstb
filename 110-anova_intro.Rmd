@@ -1,4 +1,4 @@
-# Introduction to ANOVA
+# Introduction to ANOVA {#introanova}
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(RColorBrewer)
@@ -309,15 +309,17 @@ which, because the total variation amount of is fixed, can also be calculated as
 
 \[SS_{residual}=SS_{total}-SS_{genotype}\]
 
-In some software residual variation is referred to as "error". The term "error" arises from ANOVA theory, which states that the true population means represented by these sample groups are "fixed" in the population. Thus, any variation associated with our estimate must be in error.
+In some software residual variation is referred to as "error". The term "error" arises from ANOVA theory, which holds that the true population means represented by these sample groups are "fixed" in the population. Thus, any variation associated with our estimate must be in error. Residuals are the measurements of that "error".
 
-Perhaps you can intuit a few things. First, the residual variation is the variation unaccounted for by the model. Meaning that whatever causes it is not under experimental control. 
+Perhaps you can intuit a few things. First, the residual variation is the variation unaccounted for by the model. Meaning that whatever its causes, they are not under experimental control.
 
-Second, if the variation around each group remains similar, as the group means differ from each other more, the greater the fraction of the overall variation that will be associated with the model, and the less that will be associated with the residual. 
+Second, if the variation around each group mean remains similar, but as the group means differ from each other more, the greater the fraction of the overall variation that will be associated with the model, and the less that will be associated with the residual. 
 
-Third, when the noise around those group means increases, less of the total variation will be associated with group mean ,and the more with the residual. 
+Third, when the noise around those group means increases, less of the total variation will be associated with the model of group means, and the more with the residual. 
 
-In other words, noisy experiments tend to hide detectable differences between means, while clean experiments favor detecting these differences. 
+In other words, noisy experiments tend to hide detectable differences between means, while clean experiments favor detecting these differences. Similarly, predictors that lead to large effects on means 
+
+If that seems bloody obvious to you, and it is simple, then you should not have any problem processing how ANOVA works. 
 
 The following two graphs emphasize these observations. In the null graph, the group means are roughly equivalent and very nearly the same as the grand mean. There's very little model variation. Most of the variation is in the residuals.
 
@@ -417,8 +419,15 @@ The p-value is derived from an F probability distribution with 2 and 12 degrees 
 pf(22.979, 2, 12, lower.tail=F)
 ```
 
-The example above is a simple one factor completely randomized model for which there is only one F test, because it has only one component. A two-way ANOVA would have three F tests if completely randomized, but would have a total of five if related measures for both factors were involved.   
+The example above is a simple one factor completely randomized model for which there is only one F test, because it has only one component. A two-way ANOVA would have three F tests if completely randomized. An F test will pop into the ANOVA table when a factor is treated as related/repeated measures. Three-way ANOVA can have about a dozen F tests! 
 
+### Post-hoc group comparisons
+
+An final stage of ANOVA, which is optional but done very commmonly, is to run what are essentially t-test comparisons between groups. The goal is to see which specific groups actually differ from each other. The comparisons to make should be driven by scientific judgement. 
+
+For example, an experiment with $k$ groups may be designed to test which of several groups differ from a negative control. The total number of comparisons that could be made are $\frac{k(k-1)}{2}$. Yet, only a specific $k-1$ subset are of any interest. 
+
+There are several ways to run these post-hoc group comparisons. What is most important, however, is these be done in a way that keeps the FWER below the pre-set type1 error threshold. What this means 
 
 
 ## Completely randomized or related measures
@@ -439,7 +448,7 @@ Examples of intrinsically-linked subjects include
 
 There are certainly others.
 
-Since an RM design involves taking multiple measurements from each of the same subjects we can assess the variation associated those subjects. That source of variation is no longer in the residual error term, it goes right into the model.
+Since an RM design involves taking multiple measurements from each of the same replicates, there is variation associated with the replicates that can be accounted for. That source of variation is no longer in the residual error term, but can be taken right into the model. 
 
 ### The problem of lost data in related measures designs
 
@@ -500,7 +509,9 @@ An interaction effect is represented by the differing slopes of those two lines.
 
 A statistical interaction occurs when the effects of two factors are not the same across all of their levels.
 
-What this means biologically requires scientific judgement and knowledge about the two factors you're working with. I know a bit about pharmacology. If that gene is for a protein that metabolizes drugs, it's loss could lead to a larger blood glucose-lowering effect of the drug.
+What an interaction means biologically is what you have to judge scientifically. I know a bit about pharmacology. Let's assume that gene encodes a drug metabolizing protein. The loss of the protein could lead to a larger blood glucose-lowering effect of the drug, because the drug would not be strongly metabolized. 
+
+Rewinding the clock even further, let's assume I suspected that all along. The experimental design is to assess, indirectly, whether that gene's protein metabolizes that drug. An two way ANOVA interaction effect would be consistent with that hypothesis. 
 
 Here's the ANOVA table for those data.
 
@@ -514,7 +525,6 @@ anova(lm(blood_glucose ~ genotype + drug +genotype*drug, test))
 knitr::kable(test)
 
 ```
-
 
 
 Four sources of variation are accounted for: the main effect of genotype, the main effect of drug, the interaction between drug and genotype, and the residual error.

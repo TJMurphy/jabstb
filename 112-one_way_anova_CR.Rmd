@@ -1,4 +1,4 @@
-# One-way ANOVA CR
+# One-way ANOVA CR {#onewayanova}
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(magrittr)
@@ -9,15 +9,20 @@ library(ez)
 library(lsr)
 ```
 
+If you haven't yet read the ANOVA big picture, [this is worth reading](\@ref(#introanova))
+
+
 ## Using `ezANOVA`
 
-R has several functions to run ANOVA. In this course we're going to use `ezANOVA` from the `ez` package because I feel it is a better alternative for someone just learning ANOVA.
+R has several functions to run ANOVA. In this course we're going to use `ezANOVA` from the `ez` package because I feel the syntax for defining CR vs RM is pretty helpful.
 
-In this document, we'll run through an analysis of a one-way completely randomized ANOVA data set. 
+In this document, we'll run through an analysis of a one-way completely randomized ANOVA data set as 'how to' example.
 
 ## The chickwt data set 
 
-This data set in R's base. It compares the influence of 6 different types of food sources on chick weight. There is one predictor factor (feed) at 6 different levels (the various food sources). There is one continuous outcome variable (weight). We can assume the chicks have been randomly assigned to a level of feed, and have been weighed after a period of time.  
+This data set in R's base. It compares the influence of 6 different types of food sources on chick weight. There is one predictor variable, the factor 'feed', which is tested at 6 different levels (the various food sources). 
+
+There has one continuous outcome variable (weight). We can assume the chicks are outbred, and thus not intrinsically-related, and that they have been randomly assigned to a level of feed, and have been weighed after a period of time. 
 
 This is a classic one-way completely randomized ANOVA design.
 
@@ -32,7 +37,7 @@ str(chickwts)
 chickwts
 ```
 
-Calculate some descriptive stats for inspection:
+It is also helpful to calculate some descriptive stats for inspection:
 
 ```{r}
 cw1 <- chickwts %>%
@@ -191,13 +196,13 @@ Option 2:  Transform the data to homogenize outliers and variance, or switch the
 
 ### Post hoc pairwise comparisons
 
-If the ANOVA F test for the factor is extreme the next step is post hoc analysis to determine which group means actually differ. 
+If the ANOVA F test for the factor is extreme you may be interested in knowing which treatment groups differ. That's achieved by conducting post hoc analysis, which typically involves multiple group comparisons. 
 
-In other words, post hoc involves testing several hypotheses. This should be done in a way that keeps the cumulative, family-wise type1 error rate (FWER) below the type 1 error threshold that was set for the experiment; usually 5%.  
+In other words, post hoc involves testing several hypotheses simultaneously. Each test risks type1 error. Therefore, this should be done in a way that keeps the cumulative, family-wise type1 error rate (FWER) below the type 1 error threshold that was set for the experiment; usually 5%.  
 
 #### Overview of options
 
-Sometimes we do these experiments without any clear plans of what to compare. In those cases, we compare every group to all other groups. That "burns" a lot of alpha needlessly, but that's the price paid for not planning. The tests for that include the Bonferroni (aka Dunn's) and its cousins, Holm, Hommel, and Hochberg. They differ slightly.
+Sometimes we do these experiments without any clear plans of what groups we might want to compare. In those cases, we compare every group to all other groups. Doing so will involve $\frac{k(k-1)}{k}$ comparisons in an experiment with $k$ groups. That "burns" a lot of alpha, perhaps needlessly, but that's the price paid for not planning. The tests for that include the Bonferroni (aka Dunn's) and its cousins, Holm, Hommel, and Hochberg. They differ slightly, and will generate slightly different adjusted p-values given a common set of unadjusted p-values. Choose one.
 
 Step-down tests operate a bit differently but do the same thing in terms of making all comparisons, these including the Tukey HSD and Newman-Keuls.
 
@@ -205,25 +210,61 @@ When we intend to compare all groups back to one level of the factor, thus makin
 
 #### Two imperatives in pairwise testing
 
-1) Since every p-value represents a hypothesis, when simultaneously testing many hypotheses always make adjustments to keep the FWER < 0.05.
+1) Since every p-value represents a hypothesis, when simultaneously testing many hypotheses always make adjustments to keep the FWER < 0.05 (or whatever overall type1 error limit you preset for the experiment).
 
 2) Let your scientific questions drive the comparisons you'll make, and thus your choice of post hoc test.
 
-I suggest you worry less about the specific post hoc test, or about gamification of p-values, and the like. 
+I suggest you worry less about the specific post hoc test, or about gamification of p-values, and think more about whether a comparison is scientifically important. 
 
 But there are a couple of provisos: 1) Bonferroni (or its cousins) works just fine if you don't have too many means to compare, 2) Dunnett's is for comparing two or more means back to a control mean but should not be used in related measures factors, 3) Fishers LSD will give you output to make those one or few key comparison you set out to make, even though you have many other groups in the experiment (ie, several of the other groups are internal controls and not particularly scientifically important).
 
-#### Here are some post hoc options
+#### Examples
 
-**No p-value adjustment**: Sometimes it's useful to generate p-values that are not corrected for multiple comparisons. For example, although you've done a simple ANOVA, the intention all along was to test only one hypothesis between two groups. In that case, I recommend using the FisherLSD because it will generate confidence intervals for you.
+**No p-value adjustment**: Sometimes it's useful to generate p-values that are not corrected for multiple comparisons. For example, although you've done a simple ANOVA, the intention all along was to test only one hypothesis between two groups. The `pairwise.t.test` function produces a matrix of all comparisons, within which you can find the p-value for the comparison of interest.
 
-The script below will generate a matrix of p-values for t tests of all possible comparisons, none of which are adjusted for multiple comparisons. When running the other scripts, come back to this to see how adjusted p-value methods changes these results 
+The script below will generate a matrix of p-values for t tests of all possible comparisons, none of which are adjusted for multiple comparisons. When running the other scripts below, come back to this to see how adjusted p-value methods changes these results 
 
 ```{r}
 pairwise.t.test(chickwts$weight, chickwts$feed, p.adjust= "none")
 ```
 
-**Fisher LSD** This also doesn't make adjustments for multiple comparisons, making it the most liberal post hoc test. Notice the p-values are no different than above. Fisher LSD is better than 'none' because it provides CI's on the differences. Note how it's among the pairwise.t.test arguments. So we have to run a base R function. Note: diff = difference between diet means.
+**Adjusting p-values for subsets**
+Here's a three step procedure. 
+
+Step1: Run the `pairwise.t.test` function, setting the argument `p.adjust="none"`. The output is a matrix we'll name `allPairs`, providing all possible comparisons.
+
+Step2: Select from the `allPairs` matrix only the p-values that correspond to the comparisons you'd like to make. Name that vector of unadjusted p-values, `selectPairs`. This takes a bit of cleverness. `allPairs[,1]
+
+Step3: Pass the `selectPairs` vector into the `p.adjust` function.
+
+The output of step 3 are the adjusted p-values for the selected group of comparisons.
+
+For example, we only want to compare all of the diets to casein.
+
+The p-value output from the `pairwise.t.test` function is a matrix. 
+
+```{r}
+allPairs <- pairwise.t.test(chickwts$weight, chickwts$feed, p.adjust= "none")
+class(allPairs$p.value)
+allPairs$p.value
+
+```
+
+The comparisons we want are all in the first column. Use matrix indexing skillz to grab only them:
+
+```{r}
+selectPairs <- allPairs$p.value[, 1]
+selectPairs
+```
+
+Now pass those unadjusted p-values into the `padjust` function to generate adjusted p-values:
+
+```{r}
+p.adjust(selectPairs, method="bonferroni")
+```
+
+
+**Fisher LSD** This also doesn't make adjustments for multiple comparisons. Notice how the p-values are no different than if using the `p.adjust="none"`. Fisher LSD is better than 'none' because it provides CI's on the differences. Note: diff = difference between diet means.
 
 ```{r}
 #from the DescTools package
@@ -243,7 +284,15 @@ pairwise.t.test(chickwts$weight, chickwts$feed, alternative = "two.sided", p.adj
 
 The optional methods for this function, "holm", "hochberg" and "hommel", each calculates p-value adjustments in slightly different ways. They are considered slightly more liberal versions of the "bonferroni". Which is the best? For all practical purposes, none. Choose one early in your career and stick with it forever.
 
-**Dunnett's**: This post hoc method differs from above because it only does dependent t tests, on a subset of the means. For example, all means are compared to the negative control mean. The fewer comparisons don't spread the allowed FWER as thin as the other options. The following script is configured to compare the means at each level of feed to that for the first listed feed. Note: diff = the difference between diet means.
+**Dunnett's**: This post hoc method differs from above because it only does dependent t tests, on a subset of the means. For example, use this when all group means are compared to the negative control mean. 
+
+The fewer comparisons don't spread the allowed FWER as thin as the other options. The following script is configured to compare the means at each level of feed to that for the first listed feed. 
+
+Dunnett's is nice because it gives you the effect size (diff) and the confidence interval limits for the difference, as well.
+
+Note: diff = the difference between diet means for the compared groups.
+
+Here's an example comparing the weight effect of the various food sources back to casein. Adjusted for mulitple comparisons, horsebean, linseed and soybean each differ from casein. 
 
 
 ```{r}
