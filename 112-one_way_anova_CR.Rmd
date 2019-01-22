@@ -1,4 +1,4 @@
-# One-way ANOVA CR
+# One-way ANOVA CR {#onewayanova}
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(magrittr)
@@ -9,21 +9,26 @@ library(ez)
 library(lsr)
 ```
 
+If you haven't yet read the ANOVA big picture, [this is worth reading](\@ref(#introanova))
+
+
 ## Using `ezANOVA`
 
-R has several functions to run ANOVA. In this course we're going to use `ezANOVA` from the `ez` package because I feel it is a better alternative for someone just learning ANOVA.
+R has several functions to run ANOVA. In this course we're going to use `ezANOVA` from the `ez` package because I feel the syntax for defining CR vs RM is pretty helpful.
 
-In this document, we'll run through an analysis of a one-way completely randomized ANOVA data set. 
+In this document, we'll run through an analysis of a one-way completely randomized ANOVA data set as 'how to' example.
 
 ## The chickwt data set 
 
-This data set in R's base. It compares the influence of 6 different types of food sources on chick weight. There is one predictor factor (feed) at 6 different levels (the various food sources). There is one continuous outcome variable (weight). We can assume the chicks have been randomly assigned to a level of feed, and have been weighed after a period of time.  
+This data set in R's base. It compares the influence of 6 different types of food sources on chick weight. There is one predictor variable, the factor 'feed', which is tested at 6 different levels (the various food sources). 
 
-This is a classic one-way completely randomized ANOVA design.
+There has one continuous outcome variable (weight). We can assume the chicks are outbred, and thus not intrinsically-related, and that they have been randomly assigned to a level of feed, and have been weighed after a period of time. 
+
+This is a classic one-way completely randomized ANOVA design. This chapter illustrates how to go through an analysis of the data.
 
 ### Inspect the data
 
-The next few scripts involve inspecting the data set, which should be done prior to running any statistical tests.
+The next few scripts involve inspecting the data set, which should always be done prior to running any statistical tests.
 
 ```{r}
 data(chickwts)
@@ -32,7 +37,7 @@ str(chickwts)
 chickwts
 ```
 
-Calculate some descriptive stats for inspection:
+It is also helpful to calculate some descriptive stats for inspection:
 
 ```{r}
 cw1 <- chickwts %>%
@@ -47,7 +52,9 @@ cw1 <- chickwts %>%
 cw1
 ```
 
-Plot the data for a look. Simply looking at the data graphically goes a long way to ensuring this is a one-way ANOVA design. 
+The means and medians are about equal within each group. That's a quick and dirty way to suggest no skew. Overall sample size is 71, distributed as 10-14 replicates per group, it's a little unbalanced. But within acceptable limits. The variances are not equivalent, but are they unequal? Levene's test in the ANOVA will provide that answer. 
+
+Plot the data for a look. Simply looking at the data graphically goes a long way to ensuring this is a one-way ANOVA design. Jitter plots are a great way to see group data like this. I like the `crossbar` geom to overlay some summary stats.
 
 ```{r}
 ggplot(chickwts, aes(feed, weight))+
@@ -60,34 +67,35 @@ ggplot(chickwts, aes(feed, weight))+
 
 ```
 
-### Run the ANOVA
+## Run the ANOVA
 
 We can imagine designing an experiment like this with either of 3 experimental objectives in mind.
 
-1) Perhaps we're interested mostly in whether any feeds are better than others for achieving weight gain? We could answer that by making all possible pairwise comparisons. Since there are 6 levels of the factor feed, that would involve $C=\frac{6(6-1)}{2}=30$ comparisons(!!)
+1) Perhaps we're interested mostly in whether any feeds are better than others for achieving weight gain? We could answer that by making all possible pairwise comparisons. Since there are 6 levels of the factor feed, that would involve $C=\frac{6(6-1)}{2}=15$ comparisons(!!)
 
 2) Imagine casein is the standard feed, and we wish to know if any of the other feeds differ from this standard? We would compare casein to every feed. That would involve only 5 comparisons.
 
-3) Perhaps we just want to know if any of the feeds differ in causing weight gain, but we aren't interested in which feeds differ? We could answer that question using the F-test result.
+3) Perhaps we just want to know if any of the feeds differ in causing weight gain, but we aren't interested in which specific feeds differ? We could answer that question using the F-test result, and not comparing any groups post hoc.
+
+Those objectives are scientifically-driven. 
 
 Other than, perhaps, how we order our data in the data set, which of these objectives is true doesn't influence how we run the `ezANOVA` function per se. However, the objective will influence which post hoc analysis we conduct.
 
 ### Run the chickwts One Way ANOVA
 
-First, ezANOVA requires a 'wid', which is a unique ID variable for each independent replicate. We need to add one to the chickwts data set (while it's in our environment). Since all the measures are independent, we'll just do that by row number. At the same time we'll convert the integer to a factor so ezANOVA won't bark at us. 
+First, ezANOVA requires a 'wid', which is a unique ID variable for each independent replicate. We need to add one to the chickwts data set. Since all the measures are independent, we'll just do that by row number. At the same time we'll convert the integer to a factor so ezANOVA won't bark at us. 
 
 ```{r}
 chickwts$ID <- as.factor(1:nrow(chickwts))
 ```
 
-
 You should look at R's help for ezANOVA `?ezANOVA` to understand these test arguments. The help page is pretty clear for most of these. 
 
 Since we don't use the term 'dependent variable' much in this course, to be clear, 'dv' is the outcome response variable.
 
-If the factor is completely randomized, list it after the 'between' argument. If the factor is related/repeated measures, list it after the 'within' argument.
+If the factor is completely randomized, list it as a 'between' argument. If the factor is related/repeated measures, list it as a 'within' argument.
 
-Notice that `ezANOVA` is a function. Use it to create a list object called `my.ezaov`, which has all of the output information. The object name could have been `foo`. We call specific information from the `my.ezaov` object to see the results.
+Notice that `ezANOVA` is a function. Use it to create a list object called `my.ezaov`, which has all of the output information. The object name could have been `foo`. We call specific elements from the `my.ezaov` object to see the results.
 
 ```{r}
 my.ezaov <- ezANOVA(
@@ -116,17 +124,17 @@ In fact, there is a great deal more computed that is not printed, which you can 
 
 #### $ANOVA: The ANOVA table
 
-For a CR one way ANOVA design, the SS are partitioned as follows: $SS_{total}=SS_{model}+SS_{residual}$. 
+For a CR one way ANOVA design, the SS are partitioned as follows, in general: $SS_{total}=SS_{model}+SS_{residual}$. 
 
-The $SS_{model}$ has only one component: $SS_{feed}$.
+In this example, $SS_{model}= SS_{feed}$.
 
-Thus, the ANOVA table only summarizes the model components. 
+Thus, the ANOVA table summarizes the feed model.
 
-The DFn = 5 corresponds to the 6 groups, less 1 degree of freedom (one is lost to calculate mean of groups) for the model source of variance.
+The DFn = 5 corresponds to the 6 groups, less 1 degree of freedom (one is lost to calculate mean of groups (sort of)) for the model source of variance.
 
 The DFn = 65 corresponds to the degrees of freedom for the residuals (one df is lost per group to calculate group means). 
 
-Therefore, this ANOVA tests a null F distribution with 5 and 65 degrees of freedom.
+Therefore, this ANOVA tests a feed model against a null F distribution with 5 and 65 degrees of freedom.
 
 $F=MS_{feed}/MS_{residual}=15.3648$, where $MS = SS/df$. The SS can be found in the $aov output.
 
@@ -134,22 +142,24 @@ $F=MS_{feed}/MS_{residual}=15.3648$, where $MS = SS/df$. The SS can be found in 
 
 `ges` is an effect size parameter for ANOVA. For this particular experimental design, $ges=\frac{SS_n}{SS_n+SS_d}$. In other words, `ges` summarizes the variation associated with the model as a fraction of the total variation in the data. 
 
-Thus, 54.16% of the variation in weight is attributable to the different levels of feed in the experiment.
+Thus, 54.16% of the variation in weight is attributable to the different levels of feed in the experiment. In other words, the model explains 54.16% of the variation in the data.
 
 Think of eta-squared, partial eta-squared, and generalized eta-squared as all related to the more commonly understood $R^2$ of regression. They are each calculated differently, but all related to $R^2$ in so far as they serve as estimates for how much of the variation is due to the model. `ges` takes on values from 0 to 1. Higher values indicate a greater degree of the overall variation is due to the factor tested in the experiment.
 
+Having said that, it's a bit of a Goldilock statistics. You only really begin to appreciate what it means after producing several of them.
+
 #### $aov
 
-This table provides the accounting for the sum of squares and degrees of freedom, while calculating the residual standard error.
+This table provides the accounting for the sum of squares and degrees of freedom, while calculating the residual standard error. It is somewhat redundant with the $ANOVA table, though the residual standard error can come in handy.
 
 * DFn=degrees freedom for numerator. k-1, where k = levels of factor.
 * DFd=degrees freedom for denominator. n-k, where n = number of independent replicates.
 * SSn & SSd = sum of squares for model and residual, respectively
 * Residual standard error is a parameter that estimates the precision by which the data fit the model, and is in units of the outcome variable, weight. $SE$ is the square root of the residual variance: $S_{y.x}=\sqrt{\frac{SS_{residual}}{df_{residual}}}$
 
-If $S_{y.x}$ were zero, the data points would all rest at the value of the group means. The data would fit perfectly to a model of 6 group means at their observed values. $S_{y.x}$ therefore is a descriptive statistic that declares how much error, or the degree by which the data is unexplained by the model. It has some utility for confidence intervals and power analysis.
+If $S_{y.x}$ were zero, there would be no residuals. The data points would all rest at the value of the group means. The data would fit perfectly to a model of 6 group means at their observed values. $S_{y.x}$ therefore is a descriptive statistic that declares how much error, or the degree by which the data is unexplained by the model. It has some utility for confidence intervals and power analysis.
 
-#### The Hypothesis Tested by this ANOVA
+#### The F test
 
 The scientific prediction for this experiment is that chick weights will vary depending upon the type of feed they are grown on. The null is that their weights will be roughly the same, irrespective of food source.
 
@@ -159,7 +169,7 @@ The null statistical hypothesis is that the variance associated with the differe
 
 $H_0: MS_{feed}\le MS_{residual}$, $H_1: MS_{feed}>MS_{residual}$
 
-It is just as valid to express the null hypothesis in terms of the group means:
+Because of the relationship of group means to variance, it is just as valid to express the null hypothesis in terms of the group means, and that can be proven mathematically by a competent statistician:
 
 $H_0: \mu_a=\mu_b=\mu_c=\mu_d=\mu_e=\mu_f$ Though, strictly, rejecting the null doesn't mean that all group means differ from each other, it just means that some of them differ. $H_1: \mu_a\ne\mu_b\ne\mu_c\ne\mu_d\ne\mu_e\ne\mu_f$
 
@@ -181,23 +191,23 @@ The null hypothesis of the Levene test is rejected when $W>F_{(\alpha,\ k-1,\ n-
 
 Levene's test output is a 2nd ANOVA table, and can easily be confused with the ANOVA output. Levene's test lacks a $ges$ parameter, nor does it have a column that lists the factor name.
 
-If the Levene's F value is low and the p-values is high, as is the case here, the variance homogeneity assumption is validated.
+If the Levene's F value is low and the p-values is high, as is the case here, we can't reject the null that the variances are the same. Thus, the variance homogeneity assumption is validated.
 
 If this were not the case, you have two options. 
 
-Option 1: Simply ignore the result. The luck of the draw with small samples can explain group differences in variance, where none really exists. The impact on your inference will be modest. What's more important is that the population you are sampling is normally distributed. Do you have reason to think that is not the case? 
+Option 1: Simply ignore the result. The luck of the draw with small samples can explain group differences in variance, where none really exists. The impact on your inference will be very modest. What's more important is that the population you are sampling is normally distributed. Do you have reason to think that is not the case? 
 
 Option 2:  Transform the data to homogenize outliers and variance, or switch the analysis to a Kruskal-Wallis nonparametric test. 
 
-### Post hoc pairwise comparisons
+## Post hoc pairwise comparisons
 
-If the ANOVA F test for the factor is extreme the next step is post hoc analysis to determine which group means actually differ. 
+If the ANOVA F test for the factor is extreme you may be interested in knowing which treatment groups differ. That's achieved by conducting post hoc analysis, which typically involves multiple group comparisons. 
 
-In other words, post hoc involves testing several hypotheses. This should be done in a way that keeps the cumulative, family-wise type1 error rate (FWER) below the type 1 error threshold that was set for the experiment; usually 5%.  
+In other words, post hoc involves testing several hypotheses simultaneously. Each test risks type1 error. Therefore, post hoc testing should be done in a way that keeps the cumulative, family-wise type1 error rate (FWER) below the type 1 error threshold that was set for the experiment; usually 5%.
 
-#### Overview of options
+### Overview of options
 
-Sometimes we do these experiments without any clear plans of what to compare. In those cases, we compare every group to all other groups. That "burns" a lot of alpha needlessly, but that's the price paid for not planning. The tests for that include the Bonferroni (aka Dunn's) and its cousins, Holm, Hommel, and Hochberg. They differ slightly.
+Sometimes we do these experiments without any clear plans of what groups we might want to compare. In those cases, we compare every group to all other groups. Doing so will involve $\frac{k(k-1)}{k}$ comparisons in an experiment with $k$ groups. That "burns" a lot of alpha, perhaps needlessly, but that's the price paid for not planning. The tests for that include the Bonferroni (aka Dunn's) and its cousins, Holm, Hommel, and Hochberg. They differ slightly, and will generate slightly different adjusted p-values given a common set of unadjusted p-values. Choose one.
 
 Step-down tests operate a bit differently but do the same thing in terms of making all comparisons, these including the Tukey HSD and Newman-Keuls.
 
@@ -205,25 +215,111 @@ When we intend to compare all groups back to one level of the factor, thus makin
 
 #### Two imperatives in pairwise testing
 
-1) Since every p-value represents a hypothesis, when simultaneously testing many hypotheses always make adjustments to keep the FWER < 0.05.
+1) Since every p-value represents a hypothesis, when simultaneously testing many hypotheses always make adjustments to keep the FWER < 0.05 (or whatever overall type1 error limit you preset for the experiment).
 
 2) Let your scientific questions drive the comparisons you'll make, and thus your choice of post hoc test.
 
-I suggest you worry less about the specific post hoc test, or about gamification of p-values, and the like. 
+I suggest you worry less about the specific post hoc test, or about gamification of p-values, and think more about whether a comparison is scientifically important. 
 
 But there are a couple of provisos: 1) Bonferroni (or its cousins) works just fine if you don't have too many means to compare, 2) Dunnett's is for comparing two or more means back to a control mean but should not be used in related measures factors, 3) Fishers LSD will give you output to make those one or few key comparison you set out to make, even though you have many other groups in the experiment (ie, several of the other groups are internal controls and not particularly scientifically important).
 
-#### Here are some post hoc options
+#### Examples
 
-**No p-value adjustment**: Sometimes it's useful to generate p-values that are not corrected for multiple comparisons. For example, although you've done a simple ANOVA, the intention all along was to test only one hypothesis between two groups. In that case, I recommend using the FisherLSD because it will generate confidence intervals for you.
+**No p-value adjustment**: Sometimes it's useful to generate p-values that are not corrected for multiple comparisons. For example, although you've done a simple ANOVA, the intention all along was to test only one hypothesis between two groups. The `pairwise.t.test` function produces a matrix of all comparisons, within which you can find the p-value for the comparison of interest.
 
-The script below will generate a matrix of p-values for t tests of all possible comparisons, none of which are adjusted for multiple comparisons. When running the other scripts, come back to this to see how adjusted p-value methods changes these results 
+The script below will generate a matrix of p-values for t tests of all possible comparisons, none of which are adjusted for multiple comparisons. When running the other scripts below, come back to this to see how adjusted p-value methods changes these results 
 
 ```{r}
-pairwise.t.test(chickwts$weight, chickwts$feed, p.adjust= "none")
+allPairs <- pairwise.t.test(chickwts$weight, chickwts$feed, p.adjust= "none")
+allPairs
 ```
 
-**Fisher LSD** This also doesn't make adjustments for multiple comparisons, making it the most liberal post hoc test. Notice the p-values are no different than above. Fisher LSD is better than 'none' because it provides CI's on the differences. Note how it's among the pairwise.t.test arguments. So we have to run a base R function. Note: diff = difference between diet means.
+The unadjusted p-value output from the `pairwise.t.test` function is a matrix, which is important to know when the need arises to pull out specific elements of the analysis. 
+
+```{r}
+class(allPairs$p.value)
+allPairs$p.value
+
+```
+
+To quickly scan which comparisons are below the p < 0.05 threshold we can apply this custom `extreme` function across the matrix:
+
+```{r}
+extreme <- function(x){
+  ifelse(x < 0.05, TRUE, FALSE)
+}
+
+apply(allPairs$p.value, c(1, 2), extreme)
+```
+
+**All comparisons with Bonferroni adjustment**: The Bonferroni correction is the easiest to understand, so I'll use that to illustrate p-value adjusting. Let $C$ be the number of possible comparisons for a total of $k$ groups in the experiment. An adjusted type 1 error threshold for each comparison is:
+\[\alpha_k=\frac{\alpha}{C}\]
+
+Thus, in an experiment with 15 possible comparisons, the adjusted type1 error threshold for each comparison would be $\alpha_K$ = 0.05/15 = 0.003333. 
+
+The adjusted p-value functions, however, makes the correction and then recalibrate the p-values back to the confidence level of choice. This can be a bit confusing for the first time. But you'll note that the net effect is to increase each p-value. Some that were below the threshold unadjusted are greater than the threshold after the adjustment.
+
+For example, you can see that the p-values adjusted using the Bonferroni correction below are all higher than they were above, when unadjusted.
+
+```{r}
+bonf.adjustedAllpairs <- pairwise.t.test(chickwts$weight, chickwts$feed, alternative = "two.sided", p.adjust = "bonferroni")
+bonf.adjustedAllpairs
+```
+
+And here's a quick scan for which of these are now below a FWER p < 0.05. Note how a handful of comparisons that were scored extreme by this simple test above, without a p-value adjustment, are no longer extreme with the p-value adjustment.
+
+```{r}
+extreme <- function(x){
+  ifelse(x < 0.05, TRUE, FALSE)
+  
+}
+apply(bonf.adjustedAllpairs$p.value, c(1, 2), extreme)
+```
+
+Optional methods in these functions for the Bonferroni correction are "holm", "hochberg" and "hommel", each calculates p-value adjustments in slightly different ways. They are each considered slightly more liberal versions of the "bonferroni". 
+
+Which is the best? For all practical purposes, none. Choose one early in your career and stick with it forever. What's most important is to declare in the planning stages which will be used, and stick with it. That's the best way to keeps it unbiased. You don't want to ever find yourself interating through adjustment methods just to find the one that gives a borderline result an asterisk. 
+
+[Read Wright for more information on the adjustment calculations and performance](http://www-stat.wharton.upenn.edu/~steele/Courses/956/Resource/MultipleComparision/Writght92.pdf)
+
+**Adjusting p-values for subsets of comparisons**
+
+Often, we don't want to burn so much type1 error making scientifically uninteresting comparisons. In such cases, we instead want to compare subsets.
+
+Here's a three step procedure for doing just that. 
+
+Step1: First, run the `pairwise.t.test` function, setting the argument `p.adjust="none"`. The output includes a matrix of p-values we'll name `allPairs`, providing all possible comparisons.
+
+```{r}
+#just repeating from above
+allPairs <- pairwise.t.test(chickwts$weight, chickwts$feed, p.adjust= "none")
+```
+
+Step2: Select from the `allPairs` matrix only the p-values that correspond to the comparisons you'd like to make. Name that vector of unadjusted p-values, `selectPairs`. This takes a bit of cleverness depending on what you want to grab from the matrix.
+
+For example, we only want to compare all of the diets to casein. The comparisons we want are all in the first column. Use your matrix indexing skillz to grab only the unadjusted p-values from that first column:
+
+```{r}
+selectPairs <- allPairs$p.value[, 1]
+selectPairs
+```
+
+Step3: Pass unadjusted p-values in the `selectPairs` vector into the `p.adjust` function.
+
+The output of this step is a vector of adjusted p-values for the selected group of comparisons.
+
+```{r}
+adjustedPvalues <- p.adjust(selectPairs, method="bonferroni")
+adjustedPvalues
+```
+
+Which of these are extreme? If it's not clear by inspection (or too large), use a simple boolean: 
+
+```{r}
+adjustedPvalues < 0.05
+```
+
+**Fisher LSD** This also doesn't make adjustments for multiple comparisons. Notice how the p-values are no different than if using the `p.adjust="none"`. Fisher LSD is better than 'none' because it provides CI's on the differences. Note: diff = difference between diet means.
 
 ```{r}
 #from the DescTools package
@@ -232,18 +328,20 @@ PostHocTest(my.ezaov$aov, method = "lsd")
 
 All of the following scripts do adjust p-values for multiple comparisons. Therefore, notice how they increase the p-values we see in the output above. Frequently, "significant" unadjusted p-values become "nonsignificant" after these adjustments.
 
-**Bonferroni**: This is the easiest to understand. Let c be the number of possible comparisons for k factor levels. An adjusted type 1 error threshold for each comparison is:
-\[p_k=\frac{\alpha}{c}\]
+##### Other posthoc tests
 
-For example:
 
-```{r}
-pairwise.t.test(chickwts$weight, chickwts$feed, alternative = "two.sided", p.adjust = "bonferroni")
-```
 
-The optional methods for this function, "holm", "hochberg" and "hommel", each calculates p-value adjustments in slightly different ways. They are considered slightly more liberal versions of the "bonferroni". Which is the best? For all practical purposes, none. Choose one early in your career and stick with it forever.
 
-**Dunnett's**: This post hoc method differs from above because it only does dependent t tests, on a subset of the means. For example, all means are compared to the negative control mean. The fewer comparisons don't spread the allowed FWER as thin as the other options. The following script is configured to compare the means at each level of feed to that for the first listed feed. Note: diff = the difference between diet means.
+**Dunnett's**: This post hoc method differs from above because it only does dependent t tests, on a subset of the means. For example, use this when all group means are compared to the negative control mean. 
+
+The fewer comparisons don't spread the allowed FWER as thin as the other options. The following script is configured to compare the means at each level of feed to that for the first listed feed. 
+
+Dunnett's is nice because it gives you the effect size (diff) and the confidence interval limits for the difference, as well.
+
+Note: diff = the difference between diet means for the compared groups.
+
+Here's an example comparing the weight effect of the various food sources back to casein. Adjusted for mulitple comparisons, horsebean, linseed and soybean each differ from casein. 
 
 
 ```{r}

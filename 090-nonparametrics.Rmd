@@ -8,9 +8,11 @@ library(PropCIs)
 
 Non-parametric statistical tests are versatile with respect to the dependent variables they tolerate.
 
-They are typically applied to datasets involving ordered data. One nonparametric test is used to assess simple proportions. They can also be for data on measured, equal interval scales, for which the normality and equal variance assumptions of parametric statistical testing are not satisfied or cannot be assumed.
+They are typically applied to data sets involving ordered data. One of the nonparametric tests, the sign test, is used to assess simple proportions. They can also be for data on measured, equal interval scales, for which the normality and equal variance assumptions of parametric statistical testing are not satisfied or cannot be assumed.
 
-Nonparametric statistics are parameter-less. They don't compare means, or medians (though people frequently treat nonparametrics as tests of medians), or standard deviations, or variance. They do compare distributions of data, but only after the data has been transformed into a standardized measure of ranks--either signs, sign ranks or rank sums.
+Nonparametric statistics are parameter-less. They don't compare means, or medians. Though people frequently treat nonparametrics as tests of medians, that is not strictly true. They don't involve least squares calculations, or standard deviations, or variance, or SEMs. 
+
+They do compare distributions of data. This happens by transforming the data into a standardized measure of ranks--either signs, sign ranks or rank sums.
 
 **The tests, essentially, evaluate whether the distribution of ranks in an experimental outcome differs from a null distribution of ranks, given a sample size. That can seem pretty abstract. But it's actually a simple and elegant way to think about these tests.** 
 
@@ -18,24 +20,24 @@ With the exception of the Sign Test, which has a probability as an effect size, 
 
 However, it is possible to use confidence interval arguments in R's tests to coerce them into providing effect size output as estimates of medians. This can be sometimes useful.
 
-Non-parametric analogs exist for each of the major parametric statistical tests (t-tests and one-way anova. Which analog to use for a given dataset analysis depends entirely upon the experimental design.
+Non-parametric analogs exist for each of the major parametric statistical tests (t-tests and one-way anova and two-way. Which analog to use for a given data set analysis depends entirely upon the experimental design.
 
 * Sign Test -> analog to the binomial Test -> when events are categorized as either successes or failures.
-* Wilcoxon Sign Rank Test for one group -> analog to the one sample t-test -> compare a one group dataset to a standard value. 
-* Mann Whitney Rank Sum Test for 2 independent groups  ->  analog to the unpaired t test -> for comparing two groups in a dataset.
-* Wilcoxon Sign Rank Test for paired groups -> analog to the paired t-test -> comparing a group of paired outcomes in a dataset to no effect null.
+* Wilcoxon Sign Rank Test for one group -> analog to the one sample t-test -> compare a one group data set to a standard value. 
+* Mann Whitney Rank Sum Test for 2 independent groups  ->  analog to the unpaired t test -> for comparing two groups in a data set.
+* Wilcoxon Sign Rank Test for paired groups -> analog to the paired t-test -> comparing a group of paired outcomes in a data set to no effect null.
 * Kruskal-Wallis Test -> analog to one way completely randomized ANOVA -> comparing 3 or more groups
-* Friedman Test -> analog to one way related measures ANOVA -> comparing 2 two factors, each at two or more levels.
+* Friedman Test -> analog to one way related measures ANOVA -> comparing 3 or more groups.
 
-In R, the `wilcox.test`function is a work horse for non-parametric analysis. By simply changing the function's arguments it can do either a WSRT, or Mw, or a WSRT for paired groups analysis. 
+In R, the `wilcox.test`function is a work horse for non-parametric analysis. By simply changing the function's arguments it can do either a WSRT, or MW, or a WSRT for paired groups analysis. 
 
 ## Experiments involving discrete data
 
-Discrete data arises from counting objects or events, as opposed to measuring attributes of the study subjects. Counted objects are easy to spot---they are indivisible. Discrete data can be either sorted or ordered.
+Discrete data can be either sorted or ordered. Discrete data arises from counting objects or events. They also occur when the meaurements taken from the experimental units are assigned discrete values. Counted objects are easy to spot---they are indivisible. They belong in one bucket or some other bucket(s). Dependent variables that have discrete values are also easy to spot. On scatter plots they exist as discrete rows. There is no continuum of values between the rows.  
 
 When planning an experiment ask whether the data will be sorted into categories on the basis of nominal characteristics (eg, dead vs alive, in vs out).
 
-Or will the data be categorized on some ordered basis. For example, a score of 1 = the attribute, a score of 2 = more of the attribute, a score of 3= even more of the attribute...and so on. 
+Or will the data be categorized on some ordered basis. For example, a score of 1 = the attribute, a score of 2 = more of the attribute, a score of 3= even more of the attribute, ...and so on. 
 
 The discrete counts within one category of an ordered scale mean that they have more or less of some feature than do the counts in another category in the ordered group. 
 
@@ -48,35 +50,35 @@ For example, imagine a test that scores dermal inflammatory responses.
 Given a subject, 
 * Score 1 if we don't see any signs of inflammation.
 * Score 2 if there was a faint red spot.
-* Score 3 for a raised pustle. 
+* Score 3 for a raised pustule. 
 * Score 4 for a large swollen area that feels hot to the touch. 
 * Score 5 for anything worse than that, if it is possible!
 
-Using that ordered scale system, we'd run experiments, for example, to compare a steroid treatment that might reduce inflammation compared to a vehicle control. Or we'd look at a gene knockout, or CRISP-R fix, or whatever, and score an outcome response. 
+Using that ordered scale system, we'd run experiments, for example, to compare a steroid treatment that might reduce inflammation compared to a vehicle control. Or we'd look at a gene knockout, or CRISP-R fix, or whatever, and score an outcome response compared to a control group. After an evaluation by a trained observer, each experimental unit receives a score from the scale.
 
 In quantifying effect sizes for such studies, a mistake you often see is parametric analysis. The researcher uses parameters such as means, standard deviations, performs t-tests, and so forth on the score rank values. 
 
-This isn't always bad, but it assumes a couple of things. First, the distribution of the data is approximately normal, as is the population that was sampled. Second, the scoring scale is equal interval. That is to say, "the difference between inflammation scores of 1 and 2 is the same as the difference between scores 2 and 3, and so on...".
+This isn't always bad, but it assumes a couple of things. First, that the distribution of the data is approximately normal, as is the population that was sampled. Second, the scoring scale is equal interval. That is to say, "the difference between inflammation scores of 1 and 2 is the same as the difference between scores 2 and 3, and so on...".
 
 Suffice to say that researchers should validate whether these assumptions are true before resorting to parametric tests. Or they can just use nonparametric tests and save themselves from all that validation work!
 
-Sometimes we take measurements of some variable on a perfectly good measurement scale, one that satisfies these assumptions, but then break the data out to some ordered scale. 
+It happens the other way, too. Sometimes we take measurements of some variable on a perfectly good measurement scale, one that satisfies these assumptions, but then break the data out to some ordered scale. 
 
-Take blood pressure, for example. We might measure it's value for each subject, but on the basis of that measurement sort the subjects into ordered categories of low, medium and high. Our scientific experitise drives what blood pressure values match those categories. And we should have good reasons to throw away perfect good scalar information by doing this. 
+Take blood pressure, for example, which is a continuous variable, usually in standardized units of mmHg. We might measure it's value for each subject, but on the basis of that measurement sort the subjects into ordered categories of low, medium and high. Our scientific expertise drives what blood pressure values match those categories. And we should have good reasons to resort to a categorization because doing so tends to throw away perfect good scalar information. 
 
-It is on this ordered scale, of discrete events, rather than the original measurements on a continous scale, that we might then run statistical tests.
+It is on this ordered scale, of discrete events, rather than the original measurements on a continuous scale, that we might then run statistical tests.
 
-My point is, of course, that not all ordered scales are based upon subjective assessments.
+My point for this latter example is, of course, that not all ordered scales are based upon subjective assessments.
 
 ## Deviant Data
 
-Any scale can yield deviant data. Deviant data is non-normal, skewed, has unequal variances among groups, has outliers, and is just plain ugly. 
+Any scale, whether discrete or continuous, can yield deviant data. What I mean by deviant data is non-normal, skewed, has unequal variances among groups, has outliers, and is just plain ugly. 
 
 When data are deviant there are two options: 
 
-1) Use recipricol or log transform functions to transform the data distribution into something more normal-like. Run the statistical tests on the transformed values. 
-2) Run non-parametric statistical tests on the data, which transforms the data into a rank-based distribution, which are normal-like.
-3) Tossing outliers is almost always a bad option because it introduces bias!
+1) Use reciprocal or log transform functions to transform the data distribution into something more normal-like. Run the statistical tests intended for normal data on the transformed values. 
+2) Run non-parametric statistical tests on the raw, untransformed data. These tests transform the data into a rank-based distribution. These (the sign rank and the rank sum distributions), are discrete normal-like, and can be coerced to cough up p-values.
+3) Tossing outliers is almost always a bad and unnecessary option. Outlier tossing introduces bias! Because they are based on ranks, the nonparametric tests condense outliers back with the rest of the variables, providing a very slick way to deal with deviant data.
 
 ## Sign Test
 
@@ -84,15 +86,17 @@ The Sign Test is a non-parametric way of saying a binomial test.
 
 An experiment is conducted on a group of subjects, who are graded in some way for either passing (+) or failing (- ) some test. Did a cell depolarize, or not? Is a stain in the cell nucleus, or not? Did the animal move fast enough, or not? Did the subject meet some other threshold you've established as a success, or not?
 
-Simply count the number that passed..or received a "+" sign, and the number that failed (received a "-" sign). Using scientific judgement, assume a probability for the frequency of successes under the null hypothesis. For example, the null might be to expect 50% successes. If after analyzing the data and the number of successes differs from this null proportion, you may have a winner! 
+Simply count the number that passed. Given them a "+" sign. The number that failed receive a "-" sign. Using scientific judgement, assume a probability for the frequency of successes under the null hypothesis. For example, the null might be to expect 50% successes. If after analyzing the data the proportion of successes differs from this null proportion, you may have a winner! 
 
-Here's an analysis of a behavioral test, the latency to exit a dark chamber, as an index of anxiety. Let's say that exiting a chamber in less than 60 seconds is a threshold for what we'd consider "non-anxious" behavior. Fifteeen subjects are given an anti-anxiety drug. 
+Here's an analysis of a behavioral test, the latency to exit a dark chamber into a brief field, as an index of anxiety. Let's say that exiting a chamber in less than 60 seconds is a threshold for what we'd consider "non-anxious" behavior. Scientific judgement sets that threshold value. Fifteen subjects are given an anti-anxiety drug. 
 
 The null probability of exiting the chamber is 0.5. Which is to say there is a 50/50 chance a mouse will, at random, exit the chamber at any given time before or after 60 sec. Or put another way, under the null, neither exiting nor remaining in the chamber by 60 seconds is favored.
 
-The results are that twelve exited the chamber in less than 60 seconds, and 5 did not. We have not recorded times. Let's imagine we have an alarm set to go off 60 seconds after placing the subject in the chamber. When the alarm sounds, we score the subject as either (+) or (-).
+Let's imagine we have an alarm set to go off 60 seconds after placing the subject in the chamber. When the alarm sounds, we score the subject as either (+) or (-). 
 
-Scientifically, we predict the subjects on an anti-anxiety drug is are more likely to exit before this mark.
+The results are that twelve exited the chamber in less than 60 seconds, and 5 did not. We have not recorded times.
+
+Scientifically, we predict that experimental units on an anti-anxiety drug are more likely to exit before this mark.
 
 This experiment tests the null hypothesis that the probability of successes are less than or equal to 50%. If something is not less than or equal to another, it can only be greater. Thus, we choose the "greater" for the alternative hypothesis argument in the binomial test function. We think on an anti-anxiety drug the probability is greater that the subjects will successfully exit the chamber!
 
@@ -124,7 +128,7 @@ ggplot(data, aes(x, y))+
 
 This is to emphasize that the binomial distribution is used here as a model of the experimental effect. Thus, we might also conclude that our data is consistent with a binomial distribution of 15 trials wherein the probability of event success is 80%.
 
-In effect, our p-value allows us to conclude this alternate distribution is a better model for the population than is the null distribution. This is subject to a 1.758% chance that this might be a false positive conclusion....an acceptable risk of being wrong.
+In effect, our p-value allows us to conclude this alternate distribution is a better model for the population than is the null distribution. This is subject to a 1.758% chance that this might be a false positive conclusion. Use your scientific judgement to decide whether that's an acceptable risk of being wrong.
 
 This also is a way to visualize the confidence interval, which says we should expect more than 8 successes 95% of the time...an assertion that covers all but two of the lower bins in this distribution!
 
@@ -138,7 +142,7 @@ The test statistic for the Wilcoxon Sign Rank is determined as follows.
 1. Calculate the difference between the theoretical median or threshold value and the values recorded for each independent replicate.
 2. Rank those differences from lowest (rank = 1) to highest (rank = n). 
 3. Assign a negative value to the replicate values that are less than the median.
-4. The test statistic `V` is the sum of the postive values. (software other than `wilcox.test` in R may calculate W, the sum of the positive and negative values).
+4. The test statistic `V` is the sum of the positive values. (software other than `wilcox.test` in R may calculate W, the sum of the positive and negative values).
 
 The test statistic V has an approximately normal discrete distribution, whose cumulative function `psignrank` can be used to compute p-values.
 
@@ -146,7 +150,7 @@ The test statistic V has an approximately normal discrete distribution, whose cu
 
 This experimental design is similar to the Sign Rank test except in one important detail: **We actually measure the time it takes for the subjects to exit the chamber.** No alarm sounds to end the game at 60 sec. If subjects dawdle about and take longer than 60 sec to exit, we wait and record that time!
 
-Thus, because the dataset is comprised of the actual values for the latency variable, rather than counts of a simple (+) or (-) score, the Wilcoxon Sign Rank design collects more information than does the Sign Rank Test. 
+Thus, because the data set is comprised of the actual values for the latency variable, rather than counts of a simple (+) or (-) score, the Wilcoxon Sign Rank design collects more information than does the Sign Rank Test. 
 
 Let's say we have a chamber test on 7 subjects who've all been given an anti-anxiety drug. After placement in the chamber, their exit times (in seconds) are 3, 5, 8, 15, 19, 21 and 108. Based upon scientific judgement, we think exiting sooner than 60 would represent fearlessness (less anxiety).
 
@@ -211,7 +215,7 @@ Here's another in the line of the mighty mouse experiments.
 
 55 independent subjects were split into two groups. One group received an anti-anxiety drug and the second a vehicle as control. The subjects were run through the dark chamber test. The scientific prediction is the drug will reduce anxiety levels and so the drug treated mice will exit the chamber more quickly compared to the control mice.
 
-Since this is a parameter-less test, the null hypothesis is that location of the distribution of the drug-treated population is greater than or equal to the location of the vehicle distribution. The alternative hypothesis is that the location of the distribution of the drug-treated population is less than that of the vehicle distribution. The alternative is consisent with our scientific prediction and represents an outcome that is exclusive and comprehensive of the null!
+Since this is a parameter-less test, the null hypothesis is that location of the distribution of the drug-treated population is greater than or equal to the location of the vehicle distribution. The alternative hypothesis is that the location of the distribution of the drug-treated population is less than that of the vehicle distribution. The alternative is consistent with our scientific prediction and represents an outcome that is exclusive and comprehensive of the null!
 
 We choose the "less" option for the alternative argument in the test.
 
@@ -260,9 +264,9 @@ For example, we take a mouse, give it a sham treatment, and measure it's latency
 
 This kind of design can control for confounding factors, like inter-subject variability. But it can also introduce other confounds. For example, what if the mouse "remembers" that there is no real risk of leaving the dark chamber?
 
-Pairing can happen in many other ways. A classic pairing paradigm is the use of identical twins. Individuals of inbred mouse strains are all immortal clones. Two littermates would be identical twins and would also be, essentially, clones of their parents and their brothers and sisters from prior litters! Two dishes of cultured cells, passed together and now side-by-side on a bench are intrinsically-linked. All of these can be treated, statistically, as pairs.
+Pairing can happen in many other ways. A classic pairing paradigm is the use of identical twins. Individuals of inbred mouse strains are all immortal clones. Two litter mates would be identical twins and would also be, essentially, clones of their parents and their brothers and sisters from prior litters! Two dishes of cultured cells, passed together and now side-by-side on a bench are intrinsically-linked. All of these can be treated, statistically, as pairs.
 
-In this example, we take a pair of mice from each of 6 independent litters produced by mating two heterozygots of a nogo receptor knockout. One of the pair is nogo(-/-). The other is nogo(+/+). We think the nogo receptor causes the animals to be fearful, and predict animals in which the receptor is knocked out will be more fearless.
+In this example, we take a pair of mice from each of 6 independent litters produced by mating two heterozygotes of a nogo receptor knockout. One of the pair is nogo(-/-). The other is nogo(+/+). We think the nogo receptor causes the animals to be fearful, and predict animals in which the receptor is knocked out will be more fearless.
 
 The independent experimental unit in this design is a pair. We have six pairs, Therefore, the sample size is 6 (even though 12 animals will be used!)
 
@@ -300,7 +304,7 @@ ggplot(df, (aes(x,y)))+
   scale_x_continuous(breaks=(seq(0,upper,1)))
 ```
 
-The p-value is exact...and it can never be lower, given this sample size. We can reject the null since it is below our 5% threshold and it says the probably that we are accepting a type1 erro is 1.563%.
+The p-value is exact...and it can never be lower, given this sample size. We can reject the null since it is below our 5% threshold and it says the probably that we are accepting a type1 error is 1.563%.
 
 The pseudo-median is in units of latency time. It represents the median for the differences in latency within the pairs. In other words, there are six values of differences, one difference value for each pair. -61.5 is the median of those 6 differences.
 
@@ -310,15 +314,15 @@ There is a 95% chance the true median of the differences lies between negative i
 
 *Dark chamber test latency differs markedly within pairs of knockout and wildtype subjects (Wilcoxon Signed Rank Test for pairs, n=6, V = 0, p=0.01563)*
 
-## Kruskal-Wallas
+## Kruskal-Wallis
 
 The `kruskal.test` is a non-parametric method for comparing 3 or more treatment groups. It serves as an omnibus test for the null hypothesis that each of the treatment groups belong to the same population. If the null is rejected, post hoc comparison tests are then used to determine which groups differ from each other. 
 
 A post hoc test for this purpose in base R is `pairwise.wilcox.test`. The `PMCMRplus` package has others. Documentation within the `PMCMR`package vignette provides excellent background and instructions for these tests.
 
-The Kruska-Wallas test statistic is computed as follows. Values of the outcome variables across the groups are first converted into ranks, from high to low. Tied values are rank-averaged. The test can be corrected for large numbers of tied values.
+The Kruskal-Wallis test statistic is computed as follows. Values of the outcome variables across the groups are first converted into ranks, from high to low. Tied values are rank-averaged. The test can be corrected for large numbers of tied values.
 
-The Kruskal-Wallas rank sum test statistic is: 
+The Kruskal-Wallis rank sum test statistic is: 
 
 \[H=\frac{12}{n(n+1)}\sum_{i=1}^k\frac{R_{i}^2}{n_i}-3(n+1)\]
 
@@ -326,7 +330,7 @@ $n$ is the total sample size, $k$ is the number of treatment groups, $n_i$ is th
 
 The `H` statistic is approximated using the $\chi^2$ distribution with $k-1$ degrees of freedom to produce p-values.
 
-Let's analyze the InsectSprays dataset, it comes with the `PMCMRplus` package. This is a multifactorial experiment in which insects were counted in agricultural field plots that had been sprayed with 1 of 6 different insecticides. Each row in the dataset represents an independent field plot.
+Let's analyze the InsectSprays data set, it comes with the `PMCMRplus` package. This is a multifactorial experiment in which insects were counted in agricultural field plots that had been sprayed with 1 of 6 different insecticides. Each row in the data set represents an independent field plot.
 
 Do the insecticides differ? 
 
@@ -346,7 +350,7 @@ pairwise.wilcox.test(InsectSprays$count, InsectSprays$spray, p.adjust.method="bo
 
 ```
 
-We first do a Kruskal-Wallas rank sum omnibus test to test the null hypothesis that the locations of the groups within the dataset are the same. 
+We first do a Kruskal-Wallis rank sum omnibus test to test the null hypothesis that the locations of the groups within the data set are the same. 
 
 The null is rejected given the large $\chi^2$ test statistic, which has a p-value well below the threshold.
 
@@ -362,7 +366,7 @@ More generally, the Bonferroni correction is $adjusted\ type1\ threshold = 0.05/
 
 ### Write Up
 
-*A non-parametric omnibus test establishes that the locations of the insecticide effects of the six sprays differ (Kruskal-Wallas, $\Chi^2$ = 54.69, df=5, p=1.511e-10). Posthoc pairwise multiple comparisons by the Mann-Whitney test (Bonferroni adjusted p-values) indicate the following sprays differ from each other: A vC(0.00058), D(0.00117), E(0.0051), ...and so on*
+*A non-parametric omnibus test establishes that the locations of the insecticide effects of the six sprays differ (Kruskal-Wallis, $\Chi^2$ = 54.69, df=5, p=1.511e-10). Posthoc pairwise multiple comparisons by the Mann-Whitney test (Bonferroni adjusted p-values) indicate the following sprays differ from each other: A v(0.00058), D(0.00117), E(0.0051), ...and so on*
 
 
 ## Friedman test
@@ -371,13 +375,13 @@ More generally, the Bonferroni correction is $adjusted\ type1\ threshold = 0.05/
 
 ## Summary
 
-If you're used to comparing means of groups, non-parametrics can be somewhat disorienting. There are no parameters to compare! And the concept of location shifts or differences seems rather abstract. 
+If you're used to comparing means of groups, nonparametrics can be somewhat disorienting. There are no parameters to compare! And the concept of location shifts or differences seems rather abstract. 
 
 The tests transform the values of experimental outcome variables into either sign rank or into rank sum units. That abstraction can be disorientating, too. But it is important to recognize that sign ranks and rank sum distributions are approximately normal. 
 
-Therefore, perhaps its best to think of non-parametrics as a way to transform non-normal data into more normal data.
+Therefore, perhaps its best to think of nonparametrics as a way to transform non-normal data into more normal data.
 
-The non-parametrics are powerful statistical tests that should be used more widely than they are. 
+The nonparametrics are powerful statistical tests that should be used more widely than they are. 
 
 
 
