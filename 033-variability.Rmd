@@ -6,11 +6,15 @@ library(ggformula)
 ```
 
 
-One of my favorite sayings is "models are perfect, data are not", because it's a simple way to express the statistical way of thinking. In statistics, the population parameters that interest us are held to have true, fixed values. The models we conjure up to estimate these parameters are also perfect. Unfortunately, the data that we generate and fit these models to are usually pretty crappy and messy. 
+One of my favorite sayings is "models are perfect, data are not", because it's a simple way to express statistics. 
 
-Therefore, a major focus of statistics is to evaluate how well our perfect models fit these messy data. Quantifying that fit is the basis for asserting how reliable our parameter estimates are. Which in turn means how well we think we understand a system. 
+We sample a population. In statistics, the population parameters that interest us are held to have true, fixed values. The models we conjure up to estimate these parameters are also perfect. The parameters are important because they have biological meaning: affinities, maximum responses, activity rates, depolarization frequencies,..., whatever.
 
-All of this points to the fact that it is not possible to understand statistical analysis without wrapping our heads around the concepts of variability, accuracy and precision.
+What's imperfect, unfortunately, are the data that we generate. Stood up against a perfect model, they are usually come off looking pretty crappy. The models aren't always good fits for the data, and sometimes it's ambiguous whether one model fits best, or some other. 
+
+Therefore, a major focus of statistics is to evaluate how well our perfect models fit these messy data. Quantifying the wellness of that fit is one basis for asserting how reliable are our parameter estimates. Which in turn means how well we think we understand a system. 
+
+All of this points to the fact that it is not possible to understand statistical analysis without wrapping our heads around the concepts related to data dispersion: variability, accuracy and precision.
 
 The reason data are messy is that sample data possess inherent variability. This means there is always some 'error' between the true values of the population parameters and their estimated values within the model. That error is held to be random. In statistics, random error is defined as the variation that we can't account for in our model.
 
@@ -319,11 +323,12 @@ The confidence interval for a sample mean is calculated as follows:
 \[CI=\bar x \pm t_{df(n-1)}\cdot\frac{sd}{\sqrt{n}}\]
 
 ```{r message=FALSE, warning=FALSE, fig.cap="Confidence interval illustrator"}
-n <- 5
+set.seed(1234)
+n <- 3
 pop.mean <- 100
 pop.sd <- 25
 sig.dig <- 2
-conf.level <- 0.95
+conf.level <- 0.99
 x <- c(seq(1, 200, 0.1))
 #draw sample and calculate its descriptive stats
 mysample <- rnorm(n, pop.mean, pop.sd)
@@ -446,7 +451,7 @@ gf_line(dnorm(
 
 ```
 
-# Key take aways
+## Key take aways
 
 * Variability is inherent in biological data. The two main sources are intrinsic biological variation--which has so many causes, and variability associated with our measurements.
 * Statistics operates on the presumption that the values of parameters in the populations we sample are fixed. Residual error is unexplained deviation from those fixed values.
@@ -454,7 +459,11 @@ gf_line(dnorm(
 * Variance expresses the variability within a sample, but geometrically, in squared units.
 * The standard deviation, the square root of variance, estimates the variability of a sampled population.
 * The standard error of the mean estimates the precision by which a sample mean estimates a population mean.
+* The standard error of the mean grows smaller as sample size gets larger, by the square root of n.
+* The standard error of the mean is the standard deviation of a theoretical distribution of sample means. 
 * A confidence interval estimates the accuracy by which a parameter, such as a mean, has been estimated.
-* If the confidence intervals of two samples do not overlap, the sampled distributions likely differ. 
-* The central limit theorem saves the day, because even if the variable you are measuring is not normally-distributed, the means of your samples are.
+* If the confidence intervals of two samples do not overlap, the sampled distributions likely differ.
+* For a 95% CI, there is a 95% chance the true mean is within the interval.
+* A 99% CI will be wider than a 95% CI, given the same data.
+* The central limit theorem saves the day for small sample science, because even if the variable you are measuring is not normally-distributed, the means of your samples are.
 

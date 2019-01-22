@@ -476,11 +476,13 @@ This is a method to investigate the effects of two factors simultaneously. Thus,
 
 What is an interaction? Simply, it is a response that is greater (or lesser) than the sum of the two factors combined.
 
-Let's go back to the genotype blood_glucose problem, add a factor, and simplify the study a bit. We're interested in a gene that, when absent, raises blood glucose. We're also interested in a drug that, when present, lowers blood glucose. We'll design a $2\times 2$ experiment that has only the presence or absence of each of these factors.
+Let's go back to the genotype blood_glucose problem. We'll add a factor, and simplify the study a bit. We're interested in a gene that, when absent, raises blood glucose. We're also interested in a drug that, when present, lowers blood glucose. 
 
-We hypothesize the gene and the drug may interact. In other words, the prediction is that the drugs blood glucose lowering effect is greater in the absence of the gene.
+We have reason to hypothesize that a genotype:drug interaction might exist. For example, the gene encodes a protein that metabolizes our drug, thus impairing the drug's ability to lower blood glucose.
 
-Here's the result:
+We'll design a $2\times 2$ experiment that has only the presence or absence of each of these factors.
+
+Here's the data:
 
 ```{r}
 set.seed(12345)
@@ -505,15 +507,11 @@ ggplot(test, aes(genotype, blood_glucose, color=drug))+
   geom_segment(aes(x="WT", y=y0, xend="KO", yend=yend0))
 ```
 
-An interaction effect is represented by the differing slopes of those two lines. The effect of the drug is not the same at both levels of genotype. Or you could say the effect of the genotype is not the same at both levels of the drug. Whatever.
+An interaction effect can be represented by the differing slopes of those two lines. If the lines are not parallel, it means that the effect of the drug is not the same at both levels of genotype. Or you could say the effect of the genotype is not the same at both levels of the drug. Whatever.
 
-A statistical interaction occurs when the effects of two factors are not the same across all of their levels.
+Thus, a statistical interaction occurs when the effects of two factors are not the same across all of their levels.
 
-What an interaction means biologically is what you have to judge scientifically. I know a bit about pharmacology. Let's assume that gene encodes a drug metabolizing protein. The loss of the protein could lead to a larger blood glucose-lowering effect of the drug, because the drug would not be strongly metabolized. 
-
-Rewinding the clock even further, let's assume I suspected that all along. The experimental design is to assess, indirectly, whether that gene's protein metabolizes that drug. An two way ANOVA interaction effect would be consistent with that hypothesis. 
-
-Here's the ANOVA table for those data.
+Here's the ANOVA table for those data. All three F-tests are extreme. Since the F-test for the genotype:drug interaction is extreme, we can reject the null that there is no interaction between them. 
 
 ```{r}
 anova(lm(blood_glucose ~ genotype + drug +genotype*drug, test))
@@ -550,9 +548,6 @@ These contrived means are used to isolate for the variation of each of the two f
 \[SS_{drug}= \sum n_{0}(\bar y_{0}-\hat y)^2+n_{30}(\bar y_{30}-\hat y)^2 \]
 
 All that remains is to account for the variation associated with the interaction effect. That can be solved for algebraically: \[SS_{genotype\times drug}=SS_{model}-SS_{genotype}-SS_{drug} \]
-
-And so we compare the three genotype levels. We think an antidiabetic drug would have an effect, and we compare three levels of it. We wouldn't combine the drug and the genotype together if we didn't think
-
 
 Because two way ANOVA's have two factors, one of the factors can be applied completely randomized, and the other can be applied as related measures. Or both factors can be completely randomized, or both can be related measures.
 
