@@ -10,7 +10,7 @@ library(EMT)
 ```
 Biomedical research is full of studies that count discrete events. 
 
-A common mistake made by many researchers is to use statistics designed for measured variables on discrete count variables. For example, they transform count data into scaler measures (eg, percents, folds etc) and then apply statistics designed for continuous variables to events that are fundamentally discrete by nature. The problem with that is there are inherent differences in the behaviors of continuous and discrete variables. Therefore, it is important to recognize 
+A common mistake made by many researchers is to use statistics designed for measured variables on discrete count variables. For example, they transform count data into scaler measures (eg, percents, folds etc) and then apply statistics designed for continuous variables to events that are fundamentally discrete by nature. The problem with that is there are inherent differences in the behaviors of continuous and discrete variables. Therefore, it is important to recognize that there are statistical tests that can be used to analayze discrete data directly, without resorting to these transformations. 
 
 ## Types of categorical data
 
@@ -45,7 +45,7 @@ We can...
 
 * In a model of asthma, count the number of immune cells that are washed out in a pulmonary lavage protocol after an immunosuppressive agent.
 
-The key difference for these are that their non-event counterparts are meaningless. For example, it is not possible to measure the number of depolarizations that don't occur, or know the number of immune cells that don't wash out in the lavage.
+The key difference for these compared to binomial events is that their non-event counterparts are meaningless. For example, it is not possible to measure the number of depolarizations that don't occur, or know the number of immune cells that don't wash out in the lavage.
 
 ### Associations
 
@@ -55,7 +55,7 @@ Here are some examples of association study designs:
 
 You might wish to
 
-* identify causal alleles associated with a specific disease phenotype by counting the number of people with and without the disease, who have or don't have a particular allelic variants.
+* identify causal alleles associated with a specific disease phenotype by counting the number of people with and without the disease, who have or don't have a particular allelic variant.
 
 * determine if a history of exposure to certain carcinogens is associated with a higher risk of cancer by counting people with cancer who have been exposed.
 
@@ -77,7 +77,7 @@ It should be noted that higher order association studies are also possible, whic
 
 ## Exact v Asymptotic Calculations of p-values
 
-The statistical tests for hypotheses on categorical data fall into two broad categories: exact tests (`binom.test`, `fisher.test`, `multinomial.test`) and asymptotic tests (`prop.test` `chisq.test`). 
+The statistical tests for hypotheses on categorical data fall into two broad categories: exact tests (`binom.test`, `fisher.test`, `multinomial.test`) and asymptotic tests (`prop.test`, `chisq.test`). 
 
 Exact tests calculate exact p-values. That's made possible using factorial math. The `prop.test` and `chisq.test` generate asymptotic (aka, approximate) p-values. They calculate a $\chi^2$ test statistic from the data before mapping it to a $\chi^2$ probability density function. Because that  function is continuous, the p-values it generates are asymptotically-estimated, rather than exactly calculated. 
 
@@ -178,9 +178,11 @@ As you might imagine intuitively, the more counts we have in the sample, the mor
 
 #### Calculating CI with R
 
-The `PropCIs` package offers several ways to calculate a CI. Is one better than the other? Sometimes, yes. For now, let's not worry about that. [Wilson's score interval with continuity correction](http://www.ucl.ac.uk/english-usage/staff/sean/resources/binomialpoisson.pdf)] is suggested as the most accurate for proportions.
+The `PropCIs` package offers several ways to calculate a CI. Because of that, when publishing it is important is to state which CI method is used. 
 
-When publishing it is important is to state which CI method is used.  Other methods are more commonly used than Wilson's because they gained traction as being easier to compute by hand, and old habits die slowly.
+Is one better than the other? Sometimes, yes. For now, let's not worry about that. [Wilson's score interval with continuity correction](http://www.ucl.ac.uk/english-usage/staff/sean/resources/binomialpoisson.pdf)] is suggested as the most accurate for proportions.
+
+Other methods are more commonly used than Wilson's because they gained traction as being easier to compute by hand, and old habits die slowly.
 
 Taking the data on cytokine induced gradstudin+ T cells, the chunk below illustrates how to use `PropCIs` to derive a Wilscon score interval-based 95% CI:
 
@@ -214,9 +216,9 @@ Let's say that our scientific hypothesis going into all this is that the cytokin
 
 Our statistical hypothesis is the null. We'll decide whether or not to reject the null on the basis of the test results. Philosophically, we're using a falsification method.
 
-* The statistical alternate hypothesis: $\pi>15\%$
+The statistical alternate hypothesis:  $\pi>15\%$
 
-* The statistical null hypothesis: $\pi\le15\%$
+The statistical null hypothesis: $\pi\le15\%$
 
 We use Greek notation to represent the 'true' population proportion. This reminds us that a statistical hypothesis is an inferential test about the population proportion.
 
@@ -249,7 +251,7 @@ The `prop.test` conducts a chi-square analysis. The value of $\chi^2$ for this s
 
 If the null hypothesis is true in this case, the probability of a $\chi^2$ value as large or larger than we obtained is 2.2e-16, which is very, very low.
 
-The 95% CI is 0.2098 to 1.0. There is a 95% chance the population proportion is greater than 0.2098. The reason it differs from the Wilson's CI calculated above is that we used `greater`as a one-sided hypothesis argument in the prop.test.
+The 95% CI is 0.2098 to 1.0. There is a 95% chance the population proportion is greater than 0.2098. The reason it differs from the Wilson's CI calculated above is that we used `greater`as a one-sided hypothesis argument in the prop.test. These CI's from one-sided hypothesis tests are not particularly useful when attempting to use the CI as an index of accuracy.
 
 #### How to write this up
 
@@ -290,15 +292,15 @@ First, notice how we're comparing the population proportion of cytokine- to that
 
 Second, we're making this a two-tailed (`two.sided`) test instead of one-tailed (`greater`).
 
-* The statistical alterate hypothesis: $\pi_c\ne\pi_v$
+The statistical alterate hypothesis: $\pi_c\ne\pi_v$
 
-* The statistical null hypothesis: $\pi_c=\pi_v$
+The statistical null hypothesis: $\pi_c=\pi_v$
 
 A second way of writing these hypotheses to say the same thing:
 
-* Alternate: $\pi_c-\pi_v\ne0$
+Alternate: $\pi_c-\pi_v\ne0$
 
-* Null: $\pi_c-\pi_v=0$
+Null: $\pi_c-\pi_v=0$
 
 #### Running the test
 
@@ -339,9 +341,13 @@ The 99.99999% CI for the difference between two proportions does not include the
 
 Note how we don't say "statistically significantly different".
 
+Notice also how the 99.99999% CI is very wide. It would be narrower if run at a 95% confidence level. Why?
+
 ## Exact tests for two proportions
 
-An alternative to `prop.test` to **compare two proportions** is the `fisher.test`, which like the `binom.test` calculates exact p-values. The `fisher.test` requires that data be input as a matrix or table of the successes and failures. 
+An alternative to `prop.test` to **compare two proportions** is the `fisher.test`, which like the `binom.test` calculates exact p-values. 
+
+The `fisher.test` requires that data be input as a matrix or table of the successes and failures, so involves a bit more munging.
 
 We need to make a matrix of the data first, then perform the `fisher.test` on that matrix: 
 gradstudin-positive, gradstudin-negative, total
@@ -383,7 +389,9 @@ These expected counts are entered in the test script as a `prop` or `p` argument
 
 Say we had a spatial memory test in which 28 independent subjects are placed into a maze for testing (one at a time) and we count which of 4 chambers they enter first. They do so at the following frequencies: A=14, B=3, C=7, D=4. Does this frequency distribution differ from the null expectation, A=7, B=7, C=7, D=7, where no chamber is more likely to be entered than another?
 
-Failure is not an option in this design! Only successes are counted. Given enough time, a subject will always choose a chamber. If one fails the task, it must be censured. Let's test this at the 5% type1 error threshold:
+Failure is not an option in this design! Only successes are counted. Given enough time, a subject will always choose a chamber (iIf one fails the task, it should be censured). 
+
+Let's test this at the 5% type1 error threshold:
 
 ### An Exact Goodness of Fit test
 
@@ -403,7 +411,7 @@ Note on the `multinomial.test`output: [Please see this site](http://rinterested.
 
 We're only intersted in the p-value, since we're using this function as an exact goodness-of-fit hypothesis test for the null hypothesis. 
 
-Why use an exact test rather than a `chisq.test`? Because we have two cells in the dataset with counts < 5! An exact p-value will be more accurate.
+Why use an exact test rather than a `chisq.test`? Because we have two cells in the dataset with counts < 5! An exact p-value test will be more accurate than `chisq.test`.
 
 The test compares our sample frequency distribution to that in the null model. We actually wrote the latter explicitly in the function argument: null is uniform distribution--the subjects are equally likely to enter each chamber.
 
@@ -428,7 +436,6 @@ Note also that we didn't enter the null frequency argument. The `chisq.test`func
 
 ```{r}
 chisq.test(x)
-chisq.test(x)$expected
 ```
 #### Write up
 
@@ -472,7 +479,7 @@ There is an association between the presence of this marker and the probability 
 
 *The large OR indicates the presence of this marker is strongly associated with cancer (n=100, OR = 9.06, 95% CI = 2.76 to 33.68, Fisher's Exact Test for Count Data, p = 3.934e-05).*  
 
-The word "strongly" is used to emphasize the effect size, which is OR, not the smallness of the p-value. 
+The word "strongly" is used to emphasize the effect size, which is OR, not the smallness of the p-value.
 
 Here are the other tests you might use to conduct for a contingency analysis, to illustrate how they differ: `
 
@@ -491,11 +498,11 @@ chisq.test(x)
 chisq.test(x, correct=F)
 ```
 
-First, note that the prop.test is just the chisq.test. You get the same $\chi^2$ value and p-value for each. They just differ in parameter output and input options. 
+First, note that the prop.test is just the chisq.test. You get the same $\chi^2$ value and p-value for each. They just differ in parameter output and input options. If you'd like a confidence interval (you should), use `prop.test`.
 
-Second, note how turning off the Yates continuity correction changes the $\chi^2$ value and p-value. That's to be expected, it changes the calculation! Both the prop.test and chisq.test use Yates by default. The best way to think about Yate's is that it acts as a smoothing function to take off some of the jigger in the calculation of the $\chi^2$ value.
+Second, note how turning off the Yates continuity correction changes the $\chi^2$ value and the p-value. That's to be expected, it changes the calculation! Both the prop.test and chisq.test use Yates by default. The best way to think about Yate's is that it acts as a smoothing function to take off some of the jigger in the calculation of the $\chi^2$ value.
 
-### Interpretation of $\chi^2$ output
+### Interpretation of chi-square output
 
 There is an association between the presence of this marker and the probability that cancer occurs.
 
@@ -565,7 +572,6 @@ knitr::kable( apop, booktabs = TRUE,  caption = 'Hypothetical replicates compari
 The key distinction here, compared to what's been discussed in this chapter up to this point, is that within each replicate, all of the events are intrinsically-linked. Through replication we're establishing whether the events are repeatable. 
 
 Logistic (for dichotomous data) or poisson (for frequency data) regression are the appropriate analytical tools for these designs. These involve using the generalized linear model, conducted with the function `glm` or the function `glmer` (for so-called mixed models). These are discussed in the logistic regression chapter.
-
 
 ## Doing *a priori* power analysis for proportion tests
 
@@ -743,12 +749,5 @@ ggplot(
   ) +
   geom_bar(stat="identity")
 ```
-
-
-
-
-
-
-
 
 ..
