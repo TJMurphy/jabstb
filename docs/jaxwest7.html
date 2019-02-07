@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chapter 11 Reproducible Data Munging in R | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Chapter 11 Reproducible Data Munging in R | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Reproducible Data Munging in R | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
+
+
+<meta name="date" content="2019-02-07">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="pvalues.html">
+<link rel="next" href="binomial.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Software</a><ul>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#my-code-is-your-code"><i class="fa fa-check"></i><b>3.1</b> My code is your code</a></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#install-r-and-rstudio"><i class="fa fa-check"></i><b>3.2</b> Install R and RStudio</a></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#getting-started-with-r"><i class="fa fa-check"></i><b>3.3</b> Getting started with R</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#other-resources"><i class="fa fa-check"></i><b>3.4</b> Other resources</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>4</b> The Big Picture</a><ul>
+<li class="chapter" data-level="4.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>4.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>4.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="4.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>4.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="4.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>4.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="4.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>4.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>5</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>5.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>5.1.1</b> A simple test to define the experimental unit</a></li>
+<li class="chapter" data-level="5.1.2" data-path="sampling.html"><a href="sampling.html#blocking"><i class="fa fa-check"></i><b>5.1.2</b> Blocking</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>5.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>5.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="5.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>5.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>5.3</b> Random process</a></li>
+<li class="chapter" data-level="5.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>5.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>5.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="5.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>5.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="5.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>5.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="5.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>5.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>5.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>6</b> Data Classification</a><ul>
+<li class="chapter" data-level="6.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>6.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>6.1.1</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>6.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>6.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="6.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>6.2.2</b> Discrete categorical and ordinal variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>7</b> Variability, Accuracy and Precision</a><ul>
+<li class="chapter" data-level="7.1" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>7.1</b> Variance: Quantifying variation by least squares</a></li>
+<li class="chapter" data-level="7.2" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>7.2</b> Standard deviation</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>7.2.1</b> What does the standard deviation tell us</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="dispersion.html"><a href="dispersion.html#other-ways-of-describing-variability"><i class="fa fa-check"></i><b>7.3</b> Other ways of describing variability</a></li>
+<li class="chapter" data-level="7.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>7.4</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="7.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>7.5</b> Standard error</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>7.5.1</b> What exactly does the standard error represent?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>7.6</b> Confidence intervals</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="dispersion.html"><a href="dispersion.html#simulations"><i class="fa fa-check"></i><b>7.6.1</b> Simulations</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>7.7</b> Key take aways</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>8</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="8.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>8.1</b> The decision process</a></li>
+<li class="chapter" data-level="8.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>8.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="8.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>8.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>9</b> Error</a><ul>
+<li class="chapter" data-level="9.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>9.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>9.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="9.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>9.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>9.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="9.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>9.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>10</b> P Values</a><ul>
+<li class="chapter" data-level="10.1" data-path="pvalues.html"><a href="pvalues.html#how-p-values-are-calculated"><i class="fa fa-check"></i><b>10.1</b> How p-values are calculated</a></li>
+<li class="chapter" data-level="10.2" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>10.2</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="10.3" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>10.3</b> Interpretation</a></li>
+<li class="chapter" data-level="10.4" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>10.4</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>11</b> Reproducible Data Munging in R</a><ul>
+<li class="chapter" data-level="11.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-glucose-data"><i class="fa fa-check"></i><b>11.1</b> Jaxwest7 glucose data</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="jaxwest7.html"><a href="jaxwest7.html#inspect-the-jaxwest7-data"><i class="fa fa-check"></i><b>11.1.1</b> Inspect the Jaxwest7 data</a></li>
+<li class="chapter" data-level="11.1.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-concentration-data-into-r"><i class="fa fa-check"></i><b>11.1.2</b> Munge the glucose concentration data into R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="jaxwest7.html"><a href="jaxwest7.html#explore-the-jaxwest7-data"><i class="fa fa-check"></i><b>11.2</b> Explore the Jaxwest7 data</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>12</b> The Binomial Distribution</a><ul>
+<li class="chapter" data-level="12.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>12.1</b> dbinom</a></li>
+<li class="chapter" data-level="12.2" data-path="binomial.html"><a href="binomial.html#pbinom"><i class="fa fa-check"></i><b>12.2</b> pbinom</a></li>
+<li class="chapter" data-level="12.3" data-path="binomial.html"><a href="binomial.html#qbinom"><i class="fa fa-check"></i><b>12.3</b> qbinom</a></li>
+<li class="chapter" data-level="12.4" data-path="binomial.html"><a href="binomial.html#rbinom"><i class="fa fa-check"></i><b>12.4</b> rbinom</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="poisson.html"><a href="poisson.html"><i class="fa fa-check"></i><b>13</b> The Poisson Distribution</a><ul>
+<li class="chapter" data-level="13.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>13.1</b> Poisson Events</a></li>
+<li class="chapter" data-level="13.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>13.2</b> dpois</a></li>
+<li class="chapter" data-level="13.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>13.3</b> ppois</a></li>
+<li class="chapter" data-level="13.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>13.4</b> rpois</a></li>
+<li class="chapter" data-level="13.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>13.5</b> Overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>14</b> The Normal Distribution</a><ul>
+<li class="chapter" data-level="14.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>14.0.1</b> The Standard Normal</a></li>
+<li class="chapter" data-level="14.1" data-path="normal.html"><a href="normal.html#dnorm"><i class="fa fa-check"></i><b>14.1</b> dnorm</a></li>
+<li class="chapter" data-level="14.2" data-path="normal.html"><a href="normal.html#pnorm"><i class="fa fa-check"></i><b>14.2</b> pnorm</a><ul>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-p-values-using-pnorm"><i class="fa fa-check"></i>Calculating “p-values”&quot; using pnorm</a></li>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-percentiles-using-pnorm"><i class="fa fa-check"></i>Calculating percentiles using pnorm</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="normal.html"><a href="normal.html#qnorm"><i class="fa fa-check"></i><b>14.3</b> qnorm</a></li>
+<li class="chapter" data-level="14.4" data-path="normal.html"><a href="normal.html#rnorm"><i class="fa fa-check"></i><b>14.4</b> rnorm</a><ul>
+<li class="chapter" data-level="14.4.1" data-path="normal.html"><a href="normal.html#plotting-histograms-of-some-rnorm-samples"><i class="fa fa-check"></i><b>14.4.1</b> Plotting histograms of some rnorm samples</a></li>
+<li class="chapter" data-level="14.4.2" data-path="normal.html"><a href="normal.html#bins-and-binwidth"><i class="fa fa-check"></i><b>14.4.2</b> Bins and Binwidth</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="categorical.html"><a href="categorical.html"><i class="fa fa-check"></i><b>15</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="15.1" data-path="categorical.html"><a href="categorical.html#types-of-categorical-data"><i class="fa fa-check"></i><b>15.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="15.1.1" data-path="categorical.html"><a href="categorical.html#proportions"><i class="fa fa-check"></i><b>15.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="15.1.2" data-path="categorical.html"><a href="categorical.html#frequencies"><i class="fa fa-check"></i><b>15.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="15.1.3" data-path="categorical.html"><a href="categorical.html#associations"><i class="fa fa-check"></i><b>15.1.3</b> Associations</a></li>
+<li class="chapter" data-level="15.1.4" data-path="categorical.html"><a href="categorical.html#statistics-covered-here"><i class="fa fa-check"></i><b>15.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="categorical.html"><a href="categorical.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>15.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="15.2.1" data-path="categorical.html"><a href="categorical.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>15.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="15.3" data-path="categorical.html"><a href="categorical.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>15.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="15.3.1" data-path="categorical.html"><a href="categorical.html#proportion-analysis"><i class="fa fa-check"></i><b>15.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="15.3.2" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>15.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="15.3.3" data-path="categorical.html"><a href="categorical.html#contingency-analysis"><i class="fa fa-check"></i><b>15.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="categorical.html"><a href="categorical.html#comparing-proportions"><i class="fa fa-check"></i><b>15.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="15.4.1" data-path="categorical.html"><a href="categorical.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>15.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="15.4.2" data-path="categorical.html"><a href="categorical.html#calculating-proportions"><i class="fa fa-check"></i><b>15.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="15.4.3" data-path="categorical.html"><a href="categorical.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>15.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="15.4.4" data-path="categorical.html"><a href="categorical.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>15.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="15.4.5" data-path="categorical.html"><a href="categorical.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>15.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="15.4.6" data-path="categorical.html"><a href="categorical.html#comparing-two-proportions"><i class="fa fa-check"></i><b>15.4.6</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="categorical.html"><a href="categorical.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>15.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="15.6" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>15.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="15.6.1" data-path="categorical.html"><a href="categorical.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>15.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="15.6.2" data-path="categorical.html"><a href="categorical.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>15.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="15.7" data-path="categorical.html"><a href="categorical.html#contingency-testing"><i class="fa fa-check"></i><b>15.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="15.7.1" data-path="categorical.html"><a href="categorical.html#intepretation-of-contingency-results"><i class="fa fa-check"></i><b>15.7.1</b> Intepretation of Contingency Results</a></li>
+<li class="chapter" data-level="15.7.2" data-path="categorical.html"><a href="categorical.html#write-up-3"><i class="fa fa-check"></i><b>15.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="15.7.3" data-path="categorical.html"><a href="categorical.html#interpretation-of-chi-square-output"><i class="fa fa-check"></i><b>15.7.3</b> Interpretation of chi-square output</a></li>
+<li class="chapter" data-level="15.7.4" data-path="categorical.html"><a href="categorical.html#write-up-4"><i class="fa fa-check"></i><b>15.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="15.7.5" data-path="categorical.html"><a href="categorical.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>15.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="15.7.6" data-path="categorical.html"><a href="categorical.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>15.7.6</b> Higher dimension contingency analysis</a></li>
+<li class="chapter" data-level="15.7.7" data-path="categorical.html"><a href="categorical.html#other-experimental-designs-involving-categorical-data"><i class="fa fa-check"></i><b>15.7.7</b> Other experimental designs involving categorical data</a></li>
+</ul></li>
+<li class="chapter" data-level="15.8" data-path="categorical.html"><a href="categorical.html#doing-a-priori-power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>15.8</b> Doing <em>a priori</em> power analysis for proportion tests</a></li>
+<li class="chapter" data-level="15.9" data-path="categorical.html"><a href="categorical.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>15.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="15.10" data-path="categorical.html"><a href="categorical.html#graphing-proportions"><i class="fa fa-check"></i><b>15.10</b> Graphing Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="chisquare.html"><a href="chisquare.html"><i class="fa fa-check"></i><b>16</b> The Chi-square Distribution</a><ul>
+<li class="chapter" data-level="16.1" data-path="chisquare.html"><a href="chisquare.html#background"><i class="fa fa-check"></i><b>16.1</b> Background</a></li>
+<li class="chapter" data-level="16.2" data-path="chisquare.html"><a href="chisquare.html#dchisq"><i class="fa fa-check"></i><b>16.2</b> dchisq</a></li>
+<li class="chapter" data-level="16.3" data-path="chisquare.html"><a href="chisquare.html#pchisq"><i class="fa fa-check"></i><b>16.3</b> pchisq</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="chisquare.html"><a href="chisquare.html#calculating-p-values-from-pchisq"><i class="fa fa-check"></i><b>16.3.1</b> Calculating p-values from pchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="chisquare.html"><a href="chisquare.html#qchisq"><i class="fa fa-check"></i><b>16.4</b> qchisq</a></li>
+<li class="chapter" data-level="16.5" data-path="chisquare.html"><a href="chisquare.html#rchisq"><i class="fa fa-check"></i><b>16.5</b> rchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="nonparametrics.html"><a href="nonparametrics.html"><i class="fa fa-check"></i><b>17</b> Nonparametric Statistical Tests</a><ul>
+<li class="chapter" data-level="17.1" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-discrete-data"><i class="fa fa-check"></i><b>17.1</b> Experiments involving discrete data</a></li>
+<li class="chapter" data-level="17.2" data-path="nonparametrics.html"><a href="nonparametrics.html#deviant-data"><i class="fa fa-check"></i><b>17.2</b> Deviant Data</a></li>
+<li class="chapter" data-level="17.3" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>17.3</b> Sign Test</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>17.3.1</b> Interpretation</a></li>
+<li class="chapter" data-level="17.3.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-5"><i class="fa fa-check"></i><b>17.3.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>17.4</b> Wilcoxon Sign Rank Test for One Group</a><ul>
+<li class="chapter" data-level="17.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>17.4.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
+<li class="chapter" data-level="17.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>17.4.2</b> Interpretation</a></li>
+<li class="chapter" data-level="17.4.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>17.4.3</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>17.5</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
+<li class="chapter" data-level="17.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>17.5.1</b> Interpretation</a></li>
+<li class="chapter" data-level="17.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>17.5.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>17.6</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
+<li class="chapter" data-level="17.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>17.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="17.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>17.6.2</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.7" data-path="nonparametrics.html"><a href="nonparametrics.html#kruskal-wallis"><i class="fa fa-check"></i><b>17.7</b> Kruskal-Wallis</a><ul>
+<li class="chapter" data-level="17.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>17.7.1</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.8" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>17.8</b> Friedman test</a></li>
+<li class="chapter" data-level="17.9" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-power-calculations"><i class="fa fa-check"></i><b>17.9</b> Nonparametric power calculations</a><ul>
+<li class="chapter" data-level="17.9.1" data-path="nonparametrics.html"><a href="nonparametrics.html#how-it-works"><i class="fa fa-check"></i><b>17.9.1</b> How it works</a></li>
+<li class="chapter" data-level="17.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#initialization-with-population-parameters"><i class="fa fa-check"></i><b>17.9.2</b> Initialization with population parameters</a></li>
+<li class="chapter" data-level="17.9.3" data-path="nonparametrics.html"><a href="nonparametrics.html#an-example"><i class="fa fa-check"></i><b>17.9.3</b> An example</a></li>
+<li class="chapter" data-level="17.9.4" data-path="nonparametrics.html"><a href="nonparametrics.html#nonpara.pwr"><i class="fa fa-check"></i><b>17.9.4</b> nonpara.pwr</a></li>
+</ul></li>
+<li class="chapter" data-level="17.10" data-path="nonparametrics.html"><a href="nonparametrics.html#summary"><i class="fa fa-check"></i><b>17.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>18</b> Signed Rank Distribution</a><ul>
+<li class="chapter" data-level="18.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>18.1</b> Transformation of data into sign ranks</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="signrank.html"><a href="signrank.html#for-a-one-group-sample"><i class="fa fa-check"></i><b>18.1.1</b> For a one group sample</a></li>
+<li class="chapter" data-level="18.1.2" data-path="signrank.html"><a href="signrank.html#for-a-paired-sample"><i class="fa fa-check"></i><b>18.1.2</b> For a paired sample</a></li>
+<li class="chapter" data-level="18.1.3" data-path="signrank.html"><a href="signrank.html#the-sign-rank-test-statistic-in-r"><i class="fa fa-check"></i><b>18.1.3</b> The sign rank test statistic in R</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="signrank.html"><a href="signrank.html#rs-four-sign-rank-distribution-functions"><i class="fa fa-check"></i><b>18.2</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="signrank.html"><a href="signrank.html#dsignrank"><i class="fa fa-check"></i><b>18.2.1</b> dsignrank</a></li>
+<li class="chapter" data-level="18.2.2" data-path="signrank.html"><a href="signrank.html#psignrank"><i class="fa fa-check"></i><b>18.2.2</b> psignrank</a></li>
+<li class="chapter" data-level="18.2.3" data-path="signrank.html"><a href="signrank.html#qsignrank"><i class="fa fa-check"></i><b>18.2.3</b> qsignrank</a></li>
+<li class="chapter" data-level="18.2.4" data-path="signrank.html"><a href="signrank.html#rsignrank"><i class="fa fa-check"></i><b>18.2.4</b> rsignrank</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="ranksum.html"><a href="ranksum.html"><i class="fa fa-check"></i><b>19</b> Rank Sum Distribution</a><ul>
+<li class="chapter" data-level="19.0.1" data-path="ranksum.html"><a href="ranksum.html#transformation-of-data-into-rank-summs"><i class="fa fa-check"></i><b>19.0.1</b> Transformation of data into rank summs</a></li>
+<li class="chapter" data-level="19.0.2" data-path="ranksum.html"><a href="ranksum.html#the-sign-rank-test-statistic-in-r-1"><i class="fa fa-check"></i><b>19.0.2</b> The sign rank test statistic in R</a></li>
+<li class="chapter" data-level="19.1" data-path="ranksum.html"><a href="ranksum.html#rs-four-sign-rank-distribution-functions-1"><i class="fa fa-check"></i><b>19.1</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="19.1.1" data-path="ranksum.html"><a href="ranksum.html#dwilcox"><i class="fa fa-check"></i><b>19.1.1</b> dwilcox</a></li>
+<li class="chapter" data-level="19.1.2" data-path="ranksum.html"><a href="ranksum.html#pwilcox"><i class="fa fa-check"></i><b>19.1.2</b> pwilcox</a></li>
+<li class="chapter" data-level="19.1.3" data-path="ranksum.html"><a href="ranksum.html#qwilcox"><i class="fa fa-check"></i><b>19.1.3</b> qwilcox</a></li>
+<li class="chapter" data-level="19.1.4" data-path="ranksum.html"><a href="ranksum.html#rwilcox"><i class="fa fa-check"></i><b>19.1.4</b> rwilcox</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>20</b> The t-tests</a><ul>
+<li class="chapter" data-level="20.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>20.1</b> Data assumptions for t-tests</a></li>
+<li class="chapter" data-level="20.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>20.2</b> The t Statistic</a><ul>
+<li class="chapter" data-level="20.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>20.2.1</b> One sample t tests</a></li>
+<li class="chapter" data-level="20.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>20.2.2</b> Unpaired t tests</a></li>
+<li class="chapter" data-level="20.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>20.2.3</b> Paired t tests</a></li>
+</ul></li>
+<li class="chapter" data-level="20.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>20.3</b> t Test Hypotheses</a><ul>
+<li class="chapter" data-level="20.3.1" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>20.3.1</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="20.3.2" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>20.3.2</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="20.3.3" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>20.3.3</b> Paired hypotheses</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>20.4</b> Confidence Intervals of Means</a></li>
+<li class="chapter" data-level="20.5" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>20.5</b> t Tests: Running the analysis</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>20.5.1</b> One sample t test</a></li>
+<li class="chapter" data-level="20.5.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>20.5.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="20.5.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>20.5.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="20.6" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>20.6</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="20.6.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>20.6.1</b> Unpaired</a></li>
+<li class="chapter" data-level="20.6.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>20.6.2</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="20.7" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>20.7</b> t Test Power</a><ul>
+<li class="chapter" data-level="20.7.1" data-path="ttests.html"><a href="ttests.html#interpretation-7"><i class="fa fa-check"></i><b>20.7.1</b> Interpretation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>21</b> Statistical design of t-tests</a><ul>
+<li class="chapter" data-level="21.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>21.1</b> About this chapter</a><ul>
+<li class="chapter" data-level="21.1.1" data-path="ttestmc.html"><a href="ttestmc.html#scenario"><i class="fa fa-check"></i><b>21.1.1</b> Scenario</a></li>
+</ul></li>
+<li class="chapter" data-level="21.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>21.2</b> One sample t-test Monte Carlo</a></li>
+<li class="chapter" data-level="21.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>21.3</b> Unpaired t-test Monte Carlo</a></li>
+<li class="chapter" data-level="21.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>21.4</b> Paired t-test Monte Carlo</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="introanova.html"><a href="introanova.html"><i class="fa fa-check"></i><b>22</b> Introduction to ANOVA</a><ul>
+<li class="chapter" data-level="22.1" data-path="introanova.html"><a href="introanova.html#factors-and-levels"><i class="fa fa-check"></i><b>22.1</b> Factors and levels</a></li>
+<li class="chapter" data-level="22.2" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>22.2</b> ANOVA models: One-, Two-, and Three-way</a></li>
+<li class="chapter" data-level="22.3" data-path="introanova.html"><a href="introanova.html#anova-inference-protocol"><i class="fa fa-check"></i><b>22.3</b> ANOVA inference protocol</a></li>
+<li class="chapter" data-level="22.4" data-path="introanova.html"><a href="introanova.html#anova-calculations"><i class="fa fa-check"></i><b>22.4</b> ANOVA calculations</a><ul>
+<li class="chapter" data-level="22.4.1" data-path="introanova.html"><a href="introanova.html#sums-of-squares-partitioning"><i class="fa fa-check"></i><b>22.4.1</b> Sums of Squares partitioning</a></li>
+<li class="chapter" data-level="22.4.2" data-path="introanova.html"><a href="introanova.html#degrees-of-freedom"><i class="fa fa-check"></i><b>22.4.2</b> Degrees of freedom</a></li>
+<li class="chapter" data-level="22.4.3" data-path="introanova.html"><a href="introanova.html#the-mean-squares"><i class="fa fa-check"></i><b>22.4.3</b> The mean squares</a></li>
+<li class="chapter" data-level="22.4.4" data-path="introanova.html"><a href="introanova.html#the-anova-table"><i class="fa fa-check"></i><b>22.4.4</b> The ANOVA table</a></li>
+<li class="chapter" data-level="22.4.5" data-path="introanova.html"><a href="introanova.html#the-f-test"><i class="fa fa-check"></i><b>22.4.5</b> The F-test</a></li>
+<li class="chapter" data-level="22.4.6" data-path="introanova.html"><a href="introanova.html#post-hoc-group-comparisons"><i class="fa fa-check"></i><b>22.4.6</b> Post-hoc group comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="22.5" data-path="introanova.html"><a href="introanova.html#completely-randomized-or-related-measures"><i class="fa fa-check"></i><b>22.5</b> Completely randomized or related measures</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="introanova.html"><a href="introanova.html#the-problem-of-lost-data-in-related-measures-designs"><i class="fa fa-check"></i><b>22.5.1</b> The problem of lost data in related measures designs</a></li>
+</ul></li>
+<li class="chapter" data-level="22.6" data-path="introanova.html"><a href="introanova.html#two-way-anova"><i class="fa fa-check"></i><b>22.6</b> Two-way ANOVA</a></li>
+<li class="chapter" data-level="22.7" data-path="introanova.html"><a href="introanova.html#other-anova-models"><i class="fa fa-check"></i><b>22.7</b> Other ANOVA models</a><ul>
+<li class="chapter" data-level="22.7.1" data-path="introanova.html"><a href="introanova.html#r-and-anova"><i class="fa fa-check"></i><b>22.7.1</b> R and ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="22.8" data-path="introanova.html"><a href="introanova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>22.8</b> Alternatives to ANOVA</a><ul>
+<li class="chapter" data-level="22.8.1" data-path="introanova.html"><a href="introanova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>22.8.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>23</b> The F distribution</a><ul>
+<li class="chapter" data-level="23.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>23.1</b> Background</a><ul>
+<li class="chapter" data-level="23.1.1" data-path="fdistr.html"><a href="fdistr.html#sample-variance-and-fs-pdf"><i class="fa fa-check"></i><b>23.1.1</b> Sample Variance and F’s PDF</a></li>
+</ul></li>
+<li class="chapter" data-level="23.2" data-path="fdistr.html"><a href="fdistr.html#df"><i class="fa fa-check"></i><b>23.2</b> df</a></li>
+<li class="chapter" data-level="23.3" data-path="fdistr.html"><a href="fdistr.html#pf"><i class="fa fa-check"></i><b>23.3</b> pf</a></li>
+<li class="chapter" data-level="23.4" data-path="fdistr.html"><a href="fdistr.html#qf"><i class="fa fa-check"></i><b>23.4</b> qf</a></li>
+<li class="chapter" data-level="23.5" data-path="fdistr.html"><a href="fdistr.html#rf"><i class="fa fa-check"></i><b>23.5</b> rf</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="onewayanova.html"><a href="onewayanova.html"><i class="fa fa-check"></i><b>24</b> One-way ANOVA CR</a><ul>
+<li class="chapter" data-level="24.1" data-path="onewayanova.html"><a href="onewayanova.html#using-ezanova"><i class="fa fa-check"></i><b>24.1</b> Using <code>ezANOVA</code></a></li>
+<li class="chapter" data-level="24.2" data-path="onewayanova.html"><a href="onewayanova.html#the-chickwt-data-set"><i class="fa fa-check"></i><b>24.2</b> The chickwt data set</a><ul>
+<li class="chapter" data-level="24.2.1" data-path="onewayanova.html"><a href="onewayanova.html#inspect-the-data"><i class="fa fa-check"></i><b>24.2.1</b> Inspect the data</a></li>
+</ul></li>
+<li class="chapter" data-level="24.3" data-path="onewayanova.html"><a href="onewayanova.html#run-the-anova"><i class="fa fa-check"></i><b>24.3</b> Run the ANOVA</a><ul>
+<li class="chapter" data-level="24.3.1" data-path="onewayanova.html"><a href="onewayanova.html#run-the-chickwts-one-way-anova"><i class="fa fa-check"></i><b>24.3.1</b> Run the chickwts One Way ANOVA</a></li>
+<li class="chapter" data-level="24.3.2" data-path="onewayanova.html"><a href="onewayanova.html#interpreting-the-one-way-cr-anova-output"><i class="fa fa-check"></i><b>24.3.2</b> Interpreting the One-Way CR ANOVA Output</a></li>
+</ul></li>
+<li class="chapter" data-level="24.4" data-path="onewayanova.html"><a href="onewayanova.html#post-hoc-pairwise-comparisons"><i class="fa fa-check"></i><b>24.4</b> Post hoc pairwise comparisons</a><ul>
+<li class="chapter" data-level="24.4.1" data-path="onewayanova.html"><a href="onewayanova.html#overview-of-options"><i class="fa fa-check"></i><b>24.4.1</b> Overview of options</a></li>
+</ul></li>
+<li class="chapter" data-level="24.5" data-path="onewayanova.html"><a href="onewayanova.html#reporting-the-result"><i class="fa fa-check"></i><b>24.5</b> Reporting the result</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="jaxwest7" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> Reproducible Data Munging in R</h1>
+<p>Data munging is the process of taking data from one source(s), working it into a condition where it can be analyzed. Because every data set will differ every data munge will be custom.</p>
+<p>Data munging is a bit like organic chemistry. You know the chemical you want to create. You know the starting materials that you have on hand. You know the reactions and the intermediates that you’ll need to produce to get that final product.</p>
+<p>Here’s one example of the munging process. What we want to achieve in this exercise, the final product, is to get some graphical views in order to visualize the data structure along with some summary statistics.</p>
+<p>We begin with some experimental data that’s a bit unstructured. Our tools include an data import function (<code>datapasta</code>) and a handful of functions in the <code>tidyverse</code> package.</p>
+<p>Not especially how every transaction with the data is recorded. If you took each of these code chuncks and ran them on your machine, you should get identical results. That’s reproducibility.</p>
+<div id="jaxwest7-glucose-data" class="section level2">
+<h2><span class="header-section-number">11.1</span> Jaxwest7 glucose data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(datapasta)
+<span class="kw">library</span>(tidyverse)</code></pre></div>
+<p>The <a href="https://phenome.jax.org/projects/Jaxwest7">Jaxwest7 data set</a> is a Jackson Labs experiment conducted in a mouse strain serving as a model for type 2 diabetes. Animals fed a glucose-rich diet develop a type 2 diabetes syndrome. The experiment tests whether the antidiabetic drug rosglitazone suppresses disease development.</p>
+<p>Half the subjects receive the antidiabetic drug, the other receive vehicle as placebo.The syndrome is assessed by measuring two response variables: body weight and blood glucose concentrations. There are two explanatory variables: day of study and drug treatment.</p>
+<p>The experimental design is therefore multivariate (weight, blood glucose) two-factor (drug treatment, day) ANOVA with repeated measures from the replicates.</p>
+<p>The purpose of this chapter is to illustrate how to retrieve and process data in R, focusing only on the blood glucose response variable within the Jaxwest7 data set.</p>
+<p>Going through this exercise will illustrate how to prepare data for statistical analysis.</p>
+<div id="inspect-the-jaxwest7-data" class="section level3">
+<h3><span class="header-section-number">11.1.1</span> Inspect the Jaxwest7 data</h3>
+<p>Download the <a href="https://phenome.jax.org/projects/Jaxwest7">Jaxwest7.xls file from the mouse phenome database</a> to your machine and open it with Excel (or some other spreadsheet software).</p>
+<p>Go to the BloodGlucoseGroups tab.</p>
+<p>This is readable, but what hits you is the sheet’s complexity. In fact, this sheet illustrates what unstructured data looks like.</p>
+<p>Almost every column has cells containing multiple types of values. The first 8 rows have various descriptor text, including a logo! Rows 9-14 have some other definitions. Scroll way over to the right and some graphs pop up. The data we are interested in are in rows 15 to 42, and in columns F to S. Each of those columns has two column names, a date and a day. Thus, if a column in this array is a group of variable values, then each variable has two names! There should be only 1.</p>
+<p>Columns T and U have several missing values, because those animals were used for autopsy. We’re going to have to ignore their response values. Columns 43 to 146 are missing entirely! Below the array are some summary statistics on the columns above, which represent different variables.</p>
+<p>This is not a spreadsheet that can or should be imported whole scale directly into R. Instead, we need to grab only the data we need. Then we’ll use R to structure it properly.</p>
+</div>
+<div id="munge-the-glucose-concentration-data-into-r" class="section level3">
+<h3><span class="header-section-number">11.1.2</span> Munge the glucose concentration data into R</h3>
+<p>Let’s get the glucose concentration data into R, and create a “long”&quot; data frame format, where every column represents a variable and every row is a case (or a subset of a case). We’ll have to create some row and some column variable names.</p>
+<p>What do we have to work with? What do we need to create?</p>
+<p>Glucose concentrations were measured twice per day on odd-numbered days plus day 12. Each column represents a blood draw session. This was done on each of 16 animals. Half were in a placebo group, half were in a drug group. I’m going to omit day 15 due to the NA values (those mice were harvested for autopsy, and so day 15 breaks the time series).</p>
+<p>Let’s make a proper R data frame out of this data.</p>
+<p>Open up an R script file and follow along.</p>
+<p><strong>Step 1:</strong> Deal with cell F21. It’s value in the excel spreadsheet is “Hi”, a character value rather than a numeric (it must have tested out-of-range for the assay). We have two options: Assign it an NA value, or impute. Since this is a related-measures time series with multiple other glucose measurements for that specific replicate, we’ll impute by using the average of all these other measurements.</p>
+<p>Calculate the value that will be imputed:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Use datapasta to paste in vector values. Calculate their mean. Then impute value for cell F21 in original data set by exchanging the value &quot;Hi&quot; with the mean produced here. </span>
+F21 &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">c</span>(449L, 525L, 419L, 437L, 476L, 525L, 499L, 516L, 485L, 472L, 535L, 500L, 497L)
+); F21</code></pre></div>
+<pre><code>## [1] 487.3077</code></pre>
+<p>Ideally, you’d import the data with the “Hi” value and fix it in R, to have reproducible record. Doing so would involve walking several confusing munging steps into the weeds, which are beyond the scope of this chapter.</p>
+<p>Step 2: Fix the F21 cell in the spreadsheet, then copy the array F15:S42 to the clipboard. This gives 14 columns and 16 rows of glucose data. All values are numeric and represent the same variable: glucose concentration.</p>
+<p>Use the <code>datapasta</code> package addin for this procedure. Create an object name, pasting in as a tribble provides the cleanest route.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gluc &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">tribble</span>(
+           <span class="op">~</span>V1,  <span class="op">~</span>V2,  <span class="op">~</span>V3,  <span class="op">~</span>V4,  <span class="op">~</span>V5,  <span class="op">~</span>V6,  <span class="op">~</span>V7,  <span class="op">~</span>V8,  <span class="op">~</span>V9, <span class="op">~</span>V10, <span class="op">~</span>V11, <span class="op">~</span>V12, <span class="op">~</span>V13, <span class="op">~</span>V14,
+          136L, 270L, 162L, 165L, 192L, 397L, 172L, 148L, 291L, 239L, 192L, 172L, 235L, 153L,
+          345L, 518L, 429L, 413L, 456L, 487L, 468L, 419L, 507L, 559L, 420L, 415L, 511L, 464L,
+          190L, 301L, 311L, 361L, 398L, 465L, 388L, 392L, 453L, 421L, 355L, 381L, 394L, 444L,
+          434L, 504L, 453L, 392L, 350L, 400L, 458L, 387L, 342L, 368L, 355L, 429L, 373L, 501L,
+          424L, 486L, 447L, 417L, 496L, 484L, 468L, 423L, 472L, 507L, 458L, 456L, 519L, 570L,
+          170L, 208L, 134L, 129L, 147L, 141L, 241L, 128L, 162L, 163L, 222L, 438L, 307L, 252L,
+          487L, 449L, 525L, 419L, 437L, 476L, 525L, 499L, 516L, 485L, 472L, 535L, 500L, 497L,
+          218L, 273L, 254L, 265L, 338L, 386L, 287L, 236L, 347L, 235L, 432L, 450L, 509L, 326L,
+          179L, 184L, 124L, 107L, 108L, 149L, 142L, 143L, 112L, 233L, 113L, 137L, 106L, 150L,
+          260L, 381L, 174L, 140L, 132L, 138L, 164L, 137L, 122L, 140L, 102L, 174L, 120L, 135L,
+          115L, 191L, 132L, 132L, 169L, 158L, 129L, 120L, 122L, 157L,  94L, 141L, 120L, 166L,
+          526L, 517L, 465L, 394L, 310L, 269L, 213L, 185L, 145L, 201L, 131L, 258L, 114L, 160L,
+          325L, 252L, 203L, 158L, 135L, 162L, 164L, 181L, 150L, 177L, 162L, 192L, 170L, 162L,
+          329L, 296L, 212L, 159L, 156L, 200L, 139L, 143L, 164L, 150L, 119L, 193L, 148L, 188L,
+          230L, 414L, 408L, 179L, 432L, 288L, 163L, 240L, 185L, 208L, 138L, 208L, 153L, 140L,
+          204L, 120L, 138L, 139L, 157L, 122L, 163L, 168L, 164L, 128L, 129L, 218L, 135L, 182L
+          )</code></pre></div>
+<p>Notice how R coerces unique variable names for each column. At this point, they are much cleaner than the column names available in the spreadsheet.</p>
+<p>Step 3: Create a column for the ID variable. There are 16 replicate mice. We’ll given them each a unique ID name.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ID &lt;-<span class="st"> </span>LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>]</code></pre></div>
+<p>Step 4: Create a column for the treatment variable. The first 8 replicates received vehicle (placebo). The second 8 rosiglitazone.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">treat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;placebo&quot;</span>, <span class="dv">8</span>), <span class="kw">rep</span>(<span class="st">&quot;rosiglit&quot;</span>, <span class="dv">8</span>))</code></pre></div>
+<p>Step 5: Add these columns to the gluc tribble</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gluc &lt;-<span class="st"> </span><span class="kw">add_column</span>(gluc, ID, treat, <span class="dt">.before=</span>T)</code></pre></div>
+<p>Step 6: Now would be a good time to convert from a wide to a long table format. We use the <code>gather</code> function in the tidyverse package for that.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gluc &lt;-<span class="st"> </span><span class="kw">gather</span>(gluc, V, glucose, <span class="op">-</span>ID, <span class="op">-</span>treat)</code></pre></div>
+<p>Step 7: Replace the variable V with two variables.</p>
+<p>Note how we created a new variable, V, in this move. As you can see, the gather function successively “gathers” all the glucose values from columns V1, V2,…, V14 into a single column under the variable V. It’s a very, very slick and useful function that’s analogous to an excel pivot table (but much easier to execute).</p>
+<p>The V variable, however, is ambiguous. The 14 levels of V actually represent two variables. The odd numbered represent the early day blood draw, while the even numbered represent the late day draw. Meanwhile, V1 and V2 represent day one, V3 and V4 represent day three,…, and V13 and V14 represent day eleven.</p>
+<p>We need a single variable column to represent early or late draw, and another variable column to represent the seven days of the study.</p>
+<p>There are two levels for the draw variable, and seven levels for the day variable. These repeat in a 16 and 32 unit pattern, respectively.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">draw &lt;-<span class="st"> </span><span class="kw">rep</span>(
+  <span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;early&quot;</span>, 
+        <span class="dv">16</span>), 
+    <span class="kw">rep</span>(<span class="st">&quot;late&quot;</span>, 
+        <span class="dv">16</span>)
+    ), 
+  <span class="dv">7</span>
+  )
+day &lt;-<span class="st"> </span><span class="kw">rep</span>(
+  <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">12</span>), 
+  <span class="dt">each =</span><span class="dv">32</span>)</code></pre></div>
+<p>Step 8: Update the gluc table to incorporate these new variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gluc &lt;-<span class="st"> </span><span class="kw">add_column</span>(gluc, draw, day, <span class="dt">.before=</span>T)
+gluc</code></pre></div>
+<pre><code>## # A tibble: 224 x 6
+##    draw    day ID    treat    V     glucose
+##    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;int&gt;
+##  1 early     1 A     placebo  V1        136
+##  2 early     1 B     placebo  V1        345
+##  3 early     1 C     placebo  V1        190
+##  4 early     1 D     placebo  V1        434
+##  5 early     1 E     placebo  V1        424
+##  6 early     1 F     placebo  V1        170
+##  7 early     1 G     placebo  V1        487
+##  8 early     1 H     placebo  V1        218
+##  9 early     1 I     rosiglit V1        179
+## 10 early     1 J     rosiglit V1        260
+## # ... with 214 more rows</code></pre>
+<p>Step 9: Remove the V variable column from the tribble. First verify that the correct levels for draws and days correspond to the correct levels of V. After that, the V column has no use so it can be removed.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gluc &lt;-<span class="st"> </span><span class="kw">select</span>(gluc, <span class="op">-</span><span class="kw">one_of</span>(<span class="st">&quot;V&quot;</span>))
+gluc</code></pre></div>
+<pre><code>## # A tibble: 224 x 5
+##    draw    day ID    treat    glucose
+##    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;      &lt;int&gt;
+##  1 early     1 A     placebo      136
+##  2 early     1 B     placebo      345
+##  3 early     1 C     placebo      190
+##  4 early     1 D     placebo      434
+##  5 early     1 E     placebo      424
+##  6 early     1 F     placebo      170
+##  7 early     1 G     placebo      487
+##  8 early     1 H     placebo      218
+##  9 early     1 I     rosiglit     179
+## 10 early     1 J     rosiglit     260
+## # ... with 214 more rows</code></pre>
+<p>Let’s fix one subtle issue. Each of the variables draw, day, ID and treat should all be interpreted as factor objects. But the data table interprets them as characters (or dbl in the case of day). Some statistical tests need to read these as factors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cols &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;draw&quot;</span>, <span class="st">&quot;day&quot;</span>, <span class="st">&quot;ID&quot;</span>, <span class="st">&quot;treat&quot;</span>)
+gluc[cols] &lt;-<span class="st"> </span><span class="kw">lapply</span>(gluc[cols], factor)</code></pre></div>
+</div>
+</div>
+<div id="explore-the-jaxwest7-data" class="section level2">
+<h2><span class="header-section-number">11.2</span> Explore the Jaxwest7 data</h2>
+<p>Histograms are a great way to get a first look at data sets with a reasonably healthy number of values, such as this one. We expect glucose to be a normally-distributed variable. Here it’s clearly bi-modal, perhaps representing two normally-distributed treatment groups?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gluc)<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(glucose))</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p>By coloring the two groups, the story grows a bit more complex.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gluc,
+       <span class="kw">aes</span>(<span class="dt">fill=</span>treat)
+       ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(glucose))</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
+<p>We can also look at the data as scatter plots, by draw, treatment and time. This view shows the time series for each replicate. Looking at the data atomically, in this way, gives tremendous insights!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gluc, 
+       <span class="kw">aes</span>(day, 
+           glucose,
+           <span class="dt">group=</span>ID,
+           <span class="dt">color =</span> treat)
+       ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>draw) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>()</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-57-1.png" width="672" /> Now create some summaries. Here’s a plot of the means and standard deviations of the groups. The <code>stat_summary</code> function is a bit quirky to work with, but worth learning.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gluc, 
+       <span class="kw">aes</span>(day, 
+         glucose,
+         <span class="dt">color=</span>treat
+         )
+       ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>draw) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_sdl&quot;</span>,
+               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult =</span> <span class="dv">1</span>),
+               <span class="dt">geom =</span><span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, 
+               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, 
+               <span class="kw">aes</span>(<span class="dt">group=</span>treat)
+               ) </code></pre></div>
+<pre><code>## Warning: Computation failed in `stat_summary()`:
+## &#39;what&#39; must be a function or character string
+
+## Warning: Computation failed in `stat_summary()`:
+## &#39;what&#39; must be a function or character string</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+<p>Now here’s a summary of all the replicate values in tabular form.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gluc <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(day, treat, draw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">mean=</span><span class="kw">mean</span>(glucose),
+          <span class="dt">sd=</span><span class="kw">sd</span>(glucose),
+          <span class="dt">n=</span><span class="kw">length</span>(glucose))</code></pre></div>
+<pre><code>## # A tibble: 28 x 6
+## # Groups:   day, treat [?]
+##    day   treat    draw   mean    sd     n
+##    &lt;fct&gt; &lt;fct&gt;    &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+##  1 1     placebo  early  300. 138.      8
+##  2 1     placebo  late   376. 125.      8
+##  3 1     rosiglit early  271  126.      8
+##  4 1     rosiglit late   294. 134.      8
+##  5 3     placebo  early  339. 146.      8
+##  6 3     placebo  late   320. 118.      8
+##  7 3     rosiglit early  232  131.      8
+##  8 3     rosiglit late   176   90.6     8
+##  9 5     placebo  early  352. 125.      8
+## 10 5     placebo  late   404. 114.      8
+## # ... with 18 more rows</code></pre>
+<p>The more you look at the early v late draws, both graphically and in the table above, the more you don’t have a problem treating those as technical or pseudo replicates. Perhaps it was a decision made ahead of time at Jackson? We’ll declare the early and late draws on the same day as not independent. Averaging them leaves will leave us with a tighter estimate of daily blood glucose concentrations, which is nice.</p>
+<p>The code below averages the early and late draws to produce a single mean glucose value per replicate per time point.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gluc <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(day, treat, ID) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">mean=</span><span class="kw">mean</span>(glucose),
+          <span class="dt">sd=</span><span class="kw">sd</span>(glucose),
+          <span class="dt">n=</span><span class="kw">length</span>(glucose)
+          )</code></pre></div>
+<pre><code>## # A tibble: 112 x 6
+## # Groups:   day, treat [?]
+##    day   treat    ID     mean     sd     n
+##    &lt;fct&gt; &lt;fct&gt;    &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;
+##  1 1     placebo  A      203   94.8      2
+##  2 1     placebo  B      432. 122.       2
+##  3 1     placebo  C      246.  78.5      2
+##  4 1     placebo  D      469   49.5      2
+##  5 1     placebo  E      455   43.8      2
+##  6 1     placebo  F      189   26.9      2
+##  7 1     placebo  G      468   26.9      2
+##  8 1     placebo  H      246.  38.9      2
+##  9 1     rosiglit I      182.   3.54     2
+## 10 1     rosiglit J      320.  85.6      2
+## # ... with 102 more rows</code></pre>
+<p>The ‘mean’ column should be used as the final value for the glucose response variable, in statistical analysis. This is the right call. To leave the technical duplicates would be to flood the data set with undeserved degrees of freedom.</p>
+<p>We’ll create a final, working table of the data now. It catalogs how each replicate behaved on each day, and which treatment it received. You’ll note we’ve :</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">glucFinal &lt;-<span class="st"> </span>gluc <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(day, treat, ID) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">glucose=</span><span class="kw">mean</span>(glucose)
+            )
+glucFinal</code></pre></div>
+<pre><code>## # A tibble: 112 x 4
+## # Groups:   day, treat [?]
+##    day   treat    ID    glucose
+##    &lt;fct&gt; &lt;fct&gt;    &lt;fct&gt;   &lt;dbl&gt;
+##  1 1     placebo  A        203 
+##  2 1     placebo  B        432.
+##  3 1     placebo  C        246.
+##  4 1     placebo  D        469 
+##  5 1     placebo  E        455 
+##  6 1     placebo  F        189 
+##  7 1     placebo  G        468 
+##  8 1     placebo  H        246.
+##  9 1     rosiglit I        182.
+## 10 1     rosiglit J        320.
+## # ... with 102 more rows</code></pre>
+<p>Because it has all of the replicate data, the glucFinal data table is what we would use for statistical testing.</p>
+<p>If we published a figure from all of this, we’d create it from the glucFinal data table. The following would be the most appropriate because it is based on average technical replicates:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(glucFinal, 
+       <span class="kw">aes</span>(<span class="dt">x =</span> day, 
+         <span class="dt">y =</span> glucose,
+         <span class="dt">color=</span>treat
+         )
+       ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data=</span><span class="st">&quot;mean_sdl&quot;</span>,
+               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult =</span> <span class="dv">1</span>),
+               <span class="dt">geom =</span><span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean,
+               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>,
+               <span class="kw">aes</span>(<span class="dt">group=</span>treat)) </code></pre></div>
+<pre><code>## Warning: Computation failed in `stat_summary()`:
+## &#39;what&#39; must be a function or character string</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
+<p>And finally, here’s some summary stats on that final data set:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">glucFinal <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(day, treat) <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">length</span>(glucose),
+            <span class="dt">mean =</span> <span class="kw">mean</span>(glucose),
+            <span class="dt">median =</span> <span class="kw">median</span>(glucose),
+            <span class="dt">sd =</span> <span class="kw">sd</span>(glucose),
+            <span class="dt">sem =</span> sd<span class="op">/</span><span class="kw">sqrt</span>(n),
+            <span class="dt">min =</span> <span class="kw">min</span>(glucose),
+            <span class="dt">max =</span> <span class="kw">max</span>(glucose))</code></pre></div>
+<pre><code>## # A tibble: 14 x 9
+## # Groups:   day [?]
+##    day   treat        n  mean median    sd   sem   min   max
+##    &lt;fct&gt; &lt;fct&gt;    &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 1     placebo      8  338.   338. 128.  45.1   189   469 
+##  2 1     rosiglit     8  283.   300. 121.  42.8   153   522.
+##  3 3     placebo      8  330.   378. 131.  46.2   132.  472 
+##  4 3     rosiglit     8  204    169. 106.  37.6   116.  430.
+##  5 5     placebo      8  378.   403. 115.  40.6   144   490 
+##  6 5     rosiglit     8  193.   156   85.1 30.1   128.  360 
+##  7 7     placebo      8  352.   406. 132.  46.7   160   512 
+##  8 7     rosiglit     8  162.   158   27.8  9.83  124.  202.
+##  9 9     placebo      8  379.   396  132.  46.7   162.  533 
+## 10 9     rosiglit     8  160.   160.  21.2  7.48  131   196.
+## 11 11    placebo      8  386.   405.  98.5 34.8   182   504.
+## 12 11    rosiglit     8  157.   164.  27.5  9.71  118.  194.
+## 13 12    placebo      8  410.   428  117.  41.5   194   544.
+## 14 12    rosiglit     8  147.   145.  16.0  5.66  128.  168</code></pre>
+<p>Phew!</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="pvalues.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="binomial.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
