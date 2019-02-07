@@ -371,7 +371,162 @@ More generally, the Bonferroni correction is $adjusted\ type1\ threshold = 0.05/
 
 ## Friedman test
 
+## Nonparametric power calculations
 
+To my knowledge, there are no simple power functions in R designed for nonparametric testing. I assume the reason for that is that nonparametric tests can be performed on a wide variety of data types. As such, it's hard to create one-size-fits all, plug and play functions.
+
+The function below, `nonpara.pwr` is configured to simulate the power of nonparametric one- and two-group comparisons using the Wilcoxon test function of R. 
+
+The intended use of this function is to establish *a priori* the sample size needed to yield a level of power that you deem acceptable. 
+
+What the function does is simulate a long run of experimental results at a given sample size, from which it calculates the power. This is a Monte Carlo method. Thus, it simulate random values that mimic experimental results based upon "known" population parameters. 
+
+The function strictly takes the argument of a sample size value and returns an experimental power that sample size generates. 
+
+But it also requires that you customize your initialization. Do this by entering estimates for parameters of the population you expect to sample. All you need to do this is a pretty good guess of the values for the outcome variable you expect your experiment will produce.
+
+### How it works
+
+Use the initializer to define values for the parameters of the population you're sampling. These are passed into a function that randomly generate values for the outcome variable. A statistical test is performed on that outcome. A secondary 'hit' test asks whether the test result crosses a threshold. Here a 'hit' is counted if the p-value for the simulated test is less than 0.05.
+
+Power is the franction of p-values that fall below the confidence level that you set. For example, if you set a confidence level of 95%, every p-value less than 0.05 will be scored as a hit. Power = hits/number of simulations.
+
+The function is configured to repeat this simulation/testing/hit count process many times, hundreds or even thousands of times. The more times it simulates a result, the more accurate the power estimate.
+
+### Initialization with population parameters
+
+Let's focus for now on the thought process involved in how to intialize it.
+
+What's most important is to initialize the function using a random value generator that best simulates the type of data you expect to generate in your experiment. Using the random number generator functions of the various probability distributions is suitable for many cases. 
+
+For example, use `rnorm` for measured variables for which you believe you can predict means and standard deviations.
+
+```{r}
+# simulate a sample size of 5 for a normally-distributed variable with mean of 100 units and standard deviation of 25 units
+control.1 <- rnorm(n=5, mean=100, sd=25)
+treatment.1 <- rnorm(n=5, mean=150, sd=25)
+sim.set <- data.frame(control.1, treatment.1); sim.set
+
+```
+
+Use `rpois` to simulate variables that represent discrete events, such as frequencies.
+
+```{r}
+#simulate 5 events, where each occurs at an average frequency of 7.
+
+control.2 <- rpois(n=5, lambda=7)
+treatment.2 <- rpois(n=5, lambda=10)
+sim.set2 <- data.frame(control.2, treatment.2); sim.set2
+```
+
+It's even possible to simulate ordinal data, such as the outcome of likert tests. The `sample()` function can be configured for this purpose. Note how probability vector argument is used to cast expectd distributions of the values 
+
+```{r}
+#simulate 6 replicates scored on a 5-unit ordinal scale, where 1 is the lowest level of an observed outcome and 5 is the highest.
+
+control <- sample(x=c(1:5), size=6, 
+       replace=T, prob=c(.80, .15, .05, 0, 0))
+disease <- sample(x=c(1:5), size=6, 
+       replace=T, prob=c(0, 0, 0.05, 0.80, 0.15))
+results <- data.frame(control, disease); results
+```
+
+If a more sophisticated/less-biased simulation of ordinal data is needed, you'll find it is [doable but suprisingly not trivial](https://www.rdatagen.net/post/generating-and-displaying-likert-type-data/).
+
+Please recognize that simulating data for these functions mostly depends upon your scientific understanding of the variables. You have to make scientific judgements about the values your variable will take on under control and treatment conditions. 
+
+To get started statistically, go back to the basics. Is the variable discrete or continuous. Is it measured or ordered or sorted?  What means and standard deviations, or frequencies, or rank sizes should you estimate? Those are scientific judgements. 
+
+Either select the values you predict will occur, OR enter values that you believe would be a minimal, scientifically meaningful effect size.
+
+### An example
+
+Let's say we study mouse models of diabetes. In non-diabetic control subjects, mean plasma glucose concentration is typically ~100 mg/dL and the variability tends to be quite low (15 mg/dL). 
+
+Most everybody in the field agrees that average blood glucose concentration of 300 mg/dL represents successful induction of diabetes in these models. 
+
+However, experience shows these higher levels of glucose are associated with considerably greater variability (sd=150 mg/dL) than under normal states. Large differences in variability between two groups are called heteroscedaticity. The presence of heteroscedaticity can preclude the use of parametric statistical tests since it raises type1 error risk. Thus, nonparametric testing would be used when expected such outcomes.
+
+Let's say you want to test a new idea for diabetes induction. What sample size would be necessary, assuming an nonparametric testing and an unpaired design, to reliably detect a difference between these two groups at 80% power or better?
+
+The function below calculates the power of experiments that might be expected to generate such results, at given sample sizes.
+
+### nonpara.pwr
+
+Running this first code chunk reads the function into the environment. There's no output, yet. But read it line-by-line to see if you can follow the logic.
+
+```{r}
+nonpara.pwr <- function(n){
+  
+#Intitializers. Place expected values for the means and standard deviations of two groups to be compared here.
+  
+  m1= 100 #mean of group 1
+  sd1= 10 #standard deviation of group 1
+  
+  m2= 300 #mean of group 2
+  sd2= 150 #standard deviation of group 2
+  
+  
+  # the monte carlo just repeats the random sampling i times. It runs a t-test on each sample, i, grabs the p-value and places it in a growing vector, p.values[i]
+  ssims=1000
+  
+  #The function below produced p-values. This empty vector will be filled with p-values as they are generated
+  
+  p.values <- c()
+  
+  #This function inside a function repeats the simulation ssims times, collecting a p-value each time. Importantly, change the arguments for the statitical test to suit your experimental design. It 
+  i <- 1
+  repeat{
+    x=rnorm(n, m1, sd1); 
+    y=rnorm(n, m2, sd2);
+    p <- wilcox.test(x, y, 
+                paired=F, 
+                alternative="two.sided", 
+                var.equal=F,
+                conf.level=0.95)$p.value
+    p.values[i] <- p
+    
+    if (i==ssims) break
+    i = i+1
+    #This calculates the power from the values in the p.value vector.
+    pwr <- length(which(p.values<0.05))/ssims
+  }
+  return(pwr)
+  
+}
+
+```
+
+To get some output, pass a sample size of 5 per group into the function.
+
+```{r}
+set.seed(1234)
+nonpara.pwr(5)
+```
+
+At this seed, the power is 62.6% for a sample size of 5 per group.
+
+A slightly higher power would be desirable. Change the value of `n` in the code chunk to see what's necessary to get 80% power.
+
+Or, more easily, just run `nonpara.pwr` over a range of sample sizes, plotting a power vs sample size curve:
+
+```{r}
+#frame is a data frame with only one variable, sample size
+frame <- data.frame(n=2:50)
+#data is a data frame with two variables, sample size and a power value for each
+data <- bind_cols(frame, 
+                  power=apply(frame, 1, nonpara.pwr))
+
+#plot
+ggplot(data, aes(n, power))+
+  geom_point() +
+  scale_y_continuous(breaks=c(seq(0, 1, 0.1)))+
+  scale_x_continuous(breaks=c(seq(0,50,2)))
+```
+
+This result shows that a sample size of 7, 8, or 9 per group would give ~85% power. Thus, a sample size of 7 per group would be the minimal size necessary to test the two-sided null that there is no difference between the groups, at a 95% confidence level.
+
+The experimental design, and thus these scripts, can be reconfigured in many ways.
 
 ## Summary
 
@@ -382,9 +537,6 @@ The tests transform the values of experimental outcome variables into either sig
 Therefore, perhaps its best to think of nonparametrics as a way to transform non-normal data into more normal data.
 
 The nonparametrics are powerful statistical tests that should be used more widely than they are. 
-
-
-
 
 
 
