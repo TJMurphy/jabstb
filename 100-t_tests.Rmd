@@ -3,6 +3,7 @@
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(pwr)
+library(car)
 ```
 The t-tests, otherwise known as "Student's t tests" are for experimental designs that involve testing hypotheses comparing one group to a standard or two groups two each other, **and** where the outcome variable is continuous and on an equal interval scale.
 
@@ -37,9 +38,9 @@ There are two equally valid ways to approach this.
 First, a property of continuous data is that it will be normally distributed when it is measured within a linear range on its scale. The same holds for the variance assumption. 
 
 
-There are a normality tests
+There are a normality tests such as the Shapiro-Wilk (`shapiro.test`), which tests the null hypothesis that the values of a variable are normally-distributed. Levene's test `library(car), leveneTest` is useful to test homogeneity of variance. The use of these tests would be proscribed in some preset protocol. If their nulls are rejected, either the data can be normalized through log or reciprocal transformation, or nonparametric testing can be used instead.
 
-Alternately, the researcher can conduct hypothesis testing using nonparametric procedures. The performance of t-tests and their nonparametric counterparts are virtually identical when the normality and homoscedasticity assumptions are met. Whereas nonparametrics statistics are an appropriate option when these conditions are unmet.
+Alternately, the researcher can just conduct hypothesis testing using nonparametric procedures. The performance of t-tests and their nonparametric counterparts are virtually identical when the normality and homoscedasticity assumptions are met. Whereas nonparametrics statistics are an appropriate option when these conditions are unmet. On non-normal or heteroscedastic samples false positive detection is reduced slightly by using nonparametric testing compared to t-tests. 
 
 ## The t Statistic
 
@@ -319,7 +320,11 @@ pwr.t.test(d=2, sig.level=0.05, power=0.8, type="two.sample", alternative="great
 
 ### Interpretation
 
-The experiment should have a total sample size total of 8. Randomly allocate each of two levels of the predictor variable to 4 replicates each. Notice how this function produces a bizarra, fractional sample size. There is no such critter as a partial replicate!
+The experiment should have a total sample size total of 8. Randomly allocate each of two levels of the predictor variable to 4 replicates each. Notice how this function produces a bizarre, fractional sample size. Obviously, there is no such critter as a partial replicate! So always round up.
 
-People seem to have difficulty with Cohen's delta. It's nothing more complicated than a simple signal-to-noise estimate. Don't make the mistake of putting too fine of a point on Cohen's delta. Scientific judgement is required to calculate the values to use to calculate Cohen's delta. Use your best scientific guess for standard deviation and the response magnitude, and err on the conservative side.
+People seem to have difficulty with Cohen's delta. It's nothing more complicated than a simple signal-to-noise estimate. The t-statistic. You need some idea about what value to expect for a mean (whether its difference between means or mean of the differences). You need some idea of the standard deviation.
+
+Don't make the mistake of putting too fine of a point on Cohen's delta. Scientific judgement is required to calculate the values to use to calculate Cohen's delta. Use your best scientific guess for standard deviation and the response magnitude, and err on the conservative side.
+
+I strongly caution against using Cohen's delta values recommended for "small", "medium", and "large" effects. There's a good chance his idea of small effects is a lot smaller than your idea of small effects.
 
