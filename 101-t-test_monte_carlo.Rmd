@@ -33,13 +33,13 @@ The planning is based on [some mouse phenome data in a diet-induced obesity stud
 
 On the basis of expertise in the field, we make the judgment that a 50% reduction in blood glucose caused by the drug in this diet-induced obesity model would be a scientifically meaningful outcome. We need to design an experiment capable of detecting that 50% effect size.
 
-We've already compiled the phenome data into summary format [link to chapter]. We'll use that to guide our estimates in these Monte Carlo. These data show that under diabetogenic conditions the animals have an average blood glucose of 368 and SD = 119 (mg glucose/dl). 
+We've [already compiled the phenome data into summary format](\#jaxwest7). We'll use that to guide our estimates in these Monte Carlo. These data show that under diabetogenic conditions the animals have an average blood glucose of 368 and SD = 119 (mg glucose/dl). 
 
 Since this is an exercise in prediction and estimation, we'll round those values to 370 and 120, if only to make the point that highly precise numbers misses the point of what we're doing here.  
 
-A 50% reduction would yield a target value of 185 mg/dl.
+A 50% reduction would yield a target value of about 185 mg/dl.
 
-Finally, we'd like to run the real life experiments at 90% power. Why? Let's imagine that these are a pretty important test: a "go" vs "no go" inflection point for a novel drug candidate. The stakes are high.
+Finally, we'd like to run the real life experiments at 90% power. Why? Let's imagine that these are a pretty important test: a "go" vs "no go" inflection point for a novel drug candidate. When the stakes are high so too should be the power of the test. 
 
 ## One sample t-test Monte Carlo
 
@@ -54,7 +54,7 @@ Step 1: Enter mean and sd parameter estimates for the expected effect of the new
 Also enter an estimate for the theoretical mean of the population it will be evaluated against. Finally, enter a value for the sample size of the drug-treated group.
 
 ```{r}
-meanDrug <- 180
+meanDrug <- 185
 sdDrug <- 120
 
 muCon <- 370
@@ -119,7 +119,7 @@ ggplot(data.frame(p))+
                  bins=20)
 ```
 
-Next steps: The returned power for the estimates above is about 75%. That's a bit lower than a power of 90%, which we'd like here. Change the value of the `nDrug` term to a higher sample size, before re-running the simulation loops, until a power of ~90% is achieved. Change the estimate for `sdDrug`, too. How does lowering that influence sample size for 90% power? 
+Next steps: The returned power for the estimates above is about 75%. That's a bit lower than a power of 90%, which we'd like here. Change the value of the `nDrug` term to a higher sample size, before re-running the simulation loops, until a power of ~90% is achieved. You can also change the estimate for `sdDrug`, too. How does lowering that influence sample size for 90% power? 
 
 Why 90%? That's both a scientific and strategic call. In this instance a positive result will have important implications for committing further to a costly drug development process. For that reason, the study should be run at a higher power than what might be chosen for a test that is more exploratory in nature.
 
@@ -210,15 +210,15 @@ Next steps: This configuration with a sample size of 5 in each group is a bit un
 
 ## Paired t-test Monte Carlo
 
-Another way to test whether the new drug can reduce blood sugar concentrations is by using a paired design. Paired designs offer some level of control over random variability by assigning some of it to the variation within subjects. 
+Another way to test whether the new drug can reduce blood sugar concentrations is by using a paired design. Paired designs offer some level of control over random variability by accounting for some of it to the variation within subjects. 
 
-For example, individuals may differ wildly in their absolute blood glucose concentrations, but the magnitude of change due to drug from subject to another will be fairly consistent. 
+For example, individuals may differ wildly in their absolute blood glucose concentrations, but the proportional change due to drug from subject to another will be fairly consistent. 
 
 The paired t-test challenges the null hypothesis that the average change in blood glucose caused by the drug is zero. 
 
 Step 1: When simulating data for a paired design it is important to account for the expected correlation between variables. That's best accomplished on the basis of some data. 
 
-We can use the serial glucose measurements from individual subjects in the [Jaxwest7 data set to extract this information](https://phenome.jax.org/projects/Jaxwest7). 
+We can use the serial glucose measurements from individual subjects in the [Jaxwest7 data set to extract this information](\{#jaxwest7}). 
 
 There are two daily blood glucose measurements taken on days 1, 3, 5, 7, 9, 11 and 12 of a study, from each of 16 different subjects. We can think of each blood collection as a variable, for which 16 independent replicate measurements are taken.
 
@@ -259,7 +259,7 @@ bloodGlucose <- data.frame(
                 )
 ```
 
-We calculate the correlation between any two daily sets of values. In fact, we can calculate the correlation between all possible pairs of daily values. This leaves us with a large number of unique correlation coefficients. We then derive an overall average correlation coefficient. 
+We calculate the correlation between any two daily sets of values. In fact, we can calculate the correlation between all possible pairs of daily values. This leaves us with a large number of unique correlation coefficients. We then derive from these an overall average correlation coefficient for use in Monte Carlo function. 
 
 ```{r}
 #create a full correlation matrix
@@ -281,11 +281,11 @@ mean(cormat, na.rm=T)
 
 What does this value mean? 
 
-First, when the value of the correlation coefficient between the variables $X,Y$ is $r$, then the relationship between each pair of $x_i, y_i$ values in the set is \[y_i=x_i\times r+y_i\sqrt{1-r^2}\]
+First, it can be show that when the value of the correlation coefficient between the variables $X,Y$ is $r$, then the relationship between each pair of $x_i, y_i$ values in the set is \[y_i=x_i\times r+y_i\sqrt{1-r^2}\]
 
-(Intuitively, this makes sense. You can see, when $r=0$, then $y_i=y_i$. When $r=1$, then, $y_i=x_i$)
+Intuitively, this should make sense. You can see, when $r=0$, then $y_i=y_i$. When $r=1$, then, $y_i=x_i$)
 
-So the correlation coefficeint from the Jaxwest7 data set means that within each subject in our experiment the expected correlation between pre-drug glucose concentrations and post-drug glucose concentrations is 0.7666.
+So the correlation coefficeint from the Jaxwest7 data set means that *within* each subject in our experiment the expected correlation between pre-drug glucose concentrations and post-drug glucose concentrations is 0.7666.
 
 **Step 2:** Initialize the Monte Carlo with estimates for the measurement values. We start with the mean and sd values for the pre-drug blood glucose measurements. Their estimates are derived from the placebo group in the Jaxwest7 data set, rounded to 380 and 120, respectively. 
 
@@ -297,11 +297,12 @@ The expected correlation between pairs of measures is 0.7666, rounded to 0.75.
 #Sampled population paramemters
 
 # pre-drug measurements
-mean1 <- 380
+mean1 <- 185
 sd1 <- 120
 
 # post-drug response
-effect <- 0.5
+mean2 <- 380
+sd2 <- 120
 
 r <- 0.75
 
@@ -309,7 +310,7 @@ k <- sqrt(1-r^2)
 
 # number of paired measures
 
-pairs <- 10
+pairs <- 3
 ```
 
 **Step 3:** This step sets the arguments in the t-test function. Even though we predict a reduction in glucose, we'll test this as a two-tailed hypothesis. It's a little more stringent.
@@ -342,13 +343,13 @@ That is accomplished with the `w` vector. The values of `x` and `y` are correlat
 
 ```{r}
 for(i in 1:nSims){ #for each simulated experiment
-  x<-rnorm(n = pairs, mean = mean1, sd = sd1) #produce n simulated participants
+  y1<-rnorm(n = pairs, mean = mean1, sd = sd1) #produce n simulated participants
   #with mean and SD
-  y<-rnorm(n = pairs, mean = mean1, sd = sd1) #produce n simulated participants
+  y2<-rnorm(n = pairs, mean = mean2, sd = sd2) #produce n simulated participants
   #with mean and SD
   #correlated
-  w <- (x*r+y*k)*effect
-  z<-t.test(x,w, 
+  y2 <- r*y1+k*y2
+  z<-t.test(y1,y2, 
             alternative=alt, 
             paired=pairing,
             var.equal=var, 
@@ -383,7 +384,7 @@ ggplot(data.frame(p))+
 ```{r}
 library(pwr)
 
-pwr.t.test(n=10, d=1.58, sig.level=0.05, type="paired", alternative="two.sided")
-pwr.t.test(n=9, d=1.58, sig.level=0.05, type="two.sample", alternative="two.sided")
+pwr.t.test(n=6, d=1.58, sig.level=0.05, type="paired", alternative="two.sided")
+pwr.t.test(n=8, d=1.58, sig.level=0.05, type="two.sample", alternative="two.sided")
 ```
 
