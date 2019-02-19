@@ -1,0 +1,248 @@
+# Reproducible Data Munging Mostly with Tidyverse {#jaxwest2}
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(readxl)
+library(viridis)
+library(RColorBrewer)
+```
+
+Reproducibility is when someone given your data can conduct the same analysis, arriving at the same parameter estimates and conclusions. The data processing steps of an analysis are a critical determinant of reproducibility. Ideally, this is performed in a breadcrumbs process, where each step is transparent. That's what R scripts do.
+
+Here's an example of what I mean by that. I thought it would be interesting to try and pull this off using mostly tidyverse functions, if possible.
+
+The Jaxwest2 data represent an experiment to establish tumor xenograft growth in $NOD.CB17-Prkdc^{scid}/J$, an immunodeficient mouse strain.          
+
+Jaxwest2 is a nice data set to illustrate a one-way related measures ANOVA. They also provides an opportunity to illustrate some data wrangling technique. 
+
+The latter is the focus here. In particular, I'll illustrate how a complete reproducible data munge can be accomplished using mostly just the tidyverse.
+
+The study design involved injecting HT29 human colon cancer cells into the mice.  Over the next few weeks repeated daily measurements were collected from each mouse on a handful of outcome variables, including body weight and tumor lengths, widths, and heights. Tumor volume was calculated from length and width data. 
+
+The multiple measures taken from individual subjects are instrinsically-linked. The day of measurement is the only factor, and it has multiple levels. This all fits a one-way repeated measures ANOVA experimental design model.
+
+In the study per se, three groups are compared: 1) Control (no vehicle), 2) Control (vehicle), and 3) Test Group (pretreatment). 
+
+The latter is apparently proprietary, providing very little outcome data. The first two are similar and can be expected to generate the same outcomes.
+
+I'm not interested in comparing these groups since the comparisons aren't particularly interesting scientifically. So we'll take only the first of these groups to conduct an ANOVA analysis (later) and imagine the other two didn't exist. Had we compared these groups, too, it would be a two-way ANOVA repeated measures design. 
+
+Therefore, we can use this to study the effect of time on tumor cell growth. We can answer the following question: Will tumor cells grow if injected into the animals?
+
+We'll focus only on a subset of the data, the tumor volume measurements over time in the first group. This chapter illustrates how to wrangle that subset out from the rest of the data in the excel file.
+
+## Look at the original data carefully
+
+The data are in a file called `Jaxwest2.xls`, which can be downloaded from the Jackson Labs [here](https://phenome.jax.org/projects/Jaxwest2). 
+
+Before starting the munge take a close look at the excel file. A few things to note. First, there are two worksheets. One has the experimental data. The second is a variable key.
+
+Now look at that first worksheet. There are two header rows, which is problematic. 
+
+The first header row is incomplete since it has no values over the first 7 columns. The label in the 8th column actually refers to header values in the remainder of the columns, not the data beneath it. Those values correspond to the day data were collected in a time series.
+
+The second header row nicely defines the variables for each column. Note how beginning with the 9th column, the variable name incorporates the day number. Thus, `bw_1` is the variable body weight on the first day post injection. Thus, the information about the time series is embedded within each variable name. 
+
+In other words, most of the variable names are hybrids, carrying information about both the measurement and the day. We'll need to deconvolute those names.
+
+The good news is that the first header row doesn't provide any information we can't get from the second header row, so when we read in the data we'll simply omit that first header row. It would only complicate the munge.
+
+Finally, below the header, every row is a case that corresponds to a unique mouse. The values for the variable `mouse_ID` illustrates as much. 
+
+Here's the big picture, however. The column and row structure indicate that repeated measures of multiple outcome variables were collected for each of these mice.
+
+## Our goal
+
+Stop me if I've used this metaphor previously. But starting a munge is a lot like starting an organic chemistry synthesis. You have the reagents. You know the final product. The only question is how will you create the latter given the former.
+
+Let's collect the time series only for the `tumor_vol` variable. We'll ignore all the other outcome variables.
+
+The output--the goal--is to create a plot of the data. Eventually, we'll run a one-way related measures ANOVA analysis to test whether time has an effect on tumor growth (it does, by the bloody obvious test).
+
+To get there we'll read in all but the top row of the first sheet of the excel file, then simplify by selecting only the variables that we want from the Jaxwest2 data. 
+
+We want a long format data frame where every column represents a unique variable. It will have a 1) numeric tumor volume variable, and a 2) day of measurement variable as a factor, and a 3) variable for the mouse ID also as a factor, and will have data corresponding to only one treatment group (Control (no vehicle)). 
+
+## Read the data into R
+
+We'll read in all but the first header row. The function `read_excel` is from the `readxl` package, which is [part of the tidyverse](https://readxl.tidyverse.org/) but you may need to install it separately.
+
+The script below creates the object `jw2`, which is a data frame of 103 variables! Except for the first header row, `jw2` contains all of the data in the first sheet of the source file. 
+
+Note how `jaxwest2.xls` is otherwise untouched. No changes have been made locally to the original source file. That's important because it is good reproducible practice.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+jw2 <-"datasets/jaxwest2.xls" %>%
+  read_excel(
+    skip=1, 
+    sheet=1
+    )
+jw2
+```
+
+From here forward I'm illustrating the munge in step-by-step chunks, which otherwise could be combined with the one above into a single longer script.
+
+I'm also only using, or mostly using, the tidyverse for this project.
+
+## Select the variables
+
+We slim the data set considerably using the `select` function. 
+
+We want only the mouse_ID, the test group, and all the columns that correspond to a tumor volume measurement on a given day. We get the latter using the [`contains` function](https://dplyr.tidyverse.org/reference/select.html#useful-functions). 
+
+We want the mouse_ID because the data are repeated measures. We'll need it as a grouping factor for both ggplot and ANOVA.
+
+The test group variable will initially serve as a check to know we grabbed the right data. We can omit it later.
+
+`contains` is really helpful because the tumor volume variables for each day of measurement have a slightly different name, yet each contain the characters `tumor_vol_` as a common stem.
+
+We'll create a new object, `jw2vol` to represent the data. Notice how in subsequent chunks `jw2vol` is modified as we successively munge the data into shape.
+
+```{r}
+jw2vol <- jw2 %>% 
+  select(
+    mouse_ID, 
+    test_group, 
+    contains("tumor_vol_")
+    )
+jw2vol
+```
+
+## Trim the cases
+
+We only want a subset of the test_groups. Looking at `jw2vol` we can see those happen to be the first 11 cases in the data set. We'll `slice` them out, throwing away the rest.
+
+```{r}
+jw2vol <- jw2vol %>% 
+  slice(
+    1:11
+    )
+jw2vol
+```
+
+## Go long
+
+The iteration above is 15 columns wide. We use the `gather` function to make it long, and only 4 columns wide. 
+
+Importantly, the new variable `measurement` is intended to be an intermediate. It has the information about day of measurement within the character string, which we'll pull out in a moment. First, make it long:
+
+```{r}
+jw2vol <- jw2vol %>% 
+  gather(
+    measurement, 
+    tumor_vol, 
+    -mouse_ID, 
+    -test_group
+    )
+jw2vol
+```
+
+## Pull out the values for the day variable
+
+In the preceding step, all of the values for the measurement variable begin with the same character string. Getting rid of that will leave us with the day number.
+
+`str_remove_all` is from the `stringr` package and `transmute` is a `dplyr` function. All are from the [tidyverse](https://www.tidyverse.org/packages/).
+
+We want the resulting object to be a data frame with three variables. One each for the day, mouse_ID, and tumor volume. Having confirmed the cases are from the group we want, we no longer need a test_group variable. 
+
+```{r}
+jw2vol <- jw2vol %>% 
+  transmute(
+  day=str_remove_all(measurement, "tumor_vol_"),
+  mouse_ID,
+  tumor_vol
+  )
+jw2vol
+```
+
+## Convert day to numeric
+
+Because they are characters the values for days may be out of sequence (they were on my machine). Converting them to numeric should retain the correct order. Later, we'll convert the day variable to a factor for plotting and ANOVA purposes. 
+
+
+```{r}
+jw2vol <- jw2vol %>% 
+  transmute(
+    day=(as.numeric(day)),
+    mouse_ID,
+    tumor_vol
+    )
+jw2vol
+```
+
+## Convert tumor_vol to numeric
+
+You may have noticed above that R read the tumor_vol values as character. Here we convert them to numeric, and then round their values to 1 significant digit.
+
+
+```{r}
+jw2vol <- jw2vol %>% 
+  transmute(
+    tumor_vol=round(as.numeric(tumor_vol), 
+                    1
+                    ), 
+    mouse_ID, 
+    day
+    )
+jw2vol
+```
+
+## Deal with that NA
+
+You notice a missing tumor_vol value for a mouse_ID 43 on day 17. 
+
+There are two options when confronted with NA values. De-list or impute. 
+
+Since this is a repeated measures design, delisting this one of a string of repeated values would mean losing all of the data on the mouse. Ugh.
+
+Since we have 10 other values for day 17, it makes sense to impute a value for 43, on their bias. We'll take the means of all cases on day 17 and replace the NA with that value. First, check the means. Second, replace.
+
+```{r}
+means <- group_by(
+  jw2vol, day
+  ) %>% 
+  summarise(
+    mean=mean(tumor_vol, na.rm=T)
+    )
+
+means
+
+jw2vol <-jw2vol %>% 
+  replace_na(
+    list(tumor_vol=means$mean[1]
+         )
+    )
+
+jw2vol
+```
+
+## Convert variables to factor
+
+ANOVA are called factorial analyses. That's because the predictor variable is a factor. We need to convert the day variable into a factor. While we're at it, we'll convert the mouse_ID into a factor, too, so that it plays nice with ggplot and ANOVA.
+
+```{r}
+jw2vol <- jw2vol %>% 
+  mutate(
+    mouse_ID=as.factor(mouse_ID), 
+    day=as.factor(day)
+    )
+jw2vol
+```
+
+## Plot the data
+
+Repeated measures on subjects is the primary feature of this data set. Within each mouse_ID, every measurement is intrinsically-related to every other measurement. Point-to-point graphing illustrates this. 
+
+Here's all the data! It's beautiful.
+
+```{r}
+ggplot(jw2vol, aes(
+  day, tumor_vol, group=mouse_ID, color=mouse_ID))+
+  geom_point()+
+  geom_line()+
+  #scale_color_brewer(palette="Paired")+
+  scale_color_viridis(discrete=T)+
+  theme_classic()
+```
+
+
