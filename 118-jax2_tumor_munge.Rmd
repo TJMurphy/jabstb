@@ -7,9 +7,11 @@ library(viridis)
 library(RColorBrewer)
 ```
 
-Reproducibility is when someone given your data can conduct the same analysis, arriving at the same parameter estimates and conclusions. The data processing steps of an analysis are a critical determinant of reproducibility. Ideally, this is performed in a breadcrumbs process, where each step is transparent. That's what R scripts do.
+Reproducibility is when someone who has your data can conduct the same analysis, arriving at the same parameter estimates and conclusions. The data processing steps of an analysis are perhaps the most critical determinant of reproducibility. Ideally, this is performed using a breadcrumbs process, where each step is traceable. 
 
-Here's an example of what I mean by that. I thought it would be interesting to try and pull this off using mostly tidyverse functions, if possible.
+That's what R scripts do and why they are better than munging data in GUI software, such as excel or other stats packages.
+
+Here's an example of what I mean by an R script munge. I thought it would be interesting to try and pull this off using mostly tidyverse functions, if possible.
 
 The Jaxwest2 data represent an experiment to establish tumor xenograft growth in $NOD.CB17-Prkdc^{scid}/J$, an immunodeficient mouse strain.          
 
@@ -71,7 +73,7 @@ The script below creates the object `jw2`, which is a data frame of 103 variable
 
 Note how `jaxwest2.xls` is otherwise untouched. No changes have been made locally to the original source file. That's important because it is good reproducible practice.
 
-```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r message=FALSE, warning=FALSE, paged.print=TRUE}
 jw2 <-"datasets/jaxwest2.xls" %>%
   read_excel(
     skip=1, 
@@ -114,8 +116,8 @@ We only want a subset of the test_groups. Looking at `jw2vol` we can see those h
 
 ```{r}
 jw2vol <- jw2vol %>% 
-  slice(
-    1:11
+  filter(
+    test_group == "Control (no vehicle)"
     )
 jw2vol
 ```
@@ -244,5 +246,6 @@ ggplot(jw2vol, aes(
   scale_color_viridis(discrete=T)+
   theme_classic()
 ```
+
 
 
