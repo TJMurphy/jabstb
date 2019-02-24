@@ -9,14 +9,13 @@ library(ez)
 library(lsr)
 ```
 
-If you haven't yet read the ANOVA big picture, [this is worth reading](\@ref(#introanova))
-
+If you haven't yet read the ANOVA big picture, [this is worth reading](\#introanova))
 
 ## Using `ezANOVA`
 
-R has several functions to run ANOVA. In this course we're going to use `ezANOVA` from the `ez` package because I feel the syntax for defining CR vs RM is pretty helpful.
+R has several functions to run ANOVA. In this course we're going to use `ezANOVA` from the `ez` package because I feel the syntax for defining CR vs RM is a bit more straightforward.
 
-In this document, we'll run through an analysis of a one-way completely randomized ANOVA data set as 'how to' example.
+In this chapter, we'll run through an analysis of a one-way completely randomized ANOVA data set as 'how to' example.
 
 ## The chickwt data set 
 
@@ -63,7 +62,9 @@ ggplot(chickwts, aes(feed, weight))+
                fun.args = list(mult=1), 
                geom="crossbar", 
                width=0.2, 
-               color="red")
+               color="red"
+               ) + 
+  theme_classic()
 
 ```
 
@@ -77,13 +78,15 @@ We can imagine designing an experiment like this with either of 3 experimental o
 
 3) Perhaps we just want to know if any of the feeds differ in causing weight gain, but we aren't interested in which specific feeds differ? We could answer that question using the F-test result, and not comparing any groups post hoc.
 
-Those objectives are scientifically-driven. 
+Each of those objectives are scientifically-driven. They should be addressed *before* running an experiment so that an unbiased analysis is conducted *after* the data are in. 
 
 Other than, perhaps, how we order our data in the data set, which of these objectives is true doesn't influence how we run the `ezANOVA` function per se. However, the objective will influence which post hoc analysis we conduct.
 
 ### Run the chickwts One Way ANOVA
 
-First, ezANOVA requires a 'wid', which is a unique ID variable for each independent replicate. We need to add one to the chickwts data set. Since all the measures are independent, we'll just do that by row number. At the same time we'll convert the integer to a factor so ezANOVA won't bark at us. 
+First, ezANOVA requires a 'wid', which is a unique ID variable for each independent replicate. 
+
+We need to add one to the chickwts data set. Since all the measures are independent, we'll just do that by row number. At the same time we'll convert the integer to a factor so ezANOVA won't bark at us. 
 
 ```{r}
 chickwts$ID <- as.factor(1:nrow(chickwts))
@@ -91,13 +94,17 @@ chickwts$ID <- as.factor(1:nrow(chickwts))
 
 You should look at R's help for ezANOVA `?ezANOVA` to understand these test arguments. The help page is pretty clear for most of these. 
 
-Since we don't use the term 'dependent variable' much in this course, to be clear, 'dv' is the outcome response variable.
+Since we don't use the term 'dependent variable' much in this course, to be clear, 'dv' is the outcome response variable. We have to specify it in the `ezANOVA` arguments.
 
-If the factor is completely randomized, list it as a 'between' argument. If the factor is related/repeated measures, list it as a 'within' argument.
+If measurements for levels of the factor are not instrinsically-linked, if they are distributed to each replicate independently, the design is completely randomized. That factor should be listed in the function using a 'between' argument. 
+
+If measurements for levels of the factor are intrinsically-linked, it is arelated/repeated measures design. List it as a 'within' argument, rather than 'between'. 
+
+Here, the `feed` factor is `between`. Every chick was randomly assigned a level of feed.
 
 Notice that `ezANOVA` is a function. Use it to create a list object called `my.ezaov`, which has all of the output information. The object name could have been `foo`. We call specific elements from the `my.ezaov` object to see the results.
 
-```{r}
+```{r paged.print=FALSE}
 my.ezaov <- ezANOVA(
             data = chickwts, 
             wid = ID, 
@@ -106,10 +113,11 @@ my.ezaov <- ezANOVA(
             type = 2, 
             return_aov = T, 
             detailed = T)
+my.ezaov
 
-my.ezaov$ANOVA
-my.ezaov$Levene
-my.ezaov$aov
+# my.ezaov$ANOVA
+# my.ezaov$Levene
+# my.ezaov$aov
 ```
 
 ### Interpreting the One-Way CR ANOVA Output
@@ -199,7 +207,7 @@ Option 1: Simply ignore the result. The luck of the draw with small samples can 
 
 Option 2:  Transform the data to homogenize outliers and variance, or switch the analysis to a Kruskal-Wallis nonparametric test. 
 
-## Post hoc pairwise comparisons
+## Post hoc pairwise comparisons {#posthoc}
 
 If the ANOVA F test for the factor is extreme you may be interested in knowing which treatment groups differ. That's achieved by conducting post hoc analysis, which typically involves multiple group comparisons. 
 
@@ -329,8 +337,6 @@ PostHocTest(my.ezaov$aov, method = "lsd")
 All of the following scripts do adjust p-values for multiple comparisons. Therefore, notice how they increase the p-values we see in the output above. Frequently, "significant" unadjusted p-values become "nonsignificant" after these adjustments.
 
 ##### Other posthoc tests
-
-
 
 
 **Dunnett's**: This post hoc method differs from above because it only does dependent t tests, on a subset of the means. For example, use this when all group means are compared to the negative control mean. 

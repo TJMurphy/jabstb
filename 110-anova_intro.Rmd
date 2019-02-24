@@ -3,7 +3,7 @@
 library(tidyverse)
 library(RColorBrewer)
 ```
-The choice of any statistical design and analysis is always driven by the type of outcome and predictor variables involved. Recall that all variables are either continuous or discrete. Furthermore, it's helpful to think of outcome variables further classified as either [measured, ordered or sorted](\#data). 
+The choice of any statistical design and analysis is always driven by the type of outcome and predictor variables involved. Recall that all variables are either continuous or discrete. Furthermore, it's helpful to think of outcome variables further classified as either [measured, ordered or sorted](\#data), where measured variables are continuous, and ordered and sorted are discrete. 
 
 Once the dependent variable is deemed to be continuous measured, the experimental design model is determined by the number of explanatory groups involved. If the grouping factor is discrete, use t-tests with two or fewer.
 
@@ -295,7 +295,7 @@ The total sum of squares is the sum of the squared deviation from all data point
 
 The sum of squares for the genotype effect is sum of the weighted squared deviation between the group means, $\bar y_j$ and the grand mean. Here, $n_j$ is the sample size within the $j^{th}$ group.  
 
-\[SS_{genotype}=\sum_{j=1}^kn_j(\bar y_j-\hat y)\]
+\[SS_{genotype}=\sum_{j=1}^kn_j(\bar y_j-\hat y)^2\]
 
 Some software refers to this variation as the "treatment" sum of squares.
 
@@ -429,7 +429,6 @@ For example, an experiment with $k$ groups may be designed to test which of seve
 
 There are several ways to run these post-hoc group comparisons. What is most important, however, is these be done in a way that keeps the FWER below the pre-set type1 error threshold. What this means 
 
-
 ## Completely randomized or related measures
 
 Up until now we've discussed ANOVA in its simplest use case, the one-way completely randomized (CR) ANOVA. 
@@ -448,7 +447,7 @@ Examples of intrinsically-linked subjects include
 
 There are certainly others.
 
-Since an RM design involves taking multiple measurements from each of the same replicates, there is variation associated with the replicates that can be accounted for. That source of variation is no longer in the residual error term, but can be taken right into the model. 
+Since an RM design involves taking multiple measurements from each of the same replicates, each replicate may vary randomly. That random variation can be accounted for, too. That source of variation is no longer in the residual error term, but can be taken right into the model. 
 
 ### The problem of lost data in related measures designs
 
@@ -460,15 +459,21 @@ Second, over the course of any experiment it is possible to lose specific respon
 
 CR ANOVA is tolerant of such losses. That leads to a missing replicate, and an unbalanced data sets, but it's only one or a few values out of many.
 
-That is not the case with related measures designs, whose data sets cannot be unbalanced. All of the values for every level of every factor for every replicate must be included. If any values are missing for a given replicate, all of the remaining values for that replicate have to be censored. 
+That is not the case with related measures designs. All of the values for every level of every factor for every replicate must be included. If any values are missing for a given replicate, all of the remaining values for that replicate either have to be censored, or the missing values should be imputed. 
 
 The missing data problem becomes amplified in two way and three way related measures ANOVA! Those experiments tend to have more groups, meaning more data is at risk of being censored.
 
-Researchers often ask if it is reasonable to 'flip' to a completely randomized analysis when this happens? 
+Researchers often ask if it is reasonable to 'flip' to a completely randomized analysis when they notice too many values are missing from their data set. 
 
-No.
+No, it is not reasonable. The type of experimental design is scientifically-driven. Intrinsically-linked measurements are not independent, and should not be analyzed as if they are independent. To do so violates one of the two primary assumptions of the statistical analysis.
 
-There are a couple of options to deal with this, and both happen in planning. First, where possible, include an extra replicate or two as a hedge over what the power analysis suggests is necessary. Second, don't make a RM design too over-ambitious. Limit the number of levels to that which is scientifically important. Third, be aware of the risk. Is the experimental protocol difficult, with intrinsic barriers to efficiently collecting data?
+There are a few options to deal with this, and both happen in planning. 
+
+First, where possible, include an extra replicate or two as a hedge over what the power analysis suggests is necessary. 
+
+Second, don't make a RM design too over-ambitious. Limit the number of levels to that which is scientifically important. 
+
+Third, be aware of the risk of lost values. Is the experimental protocol difficult? Are any protocol steps at high risk of failure? Are there any intrinsic barriers to efficiently collecting the data?
 
 ## Two-way ANOVA
 
@@ -478,9 +483,9 @@ What is an interaction? Simply, it is a response that is greater (or lesser) tha
 
 Let's go back to the genotype blood_glucose problem. We'll add a factor, and simplify the study a bit. We're interested in a gene that, when absent, raises blood glucose. We're also interested in a drug that, when present, lowers blood glucose. 
 
-We have reason to hypothesize that a genotype:drug interaction might exist. For example, the gene encodes a protein that metabolizes our drug, thus impairing the drug's ability to lower blood glucose.
+We have reason to hypothesize that a genotype:drug interaction might exist. For example, the gene might encode a protein that metabolizes our drug, thus impairing the drug's ability to lower blood glucose.
 
-We'll design a $2\times 2$ experiment that has only the presence or absence of each of these factors.
+We'll simulate a $2\times 2$ experiment that has only the presence or absence of each of these factors.
 
 Here's the data:
 
@@ -507,23 +512,28 @@ ggplot(test, aes(genotype, blood_glucose, color=drug))+
   geom_segment(aes(x="WT", y=y0, xend="KO", yend=yend0))
 ```
 
-An interaction effect can be represented by the differing slopes of those two lines. If the lines are not parallel, it means that the effect of the drug is not the same at both levels of genotype. Or you could say the effect of the genotype is not the same at both levels of the drug. Whatever.
+An interaction effect can be represented by the differing slopes of those two lines. If the lines are not parallel, it means that the effect of the drug is not the same at both levels of genotype. Or you could say the effect of the genotype is not the same at both levels of the drug. Whatever. 
+
+The statistical term used to describe such phenomena is that the two factors interacted.
 
 Thus, a statistical interaction occurs when the effects of two factors are not the same across all of their levels.
 
-Here's the ANOVA table for those data. All three F-tests are extreme. Since the F-test for the genotype:drug interaction is extreme, we can reject the null that there is no interaction between them. 
+Here's a quick ANOVA table for those data. It has an F test for each of the factors genotype and drug, and an F test for the genotype:drug interaction. All three F-tests are extreme. 
 
 ```{r}
 anova(lm(blood_glucose ~ genotype + drug +genotype*drug, test))
 ```
- 
- It might be useful to see the data for what follows.
+
+Since the F-test for the genotype:drug interaction is extreme, we can reject the null that there is no interaction between them. Furthermore, the existence of the interaction effect complicates the interpretation of the effects of the genotype and drug factors. Generally, an interaction effect supercedes an effect of either factor, alone. 
+
+Although genotype seems to have a strong effect on glucose levels, that's really blunted in the presence of drug. And although the drug seems to reduce glucose, that effect becomes remarkably prominent when the genotype changes. When interactions occur, the effect of one factor cannot be interpreted without condition on the other factor!
+
+It might be useful to see the data for the discussion that follows.
  
 ```{r echo=FALSE}
 knitr::kable(test)
 
 ```
-
 
 Four sources of variation are accounted for: the main effect of genotype, the main effect of drug, the interaction between drug and genotype, and the residual error.
 
@@ -599,13 +609,31 @@ Don't confuse ezANOVA's use of between and within the way it is used elsewhere i
 
 Specify a completely random design by defining the **'between'** variable as your factor name. The between here is meant to imply comparisons between groups. 
 
-Specify a  related measures design by defining the **`within`** variable as your factor name. The within here is meant to imply comparisons within replicates. 
+Specify a related measures design by defining the **`within`** variable as your factor name. The within here is meant to imply comparisons within replicates. 
 
-Sum of squares `type` refers to the method of calculating the sum of squares: type 1, type 2 or type 3. [Type1, 2 and 3 sum of squares are explained here](https://www.r-bloggers.com/anova-%E2%80%93-type-iiiiii-ss-explained/)
+#### Type of calculation
 
-Suffice to say this is important to not overlook and again serves to illustrate providing good detail about the software used to analyze data. The most significant point to understand is that some commercial software uses type 3 calculations by default. As a consequence, given the same data set, the results from those packages may not coincide perfectly with those of ezANOVA. The latter gives you the option to specify the `type` for analysis. 
+There are three ways ANOVA can be calculated, which are referred to as type I, type II and type III. 
 
-My recommendation is to stick with the default, `type 2`. 
+When an experiment is balanced, which is to say it has equal sample sizes per group, the type of calculation is immaterial. In that case,type I, II and III yield the same output.
+
+Unbalanced experiments are those in which the sample sizes of groups are not the same. As long as the differences are not too large, the presence of unbalance is usually not a problem. But it can impact the precise output of different ANOVA functions, depending upon whether they perform type I, II or III calculations. 
+
+This causes some confusion, particularly when comparing the output of different ANOVA functions in R (eg, `Anova` vs `aov` vs `anova` vs `ezAnova`) and/or commercial software (eg, SAS, SPSS, Prism). The researcher scratchers her head, wonders which is "correct".
+
+In one sense, they are all correct.  
+
+Type I, II and II sum of squares calculations are explained [here](https://www.r-bloggers.com/anova-%E2%80%93-type-iiiiii-ss-explained/) and also [here](https://mcfromnz.wordpress.com/2011/03/02/anova-type-iiiiii-ss-explained/).
+
+Suffice to say this is important to not overlook. This serves to illustrate how providing good detail about the software used to analyze data is important for reproducibility. 
+
+The most significant point to understand is that some commercial software uses type 3 calculations by default. As a consequence, given the same data set, the results from those packages may not coincide perfectly with those of ezANOVA unless using a `type = 3` argument in the function.  
+
+My recommendation is to use `type = 2` when interested in testing hypotheses about the main effects of factors, and there is no interest in an interaction if working on a two- or three-way ANOVA data set. That's because `type = 2` is purported to yield consistently higher power for main effects.
+
+Use `type = 3` when, instead, the experiment is designed to test whether an interaction occurs between factors. When an interaction occurs, the main effects are not interpretable.
+
+Type I sum of squares are calculated when using the `anova` and `aov` functions of base R. This is otherwise known as "sequential" sum of squares calculation. On multifactor data with those functions, the results can differ given the order by which the factors are argued. Thus, `aov(lm(outcome~factorA + factorB))` might yield slightly different results compared to `aov(lm(outcome~factorB + factorA))`. The idea is to calculate the effect on a factor that is most interesting to you scientifically, while "controlling" for the effect of the other factor. 
 
 ## Alternatives to ANOVA
 
