@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 25 One-way ANOVA CR | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <title>Chapter 26 One-way ANOVA Related Measures | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 25 One-way ANOVA CR | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:title" content="Chapter 26 One-way ANOVA Related Measures | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 25 One-way ANOVA CR | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta name="twitter:title" content="Chapter 26 One-way ANOVA Related Measures | JABSTB: Statistical Design and Analysis of Experiments with R" />
   
   <meta name="twitter:description" content="Experimental biostatistics using R." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="fdistr.html">
-<link rel="next" href="onewayRM.html">
+<link rel="prev" href="onewayanova.html">
+<link rel="next" href="jaxwest2.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -450,459 +450,167 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="onewayanova" class="section level1">
-<h1><span class="header-section-number">Chapter 25</span> One-way ANOVA CR</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
-<span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(ggformula)
-<span class="kw">library</span>(DescTools)
+<div id="onewayRM" class="section level1">
+<h1><span class="header-section-number">Chapter 26</span> One-way ANOVA Related Measures</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(readxl)
+<span class="kw">library</span>(viridis)
 <span class="kw">library</span>(ez)
-<span class="kw">library</span>(lsr)</code></pre></div>
-<p>If you haven’t yet read the ANOVA big picture, <a href="introanova.html#introanova">this is worth reading</a>)</p>
-<div id="using-ezanova" class="section level2">
-<h2><span class="header-section-number">25.1</span> Using <code>ezANOVA</code></h2>
-<p>R has several functions to run ANOVA. In this course we’re going to use <code>ezANOVA</code> from the <code>ez</code> package because I feel the syntax for defining CR vs RM is a bit more straightforward.</p>
-<p>In this chapter, we’ll run through an analysis of a one-way completely randomized ANOVA data set as ‘how to’ example.</p>
-</div>
-<div id="the-chickwt-data-set" class="section level2">
-<h2><span class="header-section-number">25.2</span> The chickwt data set</h2>
-<p>This data set in R’s base. It compares the influence of 6 different types of food sources on chick weight. There is one predictor variable, the factor ‘feed’, which is tested at 6 different levels (the various food sources).</p>
-<p>There has one continuous outcome variable (weight). We can assume the chicks are outbred, and thus not intrinsically-related, and that they have been randomly assigned to a level of feed, and have been weighed after a period of time.</p>
-<p>This is a classic one-way completely randomized ANOVA design. This chapter illustrates how to go through an analysis of the data.</p>
-<div id="inspect-the-data" class="section level3">
-<h3><span class="header-section-number">25.2.1</span> Inspect the data</h3>
-<p>The next few scripts involve inspecting the data set, which should always be done prior to running any statistical tests.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(chickwts)
-<span class="co">#take a look at the data structure, depending upon how you like to view data</span>
-<span class="kw">str</span>(chickwts)</code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    71 obs. of  2 variables:
-##  $ weight: num  179 160 136 227 217 168 108 124 143 140 ...
-##  $ feed  : Factor w/ 6 levels &quot;casein&quot;,&quot;horsebean&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chickwts</code></pre></div>
-<pre><code>##    weight      feed
-## 1     179 horsebean
-## 2     160 horsebean
-## 3     136 horsebean
-## 4     227 horsebean
-## 5     217 horsebean
-## 6     168 horsebean
-## 7     108 horsebean
-## 8     124 horsebean
-## 9     143 horsebean
-## 10    140 horsebean
-## 11    309   linseed
-## 12    229   linseed
-## 13    181   linseed
-## 14    141   linseed
-## 15    260   linseed
-## 16    203   linseed
-## 17    148   linseed
-## 18    169   linseed
-## 19    213   linseed
-## 20    257   linseed
-## 21    244   linseed
-## 22    271   linseed
-## 23    243   soybean
-## 24    230   soybean
-## 25    248   soybean
-## 26    327   soybean
-## 27    329   soybean
-## 28    250   soybean
-## 29    193   soybean
-## 30    271   soybean
-## 31    316   soybean
-## 32    267   soybean
-## 33    199   soybean
-## 34    171   soybean
-## 35    158   soybean
-## 36    248   soybean
-## 37    423 sunflower
-## 38    340 sunflower
-## 39    392 sunflower
-## 40    339 sunflower
-## 41    341 sunflower
-## 42    226 sunflower
-## 43    320 sunflower
-## 44    295 sunflower
-## 45    334 sunflower
-## 46    322 sunflower
-## 47    297 sunflower
-## 48    318 sunflower
-## 49    325  meatmeal
-## 50    257  meatmeal
-## 51    303  meatmeal
-## 52    315  meatmeal
-## 53    380  meatmeal
-## 54    153  meatmeal
-## 55    263  meatmeal
-## 56    242  meatmeal
-## 57    206  meatmeal
-## 58    344  meatmeal
-## 59    258  meatmeal
-## 60    368    casein
-## 61    390    casein
-## 62    379    casein
-## 63    260    casein
-## 64    404    casein
-## 65    318    casein
-## 66    352    casein
-## 67    359    casein
-## 68    216    casein
-## 69    222    casein
-## 70    283    casein
-## 71    332    casein</code></pre>
-<p>It is also helpful to calculate some descriptive stats for inspection:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cw1 &lt;-<span class="st"> </span>chickwts <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(feed) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(
-    <span class="dt">mean=</span> <span class="kw">mean</span>(weight),
-    <span class="dt">median=</span><span class="kw">median</span>(weight),
-    <span class="dt">sd=</span> <span class="kw">sd</span>(weight),
-    <span class="dt">n =</span> <span class="kw">n</span>(),
-    <span class="dt">var=</span><span class="kw">var</span>(weight)
-    )
-cw1</code></pre></div>
-<pre><code>## # A tibble: 6 x 6
-##   feed       mean median    sd     n   var
-##   &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
-## 1 casein     324.   342   64.4    12 4152.
-## 2 horsebean  160.   152.  38.6    10 1492.
-## 3 linseed    219.   221   52.2    12 2729.
-## 4 meatmeal   277.   263   64.9    11 4212.
-## 5 soybean    246.   248   54.1    14 2930.
-## 6 sunflower  329.   328   48.8    12 2385.</code></pre>
-<p>The means and medians are about equal within each group. That’s a quick and dirty way to suggest no skew. Overall sample size is 71, distributed as 10-14 replicates per group, it’s a little unbalanced. But within acceptable limits. The variances are not equivalent, but are they unequal? Levene’s test in the ANOVA will provide that answer.</p>
-<p>Plot the data for a look. Simply looking at the data graphically goes a long way to ensuring this is a one-way ANOVA design. Jitter plots are a great way to see group data like this. I like the <code>crossbar</code> geom to overlay some summary stats.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(chickwts, <span class="kw">aes</span>(feed, weight))<span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_sdl, 
-               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>), 
-               <span class="dt">geom=</span><span class="st">&quot;crossbar&quot;</span>, 
-               <span class="dt">width=</span><span class="fl">0.2</span>, 
-               <span class="dt">color=</span><span class="st">&quot;red&quot;</span>
-               ) <span class="op">+</span><span class="st"> </span>
+<span class="kw">library</span>(lme4)</code></pre></div>
+<p>The analysis, interpretation and presentation of a one-way ANOVA related/repeated measures experimental design is covered in this chapter.</p>
+<p>This design has one predictor variable that is imposed at three or more levels.</p>
+<p>But the essential feature of the RM design that distinguishes it from a CR design is that the measurements of the outcome variable are intrinsically related for all levels of the predictor. Thus, a train of measurements, one for each level of the predictor variable, are taken from a single independent replicate.</p>
+<p>An complete experiment is therefore comprised of many independent replicates, within each of which are collected related, intrinsically-linked measurements.</p>
+<p>We’ll use data the Jaxwest2 study to illustrate this. In this example, growth of human tumors in immunodeficient mice is assessed by repeated measurements of size over time within each of several subjects.</p>
+<p>The outcome or dependent variable is tumor volume, in <span class="math inline">\(mm^3\)</span>. Tumor volumes are calculated after the researchers measured the lengths and widths of tumors using calipers.</p>
+<p>The predictor variable is time, in units of days. Although time is usually a continuous/measured variable, we’ll treat it as a discrete factorial variable for this analysis.</p>
+<p>The model organism is an immunodeficient mouse strain. Each mouse is an experimental unit that has been implanted with HT29 human colon tumor cells. The experiment is designed to determine whether these cells will grow (rather than be rejected by the host immune system).</p>
+<p>The overall scope of the experiment is to test whether the immunodeficient mouse strain is suitable to study the properties of human cancers. A meaningful effect of the time variable in the ANOVA analysis implies that, yes, human tumors can grow in this host.</p>
+<div id="data-prep" class="section level2">
+<h2><span class="header-section-number">26.1</span> Data prep</h2>
+<p>The data are in a file called <code>Jaxwest2.xls</code>, which can be downloaded from the Jackson Labs <a href="https://phenome.jax.org/projects/Jaxwest2">here</a>. That site offers more details about the study design than are listd here.</p>
+<p>The munge <a href="jaxwest2.html#jaxwest2">has already been done conducted</a>. For clarity, the script won’t be shown again here. However, it is used in this chapter to create a data frame object <code>jw2vol</code> to be used for plotting and statistical analysis.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(jw2vol, <span class="kw">aes</span>(
+  day, tumor_vol, <span class="dt">group=</span>mouse_ID, <span class="dt">color=</span>mouse_ID))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">3</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_classic</span>()</code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="figure"><span id="fig:Plot"></span>
+<img src="jabstb_files/figure-html/Plot-1.png" alt="Connected points illustrate each replicate and the repeated-measures aspect of the experimental design." width="480" />
+<p class="caption">
+Figure 26.1: Connected points illustrate each replicate and the repeated-measures aspect of the experimental design.
+</p>
 </div>
 </div>
-<div id="run-the-anova" class="section level2">
-<h2><span class="header-section-number">25.3</span> Run the ANOVA</h2>
-<p>We can imagine designing an experiment like this with either of 3 experimental objectives in mind.</p>
-<ol style="list-style-type: decimal">
-<li><p>Perhaps we’re interested mostly in whether any feeds are better than others for achieving weight gain? We could answer that by making all possible pairwise comparisons. Since there are 6 levels of the factor feed, that would involve <span class="math inline">\(C=\frac{6(6-1)}{2}=15\)</span> comparisons(!!)</p></li>
-<li><p>Imagine casein is the standard feed, and we wish to know if any of the other feeds differ from this standard? We would compare casein to every feed. That would involve only 5 comparisons.</p></li>
-<li><p>Perhaps we just want to know if any of the feeds differ in causing weight gain, but we aren’t interested in which specific feeds differ? We could answer that question using the F-test result, and not comparing any groups post hoc.</p></li>
-</ol>
-<p>Each of those objectives are scientifically-driven. They should be addressed <em>before</em> running an experiment so that an unbiased analysis is conducted <em>after</em> the data are in.</p>
-<p>Other than, perhaps, how we order our data in the data set, which of these objectives is true doesn’t influence how we run the <code>ezANOVA</code> function per se. However, the objective will influence which post hoc analysis we conduct.</p>
-<div id="run-the-chickwts-one-way-anova" class="section level3">
-<h3><span class="header-section-number">25.3.1</span> Run the chickwts One Way ANOVA</h3>
-<p>First, ezANOVA requires a ‘wid’, which is a unique ID variable for each independent replicate.</p>
-<p>We need to add one to the chickwts data set. Since all the measures are independent, we’ll just do that by row number. At the same time we’ll convert the integer to a factor so ezANOVA won’t bark at us.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chickwts<span class="op">$</span>ID &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(chickwts))</code></pre></div>
-<p>You should look at R’s help for ezANOVA <code>?ezANOVA</code> to understand these test arguments. The help page is pretty clear for most of these.</p>
-<p>Since we don’t use the term ‘dependent variable’ much in this course, to be clear, ‘dv’ is the outcome response variable. We have to specify it in the <code>ezANOVA</code> arguments.</p>
-<p>If measurements for levels of the factor are not instrinsically-linked, if they are distributed to each replicate independently, the design is completely randomized. That factor should be listed in the function using a ‘between’ argument.</p>
-<p>If measurements for levels of the factor are intrinsically-linked, it is arelated/repeated measures design. List it as a ‘within’ argument, rather than ‘between’.</p>
-<p>Here, the <code>feed</code> factor is <code>between</code>. Every chick was randomly assigned a level of feed.</p>
-<p>Notice that <code>ezANOVA</code> is a function. Use it to create a list object called <code>my.ezaov</code>, which has all of the output information. The object name could have been <code>foo</code>. We call specific elements from the <code>my.ezaov</code> object to see the results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my.ezaov &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(
-            <span class="dt">data =</span> chickwts, 
-            <span class="dt">wid =</span> ID, 
-            <span class="dt">dv =</span> weight, 
-            <span class="dt">between =</span> feed,
-            <span class="dt">type =</span> <span class="dv">2</span>, 
-            <span class="dt">return_aov =</span> T, 
-            <span class="dt">detailed =</span> T)</code></pre></div>
-<pre><code>## Warning: Data is unbalanced (unequal N per group). Make sure you specified
-## a well-considered value for the type argument to ezANOVA().</code></pre>
-<pre><code>## Coefficient covariances computed by hccm()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my.ezaov</code></pre></div>
+<div id="run-the-anova-1" class="section level2">
+<h2><span class="header-section-number">26.2</span> Run the ANOVA</h2>
+<p>Running the function is straightforward.</p>
+<p>The data have been munged previously into the data frame <code>jw2vol</code>. See above and <a href="jaxwest2.html#jaxwest2">here</a>.</p>
+<p>Because this involves repeated measures for each mouse, the time variable <code>day</code> is argued as <code>within</code>.</p>
+<p>Type 2 sum of squares is chosen for calculation because the only scientific concern is the main effect of the <code>day</code>. Strictly, does the value of “day” have any influence on tumor growth? In other words, does the tumor grow with time?</p>
+<p>A detailed ANOVA table is called. There are additional arguments that could be made for custom situations. Consult <code>?ezANOVA</code> for more information.</p>
+<p>The model for the RM design has two components, one for <code>day</code> and the other for the <code>mouse_ID</code>. The SS partitioning for the complete model is <span class="math inline">\(SS_{total}=SS_{day} + SS_{error}\)</span>, where <span class="math inline">\(SS_{error}= SS_{mouse_ID} + SS_{residual}\)</span>. Because it is a repeated measures design, we can account for the random variation associated with differences in mice, <span class="math inline">\(SS_{mouse_ID}\)</span>. Thereby using a reduced error term, <span class="math inline">\(SS_{residual}\)</span>, in the F-test for the effect of <code>day</code>.</p>
+<p>There are a few ways to output the analysis. Here’s the simplest:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">one_wayRM &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(<span class="dt">data =</span> jw2vol,
+                     <span class="dt">dv =</span> tumor_vol,
+                     <span class="dt">wid =</span> mouse_ID,
+                     <span class="dt">within =</span> day,
+                     <span class="dt">type =</span> <span class="dv">2</span>,
+                     <span class="dt">detailed =</span>T,
+                     <span class="dt">return_aov=</span>F)
+one_wayRM</code></pre></div>
 <pre><code>## $ANOVA
-##   Effect DFn DFd      SSn    SSd       F           p p&lt;.05       ges
-## 1   feed   5  65 231129.2 195556 15.3648 5.93642e-10     * 0.5416855
-## 
-## $`Levene&#39;s Test for Homogeneity of Variance`
-##   DFn DFd      SSn      SSd         F         p p&lt;.05
-## 1   5  65 4389.241 76154.92 0.7492639 0.5896095      
-## 
-## $aov
-## Call:
-##    aov(formula = formula(aov_formula), data = data)
-## 
-## Terms:
-##                     feed Residuals
-## Sum of Squares  231129.2  195556.0
-## Deg. of Freedom        5        65
-## 
-## Residual standard error: 54.85029
-## Estimated effects may be unbalanced</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># my.ezaov$ANOVA</span>
-<span class="co"># my.ezaov$Levene</span>
-<span class="co"># my.ezaov$aov</span></code></pre></div>
+##        Effect DFn DFd      SSn     SSd         F            p p&lt;.05
+## 1 (Intercept)   1  10 25544522 2479228 103.03417 1.385832e-06     *
+## 2         day  12 120 27137472 3115620  87.10135 2.828478e-53     *
+##         ges
+## 1 0.8203288
+## 2 0.8290727</code></pre>
 </div>
-<div id="interpreting-the-one-way-cr-anova-output" class="section level3">
-<h3><span class="header-section-number">25.3.2</span> Interpreting the One-Way CR ANOVA Output</h3>
-<p>The ezANOVA output prints 3 list objects by default:</p>
-<ul>
-<li>$ANOVA (which is the first data frame)</li>
-<li>$<code>Levene's Test for Homogeneity of Variance</code> (which is the 2nd data frame)</li>
-<li>$aov (which is the end of the console output)</li>
-</ul>
-<p>In fact, there is a great deal more computed that is not printed, which you can visualize in the console by typing <code>str(my.ezaov)</code>.</p>
-<div id="anova-the-anova-table" class="section level4">
-<h4><span class="header-section-number">25.3.2.1</span> $ANOVA: The ANOVA table</h4>
-<p>For a CR one way ANOVA design, the SS are partitioned as follows, in general: <span class="math inline">\(SS_{total}=SS_{model}+SS_{residual}\)</span>.</p>
-<p>In this example, <span class="math inline">\(SS_{model}= SS_{feed}\)</span>.</p>
-<p>Thus, the ANOVA table summarizes the feed model.</p>
-<p>The DFn = 5 corresponds to the 6 groups, less 1 degree of freedom (one is lost to calculate mean of groups (sort of)) for the model source of variance.</p>
-<p>The DFn = 65 corresponds to the degrees of freedom for the residuals (one df is lost per group to calculate group means).</p>
-<p>Therefore, this ANOVA tests a feed model against a null F distribution with 5 and 65 degrees of freedom.</p>
-<p><span class="math inline">\(F=MS_{feed}/MS_{residual}=15.3648\)</span>, where <span class="math inline">\(MS = SS/df\)</span>. The SS can be found in the $aov output.</p>
-<ul>
-<li>ges = <a href="https://link.springer.com/article/10.3758/BF03192707">generalized eta-squared</a>.</li>
-</ul>
-<p><code>ges</code> is an effect size parameter for ANOVA. For this particular experimental design, <span class="math inline">\(ges=\frac{SS_n}{SS_n+SS_d}\)</span>. In other words, <code>ges</code> summarizes the variation associated with the model as a fraction of the total variation in the data.</p>
-<p>Thus, 54.16% of the variation in weight is attributable to the different levels of feed in the experiment. In other words, the model explains 54.16% of the variation in the data.</p>
-<p>Think of eta-squared, partial eta-squared, and generalized eta-squared as all related to the more commonly understood <span class="math inline">\(R^2\)</span> of regression. They are each calculated differently, but all related to <span class="math inline">\(R^2\)</span> in so far as they serve as estimates for how much of the variation is due to the model. <code>ges</code> takes on values from 0 to 1. Higher values indicate a greater degree of the overall variation is due to the factor tested in the experiment.</p>
-<p>Having said that, it’s a bit of a Goldilock statistics. You only really begin to appreciate what it means after producing several of them.</p>
+<div id="interpretation-8" class="section level2">
+<h2><span class="header-section-number">26.3</span> Interpretation</h2>
+<p>Line 1 of the ANOVA table, labeled <code>(intercept)</code> in the Effect column, shows the residual variation (<code>SSd</code>) partitioned out by accounting for the variation of the individual mice. Therefore, <span class="math inline">\(SS_d=SS_{mouse_ID}\)</span>. Frankly, it’s not clear how <span class="math inline">\(SS_n\)</span> on this line is calculated. The statistical tests of these (<code>intercept</code>) lines are not particularly important and can be safely ignored.</p>
+<p>The most important line is #2. The null F-statistic distribution has 12 and 120 degrees of freedom, corresponding to 13 days and 143 measurements, less degrees of freedom to calculate the means for individual days and mice.</p>
+<p>The F-statistic calculated for the main effect of <code>day</code> is very high, and the corresponding p-value is very low. Here, <span class="math display">\[F=\frac{\frac{SS_n}{df_n}}{\frac{SS_d}{df_d}}\]</span></p>
+<p>This F-statistic tests the null hypothesis, which is that the variation associated with the time factor is equal to or less than residual variation.</p>
+<p>The p-value is the probability of obtaining an F-statistic value this high or even more extreme if the null hypothesis were true. The extreme F-statistic value means that null can be safely rejected.</p>
+<p>The <code>ges</code> is a regression coefficient that can take on values between 0 and 1. GES is the ratio of the variation due to the effect of the day factor to the total variation in the data set: <span class="math display">\[ges=\frac{SS_{n(day)}}{SS_{n(day)}+SS_{d(day)}+SS{_{d(mouse_ID)}}}\]</span> The value of 0.829 can be interpreted as follows: 82.9% of the observed variation in the data is associated with the differences between days.</p>
+<p>Scientifically, you can infer from this F-test result that the HT29 tumor volumes grow with time when implanted in this mouse strain.</p>
+<p>Sometimes, that’s all you wish to conclude. If you wish to further identify specific pairs of days where tumor volume differs you could do a post-hoc analysis.</p>
 </div>
-<div id="aov" class="section level4">
-<h4><span class="header-section-number">25.3.2.2</span> $aov</h4>
-<p>This table provides the accounting for the sum of squares and degrees of freedom, while calculating the residual standard error. It is somewhat redundant with the $ANOVA table, though the residual standard error can come in handy.</p>
-<ul>
-<li>DFn=degrees freedom for numerator. k-1, where k = levels of factor.</li>
-<li>DFd=degrees freedom for denominator. n-k, where n = number of independent replicates.</li>
-<li>SSn &amp; SSd = sum of squares for model and residual, respectively</li>
-<li>Residual standard error is a parameter that estimates the precision by which the data fit the model, and is in units of the outcome variable, weight. <span class="math inline">\(SE\)</span> is the square root of the residual variance: <span class="math inline">\(S_{y.x}=\sqrt{\frac{SS_{residual}}{df_{residual}}}\)</span></li>
-</ul>
-<p>If <span class="math inline">\(S_{y.x}\)</span> were zero, there would be no residuals. The data points would all rest at the value of the group means. The data would fit perfectly to a model of 6 group means at their observed values. <span class="math inline">\(S_{y.x}\)</span> therefore is a descriptive statistic that declares how much error, or the degree by which the data is unexplained by the model. It has some utility for confidence intervals and power analysis.</p>
-</div>
-<div id="the-f-test-1" class="section level4">
-<h4><span class="header-section-number">25.3.2.3</span> The F test</h4>
-<p>The scientific prediction for this experiment is that chick weights will vary depending upon the type of feed they are grown on. The null is that their weights will be roughly the same, irrespective of food source.</p>
-<p>ANOVA tests this hypothesis through the variance parameter. The question is whether the variance associated with the model, one of 6 different feed group means, is fractionally greater than the residual variance in the sample.</p>
-<p>The null statistical hypothesis is that the variance associated with the different levels of feed is less than or equal to the residual variance. Therefore, the alternate hypothesis is the variance associated with feed is greater than residual variance.</p>
-<p><span class="math inline">\(H_0: MS_{feed}\le MS_{residual}\)</span>, <span class="math inline">\(H_1: MS_{feed}&gt;MS_{residual}\)</span></p>
-<p>Because of the relationship of group means to variance, it is just as valid to express the null hypothesis in terms of the group means, and that can be proven mathematically by a competent statistician:</p>
-<p><span class="math inline">\(H_0: \mu_a=\mu_b=\mu_c=\mu_d=\mu_e=\mu_f\)</span> Though, strictly, rejecting the null doesn’t mean that all group means differ from each other, it just means that some of them differ. <span class="math inline">\(H_1: \mu_a\ne\mu_b\ne\mu_c\ne\mu_d\ne\mu_e\ne\mu_f\)</span></p>
-<p>The F statistic of 15.3648 is extreme for a null F distribution of 5 and 65 degrees of freedom. The very low p-value illustrates this extremeness.</p>
-<p>The probability of erroneously rejecting the null hypothesis is about 5e-10. We can reject the null and conclude that differences in effect on chick weights exist between this group of feeds.</p>
-</div>
-<div id="levenes-test-for-homogeneity-of-variance" class="section level4">
-<h4><span class="header-section-number">25.3.2.4</span> Levene’s test for homogeneity of variance</h4>
-<p>Levene’s test determines whether there is a substantial level of differences in variance <em>between</em> groups. Levene’s test is run as a check to determine if the groups variance is homogeneous, as homoskedasticity is one of the validity assumptions of ANOVA.</p>
-<p>Levene’s test statistic is calculated as follows:</p>
-<p><span class="math display">\[W=\frac{(n-k)}{(k-1)}\frac{\sum\limits_{i=1}^{k}n_i(\bar Z_i-\bar Z)^2}{\sum\limits_{i=1}^{k}\sum\limits_{j=1}^{n_i}(Z_{ij}-\bar Z_i)^2}\]</span></p>
-<p>where <span class="math inline">\(Z_{ij}=|x_{ij}-\bar x_i|\)</span> and <span class="math inline">\(Z_i\)</span> are the group means and <span class="math inline">\(\bar Z\)</span> is the overall mean of <span class="math inline">\(Z_{ij}\)</span>.</p>
-<p>The null hypothesis of the Levene test is rejected when <span class="math inline">\(W&gt;F_{(\alpha,\ k-1,\ n-k)}\)</span>, where the F is the critical value.</p>
-<p>Levene’s test output is a 2nd ANOVA table, and can easily be confused with the ANOVA output. Levene’s test lacks a <span class="math inline">\(ges\)</span> parameter, nor does it have a column that lists the factor name.</p>
-<p>If the Levene’s F value is low and the p-values is high, as is the case here, we can’t reject the null that the variances are the same. Thus, the variance homogeneity assumption is validated.</p>
-<p>If this were not the case, you have two options.</p>
-<p>Option 1: Simply ignore the result. The luck of the draw with small samples can explain group differences in variance, where none really exists. The impact on your inference will be very modest. What’s more important is that the population you are sampling is normally distributed. Do you have reason to think that is not the case?</p>
-<p>Option 2: Transform the data to homogenize outliers and variance, or switch the analysis to a Kruskal-Wallis nonparametric test.</p>
-</div>
-</div>
-</div>
-<div id="posthoc" class="section level2">
-<h2><span class="header-section-number">25.4</span> Post hoc pairwise comparisons</h2>
-<p>If the ANOVA F test for the factor is extreme you may be interested in knowing which treatment groups differ. That’s achieved by conducting post hoc analysis, which typically involves multiple group comparisons.</p>
-<p>In other words, post hoc involves testing several hypotheses simultaneously. Each test risks type1 error. Therefore, post hoc testing should be done in a way that keeps the cumulative, family-wise type1 error rate (FWER) below the type 1 error threshold that was set for the experiment; usually 5%.</p>
-<div id="overview-of-options" class="section level3">
-<h3><span class="header-section-number">25.4.1</span> Overview of options</h3>
-<p>Sometimes we do these experiments without any clear plans of what groups we might want to compare. In those cases, we compare every group to all other groups. Doing so will involve <span class="math inline">\(\frac{k(k-1)}{k}\)</span> comparisons in an experiment with <span class="math inline">\(k\)</span> groups. That “burns” a lot of alpha, perhaps needlessly, but that’s the price paid for not planning. The tests for that include the Bonferroni (aka Dunn’s) and its cousins, Holm, Hommel, and Hochberg. They differ slightly, and will generate slightly different adjusted p-values given a common set of unadjusted p-values. Choose one.</p>
-<p>Step-down tests operate a bit differently but do the same thing in terms of making all comparisons, these including the Tukey HSD and Newman-Keuls.</p>
-<p>When we intend to compare all groups back to one level of the factor, thus making only a subset of all possible comparisons, we use Dunnett’s or the FisherLSD. But it’s just as valid to use any other of these methods.</p>
-<div id="two-imperatives-in-pairwise-testing" class="section level4">
-<h4><span class="header-section-number">25.4.1.1</span> Two imperatives in pairwise testing</h4>
-<ol style="list-style-type: decimal">
-<li><p>Since every p-value represents a hypothesis, when simultaneously testing many hypotheses always make adjustments to keep the FWER &lt; 0.05 (or whatever overall type1 error limit you preset for the experiment).</p></li>
-<li><p>Let your scientific questions drive the comparisons you’ll make, and thus your choice of post hoc test.</p></li>
-</ol>
-<p>I suggest you worry less about the specific post hoc test, or about gamification of p-values, and think more about whether a comparison is scientifically important.</p>
-<p>But there are a couple of provisos: 1) Bonferroni (or its cousins) works just fine if you don’t have too many means to compare, 2) Dunnett’s is for comparing two or more means back to a control mean but should not be used in related measures factors, 3) Fishers LSD will give you output to make those one or few key comparison you set out to make, even though you have many other groups in the experiment (ie, several of the other groups are internal controls and not particularly scientifically important).</p>
-</div>
-<div id="examples" class="section level4">
-<h4><span class="header-section-number">25.4.1.2</span> Examples</h4>
-<p><strong>No p-value adjustment</strong>: Sometimes it’s useful to generate p-values that are not corrected for multiple comparisons. For example, although you’ve done a simple ANOVA, the intention all along was to test only one hypothesis between two groups. The <code>pairwise.t.test</code> function produces a matrix of all comparisons, within which you can find the p-value for the comparison of interest.</p>
-<p>The script below will generate a matrix of p-values for t tests of all possible comparisons, none of which are adjusted for multiple comparisons. When running the other scripts below, come back to this to see how adjusted p-value methods changes these results</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">allPairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">p.adjust=</span> <span class="st">&quot;none&quot;</span>)
-allPairs</code></pre></div>
+<div id="post-hoc-analysis" class="section level2">
+<h2><span class="header-section-number">26.4</span> Post-hoc analysis</h2>
+<p>I have a fairly extensive discussion. Go <a href="onewayanova.html#onewayanova">here</a> and scroll down to the section on Post-hoc analysis.</p>
+<p>Perhaps we’d like to dig a little deeper. For example, we might want to know on which days tumor growth differs from the first day in the recorded series of measurements.</p>
+<p>The approach taken below involves two steps.</p>
+<p>First, all pairwise comparisons are made using a paired t-test to generate a matrix of all p-values. Importantly, these p-values are unadjusted.</p>
+<p>Second, a vector of select p-values will be collected from this matrix. These p-values will then passed into the <code>p.adjust</code> function so that they are adjusted for multiple comparisons.</p>
+<p>First, the pairwise t-test. Note the arguments. No adjustment is made (yet) and a two-sided paired t-test is called. The output of the function is stored in an object named <code>m</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(<span class="dt">x =</span> jw2vol<span class="op">$</span>tumor_vol, 
+                     <span class="dt">g =</span> jw2vol<span class="op">$</span>day, 
+                     <span class="dt">p.adjust =</span> <span class="st">&quot;none&quot;</span>, 
+                     <span class="dt">paired =</span> T,
+                     <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span>
+                     )
+m</code></pre></div>
 <pre><code>## 
-##  Pairwise comparisons using t tests with pooled SD 
+##  Pairwise comparisons using paired t tests 
 ## 
-## data:  chickwts$weight and chickwts$feed 
+## data:  jw2vol$tumor_vol and jw2vol$day 
 ## 
-##           casein  horsebean linseed meatmeal soybean
-## horsebean 2.1e-09 -         -       -        -      
-## linseed   1.5e-05 0.01522   -       -        -      
-## meatmeal  0.04557 7.5e-06   0.01348 -        -      
-## soybean   0.00067 0.00032   0.20414 0.17255  -      
-## sunflower 0.81249 8.2e-10   6.2e-06 0.02644  0.00030
+##    17      18      19      22      24      26      29      31      33     
+## 18 0.00182 -       -       -       -       -       -       -       -      
+## 19 6.9e-05 0.02324 -       -       -       -       -       -       -      
+## 22 4.1e-05 3.7e-05 0.00026 -       -       -       -       -       -      
+## 24 0.00042 0.00080 0.00235 0.02634 -       -       -       -       -      
+## 26 6.4e-05 0.00012 0.00019 0.00056 0.00984 -       -       -       -      
+## 29 2.3e-05 4.8e-05 5.3e-05 0.00023 0.00488 0.06582 -       -       -      
+## 31 1.4e-05 1.5e-05 1.7e-05 3.7e-05 6.0e-05 0.00077 0.00083 -       -      
+## 33 1.3e-05 1.7e-05 1.6e-05 2.4e-05 4.1e-05 3.6e-05 1.8e-05 0.00053 -      
+## 36 1.0e-06 1.1e-06 1.1e-06 1.6e-06 1.3e-06 1.3e-06 1.0e-06 8.6e-07 0.00058
+## 38 1.3e-06 1.5e-06 1.4e-06 1.6e-06 1.2e-06 1.1e-06 1.6e-06 7.1e-06 1.4e-05
+## 40 6.3e-06 6.9e-06 6.6e-06 7.3e-06 6.0e-06 8.0e-06 8.9e-06 1.4e-05 1.3e-05
+## 44 7.0e-07 7.0e-07 6.9e-07 7.6e-07 6.5e-07 7.8e-07 7.1e-07 1.1e-06 8.6e-07
+##    36      38      40     
+## 18 -       -       -      
+## 19 -       -       -      
+## 22 -       -       -      
+## 24 -       -       -      
+## 26 -       -       -      
+## 29 -       -       -      
+## 31 -       -       -      
+## 33 -       -       -      
+## 36 -       -       -      
+## 38 0.00023 -       -      
+## 40 0.00014 0.00247 -      
+## 44 4.5e-06 1.1e-05 0.00181
 ## 
 ## P value adjustment method: none</code></pre>
-<p>The unadjusted p-value output from the <code>pairwise.t.test</code> function is a matrix, which is important to know when the need arises to pull out specific elements of the analysis.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(allPairs<span class="op">$</span>p.value)</code></pre></div>
+<p>The <code>pairwise.t.test output</code> <code>m</code> is a list of 4 elements.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(m)</code></pre></div>
+<pre><code>## List of 4
+##  $ method         : chr &quot;paired t tests&quot;
+##  $ data.name      : chr &quot;jw2vol$tumor_vol and jw2vol$day&quot;
+##  $ p.value        : num [1:12, 1:12] 1.82e-03 6.91e-05 4.07e-05 4.20e-04 6.40e-05 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:12] &quot;18&quot; &quot;19&quot; &quot;22&quot; &quot;24&quot; ...
+##   .. ..$ : chr [1:12] &quot;17&quot; &quot;18&quot; &quot;19&quot; &quot;22&quot; ...
+##  $ p.adjust.method: chr &quot;none&quot;
+##  - attr(*, &quot;class&quot;)= chr &quot;pairwise.htest&quot;</code></pre>
+<p>The most important of these is <code>$p.value</code>, which you can see is a matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(m<span class="op">$</span>p.value)</code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">allPairs<span class="op">$</span>p.value</code></pre></div>
-<pre><code>##                 casein    horsebean      linseed   meatmeal      soybean
-## horsebean 2.067997e-09           NA           NA         NA           NA
-## linseed   1.493344e-05 1.522197e-02           NA         NA           NA
-## meatmeal  4.556672e-02 7.478012e-06 1.347894e-02         NA           NA
-## soybean   6.654079e-04 3.246269e-04 2.041446e-01 0.17255391           NA
-## sunflower 8.124949e-01 8.203777e-10 6.211836e-06 0.02643548 0.0002980438</code></pre>
-<p>To quickly scan which comparisons are below the p &lt; 0.05 threshold we can apply this custom <code>extreme</code> function across the matrix:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">extreme &lt;-<span class="st"> </span><span class="cf">function</span>(x){
-  <span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>)
-}
-
-<span class="kw">apply</span>(allPairs<span class="op">$</span>p.value, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), extreme)</code></pre></div>
-<pre><code>##           casein horsebean linseed meatmeal soybean
-## horsebean   TRUE        NA      NA       NA      NA
-## linseed     TRUE      TRUE      NA       NA      NA
-## meatmeal    TRUE      TRUE    TRUE       NA      NA
-## soybean     TRUE      TRUE   FALSE    FALSE      NA
-## sunflower  FALSE      TRUE    TRUE     TRUE    TRUE</code></pre>
-<p><strong>All comparisons with Bonferroni adjustment</strong>: The Bonferroni correction is the easiest to understand, so I’ll use that to illustrate p-value adjusting. Let <span class="math inline">\(C\)</span> be the number of possible comparisons for a total of <span class="math inline">\(k\)</span> groups in the experiment. An adjusted type 1 error threshold for each comparison is: <span class="math display">\[\alpha_k=\frac{\alpha}{C}\]</span></p>
-<p>Thus, in an experiment with 15 possible comparisons, the adjusted type1 error threshold for each comparison would be <span class="math inline">\(\alpha_K\)</span> = 0.05/15 = 0.003333.</p>
-<p>The adjusted p-value functions, however, makes the correction and then recalibrate the p-values back to the confidence level of choice. This can be a bit confusing for the first time. But you’ll note that the net effect is to increase each p-value. Some that were below the threshold unadjusted are greater than the threshold after the adjustment.</p>
-<p>For example, you can see that the p-values adjusted using the Bonferroni correction below are all higher than they were above, when unadjusted.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bonf.adjustedAllpairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="dt">p.adjust =</span> <span class="st">&quot;bonferroni&quot;</span>)
-bonf.adjustedAllpairs</code></pre></div>
-<pre><code>## 
-##  Pairwise comparisons using t tests with pooled SD 
-## 
-## data:  chickwts$weight and chickwts$feed 
-## 
-##           casein  horsebean linseed meatmeal soybean
-## horsebean 3.1e-08 -         -       -        -      
-## linseed   0.00022 0.22833   -       -        -      
-## meatmeal  0.68350 0.00011   0.20218 -        -      
-## soybean   0.00998 0.00487   1.00000 1.00000  -      
-## sunflower 1.00000 1.2e-08   9.3e-05 0.39653  0.00447
-## 
-## P value adjustment method: bonferroni</code></pre>
-<p>And here’s a quick scan for which of these are now below a FWER p &lt; 0.05. Note how a handful of comparisons that were scored extreme by this simple test above, without a p-value adjustment, are no longer extreme with the p-value adjustment.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">extreme &lt;-<span class="st"> </span><span class="cf">function</span>(x){
-  <span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>)
-  
-}
-<span class="kw">apply</span>(bonf.adjustedAllpairs<span class="op">$</span>p.value, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), extreme)</code></pre></div>
-<pre><code>##           casein horsebean linseed meatmeal soybean
-## horsebean   TRUE        NA      NA       NA      NA
-## linseed     TRUE     FALSE      NA       NA      NA
-## meatmeal   FALSE      TRUE   FALSE       NA      NA
-## soybean     TRUE      TRUE   FALSE    FALSE      NA
-## sunflower  FALSE      TRUE    TRUE    FALSE    TRUE</code></pre>
-<p>Optional methods in these functions for the Bonferroni correction are “holm”, “hochberg” and “hommel”, each calculates p-value adjustments in slightly different ways. They are each considered slightly more liberal versions of the “bonferroni”.</p>
-<p>Which is the best? For all practical purposes, none. Choose one early in your career and stick with it forever. What’s most important is to declare in the planning stages which will be used, and stick with it. That’s the best way to keeps it unbiased. You don’t want to ever find yourself interating through adjustment methods just to find the one that gives a borderline result an asterisk.</p>
-<p><a href="http://www-stat.wharton.upenn.edu/~steele/Courses/956/Resource/MultipleComparision/Writght92.pdf">Read Wright for more information on the adjustment calculations and performance</a></p>
-<p><strong>Adjusting p-values for subsets of comparisons</strong></p>
-<p>Often, we don’t want to burn so much type1 error making scientifically uninteresting comparisons. In such cases, we instead want to compare subsets.</p>
-<p>Here’s a three step procedure for doing just that.</p>
-<p>Step1: First, run the <code>pairwise.t.test</code> function, setting the argument <code>p.adjust=&quot;none&quot;</code>. The output includes a matrix of p-values we’ll name <code>allPairs</code>, providing all possible comparisons.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#just repeating from above</span>
-allPairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">p.adjust=</span> <span class="st">&quot;none&quot;</span>)</code></pre></div>
-<p>Step2: Select from the <code>allPairs</code> matrix only the p-values that correspond to the comparisons you’d like to make. Name that vector of unadjusted p-values, <code>selectPairs</code>. This takes a bit of cleverness depending on what you want to grab from the matrix.</p>
-<p>For example, we only want to compare all of the diets to casein. The comparisons we want are all in the first column. Use your matrix indexing skillz to grab only the unadjusted p-values from that first column:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">selectPairs &lt;-<span class="st"> </span>allPairs<span class="op">$</span>p.value[, <span class="dv">1</span>]
-selectPairs</code></pre></div>
-<pre><code>##    horsebean      linseed     meatmeal      soybean    sunflower 
-## 2.067997e-09 1.493344e-05 4.556672e-02 6.654079e-04 8.124949e-01</code></pre>
-<p>Step3: Pass unadjusted p-values in the <code>selectPairs</code> vector into the <code>p.adjust</code> function.</p>
-<p>The output of this step is a vector of adjusted p-values for the selected group of comparisons.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adjustedPvalues &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(selectPairs, <span class="dt">method=</span><span class="st">&quot;bonferroni&quot;</span>)
-adjustedPvalues</code></pre></div>
-<pre><code>##    horsebean      linseed     meatmeal      soybean    sunflower 
-## 1.033998e-08 7.466720e-05 2.278336e-01 3.327039e-03 1.000000e+00</code></pre>
-<p>Which of these are extreme? If it’s not clear by inspection (or too large), use a simple boolean:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adjustedPvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span></code></pre></div>
-<pre><code>## horsebean   linseed  meatmeal   soybean sunflower 
-##      TRUE      TRUE     FALSE      TRUE     FALSE</code></pre>
-<p><strong>Fisher LSD</strong> This also doesn’t make adjustments for multiple comparisons. Notice how the p-values are no different than if using the <code>p.adjust=&quot;none&quot;</code>. Fisher LSD is better than ‘none’ because it provides CI’s on the differences. Note: diff = difference between diet means.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#from the DescTools package</span>
-<span class="kw">PostHocTest</span>(my.ezaov<span class="op">$</span>aov, <span class="dt">method =</span> <span class="st">&quot;lsd&quot;</span>)</code></pre></div>
-<pre><code>## 
-##   Posthoc multiple comparisons of means : Fisher LSD 
-##     95% family-wise confidence level
-## 
-## $feed
-##                            diff      lwr.ci       upr.ci    pval    
-## horsebean-casein    -163.383333 -210.287097 -116.4795699 2.1e-09 ***
-## linseed-casein      -104.833333 -149.554317  -60.1123496 1.5e-05 ***
-## meatmeal-casein      -46.674242  -92.400318   -0.9481673 0.04557 *  
-## soybean-casein       -77.154762 -120.248980  -34.0605437 0.00067 ***
-## sunflower-casein       5.333333  -39.387650   50.0543170 0.81249    
-## linseed-horsebean     58.550000   11.646237  105.4537634 0.01522 *  
-## meatmeal-horsebean   116.709091   68.846051  164.5721307 7.5e-06 ***
-## soybean-horsebean     86.228571   40.873216  131.5839270 0.00032 ***
-## sunflower-horsebean  168.716667  121.812903  215.6204301 8.2e-10 ***
-## meatmeal-linseed      58.159091   12.433016  103.8851660 0.01348 *  
-## soybean-linseed       27.678571  -15.415647   70.7727896 0.20414    
-## sunflower-linseed    110.166667   65.445683  154.8876504 6.2e-06 ***
-## soybean-meatmeal     -30.480519  -74.616890   13.6558510 0.17255    
-## sunflower-meatmeal    52.007576    6.281501   97.7336509 0.02644 *  
-## sunflower-soybean     82.488095   39.393877  125.5823134 0.00030 ***
-## 
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>All of the following scripts do adjust p-values for multiple comparisons. Therefore, notice how they increase the p-values we see in the output above. Frequently, “significant” unadjusted p-values become “nonsignificant” after these adjustments.</p>
-<div id="other-posthoc-tests" class="section level5">
-<h5><span class="header-section-number">25.4.1.2.1</span> Other posthoc tests</h5>
-<p><strong>Dunnett’s</strong>: This post hoc method differs from above because it only does dependent t tests, on a subset of the means. For example, use this when all group means are compared to the negative control mean.</p>
-<p>The fewer comparisons don’t spread the allowed FWER as thin as the other options. The following script is configured to compare the means at each level of feed to that for the first listed feed.</p>
-<p>Dunnett’s is nice because it gives you the effect size (diff) and the confidence interval limits for the difference, as well.</p>
-<p>Note: diff = the difference between diet means for the compared groups.</p>
-<p>Here’s an example comparing the weight effect of the various food sources back to casein. Adjusted for mulitple comparisons, horsebean, linseed and soybean each differ from casein.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">DunnettTest</span>(weight <span class="op">~</span><span class="st"> </span>feed, <span class="dt">data =</span> chickwts)</code></pre></div>
-<pre><code>## 
-##   Dunnett&#39;s test for comparing several treatments with a control :  
-##     95% family-wise confidence level
-## 
-## $casein
-##                         diff     lwr.ci     upr.ci    pval    
-## horsebean-casein -163.383333 -223.95852 -102.80815 6.3e-09 ***
-## linseed-casein   -104.833333 -162.58951  -47.07716 8.6e-05 ***
-## meatmeal-casein   -46.674242 -105.72847   12.37999  0.1670    
-## soybean-casein    -77.154762 -132.81000  -21.49952  0.0032 ** 
-## sunflower-casein    5.333333  -52.42284   63.08951  0.9995    
-## 
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p><strong>Tukey HSD</strong>: A method based upon the Studentized range, doing all comparisons, and providing adjusted p-values along with confidence intervals. Used when the question is, “Are there any group differences here at all?”</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(my.ezaov<span class="op">$</span>aov, <span class="st">&quot;feed&quot;</span>, <span class="dt">ordered =</span> T)</code></pre></div>
-<pre><code>##   Tukey multiple comparisons of means
-##     95% family-wise confidence level
-##     factor levels have been ordered
-## 
-## Fit: aov(formula = formula(aov_formula), data = data)
-## 
-## $feed
-##                           diff        lwr       upr     p adj
-## linseed-horsebean    58.550000 -10.413543 127.51354 0.1413329
-## soybean-horsebean    86.228571  19.541684 152.91546 0.0042167
-## meatmeal-horsebean  116.709091  46.335105 187.08308 0.0001062
-## casein-horsebean    163.383333  94.419790 232.34688 0.0000000
-## sunflower-horsebean 168.716667  99.753124 237.68021 0.0000000
-## soybean-linseed      27.678571 -35.683721  91.04086 0.7932853
-## meatmeal-linseed     58.159091  -9.072873 125.39106 0.1276965
-## casein-linseed      104.833333  39.079175 170.58749 0.0002100
-## sunflower-linseed   110.166667  44.412509 175.92082 0.0000884
-## meatmeal-soybean     30.480519 -34.414070  95.37511 0.7391356
-## casein-soybean       77.154762  13.792470 140.51705 0.0083653
-## sunflower-soybean    82.488095  19.125803 145.85039 0.0038845
-## casein-meatmeal      46.674242 -20.557722 113.90621 0.3324584
-## sunflower-meatmeal   52.007576 -15.224388 119.23954 0.2206962
-## sunflower-casein      5.333333 -60.420825  71.08749 0.9998902</code></pre>
-<p><strong>Other</strong>: “BH” is Benjamini-Hochberg, an FDR-based tool that will gives you more positives at the risk of higher false positives. Use this when you have an excessive number of comparisons to make. For example, over-designed ANOVA, 3 way ANOVA, multivariate experiments. The BH procedure first ranks the differences between paired groups from largest to smallest, and then performs the tests, unadjusted, running down the list. It debits each p-value against a starting value of 0.05 (or whatever). Once that 0.05 is exhausted, it stops testing. In this way all of the type1 experimentwise error is spent on the biggest differences.</p>
+<p>The matrix contains p-values that represent the outcome of paired t-tests for tumor_vol between all possible combinations of days.</p>
+<p>Thus, the p-value in the cell defined by the first row and first column of the matrix (<code>m$p.value[1,1]=0.00182</code>) reflects that for the mean difference in tumor_vol between the 17th and 18th days.</p>
+<p>The first column of p-values, <code>m$p.value[,1]</code>, are paired t-test comparisons of tumor_vol between the 17th day and each of the days 18 through 44.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pv &lt;-<span class="st"> </span>m<span class="op">$</span>p.value[,<span class="dv">1</span>]
+pv</code></pre></div>
+<pre><code>##           18           19           22           24           26 
+## 1.820962e-03 6.908852e-05 4.070177e-05 4.196400e-04 6.396672e-05 
+##           29           31           33           36           38 
+## 2.284286e-05 1.434352e-05 1.320905e-05 1.030862e-06 1.299382e-06 
+##           40           44 
+## 6.341556e-06 7.021455e-07</code></pre>
+<p>To create the adjusted p-values, we pass the vector of p-values <code>pv</code> selected from the p-value matrix <code>m</code> into the <code>p.adjust</code> function. Use your judgement to select an adjustment method that you deem most appropriate.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">p.adjust</span>(<span class="dt">p =</span> pv,
+         <span class="dt">method =</span> <span class="st">&quot;holm&quot;</span>,
+         <span class="dt">n =</span> <span class="kw">length</span>(pv)
+         )</code></pre></div>
+<pre><code>##           18           19           22           24           26 
+## 1.820962e-03 2.558669e-04 2.035088e-04 8.392799e-04 2.558669e-04 
+##           29           31           33           36           38 
+## 1.370571e-04 1.056724e-04 1.056724e-04 1.133948e-05 1.299382e-05 
+##           40           44 
+## 5.707401e-05 8.425746e-06</code></pre>
+<p>Since each of these adjusted p-values is less than the type 1 error threshold of 0.05, we can conclude that the mean difference in tumor volume changes on each day through the study. If we were one to to put asterisks on the figure, we would illustrate one for each of the days (other than day 17).</p>
 </div>
-</div>
-</div>
-</div>
-<div id="reporting-the-result" class="section level2">
-<h2><span class="header-section-number">25.5</span> Reporting the result</h2>
-<p>Note how the R way is to subtract the 2nd group from the 1st. For this reason, the diff values are all negative, even though the feed sources caused higher growth than casein.</p>
-<p><em>The effect of feed source accounted for 54% of the experiment’s observed variation in chick weights (one-way completely randomized ANOVA, type=2, F(5,65) = 15.365, p = 5.9e-10, ges=0.54. Pairwise group analysis using Dunnett’s test shows that horsebean (p=6.3e-9), linseed(p=8.6e-5) and soybean (p=0.0032) each differ from casein. (In methods: ANOVA analysis was performed using R v4.3, ez package).</em> (Note, it is better to put CI’s and p-values in a table)</p>
+<div id="write-up-10" class="section level2">
+<h2><span class="header-section-number">26.5</span> Write up</h2>
+<p>Here’s how we might write up the statistical methods.</p>
+<p><em>For the jaxwest2 experiment, each of 11 mice are treated as independent replicates. Pepeated tumor volume measurements were collected beginning on day 17 post-implantation. The tumor volume value for day = 17 for the 3rd subject was lost. This was replaced using an imputed value of the average tumor volume for day 17 of all other subjects. The effect of time was assessed by one-way related measures ANOVA using the ezANOVA function in R v3.5.2. For a post hoc analysis, the mean differences in tumor vol between study days were compared using two-sided paired t-tests (pairwise.t.test, R v3.5.2), with p-values adjusted using the Holm method.</em></p>
+<p>In the figure legend, something like this:</p>
+<p><em>Tumor volume increases with days after implantation (one-way RM ANOVA, F(12,120)=87.1, p=2.8e-53). Asterisks = adjusted p &lt; 0.05.</em></p>
 
 </div>
 </div>
@@ -911,8 +619,8 @@ adjustedPvalues</code></pre></div>
           </div>
         </div>
       </div>
-<a href="fdistr.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="onewayRM.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="onewayanova.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="jaxwest2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

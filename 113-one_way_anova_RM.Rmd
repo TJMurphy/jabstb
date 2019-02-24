@@ -1,0 +1,217 @@
+# One-way ANOVA Related Measures {#onewayRM}
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(readxl)
+library(viridis)
+library(ez)
+library(lme4)
+```
+
+The analysis, interpretation and presentation of a one-way ANOVA related/repeated measures experimental design is covered in this chapter. 
+
+This design has one predictor variable that is imposed at three or more levels. 
+
+But the essential feature of the RM design that distinguishes it from a CR design is that the measurements of the outcome variable are intrinsically related for all levels of the predictor. Thus, a train of measurements, one for each level of the predictor variable, are taken from a single independent replicate.
+
+An complete experiment is therefore comprised of many independent replicates, within each of which are collected related, intrinsically-linked measurements.
+
+We'll use data the Jaxwest2 study to illustrate this. In this example, growth of human tumors in immunodeficient mice is assessed by repeated measurements of size over time within each of several subjects. 
+
+The outcome or dependent variable is tumor volume, in $mm^3$. Tumor volumes are calculated after the researchers measured the lengths and widths of tumors using calipers.
+
+The predictor variable is time, in units of days. Although time is usually a continuous/measured variable, we'll treat it as a discrete factorial variable for this analysis.
+
+The model organism is an immunodeficient mouse strain. Each mouse is an experimental unit that has been implanted with HT29 human colon tumor cells. The experiment is designed to determine whether these cells will grow (rather than be rejected by the host immune system). 
+
+The overall scope of the experiment is to test whether the immunodeficient mouse strain is suitable to study the properties of human cancers. A meaningful effect of the time variable in the ANOVA analysis implies that, yes, human tumors can grow in this host.
+
+## Data prep
+
+The data are in a file called `Jaxwest2.xls`, which can be downloaded from the Jackson Labs [here](https://phenome.jax.org/projects/Jaxwest2). That site offers more details about the study design than are listd here.
+
+The munge [has already been done conducted](\#jaxwest2). For clarity, the script won't be shown again here. However, it is used in this chapter to create a data frame object `jw2vol` to be used for plotting and statistical analysis.
+
+```{r Jaxwest2 munge (jaxwvol), message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+jw2vol <-"datasets/jaxwest2.xls" %>%
+  read_excel(
+    skip=1, 
+    sheet=1
+    ) %>% 
+  select(
+    mouse_ID, 
+    test_group, 
+    contains("tumor_vol_")
+    ) %>% 
+  slice(
+    1:11
+    ) %>% 
+  gather(
+    measurement, 
+    tumor_vol, 
+    -mouse_ID, 
+    -test_group
+    ) %>% 
+  transmute(
+  day=str_remove_all(measurement, "tumor_vol_"),
+  mouse_ID,
+  tumor_vol
+  ) %>% 
+  transmute(
+    day=(as.numeric(day)),
+    mouse_ID,
+    tumor_vol
+    ) %>% 
+  transmute(
+    tumor_vol=round(as.numeric(tumor_vol), 
+                    1
+                    ), 
+    mouse_ID, 
+    day
+    ) 
+
+means <- group_by(
+  jw2vol, day
+  ) %>% 
+  summarise(
+    mean=mean(tumor_vol, na.rm=T)
+    )
+
+jw2vol <-jw2vol %>% 
+  replace_na(
+    list(tumor_vol=means$mean[1]
+         )
+    ) %>% 
+
+  mutate(
+    mouse_ID=as.factor(mouse_ID), 
+    day=as.factor(day)
+    )
+jw2vol
+
+```
+
+
+```{r fig.cap="Connected points illustrate each replicate and the repeated-measures aspect of the experimental design.", Plot, fig.height=4, fig.width=5}
+ggplot(jw2vol, aes(
+  day, tumor_vol, group=mouse_ID, color=mouse_ID))+
+  geom_point(size=3)+
+  geom_line()+
+  scale_color_viridis(discrete=T)+
+  theme_classic()
+```
+
+## Run the ANOVA
+
+Running the function is straightforward. 
+
+The data have been munged previously into the data frame `jw2vol`. See above and [here](\#jaxwest2). 
+
+Because this involves repeated measures for each mouse, the time variable `day` is argued as `within`. 
+
+Type 2 sum of squares is chosen for calculation because the only scientific concern is the main effect of the `day`. Strictly, does the value of "day" have any influence on tumor growth? In other words, does the tumor grow with time?
+
+A detailed ANOVA table is called. There are additional arguments that could be made for custom situations. Consult `?ezANOVA` for more information.
+
+The model for the RM design has two components, one for `day` and the other for the `mouse_ID`. The SS partitioning for the complete model is $SS_{total}=SS_{day} + SS_{error}$, where $SS_{error}= SS_{mouse_ID} + SS_{residual}$. Because it is a repeated measures design, we can account for the random variation associated with differences in mice, $SS_{mouse_ID}$. Thereby using a reduced error term, $SS_{residual}$, in the F-test for the effect of `day`. 
+
+There are a few ways to output the analysis. Here's the simplest:
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+one_wayRM <- ezANOVA(data = jw2vol,
+                     dv = tumor_vol,
+                     wid = mouse_ID,
+                     within = day,
+                     type = 2,
+                     detailed =T,
+                     return_aov=F)
+one_wayRM
+```
+## Interpretation
+
+Line 1 of the ANOVA table, labeled `(intercept)` in the Effect column, shows the residual variation (`SSd`) partitioned out by accounting for the variation of the individual mice. Therefore, $SS_d=SS_{mouse_ID}$. Frankly, it's not clear how $SS_n$ on this line is calculated. The statistical tests of these (`intercept`) lines are not particularly important and can be safely ignored.  
+
+The most important line is #2. The null F-statistic distribution has 12 and 120 degrees of freedom, corresponding to 13 days and 143 measurements, less degrees of freedom to calculate the means for individual days and mice.  
+
+The F-statistic calculated for the main effect of `day` is very high, and the corresponding p-value is very low. Here, \[F=\frac{\frac{SS_n}{df_n}}{\frac{SS_d}{df_d}}\]
+
+This F-statistic tests the null hypothesis, which is that the variation associated with the time factor is equal to or less than residual variation. 
+
+The p-value is the probability of obtaining an F-statistic value this high or even more extreme if the null hypothesis were true. The extreme F-statistic value means that null can be safely rejected.
+
+The `ges` is a regression coefficient that can take on values between 0 and 1. GES is the ratio of the variation due to the effect of the day factor to the total variation in the data set:
+\[ges=\frac{SS_{n(day)}}{SS_{n(day)}+SS_{d(day)}+SS{_{d(mouse_ID)}}}\]
+The value of 0.829 can be interpreted as follows: 82.9% of the observed variation in the data is associated with the differences between days.
+
+Scientifically, you can infer from this F-test result that the HT29 tumor volumes grow with time when implanted in this mouse strain. 
+
+Sometimes, that's all you wish to conclude. If you wish to further identify specific pairs of days where tumor volume differs you could do a post-hoc analysis.
+
+## Post-hoc analysis
+
+I have a fairly extensive discussion. Go [here](\#onewayanova) and scroll down to the section on Post-hoc analysis.
+
+Perhaps we'd like to dig a little deeper. For example, we might want to know on which days tumor growth differs from the first day in the recorded series of measurements.
+
+The approach taken below involves two steps. 
+
+First, all pairwise comparisons are made using a paired t-test to generate a matrix of all p-values. Importantly, these p-values are unadjusted. 
+
+Second, a vector of select p-values will be collected from this matrix. These p-values will then passed into the `p.adjust` function so that they are adjusted for multiple comparisons.
+
+First, the pairwise t-test. Note the arguments. No adjustment is made (yet) and a two-sided paired t-test is called. The output of the function is stored in an object named `m`.
+
+```{r}
+m <- pairwise.t.test(x = jw2vol$tumor_vol, 
+                     g = jw2vol$day, 
+                     p.adjust = "none", 
+                     paired = T,
+                     alternative = "two.sided"
+                     )
+m
+```
+
+The `pairwise.t.test output` `m` is a list of 4 elements. 
+
+```{r}
+str(m)
+```
+
+The most important of these is `$p.value`, which you can see is a matrix. 
+
+```{r message=FALSE, warning=FALSE, paged.print=TRUE}
+class(m$p.value)
+```
+
+The matrix contains p-values that represent the outcome of paired t-tests for tumor_vol between all possible combinations of days. 
+
+Thus, the p-value in the cell defined by the first row and first column of the matrix (`m$p.value[1,1]=0.00182`) reflects that for the mean difference in tumor_vol between the 17th and 18th days.
+
+The first column of p-values, `m$p.value[,1]`, are paired t-test comparisons of tumor_vol between the 17th day and each of the days 18 through 44.
+
+```{r}
+pv <- m$p.value[,1]
+pv
+```
+
+To create the adjusted p-values, we pass the vector of p-values `pv` selected from the p-value matrix `m` into the `p.adjust` function. Use your judgement to select an adjustment method that you deem most appropriate.
+
+```{r}
+p.adjust(p = pv,
+         method = "holm",
+         n = length(pv)
+         )
+```
+
+Since each of these adjusted p-values is less than the type 1 error threshold of 0.05, we can conclude that the mean difference in tumor volume changes on each day through the study. If we were one to to put asterisks on the figure, we would illustrate one for each of the days (other than day 17).
+
+## Write up
+
+Here's how we might write up the statistical methods.
+
+*For the jaxwest2 experiment, each of 11 mice are treated as independent replicates. Repeated tumor volume measurements were collected from each beginning on day 17 post-implantation. The tumor volume value for day = 17 for the 3rd subject was lost. This was imputed using the average tumor volume value for day 17 of all other subjects. The effect of time was assessed by one-way related measures ANOVA using the ezANOVA function in R v3.5.2. For a post hoc analysis, the mean differences in tumor vol between study days were compared using two-sided paired t-tests (pairwise.t.test, R v3.5.2), with p-values adjusted using the Holm method.*
+
+In the figure legend, something like this:
+
+*Tumor volume increases with days after implantation (one-way RM ANOVA, F(12,120)=87.1, p=2.8e-53). Asterisks = adjusted p < 0.05.* 
+
