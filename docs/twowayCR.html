@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 8 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <title>Chapter 28 Two-way ANOVA Completely Randomized | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 8 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:title" content="Chapter 28 Two-way ANOVA Completely Randomized | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 8 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta name="twitter:title" content="Chapter 28 Two-way ANOVA Completely Randomized | JABSTB: Statistical Design and Analysis of Experiments with R" />
   
   <meta name="twitter:description" content="Experimental biostatistics using R." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="dispersion.html">
-<link rel="next" href="error.html">
+<link rel="prev" href="onewayRM.html">
+<link rel="next" href="twowayRM.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -470,93 +470,444 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="hypotheses" class="section level1">
-<h1><span class="header-section-number">Chapter 8</span> Framing statistical hypotheses</h1>
-<p><em>“There is no more to science than its method, and there is no more to its method than Popper has said.”-Hermann Bondi</em></p>
-<p>Hypothesis-driven research tests predictions about the nature of the world.</p>
-<p>Testing hypotheses statistically provides a pragmatic framework for making decisions about the validity of those predictions.</p>
-<p>When planning an experiment the primary goal should be to bring hyper-focused clarity to the hypothesis. This is the time to distill your thinking down to the exact question you want answered. What are you studying? What is not known? What is your prediction? How will you measure it? What are your variables? Are they discrete or continuous? How will you test it? How will you decide whether what you predicted happened or not? Will this actually answer the question you’re asking?</p>
-<p>The statistics taught in this course are for assessing the validity of experimental outcomes in a somewhat odd way: Formally, we test the null hypothesis.</p>
-<p>The expectation is to generate observations of such extreme magnitude that we can reject the null, the hypothesis that nothing happened. At first blush that might come off as absurd. Like a Seinfeld episode, where nothing is what is most important.</p>
-<p>Hopefully this won’t seem so odd after I describe what this accomplishes and explain why it is done this way.</p>
-<div id="the-decision-process" class="section level2">
-<h2><span class="header-section-number">8.1</span> The decision process</h2>
-<p>Everybody knows something about the p-value. When it’s low enough, the experiment “worked”. Before diving into the nitty gritty of p-values, let’s jump into a wider angle format to flesh out how they are used.</p>
-<p>The framework can be broken down into 5 key steps:</p>
-<ol style="list-style-type: lower-roman">
-<li>We begin with a null hypothesis–yes, the boring one about nothing.</li>
-<li>Experiments generate data.</li>
-<li>The data are transformed into test statistics.</li>
-<li>P-values are calculated from the experiment’s test statistic value.</li>
-<li>Based upon <em>a priori</em> thresholds, a decision is made to reject a null hypothesis, or not, depending upon the extremeness of the result.</li>
+<div id="twowayCR" class="section level1">
+<h1><span class="header-section-number">Chapter 28</span> Two-way ANOVA Completely Randomized</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(ez)
+<span class="kw">library</span>(knitr)
+<span class="kw">library</span>(kableExtra)
+<span class="kw">library</span>(viridis)</code></pre></div>
+<p>A two-way ANOVA experimental design is one that involves two predictor variables, where each predictor has 2 or more levels. There is only one outcome variable in a 2 way ANOVA and it is measured on an equal interval scale. The predictor variables are often referred to as factors, and so ANOVA designs are synonymous with factorial designs.</p>
+<p>The experimental designs can be as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Completely randomized (CR) on both factors</li>
+<li>Related measures (RM) on both factors</li>
+<li>Mixed, CR on one factor and RM on the other</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/hypothesis.jpg&quot;</span>)</code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-33"></span>
-<img src="images/hypothesis.jpg" alt="Statistical hypotheses test the null in a multistep process"  />
+<p>In one sense, a two-way ANOVA can be thought of as two one-way ANOVA’s run simultaneously. The major difference, however, is the ability to test whether an interaction exists between the two factors.</p>
+<p>In this chapter we’ll focus on the data structure and analysis of a two-way ANOVA CR experimental design.</p>
+<div id="effect-of-strain-and-diet-on-liver" class="section level2">
+<h2><span class="header-section-number">28.1</span> Effect of Strain and Diet on Liver</h2>
+<p>A (hypothetical) study was conducted to evaluate the influence of mouse background strain and diet on the accumulation of cholesterol in liver. Ten animals were selected randomly from each of the C57BL/6 and C57BL/10 strains. They were each split randomly onto either of two diets, normal and high fat.</p>
+<p>After about two months they were sacrificed to obtain cholesterol measurements in liver tissue.</p>
+<p>Three predictions, and the corresponding null hypotheses that each tests, can be evaluated here simultaneously:</p>
+<ol style="list-style-type: decimal">
+<li>The two strains differ in liver cholesterol content. <span class="math inline">\(H0:\sigma^2_{strain}\le\sigma^2_{residual}\)</span></li>
+<li>The diets differ in how they affect liver cholesterol content. <span class="math inline">\(H0:\sigma^2_{diet}\le\sigma^2_{residual}\)</span></li>
+<li>The liver cholesterol content is influenced by both diet and strain. <span class="math inline">\(H0:\sigma^2_{strainXdiet}\le\sigma^2_{residual}\)</span></li>
+</ol>
+<p>The first two of these are commonly referred to as the main effects of the factors, whereas the third is referred to as the interaction effect of the factors.</p>
+<p>Here’s some simulated data. But they are guided guided using means and standard deviations from the <a href="https://phenome.jax.org/search?searchterm=cholesterol">Jackson Labs phenome database</a>). along with a graph of the results:</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+ID
+</th>
+<th style="text-align:left;">
+Strain
+</th>
+<th style="text-align:left;">
+Diet
+</th>
+<th style="text-align:right;">
+Cholesterol
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+49
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+43
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+37
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+47
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+91
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+86
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+120
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+9
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+111
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+C57BL/6
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+101
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+123
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+125
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+115
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+Normal
+</td>
+<td style="text-align:right;">
+88
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+207
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+228
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+217
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+C57BL/10
+</td>
+<td style="text-align:left;">
+High Fat
+</td>
+<td style="text-align:right;">
+217
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(
+  liver, 
+  <span class="kw">aes</span>(Diet, Cholesterol, <span class="dt">fill=</span>Strain)
+  ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(
+    <span class="dt">fun.data=</span><span class="st">&quot;mean_sdl&quot;</span>, 
+    <span class="dt">fun.args=</span><span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>), 
+    <span class="dt">geom=</span> <span class="st">&quot;errorbar&quot;</span>, 
+    <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="dv">1</span>), 
+    <span class="dt">width=</span><span class="fl">0.2</span>, 
+    <span class="dt">size=</span><span class="dv">1</span>
+    ) <span class="op">+</span>
+<span class="st">   </span><span class="kw">stat_summary</span>(
+     <span class="dt">fun.y=</span><span class="st">&quot;mean&quot;</span>, 
+     <span class="dt">fun.args=</span><span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>), 
+     <span class="dt">geom=</span> <span class="st">&quot;bar&quot;</span>, 
+     <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="dv">1</span>), 
+     <span class="dt">width=</span><span class="fl">0.5</span>, 
+     <span class="dt">size=</span><span class="dv">2</span>
+     ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(
+    <span class="dt">discrete=</span>T
+    ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.position=</span>(<span class="kw">c</span>(<span class="fl">0.8</span>, <span class="fl">0.8</span>))
+    ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">title=</span><span class="st">&quot;Strain and Diet Effects on Liver Cholesterol, mean +/- SD&quot;</span>, 
+    <span class="dt">x=</span><span class="st">&quot;Diet&quot;</span>, 
+    <span class="dt">y=</span><span class="st">&quot;Liver Cholesterol, mg/&quot;</span>
+    )</code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-284"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-284-1.png" alt="Two-way completely randomized ANOVA results" width="672" />
 <p class="caption">
-Figure 8.1: Statistical hypotheses test the null in a multistep process
+Figure 28.1: Two-way completely randomized ANOVA results
 </p>
 </div>
-<p>Low p-values are associated with extreme values of a test statistic. Extreme values of test statistics happen when the effect sizes of the results are high. Rejecting a null on the basis of a p-value means our test statistic value is too extreme to belong in the distribution of null test statistic values.</p>
-<p>Thus, a low p-value means the effect size is improbably high if it were, in fact, not truly effective.</p>
-<p>If you learn nothing more in this course, learn that the statistics discussed here are tests of the null hypothesis. Learn that every p-value you see in R output is coupled to a test statistic value. These p-values represent the probability your evidence belongs in the null test statistic distribution.</p>
+<p>In particular, pay attention to the data structure. It has four columns: ID, Strain, Diet, Cholesterol. All of these are variables, including two columns for each of the predictor variables (Strain, Diet), and one for the response variable (Cholesterol). The ID can also be thought of as a variable.</p>
+<div id="way-cr-anova-test" class="section level3">
+<h3><span class="header-section-number">28.1.1</span> 2 Way CR ANOVA Test</h3>
+<p>We use <code>ezANOVA</code> in the ANOVA package to test the three null hypotheses. Here are the arguments:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">out.cr &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(<span class="dt">data =</span> liver,
+                   <span class="dt">dv =</span> Cholesterol,
+                   <span class="dt">wid =</span> ID,
+                   <span class="dt">between =</span> <span class="kw">c</span>(Strain,Diet),
+                   <span class="dt">type =</span> <span class="dv">3</span>,
+                   <span class="dt">return_aov =</span> F,
+                   <span class="dt">detailed =</span> T
+  
+)
+
+out.cr</code></pre></div>
+<pre><code>## $ANOVA
+##        Effect DFn DFd       SSn    SSd          F            p p&lt;.05
+## 1 (Intercept)   1  16 280608.05 2096.4 2141.63747 1.801635e-18     *
+## 2      Strain   1  16  41496.05 2096.4  316.70330 5.742386e-12     *
+## 3        Diet   1  16  34196.45 2096.4  260.99180 2.499051e-11     *
+## 4 Strain:Diet   1  16   3100.05 2096.4   23.65999 1.722945e-04     *
+##         ges
+## 1 0.9925845
+## 2 0.9519091
+## 3 0.9422366
+## 4 0.5965707
+## 
+## $`Levene&#39;s Test for Homogeneity of Variance`
+##   DFn DFd   SSn   SSd        F         p p&lt;.05
+## 1   3  16 283.8 748.4 2.022448 0.1513253</code></pre>
 </div>
-<div id="popper-and-falsification" class="section level2">
-<h2><span class="header-section-number">8.2</span> Popper and falsification</h2>
-<p>Using data to falsify an hypothesis, even if that hypothesis is the null, is a decision framework that plays well with philosopher Karl Popper’s assertion that <a href="https://plato.stanford.edu/entries/popper/#ProbDema">scientific theories are probative</a> and that unscientific theories are not.</p>
-<p>To Popper, the grandest scientific theories are those that can be falsified. In Popperian logic, the truth of nature is unknowable and unproveable….even though it is testable. Thus, the scientific method advocated by Popper doesn’t allow for proving an hypothesis, but at the same time it doesn’t forbid us from rejecting hypotheses that are inconsistent with observations.</p>
-<p>Thus enters the null hypothesis, which predicts, of course, that nothing happens. The null is an incredibly handy device because if we make observations that are extremely inconsistent with the null, meaning we have observed that something happens, we are obligated to reject the null. Thus, the null is falsifiable when we have positive results!</p>
-<p>Imagine an experiment to test whether a drug lowers blood glucose in people who have diabetes. When the glucose-lowering effect size for the drug in the sample is large enough, we can reject the hypothesis that the drug didn’t have any effect.</p>
-<p>In other words, we will accept an observation as evidence for a positive result by formally concluding that same evidence is inconsistent with a negative result.</p>
-<p>Some argue that this logic forces the researcher to test the “wrong” hypothesis and to also accept an alternate hypothesis that itself may not be true. For example, although blood glucose may be lower in the drug treatment arm of the sample, that may have occured by random chance. An unknown confounder variable could be responsible for the observation that drug-treatment is associated with lower blood glucose.</p>
-<p>In that case we would make an error by rejecting the null when it is actually true.</p>
-<p>Of course, rejecting the null is provisional. All gained knowledge is provisional. Drawing a conclusion from one experiment doesn’t preclude testing the experiment some other way. If the problem is important enough (and “real”), it will be tested from multiple angles. It will need to survive the preponderance of the evidence.</p>
-<p>I’m convinced the alternative approach, which is to seek out evidence that affirms an hypothesis, is not better. This lies at the heart of what Popper stood against. There is an inherent confirmation bias in seeking out affirmation of ideas. In the proper light, any evidence can be made to look attractive. Furthermore, what if, in seeking affirmation, nothing happens? Negative results are very difficult to interpret because the absence of evidence cannot be interpreted as the evidence of absence.</p>
-<p>So I’d hope the researcher who gives this some thought will find null falsification more pragmatic, if not ingenious. It allows us to move forward on the basis of positive evidence (granted, which may be wrong and we don’t know it), while at the same time practicing a more sound, more unbiased scientific methodology (hypothesis falsification rather than affirmation).</p>
-<p>Meanwhile, this statistical framework does allow for the possibility of designing experimental conditions to minimize false positive (type1) and false negative (type2) errors. We can operationalize our tolerance for those kinds of mistakes in meaningful ways such that we are less likely to become victims of bad luck.</p>
-<p>Finally, the decision to reject a null hypothesis can stand alone. It need not be the same as a decision to accept the alternate. Rejecting the null only asserts that the experimental evidence is inconsistent with the null. In no way does that “prove”&quot; the alternative hypothesis.</p>
-<p>For most, some of these concerns should become even less of a problem when the null and alternate hypotheses are explicitly framed in terms of population parameters and their <strong>mutually exclusive and collectively exhaustive</strong> outcomes. This approach doesn’t leave much room for ambiguity about what is being declared at the decision step.</p>
-<p>For example, the null hypothesis for the diabetes case is very explicit: <span class="math inline">\(null, H_0: \mu_{placebo} = \mu_{drug}\)</span>, Here <span class="math inline">\(\mu\)</span>, since it is greek notation, represents the mean blood glucose in concentration units in the populations corresponding to the two sampled groups.</p>
-<p>Now that we have a bona fide null hypothesis, we can state the alternate hypothesis as everything the null can’t be: <span class="math inline">\(alternate, H_1: \mu_{placebo}\ \ne \mu_{drug}\)</span></p>
-<p>In other words, the inference operates on the basis of straightforward mathematical principles. Two parameters that are compared either meet our prescribed expectations, or they do not. In this case, if we reject the hypothesis that the means of the two groups are equal, then they can only be not equal.</p>
-<p>Are they truly not equal? We can never know for sure, but we are operating within a framework of known error tolerances.</p>
+<div id="interpretation-of-2-way-cr-anova-output" class="section level3">
+<h3><span class="header-section-number">28.1.2</span> Interpretation of 2 Way CR ANOVA Output</h3>
+<p>We get two F test tables, Levene’s and the ANOVA. Specific statistical details about these tests are covered in the document “Completely Randomized One Way ANOVA Analysis”.</p>
+<p>The only difference in two-way CR ANOVA compared to a one-way CR ANOVA is the test of the nulls for the additional factor and for the interaction between the two factors. The model is a bit more complex.</p>
+<div id="levenes" class="section level4">
+<h4><span class="header-section-number">28.1.2.1</span> Levene’s</h4>
+<p>Levene’s tests the null that homogeneity of variance is equivalent across the groups. The p-value of 0.15 is higher than the 0.05 type1 error rejection threshold. Levene’s is inconclusive, offering no evidence the homogeneity of variance assumption has been violated.</p>
 </div>
-<div id="statistical-hypothesis-rubric" class="section level2">
-<h2><span class="header-section-number">8.3</span> Statistical hypothesis rubric</h2>
-<p>Researchers have to grapple with two types of hypotheses. One type is the grand, paradigm-driving assertion of some key insight, which is designed to express the big picture in forward thinking terms. It is also designed to wow study sections and seminar audiences.</p>
-<p>The other type is the null hypothesis, which is designed to be tested statistically. The null predicts nothing will happen. The null is as boring as it gets. You’d never propose the null in a specific aims page, but you should get in the habit of thinking in terms of testing the null with your statistics.</p>
-<p>Only the null hypothesis has any statistical utility, whereas the grand hypothesis has no statistical utility. This is a conceptual hurdle that most students struggle with. The grand hypothesis is for marketing, the null hypothesis is for mattering.</p>
-<p>For that reason I’ve created a rubric for forming a statistically testable hypothesis. The rubric begins with a conceptual overview of a problem, and it ends with how the results will be interpreted. At some point during the semester you’ll have a major assignment that asks you to go through this rubric for a problem of your own choosing. That assignment is a major test for whether you “get” statistical design of experiments.</p>
-<p><strong>Step 1: Lay out the big picture of the problem in a way that leads to a “What is not yet known” assertion.</strong></p>
-<p><em>Type 2 diabetes is associated with high blood glucose levels and obesity, which each have long term effects associated with high morbidity. Exenatide is GLP-1 receptor agonist that can control blood glucose levels. When delivered as an osmotic minipump exenatide lowers blood glucose. A standard of care for type2 diabetics is to put them on a weight loss program while giving them drugs that manage blood glucose. It is not known if continuous administration via osmotic minipump can lead to greater weight loss while on this standard of care.</em></p>
-<p><strong>Step 2: Transform the “What is not known” statement into a bold and simple scientific prediction, as if “what is not known” were answered:</strong></p>
-<p><em>Long-term administration of exenatide via osmotic minipump to type-2 diabetics will cause weight loss.</em></p>
-<p><strong>Step 3: Now frame the experimental plan in terms of the independent and dependent variables, written as an if/then statement. In narrative format, if you manipulate what predictor variables, then what outcome do you expect to observe?</strong></p>
-<p><em>If an exenatide osmotic minipump is implanted into type-2 diabetics, then their weight loss will differ compared to placebo.</em></p>
-<p><strong>Step 4: Define the dependent and the independent variables of the experiment. What type of variables are these? What are the experimental units? Are the measurements intrinsically-linked, or not?</strong></p>
-<p><em>The dependent variable will be weight loss, calculated as the weight difference between pre-study to post-study for each human subject. Each subject is the experimental unit. The independent variable is treatment. Treatment is a discrete, factoral variable that will be at two levels, placebo and exenatide. Although pre- and post-study weights will be measured for each subject and are themselves intrinsically-linked, they are used to derive the dependent variable (weight loss), which are not instrinsically-linked.</em></p>
-<p><strong>Step 5: Write the null and alternate hypothesis on the basis of the statistical parameters to be tested. Note here that greek notation is used to symbolize that the hypothesis is about the sampled population parameters, rather than the sample.</strong></p>
-<p><em>Where</em> <span class="math inline">\(\mu\)</span> <em>represents the mean weight loss of the populations corresponding to the sampled groups, the null and alternate hypotheses are</em> <span class="math display">\[H_0:\mu_{exenatide}=\mu_{placebo}\]</span> <em>and</em> <span class="math display">\[H_1: \mu_{exenatide}\ne\mu_{placebo}\]</span></p>
-<p><strong>Step 6: What statistical test will be used to test the null hypothesis? What are the decision rules?</strong></p>
-<p><em>A two-sided, unpaired t-test for comparing group means. The sample size will be based upon a power of 90%, which means that the tolerance level for type2 error will be 10%. The decision threshold for type1 error will be 5%. Thus, the null hypothesis will be rejected at a p-value of less than 0.05.</em></p>
-<div id="two-sided-vs-one-sided-hypothesis" class="section level4">
-<h4><span class="header-section-number">8.3.0.1</span> Two-sided vs one-sided hypothesis</h4>
-<p>The above is an example for a two-sided hypothesis. In a two-sided hypothesis <span class="math inline">\(\ne\)</span> is mutually exclusive and collectively exhaustive of <span class="math inline">\(=\)</span>. By rejecting the null that two things are equal, we implicitly (and provisionally) accept the alternative hypothesis that they are not equal.</p>
-<p>Notice how this hypothesis doesn’t predict the direction of an effect. It only predicts there will be a difference between the two groups.</p>
-<p>If you’re willing to predict the direction of an effect, you would choose to make a one-sided hypothesis.</p>
-<p>One-sided hypotheses can happen in either of two ways. In one case we can predict one mean will be greater (<span class="math inline">\(&gt;\)</span>)than another mean. In the other case, we can predict one mean will be less than (<span class="math inline">\(&lt;\)</span>) another mean. The mutually exclusive and collectively exhaustive alternatives to these one sided hypotheses are therefore <span class="math inline">\(\ge\)</span> and <span class="math inline">\(\le\)</span>, respectively. In other words, if one mean is not greater than another mean, then the only alternative possibilities are that it is less than or equal to it.</p>
-<p>The decision to test a one- or two-sided hypothesis should be based upon scientific reasoning.</p>
-<p>In the example above, I’m unwilling to test a one-sided hypothesis that exenatide will cause a greater weight loss than placebo, even though that is the expectation (and hope!). Were I willing to test the direction of the effect, the one-sided hypothesis test would be written like this:</p>
-<p><span class="math display">\[H_0:\mu_{exenatide}&lt;\mu_{placebo}\]</span> <em>and</em> <span class="math display">\[H_1: \mu_{exenatide}\ge\mu_{placebo}\]</span></p>
-<p>If the data show that mean weight loss is greater in the exenatide group, as expected, that null hypothesis can be rejected.</p>
-<p>But what if, unexpectedly, weight loss is greater in the placebo group? It would generate a high p-value. According to the pre-planned hypothesis, the null could not be rejected.</p>
-<p>Worse, given they are already enrolled in a standard of care weight loss program, to know the drug actually impairs weight loss would be an important finding. But in choosing the incorrect one-sided hypothesis, there is nothing to do with the result. It is a negative result. I can’t flip the tail to the other direction to get a significant result that I wasn’t planning upon. That would be extremely biased!</p>
-<p>In practice, some researchers caught in this conundrum create a whole new can of worms by simply changing the pre-planned hypothesis after the fact. It’s done flippantly but is actually a fairly serious violation of scientific integrity. Changing the hypothesis so that it is consistent with the results is not what anybody would consider sound scientific method.</p>
+<div id="anova-table" class="section level4">
+<h4><span class="header-section-number">28.1.2.2</span> ANOVA Table</h4>
+<p>The ANOVA table shows p-values that are below the 0.05 type1 error threshold for each factor and for their interaction. We can safely reject the interaction null hypothesis (p=0.00017).</p>
+<p>Scientifically, we would conclude that the effect of diet on liver cholesterol depends upon the strain of the animal. The partial eta-square indicates this interaction between diet and strain explains about 59.6% of the observed variation.</p>
+<p>Since the interaction is positive, it’s difficult to say much about diet and strain. Sure, diet affects liver cholesterol. Strain does as well. The ANOVA per se cannot parse those out from the interaction effect (we wait for regression analysis for that!).</p>
 </div>
-<div id="stick-to-two-sided-hypotheses" class="section level4">
-<h4><span class="header-section-number">8.3.0.2</span> Stick to two-sided hypotheses</h4>
-<p>Unlike the case above, when being wrong about the direction of an effect is not a big deal, then one-sided tests are not a bad option.</p>
-<p>The example above serves to illustrate how a two-sided hypothesis would have been a better choice than a one-sided hypothesis. There are a few other reasons why it is probably better to get in the habit of always testing two-sided nulls: the two-sided test is more conservative because the p-value threshold is a bit lower. Furthermore, multiple tests and confidence intervals easier perform and to interpret, respectively.</p>
+</div>
+<div id="post-hoc-multiple-comparisons" class="section level3">
+<h3><span class="header-section-number">28.1.3</span> Post Hoc Multiple Comparisons</h3>
+<p>We could leave well enough alone and draw our inferences on the basis of the interaction effect alone. However, it would not be unreasonable to compare the effect of diet within each strain. at each level of diet. Nor is it unreasonable to compare the each strain across the diets.</p>
+<p>We’ll do run a <code>pairwise.t.test</code> function to make all possible comparisons, and use a p-value adjustment method to keep the family-wise error rate within 5%. The following script yieds every possible comparison between levels of the two factors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairwise.t.test</span>(liver<span class="op">$</span>Cholesterol, <span class="kw">interaction</span>(liver<span class="op">$</span>Strain, liver<span class="op">$</span>Diet), <span class="dt">paired=</span>F, <span class="dt">p.adj =</span> <span class="st">&quot;holm&quot;</span>)</code></pre></div>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  liver$Cholesterol and interaction(liver$Strain, liver$Diet) 
+## 
+##                  C57BL/10.High Fat C57BL/6.High Fat C57BL/10.Normal
+## C57BL/6.High Fat 1.4e-10           -                -              
+## C57BL/10.Normal  3.5e-10           0.26             -              
+## C57BL/6.Normal   3.4e-13           1.1e-06          2.8e-07        
+## 
+## P value adjustment method: holm</code></pre>
+<p>Diet effect within each strain:</p>
+<ul>
+<li>10.High v 10.Norml: p=3.5e-10</li>
+<li>6.High v 6.Normal: p=1.1e-06</li>
+</ul>
+<p>Strain effect across diets: * 10.High v 6.High p=1.4e-10 * 10.Normal v 6.Normal p=2.8e-7</p>
+<p>Of the six possible comparisons, only one shows no difference (liver cholesterol in C57Bl/10 on normal diet is no different from C57Bl/6 on high diet, p=0.26)</p>
+</div>
+<div id="write-up-11" class="section level3">
+<h3><span class="header-section-number">28.1.4</span> Write Up</h3>
+<p><em>The interaction betwen diet and strain accounts for nearly 60% of the variation liver cholesterol levels (2 way CR ANOVA, p=0.00017, n=20). Pairwise differences in the liver cholesterol response exist between levels of diet within strains, and across strains at each level of diet (Holm’s adjusted p&lt;0.05, pairwise t tests).</em></p>
 
 </div>
 </div>
@@ -566,8 +917,8 @@ Figure 8.1: Statistical hypotheses test the null in a multistep process
           </div>
         </div>
       </div>
-<a href="dispersion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="error.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="onewayRM.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="twowayRM.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
