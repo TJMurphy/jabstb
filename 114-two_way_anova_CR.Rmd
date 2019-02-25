@@ -1,0 +1,158 @@
+# Two-way ANOVA Completely Randomized {#twowayCR}
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+library(tidyverse)
+library(ez)
+library(knitr)
+library(kableExtra)
+library(viridis)
+```
+
+A two-way ANOVA experimental design is one that involves two predictor variables, where each predictor has 2 or more levels. There is only one outcome variable in a 2 way ANOVA and it is measured on an equal interval scale. The predictor variables are often referred to as factors, and so ANOVA designs are synonymous with factorial designs. 
+
+The experimental designs can be as follows:
+
+1) Completely randomized (CR) on both factors
+2) Related measures (RM) on both factors
+3) Mixed, CR on one factor and RM on the other
+
+In one sense, a two-way ANOVA can be thought of as two one-way ANOVA's run simultaneously. The major difference, however, is the ability to test whether an interaction exists between the two factors.
+
+In this chapter we'll focus on the data structure and analysis of a two-way ANOVA CR experimental design.
+
+## Effect of Strain and Diet on Liver
+
+A (hypothetical) study was conducted to evaluate the influence of mouse background strain and diet on the accumulation of cholesterol in liver. Ten animals were selected randomly from each of the C57BL/6 and C57BL/10 strains. They were each split randomly onto either of two diets, normal and high fat.
+
+After about two months they were sacrificed to obtain cholesterol measurements in liver tissue.
+
+Three predictions, and the corresponding null hypotheses that each tests, can be evaluated here simultaneously:
+
+1) The two strains differ in liver cholesterol content. $H0:\sigma^2_{strain}\le\sigma^2_{residual}$
+2) The diets differ in how they affect liver cholesterol content. $H0:\sigma^2_{diet}\le\sigma^2_{residual}$
+3) The liver cholesterol content is influenced by both diet and strain. $H0:\sigma^2_{strainXdiet}\le\sigma^2_{residual}$
+
+The first two of these are commonly referred to as the main effects of the factors, whereas the third is referred to as the interaction effect of the factors.
+
+Here's some simulated data. But they are guided guided using means and standard deviations from the [Jackson Labs phenome database](https://phenome.jax.org/search?searchterm=cholesterol)). along with a graph of the results:
+
+```{r echo=FALSE, paged.print=TRUE}
+set.seed(54321)
+a1<- round(rnorm(5, 50, 8), 0)
+a2<- round(rnorm(5, 100, 8), 0)
+b1 <- round(rnorm(5, 110, 10), 0)
+b2 <- round(rnorm(5, 200, 15), 0)
+
+ID <- as.factor(1:30)
+
+liver <- data.frame(
+  ID = as.factor(1:20),
+  Strain = rep(c("C57BL/6", "C57BL/10"), each = 10),
+  Diet = rep(c(rep("Normal", 5), rep("High Fat", 5)),2),
+  Cholesterol = c(a1, a2, b1, b2)
+  )
+
+liver %>% kable() %>% kable_styling
+
+```
+
+
+```{r fig.cap="Two-way completely randomized ANOVA results"}
+ggplot(
+  liver, 
+  aes(Diet, Cholesterol, fill=Strain)
+  ) +
+  stat_summary(
+    fun.data="mean_sdl", 
+    fun.args=list(mult=1), 
+    geom= "errorbar", 
+    position=position_dodge(width=1), 
+    width=0.2, 
+    size=1
+    ) +
+   stat_summary(
+     fun.y="mean", 
+     fun.args=list(mult=1), 
+     geom= "bar", 
+     position=position_dodge(width=1), 
+     width=0.5, 
+     size=2
+     ) +
+  scale_fill_viridis(
+    discrete=T
+    ) +
+  theme(
+    legend.position=(c(0.8, 0.8))
+    ) +
+  labs(
+    title="Strain and Diet Effects on Liver Cholesterol, mean +/- SD", 
+    x="Diet", 
+    y="Liver Cholesterol, mg/"
+    )
+```
+
+In particular, pay attention to the data structure. It has four columns: ID, Strain, Diet, Cholesterol. All of these are variables, including two columns for each of the predictor variables (Strain, Diet), and one for the response variable (Cholesterol). The ID can also be thought of as a variable. 
+
+### 2 Way CR ANOVA Test
+
+We use `ezANOVA` in the ANOVA package to test the three null hypotheses. Here are the arguments:
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+out.cr <- ezANOVA(data = liver,
+                   dv = Cholesterol,
+                   wid = ID,
+                   between = c(Strain,Diet),
+                   type = 3,
+                   return_aov = F,
+                   detailed = T
+  
+)
+
+out.cr
+```
+
+### Interpretation of 2 Way CR ANOVA Output
+
+We get two F test tables, Levene's and the ANOVA. Specific statistical details about these tests are covered in the document "Completely Randomized One Way ANOVA Analysis". 
+
+The only difference in two-way CR ANOVA compared to a one-way CR ANOVA is the test of the nulls for the additional factor and for the interaction between the two factors. The model is a bit more complex.
+
+#### Levene's
+
+Levene's tests the null that homogeneity of variance is equivalent across the groups. The p-value of 0.15 is higher than the 0.05 type1 error rejection threshold. Levene's is inconclusive, offering no evidence the homogeneity of variance assumption has been violated.
+
+#### ANOVA Table
+
+The ANOVA table shows p-values that are below the 0.05 type1 error threshold for each factor and for their interaction. We can safely reject the interaction null hypothesis (p=0.00017). 
+
+Scientifically, we would conclude that the effect of diet on liver cholesterol depends upon the strain of the animal. The partial eta-square indicates this interaction between diet and strain explains about 59.6% of the observed variation.
+
+Since the interaction is positive, it's difficult to say much about diet and strain. Sure, diet affects liver cholesterol. Strain does as well. The ANOVA per se cannot parse those out from the interaction effect (we wait for regression analysis for that!).
+
+### Post Hoc Multiple Comparisons
+
+We could leave well enough alone and draw our inferences on the basis of the interaction effect alone. However, it would not be unreasonable to compare the effect of diet within each strain. at each level of diet. Nor is it unreasonable to compare the each strain across the diets. 
+
+We'll do run a `pairwise.t.test` function to make all possible comparisons, and use a p-value adjustment method to keep the family-wise error rate within 5%. The following script yieds every possible comparison between levels of the two factors.
+
+```{r}
+pairwise.t.test(liver$Cholesterol, interaction(liver$Strain, liver$Diet), paired=F, p.adj = "holm")
+```
+
+Diet effect within each strain:
+
+* 10.High v 10.Norml: p=3.5e-10
+* 6.High v 6.Normal: p=1.1e-06
+
+Strain effect across diets:
+* 10.High v 6.High p=1.4e-10
+* 10.Normal v 6.Normal p=2.8e-7
+
+Of the six possible comparisons, only one shows no difference (liver cholesterol in C57Bl/10 on normal diet is no different from C57Bl/6 on high diet, p=0.26)
+
+### Write Up
+
+*The interaction betwen diet and strain accounts for nearly 60% of the variation liver cholesterol levels (2 way CR ANOVA, p=0.00017, n=20). Pairwise differences in the liver cholesterol response exist between levels of diet within strains, and across strains at each level of diet (Holm's adjusted p<0.05, pairwise t tests).*
+
+

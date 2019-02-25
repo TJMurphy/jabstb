@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 8 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <title>Chapter 29 Two-way ANOVA Related Measures | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 8 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:title" content="Chapter 29 Two-way ANOVA Related Measures | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 8 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta name="twitter:title" content="Chapter 29 Two-way ANOVA Related Measures | JABSTB: Statistical Design and Analysis of Experiments with R" />
   
   <meta name="twitter:description" content="Experimental biostatistics using R." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="dispersion.html">
-<link rel="next" href="error.html">
+<link rel="prev" href="twowayCR.html">
+<link rel="next" href="jaxwest2.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -470,93 +470,449 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="hypotheses" class="section level1">
-<h1><span class="header-section-number">Chapter 8</span> Framing statistical hypotheses</h1>
-<p><em>“There is no more to science than its method, and there is no more to its method than Popper has said.”-Hermann Bondi</em></p>
-<p>Hypothesis-driven research tests predictions about the nature of the world.</p>
-<p>Testing hypotheses statistically provides a pragmatic framework for making decisions about the validity of those predictions.</p>
-<p>When planning an experiment the primary goal should be to bring hyper-focused clarity to the hypothesis. This is the time to distill your thinking down to the exact question you want answered. What are you studying? What is not known? What is your prediction? How will you measure it? What are your variables? Are they discrete or continuous? How will you test it? How will you decide whether what you predicted happened or not? Will this actually answer the question you’re asking?</p>
-<p>The statistics taught in this course are for assessing the validity of experimental outcomes in a somewhat odd way: Formally, we test the null hypothesis.</p>
-<p>The expectation is to generate observations of such extreme magnitude that we can reject the null, the hypothesis that nothing happened. At first blush that might come off as absurd. Like a Seinfeld episode, where nothing is what is most important.</p>
-<p>Hopefully this won’t seem so odd after I describe what this accomplishes and explain why it is done this way.</p>
-<div id="the-decision-process" class="section level2">
-<h2><span class="header-section-number">8.1</span> The decision process</h2>
-<p>Everybody knows something about the p-value. When it’s low enough, the experiment “worked”. Before diving into the nitty gritty of p-values, let’s jump into a wider angle format to flesh out how they are used.</p>
-<p>The framework can be broken down into 5 key steps:</p>
-<ol style="list-style-type: lower-roman">
-<li>We begin with a null hypothesis–yes, the boring one about nothing.</li>
-<li>Experiments generate data.</li>
-<li>The data are transformed into test statistics.</li>
-<li>P-values are calculated from the experiment’s test statistic value.</li>
-<li>Based upon <em>a priori</em> thresholds, a decision is made to reject a null hypothesis, or not, depending upon the extremeness of the result.</li>
+<div id="twowayRM" class="section level1">
+<h1><span class="header-section-number">Chapter 29</span> Two-way ANOVA Related Measures</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(ez)
+<span class="kw">library</span>(knitr)
+<span class="kw">library</span>(kableExtra)
+<span class="kw">library</span>(viridis)</code></pre></div>
+<p>A two-way ANOVA experimental design is one that involves two predictor variables, where each predictor has 2 or more levels. There is only one outcome variable in a 2 way ANOVA and it should be continuous, measured on an equal interval scale, and ideally sampled from a normally-distributed population.</p>
+<p>The predictor variables are often referred to as factors, and so ANOVA designs are synonymous with factorial designs.</p>
+<p>The experimental designs can be as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Completely randomized (CR) on both factors</li>
+<li>Related measures (RM) on both factors</li>
+<li>Mixed, CR on one factor and RM on the other</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/hypothesis.jpg&quot;</span>)</code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-33"></span>
-<img src="images/hypothesis.jpg" alt="Statistical hypotheses test the null in a multistep process"  />
+<p>In one sense, a two-way ANOVA can be thought of as two one-way ANOVA’s run simultaneously. So it is possible to assess the effects of two factors at once. The major difference, however, is the ability to also test whether an interaction exists between the two factors.</p>
+<p>In this chapter we’ll focus on the data structure and analysis of a two-way ANOVA RM experimental design. These are particularly common in cell-culture and other in vitro-based experiments, owing to the homogeneity of the biological material.</p>
+<p>For an experiment such as the one described below, all of the biological material assayed within a single replicate comes from a common source. Every well in every plate prepared from that source is identical, for all intents and purposes. Therefore, any measurements taken from these wells are intrinsically-linked. For this reason, the data should be analyzed as related-measures.</p>
+<div class="figure"><span id="fig:unnamed-chunk-288"></span>
+<img src="images/twowayRM.jpg" alt="A two-way ANOVA RM design viewed from the bench. Each combination of the two factors is tested in technical duplicate. All measurements are intrinsically-related."  />
 <p class="caption">
-Figure 8.1: Statistical hypotheses test the null in a multistep process
+Figure 29.1: A two-way ANOVA RM design viewed from the bench. Each combination of the two factors is tested in technical duplicate. All measurements are intrinsically-related.
 </p>
 </div>
-<p>Low p-values are associated with extreme values of a test statistic. Extreme values of test statistics happen when the effect sizes of the results are high. Rejecting a null on the basis of a p-value means our test statistic value is too extreme to belong in the distribution of null test statistic values.</p>
-<p>Thus, a low p-value means the effect size is improbably high if it were, in fact, not truly effective.</p>
-<p>If you learn nothing more in this course, learn that the statistics discussed here are tests of the null hypothesis. Learn that every p-value you see in R output is coupled to a test statistic value. These p-values represent the probability your evidence belongs in the null test statistic distribution.</p>
+<p>An independent replicate occurs when the same protocol is followed, from start to finish, beginning with a new batch of plates.</p>
+<p>It’s hard to argue these represent biological replicates in such designs. The cells are likely clonal, and probably aren’t changing much from batch to batch. The statistical analysis is therefore essentially focused on establishing whether the observations occur repeatedly or not.</p>
+<div id="suppression-of-casmc-nfat-by-icer" class="section level2">
+<h2><span class="header-section-number">29.1</span> Suppression of CASMC NFAT by ICER</h2>
+<p>Cornary artery atheromas are enriched in fast-growing mesenchymal-like cells, which have prominent inflammatory characteristics. They express the transcription factor NFAT, which is regulated by mitogenic receptor signaling to control inflammatory gene expression.</p>
+<p>Cells from atheroma explants are easy to grow in culture, often indefinitely as for cancer cells. Eventually, a fast growing cell population dominates these monocultures when passaged serially. But these probably mimic the “bad” cells in an atheroma pretty well, so are useful to study.</p>
+<p>An experiment was performed on culutured human coronary smooth muscle cells derived from an atheroma to determine if the bzip suppresser ICER attenuates NFAT and whether it is mitogen-selective.</p>
+<p>One predictor variable is mitogen at 3 levels: vehicle, ADP and PDGF. A second predictor variable is an exppression vector, which is either empty or encodes a cDNA to express ICER.</p>
+<p>The output response, luminescence in cell extracts due to an NFAT-driven luciferase transcriptional reporter, is detected using a luminometer. Luminescence is linearly proportional to the amount of luciferase in the cells.</p>
+<p>The protocol involved three independent transfections of the CASM cell line with the expression vector and luciferase reporter, followed a few days later by treatment with the mitogens for 4 hrs before measuring luminescence. All treatments are peformed in technical duplicate, from which the average value is used for the response measure..</p>
+<p>Three predictions, and the corresponding null hypotheses that each tests, can be evaluated here simultaneously:</p>
+<ol style="list-style-type: decimal">
+<li>Icer and its control differ in how they each affect NFAT-mediated transcription. <span class="math inline">\(H0:\sigma^2_{suppressor}\le\sigma^2_{residual}\)</span></li>
+<li>The mitogens differ in how they affect NFAT-mediated transcription. <span class="math inline">\(H0:\sigma^2_{mitogen}\le\sigma^2_{residual}\)</span></li>
+<li>NFAT-mediated transcription is influence by a combination of suppressor and mitogen. <span class="math inline">\(H0:\sigma^2_{suppressorXmitogen}\le\sigma^2_{residual}\)</span></li>
+</ol>
+<p>Here’s some data:</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+replicate
+</th>
+<th style="text-align:left;">
+vector
+</th>
+<th style="text-align:left;">
+mitogen
+</th>
+<th style="text-align:right;">
+Nfatluc
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+Veh
+</td>
+<td style="text-align:right;">
+23.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+Veh
+</td>
+<td style="text-align:right;">
+15.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+Veh
+</td>
+<td style="text-align:right;">
+17.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+ADP
+</td>
+<td style="text-align:right;">
+83.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+ADP
+</td>
+<td style="text-align:right;">
+95.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+ADP
+</td>
+<td style="text-align:right;">
+89.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+PDGF
+</td>
+<td style="text-align:right;">
+124.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+PDGF
+</td>
+<td style="text-align:right;">
+187.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C
+</td>
+<td style="text-align:left;">
+empty
+</td>
+<td style="text-align:left;">
+PDGF
+</td>
+<td style="text-align:right;">
+170.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+Veh
+</td>
+<td style="text-align:right;">
+16.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+Veh
+</td>
+<td style="text-align:right;">
+5.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+Veh
+</td>
+<td style="text-align:right;">
+27.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+ADP
+</td>
+<td style="text-align:right;">
+89.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+ADP
+</td>
+<td style="text-align:right;">
+80.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+ADP
+</td>
+<td style="text-align:right;">
+52.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+PDGF
+</td>
+<td style="text-align:right;">
+57.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+B
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+PDGF
+</td>
+<td style="text-align:right;">
+78.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C
+</td>
+<td style="text-align:left;">
+ICER
+</td>
+<td style="text-align:left;">
+PDGF
+</td>
+<td style="text-align:right;">
+67.4
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(hcsmc, 
+       <span class="kw">aes</span>(
+         mitogen, 
+         Nfatluc, 
+         <span class="dt">group=</span>replicate)
+       ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(
+    
+  ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(
+    <span class="kw">aes</span>(
+      <span class="dt">color=</span>replicate), 
+    <span class="dt">size=</span><span class="dv">4</span>
+    ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(
+    <span class="op">~</span>vector, 
+    <span class="dt">switch=</span><span class="st">&quot;both&quot;</span>
+    ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_shape_manual</span>(
+    <span class="dt">values=</span><span class="kw">c</span>(<span class="dv">16</span>, <span class="dv">16</span>)
+    ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_viridis</span>(
+    <span class="dt">discrete=</span>T
+    ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(
+    <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>
+    ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_discrete</span>(
+    <span class="dt">limits=</span><span class="kw">c</span>(<span class="st">&quot;Veh&quot;</span>,<span class="st">&quot;ADP&quot;</span>,<span class="st">&quot;PDGF&quot;</span>)
+    ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">y=</span><span class="st">&quot;NFAT-luciferase, light units/mg&quot;</span>, 
+    <span class="dt">x=</span><span class="st">&quot;Mitogen&quot;</span>
+    )</code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-290"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-290-1.png" alt="A cell culture-based two-way ANOVA RM experiment" width="672" />
+<p class="caption">
+Figure 29.2: A cell culture-based two-way ANOVA RM experiment
+</p>
 </div>
-<div id="popper-and-falsification" class="section level2">
-<h2><span class="header-section-number">8.2</span> Popper and falsification</h2>
-<p>Using data to falsify an hypothesis, even if that hypothesis is the null, is a decision framework that plays well with philosopher Karl Popper’s assertion that <a href="https://plato.stanford.edu/entries/popper/#ProbDema">scientific theories are probative</a> and that unscientific theories are not.</p>
-<p>To Popper, the grandest scientific theories are those that can be falsified. In Popperian logic, the truth of nature is unknowable and unproveable….even though it is testable. Thus, the scientific method advocated by Popper doesn’t allow for proving an hypothesis, but at the same time it doesn’t forbid us from rejecting hypotheses that are inconsistent with observations.</p>
-<p>Thus enters the null hypothesis, which predicts, of course, that nothing happens. The null is an incredibly handy device because if we make observations that are extremely inconsistent with the null, meaning we have observed that something happens, we are obligated to reject the null. Thus, the null is falsifiable when we have positive results!</p>
-<p>Imagine an experiment to test whether a drug lowers blood glucose in people who have diabetes. When the glucose-lowering effect size for the drug in the sample is large enough, we can reject the hypothesis that the drug didn’t have any effect.</p>
-<p>In other words, we will accept an observation as evidence for a positive result by formally concluding that same evidence is inconsistent with a negative result.</p>
-<p>Some argue that this logic forces the researcher to test the “wrong” hypothesis and to also accept an alternate hypothesis that itself may not be true. For example, although blood glucose may be lower in the drug treatment arm of the sample, that may have occured by random chance. An unknown confounder variable could be responsible for the observation that drug-treatment is associated with lower blood glucose.</p>
-<p>In that case we would make an error by rejecting the null when it is actually true.</p>
-<p>Of course, rejecting the null is provisional. All gained knowledge is provisional. Drawing a conclusion from one experiment doesn’t preclude testing the experiment some other way. If the problem is important enough (and “real”), it will be tested from multiple angles. It will need to survive the preponderance of the evidence.</p>
-<p>I’m convinced the alternative approach, which is to seek out evidence that affirms an hypothesis, is not better. This lies at the heart of what Popper stood against. There is an inherent confirmation bias in seeking out affirmation of ideas. In the proper light, any evidence can be made to look attractive. Furthermore, what if, in seeking affirmation, nothing happens? Negative results are very difficult to interpret because the absence of evidence cannot be interpreted as the evidence of absence.</p>
-<p>So I’d hope the researcher who gives this some thought will find null falsification more pragmatic, if not ingenious. It allows us to move forward on the basis of positive evidence (granted, which may be wrong and we don’t know it), while at the same time practicing a more sound, more unbiased scientific methodology (hypothesis falsification rather than affirmation).</p>
-<p>Meanwhile, this statistical framework does allow for the possibility of designing experimental conditions to minimize false positive (type1) and false negative (type2) errors. We can operationalize our tolerance for those kinds of mistakes in meaningful ways such that we are less likely to become victims of bad luck.</p>
-<p>Finally, the decision to reject a null hypothesis can stand alone. It need not be the same as a decision to accept the alternate. Rejecting the null only asserts that the experimental evidence is inconsistent with the null. In no way does that “prove”&quot; the alternative hypothesis.</p>
-<p>For most, some of these concerns should become even less of a problem when the null and alternate hypotheses are explicitly framed in terms of population parameters and their <strong>mutually exclusive and collectively exhaustive</strong> outcomes. This approach doesn’t leave much room for ambiguity about what is being declared at the decision step.</p>
-<p>For example, the null hypothesis for the diabetes case is very explicit: <span class="math inline">\(null, H_0: \mu_{placebo} = \mu_{drug}\)</span>, Here <span class="math inline">\(\mu\)</span>, since it is greek notation, represents the mean blood glucose in concentration units in the populations corresponding to the two sampled groups.</p>
-<p>Now that we have a bona fide null hypothesis, we can state the alternate hypothesis as everything the null can’t be: <span class="math inline">\(alternate, H_1: \mu_{placebo}\ \ne \mu_{drug}\)</span></p>
-<p>In other words, the inference operates on the basis of straightforward mathematical principles. Two parameters that are compared either meet our prescribed expectations, or they do not. In this case, if we reject the hypothesis that the means of the two groups are equal, then they can only be not equal.</p>
-<p>Are they truly not equal? We can never know for sure, but we are operating within a framework of known error tolerances.</p>
 </div>
-<div id="statistical-hypothesis-rubric" class="section level2">
-<h2><span class="header-section-number">8.3</span> Statistical hypothesis rubric</h2>
-<p>Researchers have to grapple with two types of hypotheses. One type is the grand, paradigm-driving assertion of some key insight, which is designed to express the big picture in forward thinking terms. It is also designed to wow study sections and seminar audiences.</p>
-<p>The other type is the null hypothesis, which is designed to be tested statistically. The null predicts nothing will happen. The null is as boring as it gets. You’d never propose the null in a specific aims page, but you should get in the habit of thinking in terms of testing the null with your statistics.</p>
-<p>Only the null hypothesis has any statistical utility, whereas the grand hypothesis has no statistical utility. This is a conceptual hurdle that most students struggle with. The grand hypothesis is for marketing, the null hypothesis is for mattering.</p>
-<p>For that reason I’ve created a rubric for forming a statistically testable hypothesis. The rubric begins with a conceptual overview of a problem, and it ends with how the results will be interpreted. At some point during the semester you’ll have a major assignment that asks you to go through this rubric for a problem of your own choosing. That assignment is a major test for whether you “get” statistical design of experiments.</p>
-<p><strong>Step 1: Lay out the big picture of the problem in a way that leads to a “What is not yet known” assertion.</strong></p>
-<p><em>Type 2 diabetes is associated with high blood glucose levels and obesity, which each have long term effects associated with high morbidity. Exenatide is GLP-1 receptor agonist that can control blood glucose levels. When delivered as an osmotic minipump exenatide lowers blood glucose. A standard of care for type2 diabetics is to put them on a weight loss program while giving them drugs that manage blood glucose. It is not known if continuous administration via osmotic minipump can lead to greater weight loss while on this standard of care.</em></p>
-<p><strong>Step 2: Transform the “What is not known” statement into a bold and simple scientific prediction, as if “what is not known” were answered:</strong></p>
-<p><em>Long-term administration of exenatide via osmotic minipump to type-2 diabetics will cause weight loss.</em></p>
-<p><strong>Step 3: Now frame the experimental plan in terms of the independent and dependent variables, written as an if/then statement. In narrative format, if you manipulate what predictor variables, then what outcome do you expect to observe?</strong></p>
-<p><em>If an exenatide osmotic minipump is implanted into type-2 diabetics, then their weight loss will differ compared to placebo.</em></p>
-<p><strong>Step 4: Define the dependent and the independent variables of the experiment. What type of variables are these? What are the experimental units? Are the measurements intrinsically-linked, or not?</strong></p>
-<p><em>The dependent variable will be weight loss, calculated as the weight difference between pre-study to post-study for each human subject. Each subject is the experimental unit. The independent variable is treatment. Treatment is a discrete, factoral variable that will be at two levels, placebo and exenatide. Although pre- and post-study weights will be measured for each subject and are themselves intrinsically-linked, they are used to derive the dependent variable (weight loss), which are not instrinsically-linked.</em></p>
-<p><strong>Step 5: Write the null and alternate hypothesis on the basis of the statistical parameters to be tested. Note here that greek notation is used to symbolize that the hypothesis is about the sampled population parameters, rather than the sample.</strong></p>
-<p><em>Where</em> <span class="math inline">\(\mu\)</span> <em>represents the mean weight loss of the populations corresponding to the sampled groups, the null and alternate hypotheses are</em> <span class="math display">\[H_0:\mu_{exenatide}=\mu_{placebo}\]</span> <em>and</em> <span class="math display">\[H_1: \mu_{exenatide}\ne\mu_{placebo}\]</span></p>
-<p><strong>Step 6: What statistical test will be used to test the null hypothesis? What are the decision rules?</strong></p>
-<p><em>A two-sided, unpaired t-test for comparing group means. The sample size will be based upon a power of 90%, which means that the tolerance level for type2 error will be 10%. The decision threshold for type1 error will be 5%. Thus, the null hypothesis will be rejected at a p-value of less than 0.05.</em></p>
-<div id="two-sided-vs-one-sided-hypothesis" class="section level4">
-<h4><span class="header-section-number">8.3.0.1</span> Two-sided vs one-sided hypothesis</h4>
-<p>The above is an example for a two-sided hypothesis. In a two-sided hypothesis <span class="math inline">\(\ne\)</span> is mutually exclusive and collectively exhaustive of <span class="math inline">\(=\)</span>. By rejecting the null that two things are equal, we implicitly (and provisionally) accept the alternative hypothesis that they are not equal.</p>
-<p>Notice how this hypothesis doesn’t predict the direction of an effect. It only predicts there will be a difference between the two groups.</p>
-<p>If you’re willing to predict the direction of an effect, you would choose to make a one-sided hypothesis.</p>
-<p>One-sided hypotheses can happen in either of two ways. In one case we can predict one mean will be greater (<span class="math inline">\(&gt;\)</span>)than another mean. In the other case, we can predict one mean will be less than (<span class="math inline">\(&lt;\)</span>) another mean. The mutually exclusive and collectively exhaustive alternatives to these one sided hypotheses are therefore <span class="math inline">\(\ge\)</span> and <span class="math inline">\(\le\)</span>, respectively. In other words, if one mean is not greater than another mean, then the only alternative possibilities are that it is less than or equal to it.</p>
-<p>The decision to test a one- or two-sided hypothesis should be based upon scientific reasoning.</p>
-<p>In the example above, I’m unwilling to test a one-sided hypothesis that exenatide will cause a greater weight loss than placebo, even though that is the expectation (and hope!). Were I willing to test the direction of the effect, the one-sided hypothesis test would be written like this:</p>
-<p><span class="math display">\[H_0:\mu_{exenatide}&lt;\mu_{placebo}\]</span> <em>and</em> <span class="math display">\[H_1: \mu_{exenatide}\ge\mu_{placebo}\]</span></p>
-<p>If the data show that mean weight loss is greater in the exenatide group, as expected, that null hypothesis can be rejected.</p>
-<p>But what if, unexpectedly, weight loss is greater in the placebo group? It would generate a high p-value. According to the pre-planned hypothesis, the null could not be rejected.</p>
-<p>Worse, given they are already enrolled in a standard of care weight loss program, to know the drug actually impairs weight loss would be an important finding. But in choosing the incorrect one-sided hypothesis, there is nothing to do with the result. It is a negative result. I can’t flip the tail to the other direction to get a significant result that I wasn’t planning upon. That would be extremely biased!</p>
-<p>In practice, some researchers caught in this conundrum create a whole new can of worms by simply changing the pre-planned hypothesis after the fact. It’s done flippantly but is actually a fairly serious violation of scientific integrity. Changing the hypothesis so that it is consistent with the results is not what anybody would consider sound scientific method.</p>
+<div id="two-way-rm-anova-test" class="section level2">
+<h2><span class="header-section-number">29.2</span> Two way RM ANOVA Test</h2>
+<p>Scientific judgement dictates running this test as related measures. Each replicate was performed on a different passage of cells, approximately 1 week apart. Within each passage the cells are highly homogenous. The measurements within a replicate are intrinsically-linked. Perhaps most importantly, each measure taken on a given day is NOT independent of all other measures that day. There really is no other way to analyze these data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">out.rm &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(<span class="dt">data =</span> hcsmc
+                   , <span class="dt">dv =</span> Nfatluc
+                   , <span class="dt">wid =</span> replicate
+                   , <span class="dt">within =</span> <span class="kw">c</span>(vector, mitogen)
+                   , <span class="dt">type =</span> <span class="dv">3</span>
+                   , <span class="dt">return_aov =</span> F
+                   , <span class="dt">detailed =</span> T
+  
+); out.rm</code></pre></div>
+<pre><code>## $ANOVA
+##           Effect DFn DFd       SSn       SSd         F           p p&lt;.05
+## 1    (Intercept)   1   2 91378.125  388.5700 470.33031 0.002119408     *
+## 2         vector   1   2  6156.801  471.0011  26.14347 0.036186976     *
+## 3        mitogen   2   4 29018.893 1981.2567  29.29342 0.004084641     *
+## 4 vector:mitogen   2   4  7333.031  623.0722  23.53830 0.006133042     *
+##         ges
+## 1 0.9634772
+## 2 0.6399535
+## 3 0.8933620
+## 4 0.6791774
+## 
+## $`Mauchly&#39;s Test for Sphericity`
+##           Effect         W         p p&lt;.05
+## 3        mitogen 0.6795372 0.8243404      
+## 4 vector:mitogen 0.4963405 0.7045144      
+## 
+## $`Sphericity Corrections`
+##           Effect       GGe      p[GG] p[GG]&lt;.05      HFe       p[HF]
+## 3        mitogen 0.7573102 0.01101064         * 2.620487 0.004084641
+## 4 vector:mitogen 0.6650442 0.02123339         * 1.485468 0.006133042
+##   p[HF]&lt;.05
+## 3         *
+## 4         *</code></pre>
 </div>
-<div id="stick-to-two-sided-hypotheses" class="section level4">
-<h4><span class="header-section-number">8.3.0.2</span> Stick to two-sided hypotheses</h4>
-<p>Unlike the case above, when being wrong about the direction of an effect is not a big deal, then one-sided tests are not a bad option.</p>
-<p>The example above serves to illustrate how a two-sided hypothesis would have been a better choice than a one-sided hypothesis. There are a few other reasons why it is probably better to get in the habit of always testing two-sided nulls: the two-sided test is more conservative because the p-value threshold is a bit lower. Furthermore, multiple tests and confidence intervals easier perform and to interpret, respectively.</p>
+<div id="interpretation-of-the-output" class="section level2">
+<h2><span class="header-section-number">29.3</span> Interpretation of the output</h2>
+<div id="anova-table-1" class="section level3">
+<h3><span class="header-section-number">29.3.1</span> ANOVA Table</h3>
+<p>Note just as for the 2-way ANOVA CR analysis, there are 3 F tests for the model (the intercept F test is inconsequential for now). The F value for the suppress:mitogen interaction is beyond the critical limit for a null F distribution with 2 and 4 degrees of freedom. The result is extreme (p = 0.00613). The interaction takes precedence, since the main effects are difficult to inteprete if an interaction occurs.</p>
+<p>It is safe to reject the interaction null and conclude that variance for its effect exceeds that for its residual. Scientifically, this means that levels of NFAT-mediated transcription are influenced by both the suppressor and the mitogen stimuli, as designed in this experiment. About 68% of the variance in the data can be explained by this interaction effect.</p>
+<div id="mauchlys-sphericity-test" class="section level4">
+<h4><span class="header-section-number">29.3.1.1</span> Mauchly’s Sphericity Test</h4>
+<p>Sphericity is defined as uniform variance of the differences. Think of it as the RM analog to the CR homogeneity of variance assumption. Sphericity, as for homogeneity of variance, is an assumption ideally met in RM ANOVA for validity of the result.</p>
+<p>Mauchly’s tests the null hypothesis that the variances among the differences are equal. If the test statistic were extreme, the null would be rejected, meaning these variances are unequal and sphericity is violated. If that were the case, we’d conduct inference on the basis of a corrected p-value for the ANOVA..the p[GG], which is the Geisser-Greenhouse corrected p-value.</p>
+<p>In our analysis, the Mauchly test is not extreme. We have no reason to believe the sphericity assumption is not satisfied. We can use the p-value in the ANOVA table to guide our inference, without using the sphericity correction.</p>
+</div>
+</div>
+<div id="post-hoc-test" class="section level3">
+<h3><span class="header-section-number">29.3.2</span> Post Hoc Test</h3>
+<p>The true scientific objective here is to know whether the suppressor selectively attenuate NFAT-mediated transcription by either of the mitogens. In other words, scientifically, it would be interesting to learn whether an ICER-suppressable factor participates in the pathway of one of the mitogens, but not the other.</p>
+<p>Given that objective, there are some fairly specific planned comparisons worth making. If we compare ICER to Empty for each level of mitogen, we’ll have an answer to the question posed above. In other words, we only care about 3 of the 15 possible comparisons that could be made.</p>
+<p>Therefore, we’ll run a <code>pairwise.t.test</code> without creating any adjusted p-values. After that, we’ll create a small vector of p-values for the 3 comparisons we wish to make and use the <code>p.adjust</code> function to correct them for multiple comparisons.</p>
+<p>We use a <code>paired=T</code> argument given the intrinsically-linked relationship of the measures in the samples. Not all of the measures are independent so the unpaired t-test is inappropriate.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(hcsmc<span class="op">$</span>Nfatluc, <span class="kw">interaction</span>(hcsmc<span class="op">$</span>vector, hcsmc<span class="op">$</span>mitogen), <span class="dt">paired=</span>T, <span class="dt">p.adj =</span> <span class="st">&quot;none&quot;</span>)
+m</code></pre></div>
+<pre><code>## 
+##  Pairwise comparisons using paired t tests 
+## 
+## data:  hcsmc$Nfatluc and interaction(hcsmc$vector, hcsmc$mitogen) 
+## 
+##            empty.ADP ICER.ADP empty.PDGF ICER.PDGF empty.Veh
+## ICER.ADP   0.3413    -        -          -         -        
+## empty.PDGF 0.0439    0.0803   -          -         -        
+## ICER.PDGF  0.0129    0.6800   0.0191     -         -        
+## empty.Veh  0.0066    0.0316   0.0214     0.0276    -        
+## ICER.Veh   0.0147    0.0720   0.0215     0.0429    0.7723   
+## 
+## P value adjustment method: none</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pv &lt;-<span class="st"> </span><span class="kw">c</span>(m<span class="op">$</span>p.value[<span class="dv">1</span>,<span class="dv">1</span>], m<span class="op">$</span>p.value[<span class="dv">3</span>,<span class="dv">3</span>], m<span class="op">$</span>p.value[<span class="dv">5</span>,<span class="dv">5</span>]) 
+pv</code></pre></div>
+<pre><code>## [1] 0.34127356 0.01905007 0.77231675</code></pre>
+<p>Thus, the three comparisons and their unadjusted p-values are:</p>
+<ul>
+<li>ICER.ADP to empty.ADP p=0.3413</li>
+<li>ICER.PDGF to empty.PDGF p=0.0191</li>
+<li>ICER.Veh to empty.Veh p=0.7723</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">p.adjust</span>(<span class="dt">p=</span>pv, <span class="dt">method=</span><span class="st">&quot;holm&quot;</span>, <span class="dt">n=</span><span class="kw">length</span>(pv))</code></pre></div>
+<pre><code>## [1] 0.68254711 0.05715022 0.77231675</code></pre>
+<p>Each of these unadjusted p-values is greater than the Bonferroni adjusted type1 error threshold of 0.01666. On this basis, we cannot reject the null hypothesis that these response are the same.</p>
+<p>This illustrates the occassional case where a positive result at the level of the omnibus test is coupled to a negative finding in post hoc testing.</p>
+<p>There’s no accident in this case, it’s likely a fairly underpowered study given.</p>
+</div>
+<div id="write-up-12" class="section level3">
+<h3><span class="header-section-number">29.3.3</span> Write Up</h3>
+<p><em>Statistical analysis of the luciferase data indicates there is an interaction between levels of the suppressor and the mitogen variables (2 way RM ANOVA, p=0.0061, n=3). However, post hoc comparisons do not support the hypothesis that ICER selectively suppresses either of the mitogens (pairwise two-sided paired t-tests, Holm adjusted p-values for multiple comparisons). The experiment may have been underpowered.</em></p>
 
 </div>
 </div>
@@ -566,8 +922,8 @@ Figure 8.1: Statistical hypotheses test the null in a multistep process
           </div>
         </div>
       </div>
-<a href="dispersion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="error.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="twowayCR.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="jaxwest2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
