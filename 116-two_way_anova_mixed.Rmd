@@ -224,22 +224,22 @@ Because it has a related measures component, the two-way mixed ANOVA experimenta
 We use the `lme` function from the `nlme` package to regress the model on the ChickWeight1 dataset, generating a large table of coefficients for all the model elements. 
 
 ```{r}
-model <- lme(weight~Diet+Time+Diet*Time, data=ChickWeight1, random = ~ 1|Chick)
+model <- lme(weight ~ Diet + Time + Diet*Time, data=ChickWeight1, random = ~ 1|Chick)
 model
 
 ```
 
-Next, that linear model is passed into the `aov` function, to create an aov object. Why not use ezANOVA to create this? It doesn't create an object of the proper R class for the posthoc function.
+Next, that linear model is passed into the `aov` function, to create an aov object. Why not use ezANOVA to create this? It doesn't create an object of the proper R class for the posthoc function. This is passed
 
+Finally, we run the TukeyHSD test. This function is in the `DescTools` package. We specify Diet so that it only returns all ofthe possible comparisons between Diet groups. (If you remove the list argument it will return all posssible combinations of every group in the experiment! ) 
 
 ```{r}
-aovObject <- aov(model)
+bark <- lme(weight ~ Diet + Time + Diet*Time, data=ChickWeight1, random = ~ 1|Chick)
 ```
 
-Finally, we run the TukeyHSD test on aovObject. This function is in the `DescTools` package. We specify Diet so that it only returns all ofthe possible comparisons between Diet groups. (If you remove the list argument it will return all posssible combinations of every group in the experiment! ) 
 
 ```{r}
-PostHocTest(aovObject, which="Diet", method="hsd")
+PostHocTest(aov(bark,data=ChickWeight1), which="Diet", method="hsd")
 ```
 
 What I like about the TukeyHSD test run this way is that it yields effect size, confidence intervals, and adjusted p-values for each comparison. For example, the difference in mean weight between the first and the second diets is 14.9 grams (95%CI(adjusted): 4.4 to 25.5 grams, adjusted p-value=0.0016).

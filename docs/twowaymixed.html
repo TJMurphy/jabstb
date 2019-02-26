@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 20 The t-tests | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <title>Chapter 30 Two-way ANOVA RM/CR | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 20 The t-tests | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:title" content="Chapter 30 Two-way ANOVA RM/CR | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 20 The t-tests | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta name="twitter:title" content="Chapter 30 Two-way ANOVA RM/CR | JABSTB: Statistical Design and Analysis of Experiments with R" />
   
   <meta name="twitter:description" content="Experimental biostatistics using R." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="ranksum.html">
-<link rel="next" href="ttestmc.html">
+<link rel="prev" href="twowayRM.html">
+<link rel="next" href="jaxwest2.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -486,344 +486,266 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="ttests" class="section level1">
-<h1><span class="header-section-number">Chapter 20</span> The t-tests</h1>
-<p>The t-tests, otherwise known as “Student’s t tests” are for experimental designs that involve testing hypotheses comparing one group to a standard or two groups two each other, <strong>and</strong> where the outcome variable is continuous and on an equal interval scale.</p>
-<p>In other words, t-tests are for measured data in two or fewer groups.</p>
-<p>To recall, continuous data are on scales that have values between their intervals. For example, we might use a mass balance to measure the mass of individual mice, and then record how their weight change in response to some factor at two different levels. Here, mass would be an equal interval measurement. Mass is continuous, in so far as a theoretically infite number of values can exist between two units on the scale, depending upon the sensitivity of the measurements.</p>
-<p>Derivative continuous variables are common in t-testing. For example, growth rate, in grams/week, is a derivative of the mass and time measurement scales. Like mass and time, growth rate is also continuous.</p>
-<p>Just as importantly, the statistics derived from continuous, equal interval data also have the properties of continuous, equal interval data. For example, the means and standard deviations, the standard errors of the mean, and the t-test statistic itself are also scaled continuous.</p>
-<div id="data-assumptions-for-t-tests" class="section level2">
-<h2><span class="header-section-number">20.1</span> Data assumptions for t-tests</h2>
-<p>The following assumptions should be checked to use t-tests properly.</p>
-<div id="strong-assumptions-t-tests-are-invalid-if-these-not-met" class="section level4">
-<h4><span class="header-section-number">20.1.0.1</span> Strong assumptions, t tests are invalid if these not met:</h4>
-<ol style="list-style-type: decimal">
-<li><p>The replicate data arise from a randomized process.</p></li>
-<li><p>Each sample replicate is independent of every other sample replicate.</p></li>
-</ol>
+<div id="twowaymixed" class="section level1">
+<h1><span class="header-section-number">Chapter 30</span> Two-way ANOVA RM/CR</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#library(magrittr)</span>
+<span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(DescTools)
+<span class="kw">library</span>(ez)
+<span class="kw">library</span>(nlme)</code></pre></div>
+<p>Two-way ANOVA experiments allow for simultaneously testing the effects of two predictor variables.</p>
+<p>In a two way completely randomized ANOVA, all of the levels of both factors are randomly allocated to individual experimental units. Each experimental unit represents an independent replicate and each generates a single measurement for analysis.</p>
+<p>In a two-way related/repeated measures ANOVA, all of the levels for both factors are measured within a single experimental unit. The experimental unit represents the independent replicate, and therefore the data set contains many intrinsically-related measurements from each replicate.</p>
+<p>A hybrid of the two above is called a two-way mixed ANOVA experimental design. In a mixed ANOVA, one factor is completely randomized, whereas the other is structured as a related/repeated measures within each replicate.</p>
+<p>The ChickWeight study is a good example for visualizing how a two-way mixed ANOVA would operate.</p>
+<div id="chickweight-dataset" class="section level2">
+<h2><span class="header-section-number">30.1</span> ChickWeight Dataset</h2>
+<p>The ChickWeight dataset in base R is from a study testing the effect of 4 diets on the growth of chicks. You can learn more about it by typing <code>?ChickWeight</code> in the console.</p>
+<p>As you might imagine, the principal goal of a study like this is to determine if any of the 4 diets differ from each other in terms of how they impact chick weight over time.</p>
+<p>This is a two way mixed ANOVA design. The two factors are diet and time. Chicks are randomly assigned to a diet. While on the diet each chick is weighed repeatedly at various time points.</p>
+<p>Therefore, Diet is a completely randomized (CR) factor, whereas the factor time (in units of days) is a related/repeated measure variable.</p>
+<p>If that’s not entirely clear, it should become more obvious by looking at a plot of the data.</p>
 </div>
-<div id="weak-assumptions-t-tests-are-less-robust-when-these-are-not-met" class="section level4">
-<h4><span class="header-section-number">20.1.0.2</span> Weak assumptions: t-tests are less robust when these are not met:</h4>
-<ol start="3" style="list-style-type: decimal">
-<li><p>The sampled population for each group is normally distributed.</p></li>
-<li><p>The variances of the compared groups are equivalent.</p></li>
-</ol>
-<p>The smaller the sample size, the more difficult it is to validate these latter two assumptions. Unless you’re dealing with sample sizes of 30 or greater, it is probably futile to try to make these assessments.</p>
-<p>There are two equally valid ways to approach this.</p>
-<p>First, a property of continuous data is that it will be normally distributed when it is measured within a linear range on its scale. The same holds for the variance assumption.</p>
-<p>There are a normality tests such as the Shapiro-Wilk (<code>shapiro.test</code>), which tests the null hypothesis that the values of a variable are normally-distributed. Levene’s test <code>library(car), leveneTest</code> is useful to test homogeneity of variance. The use of these tests would be proscribed in some preset protocol. If their nulls are rejected, either the data can be normalized through log or reciprocal transformation, or nonparametric testing can be used instead.</p>
-<p>Alternately, the researcher can just conduct hypothesis testing using nonparametric procedures. The performance of t-tests and their nonparametric counterparts are virtually identical when the normality and homoscedasticity assumptions are met. Whereas nonparametrics statistics are an appropriate option when these conditions are unmet. On non-normal or heteroscedastic samples false positive detection is reduced slightly by using nonparametric testing compared to t-tests.</p>
-</div>
-</div>
-<div id="the-t-statistic" class="section level2">
-<h2><span class="header-section-number">20.2</span> The t Statistic</h2>
-<p>The t statistic is a ratio signifying the signal to noise ratio in a sample.</p>
-<p>The numerator would be a measure for the magnitude of the average effect, whereas the denominator would represent the precision by which those mean differences are determined.</p>
-<p>There are three t-tests, reflecting 3 very different experimental designs. The decision to use one or the other t-test is entirely scientific and based upon how the experiment is conducted. If you understand your experimental design, you’ll know which t test is applicable.</p>
-<p><em>One sample tests inspect the difference between a sample mean and a hypothetical mean. </em>Unpaired tests inspect the difference between the means of two groups. *The paired t test inspects the mean difference between paired observations and the value zero.</p>
-<p><em>A common mistake is to default to an unpaired t-test if an uneven number of measurements are in the data set. That is only correct when the measurements are not intrinsically-linked.</em></p>
-<div id="one-sample-t-tests" class="section level3">
-<h3><span class="header-section-number">20.2.1</span> One sample t tests</h3>
-<p>For comparing the mean response <span class="math inline">\(\bar y\)</span> to a single level of a predictor variable against a hypothetical population mean, <span class="math inline">\(\mu\)</span>. A group comprised of <span class="math inline">\(n\)</span> independent observations, whose <span class="math inline">\(\bar y\)</span> The one sample t test has <span class="math inline">\(n-1\)</span> degrees of freedom.</p>
-<p><span class="math display">\[t=\frac{\bar y-\mu}{\frac{sd}{\sqrt n}}\]</span></p>
-</div>
-<div id="unpaired-t-tests" class="section level3">
-<h3><span class="header-section-number">20.2.2</span> Unpaired t tests</h3>
-<p>This test is used for experiments in which the measurements are all independent from each other. Th unpaired t-test compares the difference between the mean responses to each of two levels, A and B, of a predictor variable. The design is comprised of a total of <span class="math inline">\(n_A + n_B\)</span> observations and has <span class="math inline">\((n_A + n_B)-2\)</span> degrees of freedom. <span class="math inline">\(s^2_p\)</span> is the pooled variance of the sample.</p>
-<p><span class="math display">\[t=\frac{\bar y_A-\bar y_B}{\sqrt{\frac{s^2_p}{n_A}+\frac{s^2_p}{n_B}}}\]</span></p>
-<p>The pooled variance is calculated using the sum of the squared deviates <span class="math inline">\(SS_A\ and\ SS_B\)</span> from each group as follows: <span class="math display">\[s^2_p=\frac{SS_A+SS_B}{df_A+df_B}\]</span>, where <span class="math inline">\(df_A=n_A-1\)</span> and <span class="math inline">\(df_B=n_B-1\)</span>.</p>
-<p>The denominator of the <span class="math inline">\(t\)</span> ratio is the standard error of the test. The standard error represents the test’s precision.</p>
-<p>Inspection of the pooled variance equation and how it factors into the calculation of the test statistic should give you some indication for why its not a good idea to have unequal sample sizes in unpaired experimental designs. If the sample size for one group is much larger than the other, it’s variance will dominate the <span class="math inline">\(t\)</span> calculation. That becomes a more significant problem the more unequal are the group variances.</p>
-</div>
-<div id="paired-t-tests" class="section level3">
-<h3><span class="header-section-number">20.2.3</span> Paired t tests</h3>
-<p>This test is used when measurements are intrinsically-linked. Each of <span class="math inline">\(n\)</span> replicates is exposed to both levels, A and B, of a predictor variable. There are <span class="math inline">\(n\)</span> pairs of measurements in the design. The mean difference <span class="math inline">\(\bar d\)</span> of the paired responses is compared to the value of zero. <span class="math inline">\(sd_d\)</span> is the standard deviation of the <span class="math inline">\(n\)</span> differences. The experiment has <span class="math inline">\(n-1\)</span> degrees of freedom.</p>
-<p><span class="math display">\[t=\frac{\bar d}{\frac{sd_d}{\sqrt n}}\]</span></p>
-</div>
-</div>
-<div id="t-test-hypotheses" class="section level2">
-<h2><span class="header-section-number">20.3</span> t Test Hypotheses</h2>
-<p>As for whether to choose a paired or unpaired analysis, the choice of t-test hypotheses depends upon the experimental design, and the scientific question at hand. Resist the temptation to o toggle between two-sided and one-sided options. That’s p-hacking, which is a bias.</p>
-<p>Since t-tests are parametric, hypotheses are stated on the basis of the statistical parameters. In this case, the means of the samples are meant to infer the sampled population, so we revert to greek notation.</p>
-<p>To put this another way, that the two samples differ is a mathematical fact. We don’t need a statistical test to tell us that. The test helps us infer whether the populations that were sampled differ.</p>
-<p>One-sided hypotheses predict the direction of an effect. For example, “the response to treatment will be greater than control.” Or, “the response to treatment will be less than control.”</p>
-<p>Two-sided hypothesis do not predict the direction of an effect: “The response to treatment will differ from control, either higher or lower.” Therefore, use a one-sided hypothesis if you think your treatment will go in a specific direction. Choose a two-sided test when you’re not willing to bet on an effect’s direction.</p>
-<p>This matters because at the 95% confidence level the threshold value of the t statistic will be lower for a one-sided test ( eg,<code>qt(0.05, 2</code>) than for a two-sided test (<code>qt(0.025, 2)</code>) given the same data. Put another way, the “significance” threshold will always be a higher bar to cross for a two-sided hypothesis. For a one-sided test, all of the 5% cumulative probability is on one side of the distribution. For a two-sided test, that 5% is evenly split to both sides. Therefore, two-sided tests are slightly more stringent.</p>
-<div id="one-sample-hypotheses" class="section level3">
-<h3><span class="header-section-number">20.3.1</span> One sample hypotheses</h3>
-<p>Two sided: Use when, going into an experiment, you are not sure which direction the predictor variable will change the outcome variable relative to the population mean.</p>
-<p>H_0: <span class="math inline">\(\bar x = \mu\)</span> H_1: <span class="math inline">\(\bar \ne \mu\)</span></p>
-<p>One sided: Use when, going into an experiment, you are confident the predictor variable will cause the outcome response to be higher than the population mean.</p>
-<p>H_0: <span class="math inline">\(\bar x \le \mu\)</span> H_1: <span class="math inline">\(\bar x&gt;\mu\)</span></p>
-<p>Or you are confident the predictor variable will cause the outcome response to be lower than the population mean.</p>
-<p>H_0: <span class="math inline">\(\bar x \ge \mu\)</span> H_1: <span class="math inline">\(\bar x&lt;\mu\)</span></p>
-</div>
-<div id="unpaired-hypotheses" class="section level3">
-<h3><span class="header-section-number">20.3.2</span> Unpaired hypotheses</h3>
-<p>Two sided: Use when, going into an experiment, you are not sure whether level A or B of the predictor will cause a higher outcome response.</p>
-<p>H_0: <span class="math inline">\(\bar x_A = \bar x_B\)</span> H_1: <span class="math inline">\(\bar x_A \ne \bar x_B\)</span></p>
-<p>One sided: Use when, going into an experiment, you are confident level A of the predictor variable will cause the outcome response to be higher than that for level B.</p>
-<p>H_0: <span class="math inline">\(\bar x_A \le \bar x_B\)</span> H_1: <span class="math inline">\(\bar x_A &gt; \bar x_B\)</span></p>
-<p>Or when you are confident the level A of the predictor variable will cause the outcome response to be lower than that for level B.</p>
-<p>H_0: <span class="math inline">\(\bar x_A \ge \bar x_B\)</span> H_1: <span class="math inline">\(\bar x_A &lt; \bar x_B\)</span></p>
-</div>
-<div id="paired-hypotheses" class="section level3">
-<h3><span class="header-section-number">20.3.3</span> Paired hypotheses</h3>
-<p>Two sided: Use when, going into an experiment, you are not sure whether the mean difference between levels of the predictor variable will be less than or greater than zero.</p>
-<p>H_0: <span class="math inline">\(\bar x = 0\)</span> H_1: <span class="math inline">\(\bar x \ne 0\)</span></p>
-<p>One sided: Use when, going into an experiment, you are confident the mean difference between levels of the predictor will be greater than zero.</p>
-<p>H_0: <span class="math inline">\(\bar x \le 0\)</span> H_1: <span class="math inline">\(\bar x&gt;0\)</span></p>
-<p>Or when, going into an experiment, you are confident the mean difference between levels of the predictor will be less than zero.</p>
-<p>H_0: <span class="math inline">\(\bar x \ge 0\)</span> H_1: <span class="math inline">\(\bar x&lt;0\)</span></p>
-</div>
-</div>
-<div id="confidence-intervals-of-means" class="section level2">
-<h2><span class="header-section-number">20.4</span> Confidence Intervals of Means</h2>
-<p>A 95% confidence interval is an inferential statistic that allows for estimating the accuracy of a sample. The 95% CI is the range of values in which there is a 95% chance the true mean exists.</p>
-<p>A 95% CI can be calculated as follows:</p>
-<p><span class="math inline">\(mean\pm qt(0.975, df)*\frac{sd}{\sqrt n}\)</span></p>
-<p>For example, given a sample size of n=3, that has a mean of 100. and a standard deviation of 25</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">upper.limit &lt;-<span class="st"> </span><span class="dv">100</span><span class="op">+</span><span class="kw">qt</span>(<span class="fl">0.975</span>, <span class="dv">2</span>)<span class="op">*</span>(<span class="dv">25</span><span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">3</span>))
-lower.limit &lt;-<span class="st"> </span><span class="dv">100</span><span class="op">-</span><span class="kw">qt</span>(<span class="fl">0.975</span>, <span class="dv">2</span>)<span class="op">*</span>(<span class="dv">25</span><span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">3</span>))
-upper.limit</code></pre></div>
-<pre><code>## [1] 162.1034</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lower.limit</code></pre></div>
-<pre><code>## [1] 37.89656</code></pre>
-</div>
-<div id="t-tests-running-the-analysis" class="section level2">
-<h2><span class="header-section-number">20.5</span> t Tests: Running the analysis</h2>
-<p>In R <code>t.test</code> represents a single function by which each of the three t test experimental designs can be analyzed.</p>
-<div id="one-sample-t-test" class="section level3">
-<h3><span class="header-section-number">20.5.1</span> One sample t test</h3>
-<p>Let’s say a standard to measure against is the value of 100. We can ask if a random sample that is 2-fold greater is different than 100, less than 100, or greater than 100:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
-a &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dt">mean=</span><span class="dv">200</span>, <span class="dt">sd=</span><span class="dv">25</span>)
-<span class="kw">t.test</span>(a, <span class="dt">mu=</span><span class="dv">100</span>, <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span> )</code></pre></div>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  a
-## t = 6.0375, df = 2, p-value = 0.02635
-## alternative hypothesis: true mean is not equal to 100
-## 95 percent confidence interval:
-##  129.1056 273.4744
-## sample estimates:
-## mean of x 
-##    201.29</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(a, <span class="dt">mu=</span><span class="dv">100</span>, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</code></pre></div>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  a
-## t = 6.0375, df = 2, p-value = 0.9868
-## alternative hypothesis: true mean is less than 100
-## 95 percent confidence interval:
-##      -Inf 250.2778
-## sample estimates:
-## mean of x 
-##    201.29</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(a, <span class="dt">mu=</span><span class="dv">100</span>, <span class="dt">alternative =</span><span class="st">&quot;greater&quot;</span>)</code></pre></div>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  a
-## t = 6.0375, df = 2, p-value = 0.01318
-## alternative hypothesis: true mean is greater than 100
-## 95 percent confidence interval:
-##  152.3023      Inf
-## sample estimates:
-## mean of x 
-##    201.29</code></pre>
-<div id="interpretation-5" class="section level4">
-<h4><span class="header-section-number">20.5.1.1</span> Interpretation</h4>
-<ul>
-<li><p>t is a descriptive statistic. Notice how the t-value doesn’t change. The same sample will give the same signal to noise ratio, irrespective of the hypothesis tested.</p></li>
-<li><p>The p-value is the probability of making a type1 error by rejecting the null hypothesis.</p></li>
-<li><p>The p-value differs, given the hypothesis argument. The p-value is an inferential statistic. Notice how the p-value for a two sided test is larger than for a one sided test.</p></li>
-<li><p>Notice how the alternative output corresponds to the alternative input.</p></li>
-<li><p>Notice how the 95% confidence level is the default output. If you want a differnt confidence level, enter an argument for it.</p></li>
-<li><p>The 95% Confidence Interval differs for each hypothesis. Like the p-value, that indicates the 95% CI is an inferential statistic.</p></li>
-<li><p>The simplest way to get a typical 95%CI of a mean in R is to run a two.sided t.test and pull it out of that.</p></li>
-</ul>
-</div>
-</div>
-<div id="unpaired-t-test" class="section level3">
-<h3><span class="header-section-number">20.5.2</span> Unpaired t test</h3>
-<p>Now will pull two random samples: one from a normal distribution that has a mean of 200, and the second from a distribution that has a mean of 100. Both have standard deviations of 25. Will these random samples differ?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
-a &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dt">mean=</span><span class="dv">200</span>, <span class="dt">sd=</span><span class="dv">25</span>)
-b &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dt">mean=</span><span class="dv">100</span>, <span class="dt">sd=</span><span class="dv">25</span>)
-<span class="kw">t.test</span>(a, <span class="dt">mu=</span><span class="dv">100</span>, <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span> )</code></pre></div>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  a
-## t = 6.0375, df = 2, p-value = 0.02635
-## alternative hypothesis: true mean is not equal to 100
-## 95 percent confidence interval:
-##  129.1056 273.4744
-## sample estimates:
-## mean of x 
-##    201.29</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(a, <span class="dt">mu=</span><span class="dv">100</span>, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</code></pre></div>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  a
-## t = 6.0375, df = 2, p-value = 0.9868
-## alternative hypothesis: true mean is less than 100
-## 95 percent confidence interval:
-##      -Inf 250.2778
-## sample estimates:
-## mean of x 
-##    201.29</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(a, <span class="dt">mu=</span><span class="dv">100</span>, <span class="dt">alternative =</span><span class="st">&quot;greater&quot;</span>)</code></pre></div>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  a
-## t = 6.0375, df = 2, p-value = 0.01318
-## alternative hypothesis: true mean is greater than 100
-## 95 percent confidence interval:
-##  152.3023      Inf
-## sample estimates:
-## mean of x 
-##    201.29</code></pre>
-<div id="interpretation-6" class="section level4">
-<h4><span class="header-section-number">20.5.2.1</span> Interpretation</h4>
-<ul>
-<li><p>The interpretation is is similar to the one sample case.</p></li>
-<li><p>The “mean of x” corresponds to the <code>a</code> sample, or the first group in the argument. In the unpaired t test, good practice is to put the ‘treatment’ as the first data argument, and the ‘control’ as the second argument.</p></li>
-</ul>
-</div>
-</div>
-<div id="paired-t-test" class="section level3">
-<h3><span class="header-section-number">20.5.3</span> Paired t Test</h3>
-<p>The structure of the data input matters. If entered as two vectors, the first value of the first vector will be paired with the first value of the second vector, and so on.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
-a &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dt">mean=</span><span class="dv">200</span>, <span class="dt">sd=</span><span class="dv">25</span>);a</code></pre></div>
-<pre><code>## [1] 169.8234 206.9357 227.1110</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dt">mean=</span><span class="dv">100</span>, <span class="dt">sd=</span><span class="dv">25</span>);b</code></pre></div>
-<pre><code>## [1]  41.35756 110.72812 112.65140</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(a, b, <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="dt">paired=</span>T )</code></pre></div>
-<pre><code>## 
-##  Paired t-test
-## 
-## data:  a and b
-## t = 12.105, df = 2, p-value = 0.006756
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##   72.86194 153.22676
-## sample estimates:
-## mean of the differences 
-##                113.0443</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(a, b, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>, <span class="dt">paired=</span>T)</code></pre></div>
-<pre><code>## 
-##  Paired t-test
-## 
-## data:  a and b
-## t = 12.105, df = 2, p-value = 0.9966
-## alternative hypothesis: true difference in means is less than 0
-## 95 percent confidence interval:
-##     -Inf 140.314
-## sample estimates:
-## mean of the differences 
-##                113.0443</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(a, b, <span class="dt">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="dt">paired=</span>T)</code></pre></div>
-<pre><code>## 
-##  Paired t-test
-## 
-## data:  a and b
-## t = 12.105, df = 2, p-value = 0.003378
-## alternative hypothesis: true difference in means is greater than 0
-## 95 percent confidence interval:
-##  85.77465      Inf
-## sample estimates:
-## mean of the differences 
-##                113.0443</code></pre>
-<div id="intepretation" class="section level4">
-<h4><span class="header-section-number">20.5.3.1</span> Intepretation</h4>
-<ul>
-<li><p>Notice how, given the same data, the paired computes a different value for t compaired to the unpaired.</p></li>
-<li><p>The sample estimate for the paired analysis is the mean of the differences.</p></li>
-<li><p>The 95% CI is for the mean of the differences. There is a 95% chance the true mean of the differences in the population sampled is within the CI’s range of values.</p></li>
-</ul>
-</div>
-</div>
-</div>
-<div id="plotting-t-tests" class="section level2">
-<h2><span class="header-section-number">20.6</span> Plotting t Tests</h2>
-<div id="unpaired" class="section level3">
-<h3><span class="header-section-number">20.6.1</span> Unpaired</h3>
-<p>A t test compares two means, so the plot should illustrate that comparison. There’s a growing movement to show all the data as points.</p>
-<p>Tidy the data, create a descriptive statistics summary table</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#data munge</span>
-data.u &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">control=</span>b, <span class="dt">treatment=</span>a) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(<span class="dt">key=</span>Predictor, <span class="dt">value=</span>Response) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">add_column</span>(<span class="dt">id=</span>LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])
-
-<span class="co">#summary statistics table to have</span>
-data.y &lt;-<span class="st"> </span>data.u<span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(Predictor) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(
-     <span class="dt">mean=</span><span class="kw">mean</span>(Response),
-     <span class="dt">sd=</span><span class="kw">sd</span>(Response),
-     <span class="dt">n=</span><span class="kw">length</span>(Response),
-     <span class="dt">sem=</span><span class="kw">mean</span>(Response)<span class="op">/</span><span class="kw">sqrt</span>(n)
+<div id="munge-chickweight-data" class="section level2">
+<h2><span class="header-section-number">30.2</span> Munge ChickWeight data</h2>
+<p>We have several things to do before the ANOVA can be run. First, let’s just look at the data graphically. That makes the study design a bit easier to understand.</p>
+<p>Then we’ll clean it up for what we need to do.</p>
+<p>Step 1: Plot it for a quick visualization</p>
+<p>Note how each point-to-point line represents a unique chick replicate. You can get a sense from this visual how weight correlates with the replicates by time. Heavier chicks are heavy throughout the time course, lighter chicks are lighter throughout the time course. This serves as an interesting visualization of biological variation.</p>
+<p>Visually, can you tell if any of the diets differ from the others?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(ChickWeight, 
+       <span class="kw">aes</span>(Time, 
+           weight,
+           <span class="dt">group=</span>Chick, 
+           <span class="dt">color=</span>Chick)
+       ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(
     
-           )</code></pre></div>
-<p>Plot the data points with mean +/- standard error of the mean. Since the dotplot produces the actual data, the variability of the sample can be ascertained. In this case, showing the SEM is appropriate.</p>
-<p>One of the more straight forward ways to add error bars is by use of the <code>stat_summary</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(data.u, <span class="kw">aes</span>(Predictor, Response)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_dotplot</span>(<span class="dt">binaxis=</span><span class="st">&#39;y&#39;</span>, <span class="dt">dotsize=</span><span class="dv">1</span>, <span class="dt">stackdir=</span><span class="st">&quot;center&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data=</span><span class="st">&quot;mean_se&quot;</span>, <span class="dt">fun.args=</span><span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>), <span class="dt">geom=</span><span class="st">&quot;errorbar&quot;</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, <span class="dt">width=</span><span class="fl">0.2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y=</span>mean, <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
-<pre><code>## `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<pre><code>## Warning: Computation failed in `stat_summary()`:
-## &#39;what&#39; must be a function or character string</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-188-1.png" width="672" /></p>
+  ) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(
+    
+  ) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_color_viridis_d</span>(
+    
+  ) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(
+    <span class="op">~</span>Diet
+    ) </code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-296-1.png" width="672" /></p>
+<p>Step 2: First, check for missing data on the within factor, chicks.</p>
+<p>We can’t have any for a RM design. ezDesign is a slick function in the ez package with which to check for missing values:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ezDesign</span>(
+    <span class="dt">data =</span> ChickWeight,
+    <span class="dt">x =</span> .(Time),
+    <span class="dt">y =</span> .(Chick), 
+    <span class="dt">row =</span> <span class="ot">NULL</span>, 
+    <span class="dt">col =</span> <span class="ot">NULL</span>, 
+    <span class="dt">cell_border_size =</span> <span class="dv">1</span>
+)</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-297-1.png" width="672" /> Step 3: Remove Chicks for which full Time series is missing, while creating a repaired dataset.</p>
+<p>Here’s a hemi dplyr-based way to do that:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(
+  ChickWeight<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(Chick)<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">tally</span>()
+)
+<span class="co"># show only the Chick replicates that have incomplete measures on time</span>
+temp[temp<span class="op">$</span>n<span class="op">&lt;</span><span class="dv">12</span>, ]</code></pre></div>
+<pre><code>##    Chick  n
+## 1     18  2
+## 2     16  7
+## 3     15  8
+## 8      8 11
+## 41    44 10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create new dataframe for ANOVA analysis in which the incomplete replicates are removed</span>
+
+ChickWeight1 &lt;-<span class="st">  </span>ChickWeight[<span class="op">!</span>(ChickWeight<span class="op">$</span>Chick <span class="op">%in%</span><span class="st"> </span>temp<span class="op">$</span>Chick[temp<span class="op">$</span>n<span class="op">&lt;</span><span class="dv">12</span>]),]</code></pre></div>
+<p>Step 4: Check to make sure the new dataframe from the previous step is clean, that incomplete replicates are out</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ezDesign</span>(
+    <span class="dt">data =</span> ChickWeight1
+    , <span class="dt">x =</span> .(Time)
+    , <span class="dt">y =</span> .(Chick)
+    , <span class="dt">row =</span> <span class="ot">NULL</span>
+    , <span class="dt">col =</span> <span class="ot">NULL</span>
+    , <span class="dt">cell_border_size =</span> <span class="dv">1</span>
+)</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-299-1.png" width="672" /></p>
+<p>Step 5: The ChickWeight dataframe has Time as a numeric, which needs to be converted to a factor to get stuff to work.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ChickWeight1<span class="op">$</span>Time &lt;-<span class="st"> </span><span class="kw">as.factor</span>(ChickWeight1<span class="op">$</span>Time)</code></pre></div>
+<p>One last check of the data structure:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(ChickWeight1)</code></pre></div>
+<pre><code>## Grouped Data: weight ~ Time | Chick
+##   weight Time Chick Diet
+## 1     42    0     1    1
+## 2     51    2     1    1
+## 3     59    4     1    1
+## 4     64    6     1    1
+## 5     76    8     1    1
+## 6     93   10     1    1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(ChickWeight1)</code></pre></div>
+<pre><code>## Classes &#39;nfnGroupedData&#39;, &#39;nfGroupedData&#39;, &#39;groupedData&#39; and &#39;data.frame&#39;:   540 obs. of  4 variables:
+##  $ weight: num  42 51 59 64 76 93 106 125 149 171 ...
+##  $ Time  : Factor w/ 12 levels &quot;0&quot;,&quot;2&quot;,&quot;4&quot;,&quot;6&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Chick : Ord.factor w/ 45 levels &quot;13&quot;&lt;&quot;9&quot;&lt;&quot;20&quot;&lt;..: 11 11 11 11 11 11 11 11 11 11 ...
+##  $ Diet  : Factor w/ 4 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  - attr(*, &quot;formula&quot;)=Class &#39;formula&#39;  language weight ~ Time | Chick
+##   .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: R_EmptyEnv&gt; 
+##  - attr(*, &quot;labels&quot;)=List of 2
+##   ..$ x: chr &quot;Time&quot;
+##   ..$ y: chr &quot;Body weight&quot;
+##  - attr(*, &quot;units&quot;)=List of 2
+##   ..$ x: chr &quot;(days)&quot;
+##   ..$ y: chr &quot;(gm)&quot;
+##  - attr(*, &quot;outer&quot;)=Class &#39;formula&#39;  language ~Diet
+##   .. ..- attr(*, &quot;.Environment&quot;)=&lt;environment: R_EmptyEnv&gt; 
+##  - attr(*, &quot;FUN&quot;)=function (x)  
+##  - attr(*, &quot;order.groups&quot;)= logi TRUE</code></pre>
+<p>Done with the munge!</p>
 </div>
-<div id="paired" class="section level3">
-<h3><span class="header-section-number">20.6.2</span> Paired</h3>
-<p>Paired t test data should always be plotted with point-to-point lines to illustrate the paired experimental design. In the paired design, each replicate is a pair of observations. The means of the observations for the two groups are irrelevant.</p>
-<p>The design tests for the <em>difference</em> the treatment causes within each pair, which the slope of the line illustrates. For example, a horizontal line connect a replicate would indicate no effect of the predictor variable!</p>
-<p>Munge the data into a long data frame format. Adding an ID for each replicate allows using it as a grouping variable for the plot</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data.w &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">control=</span>b, <span class="dt">treatment=</span>a, <span class="dt">id=</span>LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(<span class="dt">key=</span>Predictor, <span class="dt">value=</span>Response, <span class="op">-</span>id)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(data.w, <span class="kw">aes</span>(Predictor, Response, <span class="dt">group=</span>id)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-190-1.png" width="672" /></p>
+<div id="the-test-2" class="section level2">
+<h2><span class="header-section-number">30.3</span> The test</h2>
+<p>The main scientific objective of this study is to learn whether growth differs between the four diets.</p>
+<p>The study design calls for a two-way mixed ANOVA analysis as an omnibus test. If that passes, we’ll have access to compare the diets post-hoc.</p>
+<p>We’re not particularly interested in the effect of the Time factor, per se. We know the chicks will grow with time. Nor are we particularly interested in the interaction effect between Time and Diet. Which is to say that we don’t want to know at what times the various levels of the diets differ.</p>
+<p>We just want to know if the diets differ.</p>
+<p>Having said that, the repeated measures of weight on time seems, intuitively, a solid way for designing the experiment, compared to a few conceivable alternatives.</p>
+<p>It collects 12 different weights per replicate than a study that only weighed each critter once, say, on the 21st day. Thus, there is more thorough information on how each replicate responded to the diet. Which seems useful.</p>
+<p>But we’re not explicitly applying a rate model to the data to derive growth rate constants that might be compared. The growth rate is more implicit…it’s the information buried within the repeated measures.</p>
+<p>And we’re also not particularly interested in knowing at what specific time points the various diets might differ.</p>
+<p>We just want to know if the four diets differ from each other.</p>
+<p>Here’s how that’s done.</p>
+<p>To encode a two-way mixed ANOVA using ezANOVA, simply configure the arguments such that the repeated measure factor is <code>within</code> and the completely randomized factor is <code>between</code>. An object named <code>two_wayMM</code>, which could have been named foo, is used to store the ANOVA output.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_wayMM &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(<span class="dt">data =</span> ChickWeight1,
+                     <span class="dt">dv =</span> weight,
+                     <span class="dt">wid =</span> Chick,
+                     <span class="dt">between =</span> Diet,
+                     <span class="dt">within =</span> Time,
+                     <span class="dt">type =</span> <span class="dv">3</span>,
+                     <span class="dt">detailed =</span> T
+                     )
+two_wayMM</code></pre></div>
+<pre><code>## $ANOVA
+##        Effect DFn DFd        SSn      SSd           F             p p&lt;.05
+## 1 (Intercept)   1  41 8404690.44 313495.0 1099.195477  3.122264e-31     *
+## 2        Diet   3  41  116403.57 313495.0    5.074559  4.428259e-03     *
+## 3        Time  11 451 2023644.28 295322.5  280.945086 6.411563e-194     *
+## 4   Diet:Time  33 451   81375.09 295322.5    3.765802  9.341051e-11     *
+##         ges
+## 1 0.9324550
+## 2 0.1605077
+## 3 0.7687269
+## 4 0.1179020
+## 
+## $`Mauchly&#39;s Test for Sphericity`
+##      Effect           W             p p&lt;.05
+## 3      Time 2.67541e-17 1.032609e-251     *
+## 4 Diet:Time 2.67541e-17 1.032609e-251     *
+## 
+## $`Sphericity Corrections`
+##      Effect      GGe        p[GG] p[GG]&lt;.05       HFe        p[HF]
+## 3      Time 0.114145 2.005482e-24         * 0.1160483 8.633944e-25
+## 4 Diet:Time 0.114145 1.045740e-02         * 0.1160483 1.001674e-02
+##   p[HF]&lt;.05
+## 3         *
+## 4         *</code></pre>
+</div>
+<div id="interpreting-the-anova-output" class="section level2">
+<h2><span class="header-section-number">30.4</span> Interpreting the ANOVA output</h2>
+<p>Here ezANOVA creates Four objects: * $ANOVA * $Mauchly’s Test for Sphericity * $Sphericity Corrections` * $aov (not shown)</p>
+<div id="anova-the-anova-table-1" class="section level3">
+<h3><span class="header-section-number">30.4.1</span> $ANOVA: The ANOVA table</h3>
+<p>Before partioning for sujects, the total residual sums of squares in the sample would be the sum of the residual error terms, or <span class="math inline">\(295322.5 + 313495.0 = 608817.5\)</span>.</p>
+<p>Because weight measurements were repeated on each chick over time, this procedure allows us to account for some of the variation in the Time variable as that due to variation among the chicks.</p>
+<p>Pulling 313495 out from the overall residual provides a new (and lower than otherwise) residual term for the effect of Diet, while lowering the residual term for the effect of Time and the interaction.</p>
+<p>The plot above gives you a sense of what’s going on. What’s really noticable, I think, is a lot of chick-to-chick variation, irrespective of the diet. There’s also a lot of variation across the time frame. But the chick-to-chick variation grows really prominent near the end of the time course.</p>
+<p>What this does is help to isolate from the variation over the time course that which is due to the differences between the 45 chicks. It doesn’t explain why that variation between the chicks occurs, its obviously biological, but it does allow us to partition it out from the Time effect.</p>
+<p>In the ANOVA table the intercept effect is not particularly important except for the SSd, which tabulates the SS that have been partitioned to the chicks. It is the subject effect. You can think of it as the average subject effect. An extreme value means that there is substantial variation within the chick replicates. Of course there is, they’re growing up!</p>
+<p>The second effect is Diet, which is important for all the reasons above. There are four diets and thus 3 degrees of freedom for the F test numerator. There are 45 chicks serving as replicates spread out into the four diet groups. The four diet group means cost a total of 4 degrees of freedom, leaving 41 degrees of freedom for the Diet residual variance (denominator). F has been calculated as <span class="math display">\[F=\frac{\frac{SSn}{df_n}}{\frac{SSd}{df_d}}\]</span></p>
+<p>The p-value is the probability of getting an F value as or more extreme from the null F(3,41) distribution. Given the p-value is less than a type 1 error threshold of 5%, we can reject that the F test statistic obtained in the sample belongs to the null.</p>
+<p>Normally we would conclude that this means the diets effect on weight differs. But that’s hard to call to make given the interaction effect is also positive.</p>
+<p>The general eta-squared (ges) value indicates that 16% of the overall variation is attributable to the Diet effect.</p>
+<p>The second effect is that for the twelve levels of the variable Time. The interpretation of it’s table is much the same. There are seven time points per replicate, and one is lost to calculate the grand time mean, leaving 11 df for this test. The residual <span class="math inline">\(df_d=(45-1)*(12-1)-(12-1)*(4-1)=451\)</span>. Almost 77% of the total variation in the sample can be explained the effect of time. Although a large effect, it isn’t very interesting scientifically. There’s no surprise that the chicks grew a lot!</p>
+<p>The third effect is the interaction between the Diet and Time variables. <span class="math inline">\(df_n=(4-1)*(12-1)=33\)</span>. The interaction between these two variables explains about 11.8% of the total variation in the sample. This suggests the various diets have some differential influence on the growth rates. It isn’t just the diets, and it isn’t just the time; the two factors together combine to change weights in a way that neither does alone.</p>
+</div>
+<div id="mauchlys-test-and-corrections" class="section level3">
+<h3><span class="header-section-number">30.4.2</span> Mauchly’s Test and Corrections</h3>
+<p>You’ll recall one of the assumptions to be met for valid ANOVA analysis is that the response variances of the different levels of a factor should be about equivalent (homoskedasticity). This concept extends to the related measures scenarios.</p>
+<p>Sphericity is defined as uniform variance for the <strong>differences</strong> between factor levels. Sphericity is an assumption of RM ANOVA, and if violated, should be corrected.</p>
+<p>Quick inspection of the time course shows violation. Focus on the connecting lines. They have far greater slope near the end of the time course compared to early stages.</p>
+<p>Mauchly’s test, with its extreme F-statistic value, indicates we can reject the null that sphericity is present. There are differences in variance of differences across the time scale. The Df’s for this test are Dfn<em>GGe &amp; Dfd</em>GGe.</p>
+<p>Because of that, we correct the Time result for sphericity using the Geiser-Greenhouse correction. We do this by using the value of p[GG] as a p-value for our test. The correction is dramatic, at least with respect to the p-value correction for the interaction effect. The p[GG]= 0.01045 for the interaction test is that which should be used for inference.</p>
 </div>
 </div>
-<div id="t-test-power" class="section level2">
-<h2><span class="header-section-number">20.7</span> t Test Power</h2>
-<p>A power analysis should precede every planned experiment to decide upon an optimal sample size. The principle output of a power function is the sample size that would be necessary to conduct a well-powered experiment.</p>
-<p>The <code>pwr</code> library has the <code>pwr.t.test</code> function that can be used for this purpose and is very simple to execute. This function requires that several decisions be made in advance.</p>
-<p>First, it takes arguments for acceptable type1 error and for intended power. The standard for these is 5% and 80%, respectively, but you can use any level you deem appropriate.</p>
-<p>Two other arguments are <code>type</code>, which is the experimental design, and <code>alternative</code>, which is the hypothesis.</p>
-<p>Finally, there is the <code>d</code> argument, which is Cohen’s <span class="math inline">\(\delta\)</span>. This is less obvious, but very important and simple to understand. Cohen’s <span class="math inline">\(\delta\)</span> is the signal to noise for the effect size you anticipate.</p>
-<p>For example, imagine you anticipate measurements that will have a standard deviation of 25 units. You estimate this value on the basis of your own preliminary data or published information. You also believe the average response to a control level of the predictor varible will be around 50 units. In your mind, a minimally scientifically valid treatment effect will have a 100 unit response.</p>
-<p>The signal will be 100-50=50, andn the noise will be 25. Cohen’s <span class="math inline">\(\delta\)</span> will therefore be 50/25=2.</p>
-<p>A power calculation for a one-sided hypothesis is illustrated for a unpaired design:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pwr.t.test</span>(<span class="dt">d=</span><span class="dv">2</span>, <span class="dt">sig.level=</span><span class="fl">0.05</span>, <span class="dt">power=</span><span class="fl">0.8</span>, <span class="dt">type=</span><span class="st">&quot;two.sample&quot;</span>, <span class="dt">alternative=</span><span class="st">&quot;greater&quot;</span>)</code></pre></div>
+<div id="post-hoc-pairwise-tests" class="section level2">
+<h2><span class="header-section-number">30.5</span> Post hoc pairwise tests</h2>
+<p>A positive F-test opens the gate to perform post hoc analysis of any groups that interest us. The F tests for the two factors and the interaction shows that there are effects of time and diet on the growth of chicks. The effect of time is not particularly interesting since it is no surprise that chicks grow.</p>
+<p>What the F tests haven’t told us is which diets differ. Is one better than any other? Is one worse than any other?</p>
+<p>The approach that we’ll use to answer these questions is the TukeyHSD test, which is used to make a variety of comparisons between groups. The only groups that are of interest scientifically, however, are those associated with the main effects of the diet. Even so, we should make those comparisons in the context of the overall experimental design.</p>
+<p>The TukeyHSD test runs in three steps.</p>
+<p>The first step is to create a linear model of the design. The second step is to create an anova object from that model. And the third step is the reason for the first two. The TukeyHSD test function takes an aov object as its data source before running the group comparisons.</p>
+<p>Because it has a related measures component, the two-way mixed ANOVA experimental design is also known as a general linear mixed-effects model. Exactly what this means will be more clear when we get to discussing general linear models.</p>
+<p>We use the <code>lme</code> function from the <code>nlme</code> package to regress the model on the ChickWeight1 dataset, generating a large table of coefficients for all the model elements.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">lme</span>(weight <span class="op">~</span><span class="st"> </span>Diet <span class="op">+</span><span class="st"> </span>Time <span class="op">+</span><span class="st"> </span>Diet<span class="op">*</span>Time, <span class="dt">data=</span>ChickWeight1, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span><span class="op">|</span>Chick)
+model</code></pre></div>
+<pre><code>## Linear mixed-effects model fit by REML
+##   Data: ChickWeight1 
+##   Log-restricted-likelihood: -2401.1
+##   Fixed: weight ~ Diet + Time + Diet * Time 
+##  (Intercept)        Diet2        Diet3        Diet4        Time2 
+##   41.5625000   -0.8625000   -0.7625000   -0.6736111    6.3125000 
+##        Time4        Time6        Time8       Time10       Time12 
+##   15.1250000   26.1250000   40.0000000   55.6875000   72.8750000 
+##       Time14       Time16       Time18       Time20       Time21 
+##   85.7500000  104.2500000  118.9375000  131.6875000  136.1875000 
+##  Diet2:Time2  Diet3:Time2  Diet4:Time2  Diet2:Time4  Diet3:Time4 
+##    2.3875000    3.2875000    4.6875000    3.9750000    6.2750000 
+##  Diet4:Time4  Diet2:Time6  Diet3:Time6  Diet4:Time6  Diet2:Time8 
+##    8.4305556    8.5750000   10.9750000   16.6527778   11.0000000 
+##  Diet3:Time8  Diet4:Time8 Diet2:Time10 Diet3:Time10 Diet4:Time10 
+##   17.6000000   25.0000000   12.1125000   20.6125000   30.3125000 
+## Diet2:Time12 Diet3:Time12 Diet4:Time12 Diet2:Time14 Diet3:Time14 
+##   17.7250000   30.7250000   40.3472222   15.4500000   37.9500000 
+## Diet4:Time14 Diet2:Time16 Diet3:Time16 Diet4:Time16 Diet2:Time18 
+##   37.8055556   19.7500000   52.3500000   40.9722222   28.0625000 
+## Diet3:Time18 Diet4:Time18 Diet2:Time20 Diet3:Time20 Diet4:Time20 
+##   73.3625000   49.3958333   33.2125000   86.4125000   61.3125000 
+## Diet2:Time21 Diet3:Time21 Diet4:Time21 
+##   37.8125000   93.3125000   61.4791667 
+## 
+## Random effects:
+##  Formula: ~1 | Chick
+##         (Intercept) Residual
+## StdDev:    24.13746  25.5894
+## 
+## Number of Observations: 540
+## Number of Groups: 45</code></pre>
+<p>Next, that linear model is passed into the <code>aov</code> function, to create an aov object. Why not use ezANOVA to create this? It doesn’t create an object of the proper R class for the posthoc function. This is passed</p>
+<p>Finally, we run the TukeyHSD test. This function is in the <code>DescTools</code> package. We specify Diet so that it only returns all ofthe possible comparisons between Diet groups. (If you remove the list argument it will return all posssible combinations of every group in the experiment! )</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bark &lt;-<span class="st"> </span><span class="kw">lme</span>(weight <span class="op">~</span><span class="st"> </span>Diet <span class="op">+</span><span class="st"> </span>Time <span class="op">+</span><span class="st"> </span>Diet<span class="op">*</span>Time, <span class="dt">data=</span>ChickWeight1, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span><span class="op">|</span>Chick)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">PostHocTest</span>(<span class="kw">aov</span>(bark,<span class="dt">data=</span>ChickWeight1), <span class="dt">which=</span><span class="st">&quot;Diet&quot;</span>, <span class="dt">method=</span><span class="st">&quot;hsd&quot;</span>)</code></pre></div>
 <pre><code>## 
-##      Two-sample t test power calculation 
+##   Posthoc multiple comparisons of means : Tukey HSD 
+##     95% family-wise confidence level
 ## 
-##               n = 3.986998
-##               d = 2
-##       sig.level = 0.05
-##           power = 0.8
-##     alternative = greater
+## $Diet
+##          diff     lwr.ci   upr.ci    pval    
+## 2-1 14.976042   4.423629 25.52845  0.0016 ** 
+## 3-1 35.309375  24.756962 45.86179 9.7e-11 ***
+## 4-1 30.692708  19.785494 41.59992 1.1e-10 ***
+## 3-2 20.333333   8.626482 32.04018 5.5e-05 ***
+## 4-2 15.716667   3.689020 27.74431  0.0045 ** 
+## 4-3 -4.616667 -16.644313  7.41098  0.7555    
 ## 
-## NOTE: n is number in *each* group</code></pre>
-<div id="interpretation-7" class="section level3">
-<h3><span class="header-section-number">20.7.1</span> Interpretation</h3>
-<p>The experiment should have a total sample size total of 8. Randomly allocate each of two levels of the predictor variable to 4 replicates each. Notice how this function produces a bizarre, fractional sample size. Obviously, there is no such critter as a partial replicate! So always round up.</p>
-<p>People seem to have difficulty with Cohen’s delta. It’s nothing more complicated than a simple signal-to-noise estimate. The t-statistic. You need some idea about what value to expect for a mean (whether its difference between means or mean of the differences). You need some idea of the standard deviation.</p>
-<p>Don’t make the mistake of putting too fine of a point on Cohen’s delta. Scientific judgement is required to calculate the values to use to calculate Cohen’s delta. Use your best scientific guess for standard deviation and the response magnitude, and err on the conservative side.</p>
-<p>I strongly caution against using Cohen’s delta values recommended for “small”, “medium”, and “large” effects. There’s a good chance his idea of small effects is a lot smaller than your idea of small effects.</p>
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>What I like about the TukeyHSD test run this way is that it yields effect size, confidence intervals, and adjusted p-values for each comparison. For example, the difference in mean weight between the first and the second diets is 14.9 grams (95%CI(adjusted): 4.4 to 25.5 grams, adjusted p-value=0.0016).</p>
+<div id="heres-whats-been-discovered" class="section level3">
+<h3><span class="header-section-number">30.5.1</span> Here’s what’s been discovered</h3>
+<p>Thus, in terms of how the 4 levels of the Diet factor differ in causing chick weight we can conclude: a) all diets are better than Diet 1, b) Diets 3 and 4 are better than Diet 2, c) Diets 3 and 4 do not differ.</p>
+<p><strong>Reporting</strong></p>
+<p>“The data were analyzed by type 3 two-way mixed ANOVA with repeated measures on Time (R 3.5.2, ezANOVA). The diet, time interaction F test was positive following correction for a positive Mauchly’s test (correction factor = 0.114145, GG-adjusted p-value = 0.01045). Post hoc comparisons using TukeyHSD adjustments for multiple comparisons indicate the mass of animals on Diet 1 is less than on all others, and that weight is greater on Diets 3 and 4 than on Diet 2.”</p>
+<p>Ideally, report the last sentence in a table, showing the results.</p>
+<p><em>It’s very important to understand here that we took the p-value of p[GG] from the sphericity correction table, rather than that for Time from the ANOVA table, as our inference for this experiment</em></p>
 
 </div>
 </div>
@@ -833,8 +755,8 @@ data.y &lt;-<span class="st"> </span>data.u<span class="op">%&gt;%</span>
           </div>
         </div>
       </div>
-<a href="ranksum.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="ttestmc.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="twowayRM.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="jaxwest2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
