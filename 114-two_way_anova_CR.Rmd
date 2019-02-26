@@ -94,7 +94,7 @@ ggplot(
 
 In particular, pay attention to the data structure. It has four columns: ID, Strain, Diet, Cholesterol. All of these are variables, including two columns for each of the predictor variables (Strain, Diet), and one for the response variable (Cholesterol). The ID can also be thought of as a variable. 
 
-### 2 Way CR ANOVA Test
+## The test
 
 We use `ezANOVA` in the ANOVA package to test the three null hypotheses. Here are the arguments:
 
@@ -112,17 +112,17 @@ out.cr <- ezANOVA(data = liver,
 out.cr
 ```
 
-### Interpretation of 2 Way CR ANOVA Output
+## Interpretation of 2 Way CR ANOVA Output
 
 We get two F test tables, Levene's and the ANOVA. Specific statistical details about these tests are covered in the document "Completely Randomized One Way ANOVA Analysis". 
 
 The only difference in two-way CR ANOVA compared to a one-way CR ANOVA is the test of the nulls for the additional factor and for the interaction between the two factors. The model is a bit more complex.
 
-#### Levene's
+### Levene's
 
 Levene's tests the null that homogeneity of variance is equivalent across the groups. The p-value of 0.15 is higher than the 0.05 type1 error rejection threshold. Levene's is inconclusive, offering no evidence the homogeneity of variance assumption has been violated.
 
-#### ANOVA Table
+### ANOVA Table
 
 The ANOVA table shows p-values that are below the 0.05 type1 error threshold for each factor and for their interaction. We can safely reject the interaction null hypothesis (p=0.00017). 
 
@@ -130,7 +130,7 @@ Scientifically, we would conclude that the effect of diet on liver cholesterol d
 
 Since the interaction is positive, it's difficult to say much about diet and strain. Sure, diet affects liver cholesterol. Strain does as well. The ANOVA per se cannot parse those out from the interaction effect (we wait for regression analysis for that!).
 
-### Post Hoc Multiple Comparisons
+## Post Hoc Multiple Comparisons
 
 We could leave well enough alone and draw our inferences on the basis of the interaction effect alone. However, it would not be unreasonable to compare the effect of diet within each strain. at each level of diet. Nor is it unreasonable to compare the each strain across the diets. 
 

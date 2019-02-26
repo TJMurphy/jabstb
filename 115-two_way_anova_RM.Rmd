@@ -34,7 +34,7 @@ An independent replicate occurs when the same protocol is followed, from start t
 
 It's hard to argue these represent biological replicates in such designs. The cells are likely clonal, and probably aren't changing much from batch to batch. The statistical analysis is therefore essentially focused on establishing whether the observations occur repeatedly or not.
 
-## Suppression of CASMC NFAT by ICER
+## Cell culture
 
 Cornary artery atheromas are enriched in fast-growing mesenchymal-like cells, which have prominent inflammatory characteristics. They express the transcription factor NFAT, which is regulated by mitogenic receptor signaling to control inflammatory gene expression. 
 
@@ -114,7 +114,7 @@ ggplot(hcsmc,
 ```
 
 
-## Two way RM ANOVA Test
+## The test
 
 Scientific judgement dictates running this test as related measures. Each replicate was performed on a different passage of cells, approximately 1 week apart. Within each passage the cells are highly homogenous. The measurements within a replicate are intrinsically-linked. Perhaps most importantly, each measure taken on a given day is NOT independent of all other measures that day. There really is no other way to analyze these data.
 
@@ -139,7 +139,7 @@ Note just as for the 2-way ANOVA CR analysis, there are 3 F tests for the model 
 
 It is safe to reject the interaction null and conclude that variance for its effect exceeds that for its residual. Scientifically, this means that levels of NFAT-mediated transcription are influenced by both the suppressor and the mitogen stimuli, as designed in this experiment. About 68% of the variance in the data can be explained by this interaction effect.
 
-#### Mauchly's Sphericity Test
+### Mauchly's Sphericity Test
 
 Sphericity is defined as uniform variance of the differences. Think of it as the RM analog to the CR homogeneity of variance assumption. Sphericity, as for homogeneity of variance, is an assumption ideally met in RM ANOVA for validity of the result.
 
@@ -147,7 +147,7 @@ Mauchly's tests the null hypothesis that the variances among the differences are
 
 In our analysis, the Mauchly test is not extreme. We have no reason to believe the sphericity assumption is not satisfied. We can use the p-value in the ANOVA table to guide our inference, without using the sphericity correction.
 
-### Post Hoc Test
+## Post Hoc multiple comparisons
 
 The true scientific objective here is to know whether the suppressor selectively attenuate NFAT-mediated transcription by either of the mitogens. In other words, scientifically, it would be interesting to learn whether an ICER-suppressable factor participates in the pathway of one of the mitogens, but not the other. 
 
@@ -183,7 +183,7 @@ This illustrates the occassional case where a positive result at the level of th
 
 There's no accident in this case, it's likely a fairly underpowered study given.
 
-### Write Up
+## Write Up
 
 *Statistical analysis of the luciferase data indicates there is an interaction between levels of the suppressor and the mitogen variables (2 way RM ANOVA, p=0.0061, n=3). However, post hoc comparisons do not support the hypothesis that ICER selectively suppresses either of the mitogens (pairwise two-sided paired t-tests, Holm adjusted p-values for multiple comparisons). The experiment may have been underpowered.*
 
