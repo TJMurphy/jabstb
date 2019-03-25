@@ -285,15 +285,15 @@ Both of these errors require some attention to overcome.
 
 Chances are you need to twiddle with the formula. It may be missing a parentheses or something else, and thus calculating a value for `y` that you don't intend. Once you are sure the formula is correct, next evaluate your `start list`. The values you entered may be off too much, and you need to feed it better start estimates. Next, try different algorithms (`plinear` or `port` or the L-M in `nlsLM`). Or you can toggle some `control` arguments, or perform a weighted analysis. 
 
-Do you have enough degrees of freedom for the model? Models with more parameters need more degrees of freedom to have a better chance at fitting. Rather than regressing on an average of technical replicates, run your regression using all technical replicate values, which doubles your degrees of freedom. Otherwise, you may not have data that is fittable by a complex model. In that case, choose a simpler model instead. 
+Do you have enough degrees of freedom for the model? Models with more parameters need more degrees of freedom to have a better chance at fitting. Rather than regressing on an average of technical replicates, run your regression using all technical replicate values, which doubles your degrees of freedom. If none of this helps, you may not have data that is fittable by a complex model. In that case, choose a simpler model instead. 
 
-Simulation *a priori* is the best way to know how many data points are necessary to test a given model. A three parameter model can be fit by as few as 12 well-behaved $x,y$ pairs. A five parameter model might be solvable with twice that many, but could likely need more. It all depends on the model and the quality of the data. 
+Simulation *a priori* is the best way to know how many data points are necessary to test a given model. A three parameter model can be fit by a bit fewer than 12 well-behaved $x,y$ pairs. A five parameter model might be solvable with twice that many, and could likely need more degrees of freedom. It all depends on the model and the quality of the data. 
 
-Finally, and most importantly, most fitting problems can be avoided by proper experimental design. Design experiments that have several data points that "bracket" the expected parameter values symmetrically. This is done by choosing appropriate values of the $X$ variable for which to collect responses. 
+Finally, and **most importantly**, most fitting problems can be avoided by proper experimental design. Design experiments with several data points that "bracket" the expected parameter values symmetrically. This is done by choosing appropriate values of the $X$ variable for which to collect responses. This usually entails conducting one or a few preliminary 'scoping' experiments to get a sense of the curves shape.
 
 For example, let's say the goal of the experiment is to estimate $K$ which is in units of the predictor, $X$. Assuming you have some general idea of what value for $K$ to expect, test a handful of values for $X$ each on both side of $K$ in your experiment. $K$ would be a mid-point on a graph, with about 5 or so data points each to its left and right. 
 
-If most of the data are on a plateau phase, the regression might hone in on an artifact in that region and solve that. If the parameter value of interest is within a data point desert, it might be lost for good!
+If most of the data points are on a plateau phase, the regression might hone in on an artifact in that region and solve that. When the parameter value of interest is within a data point desert, it might be lost for good!
 
 ### Selecting the right model
 
@@ -301,7 +301,7 @@ If most of the data are on a plateau phase, the regression might hone in on an a
 knitr::include_graphics("images/nonlinear_model_choices.jpg")
 ```
 
-Once you realize you have a nonlinear process, you'll need to lean on your scientific judgement to select the most appropriate model. One way is to simply reach up to your equation shelf to select one, based upon your expertise (or willingness to become an expert!) with the biological system.
+Once you realize you have a nonlinear process, you'll need to lean on your scientific judgement to select the most appropriate model. Simply reach up to your metaphorical equation shelf to select one. Do this based upon your expertise (or willingness to become an expert!) with the biological system.
 
 As I mentioned before, if you don't know what model to use, first take a look at [GraphPad's nonlinear regression guide](https://www.graphpad.com/guides/prism/8/curve-fitting/index.htm?REG_Exponential_decay_2phase.htm). 
 
@@ -331,7 +331,7 @@ The simplest is to use a negative Hill slope in the standard hyperbolic formula.
 
 `y <- ylo+ ((yhi-ylo)*x^h)/(k^h+x^h)`
 
-```{r fig.show="hold"}
+```{r fig.cap="Inhibition: Linear and log plots", fig.height=3, fig.show="hold", fig.width=3}
 x <- c(1:60)
 
 ylo <- 0
@@ -341,12 +341,15 @@ k <- 30
 
 y <- ylo+((yhi-ylo)*x^h)/(k^h+x^h)
 
+#linear plot
 ggplot(data.frame(x,y), aes(x,y))+
-  geom_point()
+  geom_point(color="blue")
 
+#log plot
 ggplot(data.frame(x,y), aes(x,y))+
   geom_point(color="blue")+
-  scale_x_log10()
+  scale_x_log10()+
+  labs(x="Log10(x)")
 ```
 
 Alternately, the hyperbolic function can be inverted algebraically, deriving this model:
@@ -355,7 +358,7 @@ Alternately, the hyperbolic function can be inverted algebraically, deriving thi
 
 Whose formula is `y=ylo+((yhi-ylo)/(1+x^h/k^h))`
 
-```{r fig.show="hold"}
+```{r fig.cap="More inhibition: Linear and log plots", fig.height=3, fig.show="hold", fig.width=3}
 x <- c(1:60)
 
 ylo <- 0
@@ -365,12 +368,15 @@ k <- 30
 
 y <- ylo+((yhi-ylo)/(1+x^h/k^h))
 
+#linear
 ggplot(data.frame(x,y), aes(x,y))+
-  geom_point()
+  geom_point(color="blue")
 
+#log
 ggplot(data.frame(x,y), aes(x,y))+
-  geom_point()+
-  scale_x_log10()
+  geom_point(color="blue")+
+  scale_x_log10()+
+  labs(x="Log10(x)")
 ```
 
 Finally, a model for inhibition on a log10 scale would be:
@@ -390,13 +396,13 @@ K  <- 45
 y <- ylo+(yhi-ylo)/(1+10^(x-log10(K))*h) 
 
 
-
 ggplot(data.frame(x,y), aes(x,y))+
-  geom_point(color="blue")
+  geom_point(color="blue")+
+  labs(x="Log10(x)")
 
 ```
 
-#### Time seires
+#### Time series
 
 When performing time-series experiments, many outcome responses can be modeled using exponential association or decay equations. For example, here's a first order decay model: \[Y=Y_0e^{-kt}\]
 
@@ -414,12 +420,15 @@ k <- log(2)/30
 
 y <- ylo+(yhi-ylo)*exp(-k*x)
 
+#linear
 ggplot(data.frame(x, y), aes(x,y))+
   geom_point(color="blue")
 
+#log
 ggplot(data.frame(x, y), aes(x,y))+
   geom_point(color="blue")+
-  scale_y_log10()
+  scale_y_log10()+
+  labs(y="Log10(y)")
 ```
 
 #### Rythmic functions

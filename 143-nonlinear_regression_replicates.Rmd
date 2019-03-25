@@ -44,6 +44,8 @@ nonsmokers <- read.csv("datasets/nosmoketheo.csv", stringsAsFactors = F)
 str(nonsmokers)
 ```
 
+## Munging for regression analysis
+
 ### Average the technical replicates
 
 We have a few data processing steps to clean things up. First, let's average the technical duplicates for each time point.
@@ -136,7 +138,7 @@ onephaseFits <- bind_rows(
 kable(onephaseFits[seq(3,18,3),])
 ```
 
-### Calculate half-lives and perform t-test
+## T-test on half-lives
 
 We now just need to create a results table for the half-lives, which we'll use to pass into a t-test function.
 
@@ -167,15 +169,15 @@ And now, finally, the t-test. This evaluates the null hypothesis that theophylli
 t.test(halflife~smoke, data=results, var.equal=T)
 ```
 
-### Conclusion
+## Conclusion
 
-Reject the null hypothesis. The data indicate....
+Reject the null hypothesis. The data indicate that....
 
 #### Write up
 
-**Exposure to cigarette smoke about doubles the rate of theophylline metabolism in rat microsomes, from 16 +/- 0.9 min to 29 +/- 0.6 min (mean +/- SD, 95% confidence interval of the difference is 11.6 to 15.3 min, unpaired t-test, p=3.4e-5).**
+**Exposure to cigarette smoke about doubles the rate of theophylline metabolism in rat microsomes. The half-life of the drug is reduced from 29 +/- 0.6 min to 16 +/- 0.9 min (mean +/- SD, 95% confidence interval of the difference is 11.6 to 15.3 min, unpaired t-test, p=3.4e-5).**
 
-#### Summary figure
+## Summary figure
 
 The figure above is not quite ready for publication or presentation. The absolute values of theophylline differ from replicate to replicate. The figure also fails to convey, from a glance, that the smoke exposure has any effect.
 
