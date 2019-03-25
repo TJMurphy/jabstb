@@ -1,0 +1,211 @@
+# Nonlinear regression of independent replicates {#nonlinearreplicates}
+
+```{r message=FALSE}
+library(tidyverse)
+library(broom)
+library(viridis)
+library(knitr)
+```
+
+This chapter illustrates how to analyze independent replicates of nonlinear data while testing an hypothesis that a predictor variable changes an outcome response.
+
+To some extent, this is a chapter about munging a lot of data into a form for nonlinear regression. Then it provides one common approach to conducting statistical inference on the results.
+
+The scientific prediction is that exposing rats to cigarette smoke changes microsomal theophylline metabolism. Specifically, exposure of cigarette smoke will induce CYP2A1, leading to more rapid theophylline degradation. A hypothesis to test that prediction is that theophylline half-lives differ in microsomes from smoke exposed animals compared to unexposed.  
+
+The half-life of a drug, the time it takes for a given drug level to be reduced by half, is a critical parameter in drug metabolism studies. The metabolism of many (not all) drugs occurs by first order kinetics: \[C=C_0\times e^{-kt}\]
+
+Here, $C$ is the concentration of drug at time $t$, $C_0$ is the concentration at time zero. And $k$ represents a first order rate constant, from which half-live values can be derived: \[k=\frac{log(2)}{t_{1/2}}\]
+
+The data set contains the results of an experiment comparing **in vitro** theophylline metabolism using rat liver microsomal preps. One group of rats were housed in an environmental chamber laden with cigarette smoke. A second group serving as control was not exposed to smoke. Microsomes were prepared from each individual subjected to these treatments. 
+
+A non-saturating level of theophylline was added to microsomes and then measured (in ng/ml units) as a function of time in duplicate. 
+
+If CYP1A2 is induced by cigarette smoke in this model, theophylline should decay faster. 
+
+One phase half-lives will be calculated by an exponential decay function 
+
+\[y=y_{lo}+(y_{hi}-y_{lo})e^{-kx}+y_{lo}\] where `k` is the rate constant, `x` is time, in minutes, and `yhi` and `ylo` are the maximal and minimal levels of theophylline within each run.
+
+You might wonder how I knew to select this model for this problem? That comes from experience and scientific judgement. If you're interested in some phenomenon and notice someone is conducting nonlinear modeling, pay close attention to the nonlinear model they used!
+
+## The dataset
+
+The experimental data are in two separate csv files. One file contains the replicates for the smoke-exposed rats (subjects Q, R and S). The other file contains the unexposed rats (subjects T, U and V).  Each replicate is comprised of duplicate measurements.
+
+It's not unusual in this kind of work for the absolute values for the response variable to vary between replicates but be tight within replicates. 
+
+```{r}
+
+#stringsAsFactors prevents some warnings in later steps
+smokers <- read.csv("datasets/smoketheo.csv", stringsAsFactors = F)
+str(smokers)
+nonsmokers <- read.csv("datasets/nosmoketheo.csv", stringsAsFactors = F)
+str(nonsmokers)
+```
+
+### Average the technical replicates
+
+We have a few data processing steps to clean things up. First, let's average the technical duplicates for each time point.
+
+```{r}
+smokers1 <- group_by(smokers, smoke, min) %>% 
+  summarise(
+    q=mean(c(q1,q2)),
+    r=mean(c(r1,r2)),
+    s=mean(c(s1,s2))
+  ) 
+
+nonsmokers1 <- group_by(nonsmokers, smoke, min) %>% 
+  summarise(
+    t=mean(c(t1,t2)),
+    u=mean(c(u1,u2)),
+    v=mean(c(v1,v2))
+  )
+#check to see if it worked!
+str(smokers1); str(nonsmokers1)
+```
+
+### Create one table
+
+There are a couple of ways to combine the data into one table. One way is to convert each table into long format, before binding them together. 
+
+```{r}
+smokers1.1 <- gather(smokers1, id, theo, -smoke, -min)
+
+nonsmokers1.1 <- gather(nonsmokers1, id, theo, -smoke, -min)
+
+theodata <- bind_rows(smokers1.1, nonsmokers1.1)
+
+theodata
+```
+
+### Plot the data
+
+It's a good idea to visualize each replicate prior any transformations. It's not clear from this view that cigarette smoke has any effect, is it? 
+
+```{r}
+ggplot(theodata, aes(min, theo, group=id))+
+  geom_line()+
+  geom_point(aes(color=smoke))+
+  scale_color_viridis(discrete=T)
+```
+### Run the regressions
+
+* We don't want to write six regressions by hand!
+* We take advantage of the fact that `nls` can operate on a subset of a data set.
+* `sapply` 'feeds' values of `reps` into the function one-by-one, each time generating an `nls` object for that replicate
+* `output` is a list of six `nls` class objects; lists are a pain
+
+```{r}
+output <- sapply(
+  
+  reps <- c("q", "r", "s", "t", "u", "v"),
+  
+  function(reps) nls(theo~(yhi-ylo)*exp(-k*min)+ylo, 
+                     start=list(
+                       yhi=200, 
+                       ylo=50,
+                       k=0.03),
+                     data=subset(theodata, id==reps)
+  ), 
+  simplify = F
+)
+
+```
+
+### Clean up regression results
+
+The scientific objective is to derive half-life values and then compare them between the two smoking conditions. Regression functions produce a lot of information. We only care for the rate constant.
+
+There's really no scientific reason to compare the `yhi` or `ylo` parameters in this particular case. So the focus of the regression is to extract the rate constants `k` for each of the independent replicates from which half-life values will be calculated. The code below accomplishes that and a bit more.
+
+The output for one nonlinear regression has a lot of extraneous information. The `broom` package has tools like `tidy` that help clean it up.
+
+* `onephaseFits` is just a tidy way of listing all of the parameter estimates from the `output` list
+* We use `kable` to print out only the rate constants, `k`
+
+```{r}
+
+onephaseFits <- bind_rows(
+  lapply(output, tidy)) %>% 
+  add_column(
+    reps=rep(reps, each=3), 
+    .before=T)
+
+kable(onephaseFits[seq(3,18,3),])
+```
+
+### Calculate half-lives and perform t-test
+
+We now just need to create a results table for the half-lives, which we'll use to pass into a t-test function.
+
+```{r}
+results <- select(
+  onephaseFits[seq(3,18,3),], 
+  reps, 
+  estimate
+  ) %>% 
+  mutate(
+    halflife=log(2)/estimate
+    ) %>% 
+  bind_cols(smoke=rep(c("Y", "N"), each=3)
+            )
+kable(results)
+
+group_by(results, smoke) %>% 
+  summarise(
+    mean=mean(halflife),
+    sd=sd(halflife)
+    )
+
+```
+
+And now, finally, the t-test. This evaluates the null hypothesis that theophylline half-lives in smoking and nonsmoking microsomes are the same.
+
+```{r}
+t.test(halflife~smoke, data=results, var.equal=T)
+```
+
+### Conclusion
+
+Reject the null hypothesis. The data indicate....
+
+#### Write up
+
+**Exposure to cigarette smoke about doubles the rate of theophylline metabolism in rat microsomes, from 16 +/- 0.9 min to 29 +/- 0.6 min (mean +/- SD, 95% confidence interval of the difference is 11.6 to 15.3 min, unpaired t-test, p=3.4e-5).**
+
+#### Summary figure
+
+The figure above is not quite ready for publication or presentation. The absolute values of theophylline differ from replicate to replicate. The figure also fails to convey, from a glance, that the smoke exposure has any effect.
+
+It is very simple to rescale the data and replot. There are a few conceivable ways to do this, but one is percent of maximum within each replicate.
+
+```{r}
+theodatapm <- group_by(theodata, id) %>% mutate(pmax=100*theo/max(theo))
+theodatapm
+```
+
+Finally, a plot of the results. 
+
+A couple of important things happen to the data on-the-fly within the ggplot function. Means and standard deviations are calculated to derive data points with error bars. And the nonlinear regression best fit line is calculated and drawn.
+
+This is a convincing result showing a marked effect of cigarette exposure on caffeine metabolism.
+
+```{r}
+ggplot(theodatapm, aes(min, pmax, color=smoke, group=smoke))+
+  stat_summary(fun.data= "mean_sdl", 
+               fun.args = list(mult=1)
+               )+
+  stat_smooth(method="nls",
+              method.args=list(
+                start=c(yhi=100, ylo=10, k=0.03)),
+              formula="y~ylo+((yhi-ylo)*exp(-k*x))",
+              se=F
+              )+
+  labs(y="Theophylline, % of maximum", 
+       y="minutes"
+       )+
+  scale_color_viridis(discrete=T)
+```
+

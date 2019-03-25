@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chapter 34 Non-linear regression | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Chapter 34 Non-linear regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 34 Non-linear regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com">
+
+
+<meta name="date" content="2019-03-11">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="regress.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Software</a><ul>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#my-code-is-your-code"><i class="fa fa-check"></i><b>3.1</b> My code is your code</a></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#install-r-and-rstudio"><i class="fa fa-check"></i><b>3.2</b> Install R and RStudio</a></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#getting-started-with-r"><i class="fa fa-check"></i><b>3.3</b> Getting started with R</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#other-resources"><i class="fa fa-check"></i><b>3.4</b> Other resources</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>4</b> The Big Picture</a><ul>
+<li class="chapter" data-level="4.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>4.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>4.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="4.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>4.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="4.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>4.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="4.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>4.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>5</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="5.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>5.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>5.1.1</b> A simple test to define the experimental unit</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>5.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>5.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="5.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>5.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>5.3</b> Random process</a></li>
+<li class="chapter" data-level="5.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>5.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>5.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="5.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>5.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="5.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>5.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="5.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>5.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>5.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>6</b> Data Classification</a><ul>
+<li class="chapter" data-level="6.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>6.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>6.1.1</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>6.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>6.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="6.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>6.2.2</b> Discrete categorical and ordinal variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>7</b> Variability, Accuracy and Precision</a><ul>
+<li class="chapter" data-level="7.1" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>7.1</b> Variance: Quantifying variation by least squares</a></li>
+<li class="chapter" data-level="7.2" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>7.2</b> Standard deviation</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>7.2.1</b> What does the standard deviation tell us</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="dispersion.html"><a href="dispersion.html#other-ways-of-describing-variability"><i class="fa fa-check"></i><b>7.3</b> Other ways of describing variability</a></li>
+<li class="chapter" data-level="7.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>7.4</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="7.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>7.5</b> Standard error</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>7.5.1</b> What exactly does the standard error represent?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>7.6</b> Confidence intervals</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="dispersion.html"><a href="dispersion.html#simulations"><i class="fa fa-check"></i><b>7.6.1</b> Simulations</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>7.7</b> Key take aways</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>8</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="8.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>8.1</b> The decision process</a></li>
+<li class="chapter" data-level="8.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>8.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="8.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>8.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>9</b> Error</a><ul>
+<li class="chapter" data-level="9.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>9.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>9.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="9.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>9.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>9.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="9.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>9.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>10</b> P Values</a><ul>
+<li class="chapter" data-level="10.1" data-path="pvalues.html"><a href="pvalues.html#how-p-values-are-calculated"><i class="fa fa-check"></i><b>10.1</b> How p-values are calculated</a></li>
+<li class="chapter" data-level="10.2" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>10.2</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="10.3" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>10.3</b> Interpretation</a></li>
+<li class="chapter" data-level="10.4" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>10.4</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>11</b> Reproducible Data Munging in R</a><ul>
+<li class="chapter" data-level="11.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-glucose-data"><i class="fa fa-check"></i><b>11.1</b> Jaxwest7 glucose data</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="jaxwest7.html"><a href="jaxwest7.html#inspect-the-jaxwest7-data"><i class="fa fa-check"></i><b>11.1.1</b> Inspect the Jaxwest7 data</a></li>
+<li class="chapter" data-level="11.1.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-concentration-data-into-r"><i class="fa fa-check"></i><b>11.1.2</b> Munge the glucose concentration data into R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="jaxwest7.html"><a href="jaxwest7.html#explore-the-jaxwest7-data"><i class="fa fa-check"></i><b>11.2</b> Explore the Jaxwest7 data</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>12</b> The Binomial Distribution</a><ul>
+<li class="chapter" data-level="12.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>12.1</b> dbinom</a></li>
+<li class="chapter" data-level="12.2" data-path="binomial.html"><a href="binomial.html#pbinom"><i class="fa fa-check"></i><b>12.2</b> pbinom</a></li>
+<li class="chapter" data-level="12.3" data-path="binomial.html"><a href="binomial.html#qbinom"><i class="fa fa-check"></i><b>12.3</b> qbinom</a></li>
+<li class="chapter" data-level="12.4" data-path="binomial.html"><a href="binomial.html#rbinom"><i class="fa fa-check"></i><b>12.4</b> rbinom</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="poisson.html"><a href="poisson.html"><i class="fa fa-check"></i><b>13</b> The Poisson Distribution</a><ul>
+<li class="chapter" data-level="13.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>13.1</b> Poisson Events</a></li>
+<li class="chapter" data-level="13.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>13.2</b> dpois</a></li>
+<li class="chapter" data-level="13.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>13.3</b> ppois</a></li>
+<li class="chapter" data-level="13.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>13.4</b> qpois</a></li>
+<li class="chapter" data-level="13.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>13.5</b> rpois</a></li>
+<li class="chapter" data-level="13.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>13.6</b> Overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>14</b> The Normal Distribution</a><ul>
+<li class="chapter" data-level="14.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>14.0.1</b> The Standard Normal</a></li>
+<li class="chapter" data-level="14.1" data-path="normal.html"><a href="normal.html#dnorm"><i class="fa fa-check"></i><b>14.1</b> dnorm</a></li>
+<li class="chapter" data-level="14.2" data-path="normal.html"><a href="normal.html#pnorm"><i class="fa fa-check"></i><b>14.2</b> pnorm</a><ul>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-p-values-using-pnorm"><i class="fa fa-check"></i>Calculating “p-values”&quot; using pnorm</a></li>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-percentiles-using-pnorm"><i class="fa fa-check"></i>Calculating percentiles using pnorm</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="normal.html"><a href="normal.html#qnorm"><i class="fa fa-check"></i><b>14.3</b> qnorm</a></li>
+<li class="chapter" data-level="14.4" data-path="normal.html"><a href="normal.html#rnorm"><i class="fa fa-check"></i><b>14.4</b> rnorm</a><ul>
+<li class="chapter" data-level="14.4.1" data-path="normal.html"><a href="normal.html#plotting-histograms-of-some-rnorm-samples"><i class="fa fa-check"></i><b>14.4.1</b> Plotting histograms of some rnorm samples</a></li>
+<li class="chapter" data-level="14.4.2" data-path="normal.html"><a href="normal.html#bins-and-binwidth"><i class="fa fa-check"></i><b>14.4.2</b> Bins and Binwidth</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="categorical.html"><a href="categorical.html"><i class="fa fa-check"></i><b>15</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="15.1" data-path="categorical.html"><a href="categorical.html#types-of-categorical-data"><i class="fa fa-check"></i><b>15.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="15.1.1" data-path="categorical.html"><a href="categorical.html#proportions"><i class="fa fa-check"></i><b>15.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="15.1.2" data-path="categorical.html"><a href="categorical.html#frequencies"><i class="fa fa-check"></i><b>15.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="15.1.3" data-path="categorical.html"><a href="categorical.html#associations"><i class="fa fa-check"></i><b>15.1.3</b> Associations</a></li>
+<li class="chapter" data-level="15.1.4" data-path="categorical.html"><a href="categorical.html#statistics-covered-here"><i class="fa fa-check"></i><b>15.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="categorical.html"><a href="categorical.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>15.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="15.2.1" data-path="categorical.html"><a href="categorical.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>15.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="15.3" data-path="categorical.html"><a href="categorical.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>15.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="15.3.1" data-path="categorical.html"><a href="categorical.html#proportion-analysis"><i class="fa fa-check"></i><b>15.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="15.3.2" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>15.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="15.3.3" data-path="categorical.html"><a href="categorical.html#contingency-analysis"><i class="fa fa-check"></i><b>15.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="categorical.html"><a href="categorical.html#comparing-proportions"><i class="fa fa-check"></i><b>15.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="15.4.1" data-path="categorical.html"><a href="categorical.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>15.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="15.4.2" data-path="categorical.html"><a href="categorical.html#calculating-proportions"><i class="fa fa-check"></i><b>15.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="15.4.3" data-path="categorical.html"><a href="categorical.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>15.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="15.4.4" data-path="categorical.html"><a href="categorical.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>15.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="15.4.5" data-path="categorical.html"><a href="categorical.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>15.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="15.4.6" data-path="categorical.html"><a href="categorical.html#comparing-two-proportions"><i class="fa fa-check"></i><b>15.4.6</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="categorical.html"><a href="categorical.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>15.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="15.6" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>15.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="15.6.1" data-path="categorical.html"><a href="categorical.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>15.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="15.6.2" data-path="categorical.html"><a href="categorical.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>15.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="15.7" data-path="categorical.html"><a href="categorical.html#contingency-testing"><i class="fa fa-check"></i><b>15.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="15.7.1" data-path="categorical.html"><a href="categorical.html#intepretation-of-contingency-results"><i class="fa fa-check"></i><b>15.7.1</b> Intepretation of Contingency Results</a></li>
+<li class="chapter" data-level="15.7.2" data-path="categorical.html"><a href="categorical.html#write-up-3"><i class="fa fa-check"></i><b>15.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="15.7.3" data-path="categorical.html"><a href="categorical.html#interpretation-of-chi-square-output"><i class="fa fa-check"></i><b>15.7.3</b> Interpretation of chi-square output</a></li>
+<li class="chapter" data-level="15.7.4" data-path="categorical.html"><a href="categorical.html#write-up-4"><i class="fa fa-check"></i><b>15.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="15.7.5" data-path="categorical.html"><a href="categorical.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>15.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="15.7.6" data-path="categorical.html"><a href="categorical.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>15.7.6</b> Higher dimension contingency analysis</a></li>
+<li class="chapter" data-level="15.7.7" data-path="categorical.html"><a href="categorical.html#other-experimental-designs-involving-categorical-data"><i class="fa fa-check"></i><b>15.7.7</b> Other experimental designs involving categorical data</a></li>
+</ul></li>
+<li class="chapter" data-level="15.8" data-path="categorical.html"><a href="categorical.html#doing-a-priori-power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>15.8</b> Doing <em>a priori</em> power analysis for proportion tests</a></li>
+<li class="chapter" data-level="15.9" data-path="categorical.html"><a href="categorical.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>15.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="15.10" data-path="categorical.html"><a href="categorical.html#graphing-proportions"><i class="fa fa-check"></i><b>15.10</b> Graphing Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="chisquare.html"><a href="chisquare.html"><i class="fa fa-check"></i><b>16</b> The Chi-square Distribution</a><ul>
+<li class="chapter" data-level="16.1" data-path="chisquare.html"><a href="chisquare.html#background"><i class="fa fa-check"></i><b>16.1</b> Background</a></li>
+<li class="chapter" data-level="16.2" data-path="chisquare.html"><a href="chisquare.html#dchisq"><i class="fa fa-check"></i><b>16.2</b> dchisq</a></li>
+<li class="chapter" data-level="16.3" data-path="chisquare.html"><a href="chisquare.html#pchisq"><i class="fa fa-check"></i><b>16.3</b> pchisq</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="chisquare.html"><a href="chisquare.html#calculating-p-values-from-pchisq"><i class="fa fa-check"></i><b>16.3.1</b> Calculating p-values from pchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="chisquare.html"><a href="chisquare.html#qchisq"><i class="fa fa-check"></i><b>16.4</b> qchisq</a></li>
+<li class="chapter" data-level="16.5" data-path="chisquare.html"><a href="chisquare.html#rchisq"><i class="fa fa-check"></i><b>16.5</b> rchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="nonparametrics.html"><a href="nonparametrics.html"><i class="fa fa-check"></i><b>17</b> Nonparametric Statistical Tests</a><ul>
+<li class="chapter" data-level="17.1" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-discrete-data"><i class="fa fa-check"></i><b>17.1</b> Experiments involving discrete data</a></li>
+<li class="chapter" data-level="17.2" data-path="nonparametrics.html"><a href="nonparametrics.html#deviant-data"><i class="fa fa-check"></i><b>17.2</b> Deviant Data</a></li>
+<li class="chapter" data-level="17.3" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>17.3</b> Sign Test</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>17.3.1</b> Interpretation</a></li>
+<li class="chapter" data-level="17.3.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-5"><i class="fa fa-check"></i><b>17.3.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>17.4</b> Wilcoxon Sign Rank Test for One Group</a><ul>
+<li class="chapter" data-level="17.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>17.4.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
+<li class="chapter" data-level="17.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>17.4.2</b> Interpretation</a></li>
+<li class="chapter" data-level="17.4.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>17.4.3</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>17.5</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
+<li class="chapter" data-level="17.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>17.5.1</b> Interpretation</a></li>
+<li class="chapter" data-level="17.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>17.5.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>17.6</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
+<li class="chapter" data-level="17.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>17.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="17.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>17.6.2</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.7" data-path="nonparametrics.html"><a href="nonparametrics.html#kruskal-wallis"><i class="fa fa-check"></i><b>17.7</b> Kruskal-Wallis</a><ul>
+<li class="chapter" data-level="17.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>17.7.1</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="17.8" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>17.8</b> Friedman test</a></li>
+<li class="chapter" data-level="17.9" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-power-calculations"><i class="fa fa-check"></i><b>17.9</b> Nonparametric power calculations</a><ul>
+<li class="chapter" data-level="17.9.1" data-path="nonparametrics.html"><a href="nonparametrics.html#how-it-works"><i class="fa fa-check"></i><b>17.9.1</b> How it works</a></li>
+<li class="chapter" data-level="17.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#initialization-with-population-parameters"><i class="fa fa-check"></i><b>17.9.2</b> Initialization with population parameters</a></li>
+<li class="chapter" data-level="17.9.3" data-path="nonparametrics.html"><a href="nonparametrics.html#an-example"><i class="fa fa-check"></i><b>17.9.3</b> An example</a></li>
+<li class="chapter" data-level="17.9.4" data-path="nonparametrics.html"><a href="nonparametrics.html#nonpara.pwr"><i class="fa fa-check"></i><b>17.9.4</b> nonpara.pwr</a></li>
+</ul></li>
+<li class="chapter" data-level="17.10" data-path="nonparametrics.html"><a href="nonparametrics.html#summary"><i class="fa fa-check"></i><b>17.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>18</b> Signed Rank Distribution</a><ul>
+<li class="chapter" data-level="18.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>18.1</b> Transformation of data into sign ranks</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="signrank.html"><a href="signrank.html#for-a-one-group-sample"><i class="fa fa-check"></i><b>18.1.1</b> For a one group sample</a></li>
+<li class="chapter" data-level="18.1.2" data-path="signrank.html"><a href="signrank.html#for-a-paired-sample"><i class="fa fa-check"></i><b>18.1.2</b> For a paired sample</a></li>
+<li class="chapter" data-level="18.1.3" data-path="signrank.html"><a href="signrank.html#the-sign-rank-test-statistic-in-r"><i class="fa fa-check"></i><b>18.1.3</b> The sign rank test statistic in R</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="signrank.html"><a href="signrank.html#rs-four-sign-rank-distribution-functions"><i class="fa fa-check"></i><b>18.2</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="signrank.html"><a href="signrank.html#dsignrank"><i class="fa fa-check"></i><b>18.2.1</b> dsignrank</a></li>
+<li class="chapter" data-level="18.2.2" data-path="signrank.html"><a href="signrank.html#psignrank"><i class="fa fa-check"></i><b>18.2.2</b> psignrank</a></li>
+<li class="chapter" data-level="18.2.3" data-path="signrank.html"><a href="signrank.html#qsignrank"><i class="fa fa-check"></i><b>18.2.3</b> qsignrank</a></li>
+<li class="chapter" data-level="18.2.4" data-path="signrank.html"><a href="signrank.html#rsignrank"><i class="fa fa-check"></i><b>18.2.4</b> rsignrank</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="ranksum.html"><a href="ranksum.html"><i class="fa fa-check"></i><b>19</b> Rank Sum Distribution</a><ul>
+<li class="chapter" data-level="19.0.1" data-path="ranksum.html"><a href="ranksum.html#transformation-of-data-into-rank-summs"><i class="fa fa-check"></i><b>19.0.1</b> Transformation of data into rank summs</a></li>
+<li class="chapter" data-level="19.0.2" data-path="ranksum.html"><a href="ranksum.html#the-sign-rank-test-statistic-in-r-1"><i class="fa fa-check"></i><b>19.0.2</b> The sign rank test statistic in R</a></li>
+<li class="chapter" data-level="19.1" data-path="ranksum.html"><a href="ranksum.html#rs-four-sign-rank-distribution-functions-1"><i class="fa fa-check"></i><b>19.1</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="19.1.1" data-path="ranksum.html"><a href="ranksum.html#dwilcox"><i class="fa fa-check"></i><b>19.1.1</b> dwilcox</a></li>
+<li class="chapter" data-level="19.1.2" data-path="ranksum.html"><a href="ranksum.html#pwilcox"><i class="fa fa-check"></i><b>19.1.2</b> pwilcox</a></li>
+<li class="chapter" data-level="19.1.3" data-path="ranksum.html"><a href="ranksum.html#qwilcox"><i class="fa fa-check"></i><b>19.1.3</b> qwilcox</a></li>
+<li class="chapter" data-level="19.1.4" data-path="ranksum.html"><a href="ranksum.html#rwilcox"><i class="fa fa-check"></i><b>19.1.4</b> rwilcox</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>20</b> The t-tests</a><ul>
+<li class="chapter" data-level="20.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>20.1</b> Data assumptions for t-tests</a></li>
+<li class="chapter" data-level="20.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>20.2</b> The t Statistic</a><ul>
+<li class="chapter" data-level="20.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>20.2.1</b> One sample t tests</a></li>
+<li class="chapter" data-level="20.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>20.2.2</b> Unpaired t tests</a></li>
+<li class="chapter" data-level="20.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>20.2.3</b> Paired t tests</a></li>
+</ul></li>
+<li class="chapter" data-level="20.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>20.3</b> t Test Hypotheses</a><ul>
+<li class="chapter" data-level="20.3.1" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>20.3.1</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="20.3.2" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>20.3.2</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="20.3.3" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>20.3.3</b> Paired hypotheses</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>20.4</b> Confidence Intervals of Means</a></li>
+<li class="chapter" data-level="20.5" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>20.5</b> t Tests: Running the analysis</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>20.5.1</b> One sample t test</a></li>
+<li class="chapter" data-level="20.5.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>20.5.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="20.5.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>20.5.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="20.6" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>20.6</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="20.6.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>20.6.1</b> Unpaired</a></li>
+<li class="chapter" data-level="20.6.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>20.6.2</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="20.7" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>20.7</b> t Test Power</a><ul>
+<li class="chapter" data-level="20.7.1" data-path="ttests.html"><a href="ttests.html#interpretation-7"><i class="fa fa-check"></i><b>20.7.1</b> Interpretation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>21</b> Statistical design of t-tests</a><ul>
+<li class="chapter" data-level="21.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>21.1</b> About this chapter</a><ul>
+<li class="chapter" data-level="21.1.1" data-path="ttestmc.html"><a href="ttestmc.html#scenario"><i class="fa fa-check"></i><b>21.1.1</b> Scenario</a></li>
+</ul></li>
+<li class="chapter" data-level="21.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>21.2</b> One sample t-test Monte Carlo</a></li>
+<li class="chapter" data-level="21.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>21.3</b> Unpaired t-test Monte Carlo</a></li>
+<li class="chapter" data-level="21.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>21.4</b> Paired t-test Monte Carlo</a></li>
+<li class="chapter" data-level="21.5" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>21.5</b> dt</a></li>
+<li class="chapter" data-level="21.6" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>21.6</b> pt</a></li>
+<li class="chapter" data-level="21.7" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>21.7</b> qt</a></li>
+<li class="chapter" data-level="21.8" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>21.8</b> rt</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="simcorrelation.html"><a href="simcorrelation.html"><i class="fa fa-check"></i><b>22</b> Simulating correlated variables</a><ul>
+<li class="chapter" data-level="22.1" data-path="simcorrelation.html"><a href="simcorrelation.html#estimating-correlation-between-two-variables"><i class="fa fa-check"></i><b>22.1</b> Estimating correlation between two variables</a></li>
+<li class="chapter" data-level="22.2" data-path="simcorrelation.html"><a href="simcorrelation.html#simulating-correlated-variables"><i class="fa fa-check"></i><b>22.2</b> Simulating correlated variables</a></li>
+<li class="chapter" data-level="22.3" data-path="simcorrelation.html"><a href="simcorrelation.html#monte-carlo-simulation"><i class="fa fa-check"></i><b>22.3</b> Monte Carlo simulation</a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="introanova.html"><a href="introanova.html"><i class="fa fa-check"></i><b>23</b> Introduction to ANOVA</a><ul>
+<li class="chapter" data-level="23.1" data-path="introanova.html"><a href="introanova.html#factors-and-levels"><i class="fa fa-check"></i><b>23.1</b> Factors and levels</a></li>
+<li class="chapter" data-level="23.2" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>23.2</b> ANOVA models: One-, Two-, and Three-way</a></li>
+<li class="chapter" data-level="23.3" data-path="introanova.html"><a href="introanova.html#anova-inference-protocol"><i class="fa fa-check"></i><b>23.3</b> ANOVA inference protocol</a></li>
+<li class="chapter" data-level="23.4" data-path="introanova.html"><a href="introanova.html#anova-calculations"><i class="fa fa-check"></i><b>23.4</b> ANOVA calculations</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="introanova.html"><a href="introanova.html#sums-of-squares-partitioning"><i class="fa fa-check"></i><b>23.4.1</b> Sums of Squares partitioning</a></li>
+<li class="chapter" data-level="23.4.2" data-path="introanova.html"><a href="introanova.html#degrees-of-freedom"><i class="fa fa-check"></i><b>23.4.2</b> Degrees of freedom</a></li>
+<li class="chapter" data-level="23.4.3" data-path="introanova.html"><a href="introanova.html#the-mean-squares"><i class="fa fa-check"></i><b>23.4.3</b> The mean squares</a></li>
+<li class="chapter" data-level="23.4.4" data-path="introanova.html"><a href="introanova.html#the-anova-table"><i class="fa fa-check"></i><b>23.4.4</b> The ANOVA table</a></li>
+<li class="chapter" data-level="23.4.5" data-path="introanova.html"><a href="introanova.html#the-f-test"><i class="fa fa-check"></i><b>23.4.5</b> The F-test</a></li>
+<li class="chapter" data-level="23.4.6" data-path="introanova.html"><a href="introanova.html#post-hoc-group-comparisons"><i class="fa fa-check"></i><b>23.4.6</b> Post-hoc group comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="23.5" data-path="introanova.html"><a href="introanova.html#completely-randomized-or-related-measures"><i class="fa fa-check"></i><b>23.5</b> Completely randomized or related measures</a><ul>
+<li class="chapter" data-level="23.5.1" data-path="introanova.html"><a href="introanova.html#the-problem-of-lost-data-in-related-measures-designs"><i class="fa fa-check"></i><b>23.5.1</b> The problem of lost data in related measures designs</a></li>
+</ul></li>
+<li class="chapter" data-level="23.6" data-path="introanova.html"><a href="introanova.html#two-way-anova"><i class="fa fa-check"></i><b>23.6</b> Two-way ANOVA</a></li>
+<li class="chapter" data-level="23.7" data-path="introanova.html"><a href="introanova.html#other-anova-models"><i class="fa fa-check"></i><b>23.7</b> Other ANOVA models</a><ul>
+<li class="chapter" data-level="23.7.1" data-path="introanova.html"><a href="introanova.html#r-and-anova"><i class="fa fa-check"></i><b>23.7.1</b> R and ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="23.8" data-path="introanova.html"><a href="introanova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>23.8</b> Alternatives to ANOVA</a><ul>
+<li class="chapter" data-level="23.8.1" data-path="introanova.html"><a href="introanova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>23.8.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>24</b> The F distribution</a><ul>
+<li class="chapter" data-level="24.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>24.1</b> Background</a><ul>
+<li class="chapter" data-level="24.1.1" data-path="fdistr.html"><a href="fdistr.html#sample-variance-and-fs-pdf"><i class="fa fa-check"></i><b>24.1.1</b> Sample Variance and F’s PDF</a></li>
+</ul></li>
+<li class="chapter" data-level="24.2" data-path="fdistr.html"><a href="fdistr.html#df"><i class="fa fa-check"></i><b>24.2</b> df</a></li>
+<li class="chapter" data-level="24.3" data-path="fdistr.html"><a href="fdistr.html#pf"><i class="fa fa-check"></i><b>24.3</b> pf</a></li>
+<li class="chapter" data-level="24.4" data-path="fdistr.html"><a href="fdistr.html#qf"><i class="fa fa-check"></i><b>24.4</b> qf</a></li>
+<li class="chapter" data-level="24.5" data-path="fdistr.html"><a href="fdistr.html#rf"><i class="fa fa-check"></i><b>24.5</b> rf</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="onewayanova.html"><a href="onewayanova.html"><i class="fa fa-check"></i><b>25</b> One-way ANOVA Completely Randomized</a><ul>
+<li class="chapter" data-level="25.1" data-path="onewayanova.html"><a href="onewayanova.html#using-ezanova"><i class="fa fa-check"></i><b>25.1</b> Using <code>ezANOVA</code></a></li>
+<li class="chapter" data-level="25.2" data-path="onewayanova.html"><a href="onewayanova.html#the-chickwt-data-set"><i class="fa fa-check"></i><b>25.2</b> The chickwt data set</a><ul>
+<li class="chapter" data-level="25.2.1" data-path="onewayanova.html"><a href="onewayanova.html#inspect-the-data"><i class="fa fa-check"></i><b>25.2.1</b> Inspect the data</a></li>
+</ul></li>
+<li class="chapter" data-level="25.3" data-path="onewayanova.html"><a href="onewayanova.html#run-the-anova"><i class="fa fa-check"></i><b>25.3</b> Run the ANOVA</a><ul>
+<li class="chapter" data-level="25.3.1" data-path="onewayanova.html"><a href="onewayanova.html#run-the-chickwts-one-way-anova"><i class="fa fa-check"></i><b>25.3.1</b> Run the chickwts One Way ANOVA</a></li>
+<li class="chapter" data-level="25.3.2" data-path="onewayanova.html"><a href="onewayanova.html#interpreting-the-one-way-cr-anova-output"><i class="fa fa-check"></i><b>25.3.2</b> Interpreting the One-Way CR ANOVA Output</a></li>
+</ul></li>
+<li class="chapter" data-level="25.4" data-path="onewayanova.html"><a href="onewayanova.html#posthoc"><i class="fa fa-check"></i><b>25.4</b> Post hoc pairwise comparisons</a><ul>
+<li class="chapter" data-level="25.4.1" data-path="onewayanova.html"><a href="onewayanova.html#overview-of-options"><i class="fa fa-check"></i><b>25.4.1</b> Overview of options</a></li>
+</ul></li>
+<li class="chapter" data-level="25.5" data-path="onewayanova.html"><a href="onewayanova.html#reporting-the-result"><i class="fa fa-check"></i><b>25.5</b> Reporting the result</a></li>
+</ul></li>
+<li class="chapter" data-level="26" data-path="onewayRM.html"><a href="onewayRM.html"><i class="fa fa-check"></i><b>26</b> One-way ANOVA Related Measures</a><ul>
+<li class="chapter" data-level="26.1" data-path="onewayRM.html"><a href="onewayRM.html#data-prep"><i class="fa fa-check"></i><b>26.1</b> Data prep</a></li>
+<li class="chapter" data-level="26.2" data-path="onewayRM.html"><a href="onewayRM.html#run-the-anova-1"><i class="fa fa-check"></i><b>26.2</b> Run the ANOVA</a></li>
+<li class="chapter" data-level="26.3" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-8"><i class="fa fa-check"></i><b>26.3</b> Interpretation</a></li>
+<li class="chapter" data-level="26.4" data-path="onewayRM.html"><a href="onewayRM.html#post-hoc-analysis"><i class="fa fa-check"></i><b>26.4</b> Post-hoc analysis</a></li>
+<li class="chapter" data-level="26.5" data-path="onewayRM.html"><a href="onewayRM.html#write-up-10"><i class="fa fa-check"></i><b>26.5</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="27" data-path="twowayCR.html"><a href="twowayCR.html"><i class="fa fa-check"></i><b>27</b> Two-way ANOVA Completely Randomized</a><ul>
+<li class="chapter" data-level="27.1" data-path="twowayCR.html"><a href="twowayCR.html#effect-of-strain-and-diet-on-liver"><i class="fa fa-check"></i><b>27.1</b> Effect of Strain and Diet on Liver</a></li>
+<li class="chapter" data-level="27.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test"><i class="fa fa-check"></i><b>27.2</b> The test</a></li>
+<li class="chapter" data-level="27.3" data-path="twowayCR.html"><a href="twowayCR.html#interpretation-of-2-way-cr-anova-output"><i class="fa fa-check"></i><b>27.3</b> Interpretation of 2 Way CR ANOVA Output</a><ul>
+<li class="chapter" data-level="27.3.1" data-path="twowayCR.html"><a href="twowayCR.html#levenes"><i class="fa fa-check"></i><b>27.3.1</b> Levene’s</a></li>
+<li class="chapter" data-level="27.3.2" data-path="twowayCR.html"><a href="twowayCR.html#anova-table"><i class="fa fa-check"></i><b>27.3.2</b> ANOVA Table</a></li>
+</ul></li>
+<li class="chapter" data-level="27.4" data-path="twowayCR.html"><a href="twowayCR.html#post-hoc-multiple-comparisons"><i class="fa fa-check"></i><b>27.4</b> Post Hoc Multiple Comparisons</a><ul>
+<li class="chapter" data-level="27.4.1" data-path="twowayCR.html"><a href="twowayCR.html#write-up-11"><i class="fa fa-check"></i><b>27.4.1</b> Write Up</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="28" data-path="twowayRM.html"><a href="twowayRM.html"><i class="fa fa-check"></i><b>28</b> Two-way ANOVA Related Measures</a><ul>
+<li class="chapter" data-level="28.1" data-path="twowayRM.html"><a href="twowayRM.html#cell-culture"><i class="fa fa-check"></i><b>28.1</b> Cell culture</a></li>
+<li class="chapter" data-level="28.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-1"><i class="fa fa-check"></i><b>28.2</b> The test</a></li>
+<li class="chapter" data-level="28.3" data-path="twowayRM.html"><a href="twowayRM.html#interpretation-of-the-output"><i class="fa fa-check"></i><b>28.3</b> Interpretation of the output</a><ul>
+<li class="chapter" data-level="28.3.1" data-path="twowayRM.html"><a href="twowayRM.html#anova-table-1"><i class="fa fa-check"></i><b>28.3.1</b> ANOVA Table</a></li>
+<li class="chapter" data-level="28.3.2" data-path="twowayRM.html"><a href="twowayRM.html#mauchlys-sphericity-test"><i class="fa fa-check"></i><b>28.3.2</b> Mauchly’s Sphericity Test</a></li>
+</ul></li>
+<li class="chapter" data-level="28.4" data-path="twowayRM.html"><a href="twowayRM.html#post-hoc-multiple-comparisons-1"><i class="fa fa-check"></i><b>28.4</b> Post Hoc multiple comparisons</a></li>
+<li class="chapter" data-level="28.5" data-path="twowayRM.html"><a href="twowayRM.html#write-up-12"><i class="fa fa-check"></i><b>28.5</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="29" data-path="twowaymixed.html"><a href="twowaymixed.html"><i class="fa fa-check"></i><b>29</b> Two-way ANOVA RM/CR</a><ul>
+<li class="chapter" data-level="29.1" data-path="twowaymixed.html"><a href="twowaymixed.html#chickweight-dataset"><i class="fa fa-check"></i><b>29.1</b> ChickWeight Dataset</a></li>
+<li class="chapter" data-level="29.2" data-path="twowaymixed.html"><a href="twowaymixed.html#munge-chickweight-data"><i class="fa fa-check"></i><b>29.2</b> Munge ChickWeight data</a></li>
+<li class="chapter" data-level="29.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-2"><i class="fa fa-check"></i><b>29.3</b> The test</a></li>
+<li class="chapter" data-level="29.4" data-path="twowaymixed.html"><a href="twowaymixed.html#interpreting-the-anova-output"><i class="fa fa-check"></i><b>29.4</b> Interpreting the ANOVA output</a><ul>
+<li class="chapter" data-level="29.4.1" data-path="twowaymixed.html"><a href="twowaymixed.html#anova-the-anova-table-1"><i class="fa fa-check"></i><b>29.4.1</b> $ANOVA: The ANOVA table</a></li>
+<li class="chapter" data-level="29.4.2" data-path="twowaymixed.html"><a href="twowaymixed.html#mauchlys-test-and-corrections"><i class="fa fa-check"></i><b>29.4.2</b> Mauchly’s Test and Corrections</a></li>
+</ul></li>
+<li class="chapter" data-level="29.5" data-path="twowaymixed.html"><a href="twowaymixed.html#post-hoc-pairwise-tests"><i class="fa fa-check"></i><b>29.5</b> Post hoc pairwise tests</a><ul>
+<li class="chapter" data-level="29.5.1" data-path="twowaymixed.html"><a href="twowaymixed.html#heres-whats-been-discovered"><i class="fa fa-check"></i><b>29.5.1</b> Here’s what’s been discovered</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="30" data-path="jaxwest2.html"><a href="jaxwest2.html"><i class="fa fa-check"></i><b>30</b> Reproducible Data Munging Mostly with Tidyverse</a><ul>
+<li class="chapter" data-level="30.1" data-path="jaxwest2.html"><a href="jaxwest2.html#look-at-the-original-data-carefully"><i class="fa fa-check"></i><b>30.1</b> Look at the original data carefully</a></li>
+<li class="chapter" data-level="30.2" data-path="jaxwest2.html"><a href="jaxwest2.html#our-goal"><i class="fa fa-check"></i><b>30.2</b> Our goal</a></li>
+<li class="chapter" data-level="30.3" data-path="jaxwest2.html"><a href="jaxwest2.html#read-the-data-into-r"><i class="fa fa-check"></i><b>30.3</b> Read the data into R</a></li>
+<li class="chapter" data-level="30.4" data-path="jaxwest2.html"><a href="jaxwest2.html#select-the-variables"><i class="fa fa-check"></i><b>30.4</b> Select the variables</a></li>
+<li class="chapter" data-level="30.5" data-path="jaxwest2.html"><a href="jaxwest2.html#trim-the-cases"><i class="fa fa-check"></i><b>30.5</b> Trim the cases</a></li>
+<li class="chapter" data-level="30.6" data-path="jaxwest2.html"><a href="jaxwest2.html#go-long"><i class="fa fa-check"></i><b>30.6</b> Go long</a></li>
+<li class="chapter" data-level="30.7" data-path="jaxwest2.html"><a href="jaxwest2.html#pull-out-the-values-for-the-day-variable"><i class="fa fa-check"></i><b>30.7</b> Pull out the values for the day variable</a></li>
+<li class="chapter" data-level="30.8" data-path="jaxwest2.html"><a href="jaxwest2.html#convert-day-to-numeric"><i class="fa fa-check"></i><b>30.8</b> Convert day to numeric</a></li>
+<li class="chapter" data-level="30.9" data-path="jaxwest2.html"><a href="jaxwest2.html#convert-tumor_vol-to-numeric"><i class="fa fa-check"></i><b>30.9</b> Convert tumor_vol to numeric</a></li>
+<li class="chapter" data-level="30.10" data-path="jaxwest2.html"><a href="jaxwest2.html#deal-with-that-na"><i class="fa fa-check"></i><b>30.10</b> Deal with that NA</a></li>
+<li class="chapter" data-level="30.11" data-path="jaxwest2.html"><a href="jaxwest2.html#convert-variables-to-factor"><i class="fa fa-check"></i><b>30.11</b> Convert variables to factor</a></li>
+<li class="chapter" data-level="30.12" data-path="jaxwest2.html"><a href="jaxwest2.html#plot-the-data"><i class="fa fa-check"></i><b>30.12</b> Plot the data</a></li>
+</ul></li>
+<li class="chapter" data-level="31" data-path="anovamc.html"><a href="anovamc.html"><i class="fa fa-check"></i><b>31</b> ANOVA power using Monte Carlo</a><ul>
+<li class="chapter" data-level="31.1" data-path="anovamc.html"><a href="anovamc.html#alternatives-to-monte-carlo"><i class="fa fa-check"></i><b>31.1</b> Alternatives to Monte Carlo</a></li>
+<li class="chapter" data-level="31.2" data-path="anovamc.html"><a href="anovamc.html#what-is-monte-carlo"><i class="fa fa-check"></i><b>31.2</b> What is Monte Carlo</a></li>
+<li class="chapter" data-level="31.3" data-path="anovamc.html"><a href="anovamc.html#one-way-completely-randomized-anova-monte-carlo"><i class="fa fa-check"></i><b>31.3</b> One-way completely randomized ANOVA Monte Carlo</a><ul>
+<li class="chapter" data-level="31.3.1" data-path="anovamc.html"><a href="anovamc.html#directions"><i class="fa fa-check"></i><b>31.3.1</b> Directions</a></li>
+<li class="chapter" data-level="31.3.2" data-path="anovamc.html"><a href="anovamc.html#step-1-create-initial-values"><i class="fa fa-check"></i><b>31.3.2</b> Step 1: Create initial values</a></li>
+<li class="chapter" data-level="31.3.3" data-path="anovamc.html"><a href="anovamc.html#step-2-visualize-one-random-sample"><i class="fa fa-check"></i><b>31.3.3</b> Step 2: Visualize one random sample</a></li>
+<li class="chapter" data-level="31.3.4" data-path="anovamc.html"><a href="anovamc.html#step-3-run-the-power-simulator"><i class="fa fa-check"></i><b>31.3.4</b> Step 3: Run The Power Simulator</a></li>
+<li class="chapter" data-level="31.3.5" data-path="anovamc.html"><a href="anovamc.html#step-4-optimize-for-suitable-power"><i class="fa fa-check"></i><b>31.3.5</b> Step 4: Optimize for suitable power</a></li>
+<li class="chapter" data-level="31.3.6" data-path="anovamc.html"><a href="anovamc.html#notes-and-considerations"><i class="fa fa-check"></i><b>31.3.6</b> Notes And Considerations</a></li>
+</ul></li>
+<li class="chapter" data-level="31.4" data-path="anovamc.html"><a href="anovamc.html#one-way-related-measures-anova-monte-carlo"><i class="fa fa-check"></i><b>31.4</b> One-way related measures ANOVA Monte Carlo</a></li>
+<li class="chapter" data-level="31.5" data-path="anovamc.html"><a href="anovamc.html#directions-1"><i class="fa fa-check"></i><b>31.5</b> Directions</a><ul>
+<li class="chapter" data-level="31.5.1" data-path="anovamc.html"><a href="anovamc.html#step-1-initial-values"><i class="fa fa-check"></i><b>31.5.1</b> Step 1: Initial values</a></li>
+<li class="chapter" data-level="31.5.2" data-path="anovamc.html"><a href="anovamc.html#step-2-visualize-one-sample"><i class="fa fa-check"></i><b>31.5.2</b> Step 2: Visualize one sample</a></li>
+<li class="chapter" data-level="31.5.3" data-path="anovamc.html"><a href="anovamc.html#step-3-run-the-power-simulator-1"><i class="fa fa-check"></i><b>31.5.3</b> Step 3: Run the power simulator</a></li>
+<li class="chapter" data-level="31.5.4" data-path="anovamc.html"><a href="anovamc.html#step-4-should-anything-be-changed"><i class="fa fa-check"></i><b>31.5.4</b> Step 4: Should anything be changed?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="32" data-path="correl.html"><a href="correl.html"><i class="fa fa-check"></i><b>32</b> Correlation</a><ul>
+<li class="chapter" data-level="32.1" data-path="correl.html"><a href="correl.html#correlation-causation"><i class="fa fa-check"></i><b>32.1</b> Correlation != Causation</a></li>
+<li class="chapter" data-level="32.2" data-path="correl.html"><a href="correl.html#correlation-in-multivariate-outcomes-and-paired-designs"><i class="fa fa-check"></i><b>32.2</b> Correlation in Multivariate Outcomes and Paired Designs</a></li>
+<li class="chapter" data-level="32.3" data-path="correl.html"><a href="correl.html#correlation-coefficients"><i class="fa fa-check"></i><b>32.3</b> Correlation coefficients</a><ul>
+<li class="chapter" data-level="32.3.1" data-path="correl.html"><a href="correl.html#pearsons-correlation-coefficient"><i class="fa fa-check"></i><b>32.3.1</b> Pearson’s correlation coefficient</a></li>
+<li class="chapter" data-level="32.3.2" data-path="correl.html"><a href="correl.html#spearmans-rank-correlation"><i class="fa fa-check"></i><b>32.3.2</b> Spearman’s rank correlation</a></li>
+<li class="chapter" data-level="32.3.3" data-path="correl.html"><a href="correl.html#kendalls-tau"><i class="fa fa-check"></i><b>32.3.3</b> Kendall’s tau</a></li>
+<li class="chapter" data-level="32.3.4" data-path="correl.html"><a href="correl.html#which-correlation-method-to-use"><i class="fa fa-check"></i><b>32.3.4</b> Which correlation method to use?</a></li>
+<li class="chapter" data-level="32.3.5" data-path="correl.html"><a href="correl.html#r-correlation-analysis-functions"><i class="fa fa-check"></i><b>32.3.5</b> R correlation analysis functions</a></li>
+<li class="chapter" data-level="32.3.6" data-path="correl.html"><a href="correl.html#plot-the-correlations"><i class="fa fa-check"></i><b>32.3.6</b> Plot the correlations</a></li>
+<li class="chapter" data-level="32.3.7" data-path="correl.html"><a href="correl.html#calculate-a-correlation-coefficient-and-posthoc-test"><i class="fa fa-check"></i><b>32.3.7</b> Calculate a correlation coefficient and posthoc test</a></li>
+<li class="chapter" data-level="32.3.8" data-path="correl.html"><a href="correl.html#interpretation-of-correlation-output"><i class="fa fa-check"></i><b>32.3.8</b> Interpretation of correlation output</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="regress.html"><a href="regress.html"><i class="fa fa-check"></i><b>33</b> Linear Regression</a><ul>
+<li class="chapter" data-level="33.1" data-path="regress.html"><a href="regress.html#the-linear-regression-model"><i class="fa fa-check"></i><b>33.1</b> The linear regression model</a></li>
+<li class="chapter" data-level="33.2" data-path="regress.html"><a href="regress.html#least-squares-fitting"><i class="fa fa-check"></i><b>33.2</b> Least squares fitting</a></li>
+<li class="chapter" data-level="33.3" data-path="regress.html"><a href="regress.html#the-practical-importance-of-linear-model-parameters"><i class="fa fa-check"></i><b>33.3</b> The practical importance of linear model parameters</a></li>
+<li class="chapter" data-level="33.4" data-path="regress.html"><a href="regress.html#linear-model-standard-errors"><i class="fa fa-check"></i><b>33.4</b> Linear model standard errors</a></li>
+<li class="chapter" data-level="33.5" data-path="regress.html"><a href="regress.html#linear-regression-in-r"><i class="fa fa-check"></i><b>33.5</b> Linear regression in R</a></li>
+<li class="chapter" data-level="33.6" data-path="regress.html"><a href="regress.html#intepretation-1"><i class="fa fa-check"></i><b>33.6</b> Intepretation</a><ul>
+<li class="chapter" data-level="33.6.1" data-path="regress.html"><a href="regress.html#residuals"><i class="fa fa-check"></i><b>33.6.1</b> Residuals</a></li>
+<li class="chapter" data-level="33.6.2" data-path="regress.html"><a href="regress.html#coefficients"><i class="fa fa-check"></i><b>33.6.2</b> Coefficients</a></li>
+<li class="chapter" data-level="33.6.3" data-path="regress.html"><a href="regress.html#degrees-of-freedom-1"><i class="fa fa-check"></i><b>33.6.3</b> Degrees of freedom</a></li>
+<li class="chapter" data-level="33.6.4" data-path="regress.html"><a href="regress.html#r-squared"><i class="fa fa-check"></i><b>33.6.4</b> R-squared</a></li>
+<li class="chapter" data-level="33.6.5" data-path="regress.html"><a href="regress.html#f-statistic"><i class="fa fa-check"></i><b>33.6.5</b> F-statistic</a></li>
+<li class="chapter" data-level="33.6.6" data-path="regress.html"><a href="regress.html#plotting-regression-results"><i class="fa fa-check"></i><b>33.6.6</b> Plotting regression results</a></li>
+<li class="chapter" data-level="33.6.7" data-path="regress.html"><a href="regress.html#visualizing-residuals"><i class="fa fa-check"></i><b>33.6.7</b> Visualizing residuals</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="34" data-path="non-linear-regression.html"><a href="non-linear-regression.html"><i class="fa fa-check"></i><b>34</b> Non-linear regression</a><ul>
+<li class="chapter" data-level="34.1" data-path="non-linear-regression.html"><a href="non-linear-regression.html#uses-for-nonlinear-regression"><i class="fa fa-check"></i><b>34.1</b> Uses for nonlinear regression</a></li>
+<li class="chapter" data-level="34.2" data-path="non-linear-regression.html"><a href="non-linear-regression.html#nonlinear-models-and-parameters"><i class="fa fa-check"></i><b>34.2</b> Nonlinear models and parameters</a></li>
+<li class="chapter" data-level="34.3" data-path="non-linear-regression.html"><a href="non-linear-regression.html#how-does-that-fitting-happen"><i class="fa fa-check"></i><b>34.3</b> How does that fitting happen?</a><ul>
+<li class="chapter" data-level="34.3.1" data-path="non-linear-regression.html"><a href="non-linear-regression.html#selecting-the-right-model"><i class="fa fa-check"></i><b>34.3.1</b> Selecting the right model</a></li>
+<li class="chapter" data-level="34.3.2" data-path="non-linear-regression.html"><a href="non-linear-regression.html#modeling-mrna-stability-by-one-phase-exponential-decay"><i class="fa fa-check"></i><b>34.3.2</b> Modeling mRNA stability by one-phase exponential decay</a></li>
+<li class="chapter" data-level="34.3.3" data-path="non-linear-regression.html"><a href="non-linear-regression.html#now-what"><i class="fa fa-check"></i><b>34.3.3</b> Now what?</a></li>
+</ul></li>
+<li class="chapter" data-level="34.4" data-path="non-linear-regression.html"><a href="non-linear-regression.html#equations"><i class="fa fa-check"></i><b>34.4</b> Equations</a><ul>
+<li class="chapter" data-level="34.4.1" data-path="non-linear-regression.html"><a href="non-linear-regression.html#stimulation-dose-response"><i class="fa fa-check"></i><b>34.4.1</b> Stimulation Dose response</a></li>
+<li class="chapter" data-level="34.4.2" data-path="non-linear-regression.html"><a href="non-linear-regression.html#stimulation-log-dose-response"><i class="fa fa-check"></i><b>34.4.2</b> Stimulation Log dose response</a></li>
+<li class="chapter" data-level="34.4.3" data-path="non-linear-regression.html"><a href="non-linear-regression.html#inhibition-dose-response"><i class="fa fa-check"></i><b>34.4.3</b> Inhibition Dose response</a></li>
+<li class="chapter" data-level="34.4.4" data-path="non-linear-regression.html"><a href="non-linear-regression.html#inhibition-log-dose-response"><i class="fa fa-check"></i><b>34.4.4</b> Inhibition Log Dose response</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="non-linear-regression" class="section level1">
+<h1><span class="header-section-number">Chapter 34</span> Non-linear regression</h1>
+<p>Nonlinear models explain data arising from nonlinear processes. This is pretty important considering how so many processes in biological systems are nonlinear.</p>
+<p>Conceptually, statistical analysis involving nonlinear models is almost identical to that for linear models. We have data. Just as for linear models, regression customizes the fit of some nonlinear model to the data. The main difference is that there are many different nonlinear models to choose from. Furthermore, every model has parameters that are coupled to specific biological meanings. Put another way, nonlinear models give you the ability to parameterize more biological functions than is possible with linear regression.</p>
+<p>It’s not necessary to know learn every nonlinear model. Chances are that if you need nonlinear regression in your work there is a pretty good chances that you’ll find yourself specializing in just one or a few models, which you’ll get to know very well.</p>
+<p>For example, if your bread and butter assay is some sort of stimulus-response measurement, chances ae you’ll use a hyberbolic function. If your bread and butter is doing time-based assays, chances are you’ll use one of the exponential growth, association or decay functions. Binding assays are mass-action based, from which a basic hyperbolic function is derived. If you do enzyme assays there are several functions that fall out of the Michaelis-Menten kinetics paradigm (which are also derivatives of the hyperbolic function).</p>
+<p>My purpose is not to go over all of these. In fact, I encourage you to go to the GraphPad Prism Statistics Guide to explore this world. GraphPad offers <a href="https://www.graphpad.com/guides/prism/8/curve-fitting/index.htm?Reg_Classic_DR_variable.htm">an excellent online resource</a> for nonlinear regression, including a couple of dozen different functions. Most of what I know about nonlinear regression I learned from GraphPad. I doubt there is better software than Prism for nonlinear modeling of biological systems. Including R.</p>
+<div id="uses-for-nonlinear-regression" class="section level2">
+<h2><span class="header-section-number">34.1</span> Uses for nonlinear regression</h2>
+<p>Nonlinear regression has three main uses</p>
+<ul>
+<li>Artistic</li>
+<li>Interpolation (and simulation)</li>
+<li>Conducting statistical inference</li>
+</ul>
+<p>Sometimes we have nonlinear data and all we want to do is draw a pretty line through the points. That’s what I mean by an artistic use. The objective is purely visual.</p>
+<p>Other times we have measured values of <span class="math inline">\(Y\)</span> for which we want to impute values of <span class="math inline">\(X\)</span>. That’s achieved by nonlinear regression of an <span class="math inline">\(X,Y\)</span> standard curve (eg, ELISA). Conceptually related to this is simulating nonlinear data using fixed parameters. The latter encompasses several use cases, from Monte Carlo-based experimental planning to creating explanatory figures.</p>
+<p>The most common statistical use is to estimate the parameter values of a nonlinear function that best fits some sample data. We’re either deriving these parameter values as “constants” that represent our results. Or we can ask whether experimental manipulation changes these parameter values. For example, does a mutation change the <span class="math inline">\(K_D\)</span> of a drug for a receptor or the <span class="math inline">\(K_m/V_{max}\)</span> ratio of an enzyme?</p>
+</div>
+<div id="nonlinear-models-and-parameters" class="section level2">
+<h2><span class="header-section-number">34.2</span> Nonlinear models and parameters</h2>
+<p>A nonlinear model is just an equation or function that describes the relationship between two variables, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. The shape of the relationship is dictated by the equation’s parameters, such that the outcome variable <span class="math inline">\(Y\)</span> is determined by a nonlinear function of a predictor variable <span class="math inline">\(X\)</span>.</p>
+<p>For example, in the well known Michaelis-Menten (M-M) enzyme kinetic schema, the enzyme activity is measured as its initial velocity <span class="math inline">\(v_i\)</span> at various substrate concentrations, <span class="math inline">\(S\)</span>. The outcome variable is <span class="math inline">\(v_i\)</span>, and the predictor variable is <span class="math inline">\(S\)</span>. Their relationship is determined by the parameters <span class="math inline">\(K_m\)</span> and <span class="math inline">\(V_max\)</span> through a function known as the Michaelis-Menten model <span class="math display">\[v_i=\frac{V_{max}\times S}{K_m + S}\]</span>.</p>
+<p>In a generic statistical notation we might otherwise refer to these two parameters as <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, respectively. Indeed, the M-M is just a special use case for a more general hyperbolic function applicable to a diverse array of stimulus-response phenomena. Here, I’ve added the Hill coefficient, <span class="math inline">\(h\)</span>, to generalize the relationship further. The hyperbolic function is steeper when <span class="math inline">\(h&gt;1\)</span> and shallower when <span class="math inline">\(h&lt;1\)</span>. In the M-M equation above <span class="math inline">\(h\)</span> was not specified as being different than 1. <span class="math display">\[Y=\frac{\beta_0\times X^h}{\beta_1^h + X^h}\]</span></p>
+<p>These nonlinear equation parameters have important physical meaning. In the M-M case, one describes the maximal enzymatic activity in the system, while the other describes the concentration of substrate necessary for half-maximal enzymatic activity. The Hill coefficient defines the steepness of the relationship between the stimulus and response, which could infer positive or negative cooperativity.</p>
+</div>
+<div id="how-does-that-fitting-happen" class="section level2">
+<h2><span class="header-section-number">34.3</span> How does that fitting happen?</h2>
+<p>The short answer is usually by the least squares method. That’s the case for R’s<code>nls</code> function.</p>
+<p>The fitting involves iterative cycles of computer-assisted changes in parameter values. Each change is followed by a least squares check to see if the residuals have been minimized. This process continues until “the least squares solution” is arrived at. After this point, the fit cannot be improved, having reached the “best fit” solution.</p>
+<p>You have to use scientific judgement to select the most appropriate model prior to this fitting process. It’s not possible to just dump in some <span class="math inline">\(x,y\)</span> data and instruct the software to find the best model or to create one.</p>
+<p>Supervision is required. In fact, R requires the user to enter some pretty good initial estimates of the model parameters. Without these the fitting can go off track and the iterations fail to converge on a best fit solution.</p>
+<p>This means you need to have a good idea of why each part of a nonlinear model represents.</p>
+<div id="selecting-the-right-model" class="section level3">
+<h3><span class="header-section-number">34.3.1</span> Selecting the right model</h3>
+<div class="figure"><span id="fig:unnamed-chunk-2"></span>
+<img src="images/nonlinear_model_choices.jpg" alt="Choosing the right model for your data is a scientific decision."  />
+<p class="caption">
+Figure 34.1: Choosing the right model for your data is a scientific decision.
+</p>
+</div>
+<p>Once you realize you have a nonlinear process, your scientific judgement drives your selection of the most appropriate model. You simply reach into your equation shelf to select a function, based upon your expertise with the biological system.</p>
+<p>For example, the hyperbolic relationship describes the binding of a ligand to a protein, creating a ligand-protein binding complex, <span class="math inline">\(B\)</span>; <span class="math display">\[B=\frac{B_{max}\times L}{K_D + L}\]</span>, where <span class="math inline">\(L\)</span> is the ligand concentration, <span class="math inline">\(B_{max}\)</span> is the maximal number of ligand binding sites in the preparation, and <span class="math inline">\(K_D\)</span> is the equilibrium dissociation constant, in concentration units. Therefore, <span class="math inline">\(B\)</span> is the level of binding at a given concentration of <span class="math inline">\(L\)</span>, which saturates at <span class="math inline">\(B_{max}\)</span> and where half-maximal binding is when <span class="math inline">\(L=K_D\)</span>.</p>
+<p>If there is scientific reason to explore whether the binding is complex, for example, that there may be cooperativety, the model can be adapted by adding a Hill slope parameter, <span class="math inline">\(h\)</span>. In the equation above, <span class="math inline">\(h=1\)</span> and is left unstated. Incorporating a <span class="math inline">\(h\)</span> parameter in a regression can lead to a model that fits the data better than would a model without the Hill slope. <span class="math display">\[B=\frac{B_{max}\times L^h}{K_D^h + L^h}\]</span></p>
+<p>Data that is steeper or shallower have <span class="math inline">\(h&gt;1\)</span> and <span class="math inline">\(h&lt;1\)</span>, respectively.</p>
+<p>Alternately, an even more complex binding model might be suitable. For example, the biological material may have a combination of two binding sites for the ligand, each having a different <span class="math inline">\(K_D\)</span> value: <span class="math display">\[B=\frac{B_{max_1}\times L}{K_{D_1} + L}+\frac{B_{max_2}\times L}{K_{D_2} + L}\]</span></p>
+<p>We’ll discuss how to test statistically whether the more complex two-site model</p>
+<p>Often, we do stimulus response experiments over a wide range of predictor values, so it is more convenient to work with a semi-log version of the function: <span class="math display">\[B=\frac{B_{max}\times log10L^h}{log10K_D^h + log10L^h}\]</span></p>
+<p>When performing time-series experiments, many outcome responses can be modeled using exponential association or decay functions (see the Modeling mRNA stability example below): <span class="math display">\[Y=Y_0e^{-kt}\]</span></p>
+<p>Rythmic phenomenae can be modeled using sine-wave functions (eg, <span class="math inline">\(Y=\alpha sin\frac{2\pi}{\lambda}X+\varphi\)</span>).</p>
+<p>Virtually any nonlinear process can be modeled with a high-order polynomial function (eg,<span class="math inline">\(Y=\beta_0 + \beta_1X + \beta_2X^2 + \beta_3X^3 + \beta_4X^4 + \beta_5X^5\)</span> ), though it can be hard to know exactly what are the physical parameters that correspond to those coefficients. Polynomials can give you incredibly good fits to data, but the explosion of parameters that it takes to gain a perfect ft can be uninterpretable. Thus, model parsimony is often a desirable trait.</p>
+</div>
+<div id="modeling-mrna-stability-by-one-phase-exponential-decay" class="section level3">
+<h3><span class="header-section-number">34.3.2</span> Modeling mRNA stability by one-phase exponential decay</h3>
+<p>When the production of some biological molecule within a system is stopped and then is measured over time its levels typically fall. Such processes can be modeled using an exponential decay function describing a first-order kinetic process. First order kinetic processes are notable in having a constant half-life. One can imagine a whole host of experiments to do to mess around with a system and then detecting whether some manipulation had an impact on a process by measuring the half-lives of things associated with it.</p>
+<p>The stability of mRNA’s and proteins, for example, can be monitored and quantified this way. For example, mRNA’s with very short half-lives are considered more unstable than those with longer half-lives.</p>
+<p>If we stop the transcription of a gene, what is the half-life of its mRNA in a cell? Let’s answer that question by nonlinear regression using a one-phase exponential decay model.</p>
+<p>Such a model would describe mRNA levels, <span class="math inline">\(Y\)</span>, at a given time <span class="math inline">\(X\)</span> over the course of a time series, and takes on the form</p>
+<p><span class="math display">\[y=(y_{max}-y_{min})e^{-kx}+y_{min}\]</span></p>
+<p>In this equation <span class="math inline">\(y\)</span> represents the value for an mRNA level in arbitrary units. <span class="math inline">\(k\)</span> is the rate constant with units of <span class="math inline">\(time^{-1}\)</span>, which is related to half-life by the well-known formula <span class="math inline">\(t_{\frac{1}{2}}=\frac{ln(2)}{k}\)</span>, <span class="math inline">\(x\)</span> is the value of time, in whatever units. <span class="math inline">\(y_{max}\)</span> and <span class="math inline">\(y_{min}\)</span> are the highest and lowest levels of mRNA observed, respectively, over the time series.</p>
+<p>You might wonder how to know of this equation? That comes from experience and scientific judgement. If you’re interested in some phenomenon and notice someone is conducting nonlinear modeling, pay close attention to the nonlinear function they used!</p>
+<div id="the-procedure" class="section level4">
+<h4><span class="header-section-number">34.3.2.1</span> The Procedure</h4>
+<ol style="list-style-type: decimal">
+<li>Take a dataset (we’ll simulate one below)</li>
+<li>Write an equation for the model</li>
+<li>Write initializers for the nonlinear function</li>
+<li>Run the regression using R’s <code>nls</code> function and plot the results</li>
+<li>Interpret</li>
+</ol>
+<div id="the-dataset" class="section level5">
+<h5><span class="header-section-number">34.3.2.1.1</span> The dataset</h5>
+<p>In real life, you’d begin here with a fresh dataset in your hands, hot off a machine.</p>
+<p>Let’s simulate, instead.</p>
+<p>Here the <span class="math inline">\(X\)</span> represents time, in minutes after gene transcription is arrested, while <span class="math inline">\(Y\)</span> represents the level of an mRNA in the cell, in arbitrary units.</p>
+<p>To simulate a dataset, we need to randomly generate values for the model parameters. We’ll next pass those values into the model so it can generate a vector of Y values, which we’ll put into a dataframe.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#simulate a random, nonlinear dataset</span>
+k &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">2</span>)<span class="op">/</span><span class="dv">5</span>
+<span class="co">#k=0.1386 min^-1</span>
+ymax &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">80</span>, <span class="dv">110</span>)
+ymin &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">20</span>)
+k &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="fl">0.10</span>, <span class="fl">0.15</span>)
+n &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">31</span>, <span class="dv">0</span>, <span class="dv">5</span>) <span class="co">#normal randomizer component!</span>
+x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">30</span>)
+
+<span class="co"># this is the nonlinear function decay function</span>
+y &lt;-<span class="st"> </span>((ymax<span class="op">-</span>ymin)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>x))<span class="op">+</span>ymin<span class="op">+</span>n
+
+<span class="co">#store the simulated data in a dataframe</span>
+decay &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x, y)
+decay</code></pre></div>
+<pre><code>##     x          y
+## 1   0 103.047456
+## 2   1  89.724098
+## 3   2  79.365970
+## 4   3  68.204020
+## 5   4  60.740543
+## 6   5  52.299634
+## 7   6  52.289346
+## 8   7  45.274513
+## 9   8  47.236691
+## 10  9  45.547897
+## 11 10  28.464510
+## 12 11  33.705273
+## 13 12  34.238716
+## 14 13  26.810137
+## 15 14  15.506825
+## 16 15  22.556516
+## 17 16  16.705138
+## 18 17  23.670592
+## 19 18  26.140325
+## 20 19  29.073029
+## 21 20  14.944629
+## 22 21  15.403308
+## 23 22  22.420417
+## 24 23  16.036472
+## 25 24  20.078455
+## 26 25  20.914352
+## 27 26   7.749926
+## 28 27  14.252076
+## 29 28  24.843693
+## 30 29  20.725633
+## 31 30  15.665915</code></pre>
+<p>When performing regressions using R’s <code>nls</code> function, we need to initialize the iterations with parameter estimates. They “train” the model where the solution should start. An error message will throw without these initializers.</p>
+<p>Look at your data to know what values to plug in as initializers. It’s not at all important that they be precise. They just need to be in a reasonable neighborhood. The only tough one is the value of k. You should be able to guesstimate a half-life from looking at your data (at what time point is half of the mRNA remaining?). Just know that you need to convert that to k. (<span class="math inline">\(k=0.693/t_{\frac{1}{2}}\)</span>). Rate constant values are simple but not very intuitive.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#initializers for the nonlinear regression</span>
+ymax_start &lt;-<span class="st"> </span><span class="dv">90</span>
+ymin_start &lt;-<span class="st"> </span><span class="dv">10</span>
+k_start &lt;-<span class="st"> </span><span class="fl">0.15</span></code></pre></div>
+<p>Now we run the regression.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run the nonlinear regression</span>
+m &lt;-<span class="st"> </span><span class="kw">nls</span>(y<span class="op">~</span>(ymax<span class="op">-</span>ymin)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>x)<span class="op">+</span>ymin,
+         <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">ymax=</span>ymax_start,
+                    <span class="dt">ymin=</span>ymin_start, 
+                    <span class="dt">k=</span>k_start), 
+         <span class="dt">data=</span>decay)
+fit &lt;-<span class="st"> </span><span class="kw">summary</span>(m); fit</code></pre></div>
+<pre><code>## 
+## Formula: y ~ (ymax - ymin) * exp(-k * x) + ymin
+## 
+## Parameters:
+##       Estimate Std. Error t value Pr(&gt;|t|)    
+## ymax 101.99678    3.56606  28.602  &lt; 2e-16 ***
+## ymin  15.91821    1.84897   8.609 2.35e-09 ***
+## k      0.15337    0.01454  10.551 2.91e-11 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.984 on 28 degrees of freedom
+## 
+## Number of iterations to convergence: 3 
+## Achieved convergence tolerance: 5.984e-07</code></pre>
+<p>The most important information in that output are the values of the three parameters. Perhaps also their standard errors, from which you can calculate confidence intervals. The t tests are not usually interesting. They each test whether the parameter value differs from zero. Sometimes that’s important, mostly it is not.</p>
+<p>The only other information to extract from the analysis are the residuals…the deviates of the datapoints from the model at each value of X. The residuals are useful to make residual plots to visualize the model fit. They can be called specifically from the summary of the <code>nls</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">residuals &lt;-<span class="st"> </span><span class="kw">summary</span>(m)<span class="op">$</span>residuals
+res.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>residuals)
+
+<span class="kw">ggplot</span>(res.df, <span class="kw">aes</span>(x, y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">25</span>,<span class="dv">25</span>))</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="now-what" class="section level3">
+<h3><span class="header-section-number">34.3.3</span> Now what?</h3>
+<p>Typically, you report the parameters and/or make a pretty graph.</p>
+<p>Chances are we’d run the experiment via independent replication a few more times to ensure a reliable estimate of the regression parameters. Record the parameters from each regression after every one of those experiments. Most people calculate parameter means +/- SD from n independently replicated datesets. And usually they’re comparing parameters under different conditions.</p>
+<p>For example, let’s say we’re studying the effect of small molecule drug on these half-lives. We wish to compare the effect of the drug to a control. The half-life parameters collected over a series of replications are used as response variable for a t-test comparing drug to control.</p>
+<p>Alternately, the independent replicate datasets can be pooled, and parameter values estimated from a single nonlinear regression of the pooled In that case, report the parameter values +/- the SE from the regression output.</p>
+<p>Plot out the data along with the nonlinear regression best-fit curve. Note how it is necessary to the regression within the ggplot function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(decay, <span class="kw">aes</span>(x, y))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;nls&quot;</span>,
+              <span class="dt">formula =</span> <span class="st">&quot;y~((ymax-ymin)*exp(-k*x))+ymin&quot;</span>,
+              <span class="dt">method.args =</span> <span class="kw">list</span>(<span class="dt">start=</span><span class="kw">c</span>(<span class="dt">ymax=</span><span class="dv">90</span>,
+                                       <span class="dt">ymin=</span><span class="dv">10</span>,
+                                       <span class="dt">k=</span><span class="fl">0.15</span>)
+                               ),
+              <span class="dt">se=</span><span class="ot">FALSE</span>, 
+              <span class="dt">color=</span><span class="st">&quot;red&quot;</span>
+              )<span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;mRNA levels&quot;</span>, <span class="dt">x=</span><span class="st">&quot;time, min&quot;</span>)</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div id="smoothing" class="section level4">
+<h4><span class="header-section-number">34.3.3.1</span> Smoothing</h4>
+<p>Smoothing looks like regression, but it’s mostly just an artistic method to draw a nonlinear regression-ish line through the data. Smooths are more akin to polynomial fits, as they attempt to draw a line through as many datapoints as possible. Every little twist and turn in a smooth would have a corresponding parameter if it were a regression! The underlying calculation is a regression run over a sliding window. If that window is small, the smooth is as jagged as the data, and if the window is larger, the smooth is smoother.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(decay, <span class="kw">aes</span>(x, y))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,
+              <span class="dt">se=</span>T, 
+              <span class="dt">color=</span><span class="st">&quot;red&quot;</span>
+              )<span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;mRNA levels&quot;</span>, <span class="dt">x=</span><span class="st">&quot;time, min&quot;</span>)</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="equations" class="section level2">
+<h2><span class="header-section-number">34.4</span> Equations</h2>
+<div id="stimulation-dose-response" class="section level3">
+<h3><span class="header-section-number">34.4.1</span> Stimulation Dose response</h3>
+<p><span class="math display">\[Y=min+\frac{X^h\times(max-min)}{K^h+X^h}\]</span></p>
+<p><span class="math inline">\(Y=min+((X^h*(max-min))/(K^h+X^h))\)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">1e-10</span>, <span class="fl">3e-10</span>, <span class="fl">1e-9</span>, <span class="fl">3e-9</span>, <span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>)
+
+min &lt;-<span class="st"> </span><span class="dv">0</span>
+max &lt;-<span class="st"> </span><span class="dv">100</span>
+K &lt;-<span class="st"> </span><span class="fl">3e-8</span>
+h &lt;-<span class="st"> </span><span class="dv">1</span>
+
+sdr &lt;-<span class="st"> </span><span class="cf">function</span>(X){
+  min<span class="op">+</span>((X<span class="op">^</span>h<span class="op">*</span>(max<span class="op">-</span>min))<span class="op">/</span>(K<span class="op">^</span>h<span class="op">+</span>X<span class="op">^</span>h))
+} 
+
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X)
+
+<span class="kw">apply</span>(df, <span class="dv">2</span>, sdr)</code></pre></div>
+<pre><code>##                X
+##  [1,]  0.3322259
+##  [2,]  0.9900990
+##  [3,]  3.2258065
+##  [4,]  9.0909091
+##  [5,] 25.0000000
+##  [6,] 50.0000000
+##  [7,] 76.9230769
+##  [8,] 90.9090909
+##  [9,] 97.0873786
+## [10,] 99.0099010
+## [11,] 99.7008973</code></pre>
+</div>
+<div id="stimulation-log-dose-response" class="section level3">
+<h3><span class="header-section-number">34.4.2</span> Stimulation Log dose response</h3>
+<p><span class="math display">\[Y=min+\frac{max-min}{1+10^{(log10(K)-X)\times h}}\]</span></p>
+<p><span class="math inline">\(Y=min+((max-min)/(1+10^((log10(K)-X)*h)))\)</span></p>
+</div>
+<div id="inhibition-dose-response" class="section level3">
+<h3><span class="header-section-number">34.4.3</span> Inhibition Dose response</h3>
+<p><span class="math display">\[Y=min+\frac{max-min}{1+\frac{X^h}{K^h}}\]</span></p>
+</div>
+<div id="inhibition-log-dose-response" class="section level3">
+<h3><span class="header-section-number">34.4.4</span> Inhibition Log Dose response</h3>
+<p><span class="math inline">\(Y-min+(max-min)/1+10((log10(K)-X)*h)\)</span></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regress.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

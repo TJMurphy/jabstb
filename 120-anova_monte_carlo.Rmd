@@ -10,17 +10,18 @@ library(viridis)
 
 Monte Carlo simulation is a great tool for experimental design. 
 
-Monte Carlo forces you to do several things that, taken together, we can characterize as good statistical hygiene. 
+Monte Carlo forces you to do several things that, taken together, we can characterize as good statistical hygiene.
 
-* Choose predictor variables and scientifically meaningful groups to compare
-* Predict levels and attributes of the response variable
-* Consider hypotheses to be tested in advance
-* What is a minimal scientifically meaningful effect size?
+* Explicitly define predictor variables and their levels
+* Think about expected levels and variation of the response variable
+* Select scientifically meaningful groups to compare
+* Consider which hypotheses is to be tested in advance
+* Define a minimal scientifically meaningful effect size
 * Establish a sample size a priori
 * Establish the data munging and statistical analysis a priori
 * Establish feasibility of the experiment a priori
 
-If you want to do unbiased research (and you should) Monte Carlo simulation helps you do exactly that. Design the experiment in advance. Analyze a simulation of the experiment, in advance. 
+If you want to do unbiased research (and you should) Monte Carlo simulation helps you do exactly that. Design the experiment in advance. Analyze a simulation of the experiment, in advance. Figure out what you are going to do, in advance.
 
 Then go and conduct and analyze the experiment you designed.
 
@@ -28,13 +29,23 @@ The primary output of the Monte Carlo script below is experimental power at give
 
 But conducting a Monte Carlo offers much more than just sample size.
 
-'Seeing' experimental outcomes prior to running an experiment is the heartbeat of [turning predictions into strong testable hypotheses](\#hypotheses).
+An ability to 'see' experimental outcomes prior to running an experiment is the heartbeat of [turning predictions into strong testable hypotheses](\#hypotheses).
 
 Poking around with simulated data before running an experiment helps you evaluate many of your assumptions. Which helps you see what might be missing. 
 
 It also helps you practice an analysis. When working with **simulated** data, there is nothing unethical about p-hacking, harking and data snooping. Design the analysis in a way that gives you the best chance of observing the result you expect! 
 
 Figuring that out *before* the real data set is in front of you helps you avoid ethical gray areas *after* the real data set is in front of you.
+
+## Alternatives to Monte Carlo
+
+Using R you can run the `power.anova.test`function in the base `stats` package or `pwr.anova.test` in the `pwr` package. To produce a sample size outpu t, both of these require you to enter number of groups, type1 error and type2 error tolerance.
+
+The former requires estimates for model (between) and residual (within) variance. These can be entered as relative values.
+
+The latter requires an entry for Cohen's $f$. \[f=\sqrt{\frac{\eta^2}{1-\eta^2}}\]
+where $\eta^2=\frac{SS_{model}}{SS_{total}}$ for a completely randomized factor, whereas for a related measures factor it is $\eta_p^2=\frac{SS_{model}}{SS_{model}+SS_{residual}}$
+
 
 ## What is Monte Carlo
 
