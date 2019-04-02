@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 28 Two-way ANOVA Completely Randomized | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <title>Chapter 38 Multiple regression | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 28 Two-way ANOVA Completely Randomized | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:title" content="Chapter 38 Multiple regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 28 Two-way ANOVA Completely Randomized | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta name="twitter:title" content="Chapter 38 Multiple regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
   
   <meta name="twitter:description" content="Experimental biostatistics using R." />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="onewayRM.html">
-<link rel="next" href="twowayRM.html">
+<link rel="prev" href="nonlinearreplicates.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -581,444 +581,501 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="twowayCR" class="section level1">
-<h1><span class="header-section-number">Chapter 28</span> Two-way ANOVA Completely Randomized</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(ez)
-<span class="kw">library</span>(knitr)
-<span class="kw">library</span>(kableExtra)
-<span class="kw">library</span>(viridis)</code></pre></div>
-<p>A two-way ANOVA experimental design is one that involves two predictor variables, where each predictor has 2 or more levels. There is only one outcome variable in a 2 way ANOVA and it is measured on an equal interval scale. The predictor variables are often referred to as factors, and so ANOVA designs are synonymous with factorial designs.</p>
-<p>The experimental designs can be as follows:</p>
-<ol style="list-style-type: decimal">
-<li>Completely randomized (CR) on both factors</li>
-<li>Related measures (RM) on both factors</li>
-<li>Mixed, CR on one factor and RM on the other</li>
-</ol>
-<p>In one sense, a two-way ANOVA can be thought of as two one-way ANOVA’s run simultaneously. The major difference, however, is the ability to test whether an interaction exists between the two factors.</p>
-<p>In this chapter we’ll focus on the data structure and analysis of a two-way ANOVA CR experimental design.</p>
-<div id="effect-of-strain-and-diet-on-liver" class="section level2">
-<h2><span class="header-section-number">28.1</span> Effect of Strain and Diet on Liver</h2>
-<p>A (hypothetical) study was conducted to evaluate the influence of mouse background strain and diet on the accumulation of cholesterol in liver. Ten animals were selected randomly from each of the C57BL/6 and C57BL/10 strains. They were each split randomly onto either of two diets, normal and high fat.</p>
-<p>After about two months they were sacrificed to obtain cholesterol measurements in liver tissue.</p>
-<p>Three predictions, and the corresponding null hypotheses that each tests, can be evaluated here simultaneously:</p>
-<ol style="list-style-type: decimal">
-<li>The two strains differ in liver cholesterol content. <span class="math inline">\(H0:\sigma^2_{strain}\le\sigma^2_{residual}\)</span></li>
-<li>The diets differ in how they affect liver cholesterol content. <span class="math inline">\(H0:\sigma^2_{diet}\le\sigma^2_{residual}\)</span></li>
-<li>The liver cholesterol content is influenced by both diet and strain. <span class="math inline">\(H0:\sigma^2_{strainXdiet}\le\sigma^2_{residual}\)</span></li>
-</ol>
-<p>The first two of these are commonly referred to as the main effects of the factors, whereas the third is referred to as the interaction effect of the factors.</p>
-<p>Here’s some simulated data. But they are guided guided using means and standard deviations from the <a href="https://phenome.jax.org/search?searchterm=cholesterol">Jackson Labs phenome database</a>). along with a graph of the results:</p>
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-ID
-</th>
-<th style="text-align:left;">
-Strain
-</th>
-<th style="text-align:left;">
-Diet
-</th>
-<th style="text-align:right;">
-Cholesterol
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-49
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-43
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-44
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-37
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-5
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-47
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-6
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-91
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-7
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-86
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-8
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-120
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-9
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-111
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-10
-</td>
-<td style="text-align:left;">
-C57BL/6
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-101
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-11
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-100
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-12
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-123
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-13
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-125
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-14
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-115
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-15
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-Normal
-</td>
-<td style="text-align:right;">
-88
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-16
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-207
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-17
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-228
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-18
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-217
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-19
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-220
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-20
-</td>
-<td style="text-align:left;">
-C57BL/10
-</td>
-<td style="text-align:left;">
-High Fat
-</td>
-<td style="text-align:right;">
-217
-</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(
-  liver, 
-  <span class="kw">aes</span>(Diet, Cholesterol, <span class="dt">fill=</span>Strain)
-  ) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_summary</span>(
-    <span class="dt">fun.data=</span><span class="st">&quot;mean_sdl&quot;</span>, 
-    <span class="dt">fun.args=</span><span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>), 
-    <span class="dt">geom=</span> <span class="st">&quot;errorbar&quot;</span>, 
-    <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="dv">1</span>), 
-    <span class="dt">width=</span><span class="fl">0.2</span>, 
-    <span class="dt">size=</span><span class="dv">1</span>
-    ) <span class="op">+</span>
-<span class="st">   </span><span class="kw">stat_summary</span>(
-     <span class="dt">fun.y=</span><span class="st">&quot;mean&quot;</span>, 
-     <span class="dt">fun.args=</span><span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>), 
-     <span class="dt">geom=</span> <span class="st">&quot;bar&quot;</span>, 
-     <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="dv">1</span>), 
-     <span class="dt">width=</span><span class="fl">0.5</span>, 
-     <span class="dt">size=</span><span class="dv">2</span>
-     ) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_viridis</span>(
-    <span class="dt">discrete=</span>T
-    ) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(
-    <span class="dt">legend.position=</span>(<span class="kw">c</span>(<span class="fl">0.8</span>, <span class="fl">0.8</span>))
-    ) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(
-    <span class="dt">title=</span><span class="st">&quot;Strain and Diet Effects on Liver Cholesterol, mean +/- SD&quot;</span>, 
-    <span class="dt">x=</span><span class="st">&quot;Diet&quot;</span>, 
-    <span class="dt">y=</span><span class="st">&quot;Liver Cholesterol, mg/&quot;</span>
-    )</code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-284"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-284-1.png" alt="Two-way completely randomized ANOVA results" width="672" />
-<p class="caption">
-Figure 28.1: Two-way completely randomized ANOVA results
-</p>
+<div id="multregress" class="section level1">
+<h1><span class="header-section-number">Chapter 38</span> Multiple regression</h1>
+<p>The previous chapters on linear and nonlinear regression deal with fairly specific use cases for regression. Specifically, you’ll note they involved only one predictor variable, which was continuous.</p>
+<p>The goal of those procedures was to apply linear or nonlinear models to extract the regression model parameters. These parameters imply certain biological properties (e.g., <span class="math inline">\(K_D\)</span>, <span class="math inline">\(V_{max}\)</span>, kinetic rate constants, etc) that are of primary interest when using the method.</p>
+<p>Linear regression is also useful to analyze continuous responses driven by discrete predictor variables. Furthermore, regression can be performed on responses associated with multiple predictor variables, some of which might be continuous and some of which might be discrete. <strong>Multiple regression</strong> or <strong>multiple linear regression</strong> is the most common jargon used to describe this extension of the linear regression to a comprehensive array of experimental designs. That’s the focus of this chapter.</p>
+<p>We’ve actually been in this neighborhood previously, but called it other names. ANOVA and t-tests are regressions. Experimental biologists tend to use t-tests and ANOVA to analyze experiments that involve the use of discrete predictor variables. Why? Mostly out of habit. Those procedures are geared to alerting us to comparing effects of treatment and making decisions about whether an experiment “worked” or not.</p>
+<p>But that same information lies within multiple regression analysis, which if used otherwise would generate identical answers and inference as do t-tests and ANOVA.</p>
+<p>Multiple regression is used more commonly in the social and public health sciences. One reason is cultural, as for experimental biologists, that’s just the way things are done in those fields. In part it’s also because much of their data is observational. As such, they tend to deal with data sets that have many more predictor variables than what an experimental biologist can comfortably manipulate when testing hypotheses.</p>
+<p>Furthermore, those fields emphasize weighing how much a predictor variable or a group of variables of interest contributes to a response while “controlling” for the effects of other variables. Arguably, there’s more of a focus on estimating variable effect sizes and less on comparing group effects to see if they differ. Multiple regression analysis lends itself better to this kind of inference than t-tests and ANOVA.</p>
+<p>Throughout the semester we’ve been working through a heuristic that begins with deciding whether your response variable is continuous or discrete, and working from there to decide what to do. This is that:</p>
+<p><em>For nominal response data use exact tests. For ordinal data use nonparametrics. For continuous response variables with two or fewer levels of a predictor variable, choose t-tests. For three or more levels, choose ANOVA if the predictor is factorial or regression if the predictor is equal interval. When measurements are intrinsically-linked analyze using paired/related/repeated measure versions of the tests.</em></p>
+<p>Here’s an optional heuristic:</p>
+<p><em>Analyze your data using a multiple regression model</em></p>
+<p>Having said that, multiple linear regression takes some configuration to ensure it is cohesive with the overall experimental design. The functions, or at least their configurations, to use for non-guassian response variables (basically, those for “generalized” linear models) differs from those used for guassian variables.</p>
+<p>The same goes for completely independent replicates versus replicates having paired/related/repeated measures. In regression jargon, data comprising the latter are called multiple linear “mixed” models. Conducting inference with the latter is much more difficult than for straight multiple linear models.</p>
+<p>I’m going to focus below, first, on illustrating how an experimental biologist would use multiple regression when doing factorial experiments. Later, we’ll deal with more general uses for multiple regression modeling.</p>
+<div id="the-linear-regression-model-1" class="section level2">
+<h2><span class="header-section-number">38.1</span> The linear regression model</h2>
+<p>Recall the linear model we discuses for a continuous response variable, <span class="math inline">\(Y\)</span> and its predictor variable, <span class="math inline">\(X\)</span>: <span class="math display">\[y_i=\alpha+\beta x_i +\epsilon_i \]</span></p>
+<p>The <span class="math inline">\(\beta\)</span> coefficient is a multiplier such that for every 1 unit change in the level of <span class="math inline">\(x_i\)</span>, <span class="math inline">\(y_i\)</span> will change by <span class="math inline">\(\beta\)</span>. If <span class="math inline">\(\beta = 0\)</span> there is no effect for any level of <span class="math inline">\(X\)</span>. In that case, the intercept <span class="math inline">\(\alpha\)</span> estimates the value of the response variable <span class="math inline">\(Y\)</span>. Thus <span class="math inline">\(\alpha\)</span> is equivalent to the population mean <span class="math inline">\(\mu\)</span> for <span class="math inline">\(Y\)</span> in the absence of <span class="math inline">\(X\)</span>. The residual error <span class="math inline">\(\epsilon_i\)</span> is the residual difference between the values of <span class="math inline">\(y_i\)</span> predicted by the model and the values for the data. These residuals are normally distributed and have a variance of <span class="math inline">\(\sigma^2\)</span>.</p>
 </div>
-<p>In particular, pay attention to the data structure. It has four columns: ID, Strain, Diet, Cholesterol. All of these are variables, including two columns for each of the predictor variables (Strain, Diet), and one for the response variable (Cholesterol). The ID can also be thought of as a variable.</p>
+<div id="multiple-regression-models" class="section level2">
+<h2><span class="header-section-number">38.2</span> Multiple regression models</h2>
+<p>Multiple regression models have more than one predictor variables. For data containing <span class="math inline">\(i=1, 2..n\)</span> independent replicates and <span class="math inline">\(j=1, 2..p\)</span> predictor variables <span class="math display">\[y_i=\alpha+\beta_1 X_{i1}+\beta_2 X_{i2}+...\beta_p X_{ip} +\epsilon_{i}\]</span></p>
+<p>These can be either continuous or discrete, or any combination thereof.</p>
+<p><span class="math display">\[X=\{nominal; eg, genotype(+/+, -/+, -/-) \\~\\ ordinal; eg, education level (HS, College, PostGrad\\~\\continuous; eg, time( 0, 1, 2, 4, ..30\ min)\}\]</span></p>
 </div>
-<div id="the-test" class="section level2">
-<h2><span class="header-section-number">28.2</span> The test</h2>
-<p>We use <code>ezANOVA</code> in the ANOVA package to test the three null hypotheses. Here are the arguments:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">out.cr &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(<span class="dt">data =</span> liver,
-                   <span class="dt">dv =</span> Cholesterol,
-                   <span class="dt">wid =</span> ID,
-                   <span class="dt">between =</span> <span class="kw">c</span>(Strain,Diet),
-                   <span class="dt">type =</span> <span class="dv">3</span>,
-                   <span class="dt">return_aov =</span> F,
-                   <span class="dt">detailed =</span> T
-  
-)
+<div id="experimental-multiple-regression" class="section level2">
+<h2><span class="header-section-number">38.3</span> Experimental multiple regression</h2>
+<p>Here’s a simulation of a simple factorial experiment, comparing responses of a stimulus and its negative control. Every measurement is independent of all other measurements. Thus, the sample has 6 independent replicates.</p>
+<p>The predictor variable, FactorA, comes at two levels: control and stimulus. The response is a continuous variable. In your own mind substitute things for these. For me, the response is a transcription factor-driven luciferease activity, a negative control, and an agonist of a receptor is the stimulus.</p>
+<p>We obtain the following random sample:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)
+response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>))
 
-out.cr</code></pre></div>
-<pre><code>## $ANOVA
-##        Effect DFn DFd       SSn    SSd          F            p p&lt;.05
-## 1 (Intercept)   1  16 280608.05 2096.4 2141.63747 1.801635e-18     *
-## 2      Strain   1  16  41496.05 2096.4  316.70330 5.742386e-12     *
-## 3        Diet   1  16  34196.45 2096.4  260.99180 2.499051e-11     *
-## 4 Strain:Diet   1  16   3100.05 2096.4   23.65999 1.722945e-04     *
-##         ges
-## 1 0.9925845
-## 2 0.9519091
-## 3 0.9422366
-## 4 0.5965707
-## 
-## $`Levene&#39;s Test for Homogeneity of Variance`
-##   DFn DFd   SSn   SSd        F         p p&lt;.05
-## 1   3  16 283.8 748.4 2.022448 0.1513253</code></pre>
-</div>
-<div id="interpretation-of-2-way-cr-anova-output" class="section level2">
-<h2><span class="header-section-number">28.3</span> Interpretation of 2 Way CR ANOVA Output</h2>
-<p>We get two F test tables, Levene’s and the ANOVA. Specific statistical details about these tests are covered in the document “Completely Randomized One Way ANOVA Analysis”.</p>
-<p>The only difference in two-way CR ANOVA compared to a one-way CR ANOVA is the test of the nulls for the additional factor and for the interaction between the two factors. The model is a bit more complex.</p>
-<div id="levenes" class="section level3">
-<h3><span class="header-section-number">28.3.1</span> Levene’s</h3>
-<p>Levene’s tests the null that homogeneity of variance is equivalent across the groups. The p-value of 0.15 is higher than the 0.05 type1 error rejection threshold. Levene’s is inconclusive, offering no evidence the homogeneity of variance assumption has been violated.</p>
-</div>
-<div id="anova-table" class="section level3">
-<h3><span class="header-section-number">28.3.2</span> ANOVA Table</h3>
-<p>The ANOVA table shows p-values that are below the 0.05 type1 error threshold for each factor and for their interaction. We can safely reject the interaction null hypothesis (p=0.00017).</p>
-<p>Scientifically, we would conclude that the effect of diet on liver cholesterol depends upon the strain of the animal. The partial eta-square indicates this interaction between diet and strain explains about 59.6% of the observed variation.</p>
-<p>Since the interaction is positive, it’s difficult to say much about diet and strain. Sure, diet affects liver cholesterol. Strain does as well. The ANOVA per se cannot parse those out from the interaction effect (we wait for regression analysis for that!).</p>
-</div>
-</div>
-<div id="post-hoc-multiple-comparisons" class="section level2">
-<h2><span class="header-section-number">28.4</span> Post Hoc Multiple Comparisons</h2>
-<p>We could leave well enough alone and draw our inferences on the basis of the interaction effect alone. However, it would not be unreasonable to compare the effect of diet within each strain. at each level of diet. Nor is it unreasonable to compare the each strain across the diets.</p>
-<p>We’ll do run a <code>pairwise.t.test</code> function to make all possible comparisons, and use a p-value adjustment method to keep the family-wise error rate within 5%. The following script yieds every possible comparison between levels of the two factors.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairwise.t.test</span>(liver<span class="op">$</span>Cholesterol, <span class="kw">interaction</span>(liver<span class="op">$</span>Strain, liver<span class="op">$</span>Diet), <span class="dt">paired=</span>F, <span class="dt">p.adj =</span> <span class="st">&quot;holm&quot;</span>)</code></pre></div>
+data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)
+data</code></pre></div>
+<pre><code>##    factorA response
+## 1  control 48.79293
+## 2  control 50.27743
+## 3  control 51.08444
+## 4 stimulus 72.65430
+## 5 stimulus 75.42912
+## 6 stimulus 75.50606</code></pre>
+<p>The linear model for this experiment can be expressed as follows: <span class="math display">\[response=control+\beta \times stimulus + residual\]</span></p>
+<p>The model formula can be configured in several optional ways.</p>
+<p>Adding the term <code>+0</code> to the model formula in the <code>lm</code> function suppresses the intercept, allowing for a glance at the sample group means. These make sense with what was coded above.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span><span class="dv">0</span>, data)
+model</code></pre></div>
 <pre><code>## 
-##  Pairwise comparisons using t tests with pooled SD 
+## Call:
+## lm(formula = response ~ factorA + 0, data = data)
 ## 
-## data:  liver$Cholesterol and interaction(liver$Strain, liver$Diet) 
+## Coefficients:
+##  factorAcontrol  factorAstimulus  
+##           50.05            74.53</code></pre>
+<p>Knowing those group mean values helps to understand the meaning of the regression coefficients derived from the more conventional approach, which is not to suppress the intercept.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)
+model</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ factorA, data = data)
 ## 
-##                  C57BL/10.High Fat C57BL/6.High Fat C57BL/10.Normal
-## C57BL/6.High Fat 1.4e-10           -                -              
-## C57BL/10.Normal  3.5e-10           0.26             -              
-## C57BL/6.Normal   3.4e-13           1.1e-06          2.8e-07        
+## Coefficients:
+##     (Intercept)  factorAstimulus  
+##           50.05            24.48</code></pre>
+<p>The two coefficients above are estimates of the linear model’s parameters. The <code>intercept</code> and the <code>factorAstimulus</code> serve as estimates of the true population values for <span class="math inline">\(\control\)</span> and <span class="math inline">\(\beta\)</span> in our linear model, respectively.</p>
+<p>We can rewrite the linear model with those estimates as <span class="math display">\[y=50.05+24.48x\]</span></p>
+<p>Since <span class="math inline">\(x\)</span> represents a factorial variable, we just assign it a value of one, when a given factor level is present, or zero when it is not.</p>
+<p>Thus, the response value in the presence of the stimulus is <span class="math inline">\(y=50.05+24.48=74.53\)</span>, which is the mean of the stimulus group.</p>
+<p>When the stimulus is absent, than <span class="math inline">\(x=0\)</span>, and the linear model predicts a response of <span class="math inline">\(y=50.05\)</span>, which you can see is both the value of the intercept and the mean of the control group.</p>
+<p>The coefficient for the stimulus term in this model formula is not the mean of the response to the stimulus, but is instead the difference between between the mean response to the stimulus and the mean response of the control.</p>
+<p>Perhaps that reminds you of the numerator for the unpaired t-test, between two levels of a factor, control and stimulus? <span class="math display">\[t=\frac{mean_{stimulus}-mean_{control}}{SE}\]</span></p>
+<p>Let’s see if a t-test between stimulus and control gives us the same result as the linear regression. First, let’s complete the linear model analysis.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ factorA, data = data)
 ## 
-## P value adjustment method: holm</code></pre>
-<p>Diet effect within each strain:</p>
-<ul>
-<li>10.High v 10.Norml: p=3.5e-10</li>
-<li>6.High v 6.Normal: p=1.1e-06</li>
-</ul>
-<p>Strain effect across diets: * 10.High v 6.High p=1.4e-10 * 10.Normal v 6.Normal p=2.8e-7</p>
-<p>Of the six possible comparisons, only one shows no difference (liver cholesterol in C57Bl/10 on normal diet is no different from C57Bl/6 on high diet, p=0.26)</p>
-<div id="write-up-11" class="section level3">
-<h3><span class="header-section-number">28.4.1</span> Write Up</h3>
-<p><em>The interaction betwen diet and strain accounts for nearly 60% of the variation liver cholesterol levels (2 way CR ANOVA, p=0.00017, n=20). Pairwise differences in the liver cholesterol response exist between levels of diet within strains, and across strains at each level of diet (Holm’s adjusted p&lt;0.05, pairwise t tests).</em></p>
+## Residuals:
+##       1       2       3       4       5       6 
+## -1.2587  0.2258  1.0328 -1.8755  0.8993  0.9762 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      50.0516     0.8155   61.37 4.22e-07 ***
+## factorAstimulus  24.4782     1.1534   21.22 2.91e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.413 on 4 degrees of freedom
+## Multiple R-squared:  0.9912, Adjusted R-squared:  0.989 
+## F-statistic: 450.4 on 1 and 4 DF,  p-value: 2.914e-05</code></pre>
+<p>Focus on the t-value for the factorAsstimulus coefficient. That t-test determines whether the coefficient value differs from zero. The coefficient value is, again, the difference between the mean responses of the control and the stimulus. We put that in the numerator and we put the SE of that difference in the denominator: <span class="math display">\[t=\frac{24.4782}{1.1534}=21.22\]</span></p>
+<p>Woohoo!</p>
+<p>To be clear, when the predictor variable was continuous, we previously discussed these <span class="math inline">\(\beta\)</span> coefficients as the “slope” of the linear regression line. That’s still the case here. R coerces a distance of 1 on the abscissa between the factorA values of control and stimulus. Thus, the difference between their means <span class="math inline">\(\Delta y\)</span> divided by 1 <span class="math inline">\(\Delta x\)</span> is the slope of an imaginary line between them.</p>
+<p>Now let’s look at an unpaired t-test between the two factors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(response<span class="op">~</span>factorA, data, <span class="dt">var.equal=</span>T)</code></pre></div>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  response by factorA
+## t = -21.224, df = 4, p-value = 2.914e-05
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -27.68045 -21.27600
+## sample estimates:
+##  mean in group control mean in group stimulus 
+##               50.05160               74.52983</code></pre>
+<p>Woohoo!</p>
+<p>Except for the sign, the t-statistic -21.22 is identical to what was derived in the linear regression! This t-test is calculated as follows: <span class="math display">\[t=\frac{50.05160-74.52983}{1.153353}=-21.22352\]</span> That denominator is the standard error of the difference between means, which is not part of the t-test output, but can be calculated by hand by dividing the t-statistic value by the value for the difference between the means. You can see that it equals the coefficient value within the <code>lm</code> output.</p>
+<p>Thus, by comparing <code>lm</code> and <code>t.test</code> output when run on the same data set we see that the same basic calculations are performed. They’re just presented differently.</p>
+<p>Put another way, a t-test is actually a linear regression using a factorial variable at two levels.</p>
+<p>The <code>t.test</code> output is more explicit about group means, and it provides a confidence interval for the difference between group means, while hiding its calculation for the standard error for that difference. The <code>lm</code> is explicit about the difference between the group means, and gives you that standard error, but only shows one group mean, that for the intercept. But they’re each making the same signal-to-noise calculation (t-test)!</p>
+<p>The real differences are more related to interpretation. We use the <code>t.test</code> to ask a simple threshold question: Do the two groups differ? Yes or no?</p>
+<p>The linear regression question is obviously related but just different enough to matter: How much does the stimulus affect the response relative to control?</p>
+<p>That distinction is important. In the context of the linear model, the result says, “the stimulus accounts for 24.48 <span class="math inline">\(Y\)</span> response units when controlled for the negative control group.</p>
+<p>Thus, you can use multiple linear regression to run the equivalent of an unpaired t-test. But you can also use it to declare the effect of a factorial variable relative to a reference response. Most practitioners of multiple regression use it for the latter purposes.</p>
+<div id="why-is-that-sign-negative-in-the-t-test" class="section level4">
+<h4><span class="header-section-number">38.3.0.1</span> Why is that sign negative in the t-test??</h4>
+<p>That’s just a quirk of R, but it’s an important quirk to understand.</p>
+<p>When you give R these variables (at least in this format) it doesn’t know what factor level you want to list first. So by default it arranges groups alphanumerically.</p>
+<p>The ‘c’ in control comes before the ‘s’ in stimulus, so R works with control first in both the linear regression and the t-test.</p>
+<p>In the t-test, the calculation for the difference between groups is 2nd from 1st, or <span class="math inline">\(c-s\)</span>. Thus the negative value for the t-statistic.</p>
+<p>The <code>lm</code> function is engineered to use the intercept as a reference. The linear regression assigns the lowest alphanumeric as the intercept, which it then subtracts from the mean response of the next variable, <span class="math inline">\(s-c\)</span>.</p>
+</div>
+<div id="specifying-the-intercept" class="section level4">
+<h4><span class="header-section-number">38.3.0.2</span> Specifying the intercept</h4>
+<p>Often you’ll name variables the way you like. But you’ll want to specify which group should be the intercept. Usually it’s your control condition. In regression jargon, it is the condition by which the other variables will be controlled for.</p>
+<p>Using the <code>relevel</code> function provides you a bit more control to define the intercept value in linear regression compared to the default alphanumeric way.</p>
+<p>Here’s some simulated data. The predictor variable, hart, has 4 levels: art, bart, cart, and dart. It’s on an alphanumeric scale. Smelly is the response variable. As you can see, each level of hart yields a different smelly response.</p>
+<p>Even though I list the hart variable levels from <code>d</code> to <code>a</code> in the dataframe, R coerces them from <code>a</code> to <code>d</code> in the regression model, thereby forcing art to serve as the intercept</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">art &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>)
+bart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>)
+cart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>)
+dart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">200</span>, <span class="dv">1</span>)
+
+hart &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;dart&quot;</span>, <span class="st">&quot;cart&quot;</span>, <span class="st">&quot;bart&quot;</span>, <span class="st">&quot;aart&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)
+data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(hart, <span class="dt">smelly=</span><span class="kw">c</span>(dart, cart, bart, art))
+data</code></pre></div>
+<pre><code>##    hart       smelly
+## 1  dart 199.88971451
+## 2  dart 199.48899049
+## 3  dart 199.08880458
+## 4  cart  -0.77625389
+## 5  cart   0.06445882
+## 6  cart   0.95949406
+## 7  bart  99.10996217
+## 8  bart  99.52280730
+## 9  bart  99.00161356
+## 10 aart  49.42526004
+## 11 aart  49.45336814
+## 12 aart  49.43554800</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = smelly ~ hart, data = data)
+## 
+## Coefficients:
+## (Intercept)     hartbart     hartcart     hartdart  
+##       49.44        49.77       -49.36       150.05</code></pre>
+<p>What do those coefficient values mean? Well, they are all in units of smelly, referenced to the level of smelly in the presence of art. Because it begins with the letter ‘a’, art is the lowest alphanumeric value of the four predictors. Therefore, it is assigned as the intercept factor. In smelly units, the intercept is the response to art; bart is about 50 more than art; cart is about 50 less than art; and dart is about 150 more than art.</p>
+<p>But let’s say we’d instead like to reference everything to the value of cart, which has a smelly value of 0. We’d use the <code>relevel</code> function for that.</p>
+<p>First we have to define the variable hart as a factorial variable explicitly. Then, we relevel the values of hart so that cart is referenced as the intercept.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hart &lt;-<span class="st"> </span><span class="kw">factor</span>(hart) <span class="co">#don&#39;t skip this step, without it the next gives an error!!!</span>
+data<span class="op">$</span>hart &lt;-<span class="st"> </span><span class="kw">relevel</span>(hart, <span class="dt">ref=</span><span class="st">&quot;cart&quot;</span>)
+
+
+<span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = smelly ~ hart, data = data)
+## 
+## Coefficients:
+## (Intercept)     hartaart     hartbart     hartdart  
+##     0.08257     49.35549     99.12889    199.40660</code></pre>
+<p>The linear model for this data is <span class="math display">\[smelly = -0.658+50.5\times art+100.1\times bart+200.6 \times dart\]</span></p>
+<p>When <span class="math inline">\(art=bart=0\)</span>, <span class="math inline">\(smelly=200\)</span></p>
+<p>The relevel is particularly useful manipulation for experimentalists, who often have explicit negative controls in their data sets. Social and public health scientists use <code>relevel</code> when they want to control the response for one of their variables. For example, when they want to control for the age of subjects, they relevel the age variable to the intercept. In that way, all other variable coefficients are relative to the magnitude of the effect of age.</p>
+</div>
+<div id="a-one-factor-experiment-with-3-groups" class="section level3">
+<h3><span class="header-section-number">38.3.1</span> A one factor experiment with 3 groups</h3>
+<p>T-tests are for comparing 2 groups. ANOVA’s are for comparing 3 or more groups. It turns out, you can use multiple linear regression to mimic an ANOVA test, too.</p>
+<p>Let’s add one more level for the predictor variable (and its responses) to the experiment. Since it now has 3 groups, and 9 independent replicates, we shouldn’t do t-tests. We could do ANOVA, but we could also do a multiple regression model, too.</p>
+<p>That model is <span class="math display">\[response=control+\beta_1 stimulus1+\beta_2 stimulus2\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)
+response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>))
+
+data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)
+
+model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)
+<span class="kw">summary</span>(model)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ factorA, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.87553 -0.01280  0.01531  0.89930  1.03284 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       50.0516     0.6659   75.16 3.73e-10 ***
+## factorAstimulus1  24.4782     0.9417   25.99 2.14e-07 ***
+## factorAstimulus2 124.3865     0.9417  132.08 1.27e-11 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.153 on 6 degrees of freedom
+## Multiple R-squared:  0.9997, Adjusted R-squared:  0.9996 
+## F-statistic:  9792 on 2 and 6 DF,  p-value: 2.873e-11</code></pre>
+<p>Notice how the coefficient value for stimulus2 is the difference between the mean response value for stimulus2 (~175 units) and the mean response value for control (~50 units). Each coefficient t-test asks whether the value of the coefficient differs from zero.</p>
+<p>In linear regression with only a single predictor variable, that coefficient was the slope of a straight line through all the <span class="math inline">\(xy\)</span> data pairs. In multiple linear regression you have to imagine separate straight lines connecting the mean intercept response value and the response values for each of the predictors.</p>
+<p>We can compare the regression model output to that for an ANOVA test on the data. Here is the equivalent of a one-way completely randomized ANOVA.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(model)</code></pre></div>
+<pre><code>## Anova Table (Type II tests)
+## 
+## Response: response
+##           Sum Sq Df F value    Pr(&gt;F)    
+## factorA    26053  2  9792.1 2.873e-11 ***
+## Residuals      8  6                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The F-test calculated in this ANOVA is the same as that calculated in the regression model. The F is a ratio of model variance to the residual variance. In the null F distribution, model and residual variance would be about equal. An extreme value of F means that the model explains a lot more of the variance than random residual differences. In this case, the model explains 9792.1 times more variance than does residual.</p>
+<p>If we were making ANOVA inferences, we would conclude that factorA has an effect. There are some differences between the means of the three groups. If we were making a regression inference, we’d predict values for <span class="math inline">\(y\)</span> on the basis of this model <span class="math display">\[response = 50.05+24.48\times stimulus1+124.39\times stimulus2\]</span> and we’d say that stimulus1 and stimulus 2 cause 24.48- and 124.39-more units of response compared to control.</p>
+<p>The t-test results also allow us to conclude the two groups differ from the control.</p>
+</div>
+<div id="a-two-factor-experiment-with-6-groups" class="section level3">
+<h3><span class="header-section-number">38.3.2</span> A two factor experiment with 6 groups</h3>
+<p>Now we’ll add a second factorial variable, factorB, to the design above. FactorB has two levels. The simulated design is akin to a two-way completely randomized ANOVA. We’ll also simulate in an interaction effect between the two variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>), <span class="dv">2</span>)
+factorB &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;cofactor1&quot;</span>, <span class="st">&quot;cofactor2&quot;</span>), <span class="dt">each=</span><span class="dv">9</span>)
+response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), 
+              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), 
+              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>), 
+              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>), 
+              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="dv">1</span>), 
+              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">700</span>, <span class="dv">1</span>)
+              )
+
+data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, factorB, response)</code></pre></div>
+<p>There are a handful of linear models we could run on this. They should be scientifically driven. Since we wouldn’t design an experiment like this unless we thought there would be an interaction between the two factors, we’ll focus on that. The coefficients for the interacting model would serve as effect sizes to describe the level of interaction that occurs.</p>
+<p>Coefficients can be confusing. Here’s a way to clarify what’s going on. It turns out, a model’s intercept is calculated differently, depending upon how the model is defined.</p>
+<p>First, a factor-less model. This output represents the grand mean of all the values in the data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(response<span class="op">~</span><span class="dv">1</span>, data)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ 1, data = data)
+## 
+## Coefficients:
+## (Intercept)  
+##         233</code></pre>
+<p>Next is a linear model just for the 3 levels of factorA. The intercept is the mean for all the data in the control groups under both cofactor1 and cofactor2.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ factorA, data = data)
+## 
+## Coefficients:
+##      (Intercept)  factorAstimulus1  factorAstimulus2  
+##            74.63            112.67            362.33</code></pre>
+<p>Here’s a linear model for the second variable alone. The intercept represents the mean of all the groups under cofactor1</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(response<span class="op">~</span>factorB, data)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ factorB, data = data)
+## 
+## Coefficients:
+##      (Intercept)  factorBcofactor2  
+##            99.67            266.59</code></pre>
+<p>Now we have the linear model for the two factors combined. This intercept is the sum of the intercepts for factorA and factorB, less the grand mean for all the data. The negative value is a hint of an interaction effect between the two factors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span>factorB, data)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ factorA + factorB, data = data)
+## 
+## Coefficients:
+##      (Intercept)  factorAstimulus1  factorAstimulus2  factorBcofactor2  
+##           -58.66            112.67            362.33            266.59</code></pre>
+<p>Finally we have the full linear model for the two factors combined, including an interaction term. Here the intercept is the value of control. All coefficients values are the difference between their absolute effect sizes and the value for control (intercept).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ factorA * factorB, data = data)
+## 
+## Coefficients:
+##                       (Intercept)                   factorAstimulus1  
+##                             50.05                              24.48  
+##                  factorAstimulus2                   factorBcofactor2  
+##                            124.39                              49.16  
+## factorAstimulus1:factorBcofactor2  factorAstimulus2:factorBcofactor2  
+##                            176.39                             475.89</code></pre>
+<p>Since the values each discrete predictor variable level can take on is either 1 (if present) or 0 (if not), all of these coefficient values serve as an effect size for the indicated group, relative to control (intercept).</p>
+<p>The linear model is <span class="math display">\[Y=50.05+24.48\times stimulus1+124.39\times stimulus2+49.16\times cofactor2+176.39\times stimulus1/cofactor2 +475.89\times stimulus2/cofactor2\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = response ~ factorA * factorB, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.87553 -0.18276 -0.00135  0.37825  1.03284 
+## 
+## Coefficients:
+##                                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                        50.0516     0.5260   95.15  &lt; 2e-16 ***
+## factorAstimulus1                   24.4782     0.7439   32.91 3.93e-13 ***
+## factorAstimulus2                  124.3865     0.7439  167.21  &lt; 2e-16 ***
+## factorBcofactor2                   49.1599     0.7439   66.08  &lt; 2e-16 ***
+## factorAstimulus1:factorBcofactor2 176.3929     1.0520  167.67  &lt; 2e-16 ***
+## factorAstimulus2:factorBcofactor2 475.8913     1.0520  452.36  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9111 on 12 degrees of freedom
+## Multiple R-squared:      1,  Adjusted R-squared:      1 
+## F-statistic: 2.183e+05 on 5 and 12 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The model summary recapitulates the coefficient values. Using this configuration, all are relative to the intercept. Each t-tests determines whether that coefficient differs from zero.</p>
+<p>In this case, all coefficients differ from zero, meaning the factor level corresponding to each has some effect on the response over and beyond that of the control level. <strong>Note that these p-values are NOT adjusted for multiple comparisons.</strong></p>
+<p>These coefficient values can be used to make declarative statements about effect sizes in response to specific levels of the variables: “In the presence of cofactor1, Stimulus1 and 2 cause a 24 and 124 unit response, respectively, over control. But in the presence of cofactor2, they cause 176- and 475-unit responses, indicating a synergy interaction.”</p>
+<p>Or something like that.</p>
+<p>The F test is a ratio of the variance associated with the model to the residual variance. It’s not particularly useful other than to announce that the model explains the data better than does residual variation.</p>
+<p>Passing the model into an the <code>Anova</code> function from the <code>car</code> package provides F tests for the main effects of each factor and for the interaction, providing the familiar ANOVA way of interpreting the data if desired.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</code></pre></div>
+<pre><code>## Anova Table (Type II tests)
+## 
+## Response: response
+##                 Sum Sq Df F value    Pr(&gt;F)    
+## factorA         412618  2  248548 &lt; 2.2e-16 ***
+## factorB         319811  1  385289 &lt; 2.2e-16 ***
+## factorA:factorB 173643  2  104597 &lt; 2.2e-16 ***
+## Residuals           10 12                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>All in all, multiple regression is an alternative way to conduct analyses on data for which every replicate is independent from all others, such as in unpaired/completely randomized designs that are otherwise performed using t-tests or ANOVA.</p>
+</div>
+</div>
+<div id="multiple-linear-mixed-models" class="section level2">
+<h2><span class="header-section-number">38.4</span> Multiple linear mixed models</h2>
+<p>Multiple regression can also be useful for analyzing data within which measurements are intrinsically-linked, such as in experiments that have paired/related/repeated measures.</p>
+<p>There are three key distinctions from the multiple regression above. First, we’ll need to use the <code>lmer</code> function in the <code>lme4</code> package (or the <code>lme</code> function in the <code>nlme</code> package), rather than <code>lm</code> in R’s base stats package. These use maximum likelihood estimation to calculate coefficient values, rather than least squares.</p>
+<p>Second, is cutting through the jargon.</p>
+<p>Third, it is dramatically more difficult to extract inference from mixed multiple regression modeling than from multiple regression modeling. The experimental researcher is probably better off sticking to ANOVA. There are exceptions to this.</p>
+<p>The coefficients solved for through linear regression are called the “fixed effects” of a linear model. They correspond to the true values in the sampled population the alpha and the beta. Recall that models are perfect data are not. So they are the perfect part of the model, making them “fixed”.</p>
+<p>The error term <span class="math inline">\(\epsilon\)</span> accounts for the extent by which actual data diverge from that predicted by these fixed effects. <span class="math inline">\(\eplison\)</span> exists to account for all the other unknown factors that conspire to influence a response.</p>
+<p>But we can control for some of this when we take multiple measures on each replicate. In regression jargon, the replicate-to-replicate variation is called the random effect.</p>
+<p>So “mixed” multiple linear regression models have a mixture of terms for the fixed and for the random effects within an experiment. Mixed models are therefore the linear regression analogs of paired/related measure designs.</p>
+<p>The <code>sleepstudy</code> data set in the <code>lme4</code> package is one such mixed effect study. The study measured reaction times (in ms) under conditions of worsening sleep deprivation. Repeated reaction time measurements were taken from each of 18 subjects over a 9 day period of sleep deprivation. These 18 subjects represent a random sample of the type of person who might become sleep deprived.</p>
+<p>Here’s a chart showing how it went for each subject. For some, reaction times are noticeably longer. For others, reaction lengthening is less bloody obvious. For subject 335 sleep deprivation might have slightly quickened reaction times!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sleepstudy, <span class="kw">aes</span>(Days, Reaction))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span>F)<span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Subject)</code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-392-1.png" width="672" /></p>
+<p>Here’s the question everybody wants answered from this study: What effect does sleep deprivation have on reaction time?</p>
+<p>Note, the question is NOT, “is the effect of sleep deprivation on reaction time”significant?“” That’s much less compelling than actually quantifying the effect size.</p>
+<p>If we completely ignore the presumed correlation within the repeated measurements within each subject we would use the <code>lm</code> function in R’s base <code>stats</code> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">lm</span>(Reaction <span class="op">~</span><span class="st"> </span>Days, sleepstudy))</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Reaction ~ Days, data = sleepstudy)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -110.848  -27.483    1.546   26.142  139.953 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  251.405      6.610  38.033  &lt; 2e-16 ***
+## Days          10.467      1.238   8.454 9.89e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 47.71 on 178 degrees of freedom
+## Multiple R-squared:  0.2865, Adjusted R-squared:  0.2825 
+## F-statistic: 71.46 on 1 and 178 DF,  p-value: 9.894e-15</code></pre>
+<p>This shows the average reaction time on day zero is 251.40 ms, and it lengthens by 10.47 ms each day of the sleep deprivation protocol. Both of these estimates differ from zero. The F test is for the main effect of Days and has an extreme value. Thus, the length of sleep deprivation changes reaction time. This variable accounts for about 28% of the overall variation in the data.</p>
+<p>Taken together, we can conclude that a period of sleep deprivation extends reaction times by about 10 ms daily.</p>
+<p><span class="math display">\[Reaction=251.4+10.4\times Days\]</span></p>
+<p>But we shouldn’t ignore the repeated measures of the design. And it would also be nice to have some estimate for the standard deviation of the effect.</p>
+<p>For those reasons we run a mixed model regression to account for the random effect of the 18 subjects.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mm1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(Days<span class="op">|</span>Subject), <span class="dt">REML=</span>F, sleepstudy)
+
+<span class="kw">summary</span>(mm1)</code></pre></div>
+<pre><code>## Linear mixed model fit by maximum likelihood  [&#39;lmerMod&#39;]
+## Formula: Reaction ~ Days + (Days | Subject)
+##    Data: sleepstudy
+## 
+##      AIC      BIC   logLik deviance df.resid 
+##   1763.9   1783.1   -876.0   1751.9      174 
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -3.9416 -0.4656  0.0289  0.4636  5.1793 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr
+##  Subject  (Intercept) 565.52   23.781       
+##           Days         32.68    5.717   0.08
+##  Residual             654.94   25.592       
+## Number of obs: 180, groups:  Subject, 18
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)  251.405      6.632  37.906
+## Days          10.467      1.502   6.968
+## 
+## Correlation of Fixed Effects:
+##      (Intr)
+## Days -0.138</code></pre>
+<p>The mixed model regression generates the identical estimates for the fixed effects as previously. What we have now that we didn’t have before are standard deviation estimates for both the slope and the intercept coefficients. Those are found in the random effect output in the summary.</p>
+<p>So we would conclude that the reaction time is 251.4+/-24.7 ms, which increases with sleep deprivation by 10.47+/-5.92 ms daily.</p>
+<p>Unlike linear modeling, linear mixed modeling doesn’t generate F tests. That’s mostly due to the fact that underlying maximum likelihood estimation doesn’t lend itself to that. As far as inference goes, we have t values but not t-tests (the df is missing!!)</p>
+</div>
+<div id="multiple-regression-of-observational-data" class="section level2">
+<h2><span class="header-section-number">38.5</span> Multiple regression of observational data</h2>
+<p>The Western Collaborative Group Study data below is epidemiological. The data are derived from cases taken in 1960-61. <a href="http://www.epi.umn.edu/cvdepi/study-synopsis/western-collaborative-group-study/">The focus was to study the relationship between behavior and cardiovascular disease risk in middle aged men</a>. The data set below is comprised of over three thousand cases with 14 variables.</p>
+<p>Since I know a little bit about blood pressure, but mostly because blood pressure is a continuous variable, I thought it would be interesting to explore how the various cofactors might influence systolic blood pressure. So I’ll use systolic blood pressure as a response variable in the regressions below. Some of the other variables will be used as predictor variables.</p>
+<p>I should make an important point. In practice you don’t just crack open and explore a data set willy nilly. I’m not the PI of the study. I’m just writing another chapter on statistical methods using data to illustrate statistical concepts. The authors of the study were testing the hypothesis that the so-called type-A personality was at higher risk of coronary heart disease. They are bound by restricting their analysis to testing preset hypotheses.</p>
+<p>These systolic blood pressure readings are just a variable that were vacuumed up in the study design, but were not hypothesized as the intended response variable.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(wcgs)
+<span class="kw">head</span>(wcgs)</code></pre></div>
+<pre><code>##     id age0 height0 weight0 sbp0 dbp0 chol0 behpat0 ncigs0 dibpat0 chd69
+## 1 2001   49      73     150  110   76   225       2     25       1     0
+## 2 2002   42      70     160  154   84   177       2     20       1     0
+## 3 2003   42      69     160  110   78   181       3      0       0     0
+## 4 2004   41      68     152  124   78   132       4     20       0     0
+## 5 2005   59      70     150  144   86   255       3     20       0     1
+## 6 2006   44      72     204  150   90   182       4      0       0     0
+##   typechd time169 arcus0
+## 1       0    1664      0
+## 2       0    3071      1
+## 3       0    3071      0
+## 4       0    3064      0
+## 5       1    1885      1
+## 6       0    3102      0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(sbp0<span class="op">~</span>age0<span class="op">+</span>height0<span class="op">+</span>weight0<span class="op">+</span>
+<span class="st">            </span>chol0<span class="op">+</span>ncigs0<span class="op">+</span>
+<span class="st">            </span>dibpat0<span class="op">+</span>chd69, 
+          wcgs)
+<span class="kw">summary</span>(fit)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = sbp0 ~ age0 + height0 + weight0 + chol0 + ncigs0 + 
+##     dibpat0 + chd69, data = wcgs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -36.215  -9.675  -1.969   7.325 101.331 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 122.06552    7.99171  15.274  &lt; 2e-16 ***
+## age0          0.40531    0.04625   8.764  &lt; 2e-16 ***
+## height0      -0.85157    0.11915  -7.147 1.10e-12 ***
+## weight0       0.23450    0.01423  16.477  &lt; 2e-16 ***
+## chol0         0.02621    0.00593   4.420 1.02e-05 ***
+## ncigs0        0.04247    0.01766   2.404   0.0163 *  
+## dibpat0       1.16580    0.50899   2.290   0.0221 *  
+## chd69         4.24199    0.94327   4.497 7.14e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 14.06 on 3134 degrees of freedom
+##   (12 observations deleted due to missingness)
+## Multiple R-squared:  0.1295, Adjusted R-squared:  0.1275 
+## F-statistic: 66.59 on 7 and 3134 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The model for systolic blood pressure level, in mmHg predicts <span class="math display">\[sbp=122+0.4/yr-0.85/inch+0.23/pound+0.026/mg/dl+0.04/cig/day+1.16\times typeA+4.24\times coronary event\]</span></p>
+<div id="sandbox" class="section level4">
+<h4><span class="header-section-number">38.5.0.1</span> Sandbox</h4>
+<p>Here’s a simulated sample. The causes of the outcome are known. Only the multiple model predicts the outcome accurately. Knowing what covariates to include in the model is not straightforward.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
+covariate &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)
+exposure  &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">+</span>(<span class="fl">0.3</span><span class="op">*</span>covariate)
+outcome   &lt;-<span class="st"> </span><span class="fl">2.0</span><span class="op">+</span>(<span class="fl">0.5</span><span class="op">*</span>exposure)<span class="op">+</span>(<span class="fl">0.25</span><span class="op">*</span>covariate)
+
+<span class="kw">lm</span>(outcome<span class="op">~</span>exposure)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = outcome ~ exposure)
+## 
+## Coefficients:
+## (Intercept)     exposure  
+##      1.9888       0.6965</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(outcome<span class="op">~</span>exposure<span class="op">+</span>covariate)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = outcome ~ exposure + covariate)
+## 
+## Coefficients:
+## (Intercept)     exposure    covariate  
+##        2.00         0.50         0.25</code></pre>
 
 </div>
 </div>
@@ -1028,8 +1085,8 @@ out.cr</code></pre></div>
           </div>
         </div>
       </div>
-<a href="onewayRM.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="twowayRM.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="nonlinearreplicates.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
