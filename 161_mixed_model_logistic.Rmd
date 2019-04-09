@@ -1,0 +1,143 @@
+# Mixed model logistic regression {#mixedlogistic}
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(lme4)
+library(viridis)
+library(multcomp)
+library(broom)
+```
+
+A mixed model logistic regression is an appropriate test for designs where repeated/related measures are taken on some variable. The "mixed" in the title is jargon referring to the fact that the model has both fixed and random effects, which is more jargon to deconvolute, of course. 
+
+## Mixed models, fixed and random effects
+
+The fixed effects of a regression model are the intercept and those due to the predictor variable. Recall that models are perfect. \[Y=\beta_0+\beta_1X+\epsilon\] The slopes and intercepts are fixed in value. Without them we couldn't draw perfect lines or curves through some data. In the model world the data are imperfect! That explains why we add a residual term to the model, so we can capture in it the stochastic deviation from the these fixed regression coefficients that the actual data has. 
+
+In experimental designs where multiple measurements are derived from a given experimental unit it becomes possible to attribute some of the residual error as the "random" variation associated with a given replicate. We account for this in our regression models as the "random" effect. The term comes from thinking that the replicate to replicate variation in a population is what is random. Usually, accounting for random effects in a model has the effect of lowering the stochastic residuals. By definition, these are the stochastic variation in the data unaccounted for by the random and fixed effects of a model.
+
+Thus, mixed models have both fixed and random effects.
+
+Here's an example for a common experimental design for a logistic linear mixed model. The outcome response involves the researcher making a decision about whether the outcome variable belongs in one one category or another. And the responses to all of the treatment levels are measured within each independent replicate.  
+
+### NFAT localization within smooth muscle cells
+
+The NFAT transcription factors mediate gene expression responses under the control of mitogen signaling. In quiescent cells they are cytosolic. When cells are activated by stimuli that increase cytosolic calcium, the phosphatase calcineurin strips NFATs of phosphate groups, exposing a nuclear localization signal. NFATs then translocate to the nucleus where they contribute to gene expression responses after binding to enhancer elements in genes.
+
+Here's a simple question: Can NFAT distinguish between different types of triggers that regulate calcium signaling? If so, this might be evident by measuring different degrees of nuclear translocation.
+
+To assess NFAT activation directly, the ability of different 3 different mitogens (AngII, UTP and PDGF) to cause nuclear translocation was measured and compared to a vehicle control. Cells in culture were treated with an agent for 30 min before they were fixed and stained with an NFAT antibody. A blinded observer randomly selected a region and counted a total of one hundred cells on each plate to determine the proportion showing nuclear NFAT. The experiment and counting procedure was replicated independently 5 times.
+
+A few features of this design are notable:
+* Predictor variable is treatment at 3 levels (Veh, AngII and UTP)
+* Outcome variable is discrete, binomial distributed (nuclear or cytoplasmic NFAT)
+* Cell culture based, all counts within a replicate are intrinsically-linked
+
+## Data 
+
+The data are in a csv file. The treatment code is as follows: a=vehicle, b=AngII, c=UTP and d=PDGF.
+
+```{r smnfat data read, warning=FALSE}
+data <- read.csv(file="datasets/smnfat.csv")
+```
+
+Here's a poor man's heat plot of the data. The replicates are color-coded, so you can see that all of the cells counted from all of the replicates are represented.
+
+```{r}
+
+ggplot(data, aes(x=treatment, y=as.factor(counts), color=reps))+
+  geom_jitter(width=0.3, size=3, alpha=0.8)+
+  scale_color_viridis(discrete=T) +
+  scale_y_discrete("counts", labels=c("0"="Cyto", "1"="Nuc"))+
+  scale_x_discrete("treatment", labels=c("a"="Veh", "b"="AngII", "c"="UTP", "d"="PDGF"))+
+  theme_classic()
+```
+## Linear model
+
+Since these are discrete nominal counts the data are expect to fit a binomial distribution. Thus, the binomial family is chosen for the generalized linear model. 
+
+Furthermore, all intracellular localization counts within a replicate are intrinsically-related since they were measured on cultured cells of the same passage date and involve the use of a common source of reagents. This is a scientific, not a statistical, judgement. 
+
+In the smnfat data set, `reps` is a grouping variable indicating the replicate id. Adding `(1|reps)` to the model accounts for this, assuring that a random intercept will be calculated for each replicate. See [Table 2 in the lme4 vignette](https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf) for more information.
+
+Finally, because we want to compare groups to each other, we're using the offset key `0+`. Here, the model will report fixed coefficient values for each level of the variable, rather than values that are in reference to the intercept. This provides a logit score for each of the 4 stimuli. 
+
+We're only doing this regression to compare the coefficient values for the different levels of treatment:
+
+```{r message=FALSE, warning=FALSE}
+model2 <- glmer(counts~0+treatment + (1 | reps), family = binomial, data)
+summary(model2)
+
+```
+### Inference
+
+The tests above in the model summary are for the null that the coefficient estimates equal zero. Sometimes that's a useful test. Here it is not useful, for scientific reasons. 
+
+A logit of zero corresponds to a 50:50 proportion of NFAT for the nucleus to cytosol. In fact, given the much lower nuclear to cytosol ratio in unstimulated cells (see the figure), a 50:50 proportion would represent some level of intrinsic activation! 
+
+Instead, what we're interested are group comparisons.
+
+The scientific question driving this experiment is whether the effects of the three mitogens differ from each other, and from the negative control. 
+
+The fixed effect coefficient values in the summary output, which are in units of logit, are estimates of the effect sizes for each level of treatment.
+
+The question is, how to compare these effect size values? 
+
+We can do so using the same Wald test, but in a way that compares one group to the next. The difference between two coefficient values divided by a standard error gives us the z statistic, which is standard normal distributed.
+
+\[z=\frac{\beta-\beta_0}{SE_\beta}\sim N(0,1)\]  
+
+This is a multiple comparison problem, basically identical to the multiple comparison problem we see after an ANOVA when we wish to compare many group means. Here, we want to compare logit values.
+
+Fortunately, [packages have been devised for this purpose](https://cran.r-project.org/web/packages/multcomp/vignettes/generalsiminf.pdf) when dealing with linear model objects. 
+
+The `multcomp` package offers the `glht` function with which to run these tests. In regression jargon, we specify the *contrasts* of interests (meaning, we tell it what coefficient comparisons we want made). Recall the Tukey HSD? You pull it out when you wish to make all possible comparisons. That's done below. 
+
+```{r}
+model3 <- summary(glht(model2, linfct=mcp(treatment="Tukey")))
+summary(model3)
+
+```
+
+Recall that a=Veh, b=AngII, c=UTP and d=PDGF. 
+
+Thus, only UTP and PDGF responses are equivalent. All other comparisons show a differential response. Each mitogen induces nuclear translocation relative to veh. And both UTP and PDGF differ from AngII in the level of response they evoke.
+
+You'll note that the p-values are adjusted for multiple comparisons.
+
+## Alternative analysis
+
+What researchers commonly do with data like these is to calculate proportions and run t-tests on same.
+
+This script munges the proportions out of the original count data, ultimately yielding the mean and SD for the replicates within each treatment level.
+
+```{r}
+group_by(data, reps, treatment) %>% 
+  summarise(prop=sum(counts)/100) %>% 
+  group_by(treatment) %>% 
+  summarise(mean=mean(prop), 
+            se=sd(prop)/sqrt(5)
+            )
+```
+
+The script calculates the estimates for the proportion sizes from the logit coefficient estimates produced through linear modeling. You can see they are in almost perfect agreement. That's because MLE is 
+
+```{r}
+#calculate mean in prob units from logit units
+coef <- summary(model2)$coefficients[,1]
+round(exp(coef)/(exp(coef)+1), 3)
+```
+
+However, you can see that the SE estimates for each of the coefficients derived by logistic regression are quite different from the SE's that would become part of the t-test calculation.
+
+```{r}
+#calculate SE in prob units from logit units
+coef2 <- summary(model2)$coefficients[,2]
+exp(coef2)/(exp(coef2)+1)
+```
+
+Here's the main problem I have t-testing proportions (as opposed to Wald testing): Proportions don't have anything that remotely resembles a Gaussian distribution. Proportions have limits at the lower (0) and upper (1) values. Gaussian distributions are limitless. Binomial distributions are skewed. Gaussian distributions are symmetrical. 
+
+The t-test should be reserved for variables that have a Gaussian distribution.
+
+
