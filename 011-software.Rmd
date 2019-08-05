@@ -1,72 +1,147 @@
-# Software {#software}
+# Installing and Understanding the Software {#software}
 
 ```{r message=FALSE, warning=FALSE}
 library(swirl)
 library(tidyverse)
 ```
 
-The course requires that you use the latest version of R and also using the RStudio integrated development environment to run R. R and RStudio have to be downloaded and installed separately. 
+This course requires that you use the latest version of R, while using RStudio, an integrated development environment to run R. 
 
-RStudio simplifies reading, writing and running scripts in R.
+R and RStudio need to be downloaded and installed separately. PLEASE READ THE INSTALLATION INSTRUCTIONS BELOW. 
 
-R itself is a collection of packages. Individual packages have the functions that you'll need. Once a package is installed on your machine, you'll need to load its library for those functions to be available for your work.
+## Use these versions for Fall 2019 term
 
-After installing R you'll have a library of system packages. These are known colloquilly as the "base" packages. The libraries for these base packages are automagically loaded each time you run R. Thus, you won't need to "call" base package librarly prior to running functions within them.
+R: 3.6.1 "Action of the Toes"
 
-From time to time you'll need to run other functions that are only found in other packages. Over time, you'll create a user library of these packages. Any time you need to get its functions to run you'll need to load the package into your environment using the `library()` function. 
+RStudio: 1.2.1335
 
-At the beginning of each chapter I list the libraries that will be necessary to run the scripts in that chapter. Those will be packages you'll need to install if you don't have them already.
+R is the computational engine. RStudio is an integrated development environment. RStudio is for creating documents (primarily R script and R markdown files) that have R code, which you can run within RStudio. 
 
-## My code is your code
+## Installing R and RStudio (and the tidyverse package)
 
-I want you to read everything in these chapters, including the R code. Especially the R code. If you're able to see the code that leads to some output, that means I think it is important for you to understand that code, how it works. You'll need it as a basis to write your own custom scripts...for class work, home work, and beyond.
+Installation of R and RStudio is pretty straight forward but not idiot proof.
 
-If you are new to R, at first it will seem...unintelligible. But it will make sense to you with a bit of time.
+### Rule 1: Install R first, RStudio second
 
-The other stuff I've written in the chapters is about statistics. Understanding the code is no less important than understanding the statistics.
+This will make it easier for RStudio to "find" your R installation.
 
-## Install R and RStudio
+### Rule 2: Don't pay!
 
-Installation of R and RStudio is pretty straight forward but not idiot proof. One sign you are doing it wrong is when you find yourself about to purchase something. Step away if that's the case. These are free. 
+One sign you are doing it wrong is when you find yourself about to purchase something. Step away if that's the case. These are free.
 
-A second sign you are doing it wrong (unless you really know what you are doing) is if you are compiling source code.
+### Rule 3: Don't compile!
+
+A second sign you are doing it wrong is if you are compiling source code. Unless you really know what you are doing, don't compile. Use the installers.
+
+### Rule 4: Download and install R first, RStudio second
+
+This way, RStudio will automagically find R. Life will be easier.
 
 Note for Windows users: If you have a 64bit processor, it is a very good idea to install and run the 64bit R version.
 
-To get started do the following **in this sequence**:
+### Rule 5: Use this installation guide
 
-1) Step 1. Install version 3.5.2 (Eggshell Igloo) of R. 
-* [Go here](https://mirrors.nics.utk.edu/cran/). Select the appropriate precompiled binary distribution for your machine. Unless you know what you're doing, don't select the source code.
+Now go to [this link](https://www.r-bloggers.com/how-to-install-r-on-mac-ubuntu-and-windows-2/), find your machine system, and follow the directions therein.
 
-2) Step 2. Run the installer function after downloading so that you have a running version of R on your machine
+After installing R and then RStudio, when you launch RStudio on your machine you should see the R console in one of the RStudio panes. 
 
-3) Step 3. Install version 1.1.x of RStudio only after you have completed installing R. [Go here](https://www.rstudio.com/products/rstudio/download/). Select the free option and choose the appropriate installer for your platform from the list. In all likelihood, you DO NOT want to choose a zip/tarball or source code.
+After the prompt (`>`), type either `2+2`, `2^2` or `2*2` in the console. If you get `4` with any of these you are good to go (you'll come to discover there are many ways to get the same thing accomplished using R)!
 
-4) Step 4. Run the RStudio installer so that you have a running version of it.
+## What is R?
 
-If you installed R prior to RStudio as instructed, launching RStudio on your machine should automagically configure R to work within the RStudio. 
+It seems the hard part of getting going with any new programming language is figuring out from the jargon how all the parts work together. 
 
-Poke around with the RStudio menu bar and the RStudio panes. Under `Tools` select `Global Options` and experiment with an appearance configuration to your liking.
+So here's an extremely helpful analogy,
+
+PBS personality Bob Ross is driven to create oil landscapes in much the same way you are driven to analyze data. 
+
+Bob Ross paints on different types of canvas. You'll write and save and share R code in different file formats (R Script,  R Markdown, others).
+
+Bob Ross has a palette and an easel on which to do this. You have R and RStudio.
+
+Bob Ross has paint brushes. You have R packages.
+
+Bob Ross has different types of paints and colors for creating specific landscape features. You have the R functions (which are within R packages).
+
+```{r Think of you, R and RStudio as Bob Ross and his process. , fig.height=3, fig.width=3}
+knitr::include_graphics("images/bobross11-1395763361.jpg")
+```
+
+### R
+
+R is an open source computing environment and language. R is designed for use on a wide assortment of data analysis projects.
+
+### R packages
+
+Solving a given problem with R will frequently involve using one or more source packages. 
+
+A package is a collection of pre-built functions that you can apply to your own data. Packages have help pages and/or vignettes that illustrate how to use the functions. Packages often have example data sets that are quite useful to experiment with the functions. Packages are created by R users who share them with other users in repositories (CRAN, Github, etc).
+
+After installing R and then R Studio, on the top menu go to View > Show Packages (or use Ctrl+7 on your keyboard).
+
+In a pane you'll see the R packages that are already on your machine. There are two main package libraries: the **system** library and the **user** library. 
+
+The packages in the system library come along with an R installation. The user library are the packages you install on your machine. The user library will grow over time. As you do more things, you'll find uses for more and more different packages.
+
+### Installing R packages
+
+Whenever you need to install a package, say, the `foobar` package, in the console you type the command `install.packages("foobar")` after the prompt.
+
+Whenever you need to use functions within an installed user library package, you must load it into your working environment for your current R session using the library function. For example, typing  `library(foobar)` in the console will load the `foobar` package.
+
+Packages in the system library don't need to be called into the environment. Their functions work automagically.
+
+At the beginning of each chapter I list the packages that will be necessary to run the scripts in that chapter. In order to run my scripts, you will first need to install those packages on your machine.
+
+#### Avoid compiling
+
+When installing packages you are sometimes presented with the option of compiling the package from source code. In almost all cases, you don't want to do that. In almost all cases, install the **binary** version, which is pre-compiled. 
+
+**You install a package once. After that, whenever you need to use the package (or a function(s) within it), you must load it into your environment using the `library()` command, for the current session.**
+
+## My code is your code
+
+When taking my course, I want you to read everything in these chapters, including the R code. 
+
+Especially the R code. 
+
+If you're able to see the code that leads to some output, that means I think it is important for you to understand that code, how it works. You'll need it as a basis to write your own custom scripts...for class work, for home work, and hopefully beyond.
+
+If you are new to R, at first the code will seem...unintelligible. But it will make sense to you if take the time to read it.
+
+The other stuff I've written in the chapters is about statistics. In my course, understanding the R code is no less important than understanding the statistics.
 
 ## Getting started with R
 
-Once you have R and RStudio up and running a class assignment will be to wrok on the R Programming module in the interactive [swirl package](https://swirlstats.com/). Install and load the swirl library by typing the following into the R console within R studio.
+Poke around with the RStudio menu bar and the RStudio panes. Under `Tools` select `Global Options` and experiment with an appearance configuration to your liking.
+
+Once you have R and RStudio up and running a class assignment will be to work on the R Programming module in the interactive [swirl package](https://swirlstats.com/). Install and load the swirl library by typing the following into the R console within R studio.
 
 ```
 install.packages("swirl")
 library(swirl)
 ```
-Swirl does a quick overview of the basics. But there are a lot of basics, most of which you'll forget! But that's ok. As you go through swirl I suggest you go to the source pane to open up a fresh R script or R markdown file to take notes (eg, copy/paste code snippets) for a custom cheatsheet.
+Swirl does a quick overview of the basics. But there are a lot of basics, most of which you'll forget! But that's OK. As you go through swirl I suggest you go to the source pane to open up a fresh R script file or R markdown file to take notes (eg, copy/paste code snippets) for a custom cheat sheet.
 
 ## Other resources
 
-There are many, many other resources with which to get started. Try some, if you wish.
+How to do something? Just Google it. Chances are someone had the exact same question you have and someone else wrote a decent answer.
+
+By far, I find Stack Overflow to be the most useful resource. I usually only click on Stack Overflow links that come up in Google searches.
+
+It took some time for me to learn how to read R's Help documents and vignettes. Most of the time, I figure out how a new function works by playing with the examples in these files; by reverse engineering them.
+
+But there are many, many other resources with which to get started. Try some, if you wish.
 
 [If you are ready to roll up your sleaves and play with R go here](https://www.r-bloggers.com/the-5-most-effective-ways-to-learn-r/).
 
-As you work with R you'll make mistakes. Of these, >90% will be typos, especially missing commas and unclosed parentheses. If you didn't mistype a command, just copy and paste error messages into your browser search bar. Most of the errors you will make have happened before. Most of what you want to do someone has done before. Almost always, the best documented solutions are usually found in StackOverflow.
+As you work with R you'll make mistakes. Of these, >90% will be typos, especially missing commas and unclosed parentheses. 
 
-Code camps are nice, but by far the best way to learn R is to just start using it to solve the problems you need to solve. I'll provide you the problems you need to solve in this course. They are about learning statistics, but you'll end up learning how to use R as a side benefit.
+If you didn't mistype a command, copy and paste error messages into your browser search bar. Most of the errors you will make have happened before. Most of what you want to do someone has done before. Almost always, the best documented solutions are usually found in Stack Overflow.
 
-By the way, after you install the `swirl` package, go ahead and install the `tidyverse` package.
+Code camps are nice, but by far the best way to learn R is to just start using it to solve the problems you need to solve. 
+
+I'll provide you the problems you need to solve in this course. They are about learning statistics, but you'll end up learning how to use R as a side benefit.
+
+By the way, after you install the `swirl` package, go ahead and install the `tidyverse` package. It's actually a collection of many packages that we'll use a lot.
 

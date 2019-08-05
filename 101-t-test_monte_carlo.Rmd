@@ -11,25 +11,46 @@ This chapter walks through a statistical design for three different types of t-t
 
 Each of these examples use Monte Carlo simulation to assess experimental power at given sample and effect sizes, so you'd know many replicates are needed for a real life experiment. 
 
-For preliminary data, these all use information in [a mouse diabetes study conducted by the Jackson Labs](https://phenome.jax.org/projects/Jaxwest7). This is done to illustrate how existing data can be used to refine predictions about the values we might expect in our own experiment. 
+For preliminary data, these all use information in [a mouse diabetes study conducted by the Jackson Labs](https://phenome.jax.org/projects/Jaxwest7). This is done to illustrate how existing data can be used to refine predictions about the values we might expect in our own experiment.
 
-In a single cycle of a Monte Carlo t-test simulation, a random distribution function is used to simulate a random sample. This mimics how the values for replicates might be generated in a real life experiment. The key distinction between real life and simulated samples is that we know the true parameters of the sampled population for the latter...because we code them in!
+### Overview
 
-In these t-test cases, we'll use the `rnorm` function to generate sample replicates. That's because, ideally, t-tests are only used on dependent variables that are continuous and normally distributed. In this case, we'll be simulating experiments that involve measuring glucose concentration, which is a continuous, normally distributed variable.
+In a single cycle of a Monte Carlo t-test simulation, a random distribution function is used to simulate a random sample. This mimics how the values for replicates might be collected in a real life experiment. The key distinction between real life and simulated samples is that we know the true parameters of the sampled population for the latter...because we code them in!
 
-Having a simulated sample of a proper sample size, a t-test is next configured to test that sample, and then the p-value for it is collected. A p-value less than 0.05 would be counted as a "hit".
+That's a key difference from real life, because it means we can assess how well the simulated samples lead to a correct answer.
 
-A cycle of random sampling, t-testing, and p-value evaluation is repeated anywhere from 100 to 10000 times, depending upon how accurate you'd like to be. The fraction of 'hits' relative to the number of simulations is the power of the test. The higher the number of simulations, the more accurate the Monte Carlo in terms of predicting "hits" and power. 
+### Simulating data
 
-If the result is not an acceptable power, change the sample size `n` in the `rnorm` function until a Monte Carlo simulation run gives you an acceptable fraction of 'hits'. There's your sample size! Furthermore, any other assumptions or conditions can be changed, too. Need to re-evaluate the predicted standard deviation? Change it! Will the effect size be larger or smaller than you think? Simulate that! Want to compare a one-tailed to a two-tailed hypothesis? Switch it up! 
+In these t-test cases below, we'll use the `rnorm` function to generate sample replicates. Ideally, t-tests are only used on dependent variables that are continuous and normally distributed. In this case, we'll be simulating experiments that involve measuring glucose concentration, which is a continuous, normally distributed variable.
+
+However, it is important to recognize that you should simulate the kind of data you expect to generate, irrespective of the shape of the distribution you are sampling. If you expect skewed data, for example, lognormal, then you should simulate data shaped like that!! The goal is to try to make the simulation as real life as possible.
+
+Having a simulated sample of a proper sample size, a t-test is next configured to test that sample. We could collect any test parameter we wished from that t-test, but usually we just capture the p-value.  
+
+If we're tesing at a 95% confidence level, then a p-value less than 0.05 would be counted as a "hit" indicating treatment effect.
+
+A cycle of random sampling, t-testing, and p-value evaluation is repeated anywhere from 100 to 10000 times or more. How many? It depends upon how accurate you'd like to be. 
+
+The fraction of 'hits' relative to the number of simulated samples is the power of the test. The higher the number of simulations, the more accurate the Monte Carlo in terms of predicting "hits" and power.
+
+### Change n to zero in on the power you want
+
+If the result is not an acceptable power, change the sample size `n` in the `rnorm` function until a Monte Carlo simulation run gives you an acceptable fraction of 'hits'. There's your sample size, which is usually the output we want from running this simulation! 
+
+Furthermore, any other assumptions or conditions can be changed, too. Need to re-evaluate the predicted standard deviation? Change it! Will the effect size be larger or smaller than you think? Simulate that! Want to compare a one-tailed to a two-tailed hypothesis? Switch it up! 
 
 The time to do p-hacking and HARKing is during a Monte Carlo, before running the real life experiment.
 
 ### Scenario
 
-Let's imagine we have developed a new drug we hope will be useful for treating type II diabetes. Our role is to generate pre-clinical data in support of an FDA application.
+Let's imagine we have developed a new drug we hope will be useful for treating type II diabetes. Pretend our role is to generate pre-clinical data in support of an FDA application.
 
-The planning is based on [some mouse phenome data in a diet-induced obesity study in a mouse strain](https://phenome.jax.org/projects/Jaxwest7), which is a common model for type II diabetes.  
+The planning is based on [some mouse phenome data in a diet-induced obesity study in a fancy mouse strain](https://phenome.jax.org/projects/Jaxwest7), which is a common model for type II diabetes. 
+
+### What would be a scientifically meaningful response?
+
+A key decision in setting up the Monte Carlo is to predict the mean and standard deviations of the population being sampled along with the effect size of the treatment.
+
 
 On the basis of expertise in the field, we make the judgment that a 50% reduction in blood glucose caused by the drug in this diet-induced obesity model would be a scientifically meaningful outcome. We need to design an experiment capable of detecting that 50% effect size.
 
