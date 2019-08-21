@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Logistic regression {#logregress}
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
@@ -263,7 +268,9 @@ The actual values of these deviances are in $\chi^2$ units. For null $\chi^2$=45
 
 #### Inference
 
-There are two basic but interrelated levels of inference that can be drawn from generalized linear modeling. The first involves inferring how well the model fits the data. Sometimes our data include variables that don't improve the explanatory value of a less comprehensive model. Model fitting has a lot of value for making those decisions. The second area for inference focuses on the model coefficient values as effect sizes for a variable. This goes a step beyond whether a variable has earned its seat in the model by ascribing the level of impact the variable can have.   
+There are two basic but interrelated levels of inference that can be drawn from generalized linear modeling. The first involves inferring how well the model fits the data. Sometimes our data include variables that don't improve the explanatory value of a less comprehensive model. Model fitting has a lot of value for choosing whether a more complex model offers a better fit. 
+
+The second area for inference focuses on the model coefficient values as effect sizes for a variable. This goes a step beyond whether a variable has earned its seat in the model by ascribing the level of impact the variable can have.   
 
 ##### Analysis of deviance
 
@@ -302,9 +309,9 @@ The p-value is derived from a standard normal distribution as $2*(1-pnorm(z))$. 
 
 In this instance, neither the intercept nor the corticosterone coefficients have p-values below our threshold. We cannot reject the hypothesis that their values are zero. Of the two, the cort coefficient is the more important, because it represents the slope. And the slope is not different than zero. 
 
-What this means is that there's no strong support for a linear relationship between nestling cort and survival. 
+What this means is that, despite the lovely graphs above, there's no strong statistical support for a linear relationship between nestling cort and survival. 
 
-If we had previously set a 5% type 1 error threshold, since the p-value for the analysis of deviance and/or these coefficient values is greater than 5%, and just barely, we don't reject the null.
+If we had previously set a 5% type 1 error threshold, since the p-value for the analysis of deviance and/or these coefficient values is greater than 5%, althought just barely, we don't reject the null.
 
 We would conclude that we have insufficient evidence to conclude the goodness of fit for the null model is improved by including the corticosterone variable. Thus, whether stress of stork nestlings improves survival remains unclear. 
 
@@ -314,7 +321,7 @@ This is consistent with the conclusion from above in the logistic model summary 
 
 The data simply don't provide a strong estimate for the value of the cort coefficient.
 
-Either test (the $\chi^2$ or z-test) can be used to draw inference and should, as a general rule, agree.
+Either test we tried (the $\chi^2$ or z-test) can be used to draw inference and should, as a general rule, agree. I should mention here that in real life, we would use only one test and not the other. That choice would have been made in advance of actually conducting the experiment.
 
 The difference between the two statistical tests is that the z-test's the null that the slope is zero, and the $\chi^$ tests whether the null model deviance $\le$ the difference between the deviances of a model that includes that predictor and the null.
 
@@ -322,7 +329,7 @@ Which test is "better"? Neither, really. In some ways, the choice of one or the 
 
 For example, if your focus is mostly on estimating the magnitude of the coefficient values and their individual contributions to the outcome, you might want to stick with the z-test. If your focus is on the overall model and big picture question (e.g., Does stress improve survival?), whether the model can be a good predictive tool, you'd focus on the deviance ratio tests for inference.
 
-Simply make a judgement during experimental planning which of these options will be chosen for making inference. 
+Simply make a judgement during experimental planning which of these options will be chosen for making inference. Then stick with that choice.
 
 #### AIC
 

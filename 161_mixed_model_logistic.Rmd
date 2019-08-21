@@ -8,13 +8,35 @@ library(multcomp)
 library(broom)
 ```
 
-A mixed model logistic regression is an appropriate test for designs where repeated/related measures are taken on some variable. The "mixed" in the title is jargon referring to the fact that the model has both fixed and random effects, which is more jargon to deconvolute, of course. 
+A mixed model logistic regression is an appropriate test for experimental designs where paired/repeated/related measures are taken and the outcome variable is a proportion. In general, mixed model regression should be used when there is a heirarchical structure in the design yielding measurements that are non-independent.
+
+Take for example an cell culture-based experiment. Independent replicates are performed. On a given day, working from a common batch of cells plated at the same time, none of the measurements from within a batch are independent of each other. However, we can assume that measurements collected between batches are independent.
+
+The "mixed" in the title is jargon referring to the fact that the model has both fixed and random components. Which is more jargon to deconvolute, I suppose. 
 
 ## Mixed models, fixed and random effects
 
-The fixed effects of a regression model are the intercept and those due to the predictor variable. Recall that models are perfect. \[Y=\beta_0+\beta_1X+\epsilon\] The slopes and intercepts are fixed in value. Without them we couldn't draw perfect lines or curves through some data. In the model world the data are imperfect! That explains why we add a residual term to the model, so we can capture in it the stochastic deviation from the these fixed regression coefficients that the actual data has. 
+Brief synopsis, in regression jargon the *fixed* effects of an experiment are those represented by the intercept and by the predictor 
 
-In experimental designs where multiple measurements are derived from a given experimental unit it becomes possible to attribute some of the residual error as the "random" variation associated with a given replicate. We account for this in our regression models as the "random" effect. The term comes from thinking that the replicate to replicate variation in a population is what is random. Usually, accounting for random effects in a model has the effect of lowering the stochastic residuals. By definition, these are the stochastic variation in the data unaccounted for by the random and fixed effects of a model.
+Recall that statistical models are perfect, while data are not.
+
+The fixed effects in a simple linear regression model are the 'background' level of the response in the system, estimated by the intercept coefficient $\beta_0$, and those effects due to the predictor variable, which is estimated by the slope coefficient, $\beta_1$. Here's a simple linear model: \[Y=\beta_0+\beta_1X+\epsilon\] 
+
+Performing a regression on a data set allows us to generate estimates for these fixed effects based upon the behavior of a sample. The error term, $\epsilon$ accounts for the residual differences between the points predicted by the model and the values for the actual data.
+
+For example, let's imagine we're measuring whether a protein is in the nucleus or in the cytosol, as a binary dependent variable $Y$. The experiment involes stimulating cultured cells with different types of mitogens $X$. This condition is followed counting some number of cells and deciding how many show nuclear protein and how many cells show the protein in the cytosol. Furthermore, the experiment is replicated independently several times.
+
+The word 'fixed' effects comes from assuming that the slopes and intercepts of the regression model have a fixed value in the wider populaton of cells that are sampled. A regression routine run on experimental data generates estimates for those fixed values.
+
+We use these model coefficients to draw perfect lines or curves through some messy data. In the statistical model world the data are imperfect! That explains why we add a residual term to the model, so we can capture in it the stochastic deviation from the these fixed regression coefficients that the actual data has. 
+
+We learned way back in ANOVA about experimental designs where multiple measurements are derived from a given experimental unit. In such designs it becomes possible to attribute some of the residual error as the "random" variation among independent replicates. The jargon 'random' in regression is the same as the 'repeated/related measures' jargon used in ANOVA.
+
+In other words, in a cell culture experiment, we would expect random variation between cell culture passages might affect nuclear location of the protein. This random variation could arise from anything, including the state of the cells and the preparation of fresh reagents.
+
+But within a replicate we would expect those random variations to affect each cell culture well similarly.
+
+We account for this repeated measure in our regression models as the "random" effect. The term comes from thinking that the replicate to replicate variation in a population is what is random. Usually, controlling for random effects in a model has the effect of lowering the stochastic residuals. By definition, these are the stochastic variation in the data unaccounted for by the random and fixed effects of a model.
 
 Thus, mixed models have both fixed and random effects.
 
@@ -22,16 +44,18 @@ Here's an example for a common experimental design for a logistic linear mixed m
 
 ### NFAT localization within smooth muscle cells
 
-The NFAT transcription factors mediate gene expression responses under the control of mitogen signaling. In quiescent cells they are cytosolic. When cells are activated by stimuli that increase cytosolic calcium, the phosphatase calcineurin strips NFATs of phosphate groups, exposing a nuclear localization signal. NFATs then translocate to the nucleus where they contribute to gene expression responses after binding to enhancer elements in genes.
+The NFAT transcription factors mediate gene expression responses under the control of mitogen signaling. In perfectly quiescent cells they are cytosolic. When cells are activated by stimuli that increase cytosolic calcium, the phosphatase calcineurin strips NFATs of phosphate groups, exposing a nuclear localization signal. The NFATs then translocate to the nucleus where they contribute to gene expression responses after binding to enhancer elements in genes.
 
 Here's a simple question: Can NFAT distinguish between different types of triggers that regulate calcium signaling? If so, this might be evident by measuring different degrees of nuclear translocation.
 
-To assess NFAT activation directly, the ability of different 3 different mitogens (AngII, UTP and PDGF) to cause nuclear translocation was measured and compared to a vehicle control. Cells in culture were treated with an agent for 30 min before they were fixed and stained with an NFAT antibody. A blinded observer randomly selected a region and counted a total of one hundred cells on each plate to determine the proportion showing nuclear NFAT. The experiment and counting procedure was replicated independently 5 times.
+To assess NFAT activation directly, the ability of 3 different mitogens (AngII, UTP and PDGF) to cause nuclear translocation was measured and compared to a vehicle control. Cells in culture were treated with an agent for 30 min before they were fixed and stained with an NFAT antibody. 
+
+A blinded observer randomly selected a region and counted a total of one hundred cells on each plate. To determine the proportion showing nuclear NFAT the cells were scored as having mostly nuclear NFAT or mostly cytosolic NFAT. The experiment and counting procedure was replicated independently 5 times.
 
 A few features of this design are notable:
-* Predictor variable is treatment at 3 levels (Veh, AngII and UTP)
-* Outcome variable is discrete, binomial distributed (nuclear or cytoplasmic NFAT)
-* Cell culture based, all counts within a replicate are intrinsically-linked
+* The predictor variable is treatment at 4 levels (Veh, AngII, UTP and PDGF)
+* The outcome variable is discrete and has a binomial distribution (nuclear or cytoplasmic NFAT)
+* This is cell culture based. A replicate is defined as a day in which all stimuli were administered side-by-side on different wells from a common cell culture source passage. Therefore, within a replicate all counts are intrinsically-linked. The regression model will have a **random** term to account for this.
 
 ## Data 
 
@@ -56,13 +80,13 @@ ggplot(data, aes(x=treatment, y=as.factor(counts), color=reps))+
 
 Since these are discrete nominal counts the data are expect to fit a binomial distribution. Thus, the binomial family is chosen for the generalized linear model. 
 
-Furthermore, all intracellular localization counts within a replicate are intrinsically-related since they were measured on cultured cells of the same passage date and involve the use of a common source of reagents. This is a scientific, not a statistical, judgement. 
+Within each replicate every cell scored under the different exposure conditions are clearly not independent from every other cell. The cell culture conditions are highly homogenous within each plate and between the different plates on any given day. They were measured on cultured cells of the same passage date and involve the use of a common source of reagents. All intracellular localization counts **within each replicate** are intrinsically-related. This is a scientific, not a statistical, judgement.  
 
 In the smnfat data set, `reps` is a grouping variable indicating the replicate id. Adding `(1|reps)` to the model accounts for this, assuring that a random intercept will be calculated for each replicate. See [Table 2 in the lme4 vignette](https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf) for more information.
 
-Finally, because we want to compare groups to each other, we're using the offset key `0+`. Here, the model will report fixed coefficient values for each level of the variable, rather than values that are in reference to the intercept. This provides a logit score for each of the 4 stimuli. 
+Finally, because we want to compare all levels of the predictor groups to each other, we're using the offset key `0+`. Here, the model will report fixed coefficient values for each level of the variable, rather than values that are in reference to a common intercept. This provides a logit score for each of the 4 stimuli. 
 
-We're only doing this regression to compare the coefficient values for the different levels of treatment:
+The regression output has a lot of information, but we're only going to compare the coefficient values for the different levels of treatment:
 
 ```{r message=FALSE, warning=FALSE}
 model2 <- glmer(counts~0+treatment + (1 | reps), family = binomial, data)
