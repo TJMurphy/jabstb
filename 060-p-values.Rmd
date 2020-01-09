@@ -4,43 +4,251 @@
 library(tidyverse)
 ```
 
+*Statistical "significance" by itself is not a rational basis for action.*
+-W. Edwards Deming, 1936
 
-You'll see soon enough that when you run a statistical test function in R, it generates list objects that are chock full of useful information. 
+You'll see soon enough that running a statistical test function in R generates output in the form of list objects. These are chock full of useful information. 
 
-Invariably, the researcher's eyes will go right to the p-value. This is understandable, since most researchers have been trained to associate their own success with a p-value falling below some pre-set $\alpha$. Who could really blame them for peeking at the p-values first?
+Invariably, I notice the researcher's eyes go right to the p-value. This is understandable, since most researchers have been trained to associate the success of an experiment with a p-value falling below some pre-set $\alpha$. Who could really blame them for peeking at the p-values first?
 
-The p-value is an instrument by which an important decision will be made. As such, it is worth understanding how that instrument works.
+What this tells us is the p-value is an instrument by which a decision will be made. As such, it is worth understanding how that instrument works.
 
-Hypothesis-driven experiments are designed to test the null hypothesis. That null will be rejected if the effect size is large enough. Extreme effect sizes correspond to extreme values of test statistics.
+In the framework we are using for this course, hypothesis-driven experiments are designed to test the null hypothesis. That null will be falsified if the effect size we measure in our data is large enough. The p-value will be useful to get some sense of the level of error we are exposed to by this decision.
 
-**A p-value is the probability that a given test statistic value could be as large as it is, or even more extreme, if the null hypothesis were actually true.**
+## Definition
 
-In other words, the p-value is an error probability. It is also a random variable. Which means that it is always possible for an experiment to generate an extreme test statistic by simple random chance. The p-value asserts the probability that this is the case.
+*A p-value is the probability that a test statistic value could be as large as it is, or even more extreme, under the null hypothesis.*
 
-One of the reasons I like using R for experimental statistics is that R makes it easy to simulate p-values. Because of that you build an intuitive sense for how they operate. R makes it easy to understand p-values.
+Thus, a p-value is the probability for a given range of values of a test statistic. 
 
-## How p-values are calculated
+P-values are derived from a mathematical model that describes a theoretical probability distribution of test statistic values. 
 
-You can think of test statistics as a transformation of sample data. There are many test statistics. The one to use for a given data set depends on the experimental design. Each test statistic has a probability distribution. P-values are derived from the probability distributions of these test statistics and serve as a way to standardize the decision making process irrespective of the experimental design and test statistic.   
+These probability distributions are also called sampling distributions, because they represent test statistics for experiments based upon sampling.
 
-Probably the simplest test statistic to understand is the z-score. The z-score is a transformation of data from whatever scale it is on, to a standard normal scale. It's usually appropriate for continuous data.
+To be sure, a p-value is a probability. In particular, *it is an error probability*. The p-value is the probability we would "mistakenly declare there to be evidence against the null" in our data.^[Cox, D. R. & Hinkley, D. V. (1974). Theoretical Statistics, London, Chapman & Hall., p66]
+
+Read below to understand that one.
+
+## Test statistics come from null distributions
+
+First, you should think of test statistics just as a transformation of sample data. Test statistics are designed to capture the central tendency and variation within experimental results. They convert data into something resembling a signal-to-noise value. 
+
+Second, there are many test statistics. Each has a corresponding sampling distributions: t (`dt`), F (`df`), z (`dnorm`), $\chi^2$ (`dchisq`), sign rank (`dsignrank`), and more. The test statistic to use for a given data set depends upon the experimental design (the types of variables involved, numbers of groups, data model parameters, etc). 
+
+All of these sampling distributions are meant to represent the distribution of test statistic values you can expect to see under the null hypothesis, and assuming data are collected under a random sampling paradigm. 
+
+The script below simulates this. Using the `rnorm` function, it repeatedly conducts a random sampling to compare two groups. These groups are coded to have the same parameter values for a normal variable. A test statistic value (and also a p-value) is collected each time a random sample is generated. 
+
+The question is, how does the test statistic perform under these random null conditions? We would predict all the test statistics values will reflect null differences...because there is no difference between the two groups we coded.
+
+The gray histogram in the figure below is distribution of these 10,000 null test statistic values. You can see this compares favorably to a curve drawn from the theoretical t-statistic distribution function (`dt(df=8`). 
+
+Yet, of the 10,000 comparisons between these two identical groups, a remarkable number appear to generate extreme test statistic values. Hopefully, this simulation convinces you that a test of random samples drawn from two identical groups can show an extreme test statistic value! Just by random chance.
+
+If this were real life, we wouldn't know that we are sampling from two identical groups.  
+
+In real life, based upon just one of the thousands of samples we might have collected, just by random chance, we might have an extreme test statistic value. Even when, in fact, there is no true difference between the groups. And we have no real way to know we're being fooled when this happens.
+
+*The main take home point is that null sampling distributions can have extreme values just by random chance.*
+
+```{r, fig.cap="The distribution of null t-tests includes extreme values of the test statistic."}
+
+set.seed(1234) #this is for reproduciblity
+
+  ssims=10000 #number of cycles decided to run
+  t <- c() #empty vector, will get filled in the repeat function
+  p <- c() #ditto
+  i <- 1   #a counting metric
+  
+  repeat{
+    groupA <- rnorm(5, mean=100, sd=10); #generates 5 independent random replicates from N(100,10)
+    groupB <- rnorm(5, mean=100, sd=10); #ditto
+    
+    result <- t.test(groupA, groupB, 
+                paired=F, 
+                alternative="two.sided", 
+                var.equal=F,
+                conf.level=0.95)  #'result' is a list of t-test output
+    
+    t[i] <- result$statistic[[1]] #grabs value of t-test statistic value, adds to growing vector
+    p[i] <- result$p.value        #ditto but for p-value
+    
+    if (i==ssims) break           #logic for ending repeat function
+    i = i+1
+  }
+  
+output <- tibble(t, p)  #need this to ggplot
+
+#draws canvas, adds histogram, adds blue line, then customizes x scale
+ggplot (output, aes(x=t))+
+  geom_histogram(aes(y=..density..), binwidth=0.05)+
+  stat_function(fun=dt, args=list(df=8), color="blue", size=1)+
+  scale_x_continuous("t Statistic", breaks=-8:8)
+
+```
+
+### P-value behavior
+
+P-values are derived from the sampling distributions of these test statistics. 
+
+Their main use in practice is not in asserting probabilities or credibilities as some sort of meta evidence (we rarely speak of error probabilities as we discuss our results). Rather, p-values are used in a threshold-based decision making process.
+
+P-values allow for this decision making process to be standardized across a variety of experimental designs and test statistics. Thus, if you learn how to interpret them for one type of test, you'll be in good shape for others. 
+
+How do null p-values behave?
+
+All sampling distributions obey this condition: the more extreme the test statistic, the lower the p-value. 
+
+In fact, as the scatter plots below illustrate, the relationship between the two in the t-statistic case is a bit log-linear.
+
+```{r, fig.cap="From the simulatio above. The absolute value of the t-statistic and p-values have a log linear relationship"}
+
+ggplot(output, aes(t, p))+
+  geom_point()
+# since t can be positive or negative and is symmetrical, we plot its absolute value 
+ggplot(output, aes(abs(t), log10(p)))+
+  geom_point()
+
+```
+
+Second, the distribution of p-values from null test distributions is uniform. They take on continuous values from 0 to 1, $U(0,1)$. What this means is that when we sample from a null we are just as likely to generate p-values with high and low values. The value we get from a single null test will be determined by chance. 
+
+This histogram is broken into 20 bins. Each bin has the same frequency; is equally likely. There is a 1 in 20 chance that a true null test will generate a given value from any one of those bins, including from the furthest left bin, which has all the p-values less than 0.05.
+
+```{r}
+ggplot(output, aes(x=p))+ 
+  geom_histogram(color="blue", bins=20, na.rm=T)+
+  scale_x_continuous("p-value", limits=c(0,1))
+```
+
+This p-value behavior differs markedly when we sample true non-null groups. 
+
+I'll take the script from above and change one thing: The mean of one group will be higher than the other, by 25 units. Thus, now there is a true difference between the two groups in our code.
+
+The first thing to note is the distribution of test-statistic values is right-shifted, dramatically. Most of the t-statistic values are more extreme than those delineated by the theoretical blue-lined null distribution.
+
+Higher test statistic values are more likely when group differences are true. But note how they are not all extreme. It's possible to generate lower test statistic values when differences are true.
+
+```{r, fig.cap="By coding a true difference between groups we generate many more extreme values of the test statistic than in tests of null groups."}
+set.seed(1234)
+
+  ssims=10000
+  t <- c() 
+  p <- c() 
+  i <- 1   
+  
+  repeat{
+    groupA <- rnorm(5, mean=125, sd=10); #the mean value is the only difference
+    groupB <- rnorm(5, mean=100, sd=10); 
+    
+    result <- t.test(groupA, groupB, 
+                paired=F, 
+                alternative="two.sided", 
+                var.equal=F,
+                conf.level=0.95)  
+    
+    t[i] <- result$statistic[[1]] 
+    p[i] <- result$p.value        
+    
+    if (i==ssims) break         
+    i = i+1
+  }
+  
+output2 <- tibble(t, p) 
+
+#I'll draw our new distribution next to the theoretical null
+
+ggplot (output2)+
+  geom_histogram(aes(x=t, y=..density..), binwidth=0.05, na.rm=T)+
+  stat_function(fun=dt, args=list(df=8), color="blue", size=1)+
+  scale_x_continuous("t-statistic value", limits = c(-8,30), breaks=-8:30)
+```
+
+The second thing to note is that the distribution of p-values in tests of non-null groups is not uniform, as was the case under the null distribution. It is much, much more skewed. 
+
+Over a run of many tests, when there is a true effect we're much more likely to generate low than high values. In fact, in this particular case, over 80% of the p-values are less than 0.05.
+
+```{r, fig.cap="Tests of non-null groups yields skewed p-value distributions"}
+ggplot(output2, aes(x=p))+ 
+  scale_x_continuous("p-value", minor_breaks = 0.05) +
+  geom_histogram(color="blue", bins=20)
+  
+```
+
+Finally, for completeness we'll show the scatter plot of the relationship between the absolute values of t and the log10 p-values. Upon overlay of the null relationship, we can see that true differences between groups leads to more and lower-valued p-values.
+
+```{r, fig.cap="There are many more extreme test statistic values and P-values from non-null (blue) tests compared to null tests (gold)."}
+# since t can be positive or negative and is symmetrical, we plot its absolute value 
+ggplot(NULL, aes(abs(t), log10(p)))+
+  geom_point(data=output2, color="#000066")+
+  geom_point(data=output, color ="#cc9900")
+```
+
+*The main take away is that when there is no difference between groups, we're equally likely to generate high and low p-values. When there are differences between groups, we would expect low p-values at higher frequencies.*
+
+### P-values and the decision process
+
+When planning an experiment we don't know if the groups that we'll compare are identical groups or if they differ. And we can never know for sure. We hope they differ. 
+
+Another constraint is that we have only one shot. We'll only perform one experiment, say with 5 independent replicates per group, not 10,000 experiments. 
+
+And if the evidence from that one test does generate an extreme test statistic value, we are at risk of error in drawing a conclusion against the null.
+
+Before starting an experiment, we write in our notebook that we can tolerate some level of type1 error. Usually we choose 5% (0.05) because everybody seems to be choosing that one, but we are free to use any value that we're comfortable with. That's our judgment to make and defend. 
+
+We also write in our notebook what test statistic we intend to transform our data into. That will be based largely on our experimental design.
+
+As aloof, unbiased, highly skeptical scientists, we go about running the experiment "under the null" or to "test the null". This means that we operate, coolly and calmly, under the assumption that random chance will explain the results we collect.
+
+Better to plan not to be disappointed. No big deal. Whatev.
+
+To operationalize this dispassionate posture we assume the sampling distribution of our test statistic is determined by chance. We'll generate a test statistic value and pretend it belongs to the sampling distribution (the null).
+
+Not so fast. 
+
+We also feel that it is less likely that random chance can explain extreme results. An extreme test statistic value can come from a test of groups that truly differ. Not only that, they are more likely to come from tests of groups that differ.
+
+For this reason, we make a decision rule. Our rule is to calculate the p-value of the test statistic generated by our experimental data. Our rule is that if p-value falls below our threshold for type1 error (say, 0.05 or whatever is specified), we will reject the null hypothesis.
+
+In effect, by rejecting the null, we are declaring that the test statistic value is too extreme to belong within a null distribution of test statistic values.
+
+We do that **knowing** that null distributions of the test statistic can have extreme values all by chance alone. We accept we might be in error in making this decision, by falsely rejecting that are data are sampled from a null, when in fact they are from the null.
+
+And that's why the p-value is the probability we are making this error.
+
+## A blood glucose p-value
+
+Probably the simplest test statistic to understand is the z-score. The z-score is a transformation of data from whatever scale it is on, to a standard normal scale. A z-transformation is usually appropriate for continuous scalar data.
+
 $$z_i=\frac{y_i-\mu}{\sigma}$$
-Let's say we have single blood glucose value of 122 mg/dl. What is its p-value? Is the z-score corresponding to that glucose value too extreme to belong in the null distribution of z-scores?
 
-First, the blood glucose values is transformed into a z-score. We'll say the mean and standard deviation of blood glucose in the sampled population is 100 and 10 mg/dl, respectively. The z-score for a value of 122 is therefore: 
+Let's say we have single blood glucose value of 122 mg/dl. Let's also assume that in the population the average and standard deviation for blood glucose is 100 and 10 mg/dl, respectively.
+
+
+Transforming a glucose value from units of mg/dl into a z-score, whose units are in standard deviation, is trivial: 
 
 ```{r}
 z <- (122-100)/10; z
 ```
-z-score units are in standard deviations. Thus, a z-score value of 2.2 indicates it is 2.2 standard deviation units greater than the standard normal mean (which is zero, of course).
 
-Next, we'll pass that z-score value of 2.2 into the standard normal density function, `pnorm`. We cause the function to produce a p-value for that z-score by using a `lower.tail=FALSE` argument: 
+Thus, 122 mg/dl blood glucose value corresponds to a z-score of 2.2. This also indicates a blood glucose value of 122 mg/dl is 2.2 standard deviation units greater than the standard normal mean (which is zero).
+
+Is one blood glucose value of 122 mg/dl extreme? We can answer that, statistically, now that we've transformed its value into a test statistic form. 
+
+Is the z-score corresponding to that glucose value too extreme to belong in the null distribution of z-scores, and by inference, the null distribution of blood glucose values? And what is the exact p-value for this blood glucose value?
+
+To answer, we'll pass that z-score value of 2.2 into the standard normal density function, `pnorm`. We force the function to produce a p-value for that z-score by using a `lower.tail=FALSE` argument: 
 
 ```{r}
 pnorm(2.2, mean=0, sd=1, lower.tail=FALSE)
 ```
 
-In the z probability distribution below, the blue shaded region illustrates what this p-value looks like. The p-value covers the probabilities for z-score values of 2.2 and higher. The p-value is thus the area under the curve for the z probability distribution for that value of z and for more extreme values.
+Thus, our z-score test statistic value corresponds to a p-value of 0.0139.
+
+Let's view what this p-value represents graphically.
+
+In the z probability distribution below, the blue shaded region illustrates what this p-value looks like. The p-value covers the probabilities for z-score values of 2.2 and higher. The p-value is thus the area under the standard normal probability distribution curve for z values of 2.2 and more extreme values.
+
 
 ```{r fig.height=4, fig.width=5, message=FALSE, warning=FALSE, paged.print=FALSE}
 ggplot(data.frame(zscore = c(-5, 5)), aes(zscore)) +
@@ -58,16 +266,16 @@ The question that's ringing in your ears right now is, "Is a z-score value of 2.
 
 The answer to that question depends upon what threshold you deem is too extreme. Remember, a threshold is our tolerance for error; in this case, for type 1 error.
 
-If the threshold for an acceptable risk of type 1 error is 5% ($p < 0.05$), then let's see how those look on the z-distribution.
+If the threshold for an acceptable risk of type 1 error is 5% ($\alpah < 0.05$), then let's see how those look on the z-distribution.
 
-First, let's calculate z-scores corresponding the area outside 95% of the z-scores. Since extreme z-scores can lay on both the right and the left sides of the z-distribution, which is symmetrical. Therefore we split the 5% in half and use the quantile function `qnorm` to calculate z-scores for each: 
+First, let's calculate z-scores corresponding the area outside 95% of the z-scores. Since extreme z-scores can lay on both the right and the left sides of the z-distribution, which is symmetrical. Therefore we split the 5% in half and use the standard normal quantile function `qnorm` to calculate z-scores for each part: 
 
 ```{r}
 qnorm(0.025, lower.tail = F)
 qnorm(0.025, lower.tail = T)
 ```
 
-Thus, the 95% confidence limits for the z-scores are ~ +/- 1.96, almost 2 standard deviations from the mean. We plug those values as limits into our plot: 
+Thus, we might also say the 95% confidence limits for null z-scores are ~ +/- 1.96, or plus or minus almost 2 standard deviations from the mean. We plug those values as limits into our plot: 
 
 ```{r}
 ggplot(data.frame(zscore = c(-5, 5)), aes(zscore)) +
@@ -82,49 +290,51 @@ ggplot(data.frame(zscore = c(-5, 5)), aes(zscore)) +
   scale_x_continuous(breaks=seq(-5,5,1))
 ```
 
-Any z-score values corresponding to the red-shaded areas would be deemed too extreme to belong to the null. The limit on the right side is 1.96. Therefore, yes, a z-score of 2.2 ($p=0.0139$) is too extreme to belong to the standard null distribution.
+If our confidence level for type1 error threshold is 5%, any z-score values corresponding to the red-shaded areas would be deemed too extreme to belong to the null. The limit on the right side is 1.96. Therefore, yes, we deem a z-score of 2.2 ($p=0.0139$) is too extreme to belong to the standard null distribution.
 
 ## Interpretation
 
-Every time we do an experiment we operate on the assumption that our data represent the null. This is analogous to considering a defendant innocent until proven guilty. So we think of test statistic values we calculate from our data, unless proven otherwise, as belonging to the null distribution of test statistic values.
+Every time we do an experiment we operate on the assumption that we are sampling the null and that our data represent the null. In the same way we consider a defendant innocent until proven guilty, it is useful to think of our treatment effect as null unless disproven otherwise. 
 
-The interpretation of $p=0.0139$ is the probability that z-score (and its corresponding glucose value of 122 mg/dl) are that large by chance is 0.0139. There's about a 1.4% chance we are making an error by rejecting the null that it belongs to the $N(100, 10)$.
+The test comes by transforming our experimental data into a test statistic and mapping it to a null sampling distribution. We'll deal with that transformation later in the course, each time we come across a new test statistic. 
+
+If the value of the test statistic is extreme, we conclude that it doesn't belong in the null distribution. 
+
+The interpretation of $p=0.0139$ is the probability of obtaining a glucose value of 122 mg/dl or higher, if in fact 122 mg/ml is in the population defined as $N(100, 10)$.
+
+If the null is true, the probability of rejecting it in error is $p=0.0139$.
 
 ## Criticisms of p-values
 
 There are several criticisms of p-values, many of which are legitimate. I'll address a few key ones here.
 
 1. *They are too confusing, nobody understands them.*
-I get that. I confess that p-values are a struggle to teach in a way that's simple and memorable. Especially for students who only consider statistics episodically, perhaps a few times a year. 
 
-This year I'm teaching this with a bit more emphasis upon Popper and the merits of null hypothesis falsification as the cornerstone of the scientific method and how p-values fit into that tradition. 
+I confess that p-values are a struggle to teach in a way that's simple and memorable. Especially for researchers who only consider statistics with any intensity episodically, perhaps a few times a year. 
 
-Here it is: All statistical tests (the ones I teach in this course) are tests of the null hypothesis. When the test result is extreme, we reject the null. The p-value is the probability we're rejecting the null in error.
-
-Despite the merit of this particular criticism, p-values are not going away. They are an important inferential tool used by most biological scientists, even if poorly understood and implemented. 
-
-Like any tool in the lab, it is incumbant upon the researcher to learn how it works. I think a great way to get a better intuitive understanding for p-values is to play around with the various test statistic probability and quantile distributions in R (`pnorm, qnorm, pt, qt, pf, pf, pchisq, qchisq, psignrank, qsignrank` etc). Use them to run various scenarios, plot them out...get a sense for how the tools work by using them.
+Like any tool in the lab, it is incumbent upon the researcher to learn how it works. A good way to get a better intuitive understanding for p-values is to play around with the various test statistic probability and quantile distributions in R (`pnorm, qnorm, pt, qt, pf, pf, pchisq, qchisq, psignrank, qsignrank` etc). Use them to run various scenarios, plot them out...get a sense for how the tools work by using them.
 
 2. *p-Values poorly protect from false discovery*
+
 This is undoubtedly true. Since David Colquhoun goes over this in [blistering detail](http://rsos.royalsocietypublishing.org/content/1/3/140216) I won't repeat his thorough analysis here. The researcher MUST operate with skepticism about p-values.
 
-Since Colquhoun's argument is entirely based in simulation it also inspires an approach for dealing with this problem. Through simulation *a priori*, a researcher can design and run experiments *in silico* that strikes the right balance between the threshold levels she can control (eg, $\alpha$ and $\beta$) and feasibility in a way that best minimizes the risk of false discovery. Before ever lifting a finger in the lab.
-
-This criticism explains why I am such a strong advocate of Monte Carlo simulation in experimental design. With software like R, there really is no excuse anymore for the researcher being a victim of this problem.
+Since Colquhoun's argument is largely based on simulation of "typical" underpowered experiments, it also inspires an approach for dealing with this problem. Through simulation *a priori*, a researcher can design and run experiments *in silico* that strikes the right balance between the threshold levels she can control (eg, $\alpha$ and $\beta$) and feasibility in a way that best minimizes the risk of false discovery. All that before ever lifting a finger in the lab.
 
 3. *p-Values aren't the probability I'm interested in*
-Researchers who raise this criticism generally are interested in something the p-value was never designed to deliver: the probability that their experiment worked. 
 
-A p-value doesn't provide that information because it is an error probability. Specifically, it is the probability of making a type 1 error.
+Researchers who raise this criticism generally are interested in something the p-value was never designed to deliver: the probability that their experiment worked, or the credibility for their observed results, or even the probability of a false discovery. 
 
-For these researchers, embracing Bayesian statistics is probably a better option. I don't teach Bayesian statistics in this course for a couple of reasons, but mostly because I don't understand it well enough to teach it, and I don't see how it offers a superior approach for experimental research.
+A p-value doesn't provide that information because it is an error probability. It is meant to give the researcher a sense of the risk of making a type 1 error by rejecting the null hypothesis.
+
+For these researchers, embracing Bayesian statistics is probably a better option.
 
 4. *People use p-values as evidence for the magnitude of an effect.*
-Sure, but they are wrong. This is more a criticism of the people who use p-values, and not the p-value. But the criticism raises the point that it is a mistake to rely solely on a p-value to interpret the outcome of an experiment.
 
-A p-value<0.05 only means that there is less than 1 out of 20 chance of having detected an extreme effect when the null is true. A low p-value doesn't provide evidence that the treatment effect is real. As a result, a p-value can't provide any information about the magnitude of the treatment effect.
+It is common for people to conflate statistical significance with scientific significance.  This criticism is really about mistaking a "statistical significant" p-value and a "significant" scientific finding.
 
-Neither is a low p-value synonymous with scientific significance. A simple example of this comes from 2 way ANOVA F test analysis. When the test suggests a postive result for an interaction effect, that finding supercedes the main effects. Thus, should any main effects also have low p-values they are not scientifically meaningful.
+A low p-value doesn't provide evidence that the treatment effect is scientifically meaningful. If small, scientifically insignificant effect size is measured with high enough precision, that can come with a very low p-value.
 
-Researchers [should therefore analyze p-values in conjunction with other parameters](https://www.nature.com/articles/nmeth.4210), such as effect sizes and the confidence intervals.
+Some low p-values are uninterpretable. A simple example of this comes from 2 way ANOVA F test analysis. When the test suggests a positive result for an interaction effect, low p-values for the factors individually are uninterpretable because they are confounded by the interaction effect
+
+Researchers [should therefore always analyze p-values in conjunction with other parameters](https://www.nature.com/articles/nmeth.4210), such as effect and sample sizes and the confidence intervals, and always with scientific judgment.
 
