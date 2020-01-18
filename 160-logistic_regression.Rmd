@@ -68,7 +68,9 @@ Probabilities can be calculated from odds following exponential transformation o
 
 Sometimes it's helpful to visualize the relationships between these parameters graphically.
 
-```{r}
+The first graph, which is on a linear scale, illustrates how odds are an exponential function of probability. The second graph is on a semi-log scale. Log transformation of odds yields logit, which has a log-linear relationship with probability. 
+
+```{r, fig.cap="Odds are an exponential function of probability."}
 a <- seq(99, 1, -1)
 d <- seq(1, 99, 1)
 
@@ -83,14 +85,16 @@ ggplot()+
   geom_point(aes(p, logit))
 ```
 
+The graph below provides, I think, the most intuitive way to think about what logit values mean. Their relationship to probability is almost switch-like. For example, a log odds value of 3 indicates that an outcome is highly probable.
 
-```{r}
+```{r, fig.cap="Changing the axis illustrates the nonlinear switch-like relationship between logit and probability."}
 logit <- seq(-6, 6, 1)
 
 p <- exp(logit)/(1+exp(logit))
 
 ggplot()+
-  geom_point(aes(logit, p))
+  geom_point(aes(logit, p))+
+  scale_x_continuous(breaks = -6:6)
 ```
 
 ### Additional types of logistic regression models
@@ -111,7 +115,7 @@ $ln(\frac{p}{1-p})=\beta_0+\beta_1X_1+\beta2X_2..+\beta_nX_n$
 
 #### Running logistic regression in R
 
-So as you can see, at a higher level, logistic regression is not really different than linear or regression modeling. 
+So as you can see, at a higher level, logistic regression is not really different than linear regression modeling. 
 
 The model options determined by the predictor variables in the study. The right hand of the equation is some general linear model that accounts for the predictor variable(s) of your experiment. The left hand of the left hand of the equation is logit.
 
@@ -119,7 +123,7 @@ We use the `glm()` function in R rather than the `lm()` function. The reason for
 
 In linear and nonlinear regression (and also t-tests and ANOVA) model variation is accounted for using ordinary least squares (OLS) estimation. OLS serves as a common statistical thread that ties together the various parametric techniques, from t-tests to more complex nonlinear regression models and multiple regression.
 
-Instead of OLS, generalized linear models such as logistic regression use maximum likelihood estimation (MLE) to derive parameter values. MLE generates parameter values through iterative calculations that maximize the likelihood the regression model produced the data that were actually observed. 
+Instead of OLS, generalized linear models such as logistic regression use maximum likelihood estimation (MLE) to derive parameter values. MLE generates parameter value estimates through iterative calculations that maximize the likelihood the regression model produced the data that were actually observed. 
 
 Why MLE and not OLS? The short answer is that generalized linear models are frequently used on data that violate the assumptions for valid use of OLS-based statistical methods. Logistic regression is a perfect example: OLS has no utility in the analysis of binary outcomes!
 
