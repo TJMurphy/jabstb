@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-01-18" />
+<meta name="date" content="2020-01-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -208,17 +208,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>9</b> Variability, Accuracy and Precision</a><ul>
-<li class="chapter" data-level="9.1" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>9.1</b> Variance: Quantifying variation by least squares</a></li>
-<li class="chapter" data-level="9.2" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>9.2</b> Standard deviation</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>9.2.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="9.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>9.0.1</b> Data are messy</a></li>
+<li class="chapter" data-level="9.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>9.1</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="9.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>9.2</b> Variance: Quantifying variation by least squares</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>9.2.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="dispersion.html"><a href="dispersion.html#other-ways-of-describing-variability"><i class="fa fa-check"></i><b>9.3</b> Other ways of describing variability</a></li>
+<li class="chapter" data-level="9.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>9.3</b> Standard deviation</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>9.3.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="9.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>9.3.2</b> Ways of describing sample variability</a></li>
+</ul></li>
 <li class="chapter" data-level="9.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>9.4</b> Precision and Accuracy</a></li>
 <li class="chapter" data-level="9.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>9.5</b> Standard error</a><ul>
 <li class="chapter" data-level="9.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>9.5.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="9.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>9.5.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
 <li class="chapter" data-level="9.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>9.6</b> Confidence intervals</a><ul>
-<li class="chapter" data-level="9.6.1" data-path="dispersion.html"><a href="dispersion.html#simulations"><i class="fa fa-check"></i><b>9.6.1</b> Simulations</a></li>
+<li class="chapter" data-level="9.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>9.6.1</b> CI Definition</a></li>
+<li class="chapter" data-level="9.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>9.6.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="9.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>9.6.3</b> CI Simulation tools</a></li>
 </ul></li>
 <li class="chapter" data-level="9.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>9.7</b> Key take aways</a></li>
 </ul></li>
@@ -673,137 +680,118 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="dispersion" class="section level1">
 <h1><span class="header-section-number">Chapter 9</span> Variability, Accuracy and Precision</h1>
+<p><em>“Your estimate can be precisely inaccurate.”</em></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(ggformula)</a></code></pre></div>
-<p>One of my favorite sayings is “models are perfect, data are not”, because it’s a simple way to express statistics.</p>
-<p>We sample a population. In statistics, the population parameters that interest us are held to have true, fixed values. The models we conjure up to estimate these parameters are also perfect. The parameters are important because they have biological meaning: affinities, maximum responses, activity rates, depolarization frequencies,…, whatever.</p>
-<p>What’s imperfect, unfortunately, are the data that we generate. Stood up against a perfect model, they are usually come off looking pretty crappy. The models aren’t always good fits for the data, and sometimes it’s ambiguous whether one model fits best, or some other.</p>
-<p>Therefore, a major focus of statistics is to evaluate how well our perfect models fit these messy data. Quantifying the wellness of that fit is one basis for asserting how reliable are our parameter estimates. Which in turn means how well we think we understand a system.</p>
-<p>All of this points to the fact that it is not possible to understand statistical analysis without wrapping our heads around the concepts related to data dispersion: variability, accuracy and precision.</p>
-<p>The reason data are messy is that sample data possess inherent variability. This means there is always some ‘error’ between the true values of the population parameters and their estimated values within the model. That error is held to be random. In statistics, random error is defined as the variation that we can’t account for in our model.</p>
-<p>In running experiments on biological systems we think about two main contributors to this error. The first is biological variation. There are confounding factors inherent within the sampled specimens that are driving the observed variation, but we don’t understand them and are not controlling for them. The second source is so-called systematic error, having to do with our technique and equipment, the way we measure the sample.</p>
+<p>One of my favorite sayings is “models are perfect, data are not”, because it’s a simple way to say that statistical models will always predict perfect data.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Experimentalists draw random samples from a population we are interested in studying.</p>
+<p>In statistics, the population parameters that interest us are held to have true, fixed values. Such parameters are important because they have biological meaning: a parameter can mean the differences between two treatment levels, affinities between proteins, maximum responses, enzyme activity rates, depolarization frequencies,…. Every experiment is about a population being modeled.</p>
+<p>The models we conjure up to estimate these parameters are also perfect. When you simulate data using models (without an error term) you generate data that fit the model perfectly.</p>
+<p>I imagine a population with a mean of 5 and a standard deviation of 0. Here’s data I could expect to see from such a perfect model:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">3</span>, <span class="dt">mean=</span><span class="dv">10</span>, <span class="dt">sd=</span><span class="dv">0</span>)</a></code></pre></div>
+<pre><code>## [1] 10 10 10</code></pre>
+<p>What’s imperfect, unfortunately, are the real data that we generate through sampling. Stood up against a perfect model, they usually come off looking pretty crappy. The models aren’t always good fits for the data, and very often it is ambiguous whether one model fits best, or some other should be applied.</p>
+<p>Therefore, a major focus of statistics is to evaluate how well our perfect models are fit by these messy data. Quantifying the uncertainty of that fit is one basis for asserting how reliable are our parameter estimates. Which is very important because in turn that addresses how realiable is our understanding of the system that we are researching.</p>
+<p>All of this points to the fact that it is not possible to understand statistical analysis without wrapping our heads around the concepts related to data dispersion: variability, accuracy and precision. Together, these concepts comprise ways of thinking about and describing the uncertainty of data.</p>
+<div id="data-are-messy" class="section level3">
+<h3><span class="header-section-number">9.0.1</span> Data are messy</h3>
+<p>The reason data are messy is that sample data possess inherent variability. This means there is always some ‘error’ between the true values of the population parameters and their estimated values within the sample.</p>
+<p>In running experiments on biological systems we think about two main contributors to this error. The first is biological variation between independent replicates. There are confounding factors inherent within the sampled specimens that are driving the observed variation. We don’t understand them enough to know how to control for these confounders. Oddly enough, in statistical jargon the unexplained biological variation between replicates is often called random error. This is meant to imply the random biological differences between replicates are due to things we don’t understand, not “random chance”.</p>
+<p>The second source is so-called systematic error, having to do with our processes, the techniques and equipment, the way we measure the sample.</p>
+<p>These ways of thinking about different sources for variation will hopefully become more clear when we get to ANOVA and to regression.</p>
+</div>
+<div id="illustration-of-a-model-with-error" class="section level2">
+<h2><span class="header-section-number">9.1</span> Illustration of a model with error</h2>
 <p>As you recall from middle school, a straight line drawn between two variables is described by the linear model <span class="math inline">\(Y=\beta_0+\beta_1 X\)</span>. This model has two parameters, <span class="math inline">\(\beta_0\)</span> represents the y-intercept while <span class="math inline">\(\beta_1\)</span> represents the slope of the line. The predictor variable is <span class="math inline">\(X\)</span>. Thus, passing values of <span class="math inline">\(X\)</span> into this model generates values for the response variable, <span class="math inline">\(Y\)</span>.</p>
-<p>I mention this so I can illustrate randomness, perfect models, and all of that.</p>
+<p>I mention this so I can illustrate error, perfect models, and all of that.</p>
 <p>Here’s a simulation of response data from two linear models, <span class="math inline">\(Y1\)</span> and <span class="math inline">\(Y2\)</span>.</p>
 <p>Reading the code, you notice that one of the models, <span class="math inline">\(Y1\)</span> has no error term, so it is perfect, which is to say the values of <span class="math inline">\(Y1\)</span> are perfectly predicted by the model’s intercept and slope parameters. A linear regression goes through every data point and the output of that regression yields the exact same parameter values that were input (a bit of a circular proof, if you will). The model perfectly fits its data.</p>
 <p>The other model (<span class="math inline">\(Y2\)</span>) has an error term tacked onto it. As a result it yields imperfect values of <span class="math inline">\(Y2\)</span> even when given the exact same model parameters as for <span class="math inline">\(Y1\)</span>. Applying a linear regression to this data yields an imperfect fit…the line doesn’t go through all of the data points. Error is associated with the estimate (the gray shade), and the intercept and slope parameters estimated through linear regression differ somewhat from the parameter input values.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">#intital model parameter values</span></a>
-<a class="sourceLine" id="cb2-2" title="2"></a>
-<a class="sourceLine" id="cb2-3" title="3">b0 &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-4" title="4">b1 &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb2-5" title="5">X &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">10</span>,<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb2-6" title="6"></a>
-<a class="sourceLine" id="cb2-7" title="7">error &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(X), <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb2-8" title="8"></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#models</span></a>
-<a class="sourceLine" id="cb2-10" title="10"></a>
-<a class="sourceLine" id="cb2-11" title="11">Y1 &lt;-<span class="st"> </span>b0<span class="op">+</span>b1<span class="op">*</span>X</a>
-<a class="sourceLine" id="cb2-12" title="12">Y2 &lt;-<span class="st"> </span>b0<span class="op">+</span>b1<span class="op">*</span>X <span class="op">+</span><span class="st"> </span>error</a>
-<a class="sourceLine" id="cb2-13" title="13"></a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co">#put the simulations into a data frame so it can be plotted</span></a>
-<a class="sourceLine" id="cb2-15" title="15"></a>
-<a class="sourceLine" id="cb2-16" title="16">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X, Y1, Y2) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="st">  </span><span class="kw">gather</span>(model, response, <span class="op">-</span>X)</a>
-<a class="sourceLine" id="cb2-18" title="18"></a>
-<a class="sourceLine" id="cb2-19" title="19"><span class="co">#plotting function</span></a>
-<a class="sourceLine" id="cb2-20" title="20"></a>
-<a class="sourceLine" id="cb2-21" title="21"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(X, response))<span class="op">+</span></a>
-<a class="sourceLine" id="cb2-22" title="22"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb2-23" title="23"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(X, response), <span class="dt">method=</span>lm)<span class="op">+</span></a>
-<a class="sourceLine" id="cb2-24" title="24"><span class="st">  </span><span class="kw">facet_grid</span>(<span class="dt">cols=</span><span class="kw">vars</span>(model))</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-2"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-2-1.png" alt="Models are perfect, data are not." width="480" />
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co">#intital model parameter values</span></a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3">b0 &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb4-4" title="4">b1 &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb4-5" title="5">X &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">10</span>,<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb4-6" title="6"></a>
+<a class="sourceLine" id="cb4-7" title="7">error &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(X), <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb4-8" title="8"></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#models</span></a>
+<a class="sourceLine" id="cb4-10" title="10"></a>
+<a class="sourceLine" id="cb4-11" title="11">Y1 &lt;-<span class="st"> </span>b0<span class="op">+</span>b1<span class="op">*</span>X</a>
+<a class="sourceLine" id="cb4-12" title="12">Y2 &lt;-<span class="st"> </span>b0<span class="op">+</span>b1<span class="op">*</span>X <span class="op">+</span><span class="st"> </span>error</a>
+<a class="sourceLine" id="cb4-13" title="13"></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#put the simulations into a data frame so it can be plotted</span></a>
+<a class="sourceLine" id="cb4-15" title="15"></a>
+<a class="sourceLine" id="cb4-16" title="16">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X, Y1, Y2) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-17" title="17"><span class="st">  </span><span class="kw">gather</span>(model, response, <span class="op">-</span>X)</a>
+<a class="sourceLine" id="cb4-18" title="18"></a>
+<a class="sourceLine" id="cb4-19" title="19"><span class="co">#plotting function</span></a>
+<a class="sourceLine" id="cb4-20" title="20"></a>
+<a class="sourceLine" id="cb4-21" title="21"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(X, response))<span class="op">+</span></a>
+<a class="sourceLine" id="cb4-22" title="22"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb4-23" title="23"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(X, response), <span class="dt">method=</span>lm)<span class="op">+</span></a>
+<a class="sourceLine" id="cb4-24" title="24"><span class="st">  </span><span class="kw">facet_grid</span>(<span class="dt">cols=</span><span class="kw">vars</span>(model))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-3"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-3-1.png" alt="Models are perfect, data are not." width="480" />
 <p class="caption">
 Figure 9.1: Models are perfect, data are not.
 </p>
 </div>
 <p>You can appreciate how the second model, with the random error term, is more real life. What’s even more interesting is that every time you run the second model you’ll generate a completely different result. Copy and paste that code chunk into R and see for yourself. That error term is just a simulation of a random process. And that’s just how random processes behave!</p>
 <p>(Play with that code if you don’t understand how it works. Run it on your machine. Change the initializers)</p>
-<p>In real life, unlike in this simulation, we wouldn’t know the true values of the parameters (as we know them in this simulation). In real life we sample and fit a perfect model to imperfect data.</p>
-<p>The resulting output provides estimates of the true parameter values. But the output also includes several bits of information that summarizes all of the variability in the data. Interpreting that tells us whether or not the model is a good way to explain the data.</p>
-<p>At this point in the course it’s not important to interpret what all of this error analysis means.</p>
-<p>The point I’m making right now, and that hopefully you’ll grow to appreciate, is that to a large extent, statistics is mostly about residual error analysis. It’s actually sketchy if there is no residual error. I mean, look at the automagic warning message R barks out below for the summary of the first of these linear regressions…the perfect model:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">summary</span>(<span class="kw">lm</span>(Y1<span class="op">~</span>X)) </a></code></pre></div>
-<pre><code>## Warning in summary.lm(lm(Y1 ~ X)): essentially perfect fit: summary may be
-## unreliable</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = Y1 ~ X)
-## 
-## Residuals:
-##        Min         1Q     Median         3Q        Max 
-## -4.756e-15 -1.193e-15 -2.021e-16  1.623e-15  3.315e-15 
-## 
-## Coefficients:
-##               Estimate Std. Error    t value Pr(&gt;|t|)    
-## (Intercept) -4.494e-15  1.736e-15 -2.588e+00   0.0322 *  
-## X            5.000e+00  2.798e-16  1.787e+16   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 2.541e-15 on 8 degrees of freedom
-## Multiple R-squared:      1,  Adjusted R-squared:      1 
-## F-statistic: 3.193e+32 on 1 and 8 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">summary</span>(<span class="kw">lm</span>(Y2<span class="op">~</span>X))</a></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = Y2 ~ X)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -13.5788  -4.4087   0.4446   4.0003  12.6074 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept)   2.3461     6.0989   0.385  0.71050   
-## X             4.6110     0.9829   4.691  0.00156 **
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 8.928 on 8 degrees of freedom
-## Multiple R-squared:  0.7334, Adjusted R-squared:  0.7001 
-## F-statistic: 22.01 on 1 and 8 DF,  p-value: 0.001559</code></pre>
-<p>In some respects, you can say that what we do as researchers is iterate through discovery problems. Each time we improve our understanding of a system, in essence, we’re explaining just a little bit more of what we previously classified as residual error.</p>
-<p>Is there a biological cause for the variation I see in some assay? Can I explain it by testing a new predictor variable? If I use better technique or different equipment can I “clean up” some of the variation in the results, so that I can get a better handle on some ideas I have about what causes that biological variation?</p>
-<p>In big picture words, the signals that we are looking for as biological researchers are actually within all of that noise.</p>
-<p>Irrespective of the statistical variables and tests that you will use, every null hypothesis that you will ever test is, basically, stating “This data can only be explained by random noise.”</p>
+<p>In real life, unlike in this simulation, we wouldn’t know the true values of the parameters (as we know them in this simulation). In real life we sample and test to see how well imperfect data fit a perfect model.</p>
+<p>At this point in the course it’s not important to interpret what all of this error analysis means. The point I’m making right now, and that hopefully you’ll grow to appreciate, is that to a large extent, statistics is mostly about residual error analysis–measuring and accounting for the differences between perfect models and imperfect data.</p>
+</div>
 <div id="variance-quantifying-variation-by-least-squares" class="section level2">
-<h2><span class="header-section-number">9.1</span> Variance: Quantifying variation by least squares</h2>
-<p>The two primary methods to quantify variation are termed “ordinary least squares” and “maximum likelihood estimation”. Mathematically they are distinct, and that difference is beyond the scope of this course. It would require teaching math.</p>
-<p>What is important is that, in most cases, either method will arrive at roughly the same solution.</p>
+<h2><span class="header-section-number">9.2</span> Variance: Quantifying variation by least squares</h2>
+<p>The two primary methods to quantify variation are termed “ordinary least squares” and “maximum likelihood estimation”. Mathematically they are distinct, and that difference is beyond the scope of this moment. What is important is that, in most cases, either method will arrive at roughly the same solution.</p>
 <p>Ordinary least squares is the method used for quantifying variation for most of the statistics discussed in this course. The only exception is when we get to generalized linear models. So we’ll omit consideration of maximum likelihood estimation until then.</p>
 <p>Ordinary least squares arises from the theoretical basis of variance, and is a deceptively simple concept.</p>
-<p>It can be shown (by mathematicians) that the variance of a random variable, <span class="math inline">\(Y\)</span>, with an expected value equivalent to its mean, <span class="math inline">\(E(Y) = \mu\)</span>, is the difference between it’s squared expected value and its expected value squared. <span class="math display">\[Var(Y) = E(Y^2)-E(Y)^2 \]</span></p>
-<p>Imagine a sample of size <span class="math inline">\(n\)</span> replicates drawn from a population of the continuous random variable, <span class="math inline">\(Y\)</span>. The replicate sample values for <span class="math inline">\(Y\)</span> are <span class="math inline">\(y_1, y_2, ...y_n\)</span>.</p>
-<p>The mean of these replicate values provides an estimate for the mean of the sampled population, <span class="math inline">\(\mu\)</span>, and is <span class="math display">\[\bar y = \frac{{\sum_{i=1}^n}y_i}{n}\]</span></p>
-<p>The value by which each replicate within the sample varies from the mean is described alternately as deviate or as a residual. Each represents the same thing: <span class="math inline">\(y_i-\bar y\)</span>. A vector of sample replicates will have values that are smaller than and larger than the mean. Thus, some variate values are positive, while others are negative.</p>
-<p>In a random sample we would expect that the values for replicates are roughly equally dispersed above and below a mean. Thus, if we were to sum up the deviates (or residuals) we’d expect that that sum’s value to approach zero. <span class="math display">\[E(\sum_{i=1}^n(yi-\bar y))=0\]</span></p>
-<p>By squaring the deviates, negative values are removed, providing a parameter that paves the way to more capably describe the variation within the sample than can the sum of the deviates. This parameter is called the “sum of squares”: <span class="math display">\[SS=\sum_{i=1}^n(yi-\bar y)^2\]</span></p>
-<p>A sample’s variance is the sum of the squared deviates divided by the sample degrees of freedom, <span class="math inline">\(df=n-1\)</span>. <span class="math display">\[s^2=\frac{\sum_{i=1}^n(yi-\bar y)^2}{n-1}\]</span></p>
-<p>A sample’s variance, <span class="math inline">\(s^2\)</span> is an estimate of the variance, <span class="math inline">\(\sigma^2\)</span>, of the population that was sampled, in the same way <span class="math inline">\(y_bar\)</span> estimates <span class="math inline">\(\mu\)</span>.</p>
-<p>You can think of variance as an approximate average of <span class="math inline">\(SS\)</span>. The reason <span class="math inline">\(s^2\)</span> is arrived at through dividing by degrees of freedom, <span class="math inline">\(n-1\)</span>, rather than by <span class="math inline">\(n\)</span> is because doing so produces a better estimate of the population variance, <span class="math inline">\(\sigma^2\)</span>. <a href="https://stats.stackexchange.com/questions/100041/how-exactly-did-statisticians-agree-to-using-n-1-as-the-unbiased-estimator-for">Mathematical proofs of that assertion</a> can be found all over the internet.</p>
-<p>Variance is a hard parameter to wrap the brain around. It describes the variability within a data set, but geometrically: The units of <span class="math inline">\(s^2\)</span> are squared. For example, if your response variable is measured by the <span class="math inline">\(gram\)</span> mass of objects, then the variance units are in <span class="math inline">\(grams^2\)</span>.
-That’s weird.</p>
+<p>It can be shown (by mathematicians) that the variance of a random variable, <span class="math inline">\(Y\)</span>, with an expected value equivalent to its mean, <span class="math inline">\(E(Y) = \mu\)</span>, is the difference between it’s squared expected value and its expected value squared:</p>
+<p><span class="math display">\[Var(Y) = E(Y^2)-E(Y)^2 \]</span></p>
+<p>In practice, imagine a sample of size <span class="math inline">\(n\)</span> random independent replicates drawn from a population of the continuous random variable, <span class="math inline">\(Y\)</span>. The replicate sample values for <span class="math inline">\(Y\)</span> are, <span class="math inline">\(y_i\)</span>, and thus <span class="math inline">\(y_1, y_2, ...y_n\)</span> is a vector of values of the variable <span class="math inline">\(Y\)</span>.</p>
+<p>The mean of these replicate values provides an estimate for the mean of the sampled population, <span class="math inline">\(\mu\)</span>, and is</p>
+<p><span class="math display">\[\bar y = \frac{{\sum_{i=1}^n}y_i}{n}\]</span></p>
+<p>The value by which each replicate within the sample varies from the mean is <span class="math inline">\(y_i-\bar y\)</span>. <strong>In jargon these are described alternately as a variate, or a deviate or as a residual. Each word represents the same thing.</strong></p>
+<p>A vector of sample replicates will have values that are smaller than and larger than the mean. Thus, some variate values are positive, while others are negative.</p>
+<p>In a random sample of a normally distributed variable we would expect that the values for variates are roughly equally dispersed above and below a mean. Thus, if we were to sum up the deviates (or variates or residuals) we’d expect that that sum’s value to approach zero.</p>
+<p><span class="math display">\[E(\sum_{i=1}^n(yi-\bar y))=0\]</span></p>
+<p>By squaring the deviates, negative values of the deviates are removed, providing a parameter that paves the way to more capably describe the variation within the sample than can the sum of the deviates. This parameter is called the “sum of squares”:</p>
+<p><span class="math display">\[SS=\sum_{i=1}^n(yi-\bar y)^2\]</span></p>
+<div id="definition-of-variance" class="section level3">
+<h3><span class="header-section-number">9.2.1</span> Definition of variance</h3>
+<p>A sample’s variance is the sum of the squared deviates divided by the sample degrees of freedom<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>, <span class="math inline">\(df=n-1\)</span>.</p>
+<p><span class="math display">\[s^2=\frac{\sum_{i=1}^n(yi-\bar y)^2}{n-1}\]</span></p>
+<p>A sample’s variance, <span class="math inline">\(s^2\)</span> is used as an estimate of the variance, <span class="math inline">\(\sigma^2\)</span>, of the population that was sampled, in the same way <span class="math inline">\(y_bar\)</span> estimates the population mean <span class="math inline">\(\mu\)</span>.</p>
+<p>Since it is derived through division using a number that approximates sample size you can think of variance as an approximate average of <span class="math inline">\(SS\)</span>. Therefore, a synonym for variance is “mean square”, a jargon that is used in ANOVA.</p>
+<p>The reason <span class="math inline">\(s^2\)</span> is arrived at through dividing by degrees of freedom, <span class="math inline">\(n-1\)</span>, rather than by <span class="math inline">\(n\)</span> is because doing so produces a better estimate of the population variance, <span class="math inline">\(\sigma^2\)</span>. <a href="https://stats.stackexchange.com/questions/100041/how-exactly-did-statisticians-agree-to-using-n-1-as-the-unbiased-estimator-for">Mathematical proofs of that assertion</a> can be found all over the internet.</p>
+<p>Variance is a hard parameter to wrap the brain around. It describes the variability within a dataset, but geometrically: The units of <span class="math inline">\(s^2\)</span> are squared. For example, if your response variable is measured by the <span class="math inline">\(gram\)</span> mass of objects, then the variance units are in <span class="math inline">\(grams^2\)</span>.</p>
+<p>That’s weird.</p>
 <p>Later in the course, we’ll discuss statistical testing using analysis of variance (ANOVA) procedures. The fundamental idea of ANOVA is to test for group effects by “partitioning the error”. That’s done with <span class="math inline">\(SS\)</span>. When a factor causes some effect, the <span class="math inline">\(SS\)</span> associated with that factor get larger…by the square of the variation. Statistical testing is then done on the variance in groups, which in ANOVA jargon is called the “mean square”, or <span class="math inline">\(MS\)</span>. <span class="math inline">\(MS\)</span> is just another way for saying <span class="math inline">\(s^2\)</span>.</p>
 </div>
+</div>
 <div id="standard-deviation" class="section level2">
-<h2><span class="header-section-number">9.2</span> Standard deviation</h2>
+<h2><span class="header-section-number">9.3</span> Standard deviation</h2>
 <p>The sample standard deviation solves the problem of working with an unintuitive squared parameter. The standard deviation is a more pragmatic descriptive statistic than is variance.</p>
-<p>The standard deviation is the square root of the sample variance: <span class="math display">\[sd=\sqrt{\frac{\sum_{i=1}^n(y_i-\bar y)^2}{n-1}}\]</span></p>
+<p>The standard deviation is the square root of the sample variance:</p>
+<p><span class="math display">\[sd=\sqrt{\frac{\sum_{i=1}^n(y_i-\bar y)^2}{n-1}}\]</span></p>
+<p>Poof! The weird squared value for the varible is gone. No more need to think about blood glucose in squared units of mg/dl.</p>
 <div id="what-does-the-standard-deviation-tell-us" class="section level3">
-<h3><span class="header-section-number">9.2.1</span> What does the standard deviation tell us</h3>
+<h3><span class="header-section-number">9.3.1</span> What does the standard deviation tell us</h3>
 <p>The sample standard deviation is two things at once. It is
-* a statistical parameter that expresses the variability within the sample.
-* an estimate of the variability within the population that was sampled.</p>
-<p>There aren’t many factoids in statistics worth committing to memory, but this one on the standard deviation is one of them: A bit over two thirds of the values for a normally-distributed variable will lie between one standard deviation below and above the mean of that variable.</p>
-<p>Here’s one way to calculate that using R’s <code>pnorm</code> function, the cumulative distribution function:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">pnorm</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dt">lower.tail =</span> T) <span class="co">#Calculates the AUC below a zscore of -1.</span></a></code></pre></div>
+* a statistical parameter that conveys the variability within the sample.
+* a point estimate of the variability within the population that was sampled.</p>
+<p>There aren’t many factoids in statistics worth committing to memory, but the one that follows is:</p>
+<p><strong>A bit over two thirds of the values for a normally-distributed variable will lie between one standard deviation below and above the mean of that variable.</strong></p>
+<p>To “get” statistics it will be very important to get an intuitive feel for the standard deviation. I think the best way to understand it is to run R scripts that explore its properties.</p>
+<p>Here’s one way to calculate the “two-thirds” rule using R’s <code>pnorm</code> function, the cumulative normal distribution function:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">pnorm</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dt">lower.tail =</span> T) <span class="co">#Calculates the AUC below a zscore of -1.</span></a></code></pre></div>
 <pre><code>## [1] 0.1586553</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">pnorm</span>(<span class="dv">1</span>, <span class="dt">lower.tail =</span> F) <span class="co">#Calculates the AUC above a zscore of 1</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">pnorm</span>(<span class="dv">1</span>, <span class="dt">lower.tail =</span> F) <span class="co">#Calculates the AUC above a zscore of 1</span></a></code></pre></div>
 <pre><code>## [1] 0.1586553</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="dv">1</span><span class="op">-</span><span class="kw">pnorm</span>(<span class="op">-</span><span class="dv">1</span>)<span class="op">-</span><span class="kw">pnorm</span>(<span class="dv">1</span>, <span class="dt">lower.tail =</span> F) <span class="co">#The middle range</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="dv">1</span><span class="op">-</span><span class="kw">pnorm</span>(<span class="op">-</span><span class="dv">1</span>)<span class="op">-</span><span class="kw">pnorm</span>(<span class="dv">1</span>, <span class="dt">lower.tail =</span> F) <span class="co">#The middle range</span></a></code></pre></div>
 <pre><code>## [1] 0.6826895</code></pre>
-<p>Explore: Use <code>pnorm</code> to calculate the AUC between z scores of -2 and 2.</p>
+<p>Explore: Use <code>pnorm</code> to calculate the AUC between z scores of -2 and 2, visualizing the outcome.</p>
 <div class="figure"><span id="fig:unnamed-chunk-5"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-5-1.png" alt="About 86% of the values for a normally distributed variable are within +/- one standard deviation from the mean." width="672" />
 <p class="caption">
@@ -818,73 +806,82 @@ Figure 9.3: Modeling the distribution of a blood glucose variable.
 </p>
 </div>
 </div>
+<div id="ways-of-describing-sample-variability" class="section level3">
+<h3><span class="header-section-number">9.3.2</span> Ways of describing sample variability</h3>
+<ul>
+<li>Just show all of the data as scatter plots! Don’t hide the variability in bar plots with “error bars”.</li>
+<li>When using bar plots with error bars, always show SD.</li>
+<li>Violin plots are pretty ways to illustrate the spread and density of variation graphically.</li>
+<li>The coefficient of variation, <span class="math inline">\(cv=\frac{sd}{mean}\)</span>, is a dimensionless index that describes the noise-to-signal ratio.</li>
+<li>Percentiles and ranges. In particular, the interquartile range. This is usually reserved for non-normal data, particularly discrete data.</li>
+<li>The SEM does not describe sample variability.</li>
+</ul>
 </div>
-<div id="other-ways-of-describing-variability" class="section level2">
-<h2><span class="header-section-number">9.3</span> Other ways of describing variability</h2>
-<p>*Just show all of the data as scatter plots! There’s no need to hide the variability in bar plots with “error bars”.</p>
-<p>*Violin plots are pretty ways to illustrate the spread and density of variation graphically.</p>
-<p>*The coefficient of variation, <span class="math inline">\(cv=\frac{sd}{mean}\)</span>, is a dimensionless index. If you tell me, “My cv is 60%,” then my response would be, “Mmmm, that sounds pretty noisy.” That is, the more cv’s you pay attention to, the better you appreciate the physical implications of a given value.</p>
-<p>*Percentiles and ranges. In particular, the innerquartile range. This is usually reserved for non-normal data, particularly discrete data. The IQR illustrates the spread of the middle 50% of data values, from the 25th to the 75th percentiles, and is usually accompanied by the use of the median as the centrality parameter.</p>
 </div>
 <div id="precision-and-accuracy" class="section level2">
 <h2><span class="header-section-number">9.4</span> Precision and Accuracy</h2>
-<p>Even with well-behaved subjects, state-of-the-art equipment, and the best of technique and intentions, samples can yield wildly inaccurate estimates, even while measuring something precisely. My favorite illustration of this is how <a href="https://unbiasedresearch.blogspot.com/2018/02/accuracy-v-precision.html">estimates for the masses of subatomic particles have evolved over time</a>. We can probably assume that the real masses of these particles have remained constant. Yet, note all the quantum jumps, pun intended, in their estimated values.</p>
-<p>Ways of measuring things change. What seems very accurate today could prove to be wildly inaccurate tomorrow. And just because you’ve measured something precisely doesn’t mean you know its true value.</p>
+<p>Even with well-behaved subjects, state-of-the-art equipment, and the best of technique and intentions, samples can yield wildly inaccurate estimates, even while measuring something precisely.</p>
+<p>My favorite illustration of this is how <a href="https://unbiasedresearch.blogspot.com/2018/02/accuracy-v-precision.html">estimates for the masses of subatomic particles have evolved over time</a>. We can assume that the real masses of these particles have remained constant. Yet, note all of the quantum jumps, pun intended, in their estimated values.</p>
+<p>What seems very accurate today could prove to be wildly inaccurate tomorrow. In particular, just because something is measured precisely doesn’t mean it is accurate.</p>
 <p>If there is one clear take away from this it’s that all such statistical estimates are provisional.</p>
 </div>
 <div id="standard-error" class="section level2">
 <h2><span class="header-section-number">9.5</span> Standard error</h2>
 <p>This will sound counter-intuitive, but we can actually know how precise our estimate of some parameter is without knowing the true value. That’s because precision is the repeatability of a measurement, and it is possible to repeat something very, very reliably but inaccurately.</p>
-<p><strong>The standard error is the statistical parameter used to express sample precision. Standard error is calculated from standard deviation</strong>
-<span class="math display">\[precision:\ SE = \frac{sd}{\sqrt n}\]</span></p>
-<p>In contrast, as the history of subatomic particle estimates illustrates, we can never know for sure whether an estimate derived from a sample accurately estimates the sampled population. We will always be uncertain.</p>
+<p><strong>The standard error is the statistical parameter used to express sample precision. Standard error is calculated from standard deviation and the sample size</strong></p>
+<p><span class="math display">\[precision:\ SE = \frac{sd}{\sqrt n}\]</span></p>
+<p>Thus, the SE is not something that estimates a fixed parameter of the sampled population. Since it reduces as sample size increases, it provides information only about the sample.</p>
 <div id="what-exactly-does-the-standard-error-represent" class="section level3">
 <h3><span class="header-section-number">9.5.1</span> What exactly does the standard error represent?</h3>
-<p>The central limit theorem predicts a few important things:
-1) A distribution of many sample means will be normally distributed, even if a non-normal distribution is sampled.
-2) A distribution of sample means will have less dispersion with larger sample sizes.
-3) If a sample population has a mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, the distribution of sample means of sample size <span class="math inline">\(n\)</span> drawn from that population will have a mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\frac{\sigma}{\sqrt n}\)</span>.</p>
+<p>The central limit theorem predicts a few important things:</p>
+<ol style="list-style-type: decimal">
+<li>A distribution of many sample means will be normally distributed, even if a non-normal distribution is sampled.</li>
+<li>A distribution of sample means will have less dispersion with larger sample sizes.</li>
+<li>If a sample population has a mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, the distribution of sample means of sample size <span class="math inline">\(n\)</span> drawn from that population will have a mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\frac{\sigma}{\sqrt n}\)</span>.</li>
+</ol>
+<p>Therefore, the standard error for a mean is the standard deviation of a theoretical population of sample means.</p>
 <p>These features are illustrated below, as a prelude to further defining standard error.</p>
-<p>The first graph showing a big black box simply plots out a uniform distribution of the random variable <span class="math inline">\(Y\)</span> ranging in values from 0 to 1, using the <code>dunif</code>function. It just means that any value, <span class="math inline">\(y\)</span>, plucked from that distribution is as equally likely as all other values.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">ggplot</span>(</a>
-<a class="sourceLine" id="cb14-2" title="2">  <span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb14-3" title="3">    <span class="dt">x=</span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)),</a>
-<a class="sourceLine" id="cb14-4" title="4">  <span class="kw">aes</span>(x))<span class="op">+</span></a>
-<a class="sourceLine" id="cb14-5" title="5"><span class="st">  </span><span class="kw">stat_function</span>(</a>
-<a class="sourceLine" id="cb14-6" title="6">    <span class="dt">fun=</span>dunif, </a>
-<a class="sourceLine" id="cb14-7" title="7">    <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb14-8" title="8">    <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb14-9" title="9">    <span class="dt">geom=</span><span class="st">&quot;area&quot;</span>, </a>
-<a class="sourceLine" id="cb14-10" title="10">    <span class="dt">fill=</span><span class="st">&quot;black&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb14-11" title="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;p(y)&quot;</span>, <span class="dt">x=</span><span class="st">&quot;Y&quot;</span>)</a></code></pre></div>
+<p>The first graph showing a big boring black box. It simply plots out a uniform distribution of the random variable <span class="math inline">\(Y\)</span> ranging in values from 0 to 1, using the <code>dunif</code>function. It just means that any value, <span class="math inline">\(y\)</span>, plucked from that distribution is as equally likely as all other values. We’ll sample repeatedly from this distribution and show that the means of those samples are normally distributed.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">ggplot</span>(</a>
+<a class="sourceLine" id="cb11-2" title="2">  <span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb11-3" title="3">    <span class="dt">x=</span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)),</a>
+<a class="sourceLine" id="cb11-4" title="4">  <span class="kw">aes</span>(x))<span class="op">+</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="st">  </span><span class="kw">stat_function</span>(</a>
+<a class="sourceLine" id="cb11-6" title="6">    <span class="dt">fun=</span>dunif, </a>
+<a class="sourceLine" id="cb11-7" title="7">    <span class="dt">args=</span><span class="kw">list</span>(<span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb11-8" title="8">    <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb11-9" title="9">    <span class="dt">geom=</span><span class="st">&quot;area&quot;</span>, </a>
+<a class="sourceLine" id="cb11-10" title="10">    <span class="dt">fill=</span><span class="st">&quot;black&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;p(y)&quot;</span>, <span class="dt">x=</span><span class="st">&quot;Y&quot;</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-7"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" alt="A variable with a uniform distribution." width="672" />
+<img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" alt="A variable having a uniform distribution" width="480" />
 <p class="caption">
-Figure 9.4: A variable with a uniform distribution.
+Figure 9.4: A variable having a uniform distribution
 </p>
 </div>
-<p>The probability of sampling any one of these values is equivalent to that for all other values. Uniform distributions arise from time-to-time. For example, important actually, the distribution of p-values from null hypothesis tests is uniform.</p>
+<p>The probability of sampling any single <span class="math inline">\(y_i\)</span> value is equivalent to that for all other <span class="math inline">\(y_i\)</span> values. Uniform distributions arise from time-to-time. For example, important actually, the distribution of p-values derived from true null hypothesis tests is uniform.</p>
 <p>As you might imagine, the mean of this particular uniform distribution is 0.5 (because it is halfway between the value limits 0 and 1). Probably less obvious is the standard deviation for a uniform distribution with limits <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> is <span class="math inline">\(\frac{b-a}{\sqrt{12}}\)</span>. So the standard deviation for this particular uniform distribution <span class="math inline">\(\sigma\)</span> = 0.2887.</p>
-<p>Just so you trust me, these assertions pass the following simulation test:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">mean</span>(<span class="kw">runif</span>(<span class="dt">n=</span><span class="dv">100000</span>, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>))</a></code></pre></div>
-<pre><code>## [1] 0.4995042</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">sd</span>(<span class="kw">runif</span>(<span class="dt">n=</span><span class="dv">100000</span>, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>))</a></code></pre></div>
-<pre><code>## [1] 0.289067</code></pre>
+<p>Just so you trust me, these two assertions pass the following simulation test:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">mean</span>(<span class="kw">runif</span>(<span class="dt">n=</span><span class="dv">100000</span>, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>))</a></code></pre></div>
+<pre><code>## [1] 0.4998165</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">sd</span>(<span class="kw">runif</span>(<span class="dt">n=</span><span class="dv">100000</span>, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">1</span>))</a></code></pre></div>
+<pre><code>## [1] 0.2885671</code></pre>
 <p>The next graph illustrates the behavior of the central limit theorem.</p>
-<p>In the following script, random samples are taken from this uniform distribution many times. It takes either 1000 small random samples (n=3) or 1000 large random samples (n=30).</p>
-<p>It then calculates the means for each one of those samples before finally plotting out a histogram showing the distribution of all of those sample means.</p>
+<p>In the following a little custom function, called meanMaker, random samples are taken from this uniform distribution many times.</p>
+<p>The script generates either 1000 means of very small random samples (n=3) or 1000 means from somewhat larger random samples (n=30).</p>
+<p>Those two sets of means are then plotted.</p>
 <p>Notice how the distributions of sample means are normally distributed, even though they comes from a uniform distribution! That validates the first prediction of the CLT, made above.</p>
 <p>Note also that the distribution of means corresponding to the larger sample sizes has much less dispersion than that for the smaller sample sizes. That validates the second CLT prediction made above.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">meanMaker &lt;-<span class="st"> </span><span class="cf">function</span>(n){</a>
-<a class="sourceLine" id="cb19-2" title="2"> <span class="kw">mean</span>(<span class="kw">runif</span>(n))</a>
-<a class="sourceLine" id="cb19-3" title="3">}</a>
-<a class="sourceLine" id="cb19-4" title="4">small.sample &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>,<span class="kw">meanMaker</span>(<span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb19-5" title="5">large.sample &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">meanMaker</span>(<span class="dv">30</span>))</a>
-<a class="sourceLine" id="cb19-6" title="6"></a>
-<a class="sourceLine" id="cb19-7" title="7"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(small.sample, large.sample))<span class="op">+</span></a>
-<a class="sourceLine" id="cb19-8" title="8"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(small.sample), <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb19-9" title="9"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(large.sample), <span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.5</span> )<span class="op">+</span></a>
-<a class="sourceLine" id="cb19-10" title="10"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;n=3 (red) or n=30 (blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">meanMaker &lt;-<span class="st"> </span><span class="cf">function</span>(n){</a>
+<a class="sourceLine" id="cb16-2" title="2"> <span class="kw">mean</span>(<span class="kw">runif</span>(n))</a>
+<a class="sourceLine" id="cb16-3" title="3">}</a>
+<a class="sourceLine" id="cb16-4" title="4">small.sample &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">meanMaker</span>(<span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb16-5" title="5">large.sample &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">meanMaker</span>(<span class="dv">30</span>))</a>
+<a class="sourceLine" id="cb16-6" title="6"></a>
+<a class="sourceLine" id="cb16-7" title="7"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(small.sample, large.sample))<span class="op">+</span></a>
+<a class="sourceLine" id="cb16-8" title="8"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(small.sample), <span class="dt">fill=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb16-9" title="9"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(large.sample), <span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.5</span> )<span class="op">+</span></a>
+<a class="sourceLine" id="cb16-10" title="10"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;n=3 (red) or n=30 (blue&quot;</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-9"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-9-1.png" alt="The central limit theorem in action, distributions of sample means of small (red) and large (blue) sample sizes." width="672" />
 <p class="caption">
@@ -892,169 +889,224 @@ Figure 9.5: The central limit theorem in action, distributions of sample means o
 </p>
 </div>
 <p>As for the third point, the code below calculates a mean of all these means, and the SD of all these means, for each of the groups.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">mean</span>(small.sample)</a></code></pre></div>
-<pre><code>## [1] 0.4929313</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">sd</span>(small.sample)</a></code></pre></div>
-<pre><code>## [1] 0.1676283</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw">mean</span>(large.sample)</a></code></pre></div>
-<pre><code>## [1] 0.4995097</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">sd</span>(large.sample)</a></code></pre></div>
-<pre><code>## [1] 0.05261554</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">mean</span>(small.sample)</a></code></pre></div>
+<pre><code>## [1] 0.4981331</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">sd</span>(small.sample)</a></code></pre></div>
+<pre><code>## [1] 0.1630902</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw">mean</span>(large.sample)</a></code></pre></div>
+<pre><code>## [1] 0.4995954</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">sd</span>(large.sample)</a></code></pre></div>
+<pre><code>## [1] 0.05178088</code></pre>
 <p>Irrespective of sample size, the mean of the means is a great estimator of the mean of the uniform distribution.</p>
 <p>But passing the sample means into the <code>sd</code> function shows that neither provides a good estimate of the <span class="math inline">\(\sigma\)</span> for the population sampled, which we know for a fact has a value of 0.2887.</p>
 <p>Obviously, the standard deviation <strong>of a group of means</strong> is not an estimator of the population standard deviation. So what is it? The standard deviation of the distribution of sample means is what is known as the standard error of the mean.</p>
 <p><strong>This goes a long way to illustrate what the standard error of the mean of a sample, SEM, actually represents. It is an estimator of the theoretical standard deviation of the distribution of sample means,</strong><span class="math inline">\(\sigma_{\bar y}\)</span>.</p>
 <p>Now what are the implications of THAT?</p>
 <p>There are a few.</p>
-<p>First, SEM is not a measure of dispersion. It is a measure that describes the precision by which a mean has been estimated. The SEM for the large sample size group above is much lower than that for the small sample size group. Meaning, <span class="math inline">\(\mu\)</span> is estimated more precisely by using large sample sizes.</p>
+<p>First, SEM is not a measure of dispersion in a sample. It is a measure that describes the precision by which a mean has been estimated. The SEM for the large sample size group above is much lower than that for the small sample size group. Meaning, <span class="math inline">\(\mu\)</span> is estimated more precisely by using large sample sizes. That should make intuitive sense.</p>
 <p>Second, statistically naive researchers use SEM to illustrate dispersion in their data (eg, using SEM as “error bars”). Ugh. They do this because, invariably, the SEM will be lower than the SD. And that looks cleaner.</p>
-<p>But they shouldn’t do this, because SEM is not an estimator of <span class="math inline">\(\sigma\)</span>. Rather, SEM estimates <span class="math inline">\(\sigma_{\bar y}\)</span>. Those are two very different things.</p>
-<p>I suggest you use SEM if it is important to illustrate the precision by which something is measured. That’s usually only important for parameters that are physical constants.</p>
-<p>Third, when we do experiments we sample only once (with <span class="math inline">\(n\)</span> independent replicates) and draw inferences about the population under study on that bases of that one sample.</p>
+<p>But they should not do this, because SEM is not an estimator of <span class="math inline">\(\sigma\)</span>. Rather, SEM estimates <span class="math inline">\(\sigma_{\bar y}\)</span>. Those are two very different things.</p>
+<p>When we do experiments we sample only once (with <span class="math inline">\(n\)</span> independent replicates) and draw inferences about the population under study on that bases of that one sample.</p>
 <p>We don’t have the luxury or resources to re-sample again and again, as we can in simulations. However, these simulations illustrate that, due to the central limit theorem, a long run of sampling is predictably well-behaved. This predictability is actually the foundation of statistical sampling methodology.</p>
-<p>The SEM estimates a theoretical parameter (<span class="math inline">\(\sigma_{\bar y}\)</span> that we would rarely, if ever, attempt to validate. Yet, on the basis of one sample it serves a purpose by providing an estimator of precision.</p>
+<p>The SEM estimates a theoretical parameter (<span class="math inline">\(\sigma_{\bar y}\)</span> that we would rarely, if ever, attempt to validate. Yet, on the basis of one sample it serves a purpose by providing an estimator of precision. In a sense, the SEM provides an estimate for how well something is estimated.</p>
+</div>
+<div id="should-i-use-sd-or-sem" class="section level3">
+<h3><span class="header-section-number">9.5.2</span> “Should I use SD or SEM?”</h3>
+<p><strong>The SEM does not illustrate variation. I suggest you use SEM if it is important to illustrate the precision by which something is measured. That’s usually only important for parameters that are physical constants. And the exact n should be coupled to every reported SEM. More often, your reader is better served by showing true dispersion. Use SD to summarize the variability in your data using SD.</strong></p>
 </div>
 </div>
 <div id="confidence-intervals" class="section level2">
 <h2><span class="header-section-number">9.6</span> Confidence intervals</h2>
-<p>Confidence intervals are the range of values within which we predict is the true value of a parameter, with some confidence.</p>
-<p>We just need to pick a level within which to be confident. 90%? 95%? 99%? Once that is decided, we can calculate the range within which that true value likely lies.</p>
-<p><strong>The confidence interval serves as the statistical parameter used to express sample accuracy.</strong></p>
-<p>Standard errors and confidence intervals are calculated from the same sample data. So there is a bit of a circular argument at play here. We use the variability within the sample to generate two related parameters, standard error and confidence intervals. The former tells us about the precision and the latter tells us about the accuracy.</p>
-<div id="simulations" class="section level3">
-<h3><span class="header-section-number">9.6.1</span> Simulations</h3>
-<p>The random sampler is a script that <strong>generates a random sample from a known distribution</strong> before calculating several sample parameters, including the confidence interval.</p>
-<p>It’s particularly useful to illustrate the relationships between confidence intervals, sample sizes, standard deviations, and confidence levels.</p>
-<p>When the confidence interval is accurate, a blue-colored bar appears. When the confidence interval is not accurate, you get a red bar.</p>
+<p>Confidence intervals are among the most useful yet misunderstood statistics.</p>
+<ul>
+<li>They are calculated from a sample.</li>
+<li>They are a range of values for the variable parameter being estimated.</li>
+<li>They can be calculated for virtually any variable parameters.</li>
+<li>There are many ways to calculate CIs</li>
+<li>They can be set at any confidence level the researcher prefers, 95%, 90%, 99%, 87.26%</li>
+</ul>
+<p>For example, assume the variable is blood glucose, in units of mg/dl, and the parameter we are interested in estimating is the mean blood glucose level in a population. The experiment involves taking a random sample of that population through <span class="math inline">\(n\)</span> independent replicates, measuring the blood glucose level in each. The sample mean is calculated, along with a 95% confidence interval for that mean.</p>
+<div id="ci-definition" class="section level3">
+<h3><span class="header-section-number">9.6.1</span> CI Definition</h3>
+<p>Let’s assume our experiment involves random sampling of a population to estimate its mean, and we are calculating the 95% confidence interval from that sample.</p>
+<p>What does that 95% CI tell us?</p>
+<p><strong>Definition: If we repeated the same experiment many, many times, where each experiment is a fresh random sample of <span class="math inline">\(n\)</span> independent replicates, we would expect the true value of the population mean to fall within 95% of those confidence intervals.</strong></p>
+<p>In other words, for any given experiment there is a 1 in 20 chance the true value of the population mean is not within the 95% CI calculated from the sample. Or, we are 95% confident our interval includes the value of the true population mean.</p>
+<p>Let me add that this is the beating heart of the frequentism in frequentist statistics. The CI is a statistic that is calculated from the sample of one experiment…and yet its interpretation is assumes an infinite number of repeats of that experiment that we would never do. This drives people who practice Bayesian statistics apoplectic.</p>
+<p>What does the 95% CI not mean?</p>
+<ul>
+<li>The 95% CI is not a probability.</li>
+</ul>
+<p>We should neither say, “the probability of the point estimate is 95%” nor “the probability the true value lies within this range is 95%.”</p>
+<p>The CI merely asserts our level of confidence in a range of values that might include the true parameter value. To have more or to have less confidence means that we would need to calculate some other interval, such as a 99% or 90% interval, respectively. When that is done for the same sample date, the range of the interval changes. Because our confidence in the sample changes!</p>
+</div>
+<div id="evaluating-confidence-intervals" class="section level3">
+<h3><span class="header-section-number">9.6.2</span> Evaluating confidence intervals</h3>
+<p>The CI has duality as both and inferential and descriptive statistic. Standard errors and confidence intervals and test statistics and p-values are calculated from the same sample data. So there is a bit of a circular argument at play here.</p>
+<p><strong>The confidence interval serves as a statistical parameter used to express sample accuracy.</strong></p>
+<p>We use the variability within the sample to generate two related parameters, standard error and confidence intervals. If the former tells us about the precision of the point estimate (eg, the sample mean), let the latter speak to accuracy (eg, a range of sample means consistent with the sample that we can be confident of).</p>
+<p>To be sure, this is conditioned on the experiment’s ability to detect a true point estimate. There are a lot of ways for the sample to be untrue. If the measurement machines and techniques are uncalibrated, or the sampled population is the wrong one, or there are uncontrolled confounder variables, or the experiment was underpowered, or the researcher picked and chose replicates to keep, the sample may be wildly inaccurate.</p>
+<p>The CI also reports the accuracy of point estimates that are wrong. Wrong point estimates are something that can only be addressed scientifically, not statistically.</p>
+<p><strong>The confidence interval can be used inferentially, to make decisions on hypothesis tests</strong></p>
+<p>Assume three experiments, each by one of three different groups, are conducted to test whether a drug lowers blood glucose in diabetics. They all use a paired, before/after paradigm.</p>
+<p>From each random independent replicate blood glucose is measured just before (B) and after (A) giving the drug. The estimated sample parameter is the mean difference between the before and after blood glucose values (a difference equal to <span class="math inline">\(B-A\)</span> is computed within each replicate, the experiment tests whether that difference is reliable).</p>
+<p>The null hypothesis is the mean difference is zero, or:</p>
+<p><span class="math display">\[H_0:\beta - \alpha = 0\]</span></p>
+<p>CI’s for the mean difference by the groups are listed:</p>
+<ul>
+<li>Group1: 95% CI: 57 to 25 mg/dl</li>
+<li>Group2: 95% CI: 34 to 2 mg/dl</li>
+<li>Group3: 95% CI: 40 to -5 mg/dl</li>
+</ul>
+<p>Each group is 95% confident the true mean difference in blood glucose lies within their own calculated range.</p>
+<p>The range of values in Group1 does not include the null value, zero. We can reject the null at 95% confidence. Further, given our scientific experitise in blood glucose, we also assert every value in that range is scientifically meaningful.</p>
+<p>The range of values in Group2 does not include the null value, zero. We can reject the null at 95% confidence. However, given our scientific expertise in blood glucose, we note the range includes low values that represent scientifically inconsequential effects.</p>
+<p>The range of values in Group3 does include the value of zero, which represents no mean difference. We are not prepared to reject the null at 95% confidence. The result is inconclusive.</p>
+</div>
+<div id="ci-simulation-tools" class="section level3">
+<h3><span class="header-section-number">9.6.3</span> CI Simulation tools</h3>
+<p>I’ve found simulation is by far the best way to gain an intuitive feel for how confidence intervals operate.</p>
+<div id="evaluating-one-sample-ci" class="section level4">
+<h4><span class="header-section-number">9.6.3.1</span> Evaluating one sample CI</h4>
+<p>The first random sampler is a script that <strong>generates a single random sample from a known distribution</strong> before calculating several sample parameters, including the confidence interval, which it plots as a pretty CI line over the distribution curve for the population that was sampled.</p>
+<p>It’s particularly useful to illustrate the relationships between confidence intervals, sample sizes, standard deviations, confidence levels, and the sampled population.</p>
+<p>When the confidence interval includees the mean of the population sampled, the confidence interval is accurate, and a blue-colored bar appears. When the confidence interval is not accurate, you get a red bar.</p>
 <p>The confidence interval for a sample mean is calculated as follows:</p>
 <p><span class="math display">\[CI=\bar x \pm t_{df(n-1)}\cdot\frac{sd}{\sqrt{n}}\]</span></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb28-2" title="2">n &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb28-3" title="3">pop.mean &lt;-<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb28-4" title="4">pop.sd &lt;-<span class="st"> </span><span class="dv">25</span></a>
-<a class="sourceLine" id="cb28-5" title="5">sig.dig &lt;-<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb28-6" title="6">conf.level &lt;-<span class="st"> </span><span class="fl">0.99</span></a>
-<a class="sourceLine" id="cb28-7" title="7">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="fl">0.1</span>))</a>
-<a class="sourceLine" id="cb28-8" title="8"><span class="co">#draw sample and calculate its descriptive stats</span></a>
-<a class="sourceLine" id="cb28-9" title="9">mysample &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, pop.mean, pop.sd)</a>
-<a class="sourceLine" id="cb28-10" title="10">mean &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">mean</span>(mysample), sig.dig)</a>
-<a class="sourceLine" id="cb28-11" title="11">sd &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">sd</span>(mysample), sig.dig)</a>
-<a class="sourceLine" id="cb28-12" title="12">sem &lt;-<span class="st"> </span><span class="kw">round</span>(sd<span class="op">/</span><span class="kw">sqrt</span>(n), sig.dig)</a>
-<a class="sourceLine" id="cb28-13" title="13">ll &lt;-<span class="st"> </span><span class="kw">round</span>(mean<span class="op">-</span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span>conf.level)<span class="op">/</span><span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb28-14" title="14">                    n<span class="dv">-1</span>)<span class="op">*</span>sem, sig.dig)</a>
-<a class="sourceLine" id="cb28-15" title="15">ul &lt;-<span class="st"> </span><span class="kw">round</span>(mean<span class="op">+</span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span>conf.level)<span class="op">/</span><span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb28-16" title="16">                    n<span class="dv">-1</span>)<span class="op">*</span>sem, sig.dig)</a>
-<a class="sourceLine" id="cb28-17" title="17"><span class="co">#print to console</span></a>
-<a class="sourceLine" id="cb28-18" title="18"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">round</span>(mysample, sig.dig), </a>
-<a class="sourceLine" id="cb28-19" title="19">        <span class="kw">paste</span>(</a>
-<a class="sourceLine" id="cb28-20" title="20">          <span class="st">&quot;mean=&quot;</span>, mean, <span class="st">&quot;sd=&quot;</span>, sd, </a>
-<a class="sourceLine" id="cb28-21" title="21">          <span class="st">&quot;sem=&quot;</span>, sem, <span class="st">&quot;CIll=&quot;</span>, ll, </a>
-<a class="sourceLine" id="cb28-22" title="22">          <span class="st">&quot;CIul=&quot;</span>, ul)))</a></code></pre></div>
-<pre><code>## [1] &quot;69.82&quot;                                                      
-## [2] &quot;106.94&quot;                                                     
-## [3] &quot;127.11&quot;                                                     
-## [4] &quot;mean= 101.29 sd= 29.06 sem= 16.78 CIll= -65.25 CIul= 267.83&quot;</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="co"># graph the sample confidence interval on the population</span></a>
-<a class="sourceLine" id="cb30-2" title="2"></a>
-<a class="sourceLine" id="cb30-3" title="3">pretty &lt;-<span class="st"> </span><span class="kw">ifelse</span>(ll <span class="op">&gt;</span><span class="st"> </span>pop.mean <span class="op">|</span><span class="st"> </span>ul <span class="op">&lt;</span><span class="st"> </span>pop.mean, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb30-4" title="4"></a>
-<a class="sourceLine" id="cb30-5" title="5"><span class="co">#graph (note: using ggformula package)</span></a>
-<a class="sourceLine" id="cb30-6" title="6"><span class="kw">gf_line</span>(<span class="kw">dnorm</span>(x, pop.mean, pop.sd)<span class="op">~</span>x)<span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb30-7" title="7"><span class="st">  </span><span class="kw">gf_segment</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>ll <span class="op">+</span><span class="st"> </span>ul, </a>
-<a class="sourceLine" id="cb30-8" title="8">             <span class="dt">size =</span> <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb30-9" title="9">             <span class="dt">color =</span> pretty)<span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb30-10" title="10"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">subtitle =</span> </a>
-<a class="sourceLine" id="cb30-11" title="11">            <span class="kw">paste</span>(<span class="dv">100</span><span class="op">*</span>conf.level,</a>
-<a class="sourceLine" id="cb30-12" title="12">                  <span class="st">&quot;% CI =&quot;</span>,ll,</a>
-<a class="sourceLine" id="cb30-13" title="13">                  <span class="st">&quot;to&quot;</span>,ul))</a></code></pre></div>
+<p>Pla</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="co">#set.seed(1234)</span></a>
+<a class="sourceLine" id="cb25-2" title="2"></a>
+<a class="sourceLine" id="cb25-3" title="3"><span class="co"># change these initializers</span></a>
+<a class="sourceLine" id="cb25-4" title="4">n &lt;-<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb25-5" title="5">pop.mean &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb25-6" title="6">pop.sd &lt;-<span class="st"> </span><span class="dv">25</span></a>
+<a class="sourceLine" id="cb25-7" title="7">sig.dig &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb25-8" title="8">conf.level &lt;-<span class="st"> </span><span class="fl">0.95</span></a>
+<a class="sourceLine" id="cb25-9" title="9">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="fl">0.1</span>))</a>
+<a class="sourceLine" id="cb25-10" title="10"></a>
+<a class="sourceLine" id="cb25-11" title="11"><span class="co"># this draws a sample and calculate its descriptive stats</span></a>
+<a class="sourceLine" id="cb25-12" title="12">mysample &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, pop.mean, pop.sd)</a>
+<a class="sourceLine" id="cb25-13" title="13">mean &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">mean</span>(mysample), sig.dig)</a>
+<a class="sourceLine" id="cb25-14" title="14">sd &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">sd</span>(mysample), sig.dig)</a>
+<a class="sourceLine" id="cb25-15" title="15">sem &lt;-<span class="st"> </span><span class="kw">round</span>(sd<span class="op">/</span><span class="kw">sqrt</span>(n), sig.dig)</a>
+<a class="sourceLine" id="cb25-16" title="16">ll &lt;-<span class="st"> </span><span class="kw">round</span>(mean<span class="op">-</span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span>conf.level)<span class="op">/</span><span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb25-17" title="17">                    n<span class="dv">-1</span>)<span class="op">*</span>sem, sig.dig)</a>
+<a class="sourceLine" id="cb25-18" title="18">ul &lt;-<span class="st"> </span><span class="kw">round</span>(mean<span class="op">+</span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span>conf.level)<span class="op">/</span><span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb25-19" title="19">                    n<span class="dv">-1</span>)<span class="op">*</span>sem, sig.dig)</a>
+<a class="sourceLine" id="cb25-20" title="20"><span class="co">#print to console</span></a>
+<a class="sourceLine" id="cb25-21" title="21"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">round</span>(mysample, sig.dig), </a>
+<a class="sourceLine" id="cb25-22" title="22">        <span class="kw">paste</span>(</a>
+<a class="sourceLine" id="cb25-23" title="23">          <span class="st">&quot;mean=&quot;</span>, mean, <span class="st">&quot;sd=&quot;</span>, sd, </a>
+<a class="sourceLine" id="cb25-24" title="24">          <span class="st">&quot;sem=&quot;</span>, sem, <span class="st">&quot;CIll=&quot;</span>, ll, </a>
+<a class="sourceLine" id="cb25-25" title="25">          <span class="st">&quot;CIul=&quot;</span>, ul)))</a></code></pre></div>
+<pre><code>## [1] &quot;70.59&quot;                                                   
+## [2] &quot;98.92&quot;                                                   
+## [3] &quot;95.93&quot;                                                   
+## [4] &quot;mean= 88.48 sd= 15.56 sem= 8.98 CIll= 49.84 CIul= 127.12&quot;</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># graph the sample confidence interval on the population</span></a>
+<a class="sourceLine" id="cb27-2" title="2"></a>
+<a class="sourceLine" id="cb27-3" title="3">pretty &lt;-<span class="st"> </span><span class="kw">ifelse</span>(ll <span class="op">&gt;</span><span class="st"> </span>pop.mean <span class="op">|</span><span class="st"> </span>ul <span class="op">&lt;</span><span class="st"> </span>pop.mean, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb27-4" title="4"></a>
+<a class="sourceLine" id="cb27-5" title="5"><span class="co">#graph (note: using ggformula package)</span></a>
+<a class="sourceLine" id="cb27-6" title="6"><span class="kw">gf_line</span>(<span class="kw">dnorm</span>(x, pop.mean, pop.sd)<span class="op">~</span>x)<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb27-7" title="7"><span class="st">  </span><span class="kw">gf_segment</span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span>ll <span class="op">+</span><span class="st"> </span>ul, </a>
+<a class="sourceLine" id="cb27-8" title="8">             <span class="dt">size =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb27-9" title="9">             <span class="dt">color =</span> pretty)<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb27-10" title="10"><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">subtitle =</span> </a>
+<a class="sourceLine" id="cb27-11" title="11">            <span class="kw">paste</span>(<span class="dv">100</span><span class="op">*</span>conf.level,</a>
+<a class="sourceLine" id="cb27-12" title="12">                  <span class="st">&quot;% CI =&quot;</span>,ll,</a>
+<a class="sourceLine" id="cb27-13" title="13">                  <span class="st">&quot;to&quot;</span>,ul))</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-11"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-11-1.png" alt="Confidence interval illustrator" width="672" />
 <p class="caption">
 Figure 9.6: Confidence interval illustrator
 </p>
 </div>
-<p>Here’s a script that compares the confidence intervals of two means, from random <strong>samples of known distributions</strong>.</p>
-<p>When two CI’s don’t overlap, they remain colored blue and green, and the two means they correspond to are unequal. It’s the same as a test of significance without the formal hypothesis.</p>
-<p>If the two CI’s overlap, one of them turns red. It’s a sign the two samples are indistinguishable, since the 95% CI of one sample includes values in the 95% CI of the other. It’s also the same as a test of significance, for a null outcome.</p>
-<p>What’s should be done with this simulator is to use it to gain an intuitive understanding about how confidence intervals operate. Practice changing the sample size (n), the population means and standard deviations, and even the confidence level. Under what conditions are overlapping intervals diminished? What factors influence narrower intervals?</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">n &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb31-2" title="2">m &lt;-<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb31-3" title="3">conf.level=<span class="fl">0.95</span></a>
-<a class="sourceLine" id="cb31-4" title="4">t &lt;-<span class="st"> </span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span><span class="st"> </span>conf.level)<span class="op">/</span><span class="dv">2</span>, n<span class="dv">-1</span>)</a>
-<a class="sourceLine" id="cb31-5" title="5">pop.mean.A &lt;-<span class="st"> </span><span class="dv">125</span></a>
-<a class="sourceLine" id="cb31-6" title="6">pop.mean.B &lt;-<span class="st"> </span><span class="dv">200</span></a>
-<a class="sourceLine" id="cb31-7" title="7">pop.sd.A &lt;-<span class="st"> </span><span class="dv">25</span> </a>
-<a class="sourceLine" id="cb31-8" title="8">pop.sd.B &lt;-<span class="st"> </span><span class="dv">25</span></a>
-<a class="sourceLine" id="cb31-9" title="9">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">300</span>, <span class="fl">0.1</span>))</a>
-<a class="sourceLine" id="cb31-10" title="10">y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.0005</span>, m<span class="op">*</span><span class="fl">0.0005</span>, <span class="fl">0.0005</span>)</a>
-<a class="sourceLine" id="cb31-11" title="11"></a>
-<a class="sourceLine" id="cb31-12" title="12"><span class="co">#simulate  </span></a>
-<a class="sourceLine" id="cb31-13" title="13">mydat.A &lt;-<span class="st"> </span><span class="kw">replicate</span>(</a>
-<a class="sourceLine" id="cb31-14" title="14">  m, <span class="kw">rnorm</span>(</a>
-<a class="sourceLine" id="cb31-15" title="15">    n, pop.mean.A, pop.sd.A</a>
-<a class="sourceLine" id="cb31-16" title="16">    )</a>
-<a class="sourceLine" id="cb31-17" title="17">  )</a>
-<a class="sourceLine" id="cb31-18" title="18">ldat.A &lt;-<span class="st"> </span><span class="kw">apply</span>(</a>
-<a class="sourceLine" id="cb31-19" title="19">  mydat.A, </a>
-<a class="sourceLine" id="cb31-20" title="20">  <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb31-21" title="21">  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">-</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)</a>
-<a class="sourceLine" id="cb31-22" title="22">  )</a>
-<a class="sourceLine" id="cb31-23" title="23">udat.A &lt;-<span class="st"> </span><span class="kw">apply</span>(</a>
-<a class="sourceLine" id="cb31-24" title="24">  mydat.A, </a>
-<a class="sourceLine" id="cb31-25" title="25">  <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb31-26" title="26">  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">+</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)</a>
-<a class="sourceLine" id="cb31-27" title="27">  )</a>
-<a class="sourceLine" id="cb31-28" title="28"></a>
-<a class="sourceLine" id="cb31-29" title="29">mydat.B &lt;-<span class="st"> </span><span class="kw">replicate</span>(</a>
-<a class="sourceLine" id="cb31-30" title="30">  m, <span class="kw">rnorm</span>(</a>
-<a class="sourceLine" id="cb31-31" title="31">    n, pop.mean.B, pop.sd.B</a>
-<a class="sourceLine" id="cb31-32" title="32">    )</a>
-<a class="sourceLine" id="cb31-33" title="33">  )</a>
-<a class="sourceLine" id="cb31-34" title="34">ldat.B &lt;-<span class="st"> </span><span class="kw">apply</span>(</a>
-<a class="sourceLine" id="cb31-35" title="35">  mydat.B, </a>
-<a class="sourceLine" id="cb31-36" title="36">  <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb31-37" title="37">  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">-</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)</a>
-<a class="sourceLine" id="cb31-38" title="38">  )</a>
-<a class="sourceLine" id="cb31-39" title="39">udat.B &lt;-<span class="st"> </span><span class="kw">apply</span>(</a>
-<a class="sourceLine" id="cb31-40" title="40">  mydat.B, </a>
-<a class="sourceLine" id="cb31-41" title="41">  <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb31-42" title="42">  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">+</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)</a>
-<a class="sourceLine" id="cb31-43" title="43">  )  </a>
-<a class="sourceLine" id="cb31-44" title="44"></a>
-<a class="sourceLine" id="cb31-45" title="45">ci &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb31-46" title="46">  y, ldat.A, udat.A, ldat.B, udat.B</a>
-<a class="sourceLine" id="cb31-47" title="47">  )</a>
-<a class="sourceLine" id="cb31-48" title="48"></a>
-<a class="sourceLine" id="cb31-49" title="49">alt &lt;-<span class="st"> </span><span class="kw">ifelse</span>(</a>
-<a class="sourceLine" id="cb31-50" title="50">  udat.A <span class="op">&gt;=</span><span class="st"> </span>ldat.B, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span></a>
-<a class="sourceLine" id="cb31-51" title="51">  )</a>
-<a class="sourceLine" id="cb31-52" title="52"></a>
-<a class="sourceLine" id="cb31-53" title="53"><span class="co">#plots made with ggformula package</span></a>
-<a class="sourceLine" id="cb31-54" title="54"></a>
-<a class="sourceLine" id="cb31-55" title="55"><span class="kw">gf_line</span>(<span class="kw">dnorm</span>(</a>
-<a class="sourceLine" id="cb31-56" title="56">  x, pop.mean.A, pop.sd.A)<span class="op">~</span>x, </a>
-<a class="sourceLine" id="cb31-57" title="57">  <span class="dt">color =</span> <span class="st">&quot;dark green&quot;</span></a>
-<a class="sourceLine" id="cb31-58" title="58">  )<span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-59" title="59"><span class="st">  </span></a>
-<a class="sourceLine" id="cb31-60" title="60"><span class="st">  </span><span class="kw">gf_line</span>(<span class="kw">dnorm</span>(</a>
-<a class="sourceLine" id="cb31-61" title="61">    x, pop.mean.B, pop.sd.B)<span class="op">~</span>x, </a>
-<a class="sourceLine" id="cb31-62" title="62">    <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span></a>
-<a class="sourceLine" id="cb31-63" title="63">    )<span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-64" title="64"><span class="st">  </span></a>
-<a class="sourceLine" id="cb31-65" title="65"><span class="st">  </span><span class="kw">gf_segment</span>(</a>
-<a class="sourceLine" id="cb31-66" title="66">    y<span class="op">+</span>y <span class="op">~</span><span class="st"> </span>ldat.A <span class="op">+</span><span class="st"> </span>udat.A, </a>
-<a class="sourceLine" id="cb31-67" title="67">    <span class="dt">data =</span> ci, </a>
-<a class="sourceLine" id="cb31-68" title="68">    <span class="dt">color =</span> <span class="st">&quot;dark green&quot;</span></a>
-<a class="sourceLine" id="cb31-69" title="69">    )<span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-70" title="70"><span class="st">  </span></a>
-<a class="sourceLine" id="cb31-71" title="71"><span class="st">  </span><span class="kw">gf_segment</span>(</a>
-<a class="sourceLine" id="cb31-72" title="72">    y<span class="op">+</span>y <span class="op">~</span><span class="st"> </span>ldat.B <span class="op">+</span><span class="st"> </span>udat.B, </a>
-<a class="sourceLine" id="cb31-73" title="73">    <span class="dt">data =</span> ci, </a>
-<a class="sourceLine" id="cb31-74" title="74">    <span class="dt">color =</span> alt</a>
-<a class="sourceLine" id="cb31-75" title="75">    )<span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb31-76" title="76"><span class="st">  </span><span class="kw">gf_labs</span>(</a>
-<a class="sourceLine" id="cb31-77" title="77">    <span class="dt">y =</span> <span class="st">&quot;dnorm(x, pop.mean, sd.mean&quot;</span></a>
-<a class="sourceLine" id="cb31-78" title="78">    )</a></code></pre></div>
+</div>
+<div id="comparing-two-samples-with-ci" class="section level4">
+<h4><span class="header-section-number">9.6.3.2</span> Comparing two samples with CI</h4>
+<p>Here’s a second script that compares the confidence intervals of two means, from random samples of known distributions.</p>
+<p>When two CI’s don’t overlap, they remain colored blue and green, and the two means they correspond to are unequal. It’s no different inferentially than test of a statistical difference for comparing two means and using p-values.</p>
+<p>If the two CI’s overlap, one of them turns red. It’s a sign the two samples might not differ, since the 95% CI of one sample includes values in the 95% CI of the other. It’s also the same as a test of significance, for a null outcome.</p>
+<p>Use this simulator to gain an intuitive understanding about how confidence intervals operate. Practice changing the sample size (n), the population means and standard deviations, and even the confidence level. Under what conditions are overlapping intervals diminished? What factors influence narrower intervals?</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">n &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb28-2" title="2">m &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb28-3" title="3">conf.level=<span class="fl">0.95</span></a>
+<a class="sourceLine" id="cb28-4" title="4">t &lt;-<span class="st"> </span><span class="kw">qt</span>((<span class="dv">1</span><span class="op">+</span><span class="st"> </span>conf.level)<span class="op">/</span><span class="dv">2</span>, n<span class="dv">-1</span>)</a>
+<a class="sourceLine" id="cb28-5" title="5">pop.mean.A &lt;-<span class="st"> </span><span class="dv">125</span></a>
+<a class="sourceLine" id="cb28-6" title="6">pop.mean.B &lt;-<span class="st"> </span><span class="dv">200</span></a>
+<a class="sourceLine" id="cb28-7" title="7">pop.sd.A &lt;-<span class="st"> </span><span class="dv">25</span> </a>
+<a class="sourceLine" id="cb28-8" title="8">pop.sd.B &lt;-<span class="st"> </span><span class="dv">25</span></a>
+<a class="sourceLine" id="cb28-9" title="9">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">300</span>, <span class="fl">0.1</span>))</a>
+<a class="sourceLine" id="cb28-10" title="10">y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.0005</span>, m<span class="op">*</span><span class="fl">0.0005</span>, <span class="fl">0.0005</span>)</a>
+<a class="sourceLine" id="cb28-11" title="11"></a>
+<a class="sourceLine" id="cb28-12" title="12"><span class="co">#simulate  </span></a>
+<a class="sourceLine" id="cb28-13" title="13">mydat.A &lt;-<span class="st"> </span><span class="kw">replicate</span>(</a>
+<a class="sourceLine" id="cb28-14" title="14">  m, <span class="kw">rnorm</span>(</a>
+<a class="sourceLine" id="cb28-15" title="15">    n, pop.mean.A, pop.sd.A</a>
+<a class="sourceLine" id="cb28-16" title="16">    )</a>
+<a class="sourceLine" id="cb28-17" title="17">  )</a>
+<a class="sourceLine" id="cb28-18" title="18">ldat.A &lt;-<span class="st"> </span><span class="kw">apply</span>(</a>
+<a class="sourceLine" id="cb28-19" title="19">  mydat.A, </a>
+<a class="sourceLine" id="cb28-20" title="20">  <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb28-21" title="21">  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">-</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)</a>
+<a class="sourceLine" id="cb28-22" title="22">  )</a>
+<a class="sourceLine" id="cb28-23" title="23">udat.A &lt;-<span class="st"> </span><span class="kw">apply</span>(</a>
+<a class="sourceLine" id="cb28-24" title="24">  mydat.A, </a>
+<a class="sourceLine" id="cb28-25" title="25">  <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb28-26" title="26">  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">+</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)</a>
+<a class="sourceLine" id="cb28-27" title="27">  )</a>
+<a class="sourceLine" id="cb28-28" title="28"></a>
+<a class="sourceLine" id="cb28-29" title="29">mydat.B &lt;-<span class="st"> </span><span class="kw">replicate</span>(</a>
+<a class="sourceLine" id="cb28-30" title="30">  m, <span class="kw">rnorm</span>(</a>
+<a class="sourceLine" id="cb28-31" title="31">    n, pop.mean.B, pop.sd.B</a>
+<a class="sourceLine" id="cb28-32" title="32">    )</a>
+<a class="sourceLine" id="cb28-33" title="33">  )</a>
+<a class="sourceLine" id="cb28-34" title="34">ldat.B &lt;-<span class="st"> </span><span class="kw">apply</span>(</a>
+<a class="sourceLine" id="cb28-35" title="35">  mydat.B, </a>
+<a class="sourceLine" id="cb28-36" title="36">  <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb28-37" title="37">  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">-</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)</a>
+<a class="sourceLine" id="cb28-38" title="38">  )</a>
+<a class="sourceLine" id="cb28-39" title="39">udat.B &lt;-<span class="st"> </span><span class="kw">apply</span>(</a>
+<a class="sourceLine" id="cb28-40" title="40">  mydat.B, </a>
+<a class="sourceLine" id="cb28-41" title="41">  <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb28-42" title="42">  <span class="cf">function</span>(x) <span class="kw">mean</span>(x)<span class="op">+</span>t<span class="op">*</span><span class="kw">sd</span>(x)<span class="op">/</span><span class="kw">sqrt</span>(n)</a>
+<a class="sourceLine" id="cb28-43" title="43">  )  </a>
+<a class="sourceLine" id="cb28-44" title="44"></a>
+<a class="sourceLine" id="cb28-45" title="45">ci &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb28-46" title="46">  y, ldat.A, udat.A, ldat.B, udat.B</a>
+<a class="sourceLine" id="cb28-47" title="47">  )</a>
+<a class="sourceLine" id="cb28-48" title="48"></a>
+<a class="sourceLine" id="cb28-49" title="49">alt &lt;-<span class="st"> </span><span class="kw">ifelse</span>(</a>
+<a class="sourceLine" id="cb28-50" title="50">  udat.A <span class="op">&gt;=</span><span class="st"> </span>ldat.B, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span></a>
+<a class="sourceLine" id="cb28-51" title="51">  )</a>
+<a class="sourceLine" id="cb28-52" title="52"></a>
+<a class="sourceLine" id="cb28-53" title="53"><span class="co">#plots made with ggformula package</span></a>
+<a class="sourceLine" id="cb28-54" title="54"></a>
+<a class="sourceLine" id="cb28-55" title="55"><span class="kw">gf_line</span>(<span class="kw">dnorm</span>(</a>
+<a class="sourceLine" id="cb28-56" title="56">  x, pop.mean.A, pop.sd.A)<span class="op">~</span>x, </a>
+<a class="sourceLine" id="cb28-57" title="57">  <span class="dt">color =</span> <span class="st">&quot;dark green&quot;</span></a>
+<a class="sourceLine" id="cb28-58" title="58">  )<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-59" title="59"><span class="st">  </span></a>
+<a class="sourceLine" id="cb28-60" title="60"><span class="st">  </span><span class="kw">gf_line</span>(<span class="kw">dnorm</span>(</a>
+<a class="sourceLine" id="cb28-61" title="61">    x, pop.mean.B, pop.sd.B)<span class="op">~</span>x, </a>
+<a class="sourceLine" id="cb28-62" title="62">    <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span></a>
+<a class="sourceLine" id="cb28-63" title="63">    )<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-64" title="64"><span class="st">  </span></a>
+<a class="sourceLine" id="cb28-65" title="65"><span class="st">  </span><span class="kw">gf_segment</span>(</a>
+<a class="sourceLine" id="cb28-66" title="66">    y<span class="op">+</span>y <span class="op">~</span><span class="st"> </span>ldat.A <span class="op">+</span><span class="st"> </span>udat.A, </a>
+<a class="sourceLine" id="cb28-67" title="67">    <span class="dt">data =</span> ci, </a>
+<a class="sourceLine" id="cb28-68" title="68">    <span class="dt">color =</span> <span class="st">&quot;dark green&quot;</span></a>
+<a class="sourceLine" id="cb28-69" title="69">    )<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-70" title="70"><span class="st">  </span></a>
+<a class="sourceLine" id="cb28-71" title="71"><span class="st">  </span><span class="kw">gf_segment</span>(</a>
+<a class="sourceLine" id="cb28-72" title="72">    y<span class="op">+</span>y <span class="op">~</span><span class="st"> </span>ldat.B <span class="op">+</span><span class="st"> </span>udat.B, </a>
+<a class="sourceLine" id="cb28-73" title="73">    <span class="dt">data =</span> ci, </a>
+<a class="sourceLine" id="cb28-74" title="74">    <span class="dt">color =</span> alt</a>
+<a class="sourceLine" id="cb28-75" title="75">    )<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb28-76" title="76"><span class="st">  </span><span class="kw">gf_labs</span>(</a>
+<a class="sourceLine" id="cb28-77" title="77">    <span class="dt">y =</span> <span class="st">&quot;dnorm(x, pop.mean, sd.mean&quot;</span></a>
+<a class="sourceLine" id="cb28-78" title="78">    )</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-12"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-12-1.png" alt="Comparing two samples using confidence intervals. Red-colored indicates the two CI overlap, meaning the two groups for that sample test out as no different." width="672" />
 <p class="caption">
@@ -1063,10 +1115,12 @@ Figure 9.7: Comparing two samples using confidence intervals. Red-colored indica
 </div>
 </div>
 </div>
+</div>
 <div id="key-take-aways" class="section level2">
 <h2><span class="header-section-number">9.7</span> Key take aways</h2>
+<p>Focus less on point estimates (eg, the mean of samples) and much more on the statistical parameters that give insight into variation (eg, SD, CI’s, range, and even SE)</p>
 <ul>
-<li>Variability is inherent in biological data. The two main sources are intrinsic biological variation–which has so many causes, and variability associated with our measurements.</li>
+<li>Variability is inherent in biological data. The two main sources are intrinsic biological variation–which has so many causes, and variability associated with our measurements and procedures.</li>
 <li>Statistics operates on the presumption that the values of parameters in the populations we sample are fixed. Residual error is unexplained deviation from those fixed values.</li>
 <li>About two-thirds of the values of a normally distributed variable will lay, symmetrically, within one standard deviation on either side of the variable’s mean.</li>
 <li>Variance expresses the variability within a sample, but geometrically, in squared units.</li>
@@ -1076,12 +1130,19 @@ Figure 9.7: Comparing two samples using confidence intervals. Red-colored indica
 <li>The standard error of the mean is the standard deviation of a theoretical distribution of sample means.</li>
 <li>A confidence interval estimates the accuracy by which a parameter, such as a mean, has been estimated.</li>
 <li>If the confidence intervals of two samples do not overlap, the sampled distributions likely differ.</li>
-<li>For a 95% CI, there is a 95% chance the true mean is within the interval.</li>
-<li>A 99% CI will be wider than a 95% CI, given the same data.</li>
-<li>The central limit theorem saves the day for small sample science, because even if the variable you are measuring is not normally-distributed, the means of your samples are.</li>
+<li>For a 95% CI for a mean, there is a 95% confidence the interval includes the true mean.</li>
+<li>A 99% CI will be wider than a 95% CI, given the same data. A 90% CI will be narrower.</li>
+<li>The best way to understand these various statistics of dispersion is to simulate and view the outcomes.</li>
 </ul>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>This may sound like a contrarian view, but is not. Epidemiologists like to say that all models are wrong, but they imply the problem of choosing the wrong model for a dataset. Even a wrong model is perfect.<a href="dispersion.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>The sample mean is used to calculate SS; deriving that mean cost 1 degree of freedom. Given that mean, the values for all but one replicate are free to vary for the SS to be true. <a href="dispersion.html#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
             </section>
 
