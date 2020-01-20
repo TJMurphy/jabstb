@@ -130,23 +130,26 @@ ggplot(df, aes(s)) +
 
 ## Overdispersion 
 
-It's very common to observe systems that disobey the Poisson. In other words, these are systems that are discrete counts in time or space, and thus whose very nature is frequency. But yet they are poorly fit by the Poisson distribution model.  
+It's very common to observe discrete variables that disobey the Poisson. 
 
-For example, the two graphs below. The first is a distribution of the counts of facebook friends of biostats students. Their average number of friends is 610. The second is a based upon a Poisson distribution whose lambda is 610.
+In other words, these are systems that are discrete counts in time or space, and thus whose very nature is frequency. But yet they are poorly fit by the Poisson distribution model.  
 
-The model obviously is a poor fit for the data. Models are perfect, data are not. 
+For example, the two graphs below. The first is a distribution of the counts of facebook friends of biostats students. Their average number of friends is 610. The second is based upon a Poisson distribution whose lambda is 610.
+
+The dpois model obviously is a poor fit for the data. Models are perfect, data are not. 
 
 The friends distribution is said to be over-dispersed. The reason for this overdispersion is likely that it is a more complex system than what a Poisson would assume. A key assumption for a Poisson model is that the counts occur randomly. It seems quite likely that biostats students probably don't choose friends randomly.
 
 
 ```{r}
-survey <- read.csv( "datasets/precourse.csv")
+survey <- read_csv( "datasets/precourse.csv")
+
 ggplot(survey, aes(x=friends)) +
-  geom_histogram(aes(y=..density..), color="red", binwidth=50)
+  geom_histogram(binwidth=100)
 
 
 x <- c(0:5000)
-lambda <- 610
+lambda <- 500
 df <- data.frame(x, px=dpois(x, lambda))
 
 ggplot(df, aes(x=x,y=px)) +
