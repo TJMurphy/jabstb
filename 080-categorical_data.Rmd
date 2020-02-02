@@ -89,15 +89,19 @@ The statistical tests for hypotheses on categorical data fall into two broad cat
 
 Exact tests calculate exact p-values. That's made possible using factorial math. The `prop.test` and `chisq.test` generate asymptotic (aka, approximate) p-values. They calculate a $\chi^2$ test statistic from the data before mapping it to a $\chi^2$ probability density function. Because that  function is continuous, the p-values it generates are asymptotically-estimated, rather than exactly calculated. 
 
+That should strike you as odd that a continuous sampling distribution is used for discrete data. The reasons are historical. In the early days, it was harder to calculate exact p-values than $\chi^2$ values. Tables existed (in text books) with critical values of the $\chi^2$ and associated p-values.
+
 ### Choosing exact or asymptotic
 
-As a general rule, given the same datasets and arguments, exact and approximate hypothesis test functions will almost always give you p-values that differ, but only slightly.  
+As a general rule, given the same datasets and arguments, exact and approximate hypothesis test functions will almost always give you p-values that differ, but only slightly. 
 
-That's usually not a problem unless you're near a threshold value. Typically, an integrity crisis is evoked when that happens. For example, you don't want to put yourself in a position to run the same data through two tests that generate p-values on either side of a threshold. To ask "Which test is "right???" is not the right question. Instead, ask yourself whether p-hacking is right.
+That's usually not a problem unless you're near a threshold value. 
 
-You should use the test you said you'd use when you first designed the experiment. And if you didn't pre-plan...or at least have some idea about where you are going...recognize that the exact tests are more accurate.
+Typically, an integrity crisis is evoked when that happens. For example, you don't want to put yourself in a position to run the same data through two tests that generate p-values on either side of a threshold. To ask "Which test is "right???" is not the right question. Instead, if you find yourself in such a position ask yourself whether p-hacking is right (it is not).
 
-Another issue that arises is how well the tests perform with low count numbers. For example, as a rule of thumb, avoid using the `chisq.test` when the data have counts less than 5 in more than 20% of the cells because the accuracy of the `chisq.test` is less at these low cell counts. Use an exact test instead. 
+You should use the test you said you'd use when you first designed the experiment. And if you didn't pre-plan...or at least have some idea about where you are going...recognize that the exact tests are more accurate, even when they give you the answer you don't want.
+
+Another issue that arises is how well the tests perform with low count numbers. For example, as a rule of thumb, we're advised to avoid using the `chisq.test` when the data have counts less than 5 in more than 20% of the cells because the accuracy of the `chisq.test` is less at these low cell counts. Use an exact test instead. 
 
 ## Overview of the types of hypothesis testing
 
@@ -439,7 +443,7 @@ Let's test this at the 5% type1 error threshold:
 
 ### An Exact Goodness of Fit test
 
-NB:The multinomial.test function requires you to assert the null frequency distribution explicitly and as fractions whose sum is 1.
+NB:The `multinomial.test` function form the `EMT` package requires you to assert the null frequency distribution explicitly and as fractions whose sum is 1. This is unlike using the `chisq.test`, which coerces expected values for you unless you argue otherwise. Also note that in this example the probabilities are uniform. That need not be the case. The only requirement is that the sum of the probabilities equals one. The multinomial test shines brightest when you expect varied probs.
 
 ```{r}
 x <- c(A=14, B=3, C=7, D=4)
@@ -451,8 +455,7 @@ multinomial.test(
   )
 ```
 
-Note on the `multinomial.test`output: [Please see this site](http://rinterested.github.io/statistics/multinomial_exact.html) for further information on what is represented by events. In this case the value for Events is `choose(28+3-1,4-1)`.  pObs is a (rounded) multinomial probability for observing that exact permutation (`dmultinom(x=c(14,3,7,4), prob = c(0.25,0.25,0.25,0.25))`), which serves as a critical value. The p.value is the sum of all pObs for other permutations that are lower (more extreme) than this pObs. 
-
+Note on the `multinomial.test`output: [Please see this site for further reading](http://rinterested.github.io/statistics/multinomial_exact.html) for further information on what is represented by events. In this case the value for Events is `choose(28+3-1,4-1)`.  pObs is a (rounded) multinomial probability for observing that exact permutation (`dmultinom(x=c(14,3,7,4), prob = c(0.25,0.25,0.25,0.25))`), which serves as a critical value. The p.value is the sum of all pObs for other permutations that are lower (more extreme) than this pObs. 
 
 We're only interested in the p-value, since we're using this function as an exact goodness-of-fit hypothesis test for the null hypothesis. 
 
@@ -471,7 +474,7 @@ Because the observed p-value is less than a pre-chosen threshold of 0.05, we rej
 
 #### Write up
 
-*In a 4 chamber maze test, the subjects displayed a clear, non-uniform chamber preference (Exact Multinomial Test, n=28, p=0.0235)* 
+*In a 4 chamber maze test, the subjects displayed a non-uniform chamber preference (Exact Multinomial Test, n=28, p=0.0235)* 
 
 Note how this phrasing implies the null hypothesis.
 
@@ -490,7 +493,7 @@ chisq.test(x)
 
 The interpretation is no different than for the exact test. The write up is:
 
-*In a 4 chamber maze test, the subjects displayed a clear chamber preference (Chi square test for uniform probabilities, $\chi^2$=10.571, df=3, p=0.01428)*
+*In a 4 chamber maze test, the subjects displayed a nonuniform chamber preference (Chi square test for uniform probabilities, $\chi^2$=10.571, df=3, p=0.01428)*
 
 #### Post hoc: which chamber is the preferred?
 
@@ -731,7 +734,7 @@ knitr::kable( apop, booktabs = TRUE,  caption = 'Hypothetical replicates compari
 
 The key distinction here, compared to what's been discussed in this chapter up to this point, is that within each replicate, all of the events are intrinsically-linked. Through replication we're establishing whether the frequencies of these counts are repeatable. 
 
-Logistic (for dichotomous data) or Poisson (for frequency data) regression are the appropriate analytical tools for these designs. These involve using the generalized linear model, conducted with the function `glm` or the function `glmer` (for so-called mixed models involving ). These are discussed later in the logistic regression chapter.
+Logistic (for dichotomous data) or Poisson (for frequency data) regression are the appropriate analytical tools for these designs. These involve using the generalized linear model, conducted with the function `glm` or the function `glmer` (for so-called mixed models). These are discussed later in the logistic regression chapter.
 
 ## Power analysis for proportion tests
 
@@ -908,7 +911,7 @@ ggplot(
 
 The gold standard for clear presentation of total counts and differences in counts between groups.
 
-Note: There is no error to report. There's no variation. Cells were classified as either having or not having the antigen. Every count is independent of all other counts.
+Note: When comparing *independent* counts there is no error to report. There's no variation. Cells were classified as either having or not having the antigen. Every count is independent of all other counts.
 
 ```{r}
 ggplot(
@@ -920,20 +923,64 @@ ggplot(
    )
   ) +
   geom_bar(stat="identity", fill = c("red", "blue"))
+  
 ```
+
+
+##### Plot proportions with confidence intervals
+
+However, adding confidence intervals to bar plots of proportions is a good way to visualize the uncertainty of counted data and comparing to other proportions.
+
+
+```{r hypothetical proportion data, include=FALSE}
+
+# simulate a dataset; adjust n 
+
+n=230
+
+group <- as_factor(c("Control", "Cytokine1", "Cytokine2"))
+pos <- c(rbinom(1, n, 0.15), rbinom(1, n, 0.20), rbinom(1, n, 0.30))
+neg <- n - pos
+
+myCounts <- tibble(group, pos, neg) 
+
+```
+
+```{r echo=FALSE}
+kable(myCounts, caption="Hypothetical counts of gradstudin-stained T cells")
+
+```
+
+Munge the data directly within `ggplot` function to calculate values for the proportion and its upper and lower 95% confidence intervals. Proportions with overlapping CIs do not differ from each other. Note how the CIs are adjusted for the 3 possible comparisons using the Bonferroni correction (adjusted 95% confidence level = 1-0.05/3). 
+
+Note that the `rowwise` function is necessary for certain 'legacy' functions like `scoreci`. 
+
+```{r fig.cap="You can infer two proportions differ from plots when their confidence intervals do not overlap. "}
+ggplot(myCounts %>% rowwise() %>% 
+  mutate(
+    prop=pos/(pos+neg),
+    lower=scoreci(pos, pos+neg, 0.98333)$conf.int[1],
+    upper=scoreci(pos, pos+neg, 0.98333)$conf.int[2]), aes(x=group))+
+  geom_bar(aes(y = prop), stat ="identity", fill="blue")+
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=0.2, size=2)+
+  ylab("Proportion of gradstudin positive cells")
+  
+
+```
+
 
 ##### Pie charts and mosaic plots
 
-I suggest you explore these options on Google. They can be visually appealing for showing relative differences, but they make it more difficult to easily see absolute counts and differentials. 
+I suggest you explore these options on Google. They can be visually appealing for showing relative differences in some cases, but they make it more difficult to easily see absolute counts and differentials. 
 
 ## Key Takeaways
 
 * Sorted variables have nominal values that are classified into categories and that are quantified as discrete integer counts.
 * Each count must be an independent replicate.
-* Sorted events can be modeled using `rbinom` or `rmultinom`.
-* The three basic types of experimental designs are about proportions, or about frequencies, or about associations.
+* Sorted events can be modeled using `rbinom` or `rmultinom`. The latter is used when the event has more than two discrete outcomes.
+* The three basic types of experimental designs are questions about proportions, or about frequencies, or about associations.
 * The test functions mostly differ in whether they generate approximate or exact p-values. To avoid p-hacking, choose the test in advance.
-* When designing an experiment perform a power analysis to determine the number of independent events that will be necessary. When testing for small differences or effect sizes, these numbers can be surprisingly high.
+* When designing an experiment perform a power analysis to determine the number of independent events that will be necessary. When testing for small differences or effect sizes, these numbers needed for a stringent test can be surprisingly high.
 
 
 
