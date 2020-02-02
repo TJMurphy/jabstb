@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-01-31" />
+<meta name="date" content="2020-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -757,12 +757,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">17.2</span> Exact v Asymptotic Calculations of p-values</h2>
 <p>The statistical tests for hypotheses on categorical data fall into two broad categories: exact tests (<code>binom.test</code>, <code>fisher.test</code>, <code>multinomial.test</code>) and asymptotic tests (<code>prop.test</code>, <code>chisq.test</code>).</p>
 <p>Exact tests calculate exact p-values. That’s made possible using factorial math. The <code>prop.test</code> and <code>chisq.test</code> generate asymptotic (aka, approximate) p-values. They calculate a <span class="math inline">\(\chi^2\)</span> test statistic from the data before mapping it to a <span class="math inline">\(\chi^2\)</span> probability density function. Because that function is continuous, the p-values it generates are asymptotically-estimated, rather than exactly calculated.</p>
+<p>That should strike you as odd that a continuous sampling distribution is used for discrete data. The reasons are historical. In the early days, it was harder to calculate exact p-values than <span class="math inline">\(\chi^2\)</span> values. Tables existed (in text books) with critical values of the <span class="math inline">\(\chi^2\)</span> and associated p-values.</p>
 <div id="choosing-exact-or-asymptotic" class="section level3">
 <h3><span class="header-section-number">17.2.1</span> Choosing exact or asymptotic</h3>
 <p>As a general rule, given the same datasets and arguments, exact and approximate hypothesis test functions will almost always give you p-values that differ, but only slightly.</p>
-<p>That’s usually not a problem unless you’re near a threshold value. Typically, an integrity crisis is evoked when that happens. For example, you don’t want to put yourself in a position to run the same data through two tests that generate p-values on either side of a threshold. To ask “Which test is”right???" is not the right question. Instead, ask yourself whether p-hacking is right.</p>
-<p>You should use the test you said you’d use when you first designed the experiment. And if you didn’t pre-plan…or at least have some idea about where you are going…recognize that the exact tests are more accurate.</p>
-<p>Another issue that arises is how well the tests perform with low count numbers. For example, as a rule of thumb, avoid using the <code>chisq.test</code> when the data have counts less than 5 in more than 20% of the cells because the accuracy of the <code>chisq.test</code> is less at these low cell counts. Use an exact test instead.</p>
+<p>That’s usually not a problem unless you’re near a threshold value.</p>
+<p>Typically, an integrity crisis is evoked when that happens. For example, you don’t want to put yourself in a position to run the same data through two tests that generate p-values on either side of a threshold. To ask “Which test is”right???" is not the right question. Instead, if you find yourself in such a position ask yourself whether p-hacking is right (it is not).</p>
+<p>You should use the test you said you’d use when you first designed the experiment. And if you didn’t pre-plan…or at least have some idea about where you are going…recognize that the exact tests are more accurate, even when they give you the answer you don’t want.</p>
+<p>Another issue that arises is how well the tests perform with low count numbers. For example, as a rule of thumb, we’re advised to avoid using the <code>chisq.test</code> when the data have counts less than 5 in more than 20% of the cells because the accuracy of the <code>chisq.test</code> is less at these low cell counts. Use an exact test instead.</p>
 </div>
 </div>
 <div id="overview-of-the-types-of-hypothesis-testing" class="section level2">
@@ -1039,7 +1041,7 @@ CI’s are calculated in part upon the quality of the point estimate. In the cas
 <p>Let’s test this at the 5% type1 error threshold:</p>
 <div id="an-exact-goodness-of-fit-test" class="section level3">
 <h3><span class="header-section-number">17.6.1</span> An Exact Goodness of Fit test</h3>
-<p>NB:The multinomial.test function requires you to assert the null frequency distribution explicitly and as fractions whose sum is 1.</p>
+<p>NB:The <code>multinomial.test</code> function form the <code>EMT</code> package requires you to assert the null frequency distribution explicitly and as fractions whose sum is 1. This is unlike using the <code>chisq.test</code>, which coerces expected values for you unless you argue otherwise. Also note that in this example the probabilities are uniform. That need not be the case. The only requirement is that the sum of the probabilities equals one. The multinomial test shines brightest when you expect varied probs.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">A=</span><span class="dv">14</span>, <span class="dt">B=</span><span class="dv">3</span>, <span class="dt">C=</span><span class="dv">7</span>, <span class="dt">D=</span><span class="dv">4</span>)</a>
 <a class="sourceLine" id="cb17-2" title="2">prob &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">A=</span>.<span class="dv">25</span>, <span class="dt">B=</span>.<span class="dv">25</span>, <span class="dt">C=</span>.<span class="dv">25</span>, <span class="dt">D=</span>.<span class="dv">25</span>)</a>
 <a class="sourceLine" id="cb17-3" title="3"></a>
@@ -1052,7 +1054,7 @@ CI’s are calculated in part upon the quality of the point estimate. In the cas
 ## 
 ##     Events    pObs    p.value
 ##       4495   1e-04     0.0235</code></pre>
-<p>Note on the <code>multinomial.test</code>output: <a href="http://rinterested.github.io/statistics/multinomial_exact.html">Please see this site</a> for further information on what is represented by events. In this case the value for Events is <code>choose(28+3-1,4-1)</code>. pObs is a (rounded) multinomial probability for observing that exact permutation (<code>dmultinom(x=c(14,3,7,4), prob = c(0.25,0.25,0.25,0.25))</code>), which serves as a critical value. The p.value is the sum of all pObs for other permutations that are lower (more extreme) than this pObs.</p>
+<p>Note on the <code>multinomial.test</code>output: <a href="http://rinterested.github.io/statistics/multinomial_exact.html">Please see this site for further reading</a> for further information on what is represented by events. In this case the value for Events is <code>choose(28+3-1,4-1)</code>. pObs is a (rounded) multinomial probability for observing that exact permutation (<code>dmultinom(x=c(14,3,7,4), prob = c(0.25,0.25,0.25,0.25))</code>), which serves as a critical value. The p.value is the sum of all pObs for other permutations that are lower (more extreme) than this pObs.</p>
 <p>We’re only interested in the p-value, since we’re using this function as an exact goodness-of-fit hypothesis test for the null hypothesis.</p>
 <p>Why use an exact test rather than a <code>chisq.test</code>? Because we have two cells in the dataset with counts &lt; 5. An exact p-value test will be more accurate than <code>chisq.test</code>.</p>
 <p>The test compares our sample frequency distribution to that in the null model. We actually wrote the latter explicitly in the function argument: null is a uniform distribution–the subjects are equally likely to enter each chamber.</p>
@@ -1064,7 +1066,7 @@ H1: The probability of choice is not equal for each chamber.
 <p>Because the observed p-value is less than a pre-chosen threshold of 0.05, we reject the null hypothesis and conclude that the chamber choice is not equitable across the four options.</p>
 <div id="write-up-2" class="section level4">
 <h4><span class="header-section-number">17.6.1.1</span> Write up</h4>
-<p><em>In a 4 chamber maze test, the subjects displayed a clear, non-uniform chamber preference (Exact Multinomial Test, n=28, p=0.0235)</em></p>
+<p><em>In a 4 chamber maze test, the subjects displayed a non-uniform chamber preference (Exact Multinomial Test, n=28, p=0.0235)</em></p>
 <p>Note how this phrasing implies the null hypothesis.</p>
 </div>
 </div>
@@ -1082,7 +1084,7 @@ H1: The probability of choice is not equal for each chamber.
 <div id="write-up-3" class="section level4">
 <h4><span class="header-section-number">17.6.2.1</span> Write up</h4>
 <p>The interpretation is no different than for the exact test. The write up is:</p>
-<p><em>In a 4 chamber maze test, the subjects displayed a clear chamber preference (Chi square test for uniform probabilities, <span class="math inline">\(\chi^2\)</span>=10.571, df=3, p=0.01428)</em></p>
+<p><em>In a 4 chamber maze test, the subjects displayed a nonuniform chamber preference (Chi square test for uniform probabilities, <span class="math inline">\(\chi^2\)</span>=10.571, df=3, p=0.01428)</em></p>
 </div>
 <div id="post-hoc-which-chamber-is-the-preferred" class="section level4">
 <h4><span class="header-section-number">17.6.2.2</span> Post hoc: which chamber is the preferred?</h4>
@@ -1375,7 +1377,7 @@ one
 wildtype
 </td>
 <td style="text-align:right;">
-105
+99
 </td>
 </tr>
 <tr>
@@ -1386,7 +1388,7 @@ two
 wildtype
 </td>
 <td style="text-align:right;">
-85
+117
 </td>
 </tr>
 <tr>
@@ -1397,7 +1399,7 @@ three
 wildtype
 </td>
 <td style="text-align:right;">
-99
+100
 </td>
 </tr>
 <tr>
@@ -1408,7 +1410,7 @@ one
 mutant
 </td>
 <td style="text-align:right;">
-146
+137
 </td>
 </tr>
 <tr>
@@ -1419,7 +1421,7 @@ two
 mutant
 </td>
 <td style="text-align:right;">
-153
+152
 </td>
 </tr>
 <tr>
@@ -1430,7 +1432,7 @@ three
 mutant
 </td>
 <td style="text-align:right;">
-140
+172
 </td>
 </tr>
 </tbody>
@@ -1465,7 +1467,7 @@ one
 wildtype
 </td>
 <td style="text-align:right;">
-30
+36
 </td>
 <td style="text-align:right;">
 66
@@ -1479,10 +1481,10 @@ two
 wildtype
 </td>
 <td style="text-align:right;">
-31
+32
 </td>
 <td style="text-align:right;">
-72
+69
 </td>
 </tr>
 <tr>
@@ -1493,10 +1495,10 @@ three
 wildtype
 </td>
 <td style="text-align:right;">
-25
+24
 </td>
 <td style="text-align:right;">
-70
+72
 </td>
 </tr>
 <tr>
@@ -1507,10 +1509,10 @@ one
 mutant
 </td>
 <td style="text-align:right;">
-61
+65
 </td>
 <td style="text-align:right;">
-37
+39
 </td>
 </tr>
 <tr>
@@ -1521,10 +1523,10 @@ two
 mutant
 </td>
 <td style="text-align:right;">
-59
+62
 </td>
 <td style="text-align:right;">
-39
+37
 </td>
 </tr>
 <tr>
@@ -1535,16 +1537,16 @@ three
 mutant
 </td>
 <td style="text-align:right;">
-54
+57
 </td>
 <td style="text-align:right;">
-47
+42
 </td>
 </tr>
 </tbody>
 </table>
 <p>The key distinction here, compared to what’s been discussed in this chapter up to this point, is that within each replicate, all of the events are intrinsically-linked. Through replication we’re establishing whether the frequencies of these counts are repeatable.</p>
-<p>Logistic (for dichotomous data) or Poisson (for frequency data) regression are the appropriate analytical tools for these designs. These involve using the generalized linear model, conducted with the function <code>glm</code> or the function <code>glmer</code> (for so-called mixed models involving ). These are discussed later in the logistic regression chapter.</p>
+<p>Logistic (for dichotomous data) or Poisson (for frequency data) regression are the appropriate analytical tools for these designs. These involve using the generalized linear model, conducted with the function <code>glm</code> or the function <code>glmer</code> (for so-called mixed models). These are discussed later in the logistic regression chapter.</p>
 </div>
 </div>
 <div id="power-analysis-for-proportion-tests" class="section level2">
@@ -1612,7 +1614,7 @@ mutant
 <a class="sourceLine" id="cb64-2" title="2">  <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="dv">905</span>, <span class="dv">905</span>, <span class="fl">0.05</span>, </a>
 <a class="sourceLine" id="cb64-3" title="3">  <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span></a>
 <a class="sourceLine" id="cb64-4" title="4">  )</a></code></pre></div>
-<pre><code>## [1] 0.8</code></pre>
+<pre><code>## [1] 0.74</code></pre>
 <div id="monte-carlo-power-simulations" class="section level4">
 <h4><span class="header-section-number">17.9.0.1</span> Monte Carlo power simulations</h4>
 <p>The Monte Carlo is a general technique in statistical computing to randomly repeat some calculation or process. Monte Carlo is the basis of all sorts of things, like permutation analyses, machine learning, fitting Bayesian models to datasets and more.</p>
@@ -1669,7 +1671,7 @@ mutant
 <a class="sourceLine" id="cb66-40" title="40"></a>
 <a class="sourceLine" id="cb66-41" title="41">power &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(t1 <span class="op">&lt;</span><span class="st"> </span>alpha))<span class="op">/</span>sims</a>
 <a class="sourceLine" id="cb66-42" title="42">power</a></code></pre></div>
-<pre><code>## [1] 0.822</code></pre>
+<pre><code>## [1] 0.808</code></pre>
 </div>
 </div>
 </div>
@@ -1703,7 +1705,7 @@ mutant
 <div id="side-by-side-bar-chart" class="section level5">
 <h5><span class="header-section-number">17.10.0.0.2</span> Side-by-side bar chart</h5>
 <p>The gold standard for clear presentation of total counts and differences in counts between groups.</p>
-<p>Note: There is no error to report. There’s no variation. Cells were classified as either having or not having the antigen. Every count is independent of all other counts.</p>
+<p>Note: When comparing <em>independent</em> counts there is no error to report. There’s no variation. Cells were classified as either having or not having the antigen. Every count is independent of all other counts.</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="kw">ggplot</span>(</a>
 <a class="sourceLine" id="cb71-2" title="2">  prop.df, </a>
 <a class="sourceLine" id="cb71-3" title="3">  (<span class="kw">aes</span>(</a>
@@ -1715,9 +1717,82 @@ mutant
 <a class="sourceLine" id="cb71-9" title="9"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="dt">fill =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>))</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 </div>
+<div id="plot-proportions-with-confidence-intervals" class="section level5">
+<h5><span class="header-section-number">17.10.0.0.3</span> Plot proportions with confidence intervals</h5>
+<p>However, adding confidence intervals to bar plots of proportions is a good way to visualize the uncertainty of counted data and comparing to other proportions.</p>
+<table>
+<caption>
+<span id="tab:unnamed-chunk-33">Table 17.3: </span>Hypothetical counts of gradstudin-stained T cells
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+group
+</th>
+<th style="text-align:right;">
+pos
+</th>
+<th style="text-align:right;">
+neg
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+187
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cytokine1
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+191
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cytokine2
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+158
+</td>
+</tr>
+</tbody>
+</table>
+<p>Munge the data directly within <code>ggplot</code> function to calculate values for the proportion and its upper and lower 95% confidence intervals. Proportions with overlapping CIs do not differ from each other. Note how the CIs are adjusted for the 3 possible comparisons using the Bonferroni correction (adjusted 95% confidence level = 1-0.05/3).</p>
+<p>Note that the <code>rowwise</code> function is necessary for certain ‘legacy’ functions like <code>scoreci</code>.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="kw">ggplot</span>(myCounts <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb72-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb72-3" title="3">    <span class="dt">prop=</span>pos<span class="op">/</span>(pos<span class="op">+</span>neg),</a>
+<a class="sourceLine" id="cb72-4" title="4">    <span class="dt">lower=</span><span class="kw">scoreci</span>(pos, pos<span class="op">+</span>neg, <span class="fl">0.98333</span>)<span class="op">$</span>conf.int[<span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb72-5" title="5">    <span class="dt">upper=</span><span class="kw">scoreci</span>(pos, pos<span class="op">+</span>neg, <span class="fl">0.98333</span>)<span class="op">$</span>conf.int[<span class="dv">2</span>]), <span class="kw">aes</span>(<span class="dt">x=</span>group))<span class="op">+</span></a>
+<a class="sourceLine" id="cb72-6" title="6"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">y =</span> prop), <span class="dt">stat =</span><span class="st">&quot;identity&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb72-7" title="7"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>lower, <span class="dt">ymax=</span>upper), <span class="dt">width=</span><span class="fl">0.2</span>, <span class="dt">size=</span><span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb72-8" title="8"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Proportion of gradstudin positive cells&quot;</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-34"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-34-1.png" alt="You can infer two proportions differ from plots when their confidence intervals do not overlap. " width="672" />
+<p class="caption">
+Figure 17.1: You can infer two proportions differ from plots when their confidence intervals do not overlap.
+</p>
+</div>
+</div>
 <div id="pie-charts-and-mosaic-plots" class="section level5">
-<h5><span class="header-section-number">17.10.0.0.3</span> Pie charts and mosaic plots</h5>
-<p>I suggest you explore these options on Google. They can be visually appealing for showing relative differences, but they make it more difficult to easily see absolute counts and differentials.</p>
+<h5><span class="header-section-number">17.10.0.0.4</span> Pie charts and mosaic plots</h5>
+<p>I suggest you explore these options on Google. They can be visually appealing for showing relative differences in some cases, but they make it more difficult to easily see absolute counts and differentials.</p>
 </div>
 </div>
 <div id="key-takeaways" class="section level2">
@@ -1725,10 +1800,10 @@ mutant
 <ul>
 <li>Sorted variables have nominal values that are classified into categories and that are quantified as discrete integer counts.</li>
 <li>Each count must be an independent replicate.</li>
-<li>Sorted events can be modeled using <code>rbinom</code> or <code>rmultinom</code>.</li>
-<li>The three basic types of experimental designs are about proportions, or about frequencies, or about associations.</li>
+<li>Sorted events can be modeled using <code>rbinom</code> or <code>rmultinom</code>. The latter is used when the event has more than two discrete outcomes.</li>
+<li>The three basic types of experimental designs are questions about proportions, or about frequencies, or about associations.</li>
 <li>The test functions mostly differ in whether they generate approximate or exact p-values. To avoid p-hacking, choose the test in advance.</li>
-<li>When designing an experiment perform a power analysis to determine the number of independent events that will be necessary. When testing for small differences or effect sizes, these numbers can be surprisingly high.</li>
+<li>When designing an experiment perform a power analysis to determine the number of independent events that will be necessary. When testing for small differences or effect sizes, these numbers needed for a stringent test can be surprisingly high.</li>
 </ul>
 
 </div>
