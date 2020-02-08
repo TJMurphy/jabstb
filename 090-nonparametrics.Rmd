@@ -2,83 +2,97 @@
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 library(tidyverse)
+library(PMCMR)
 library(PMCMRplus)
 library(PropCIs)
+library(knitr)
 ```
 
-Non-parametric statistical tests are versatile with respect to the dependent variables they tolerate.
+Non-parametric statistical tests are quite versatile with respect to the dependent variables they tolerate and the experimental designs.
 
-They are typically applied to data sets involving ordered data. One of the nonparametric tests, the sign test, is used to assess simple proportions. They can also be for data on measured, equal interval scales, for which the normality and equal variance assumptions of parametric statistical testing are not satisfied or cannot be assumed.
+Nonparametric tests allow for statistical analysis of discrete ordinal data, such as likert survey data or other assessment instruments comprised of discrete scoring levels.  Nonparametric tests can also be used for data on measured, equal interval scales, particularly when the normality and equal variance assumptions of parametric statistical testing are not satisfied or cannot be assumed.
 
-Nonparametric statistics are parameter-less. They don't compare means, or medians. Though people frequently treat nonparametrics as tests of medians, that is not strictly true. They don't involve least squares calculations, or standard deviations, or variance, or SEMs. 
+Nonparametric statistics are parameter-less. They don't compare means, or even medians. Though people frequently treat nonparametrics as tests of medians, that is not strictly true. They don't involve least squares calculations, or standard deviations, or variance, or SE's. 
 
-They do compare distributions of data. This happens by transforming the data into a standardized measure of ranks--either signs, sign ranks or rank sums.
+They do compare distributions of data. This happens by transforming the data into a standardized measure of ranks--either into signs, or sign ranks or rank sums. The experimental design dictates which of these measures of ranks is used for testing. 
 
 **The tests, essentially, evaluate whether the distribution of ranks in an experimental outcome differs from a null distribution of ranks, given a sample size. That can seem pretty abstract. But it's actually a simple and elegant way to think about these tests.** 
 
 With the exception of the Sign Test, which has a probability as an effect size, strictly speaking there really isn't an effect size that describes non-parametric outcomes other than the value of the test statistic.
 
-However, it is possible to use confidence interval arguments in R's tests to coerce them into providing effect size output as estimates of medians. This can be sometimes useful.
+However, it is possible to use confidence interval arguments in R's tests to coerce them into providing effect size output as estimates of medians. This can be sometimes useful in write ups of the results.
 
-Non-parametric analogs exist for each of the major parametric statistical tests (t-tests and one-way anova and two-way. Which analog to use for a given data set analysis depends entirely upon the experimental design.
+Non-parametric analogs exist for each of the major parametric statistical tests (t-tests and one-way completely randomized anova and one-way repeated/related measures anova). Which nonparametric analog to use for a given data set analysis depends entirely upon the experimental design.
 
 * Sign Test -> analog to the binomial Test -> when events are categorized as either successes or failures.
-* Wilcoxon Sign Rank Test for one group -> analog to the one sample t-test -> compare a one group data set to a standard value. 
+* Wilcoxon Sign Rank Test for one group -> analog to the one sample t-test -> compare the values of a one group data set to a standard value. 
 * Mann Whitney Rank Sum Test for 2 independent groups  ->  analog to the unpaired t test -> for comparing two groups in a data set.
 * Wilcoxon Sign Rank Test for paired groups -> analog to the paired t-test -> comparing a group of paired outcomes in a data set to no effect null.
 * Kruskal-Wallis Test -> analog to one way completely randomized ANOVA -> comparing 3 or more groups
-* Friedman Test -> analog to one way related measures ANOVA -> comparing 3 or more groups.
+* Friedman Test -> analog to one way repeated/related measures ANOVA -> comparing 3 or more differences.
 
-In R, the `wilcox.test`function is a work horse for non-parametric analysis. By simply changing the function's arguments it can do either a WSRT, or MW, or a WSRT for paired groups analysis. 
+In R, the `wilcox.test`function is a work horse for non-parametric analysis. By simply changing the function's arguments it can do either a WSRT, or MW, or a WSRT for paired groups analysis. For the Sign Test, we'll just use the `binom.test` function in R which was discussed previously in chapter \@(categorical).
+
+## Nonparametric sampling distributions
+
+As for other statistical tests, when conducting nonparametric analysis the experimental data are transformed into a test statistic that represents the signal-to-noise in the results. The question, as always, is whether this signal-to-noise is too extreme for a null effect.
+
+The key nonparametric test statistics are the Wilcoxon Signed Rank (see chapter \@(signrank)) and the Wilcoxon Rank Sum (see chapter \@(ranksum)). For each, there is a unique distribution for every sample size and the p-values are themselves discrete. 
 
 ## Experiments involving discrete data
 
-Discrete data can be either sorted or ordered. Discrete data arises from counting objects or events. They also occur when the meaurements taken from the experimental units are assigned discrete values. Counted objects are easy to spot---they are indivisible. They belong in one bucket or some other bucket(s). Dependent variables that have discrete values are also easy to spot. On scatter plots they exist as discrete rows. There is no continuum of values between the rows.  
+Discrete data can be either sorted or ordered. Discrete data arises from counting objects or events, which is sorted data. They also occur when measurements taken from the experimental units are assigned discrete values, which is ordinal data. 
+
+Counted objects are easy to spot---they are indivisible. They belong in one bucket or some other bucket(s). Dependent variables that have discrete values are also easy to spot. On scatter plots they exist as discrete rows. There is no continuum of values between the rows.  
+
+### Ordered data
 
 When planning an experiment ask whether the data will be sorted into categories on the basis of nominal characteristics (eg, dead vs alive, in vs out).
 
 Or will the data be categorized on some ordered basis. For example, a score of 1 = the attribute, a score of 2 = more of the attribute, a score of 3= even more of the attribute, ...and so on. 
 
-The discrete counts within one category of an ordered scale mean that they have more or less of some feature than do the counts in another category in the ordered group. 
+The sum of the discrete counts within one category of an ordered scale mean that they have more or less of some feature than do the counts in another category in the ordered group. 
 
-Thus, compared to nominal data, ordered data have more information. Whereas nominal events are just sorted into one bucket or another, ordered events are inherently categorized by rank.  
+Thus, compared to nominal sorted data, ordered data have more information. Whereas nominal events are just sorted into one bucket or another, ordered events are inherently categorized by rank.  
 
-Ordered data are common in survey instruments and polling. Certain experimental designs generate inherently ordered data as well. 
+Ordered data are common in survey instruments. These are likert scales. For example, you might take a survey that asks you to rate your enthusiasm for taking a biostats course. Your choice options are discrete values, on a scale of 1 to 10, where 1= "undetectable enthusiasm" and 10 = "giddy with excitement". Obviously, a selection of 2 implies more enthusiasm than 1, and so on up the scale. The values are ordered.
+
+Certain experimental designs generate inherently ordered data as well. 
 
 For example, imagine a test that scores dermal inflammatory responses. 
 
 Given a subject, 
 * Score 1 if we don't see any signs of inflammation.
 * Score 2 if there was a faint red spot.
-* Score 3 for a raised pustule. 
+* Score 3 for a raised pustule.
 * Score 4 for a large swollen area that feels hot to the touch. 
 * Score 5 for anything worse than that, if it is possible!
 
 Using that ordered scale system, we'd run experiments, for example, to compare a steroid treatment that might reduce inflammation compared to a vehicle control. Or we'd look at a gene knockout, or CRISP-R fix, or whatever, and score an outcome response compared to a control group. After an evaluation by a trained observer, each experimental unit receives a score from the scale.
 
-In quantifying effect sizes for such studies, a mistake you often see is parametric analysis. The researcher uses parameters such as means, standard deviations, performs t-tests, and so forth on the score rank values. 
+In quantifying effect sizes for such studies, a mistake you often see is parametric analysis. The researcher uses parameters such as means, and standard deviations, performs t-tests, and so forth on the scored rank values. 
 
-This isn't always bad, but it assumes a couple of things. First, that the distribution of the data is approximately normal, as is the population that was sampled. Second, the scoring scale is equal interval. That is to say, "the difference between inflammation scores of 1 and 2 is the same as the difference between scores 2 and 3, and so on...".
+This isn't always bad, but it assumes a couple of things. First, that the distribution of the residuals for the data is approximately normal, as is the population that was sampled. Second, the scoring scale is equal interval. That is to say, "the difference between inflammation scores of 1 and 2 is the same as the difference between scores 2 and 3, and so on...".
 
-Suffice to say that researchers should validate whether these assumptions are true before resorting to parametric tests. Or they can just use nonparametric tests and save themselves from all that validation work!
+Suffice to say that researchers should validate whether these assumptions are true before resorting to parametric tests. If the assumptions cannot be validated nonparametric tests are perfectly suitable for such data.
 
 It happens the other way, too. Sometimes we take measurements of some variable on a perfectly good measurement scale, one that satisfies these assumptions, but then break the data out to some ordered scale. 
 
-Take blood pressure, for example, which is a continuous variable, usually in standardized units of mmHg. We might measure it's value for each subject, but on the basis of that measurement sort the subjects into ordered categories of low, medium and high. Our scientific expertise drives what blood pressure values match those categories. And we should have good reasons to resort to a categorization because doing so tends to throw away perfect good scalar information. 
+Take blood pressure, for example, which is a continuous variable, usually in standardized units of mm-Hg. We might measure it's value for each subject, but on the basis of that measurement sort the subjects into ordered categories of low, medium and high pressure. Our scientific expertise drives what blood pressure values are used to define the margins of those categories. And we should have good reasons to resort to a categorization because doing so tends to throw away perfect good scalar information. Which is not a good idea, generally.
 
 It is on this ordered scale, of discrete events, rather than the original measurements on a continuous scale, that we might then run statistical tests.
 
 My point for this latter example is, of course, that not all ordered scales are based upon subjective assessments.
 
-## Deviant Data
+## Experiments involving deviant Data
 
 Any scale, whether discrete or continuous, can yield deviant data. What I mean by deviant data is non-normal, skewed, has unequal variances among groups, has outliers, and is just plain ugly. 
 
 When data are deviant there are two options: 
 
 1) Use reciprocal or log transform functions to transform the data distribution into something more normal-like. Run the statistical tests intended for normal data on the transformed values. 
-2) Run non-parametric statistical tests on the raw, untransformed data. These tests transform the data into a rank-based distribution. These (the sign rank and the rank sum distributions), are discrete normal-like, and can be coerced to cough up p-values.
-3) Tossing outliers is almost always a bad and unnecessary option. Outlier tossing introduces bias! Because they are based on ranks, the nonparametric tests condense outliers back with the rest of the variables, providing a very slick way to deal with deviant data.
+2) Run non-parametric statistical tests on the raw, untransformed data. These tests transform the data into a rank-based distribution. These (the sign rank and the rank sum distributions), are discrete normal-like, and are used to cough up p-values.
+3) Tossing outliers is almost always a bad and unnecessary option. Outlier tossing introduces bias when the only reason to toss it is because it is an outlier. Because they are based on ranks, the nonparametric tests condense outliers back with the rest of the variables, providing a very slick way to deal with deviant data.
 
 ## Sign Test
 
@@ -92,13 +106,18 @@ Here's an analysis of a behavioral test, the latency to exit a dark chamber into
 
 The null probability of exiting the chamber is 0.5. Which is to say there is a 50/50 chance a mouse will, at random, exit the chamber at any given time before or after 60 sec. Or put another way, under the null, neither exiting nor remaining in the chamber by 60 seconds is favored.
 
-Let's imagine we have an alarm set to go off 60 seconds after placing the subject in the chamber. When the alarm sounds, we score the subject as either (+) or (-). 
+Let's imagine we have an alarm set to go off 60 seconds after placing the subject in the chamber. When the alarm sounds, we score the subject as either (+) or (-). If the subject is out of the chamber, a success is (+). If still in the chamber after 60 s it is a failure (-). 
 
-The results are that twelve exited the chamber in less than 60 seconds, and 5 did not. We have not recorded times.
+This experiment tests the null hypothesis that the probability of successes are less than or equal to 50%.
 
-Scientifically, we predict that experimental units on an anti-anxiety drug are more likely to exit before this mark.
+We'll write in our notebook this hypothesis. We are testing the null. The alternate is mutually exclusive and exhaustive of the null, so it is that the probability of successes are greater than 50%.
 
-This experiment tests the null hypothesis that the probability of successes are less than or equal to 50%. If something is not less than or equal to another, it can only be greater. Thus, we choose the "greater" for the alternative hypothesis argument in the binomial test function. We think on an anti-anxiety drug the probability is greater that the subjects will successfully exit the chamber!
+We'll also jot down our error tolerance. Our tolerance for a type1 error is 5%, or 0.05. Thus our threshold rule is that we will reject the null if the p-value of the statistical test is below this tolerance level. Finally, we'll write down that once the data are collected, we'll run the binomial test to analyze the results.
+
+The results are that twelve exited the chamber in less than 60 seconds, and 5 did not. We have not recorded times because that isn't part of the protocol.
+
+If something is not less than or equal to another, it can only be greater. Thus, we choose the "greater" for the alternative hypothesis argument in the binomial test function. We think on an anti-anxiety drug the probability is greater that the subjects will successfully exit the chamber.
+
 
 ```{r}
 binom.test(x=12, n=15, p=0.5, alternative ="greater", conf.level=0.95 )
@@ -106,9 +125,13 @@ scoreci(x=12, n=15, conf.level = 0.95)
 ```
 ### Interpretation
 
-The effect size is 0.8, which represents the fraction of subjects that left the chamber prior to the 60 second threshold we set. The p-value is the probability of observing an effect size this large, if the null hypothesis is actually true. There is a 95% chance the true effect size is within the range of 0.56 to 1.
+The effect size is 0.8, which represents the fraction of subjects that left the chamber prior to the 60 second threshold we set. The p-value is the probability of observing an effect size this large or larger, if the null hypothesis is actually true. 
 
-To get a clear sense of what's going on, here is the distribution of the binomial function for the null hypothesis. 
+The interpretation of the confidence interval is as follows. On the basis of this sample, there is 95% confidence the true value for the fraction of subjects that would leave the chamber prior to 60 seconds is within the range of 0.56 to 1. 
+
+Note that this 95% CI range includes values, eg, 0.56, that are pretty close to the null expectation. The fact that p-value beat the threshold should be tempered by the fact that we are also 95% confident that the proportion of successes includes values that are pretty darn close to what we predicted is the null. 
+
+To get a clearer sense of what's going on, here is the distribution of the binomial function for the null hypothesis. You can see that it is symmetrical. If the drug were ineffective, we'd expect half to exit prior to 60 s, and the other half after 60 s.
 
 ```{r}
 # I'll use the rbinom function to simulate 
@@ -118,7 +141,8 @@ ggplot(data, aes(x, y))+
 
 ```
 
-And here is the distribution for the alternate hypothesis: 
+And here is the distribution for the alternate hypothesis, given the effect size: If the drug were effective at reducing anxiety, we'd expect 80% would exit the chamber prior to 60 second.
+
 ```{r}
 data <- data.frame(x = c(0:15),y=dbinom(c(0:15), 15, prob=0.8))
 ggplot(data, aes(x, y))+
@@ -126,37 +150,39 @@ ggplot(data, aes(x, y))+
 
 ```
 
-This is to emphasize that the binomial distribution is used here as a model of the experimental effect. Thus, we might also conclude that our data is consistent with a binomial distribution of 15 trials wherein the probability of event success is 80%.
-
-In effect, our p-value allows us to conclude this alternate distribution is a better model for the population than is the null distribution. This is subject to a 1.758% chance that this might be a false positive conclusion. Use your scientific judgement to decide whether that's an acceptable risk of being wrong.
-
-This also is a way to visualize the confidence interval, which says we should expect more than 8 successes 95% of the time...an assertion that covers all but two of the lower bins in this distribution!
+This is to emphasize that the binomial distribution is used here as a model of the experimental data. Thus, we might also conclude that our data is consistent with a binomial distribution of 15 trials wherein the probability of event success is 80%.
 
 ### Write Up
+
+Here's a way to write up the result. 
 
 *Drug treatment increases fearlessness (one-sided binomial test, p = 0.01759). The fraction exiting the chamber (0.8) is greater than expected for the null of 0.5 (95% CI = 0.55 to 1.0, Wilson's CI)*
 
 ## Wilcoxon Sign Rank Test for One Group
 
 The test statistic for the Wilcoxon Sign Rank is determined as follows.
-1. Calculate the difference between the theoretical median or threshold value and the values recorded for each independent replicate.
-2. Rank those differences from lowest (rank = 1) to highest (rank = n). 
-3. Assign a negative value to the replicate values that are less than the median.
-4. The test statistic `V` is the sum of the positive values. (software other than `wilcox.test` in R may calculate W, the sum of the positive and negative values).
 
-The test statistic V has an approximately normal discrete distribution, whose cumulative function `psignrank` can be used to compute p-values.
+1. Assert a theoretical threshold value of the dependent variable, such as a median.
+2. Calculate the difference between the theoretical threshold value and the values recorded for each independent replicate.
+3. Rank those differences from lowest (rank = 1) to highest (rank = n). 
+4. Assign a negative value to the replicate values that are less than the median.
+5. The test statistic `V` is the sum of the positive values. (software other than `wilcox.test` in R may calculate W, the sum of the positive and negative values).
+
+The test statistic V has a symmetrical discrete distribution. The cumulative function of V is `psignrank` and is used to compute p-values.
 
 ### Wilcoxon Sign Rank Experimental Designs
 
-This experimental design is similar to the Sign Rank test except in one important detail: **We actually measure the time it takes for the subjects to exit the chamber.** No alarm sounds to end the game at 60 sec. If subjects dawdle about and take longer than 60 sec to exit, we wait and record that time!
+This experimental design is similar to the Sign Rank test above except in one important detail: **We actually measure the time it takes for the subjects to exit the chamber.** No alarm sounds to end the game at 60 sec. If subjects dawdle about and take longer than 60 sec to exit, we wait and record that time!
 
 Thus, because the data set is comprised of the actual values for the latency variable, rather than counts of a simple (+) or (-) score, the Wilcoxon Sign Rank design collects more information than does the Sign Rank Test. 
 
-Let's say we have a chamber test on 7 subjects who've all been given an anti-anxiety drug. After placement in the chamber, their exit times (in seconds) are 3, 5, 8, 15, 19, 21 and 108. Based upon scientific judgement, we think exiting sooner than 60 would represent fearlessness (less anxiety).
+Let's say we have a chamber test on 7 subjects who've all been given an anti-anxiety drug. After placement in the chamber, their exit times (in seconds) are 3, 5, 8, 15, 19, 21 and 108. Based upon our scientific expertise, we assume exiting sooner than 60 s would represent fearlessness (less anxiety).
 
-This test ranks each subject's performance relative to that reference time and then "signs" it as negative or positive based on whether it's original value was below or above the 60 second threshold. In our data, only one subject exceeded that value...108 sec.
+This test ranks each subject's performance relative to that reference time and then "signs" it as negative or positive based on whether it's original value was below or above the 60 second threshold. 
 
-Our prediction is that less anxious subjects should exit the comfort of the dark chamber sooner than would be expected. The null hypothesis is that the "location"" of the null distribution is greater than or equal to 60 seconds. The alternate is the location is "less" than 60 seconds, since less is everything that greater than or equal to cannot be. 
+In our data, only one subject exceeded that value...108 sec.
+
+Our prediction is that less anxious subjects should exit the comfort of the dark chamber sooner than would be expected. The null hypothesis is that the "location"" of the null distribution is greater than or equal to 60 seconds. The alternate is the location of the distribution is "less" than 60 seconds, since less is everything that greater than or equal to cannot be. 
 
 We run the Wilcoxon Sign Rank test to test this hypothesis using the arguments below.
 
@@ -166,9 +192,9 @@ wilcox.test(x=c(3,5,8,15,19,21,108), mu=60, alternative = "less", conf.level = 0
 
 ### Interpretation
 
-The value of the test statistic, V is four. How extreme is that? It is pretty far to the left on the test statistic distribution (see below) for this sample size. The p-value is above the threshold of 5%. The evidence is not enough to reject the null hypothesis. Otherwise, the probability of making an error doing so would be 0.05469. 
+The value of the test statistic, V is four. How extreme is that? It is pretty far to the left on the test statistic distribution (see below) for this particular sample size. However, the p-value is above the threshold of 5%. The evidence is not enough to reject the null hypothesis. Otherwise, the probability of making an error doing so would be 0.05469. 
 
-That V = 4 means it is the value corresponding to the sum of the positively signed ranks in the sample. The pseudo-median of the latency time is 14 seconds. The one-sided 95% confidence ranges from -infinity to 61.5.
+What does V = 4 mean? It is the value corresponding to the sum of the positively signed ranks in the sample. The pseudo-median of the latency time is 14 seconds. The one-sided 95% confidence ranges from -infinity to 61.5.
 
 Here's a null signrank distribution for a sample size of 7. The values of the x scale are V, the test statistic. These are all the possible values that V can take on, given the sample size. For example, if all the signed ranks were positive...if every subject took longer than 60 sec to exit)...then V would equal 28. If all subjects exited before 60 sec, then V would equal zero.
 
@@ -322,21 +348,23 @@ A post hoc test for this purpose in base R is `pairwise.wilcox.test`. The `PMCMR
 
 The Kruskal-Wallis test statistic is computed as follows. Values of the outcome variables across the groups are first converted into ranks, from high to low. Tied values are rank-averaged. The test can be corrected for large numbers of tied values.
 
-The Kruskal-Wallis rank sum test statistic is: 
+The Kruskal-Wallis rank sum test statistic is H: 
 
 \[H=\frac{12}{n(n+1)}\sum_{i=1}^k\frac{R_{i}^2}{n_i}-3(n+1)\]
 
 $n$ is the total sample size, $k$ is the number of treatment groups, $n_i$ is the sample size in the $ith$ group and $R_i^2$ is the squared rank sum of the $ith$ group. Under the null, $\bar{R_i} = (n+1)/2$.
 
-The `H` statistic is approximated using the $\chi^2$ distribution with $k-1$ degrees of freedom to produce p-values.
+Because it is, effectively, the sum of a squared value, the `H` statistic is approximated using the $\chi^2$ distribution with $k-1$ degrees of freedom to produce p-values.
 
-Let's analyze the InsectSprays data set, it comes with the `PMCMRplus` package. This is a multifactorial experiment in which insects were counted in agricultural field plots that had been sprayed with 1 of 6 different insecticides. Each row in the data set represents an independent field plot.
+### The experimental design
+
+Let's analyze the InsectSprays data set, which comes with the `PMCMRplus` package. This is a multifactorial experiment in which insects were counted in agricultural field plots that had been sprayed with 1 of 6 different insecticides. Each row in the data set represents an independent field plot.
 
 Do the insecticides differ? 
 
 ```{r}
 ggplot(InsectSprays, aes(spray, count))+
-  geom_violin()
+  geom_violin(fill="blue")
 ```
 
 The violin plots (modern day versions of box plots) illustrate how the groups have unequal variance. Such data are appropriate for non-parametric analysis.
@@ -345,35 +373,147 @@ The violin plots (modern day versions of box plots) illustrate how the groups ha
 ```{r warning=FALSE}
 #insectsprays <- read.csv("insectsprays.csv")
 kruskal.test(count ~ spray, data=InsectSprays)
-data(insectsprays)
-pairwise.wilcox.test(InsectSprays$count, InsectSprays$spray, p.adjust.method="bonferroni", alternative ="two.sided")
 
 ```
+```{r}
+kwAllPairsConoverTest(count ~ spray, data=InsectSprays, p.adjust ="bonf")
+```
 
-We first do a Kruskal-Wallis rank sum omnibus test to test the null hypothesis that the locations of the groups within the data set are the same. 
+We first do a Kruskal-Wallis rank sum omnibus test to test the null hypothesis that the locations of the insect distributions for several insecticide groups are the same. 
 
-The null is rejected given the large $\chi^2$ test statistic, which has a p-value well below the threshold.
+The null is rejected given the large $\chi^2$ test statistic, which has a p-value well below the threshold of 5% type1 error.
 
-That's followed by a pairwise Wilcoxon rank sum test...think of it as running a Mann-Whitney test on all possible pairs in the group. The number of pairwise tests for 6 groups is `choose(6, 2)`= 15.
+That's followed by a pairwise post hoc test with a p-value adjustment. The number of pairwise tests for 6 groups is `choose(6, 2)`= 15.
 
-Each pairwise test is a single hypothesis test associated with 5% type1 error risk. If we don't make a correction for doing the multiple comparisons, the family-wise type1 error would inflate to $15 x 5% = 75%$! 
+Each pairwise test is a single hypothesis test associated with 5% type1 error risk. If we don't make a correction for doing the multiple comparisons, the family-wise type1 error we allow ourselves would inflate to $15 x 5% = 75%$! 
 
-The Bonferroni adjustment is the most conservative and simple to understand. It multiples every unadjusted p-value by 15, the number of comparisons made. Thus, each of the p-values in the grid is 15X larger than had the adjustment not been made. 
+The Bonferroni adjustment is simple to understand. It multiplies every unadjusted p-value by 15, the number of comparisons made. Thus, each of the p-values in the grid is 15X larger than had the adjustment not been made. 
 
-Every p-value less than 0.05 in the grid is therefore cause for rejecting the null hypothesis that the pair does not differ. The highest among these is the comparisons between sprays C and D, which has a p-value of 0.03977.
-
-More generally, the Bonferroni correction is $adjusted\ type1\ threshold = 0.05/C$ where C is the number of comparisons to make.
+Every p-value less than 0.05 in the grid is therefore cause for rejecting the null hypothesis those two compared groups. The highest among these is the comparisons between sprays C and D, which has a p-value of 0.03977.
 
 ### Write Up
 
 *A non-parametric omnibus test establishes that the locations of the insecticide effects of the six sprays differ (Kruskal-Wallis, $\Chi^2$ = 54.69, df=5, p=1.511e-10). Posthoc pairwise multiple comparisons by the Mann-Whitney test (Bonferroni adjusted p-values) indicate the following sprays differ from each other: A v(0.00058), D(0.00117), E(0.0051), ...and so on*
 
-
 ## Friedman test
+
+The Friedman test is used for nonparametric analysis of three or more levels of an independent variable for experimental designs that involve repeated/related measures. These are otherwise known as block designs. The Friedman test is a nonparametric analog of the one-way repeated/related measures ANOVA. 
+
+The test statistic is calculated in a multistep process from matrix-like data ${x_{i,j}}$. Each row, $n_i$, is an independent block within which repeated/related measures are collected. Each column, $k_j$ represents one level of the independent variable. 
+
+The `friedman.test` function works as follows: The first step involves ranking response values in ascending order within each row, transforming into a matrix of ranks, $r_{i,j}$. The mean ranks are derived for each column $\bar r_j=\frac{1}{n}\sum_{i=1}^n(r_{i,j})$.
+
+The Friedman test statistic is then \[Q=\frac{12n}{k(k+1)}\sum_{j=1}^k(\bar r_j-\frac{k+1}{2})^2\]
+
+Note how this is in the form of a sum of squared values. The distribution of $Q$ is therefore approximately $\chi^2$.
+
+The function output is very simple: a p-value derived from the $\chi^2$ distribution.
+
+### Blocked experimental design
+
+Protein kinase A activity (PKA) was measured in extracts of cultured VSMC after exposure to either of four possible treatments. 
+
+There are a few critical questions this experiment hopes to answer. Does isoproterenol stimulate activity? Does the presence of a GFP_PKI inhibit stimulated activity? Is that inhibitory effect absent in a negative control for GFP_PKI? 
+
+Each week serves as a block, which is an independent replicate wherein all recorded measurements are more related to each other than they are to measurements in other weeks. The VSMC used each week have a common source, are treated in parallel, and are subject to vagaries peculiar to that week for the multi-step protocol. 
+
+The results are entered in the code below:
+
+```{r}
+
+pki <- tibble(
+  replicate=c('week1', 'week2', 'week3', 'week4', 'week5'),
+  basal=c(20.0, 5.0, 2.1, 9.0, 23.7),
+  isoproterenol=c(38.3, 9.1, 3.6, 15.5, 38.9),
+  iso_GFP_PKI=c(27.5, 6.7, 2.7, 12.1,28.0 ),
+  iso_GFP=c(36.1, 8.5, 4.2, 16.0,39.9 )
+)
+```
+
+Here is a plot of the VSMC data:
+
+```{r fig.cap ="PKA activity in VSMC, note related measures within each replicate."}
+ggplot(pki %>% 
+         pivot_longer(-replicate, names_to="stimulus", values_to ="pka"), aes(stimulus, pka, group=replicate, color=replicate))+
+  geom_point(size=4)+
+  geom_line()+
+  labs(y="PKA activity, pmole/mg/min")
+
+```
+
+```{r echo=FALSE}
+kable(pki, caption = "Replicate measurements of PKA enzyme activity (pmole/mg/min) in cultured rat vascular smooth muscle cells (VSMC). ")
+```
+
+As seen in the graph and the table, for a given predictor variable there is as much as a 10-fold difference in activity from week to week. But within each row are consistent fold-differences between treatments.
+
+The inconsistent levels of raw enzymatic activity from week-to-week make this suitable for nonparametric testing, whereas the weekly block design calls for related measures analysis.  Thus the Friedman test.
+
+The Friedman test can answer this question: Do any of these treatments differ? The test does not provide information on which groups differ, serving instead as an omnibus. The test output is simply a p-value, derived from the so-called Friedman chisquare.
+
+There are a couple of options for performing the test. 
+
+The first involves converting the data to a matrix, omitting the values of the `replicate` variable, and passing that matrix of responses into the `friendman.test` function. The final row names decoration is not essential for `friedman.test`, but does help the posthoc tests play nicer.
+
+```{r}
+pkiM <- pki %>% select(basal:iso_GFP) %>% as.matrix()
+rownames(pkiM) <- 1:5
+```
+
+```{r}
+friedman.test(pkiM)
+```
+
+The second approach is the so-called formula method, which we'll use a lot when we get to regression. First, convert the data to a long format data frame.
+
+```{r}
+
+pkiL <- pki %>% pivot_longer(-replicate, names_to = "stimulus", values_to="pka")
+
+```
+
+Now pass that format into `friedman.test`. In English, this formula reads, "run the Friedman test on pka activity by stimulus levels, with related measures by replicate".
+
+```{r}
+friedman.test(pka~stimulus|replicate, data=pkiL)
+```
+
+Because this p-value is below a 5% type1 error threshold, this result indicates that levels of the stimulus variable cause differences in PKA activities. 
+
+However, posthoc comparison tests are necessary to find out which differences between stimulus levels are reliable.
+
+```{r}
+frdAllPairsConoverTest(pkiM, p.adjust="bonf")
+
+```
+
+You'll find a handful of pairwise posthoc comparison functions like the two used in this chapter in the `PMCMRplus` package. They are based upon different formulas and perform differently. It is not possible to conclude that one is better than another, except those that allow for a p-value adjustment should be used.
+
+In this particular case, we have an ambiguous and underpowered data set. If you play with this data on your own machine, you'll find there is ample latitude for prosperous p-hacking in the post hoc testing. 
+
+For example, if the p-values are unadjusted for multiple comparisons, all of the post hoc functions yield statistical differences. But unadjusted comparisons are not very stringent.
+
+Alternately, certain post hoc tests with other p-value adjustment options yield statistical differences.
+
+The question is not "which one is better"? The approach to take is to run realistic simulations in advance of collecting data, learn about the options,and choose accordingly. Write down your choices, and stick with them after the data rolls in.
+
+### Interpretation
+
+Because the probability of the Friedman test statistic is below the 5% threshold, we can reject the null that there are no differences in PKA activity caused by the four stimulus conditions. 
+
+However, the post hoc multiple comparison testing, with appropriate p-value adjustment, is inconclusive. The bloody obvious evidence (as seen by inspecting the table and figure) that the GFP-PKI construct inhibits PKA is unsupported by the statistical analysis. The experiment is underpowered to detect those differences.
+
+Although there is a proverbial "trending towards significance"^[http://www.academiaobscura.com/still-not-significant/] for two of the comparisons, neither of these are for the most important outcome, which is to observe that GFP-PKI causes PKA activity to be much lower than GFP.
+
+It turns out transfection inefficiency explained this failure. This was overcome by a significant protocol adjustment.^[http://molpharm.aspetjournals.org/content/54/3/514]
+
+### Write up
+
+*Although a positive nonparametric Friedman test indicates there are differences in PKA activity among levels of the stimuli (Friedman chi-squared = 13.56, df = 3, p-value = 0.00357), no statistical differences are observed in pairwise post hoc comparisons, likely because the effects are small and the experiment is underpowered (Conover test with Holm p-value adjustment, experimentwise type 1 error threshold of 5%).*
 
 ## Nonparametric power calculations
 
-To my knowledge, there are no simple power functions in R designed for nonparametric testing. I assume the reason for that is that nonparametric tests can be performed on a wide variety of data types. As such, it's hard to create one-size-fits all, plug and play functions.
+To my knowledge, there are no simple power functions in R (or elsewhere) designed for nonparametric testing. I assume the reason for that is that nonparametric tests can be performed on a wide variety of data types, often with crappy parameter estimates. As such, it's hard to create one-size-fits all, plug and play functions that anybody can use.
 
 The function below, `nonpara.pwr` is configured to simulate the power of nonparametric one- and two-group comparisons using the Wilcoxon test function of R. 
 
@@ -387,29 +527,37 @@ But it also requires that you customize your initialization. Do this by entering
 
 ### How it works
 
+#### tl;dr
+
+1) Simulate a random sample. 
+2) Run a statistical test on the sample.
+3) Collect the p-value from that test.
+4) Repeat steps 1 through 3 ~1000 times or more.
+5) Calculate the fraction of p-values that are below a threshold, such as 0.05.
+
 Use the initializer to define values for the parameters of the population you're sampling. These are passed into a function that randomly generate values for the outcome variable. A statistical test is performed on that outcome. A secondary 'hit' test asks whether the test result crosses a threshold. Here a 'hit' is counted if the p-value for the simulated test is less than 0.05.
 
-Power is the franction of p-values that fall below the confidence level that you set. For example, if you set a confidence level of 95%, every p-value less than 0.05 will be scored as a hit. Power = hits/number of simulations.
+Power is the fraction of p-values that fall below the confidence level that you set. For example, if you set a confidence level of 95%, every p-value less than 0.05 will be scored as a hit. Power = hits/number of simulations.
 
 The function is configured to repeat this simulation/testing/hit count process many times, hundreds or even thousands of times. The more times it simulates a result, the more accurate the power estimate.
 
-### Initialization with population parameters
+### Simulating response data
 
-Let's focus for now on the thought process involved in how to intialize it.
+Let's focus for now on the thought process involved in how to initialize it.
 
-What's most important is to initialize the function using a random value generator that best simulates the type of data you expect to generate in your experiment. Using the random number generator functions of the various probability distributions is suitable for many cases. 
+What's most important is to initialize the function using a random value generator that best simulates the type of data you expect to generate in your experiment. More on 'best simulates' is at the end of this section. Using the random number generator functions of the various probability distributions in R is suitable for many cases. For other problems, random sampling functions like `sample` can do the trick. 
 
-For example, use `rnorm` for measured variables for which you believe you can predict means and standard deviations.
+For example, use `rnorm` for measured variables for which you believe you can predict means and standard deviations. Make sure your `sd` estimate is realistic. Most people underestimate `sd`.
 
 ```{r}
 # simulate a sample size of 5 for a normally-distributed variable with mean of 100 units and standard deviation of 25 units
 control.1 <- rnorm(n=5, mean=100, sd=25)
 treatment.1 <- rnorm(n=5, mean=150, sd=25)
-sim.set <- data.frame(control.1, treatment.1); sim.set
+sim.set1 <- data.frame(control.1, treatment.1); sim.set1
 
 ```
 
-Use `rpois` to simulate variables that represent discrete events, such as frequencies.
+Use `rpois` to simulate variables that represent discrete events, such as frequencies. How many depolarizations do you expect at baseline? How many more (or less) do you think your treatment will cause? 
 
 ```{r}
 #simulate 5 events, where each occurs at an average frequency of 7.
@@ -419,23 +567,33 @@ treatment.2 <- rpois(n=5, lambda=10)
 sim.set2 <- data.frame(control.2, treatment.2); sim.set2
 ```
 
-It's even possible to simulate ordinal data, such as the outcome of likert tests. The `sample()` function can be configured for this purpose. Note how probability vector argument is used to cast expectd distributions of the values 
+Use `rlnorm` to simulate variables that have log normal distributions, which just happens a lot in biological systems. It takes some playing to get used to simulating with `rlnorm` but the results can look scary realistic compared to `rnorm`.
+
+```{r}
+# simulate 5 events, from a log normal distribution
+control.3 <- rlnorm(n=5, meanlog=0, sdlog=1)
+treatment.3 <- rlnorm(n=5, meanlog=2, sdlog=1)
+sim.set3 <- data.frame(control.3, treatment.3); sim.set3
+
+```
+
+It's even possible to simulate ordinal data, such as the outcome of likert tests. The `sample()` function can be configured for this purpose. Note how a probability vector argument is used to cast expected distributions of the values 
 
 ```{r}
 #simulate 6 replicates scored on a 5-unit ordinal scale, where 1 is the lowest level of an observed outcome and 5 is the highest.
 
 control <- sample(x=c(1:5), size=6, 
-       replace=T, prob=c(.80, .15, .05, 0, 0))
+       replace=T, prob=c(.70, .25, .05, 0, 0))
 disease <- sample(x=c(1:5), size=6, 
-       replace=T, prob=c(0, 0, 0.05, 0.80, 0.15))
+       replace=T, prob=c(0, 0, 0.15, 0.70, 0.15))
 results <- data.frame(control, disease); results
 ```
 
-If a more sophisticated/less-biased simulation of ordinal data is needed, you'll find it is [doable but suprisingly not trivial](https://www.rdatagen.net/post/generating-and-displaying-likert-type-data/).
+If a more sophisticated simulation of ordinal data is needed, you'll find it is [doable but suprisingly not trivial](https://www.rdatagen.net/post/generating-and-displaying-likert-type-data/).
 
-Please recognize that simulating data for these functions mostly depends upon your scientific understanding of the variables. You have to make scientific judgements about the values your variable will take on under control and treatment conditions. 
+Please recognize that simulating data for these functions mostly depends upon your scientific understanding of the variables. You have to make scientific judgments about the values your variable will take on under control and treatment conditions. 
 
-To get started statistically, go back to the basics. Is the variable discrete or continuous. Is it measured or ordered or sorted?  What means and standard deviations, or frequencies, or rank sizes should you estimate? Those are scientific judgements. 
+To get started statistically, go back to the basics. Is the variable discrete or continuous. Is it measured or ordered or sorted?  What means and standard deviations, or frequencies, or rank sizes should you estimate? Those are all scientific judgments. 
 
 Either select the values you predict will occur, OR enter values that you believe would be a minimal, scientifically meaningful effect size.
 
@@ -445,7 +603,7 @@ Let's say we study mouse models of diabetes. In non-diabetic control subjects, m
 
 Most everybody in the field agrees that average blood glucose concentration of 300 mg/dL represents successful induction of diabetes in these models. 
 
-However, experience shows these higher levels of glucose are associated with considerably greater variability (sd=150 mg/dL) than under normal states. Large differences in variability between two groups are called heteroscedaticity. The presence of heteroscedaticity can preclude the use of parametric statistical tests since it raises type1 error risk. Thus, nonparametric testing would be used when expected such outcomes.
+However, experience shows these higher levels of glucose are associated with considerably greater variability (SD=150 mg/dL) than under normal states. Large differences in variability between two groups are called heteroscedaticity. The presence of heteroscedaticity can preclude the use of parametric statistical tests since it raises type1 error risk. Thus, nonparametric testing would be used when expecting such outcomes.
 
 Let's say you want to test a new idea for diabetes induction. What sample size would be necessary, assuming an nonparametric testing and an unpaired design, to reliably detect a difference between these two groups at 80% power or better?
 
@@ -453,12 +611,15 @@ The function below calculates the power of experiments that might be expected to
 
 ### nonpara.pwr
 
-Running this first code chunk reads the function into the environment. There's no output, yet. But read it line-by-line to see if you can follow the logic.
+Running this first code chunk reads the custom function into the environment. There's no output, yet. You'll see some code later that uses this function.
+
+Read it line-by-line to see if you can follow the logic.
 
 ```{r}
+
 nonpara.pwr <- function(n){
   
-#Intitializers. Place expected values for the means and standard deviations of two groups to be compared here.
+#Intitializers. Place expected values for the means and standard deviations of two groups to be compared here. These values will be called by the function a few lines below
   
   m1= 100 #mean of group 1
   sd1= 10 #standard deviation of group 1
@@ -470,11 +631,12 @@ nonpara.pwr <- function(n){
   # the monte carlo just repeats the random sampling i times. It runs a t-test on each sample, i, grabs the p-value and places it in a growing vector, p.values[i]
   ssims=1000
   
-  #The function below produced p-values. This empty vector will be filled with p-values as they are generated
+  #The function below produced p-values. This empty vector has to exist before the first p-value is generated. It will be filled successfully with p-values as the repeat component below...repeats.
   
   p.values <- c()
   
-  #This function inside a function repeats the simulation ssims times, collecting a p-value each time. Importantly, change the arguments for the statitical test to suit your experimental design. It 
+  #This repeat function is a function inside a function. It repeats the simulation ssims times, collecting a p-value each time, and depositing that new p-value in our growing vector. Importantly, change the arguments for the statitical test to suit your experimental design. Want to simulate a "greater" hypothesis? Change it here. What about a paired model? Change it here, not after you run an experiment.
+  
   i <- 1
   repeat{
     x=rnorm(n, m1, sd1); 
@@ -497,26 +659,38 @@ nonpara.pwr <- function(n){
 
 ```
 
-To get some output, pass a sample size of 5 per group into the function.
+To get some output, pass a sample size of n= 5 per group into the function.
 
 ```{r}
+# test it!
 set.seed(1234)
 nonpara.pwr(5)
 ```
 
-At this seed, the power is 62.6% for a sample size of 5 per group.
+At this seed, the power is 62.6% for a sample size of 5 per group. YMMV if on a Mac.
 
-A slightly higher power would be desirable. Change the value of `n` in the code chunk to see what's necessary to get 80% power.
+A slightly higher power would be desirable. Change the value of `n` in the test it code chunk to see what's necessary to get 80% power.
 
-Or, more easily, just run `nonpara.pwr` over a range of sample sizes, plotting a power vs sample size curve:
+Or, more easily, just run `nonpara.pwr` over a range of sample sizes, plotting a power vs sample size curve. 
+
+There are a couple of keys here. First, make a simple dataframe with only one variable, a bunch of n values.
 
 ```{r}
 #frame is a data frame with only one variable, sample size
 frame <- data.frame(n=2:50)
+```
+
+Second, use R's `apply` function to, row by row, calculate power for each value of n. This will take some time to run. Hopefully just a few seconds if you have a decent machine.
+
+```{r}
 #data is a data frame with two variables, sample size and a power value for each
 data <- bind_cols(frame, 
                   power=apply(frame, 1, nonpara.pwr))
+```
 
+Now plot it out!
+
+```{r}
 #plot
 ggplot(data, aes(n, power))+
   geom_point() +
@@ -526,18 +700,25 @@ ggplot(data, aes(n, power))+
 
 This result shows that a sample size of 7, 8, or 9 per group would give ~85% power. Thus, a sample size of 7 per group would be the minimal size necessary to test the two-sided null that there is no difference between the groups, at a 95% confidence level.
 
-The experimental design, and thus these scripts, can be reconfigured in many ways.
+Notice how the power is discrete for the early runs? That's a byproduct of the discrete nature of nonparametric sampling distributions.
+
+Think about the general way this Monte Carlo technique worked: simulate, test, repeat that many times, count up the p-values. 
+
+It shouldn't be much of a leap for you to realize this approach can be run for any experimental design. If you know what experiment you want to run, you can simulate how it will work thousands of times in just a few seconds. Minutes at the worst.
 
 ## Summary
 
-If you're used to comparing means of groups, nonparametrics can be somewhat disorienting. There are no parameters to compare! And the concept of location shifts or differences seems rather abstract. 
+If you're used to comparing means of groups, nonparametrics can be somewhat disorienting. There are no parameters to compare! And the concept of location shifts or vague differences seems rather abstract. 
 
 The tests transform the values of experimental outcome variables into either sign rank or into rank sum units. That abstraction can be disorientating, too. But it is important to recognize that sign ranks and rank sum distributions are approximately normal. 
 
-Therefore, perhaps its best to think of nonparametrics as a way to transform non-normal data into more normal data.
+Therefore, perhaps its best to think of nonparametrics as a way to transform non-normal data into more normal data, from which predictable p-values can be derived.
 
 The nonparametrics are powerful statistical tests that should be used more widely than they are. 
 
+Power analysis is really important when designing experiments. It allows you to determine a proper sample size to give your idea the severe test it deserves. The process can also help you evaluate the feasibility and even cost of an experiment. Are there enough mice in the world to test your idea? Will you still be young after doing your laborious protocol on as many replicates as the power analysis suggests is necessary?
+
+Embrace the Monte Carlo technique if you agree it is better to try to work out these questions over the course of a few hours coding in R, rather than jumping into a rabbit hole and hoping for an exit.
 
 
 
