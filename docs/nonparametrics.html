@@ -1090,9 +1090,9 @@ Figure 19.6: Null sign rank test statistic distribution when n= 6 pairs.
 <a class="sourceLine" id="cb25-2" title="2"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></a>
 <a class="sourceLine" id="cb25-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-7"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" alt="Paired experimental designs should always be plotted dot-point-dot." width="672" />
+<img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" alt="Paired experimental designs should always be plotted dot-line-dot." width="672" />
 <p class="caption">
-Figure 19.7: Paired experimental designs should always be plotted dot-point-dot.
+Figure 19.7: Paired experimental designs should always be plotted dot-line-dot.
 </p>
 </div>
 </div>
@@ -1342,11 +1342,11 @@ Figure 19.9: PKA activity in VSMC, note related measures within each replicate.
 <pre><code>## # A tibble: 5 x 2
 ##   control.1 treatment.1
 ##       &lt;dbl&gt;       &lt;dbl&gt;
-## 1      79.2        163.
-## 2      99.2        152.
-## 3     136.         185.
-## 4     105.         146.
-## 5     133.         161.</code></pre>
+## 1     104.        176. 
+## 2      39.6       170. 
+## 3     119.        147. 
+## 4     116.        150. 
+## 5      76.3        93.9</code></pre>
 <p>Use <code>rpois</code> to simulate variables that represent discrete events, such as frequencies. How many depolarizations do you expect at baseline? How many more (or less) do you think your treatment will cause?</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co">#simulate 5 events, where each occurs at an average frequency of 7.</span></a>
 <a class="sourceLine" id="cb50-2" title="2"></a>
@@ -1356,11 +1356,11 @@ Figure 19.9: PKA activity in VSMC, note related measures within each replicate.
 <pre><code>## # A tibble: 5 x 2
 ##   control.2 treatment.2
 ##       &lt;int&gt;       &lt;int&gt;
-## 1         6           8
-## 2         9          13
-## 3         5           7
-## 4        13           4
-## 5         3           7</code></pre>
+## 1         6          13
+## 2         5          10
+## 3         9          15
+## 4         5          10
+## 5         2           7</code></pre>
 <p>Use <code>rlnorm</code> to simulate variables that have log normal distributions, which just happens a lot in biological systems. It takes some playing to get used to simulating with <code>rlnorm</code> but the results can look scary realistic compared to <code>rnorm</code>.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># simulate 5 events, from a log normal distribution</span></a>
 <a class="sourceLine" id="cb52-2" title="2">control<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">rlnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">meanlog=</span><span class="dv">0</span>, <span class="dt">sdlog=</span><span class="dv">1</span>)</a>
@@ -1369,11 +1369,11 @@ Figure 19.9: PKA activity in VSMC, note related measures within each replicate.
 <pre><code>## # A tibble: 5 x 2
 ##   control.3 treatment.3
 ##       &lt;dbl&gt;       &lt;dbl&gt;
-## 1     1.14         4.72
-## 2     1.02        67.1 
-## 3     2.44         7.02
-## 4     0.777        1.37
-## 5     1.44         2.20</code></pre>
+## 1     0.501      19.8  
+## 2     0.853       7.02 
+## 3     0.164      15.6  
+## 4     1.18        6.30 
+## 5     6.01        0.787</code></pre>
 <p>It’s even possible to simulate ordinal data, such as the outcome of likert tests. The <code>sample()</code> function can be configured for this purpose. Note how a probability vector argument is used to cast expected distributions of the values</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co">#simulate 6 replicates scored on a 5-unit ordinal scale, </span></a>
 <a class="sourceLine" id="cb54-2" title="2"><span class="co">#where 1 is the lowest level of an observed outcome and 5 is the highest.</span></a>
@@ -1388,10 +1388,10 @@ Figure 19.9: PKA activity in VSMC, note related measures within each replicate.
 ##       &lt;int&gt;       &lt;int&gt;
 ## 1         1           4
 ## 2         1           4
-## 3         1           4
+## 3         2           4
 ## 4         1           4
 ## 5         1           4
-## 6         3           3</code></pre>
+## 6         2           4</code></pre>
 <p>If a more sophisticated simulation of ordinal data is needed, you’ll find it is <a href="https://www.rdatagen.net/post/generating-and-displaying-likert-type-data/">doable but suprisingly not trivial</a>.</p>
 <p>Please recognize that simulating data for these functions mostly depends upon your scientific understanding of the variables. You have to make scientific judgments about the values your variable will take on under control and treatment conditions.</p>
 <p>To get started statistically, go back to the basics. Is the variable discrete or continuous. Is it measured or ordered or sorted? What means and standard deviations, or frequencies, or rank sizes should you estimate? Those are all scientific judgments.</p>
