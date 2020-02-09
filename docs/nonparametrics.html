@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-07" />
+<meta name="date" content="2020-02-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -357,10 +357,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>19.6</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
 <li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>19.6.2</b> Write Up</a></li>
+<li class="chapter" data-level="19.6.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot"><i class="fa fa-check"></i><b>19.6.3</b> Plot</a></li>
 </ul></li>
 <li class="chapter" data-level="19.7" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>19.7</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
 <li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.7.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>19.7.2</b> Write up</a></li>
+<li class="chapter" data-level="19.7.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot-1"><i class="fa fa-check"></i><b>19.7.3</b> Plot</a></li>
 </ul></li>
 <li class="chapter" data-level="19.8" data-path="nonparametrics.html"><a href="nonparametrics.html#kruskal-wallis"><i class="fa fa-check"></i><b>19.8</b> Kruskal-Wallis</a><ul>
 <li class="chapter" data-level="19.8.1" data-path="nonparametrics.html"><a href="nonparametrics.html#the-experimental-design"><i class="fa fa-check"></i><b>19.8.1</b> The experimental design</a></li>
@@ -696,6 +698,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="nonparametrics" class="section level1">
 <h1><span class="header-section-number">Chapter 19</span> Nonparametric Statistical Tests</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(PMCMR)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(PMCMRplus)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(PropCIs)</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(knitr)</a></code></pre></div>
 <p>Non-parametric statistical tests are quite versatile with respect to the dependent variables they tolerate and the experimental designs.</p>
 <p>Nonparametric tests allow for statistical analysis of discrete ordinal data, such as likert survey data or other assessment instruments comprised of discrete scoring levels. Nonparametric tests can also be used for data on measured, equal interval scales, particularly when the normality and equal variance assumptions of parametric statistical testing are not satisfied or cannot be assumed.</p>
 <p>Nonparametric statistics are parameter-less. They don’t compare means, or even medians. Though people frequently treat nonparametrics as tests of medians, that is not strictly true. They don’t involve least squares calculations, or standard deviations, or variance, or SE’s.</p>
@@ -770,7 +777,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We’ll also jot down our error tolerance. Our tolerance for a type1 error is 5%, or 0.05. Thus our threshold rule is that we will reject the null if the p-value of the statistical test is below this tolerance level. Finally, we’ll write down that once the data are collected, we’ll run the binomial test to analyze the results.</p>
 <p>The results are that twelve exited the chamber in less than 60 seconds, and 5 did not. We have not recorded times because that isn’t part of the protocol.</p>
 <p>If something is not less than or equal to another, it can only be greater. Thus, we choose the “greater” for the alternative hypothesis argument in the binomial test function. We think on an anti-anxiety drug the probability is greater that the subjects will successfully exit the chamber.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">binom.test</span>(<span class="dt">x=</span><span class="dv">12</span>, <span class="dt">n=</span><span class="dv">15</span>, <span class="dt">p=</span><span class="fl">0.5</span>, <span class="dt">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="dt">conf.level=</span><span class="fl">0.95</span> )</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">binom.test</span>(<span class="dt">x=</span><span class="dv">12</span>, <span class="dt">n=</span><span class="dv">15</span>, <span class="dt">p=</span><span class="fl">0.5</span>, </a>
+<a class="sourceLine" id="cb2-2" title="2">           <span class="dt">alternative =</span><span class="st">&quot;greater&quot;</span>, </a>
+<a class="sourceLine" id="cb2-3" title="3">           <span class="dt">conf.level=</span><span class="fl">0.95</span> )</a></code></pre></div>
 <pre><code>## 
 ##  Exact binomial test
 ## 
@@ -782,7 +791,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## sample estimates:
 ## probability of success 
 ##                    0.8</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">scoreci</span>(<span class="dt">x=</span><span class="dv">12</span>, <span class="dt">n=</span><span class="dv">15</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">scoreci</span>(<span class="dt">x=</span><span class="dv">12</span>, <span class="dt">n=</span><span class="dv">15</span>, </a>
+<a class="sourceLine" id="cb4-2" title="2">        <span class="dt">conf.level =</span> <span class="fl">0.95</span>)</a></code></pre></div>
 <pre><code>## 
 ## 
 ## 
@@ -796,16 +806,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The interpretation of the confidence interval is as follows. On the basis of this sample, there is 95% confidence the true value for the fraction of subjects that would leave the chamber prior to 60 seconds is within the range of 0.56 to 1.</p>
 <p>Note that this 95% CI range includes values, eg, 0.56, that are pretty close to the null expectation. The fact that p-value beat the threshold should be tempered by the fact that we are also 95% confident that the proportion of successes includes values that are pretty darn close to what we predicted is the null.</p>
 <p>To get a clearer sense of what’s going on, here is the distribution of the binomial function for the null hypothesis. You can see that it is symmetrical. If the drug were ineffective, we’d expect half to exit prior to 60 s, and the other half after 60 s.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># I&#39;ll use the rbinom function to simulate </span></a>
-<a class="sourceLine" id="cb5-2" title="2">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>),<span class="dt">y=</span><span class="kw">dbinom</span>(<span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>), <span class="dv">15</span>, <span class="dt">prob=</span><span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;exits before 60s&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;prob of that many exits&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span>.<span class="dv">20</span>, <span class="dt">label=</span><span class="st">&quot;H0 distribution&quot;</span>))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># I&#39;ll use the rbinom function to simulate </span></a>
+<a class="sourceLine" id="cb6-2" title="2">data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>),<span class="dt">y=</span><span class="kw">dbinom</span>(<span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>), <span class="dv">15</span>, <span class="dt">prob=</span><span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb6-3" title="3"></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;exits before 60s&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;prob of that many exits&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span>.<span class="dv">20</span>, </a>
+<a class="sourceLine" id="cb6-9" title="9">                <span class="dt">label=</span><span class="st">&quot;H0 distribution&quot;</span>))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-1"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-1-1.png" alt="Distribution of chamber exits in a trial sized 15 for the null for a 50% chance of chamber exits priort to 60 seconds, on a binomial model." width="672" />
+<p class="caption">
+Figure 19.1: Distribution of chamber exits in a trial sized 15 for the null for a 50% chance of chamber exits priort to 60 seconds, on a binomial model.
+</p>
+</div>
 <p>And here is the distribution for the alternate hypothesis, given the effect size: If the drug were effective at reducing anxiety, we’d expect 80% would exit the chamber prior to 60 second.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>),<span class="dt">y=</span><span class="kw">dbinom</span>(<span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>), <span class="dv">15</span>, <span class="dt">prob=</span><span class="fl">0.8</span>))</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">fill=</span><span class="st">&quot;green&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;exits before 60s&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;prob of that many exits&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span>.<span class="dv">20</span>, <span class="dt">label=</span><span class="st">&quot;H1 distribution&quot;</span>))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">data &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>),<span class="dt">y=</span><span class="kw">dbinom</span>(<span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">15</span>), <span class="dv">15</span>, <span class="dt">prob=</span><span class="fl">0.8</span>))</a>
+<a class="sourceLine" id="cb7-2" title="2"></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">fill=</span><span class="st">&quot;green&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;exits before 60s&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;prob of that many exits&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span>.<span class="dv">20</span>, </a>
+<a class="sourceLine" id="cb7-8" title="8">                <span class="dt">label=</span><span class="st">&quot;H1 distribution&quot;</span>)</a>
+<a class="sourceLine" id="cb7-9" title="9">            )</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-2"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-2-1.png" alt="Distribution of chamber exits in a trial sized 15 for the alternate expectation that 80% would exit prior to 60 seconds, based upon the binomial." width="672" />
+<p class="caption">
+Figure 19.2: Distribution of chamber exits in a trial sized 15 for the alternate expectation that 80% would exit prior to 60 seconds, based upon the binomial.
+</p>
+</div>
 <p>This is to emphasize that the binomial distribution is used here as a model of the experimental data. Thus, we might also conclude that our data is consistent with a binomial distribution of 15 trials wherein the probability of event success is 80%.</p>
 </div>
 <div id="write-up-6" class="section level3">
@@ -834,7 +865,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In our data, only one subject exceeded that value…108 sec.</p>
 <p>Our prediction is that less anxious subjects should exit the comfort of the dark chamber sooner than would be expected. The null hypothesis is that the “location”" of the null distribution is greater than or equal to 60 seconds. The alternate is the location of the distribution is “less” than 60 seconds, since less is everything that greater than or equal to cannot be.</p>
 <p>We run the Wilcoxon Sign Rank test to test this hypothesis using the arguments below.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">wilcox.test</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">15</span>,<span class="dv">19</span>,<span class="dv">21</span>,<span class="dv">108</span>), <span class="dt">mu=</span><span class="dv">60</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>, <span class="dt">conf.level =</span> <span class="fl">0.95</span>, <span class="dt">conf.int =</span> <span class="fl">0.95</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">wilcox.test</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">15</span>,<span class="dv">19</span>,<span class="dv">21</span>,<span class="dv">108</span>), </a>
+<a class="sourceLine" id="cb8-2" title="2">            <span class="dt">mu=</span><span class="dv">60</span>, </a>
+<a class="sourceLine" id="cb8-3" title="3">            <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>, </a>
+<a class="sourceLine" id="cb8-4" title="4">            <span class="dt">conf.level =</span> <span class="fl">0.95</span>, </a>
+<a class="sourceLine" id="cb8-5" title="5">            <span class="dt">conf.int =</span> <span class="fl">0.95</span></a>
+<a class="sourceLine" id="cb8-6" title="6">            )</a></code></pre></div>
 <pre><code>## 
 ##  Wilcoxon signed rank test
 ## 
@@ -854,18 +890,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here’s a null signrank distribution for a sample size of 7. The values of the x scale are V, the test statistic. These are all the possible values that V can take on, given the sample size. For example, if all the signed ranks were positive…if every subject took longer than 60 sec to exit)…then V would equal 28. If all subjects exited before 60 sec, then V would equal zero.</p>
 <p>Which is to say the location of this distribution is, by coincidence, also centered on 14. The value of 4 is less than this location, but not extremely-enough lower to be considered as belonging to some other distribution with a different location!
 The 95% confidence interval of the location on the V test statistic ranges from -infinity to 62.5.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">psignrank</span>(<span class="dt">q=</span><span class="dv">4</span>, <span class="dt">n=</span><span class="dv">7</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">psignrank</span>(<span class="dt">q=</span><span class="dv">4</span>, <span class="dt">n=</span><span class="dv">7</span>)</a></code></pre></div>
 <pre><code>## [1] 0.0546875</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">psignrank</span>(<span class="dt">q=</span><span class="dv">1</span>, <span class="dt">n=</span><span class="dv">7</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">psignrank</span>(<span class="dt">q=</span><span class="dv">1</span>, <span class="dt">n=</span><span class="dv">7</span>)</a></code></pre></div>
 <pre><code>## [1] 0.015625</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">upper &lt;-<span class="st"> </span><span class="dv">28</span></a>
-<a class="sourceLine" id="cb13-2" title="2">n &lt;-<span class="st"> </span><span class="dv">7</span></a>
-<a class="sourceLine" id="cb13-3" title="3">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span>upper, <span class="dt">y=</span><span class="kw">dsignrank</span>(<span class="dv">0</span><span class="op">:</span>upper, n))</a>
-<a class="sourceLine" id="cb13-4" title="4"><span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb13-5" title="5"><span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-6" title="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;V&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-7" title="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>(<span class="kw">seq</span>(<span class="dv">0</span>,upper,<span class="dv">1</span>)))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># sign rank distribution for sample size of 7</span></a>
+<a class="sourceLine" id="cb14-2" title="2"></a>
+<a class="sourceLine" id="cb14-3" title="3">upper &lt;-<span class="st"> </span><span class="dv">28</span></a>
+<a class="sourceLine" id="cb14-4" title="4">n &lt;-<span class="st"> </span><span class="dv">7</span></a>
+<a class="sourceLine" id="cb14-5" title="5">df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span>upper, <span class="dt">y=</span><span class="kw">dsignrank</span>(<span class="dv">0</span><span class="op">:</span>upper, n))</a>
+<a class="sourceLine" id="cb14-6" title="6"></a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-9" title="9"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;V&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-10" title="10"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>(<span class="kw">seq</span>(<span class="dv">0</span>,upper,<span class="dv">1</span>)))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-3"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-3-1.png" alt="Null sign rank test statistic distribution for sample size of 7" width="672" />
+<p class="caption">
+Figure 19.3: Null sign rank test statistic distribution for sample size of 7
+</p>
+</div>
 </div>
 <div id="write-up-7" class="section level3">
 <h3><span class="header-section-number">19.5.3</span> Write Up</h3>
@@ -889,8 +933,20 @@ The 95% confidence interval of the location on the V test statistic ranges from 
 <p>55 independent subjects were split into two groups. One group received an anti-anxiety drug and the second a vehicle as control. The subjects were run through the dark chamber test. The scientific prediction is the drug will reduce anxiety levels and so the drug treated mice will exit the chamber more quickly compared to the control mice.</p>
 <p>Since this is a parameter-less test, the null hypothesis is that location of the distribution of the drug-treated population is greater than or equal to the location of the vehicle distribution. The alternative hypothesis is that the location of the distribution of the drug-treated population is less than that of the vehicle distribution. The alternative is consistent with our scientific prediction and represents an outcome that is exclusive and comprehensive of the null!</p>
 <p>We choose the “less” option for the alternative argument in the test.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">mightymouse &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/mightymouse.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb14-2" title="2"><span class="kw">wilcox.test</span>(Time <span class="op">~</span><span class="st"> </span>Group, <span class="dt">data =</span> mightymouse, <span class="dt">alternative =</span><span class="st">&quot;less&quot;</span>, <span class="dt">conf.level=</span><span class="fl">0.95</span>, <span class="dt">conf.int=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">mightymouse &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;datasets/mightymouse.csv&quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Group = col_character(),
+##   Time = col_double(),
+##   Rank = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="co"># note use of naming variables with the formula syntax </span></a>
+<a class="sourceLine" id="cb17-2" title="2"></a>
+<a class="sourceLine" id="cb17-3" title="3"><span class="kw">wilcox.test</span>(Time <span class="op">~</span><span class="st"> </span>Group, </a>
+<a class="sourceLine" id="cb17-4" title="4">            <span class="dt">data =</span> mightymouse, </a>
+<a class="sourceLine" id="cb17-5" title="5">            <span class="dt">alternative =</span><span class="st">&quot;less&quot;</span>, </a>
+<a class="sourceLine" id="cb17-6" title="6">            <span class="dt">conf.level=</span><span class="fl">0.95</span>, </a>
+<a class="sourceLine" id="cb17-7" title="7">            <span class="dt">conf.int=</span>T)</a></code></pre></div>
 <pre><code>## 
 ##  Wilcoxon rank sum test
 ## 
@@ -904,15 +960,21 @@ The 95% confidence interval of the location on the V test statistic ranges from 
 ##                   -9.8</code></pre>
 <div id="interpretation-3" class="section level3">
 <h3><span class="header-section-number">19.6.1</span> Interpretation</h3>
-<p>The test statistic you see in the output, W, warrants some discussion. W is equal to <span class="math inline">\(U_2\)</span> as defined above.</p>
+<p>The test statistic you see in the output, <span class="math inline">\(W\)</span>, warrants some discussion. <span class="math inline">\(W\)</span> is equal to <span class="math inline">\(U_2\)</span> as defined above.</p>
 <p>By default, R produces <span class="math inline">\(U_2\)</span> (labeled W!) as the test statistic. Most other software packages use <span class="math inline">\(U_1\)</span>, which in this case would be 88 (easy to compute in the console given <span class="math inline">\(U_2\)</span>).</p>
-<p>Think of W as a value on the x axis of a rank sum distribution for a sample size of <code>m+n</code>. The rank sum distribution has a function in R called <code>dwilcox</code>. Here it is (note the large value this distribution can take on is <code>m*n</code> and the smallest is zero):</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span><span class="dv">143</span>, <span class="dt">y=</span><span class="kw">dwilcox</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">143</span>, <span class="dv">11</span>, <span class="dv">13</span>))</a>
-<a class="sourceLine" id="cb16-2" title="2"><span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb16-3" title="3"><span class="st">  </span><span class="kw">geom_col</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb16-4" title="4"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;W&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb16-5" title="5"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">55</span>, <span class="dv">88</span>))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Think of <span class="math inline">\(W\)</span> as a value on the x axis of a rank sum distribution for a sample size of <code>m+n</code>. The rank sum distribution has a function in R called <code>dwilcox</code>. Here it is (note the large value this distribution can take on is <code>m*n</code> and the smallest is zero):</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span><span class="dv">143</span>, <span class="dt">y=</span><span class="kw">dwilcox</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">143</span>, <span class="dv">11</span>, <span class="dv">13</span>))</a>
+<a class="sourceLine" id="cb19-2" title="2"></a>
+<a class="sourceLine" id="cb19-3" title="3"><span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb19-4" title="4"><span class="st">  </span><span class="kw">geom_col</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb19-5" title="5"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;W&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb19-6" title="6"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">55</span>, <span class="dv">88</span>))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-4"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-4-1.png" alt="The null rank sum test statistic distribution for a sample size of m=11 and n=13" width="672" />
+<p class="caption">
+Figure 19.4: The null rank sum test statistic distribution for a sample size of m=11 and n=13
+</p>
+</div>
 <p>All this can seem confusing, but it is very elegant. First, the rank sums of samples, like the rank signs of samples, take on symmetrical, normal-like distributions. The greater the sample sizes, the more normal-like they become.</p>
 <p>Second, the bottom line is the same as for all other statistical tests: test statistic values at either extreme of these null distributions are associated with large effect sizes.</p>
 <p>The non-extreme-ness of the test statistic value for our sample is illustrated in that plot. Clearly, W=55, it is well within the null distribution. I calculated it’s symmetrical counterpart, <span class="math inline">\(U_1\)</span> = 88, from the relationship above. As you can see, the value of the test statistic and 88 frame the central location of this null ranksum distribution null quite nicely:</p>
@@ -924,6 +986,25 @@ The 95% confidence interval of the location on the V test statistic ranges from 
 <h3><span class="header-section-number">19.6.2</span> Write Up</h3>
 <p><em>There is no difference in performance using the closed chamber test between subjects randomized to anti-anxiety drug (n=11) or to vehicle (n=13) (Mann-Whitney test, W = 55, p = 0.1804).</em></p>
 </div>
+<div id="plot" class="section level3">
+<h3><span class="header-section-number">19.6.3</span> Plot</h3>
+<p>This is a two group experiment. Every data point represents an independent replicate.</p>
+<p>The <code>aes</code> function defines the plot axis. The x-axis is the factor “Group” and it has two levels, “Drugs” and “Vehicle”. The y-axis is “Time” in seconds.</p>
+<p>It is customary to illustrate summary statistics of nonparametric data with box plots. By default these illustrate the median (mid horizontal bar), interquartile ranges (outer horizontal bars) and full ranges (verticle bars). The small dot is a value the <code>geom_boxplot</code> function recognizes as an outlier. It can be surpressed with an argument.</p>
+<p>It is becoming customary to show all data points. Thus, overlaying the points on a box plot shows all the data and its summary. The visualization illustrates quite well the deviant data. Nonparametric analysis handles this well. This isn’t suitable for a t-test.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">ggplot</span>(mightymouse, <span class="kw">aes</span>(<span class="dt">x=</span>Group, <span class="dt">y=</span>Time))<span class="op">+</span></a>
+<a class="sourceLine" id="cb20-2" title="2"><span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">width=</span><span class="fl">0.3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb20-3" title="3"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">height=</span><span class="dv">0</span>, </a>
+<a class="sourceLine" id="cb20-4" title="4">              <span class="dt">width =</span> <span class="fl">0.1</span>, </a>
+<a class="sourceLine" id="cb20-5" title="5">              <span class="dt">size =</span> <span class="dv">4</span>, </a>
+<a class="sourceLine" id="cb20-6" title="6">              <span class="dt">alpha=</span><span class="fl">0.4</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-5"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-5-1.png" alt="A minimal configuration for plotting a 2 group nonparametric experimental design." width="672" />
+<p class="caption">
+Figure 19.5: A minimal configuration for plotting a 2 group nonparametric experimental design.
+</p>
+</div>
+</div>
 </div>
 <div id="wilcoxon-sign-rank-test-for-paired-groups" class="section level2">
 <h2><span class="header-section-number">19.7</span> Wilcoxon Sign Rank Test for paired groups</h2>
@@ -934,12 +1015,30 @@ The 95% confidence interval of the location on the V test statistic ranges from 
 <p>In this example, we take a pair of mice from each of 6 independent litters produced by mating two heterozygotes of a nogo receptor knockout. One of the pair is nogo(-/-). The other is nogo(+/+). We think the nogo receptor causes the animals to be fearful, and predict animals in which the receptor is knocked out will be more fearless.</p>
 <p>The independent experimental unit in this design is a pair. We have six pairs, Therefore, the sample size is 6 (even though 12 animals will be used!)</p>
 <p>We’ll measure latency in the dark chamber test. Our random variable will be the difference in latency time between the knockout and the wild type, for each pair.</p>
-<p>Here’s the data, latency times are in sec units:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">mmko &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">knockout=</span><span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">24</span>, <span class="dv">4</span>, <span class="dv">22</span>, <span class="dv">15</span>, <span class="dv">18</span>), <span class="dt">wildtype=</span><span class="kw">c</span>(<span class="dv">99</span>, <span class="dv">81</span>, <span class="dv">70</span>, <span class="dv">62</span>, <span class="dv">120</span>, <span class="dv">55</span>))</a>
-<a class="sourceLine" id="cb17-2" title="2"><span class="co">#create a long data fram to do formula arguments in wilcox test</span></a>
-<a class="sourceLine" id="cb17-3" title="3">mmkotidy &lt;-<span class="st"> </span><span class="kw">gather</span>(mmko, genotype, latency )</a></code></pre></div>
+<p>Here’s the data, latency times are in sec units. Each animal generates two measurements and has an id value:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="co"># enter the data by hand, no need to use csv files </span></a>
+<a class="sourceLine" id="cb21-2" title="2"></a>
+<a class="sourceLine" id="cb21-3" title="3">mmko &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
+<a class="sourceLine" id="cb21-4" title="4">  <span class="dt">id=</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>, <span class="st">&quot;e&quot;</span>, <span class="st">&quot;f&quot;</span>),</a>
+<a class="sourceLine" id="cb21-5" title="5">  <span class="dt">knockout=</span><span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">24</span>, <span class="dv">4</span>, <span class="dv">22</span>, <span class="dv">15</span>, <span class="dv">18</span>), </a>
+<a class="sourceLine" id="cb21-6" title="6">  <span class="dt">wildtype=</span><span class="kw">c</span>(<span class="dv">99</span>, <span class="dv">81</span>, <span class="dv">70</span>, <span class="dv">62</span>, <span class="dv">120</span>, <span class="dv">55</span>)</a>
+<a class="sourceLine" id="cb21-7" title="7">  )</a>
+<a class="sourceLine" id="cb21-8" title="8"></a>
+<a class="sourceLine" id="cb21-9" title="9"><span class="co">#create a long data fram to do formula arguments in wilcox test</span></a>
+<a class="sourceLine" id="cb21-10" title="10"></a>
+<a class="sourceLine" id="cb21-11" title="11">mmkotidy &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(mmko, </a>
+<a class="sourceLine" id="cb21-12" title="12">                         <span class="op">-</span><span class="st"> </span>id, </a>
+<a class="sourceLine" id="cb21-13" title="13">                         <span class="dt">names_to =</span> <span class="st">&quot;genotype&quot;</span>, </a>
+<a class="sourceLine" id="cb21-14" title="14">                         <span class="dt">values_to =</span> <span class="st">&quot;latency&quot;</span> </a>
+<a class="sourceLine" id="cb21-15" title="15">                         )</a></code></pre></div>
 <p>Scientifically, we predict there will be a difference in latency times within the pairs. Specifically, the knockout will have lower times than their paired wild-type. The null hypothesis is that the difference within pairs will be greater than or equal to zero. The alternative hypothesis is the difference will be less than zero.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">wilcox.test</span>(latency <span class="op">~</span><span class="st"> </span>genotype, <span class="dt">data=</span>mmkotidy, <span class="dt">paired=</span>T, <span class="dt">conf.level=</span><span class="fl">0.95</span>, <span class="dt">conf.int=</span>T, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">wilcox.test</span>(latency <span class="op">~</span><span class="st"> </span>genotype, </a>
+<a class="sourceLine" id="cb22-2" title="2">            <span class="dt">data=</span>mmkotidy, </a>
+<a class="sourceLine" id="cb22-3" title="3">            <span class="dt">paired=</span>T, </a>
+<a class="sourceLine" id="cb22-4" title="4">            <span class="dt">conf.level=</span><span class="fl">0.95</span>, </a>
+<a class="sourceLine" id="cb22-5" title="5">            <span class="dt">conf.int=</span>T, </a>
+<a class="sourceLine" id="cb22-6" title="6">            <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span></a>
+<a class="sourceLine" id="cb22-7" title="7">            )</a></code></pre></div>
 <pre><code>## 
 ##  Wilcoxon signed rank test
 ## 
@@ -956,14 +1055,23 @@ The 95% confidence interval of the location on the V test statistic ranges from 
 <p>Note that this is not a rank sum test as for the Mann-Whitney, but a signed rank test.</p>
 <p>So we have seen the V test statistic before. It’s value of 0 is as extreme as can be had on the null distribution, as is evident in the distribution below! That happened because in each of the six pairs, the knockout had a lower latency time than its paired wildtype. All of the signed ranks were negative!</p>
 <p>In terms of position differences, it is as strong of an effect size as possible.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">upper &lt;-<span class="st"> </span><span class="dv">21</span></a>
-<a class="sourceLine" id="cb20-2" title="2">n &lt;-<span class="st"> </span><span class="dv">6</span></a>
-<a class="sourceLine" id="cb20-3" title="3">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span>upper, <span class="dt">y=</span><span class="kw">dsignrank</span>(<span class="dv">0</span><span class="op">:</span>upper, n))</a>
-<a class="sourceLine" id="cb20-4" title="4"><span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb20-5" title="5"><span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb20-6" title="6"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;V&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb20-7" title="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>(<span class="kw">seq</span>(<span class="dv">0</span>,upper,<span class="dv">1</span>)))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">upper &lt;-<span class="st"> </span><span class="dv">21</span></a>
+<a class="sourceLine" id="cb24-2" title="2">n &lt;-<span class="st"> </span><span class="dv">6</span></a>
+<a class="sourceLine" id="cb24-3" title="3"></a>
+<a class="sourceLine" id="cb24-4" title="4">df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x=</span><span class="dv">0</span><span class="op">:</span>upper, </a>
+<a class="sourceLine" id="cb24-5" title="5">             <span class="dt">y=</span><span class="kw">dsignrank</span>(<span class="dv">0</span><span class="op">:</span>upper, n)</a>
+<a class="sourceLine" id="cb24-6" title="6">             )</a>
+<a class="sourceLine" id="cb24-7" title="7"></a>
+<a class="sourceLine" id="cb24-8" title="8"><span class="kw">ggplot</span>(df, (<span class="kw">aes</span>(x,y)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb24-9" title="9"><span class="st">  </span><span class="kw">geom_col</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-10" title="10"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;V&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-11" title="11"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>(<span class="kw">seq</span>(<span class="dv">0</span>,upper,<span class="dv">1</span>)))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-6"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-6-1.png" alt="Null sign rank test statistic distribution when n= 6 pairs." width="672" />
+<p class="caption">
+Figure 19.6: Null sign rank test statistic distribution when n= 6 pairs.
+</p>
+</div>
 <p>The p-value is exact…and it can never be lower, given this sample size. We can reject the null since it is below our 5% threshold and it says the probably that we are accepting a type1 error is 1.563%.</p>
 <p>The pseudo-median is in units of latency time. It represents the median for the differences in latency within the pairs. In other words, there are six values of differences, one difference value for each pair. -61.5 is the median of those 6 differences.</p>
 <p>There is a 95% chance the true median of the differences lies between negative infinity and -40. Note that the 95% CI does not include the value of zero.</p>
@@ -971,6 +1079,22 @@ The 95% confidence interval of the location on the V test statistic ranges from 
 <div id="write-up-9" class="section level3">
 <h3><span class="header-section-number">19.7.2</span> Write up</h3>
 <p><em>Dark chamber test latency differs markedly within pairs of knockout and wildtype subjects (Wilcoxon Signed Rank Test for pairs, n=6, V = 0, p=0.01563)</em></p>
+</div>
+<div id="plot-1" class="section level3">
+<h3><span class="header-section-number">19.7.3</span> Plot</h3>
+<p>Since this is a paired experimental design we create a dot-line-dot plot that illustrates this point. A very common mistake is for people who have a paired experiment to plot means of the two groups, or two bars, without connecting the paired data.</p>
+<p>The statistical test, in fact, is not performed on the latency values for the two groups.Group means or medians are irrelevant. Instead, it is performed on the <em>differences within the pairs</em>. In other words, the test is run, essentially, on sign ranked values related to the <em>slopes</em> of the red lines, not on the values of the dots.</p>
+<p>The plot should always reflect the experimental design.</p>
+<p>Here is a minimal concept for this. The <code>group</code> aesthetic is the key and definitely a trick worth remembering. If you want to really bob ross this, add <code>color = id</code> to the aesthetics.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">ggplot</span>(mmkotidy, <span class="kw">aes</span>(genotype, latency, <span class="dt">group=</span>id))<span class="op">+</span></a>
+<a class="sourceLine" id="cb25-2" title="2"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb25-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-7"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" alt="Paired experimental designs should always be plotted dot-point-dot." width="672" />
+<p class="caption">
+Figure 19.7: Paired experimental designs should always be plotted dot-point-dot.
+</p>
+</div>
 </div>
 </div>
 <div id="kruskal-wallis" class="section level2">
@@ -986,18 +1110,30 @@ The 95% confidence interval of the location on the V test statistic ranges from 
 <h3><span class="header-section-number">19.8.1</span> The experimental design</h3>
 <p>Let’s analyze the InsectSprays data set, which comes with the <code>PMCMRplus</code> package. This is a multifactorial experiment in which insects were counted in agricultural field plots that had been sprayed with 1 of 6 different insecticides. Each row in the data set represents an independent field plot.</p>
 <p>Do the insecticides differ?</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw">ggplot</span>(InsectSprays, <span class="kw">aes</span>(spray, count))<span class="op">+</span></a>
-<a class="sourceLine" id="cb21-2" title="2"><span class="st">  </span><span class="kw">geom_violin</span>(<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">ggplot</span>(InsectSprays, <span class="kw">aes</span>(spray, count))<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-2" title="2"><span class="st">  </span><span class="kw">geom_violin</span>(<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>, </a>
+<a class="sourceLine" id="cb26-3" title="3">              <span class="dt">color=</span><span class="st">&quot;red&quot;</span>,</a>
+<a class="sourceLine" id="cb26-4" title="4">              <span class="dt">size =</span> <span class="fl">1.5</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-8"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-8-1.png" alt="Violin plot for counts of insects in crop fields somewhere in Kansas following treatment with different insecticides." width="672" />
+<p class="caption">
+Figure 19.8: Violin plot for counts of insects in crop fields somewhere in Kansas following treatment with different insecticides.
+</p>
+</div>
 <p>The violin plots (modern day versions of box plots) illustrate how the groups have unequal variance. Such data are appropriate for non-parametric analysis.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="co">#insectsprays &lt;- read.csv(&quot;insectsprays.csv&quot;)</span></a>
-<a class="sourceLine" id="cb22-2" title="2"><span class="kw">kruskal.test</span>(count <span class="op">~</span><span class="st"> </span>spray, <span class="dt">data=</span>InsectSprays)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co">#insectsprays &lt;- read.csv(&quot;insectsprays.csv&quot;)</span></a>
+<a class="sourceLine" id="cb27-2" title="2"><span class="kw">kruskal.test</span>(count <span class="op">~</span><span class="st"> </span>spray, </a>
+<a class="sourceLine" id="cb27-3" title="3">             <span class="dt">data=</span>InsectSprays</a>
+<a class="sourceLine" id="cb27-4" title="4">             )</a></code></pre></div>
 <pre><code>## 
 ##  Kruskal-Wallis rank sum test
 ## 
 ## data:  count by spray
 ## Kruskal-Wallis chi-squared = 54.691, df = 5, p-value = 1.511e-10</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw">kwAllPairsConoverTest</span>(count <span class="op">~</span><span class="st"> </span>spray, <span class="dt">data=</span>InsectSprays, <span class="dt">p.adjust =</span><span class="st">&quot;bonf&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">kwAllPairsConoverTest</span>(count <span class="op">~</span><span class="st"> </span>spray, </a>
+<a class="sourceLine" id="cb29-2" title="2">                      <span class="dt">data=</span>InsectSprays, </a>
+<a class="sourceLine" id="cb29-3" title="3">                      <span class="dt">p.adjust =</span><span class="st">&quot;bonf&quot;</span></a>
+<a class="sourceLine" id="cb29-4" title="4">                      )</a></code></pre></div>
 <pre><code>## Warning in kwAllPairsConoverTest.default(c(10, 7, 20, 14, 14, 12, 10, 23, : Ties
 ## are present. Quantiles were corrected for ties.</code></pre>
 <pre><code>## 
@@ -1036,28 +1172,32 @@ The 95% confidence interval of the location on the V test statistic ranges from 
 <p>Protein kinase A activity (PKA) was measured in extracts of cultured VSMC after exposure to either of four possible treatments.</p>
 <p>There are a few critical questions this experiment hopes to answer. Does isoproterenol stimulate activity? Does the presence of a GFP_PKI inhibit stimulated activity? Is that inhibitory effect absent in a negative control for GFP_PKI?</p>
 <p>Each week serves as a block, which is an independent replicate wherein all recorded measurements are more related to each other than they are to measurements in other weeks. The VSMC used each week have a common source, are treated in parallel, and are subject to vagaries peculiar to that week for the multi-step protocol.</p>
-<p>The results are entered in the code below:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">pki &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb30-2" title="2">  <span class="dt">replicate=</span><span class="kw">c</span>(<span class="st">&#39;week1&#39;</span>, <span class="st">&#39;week2&#39;</span>, <span class="st">&#39;week3&#39;</span>, <span class="st">&#39;week4&#39;</span>, <span class="st">&#39;week5&#39;</span>),</a>
-<a class="sourceLine" id="cb30-3" title="3">  <span class="dt">basal=</span><span class="kw">c</span>(<span class="fl">20.0</span>, <span class="fl">5.0</span>, <span class="fl">2.1</span>, <span class="fl">9.0</span>, <span class="fl">23.7</span>),</a>
-<a class="sourceLine" id="cb30-4" title="4">  <span class="dt">isoproterenol=</span><span class="kw">c</span>(<span class="fl">38.3</span>, <span class="fl">9.1</span>, <span class="fl">3.6</span>, <span class="fl">15.5</span>, <span class="fl">38.9</span>),</a>
-<a class="sourceLine" id="cb30-5" title="5">  <span class="dt">iso_GFP_PKI=</span><span class="kw">c</span>(<span class="fl">27.5</span>, <span class="fl">6.7</span>, <span class="fl">2.7</span>, <span class="fl">12.1</span>,<span class="fl">28.0</span> ),</a>
-<a class="sourceLine" id="cb30-6" title="6">  <span class="dt">iso_GFP=</span><span class="kw">c</span>(<span class="fl">36.1</span>, <span class="fl">8.5</span>, <span class="fl">4.2</span>, <span class="fl">16.0</span>,<span class="fl">39.9</span> )</a>
-<a class="sourceLine" id="cb30-7" title="7">)</a></code></pre></div>
-<p>Here is a plot of the VSMC data:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">ggplot</span>(pki <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb31-2" title="2"><span class="st">         </span><span class="kw">pivot_longer</span>(<span class="op">-</span>replicate, <span class="dt">names_to=</span><span class="st">&quot;stimulus&quot;</span>, <span class="dt">values_to =</span><span class="st">&quot;pka&quot;</span>), <span class="kw">aes</span>(stimulus, pka, <span class="dt">group=</span>replicate, <span class="dt">color=</span>replicate))<span class="op">+</span></a>
-<a class="sourceLine" id="cb31-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb31-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb31-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;PKA activity, pmole/mg/min&quot;</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-17"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-17-1.png" alt="PKA activity in VSMC, note related measures within each replicate." width="672" />
+<p>The results are entered in the code below, creating a wide format data frame:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">pki &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
+<a class="sourceLine" id="cb35-2" title="2">  <span class="dt">replicate=</span><span class="kw">c</span>(<span class="st">&#39;week1&#39;</span>, <span class="st">&#39;week2&#39;</span>, <span class="st">&#39;week3&#39;</span>, <span class="st">&#39;week4&#39;</span>, <span class="st">&#39;week5&#39;</span>),</a>
+<a class="sourceLine" id="cb35-3" title="3">  <span class="dt">basal=</span><span class="kw">c</span>(<span class="fl">20.0</span>, <span class="fl">5.0</span>, <span class="fl">2.1</span>, <span class="fl">9.0</span>, <span class="fl">23.7</span>),</a>
+<a class="sourceLine" id="cb35-4" title="4">  <span class="dt">isoproterenol=</span><span class="kw">c</span>(<span class="fl">38.3</span>, <span class="fl">9.1</span>, <span class="fl">3.6</span>, <span class="fl">15.5</span>, <span class="fl">38.9</span>),</a>
+<a class="sourceLine" id="cb35-5" title="5">  <span class="dt">iso_GFP_PKI=</span><span class="kw">c</span>(<span class="fl">27.5</span>, <span class="fl">6.7</span>, <span class="fl">2.7</span>, <span class="fl">12.1</span>,<span class="fl">28.0</span> ),</a>
+<a class="sourceLine" id="cb35-6" title="6">  <span class="dt">iso_GFP=</span><span class="kw">c</span>(<span class="fl">36.1</span>, <span class="fl">8.5</span>, <span class="fl">4.2</span>, <span class="fl">16.0</span>,<span class="fl">39.9</span> )</a>
+<a class="sourceLine" id="cb35-7" title="7">)</a></code></pre></div>
+<p>Here is a plot of the VSMC data. Note how it was converted to long format within the ggplot function:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">ggplot</span>(pki <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb36-2" title="2"><span class="st">         </span><span class="kw">pivot_longer</span>(<span class="op">-</span>replicate, </a>
+<a class="sourceLine" id="cb36-3" title="3">                      <span class="dt">names_to=</span><span class="st">&quot;stimulus&quot;</span>, </a>
+<a class="sourceLine" id="cb36-4" title="4">                      <span class="dt">values_to =</span><span class="st">&quot;pka&quot;</span>), </a>
+<a class="sourceLine" id="cb36-5" title="5">       <span class="kw">aes</span>(stimulus, pka, <span class="dt">group=</span>replicate, <span class="dt">color=</span>replicate)</a>
+<a class="sourceLine" id="cb36-6" title="6">       )<span class="op">+</span></a>
+<a class="sourceLine" id="cb36-7" title="7"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb36-8" title="8"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb36-9" title="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;PKA activity, pmole/mg/min&quot;</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-9"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-9-1.png" alt="PKA activity in VSMC, note related measures within each replicate." width="672" />
 <p class="caption">
-Figure 19.1: PKA activity in VSMC, note related measures within each replicate.
+Figure 19.9: PKA activity in VSMC, note related measures within each replicate.
 </p>
 </div>
 <table>
-<caption><span id="tab:unnamed-chunk-18">Table 19.1: </span>Replicate measurements of PKA enzyme activity (pmole/mg/min) in cultured rat vascular smooth muscle cells (VSMC).</caption>
+<caption>(#tab:Table of PKA activity data)Replicate measurements of PKA enzyme activity (pmole/mg/min) in cultured rat vascular smooth muscle cells (VSMC).</caption>
 <thead>
 <tr class="header">
 <th align="left">replicate</th>
@@ -1110,18 +1250,24 @@ Figure 19.1: PKA activity in VSMC, note related measures within each replicate.
 <p>The Friedman test can answer this question: Do any of these treatments differ? The test does not provide information on which groups differ, serving instead as an omnibus. The test output is simply a p-value, derived from the so-called Friedman chisquare.</p>
 <p>There are a couple of options for performing the test.</p>
 <p>The first involves converting the data to a matrix, omitting the values of the <code>replicate</code> variable, and passing that matrix of responses into the <code>friendman.test</code> function. The final row names decoration is not essential for <code>friedman.test</code>, but does help the posthoc tests play nicer.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">pkiM &lt;-<span class="st"> </span>pki <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(basal<span class="op">:</span>iso_GFP) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>()</a>
-<a class="sourceLine" id="cb32-2" title="2"><span class="kw">rownames</span>(pkiM) &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span></a></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">friedman.test</span>(pkiM)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">pkiM &lt;-<span class="st"> </span>pki <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-2" title="2"><span class="st">  </span><span class="kw">select</span>(basal<span class="op">:</span>iso_GFP) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-3" title="3"><span class="st">  </span><span class="kw">as.matrix</span>()</a>
+<a class="sourceLine" id="cb37-4" title="4"><span class="kw">rownames</span>(pkiM) &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span></a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">friedman.test</span>(pkiM)</a></code></pre></div>
 <pre><code>## 
 ##  Friedman rank sum test
 ## 
 ## data:  pkiM
 ## Friedman chi-squared = 13.56, df = 3, p-value = 0.00357</code></pre>
 <p>The second approach is the so-called formula method, which we’ll use a lot when we get to regression. First, convert the data to a long format data frame.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">pkiL &lt;-<span class="st"> </span>pki <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="op">-</span>replicate, <span class="dt">names_to =</span> <span class="st">&quot;stimulus&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;pka&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">pkiL &lt;-<span class="st"> </span>pki <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb40-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>replicate, </a>
+<a class="sourceLine" id="cb40-3" title="3">               <span class="dt">names_to =</span> <span class="st">&quot;stimulus&quot;</span>, </a>
+<a class="sourceLine" id="cb40-4" title="4">               <span class="dt">values_to=</span><span class="st">&quot;pka&quot;</span>)</a></code></pre></div>
 <p>Now pass that format into <code>friedman.test</code>. In English, this formula reads, “run the Friedman test on pka activity by stimulus levels, with related measures by replicate”.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">friedman.test</span>(pka<span class="op">~</span>stimulus<span class="op">|</span>replicate, <span class="dt">data=</span>pkiL)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw">friedman.test</span>(pka<span class="op">~</span>stimulus<span class="op">|</span>replicate, </a>
+<a class="sourceLine" id="cb41-2" title="2">              <span class="dt">data=</span>pkiL)</a></code></pre></div>
 <pre><code>## 
 ##  Friedman rank sum test
 ## 
@@ -1129,7 +1275,8 @@ Figure 19.1: PKA activity in VSMC, note related measures within each replicate.
 ## Friedman chi-squared = 13.56, df = 3, p-value = 0.00357</code></pre>
 <p>Because this p-value is below a 5% type1 error threshold, this result indicates that levels of the stimulus variable cause differences in PKA activities.</p>
 <p>However, posthoc comparison tests are necessary to find out which differences between stimulus levels are reliable.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">frdAllPairsConoverTest</span>(pkiM, <span class="dt">p.adjust=</span><span class="st">&quot;bonf&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">frdAllPairsConoverTest</span>(pkiM, </a>
+<a class="sourceLine" id="cb43-2" title="2">                       <span class="dt">p.adjust=</span><span class="st">&quot;bonf&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using Conover&#39;s all-pairs test for a two-way balanced complete block design</code></pre>
 <pre><code>## data: y</code></pre>
@@ -1143,14 +1290,14 @@ Figure 19.1: PKA activity in VSMC, note related measures within each replicate.
 <p>In this particular case, we have an ambiguous and underpowered data set. If you play with this data on your own machine, you’ll find there is ample latitude for prosperous p-hacking in the post hoc testing.</p>
 <p>For example, if the p-values are unadjusted for multiple comparisons, all of the post hoc functions yield statistical differences. But unadjusted comparisons are not very stringent.</p>
 <p>Alternately, certain post hoc tests with other p-value adjustment options yield statistical differences.</p>
-<p>The question is not “which one is better”? The approach to take is to run realistic simulations in advance of collecting data, learn about the options,and choose accordingly. Write down your choices, and stick with them after the data rolls in.</p>
+<p>The question is not “which one is better”? The approach to take is to run realistic simulations in advance of collecting data, learn about the options by playing with familiar variables, and choose accordingly. Write down your choices for how you you intend to post hoc once the new data is collected, and stick with that plan.</p>
 </div>
 <div id="interpretation-5" class="section level3">
 <h3><span class="header-section-number">19.9.2</span> Interpretation</h3>
-<p>Because the probability of the Friedman test statistic is below the 5% threshold, we can reject the null that there are no differences in PKA activity caused by the four stimulus conditions.</p>
-<p>However, the post hoc multiple comparison testing, with appropriate p-value adjustment, is inconclusive. The bloody obvious evidence (as seen by inspecting the table and figure) that the GFP-PKI construct inhibits PKA is unsupported by the statistical analysis. The experiment is underpowered to detect those differences.</p>
-<p>Although there is a proverbial “trending towards significance”<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for two of the comparisons, neither of these are for the most important outcome, which is to observe that GFP-PKI causes PKA activity to be much lower than GFP.</p>
-<p>It turns out transfection inefficiency explained this failure. This was overcome by a significant protocol adjustment.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>Because the p-value of the Friedman test statistic is below the 5% threshold, we can reject the null that there are no differences in PKA activity caused by the four stimulus conditions.</p>
+<p>However, the post hoc multiple comparison testing, with appropriate p-value adjustment, is inconclusive. The bloody obvious evidence (as seen by inspecting the table and figure) that the GFP-PKI construct inhibits PKA is unsupported by the statistical analysis. The experiment is underpowered. There are too few independent replicates.</p>
+<p>Although there is a proverbial “trending towards significance”<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for two of the comparisons, neither of these speak to the most important outcome, which is to observe that GFP-PKI inhibits PKA activity.</p>
+<p>It turns out transfection inefficiency explained this failure. The data reflect that the inhibitor was working, just not in enough cells. This was overcome by a significant protocol adjustment so that more cells expressed the inhibitor.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 </div>
 <div id="write-up-11" class="section level3">
 <h3><span class="header-section-number">19.9.3</span> Write up</h3>
@@ -1159,14 +1306,15 @@ Figure 19.1: PKA activity in VSMC, note related measures within each replicate.
 </div>
 <div id="nonparametric-power-calculations" class="section level2">
 <h2><span class="header-section-number">19.10</span> Nonparametric power calculations</h2>
-<p>To my knowledge, there are no simple power functions in R (or elsewhere) designed for nonparametric testing. I assume the reason for that is that nonparametric tests can be performed on a wide variety of data types, often with crappy parameter estimates. As such, it’s hard to create one-size-fits all, plug and play functions that anybody can use.</p>
 <p>The function below, <code>nonpara.pwr</code> is configured to simulate the power of nonparametric one- and two-group comparisons using the Wilcoxon test function of R.</p>
 <p>The intended use of this function is to establish <em>a priori</em> the sample size needed to yield a level of power that you deem acceptable.</p>
-<p>What the function does is simulate a long run of experimental results at a given sample size, from which it calculates the power. This is a Monte Carlo method. Thus, it simulate random values that mimic experimental results based upon “known” population parameters.</p>
-<p>The function strictly takes the argument of a sample size value and returns an experimental power that sample size generates.</p>
-<p>But it also requires that you customize your initialization. Do this by entering estimates for parameters of the population you expect to sample. All you need to do this is a pretty good guess of the values for the outcome variable you expect your experiment will produce.</p>
+<p>The function simulates a long run sample results at a given sample size, running a statistical test on each. Power is simply the fraction of these tests that have p-values below a chosen threshold. This is a Monte Carlo method.</p>
+<p>The function strictly takes the argument of a sample size value and returns an experimental power that sample size generates. For example, after loading the function in your environment, typing <code>nonparam.pwr(n=5)</code> in the console will return the power for the test you configured.</p>
+<p>That configuration customization of the function’s initialization. Do this by entering estimates for parameters of the population you expect to sample. All you need for that is a scientific hunch about the values for the outcome variable you expect your experiment will produce.</p>
 <div id="how-it-works" class="section level3">
 <h3><span class="header-section-number">19.10.1</span> How it works</h3>
+<p>Monte Carlo is general statistical jargon for repeated simulation. This is a technique widely used in many applications across statistics and data science.</p>
+<p>In this course, Monte Carlo power calculations means that we are mostly running repeated simulations to determine a sample size for a planned experiment.</p>
 <div id="tldr" class="section level4">
 <h4><span class="header-section-number">19.10.1.1</span> tl;dr</h4>
 <ol style="list-style-type: decimal">
@@ -1174,66 +1322,76 @@ Figure 19.1: PKA activity in VSMC, note related measures within each replicate.
 <li>Run a statistical test on the sample.</li>
 <li>Collect the p-value from that test.</li>
 <li>Repeat steps 1 through 3 ~1000 times or more.</li>
-<li>Calculate the fraction of p-values that are below a threshold, such as 0.05.</li>
+<li>Count the p-values that are below a type1 threshold, such as 0.05.</li>
 </ol>
-<p>Use the initializer to define values for the parameters of the population you’re sampling. These are passed into a function that randomly generate values for the outcome variable. A statistical test is performed on that outcome. A secondary ‘hit’ test asks whether the test result crosses a threshold. Here a ‘hit’ is counted if the p-value for the simulated test is less than 0.05.</p>
-<p>Power is the fraction of p-values that fall below the confidence level that you set. For example, if you set a confidence level of 95%, every p-value less than 0.05 will be scored as a hit. Power = hits/number of simulations.</p>
-<p>The function is configured to repeat this simulation/testing/hit count process many times, hundreds or even thousands of times. The more times it simulates a result, the more accurate the power estimate.</p>
 </div>
 </div>
 <div id="simulating-response-data" class="section level3">
 <h3><span class="header-section-number">19.10.2</span> Simulating response data</h3>
-<p>Let’s focus for now on the thought process involved in how to initialize it.</p>
-<p>What’s most important is to initialize the function using a random value generator that best simulates the type of data you expect to generate in your experiment. More on ‘best simulates’ is at the end of this section. Using the random number generator functions of the various probability distributions in R is suitable for many cases. For other problems, random sampling functions like <code>sample</code> can do the trick.</p>
+<p>Nonparametric tests are useful for a diverse array of data types. So it is useful to know there are many ways to mimic this diversity. What’s most important is mimicking the effect sizes (eg, differences) and variation as realistically as possible.</p>
+<p>Using the random number generator functions of the various probability distributions in R is suitable for many cases. Bear in mind, the base distributions we cover in this course are just tip of the iceberg.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>For other problems, random sampling functions like <code>sample</code> can be configured to do the trick.</p>
 <p>For example, use <code>rnorm</code> for measured variables for which you believe you can predict means and standard deviations. Make sure your <code>sd</code> estimate is realistic. Most people underestimate <code>sd</code>.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="co"># simulate a sample size of 5 for a normally-distributed variable with mean of 100 units and standard deviation of 25 units</span></a>
-<a class="sourceLine" id="cb43-2" title="2">control<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">mean=</span><span class="dv">100</span>, <span class="dt">sd=</span><span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb43-3" title="3">treatment<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">mean=</span><span class="dv">150</span>, <span class="dt">sd=</span><span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb43-4" title="4">sim.set1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(control<span class="fl">.1</span>, treatment<span class="fl">.1</span>); sim.set1</a></code></pre></div>
-<pre><code>##   control.1 treatment.1
-## 1 147.61284    135.7875
-## 2  87.52282    169.6323
-## 3 137.28064    147.7520
-## 4 130.29390    140.0776
-## 5  87.90917    173.8144</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># simulate a sample size of 5 for a normally-distributed </span></a>
+<a class="sourceLine" id="cb48-2" title="2"><span class="co">#variable with mean of 100 units and standard deviation of 25 units</span></a>
+<a class="sourceLine" id="cb48-3" title="3">control<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">mean=</span><span class="dv">100</span>, <span class="dt">sd=</span><span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb48-4" title="4">treatment<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">mean=</span><span class="dv">150</span>, <span class="dt">sd=</span><span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb48-5" title="5">sim.set1 &lt;-<span class="st"> </span><span class="kw">tibble</span>(control<span class="fl">.1</span>, </a>
+<a class="sourceLine" id="cb48-6" title="6">                   treatment<span class="fl">.1</span>) </a>
+<a class="sourceLine" id="cb48-7" title="7">sim.set1</a></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##   control.1 treatment.1
+##       &lt;dbl&gt;       &lt;dbl&gt;
+## 1      79.2        163.
+## 2      99.2        152.
+## 3     136.         185.
+## 4     105.         146.
+## 5     133.         161.</code></pre>
 <p>Use <code>rpois</code> to simulate variables that represent discrete events, such as frequencies. How many depolarizations do you expect at baseline? How many more (or less) do you think your treatment will cause?</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="co">#simulate 5 events, where each occurs at an average frequency of 7.</span></a>
-<a class="sourceLine" id="cb45-2" title="2"></a>
-<a class="sourceLine" id="cb45-3" title="3">control<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">lambda=</span><span class="dv">7</span>)</a>
-<a class="sourceLine" id="cb45-4" title="4">treatment<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">lambda=</span><span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb45-5" title="5">sim.set2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(control<span class="fl">.2</span>, treatment<span class="fl">.2</span>); sim.set2</a></code></pre></div>
-<pre><code>##   control.2 treatment.2
-## 1         4           4
-## 2         5          10
-## 3         6           8
-## 4        10           7
-## 5         3           8</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co">#simulate 5 events, where each occurs at an average frequency of 7.</span></a>
+<a class="sourceLine" id="cb50-2" title="2"></a>
+<a class="sourceLine" id="cb50-3" title="3">control<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">lambda=</span><span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb50-4" title="4">treatment<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">lambda=</span><span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb50-5" title="5">sim.set2 &lt;-<span class="st"> </span><span class="kw">tibble</span>(control<span class="fl">.2</span>, treatment<span class="fl">.2</span>); sim.set2</a></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##   control.2 treatment.2
+##       &lt;int&gt;       &lt;int&gt;
+## 1         6           8
+## 2         9          13
+## 3         5           7
+## 4        13           4
+## 5         3           7</code></pre>
 <p>Use <code>rlnorm</code> to simulate variables that have log normal distributions, which just happens a lot in biological systems. It takes some playing to get used to simulating with <code>rlnorm</code> but the results can look scary realistic compared to <code>rnorm</code>.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># simulate 5 events, from a log normal distribution</span></a>
-<a class="sourceLine" id="cb47-2" title="2">control<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">rlnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">meanlog=</span><span class="dv">0</span>, <span class="dt">sdlog=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb47-3" title="3">treatment<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">rlnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">meanlog=</span><span class="dv">2</span>, <span class="dt">sdlog=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb47-4" title="4">sim.set3 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(control<span class="fl">.3</span>, treatment<span class="fl">.3</span>); sim.set3</a></code></pre></div>
-<pre><code>##   control.3 treatment.3
-## 1 3.1485816    9.399957
-## 2 1.1377804    5.974862
-## 3 0.8810592   11.839055
-## 4 3.0136024   48.852407
-## 5 0.6772780    4.778528</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># simulate 5 events, from a log normal distribution</span></a>
+<a class="sourceLine" id="cb52-2" title="2">control<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">rlnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">meanlog=</span><span class="dv">0</span>, <span class="dt">sdlog=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb52-3" title="3">treatment<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">rlnorm</span>(<span class="dt">n=</span><span class="dv">5</span>, <span class="dt">meanlog=</span><span class="dv">2</span>, <span class="dt">sdlog=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb52-4" title="4">sim.set3 &lt;-<span class="st"> </span><span class="kw">tibble</span>(control<span class="fl">.3</span>, treatment<span class="fl">.3</span>); sim.set3</a></code></pre></div>
+<pre><code>## # A tibble: 5 x 2
+##   control.3 treatment.3
+##       &lt;dbl&gt;       &lt;dbl&gt;
+## 1     1.14         4.72
+## 2     1.02        67.1 
+## 3     2.44         7.02
+## 4     0.777        1.37
+## 5     1.44         2.20</code></pre>
 <p>It’s even possible to simulate ordinal data, such as the outcome of likert tests. The <code>sample()</code> function can be configured for this purpose. Note how a probability vector argument is used to cast expected distributions of the values</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co">#simulate 6 replicates scored on a 5-unit ordinal scale, where 1 is the lowest level of an observed outcome and 5 is the highest.</span></a>
-<a class="sourceLine" id="cb49-2" title="2"></a>
-<a class="sourceLine" id="cb49-3" title="3">control &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="dt">size=</span><span class="dv">6</span>, </a>
-<a class="sourceLine" id="cb49-4" title="4">       <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">70</span>, <span class="fl">.25</span>, <span class="fl">.05</span>, <span class="dv">0</span>, <span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb49-5" title="5">disease &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="dt">size=</span><span class="dv">6</span>, </a>
-<a class="sourceLine" id="cb49-6" title="6">       <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.15</span>, <span class="fl">0.70</span>, <span class="fl">0.15</span>))</a>
-<a class="sourceLine" id="cb49-7" title="7">results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(control, disease); results</a></code></pre></div>
-<pre><code>##   control disease
-## 1       2       4
-## 2       2       3
-## 3       1       4
-## 4       1       4
-## 5       3       3
-## 6       1       5</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co">#simulate 6 replicates scored on a 5-unit ordinal scale, </span></a>
+<a class="sourceLine" id="cb54-2" title="2"><span class="co">#where 1 is the lowest level of an observed outcome and 5 is the highest.</span></a>
+<a class="sourceLine" id="cb54-3" title="3"></a>
+<a class="sourceLine" id="cb54-4" title="4">control<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="dt">size=</span><span class="dv">6</span>, </a>
+<a class="sourceLine" id="cb54-5" title="5">       <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(.<span class="dv">70</span>, <span class="fl">.25</span>, <span class="fl">.05</span>, <span class="dv">0</span>, <span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb54-6" title="6">treatment<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x=</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="dt">size=</span><span class="dv">6</span>, </a>
+<a class="sourceLine" id="cb54-7" title="7">       <span class="dt">replace=</span>T, <span class="dt">prob=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.15</span>, <span class="fl">0.70</span>, <span class="fl">0.15</span>))</a>
+<a class="sourceLine" id="cb54-8" title="8">results &lt;-<span class="st"> </span><span class="kw">tibble</span>(control<span class="fl">.4</span>, treatment<span class="fl">.4</span>); results</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 2
+##   control.4 treatment.4
+##       &lt;int&gt;       &lt;int&gt;
+## 1         1           4
+## 2         1           4
+## 3         1           4
+## 4         1           4
+## 5         1           4
+## 6         3           3</code></pre>
 <p>If a more sophisticated simulation of ordinal data is needed, you’ll find it is <a href="https://www.rdatagen.net/post/generating-and-displaying-likert-type-data/">doable but suprisingly not trivial</a>.</p>
 <p>Please recognize that simulating data for these functions mostly depends upon your scientific understanding of the variables. You have to make scientific judgments about the values your variable will take on under control and treatment conditions.</p>
 <p>To get started statistically, go back to the basics. Is the variable discrete or continuous. Is it measured or ordered or sorted? What means and standard deviations, or frequencies, or rank sizes should you estimate? Those are all scientific judgments.</p>
@@ -1250,68 +1408,73 @@ Figure 19.1: PKA activity in VSMC, note related measures within each replicate.
 <div id="nonpara.pwr" class="section level3">
 <h3><span class="header-section-number">19.10.4</span> nonpara.pwr</h3>
 <p>Running this first code chunk reads the custom function into the environment. There’s no output, yet. You’ll see some code later that uses this function.</p>
-<p>Read it line-by-line to see if you can follow the logic.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">nonpara.pwr &lt;-<span class="st"> </span><span class="cf">function</span>(n){</a>
-<a class="sourceLine" id="cb51-2" title="2">  </a>
-<a class="sourceLine" id="cb51-3" title="3"><span class="co">#Intitializers. Place expected values for the means and standard deviations of two groups to be compared here. These values will be called by the function a few lines below</span></a>
-<a class="sourceLine" id="cb51-4" title="4">  </a>
-<a class="sourceLine" id="cb51-5" title="5">  m1=<span class="st"> </span><span class="dv">100</span> <span class="co">#mean of group 1</span></a>
-<a class="sourceLine" id="cb51-6" title="6">  sd1=<span class="st"> </span><span class="dv">10</span> <span class="co">#standard deviation of group 1</span></a>
-<a class="sourceLine" id="cb51-7" title="7">  </a>
-<a class="sourceLine" id="cb51-8" title="8">  m2=<span class="st"> </span><span class="dv">300</span> <span class="co">#mean of group 2</span></a>
-<a class="sourceLine" id="cb51-9" title="9">  sd2=<span class="st"> </span><span class="dv">150</span> <span class="co">#standard deviation of group 2</span></a>
-<a class="sourceLine" id="cb51-10" title="10">  </a>
-<a class="sourceLine" id="cb51-11" title="11">  </a>
-<a class="sourceLine" id="cb51-12" title="12">  <span class="co"># the monte carlo just repeats the random sampling i times. It runs a t-test on each sample, i, grabs the p-value and places it in a growing vector, p.values[i]</span></a>
-<a class="sourceLine" id="cb51-13" title="13">  ssims=<span class="dv">1000</span></a>
-<a class="sourceLine" id="cb51-14" title="14">  </a>
-<a class="sourceLine" id="cb51-15" title="15">  <span class="co">#The function below produced p-values. This empty vector has to exist before the first p-value is generated. It will be filled successfully with p-values as the repeat component below...repeats.</span></a>
-<a class="sourceLine" id="cb51-16" title="16">  </a>
-<a class="sourceLine" id="cb51-17" title="17">  p.values &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
-<a class="sourceLine" id="cb51-18" title="18">  </a>
-<a class="sourceLine" id="cb51-19" title="19">  <span class="co">#This repeat function is a function inside a function. It repeats the simulation ssims times, collecting a p-value each time, and depositing that new p-value in our growing vector. Importantly, change the arguments for the statitical test to suit your experimental design. Want to simulate a &quot;greater&quot; hypothesis? Change it here. What about a paired model? Change it here, not after you run an experiment.</span></a>
-<a class="sourceLine" id="cb51-20" title="20">  </a>
-<a class="sourceLine" id="cb51-21" title="21">  i &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb51-22" title="22">  <span class="cf">repeat</span>{</a>
-<a class="sourceLine" id="cb51-23" title="23">    x=<span class="kw">rnorm</span>(n, m1, sd1); </a>
-<a class="sourceLine" id="cb51-24" title="24">    y=<span class="kw">rnorm</span>(n, m2, sd2);</a>
-<a class="sourceLine" id="cb51-25" title="25">    p &lt;-<span class="st"> </span><span class="kw">wilcox.test</span>(x, y, </a>
-<a class="sourceLine" id="cb51-26" title="26">                <span class="dt">paired=</span>F, </a>
-<a class="sourceLine" id="cb51-27" title="27">                <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, </a>
-<a class="sourceLine" id="cb51-28" title="28">                <span class="dt">var.equal=</span>F,</a>
-<a class="sourceLine" id="cb51-29" title="29">                <span class="dt">conf.level=</span><span class="fl">0.95</span>)<span class="op">$</span>p.value</a>
-<a class="sourceLine" id="cb51-30" title="30">    p.values[i] &lt;-<span class="st"> </span>p</a>
-<a class="sourceLine" id="cb51-31" title="31">    </a>
-<a class="sourceLine" id="cb51-32" title="32">    <span class="cf">if</span> (i<span class="op">==</span>ssims) <span class="cf">break</span></a>
-<a class="sourceLine" id="cb51-33" title="33">    i =<span class="st"> </span>i<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb51-34" title="34">    <span class="co">#This calculates the power from the values in the p.value vector.</span></a>
-<a class="sourceLine" id="cb51-35" title="35">    pwr &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(p.values<span class="op">&lt;</span><span class="fl">0.05</span>))<span class="op">/</span>ssims</a>
-<a class="sourceLine" id="cb51-36" title="36">  }</a>
-<a class="sourceLine" id="cb51-37" title="37">  <span class="kw">return</span>(pwr)</a>
-<a class="sourceLine" id="cb51-38" title="38">  </a>
-<a class="sourceLine" id="cb51-39" title="39">}</a></code></pre></div>
+<p>Read it line-by-line to see if you can follow the logic. Or read the comments which explain it.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">nonpara.pwr &lt;-<span class="st"> </span><span class="cf">function</span>(n){</a>
+<a class="sourceLine" id="cb56-2" title="2">  </a>
+<a class="sourceLine" id="cb56-3" title="3"><span class="co">#Intitializers. Place expected values for the means and standard deviations of two groups to be compared here. These values will be called by the function a few lines below</span></a>
+<a class="sourceLine" id="cb56-4" title="4">  </a>
+<a class="sourceLine" id="cb56-5" title="5">  m1=<span class="st"> </span><span class="dv">100</span> <span class="co">#mean of group 1</span></a>
+<a class="sourceLine" id="cb56-6" title="6">  sd1=<span class="st"> </span><span class="dv">10</span> <span class="co">#standard deviation of group 1</span></a>
+<a class="sourceLine" id="cb56-7" title="7">  </a>
+<a class="sourceLine" id="cb56-8" title="8">  m2=<span class="st"> </span><span class="dv">300</span> <span class="co">#mean of group 2</span></a>
+<a class="sourceLine" id="cb56-9" title="9">  sd2=<span class="st"> </span><span class="dv">150</span> <span class="co">#standard deviation of group 2</span></a>
+<a class="sourceLine" id="cb56-10" title="10">  </a>
+<a class="sourceLine" id="cb56-11" title="11">  </a>
+<a class="sourceLine" id="cb56-12" title="12">  <span class="co"># the monte carlo just repeats the random sampling i times. It runs a t-test on each sample, i, grabs the p-value and places it in a growing vector, p.values[i]</span></a>
+<a class="sourceLine" id="cb56-13" title="13">  ssims=<span class="dv">1000</span></a>
+<a class="sourceLine" id="cb56-14" title="14">  </a>
+<a class="sourceLine" id="cb56-15" title="15">  <span class="co">#The function below produced p-values. This empty vector has to exist before the first p-value is generated. It will be filled successfully with p-values as the repeat component below...repeats.</span></a>
+<a class="sourceLine" id="cb56-16" title="16">  </a>
+<a class="sourceLine" id="cb56-17" title="17">  p.values &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
+<a class="sourceLine" id="cb56-18" title="18">  </a>
+<a class="sourceLine" id="cb56-19" title="19">  <span class="co">#This repeat function is a function inside a function. It repeats the simulation ssims times, collecting a p-value each time, and depositing that new p-value in our growing vector. Importantly, change the arguments for the statitical test to suit your experimental design. Want to simulate a &quot;greater&quot; hypothesis? Change it here. What about a paired model? Change it here, not after you run an experiment.</span></a>
+<a class="sourceLine" id="cb56-20" title="20">  </a>
+<a class="sourceLine" id="cb56-21" title="21">  i &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb56-22" title="22">  <span class="cf">repeat</span>{</a>
+<a class="sourceLine" id="cb56-23" title="23">    x=<span class="kw">rnorm</span>(n, m1, sd1); <span class="co"># random data generator motifs</span></a>
+<a class="sourceLine" id="cb56-24" title="24">    y=<span class="kw">rnorm</span>(n, m2, sd2);</a>
+<a class="sourceLine" id="cb56-25" title="25">    p &lt;-<span class="st"> </span><span class="kw">wilcox.test</span>(x, y, </a>
+<a class="sourceLine" id="cb56-26" title="26">                <span class="dt">paired=</span>F, </a>
+<a class="sourceLine" id="cb56-27" title="27">                <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, </a>
+<a class="sourceLine" id="cb56-28" title="28">                <span class="dt">var.equal=</span>F,</a>
+<a class="sourceLine" id="cb56-29" title="29">                <span class="dt">conf.level=</span><span class="fl">0.95</span>)<span class="op">$</span>p.value</a>
+<a class="sourceLine" id="cb56-30" title="30">    p.values[i] &lt;-<span class="st"> </span>p</a>
+<a class="sourceLine" id="cb56-31" title="31">    </a>
+<a class="sourceLine" id="cb56-32" title="32">    <span class="cf">if</span> (i<span class="op">==</span>ssims) <span class="cf">break</span></a>
+<a class="sourceLine" id="cb56-33" title="33">    i =<span class="st"> </span>i<span class="op">+</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb56-34" title="34">    <span class="co">#This calculates the power from the values in the p.value vector.</span></a>
+<a class="sourceLine" id="cb56-35" title="35">    pwr &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(p.values<span class="op">&lt;</span><span class="fl">0.05</span>))<span class="op">/</span>ssims</a>
+<a class="sourceLine" id="cb56-36" title="36">  }</a>
+<a class="sourceLine" id="cb56-37" title="37">  <span class="kw">return</span>(pwr)</a>
+<a class="sourceLine" id="cb56-38" title="38">  </a>
+<a class="sourceLine" id="cb56-39" title="39">}</a></code></pre></div>
 <p>To get some output, pass a sample size of n= 5 per group into the function.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># test it!</span></a>
-<a class="sourceLine" id="cb52-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb52-3" title="3"><span class="kw">nonpara.pwr</span>(<span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># test it!</span></a>
+<a class="sourceLine" id="cb57-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
+<a class="sourceLine" id="cb57-3" title="3"><span class="kw">nonpara.pwr</span>(<span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## [1] 0.626</code></pre>
 <p>At this seed, the power is 62.6% for a sample size of 5 per group. YMMV if on a Mac.</p>
 <p>A slightly higher power would be desirable. Change the value of <code>n</code> in the test it code chunk to see what’s necessary to get 80% power.</p>
 <p>Or, more easily, just run <code>nonpara.pwr</code> over a range of sample sizes, plotting a power vs sample size curve.</p>
 <p>There are a couple of keys here. First, make a simple dataframe with only one variable, a bunch of n values.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="co">#frame is a data frame with only one variable, sample size</span></a>
-<a class="sourceLine" id="cb54-2" title="2">frame &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">n=</span><span class="dv">2</span><span class="op">:</span><span class="dv">50</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co">#frame is a data frame with only one variable, sample size</span></a>
+<a class="sourceLine" id="cb59-2" title="2">frame &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">n=</span><span class="dv">2</span><span class="op">:</span><span class="dv">50</span>)</a></code></pre></div>
 <p>Second, use R’s <code>apply</code> function to, row by row, calculate power for each value of n. This will take some time to run. Hopefully just a few seconds if you have a decent machine.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="co">#data is a data frame with two variables, sample size and a power value for each</span></a>
-<a class="sourceLine" id="cb55-2" title="2">data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(frame, </a>
-<a class="sourceLine" id="cb55-3" title="3">                  <span class="dt">power=</span><span class="kw">apply</span>(frame, <span class="dv">1</span>, nonpara.pwr))</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="co">#data is a data frame with two variables, sample size and a power value for each</span></a>
+<a class="sourceLine" id="cb60-2" title="2">data &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(frame, </a>
+<a class="sourceLine" id="cb60-3" title="3">                  <span class="dt">power=</span><span class="kw">apply</span>(frame, <span class="dv">1</span>, nonpara.pwr))</a></code></pre></div>
 <p>Now plot it out!</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co">#plot</span></a>
-<a class="sourceLine" id="cb56-2" title="2"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(n, power))<span class="op">+</span></a>
-<a class="sourceLine" id="cb56-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb56-4" title="4"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb56-5" title="5"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">2</span>)))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co">#plot</span></a>
+<a class="sourceLine" id="cb61-2" title="2"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(n, power))<span class="op">+</span></a>
+<a class="sourceLine" id="cb61-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb61-4" title="4"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb61-5" title="5"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">2</span>)))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-10"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-10-1.png" alt="A power curve for simulated Wilcox testing for an antidiabetic drug effect. " width="672" />
+<p class="caption">
+Figure 19.10: A power curve for simulated Wilcox testing for an antidiabetic drug effect.
+</p>
+</div>
 <p>This result shows that a sample size of 7, 8, or 9 per group would give ~85% power. Thus, a sample size of 7 per group would be the minimal size necessary to test the two-sided null that there is no difference between the groups, at a 95% confidence level.</p>
 <p>Notice how the power is discrete for the early runs? That’s a byproduct of the discrete nature of nonparametric sampling distributions.</p>
 <p>Think about the general way this Monte Carlo technique worked: simulate, test, repeat that many times, count up the p-values.</p>
@@ -1334,6 +1497,7 @@ Figure 19.1: PKA activity in VSMC, note related measures within each replicate.
 <ol start="1">
 <li id="fn1"><p><a href="http://www.academiaobscura.com/still-not-significant/" class="uri">http://www.academiaobscura.com/still-not-significant/</a><a href="nonparametrics.html#fnref1" class="footnote-back">↩</a></p></li>
 <li id="fn2"><p><a href="http://molpharm.aspetjournals.org/content/54/3/514" class="uri">http://molpharm.aspetjournals.org/content/54/3/514</a><a href="nonparametrics.html#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>For a comprehensive list of distribution functions in R see <a href="https://cran.r-project.org/web/views/Distributions.html" class="uri">https://cran.r-project.org/web/views/Distributions.html</a><a href="nonparametrics.html#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
