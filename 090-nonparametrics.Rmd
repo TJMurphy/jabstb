@@ -1,6 +1,6 @@
 # Nonparametric Statistical Tests {#nonparametrics}
 
-```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+```{r message=FALSE, warning=FALSE, paged.print=FALSE, "Libraries to load"}
 library(tidyverse)
 library(PMCMR)
 library(PMCMRplus)
@@ -119,9 +119,13 @@ The results are that twelve exited the chamber in less than 60 seconds, and 5 di
 If something is not less than or equal to another, it can only be greater. Thus, we choose the "greater" for the alternative hypothesis argument in the binomial test function. We think on an anti-anxiety drug the probability is greater that the subjects will successfully exit the chamber.
 
 
-```{r}
-binom.test(x=12, n=15, p=0.5, alternative ="greater", conf.level=0.95 )
-scoreci(x=12, n=15, conf.level = 0.95)
+```{r "Sign test and 95% CI"}
+binom.test(x=12, n=15, p=0.5, 
+           alternative ="greater", 
+           conf.level=0.95 )
+
+scoreci(x=12, n=15, 
+        conf.level = 0.95)
 ```
 ### Interpretation
 
@@ -133,20 +137,32 @@ Note that this 95% CI range includes values, eg, 0.56, that are pretty close to 
 
 To get a clearer sense of what's going on, here is the distribution of the binomial function for the null hypothesis. You can see that it is symmetrical. If the drug were ineffective, we'd expect half to exit prior to 60 s, and the other half after 60 s.
 
-```{r}
+```{r fig.cap = "Distribution of chamber exits in a trial sized 15 for the null for a 50% chance of chamber exits priort to 60 seconds, on a binomial model."}
+
 # I'll use the rbinom function to simulate 
-data <- data.frame(x = c(0:15),y=dbinom(c(0:15), 15, prob=0.5))
+data <- tibble(x = c(0:15),y=dbinom(c(0:15), 15, prob=0.5))
+
 ggplot(data, aes(x, y))+
-  geom_col(fill="blue") + xlab("exits before 60s") + ylab("prob of that many exits") + geom_text(aes(x=1, y=.20, label="H0 distribution"))
+  geom_col(fill="blue") + 
+  xlab("exits before 60s") + 
+  ylab("prob of that many exits") + 
+  geom_text(aes(x=1, y=.20, 
+                label="H0 distribution"))
 
 ```
 
 And here is the distribution for the alternate hypothesis, given the effect size: If the drug were effective at reducing anxiety, we'd expect 80% would exit the chamber prior to 60 second.
 
-```{r}
-data <- data.frame(x = c(0:15),y=dbinom(c(0:15), 15, prob=0.8))
+```{r fig.cap = "Distribution of chamber exits in a trial sized 15 for the alternate expectation that 80% would exit prior to 60 seconds, based upon the binomial."}
+data <- tibble(x = c(0:15),y=dbinom(c(0:15), 15, prob=0.8))
+
 ggplot(data, aes(x, y))+
-  geom_col(fill="green") + xlab("exits before 60s") + ylab("prob of that many exits") + geom_text(aes(x=1, y=.20, label="H1 distribution"))
+  geom_col(fill="green") + 
+  xlab("exits before 60s") + 
+  ylab("prob of that many exits") + 
+  geom_text(aes(x=1, y=.20, 
+                label="H1 distribution")
+            )
 
 ```
 
@@ -186,8 +202,13 @@ Our prediction is that less anxious subjects should exit the comfort of the dark
 
 We run the Wilcoxon Sign Rank test to test this hypothesis using the arguments below.
 
-```{r}
-wilcox.test(x=c(3,5,8,15,19,21,108), mu=60, alternative = "less", conf.level = 0.95, conf.int = 0.95)
+```{r One group Wilcoxon test}
+wilcox.test(x=c(3,5,8,15,19,21,108), 
+            mu=60, 
+            alternative = "less", 
+            conf.level = 0.95, 
+            conf.int = 0.95
+            )
 ```
 
 ### Interpretation
@@ -201,16 +222,19 @@ Here's a null signrank distribution for a sample size of 7. The values of the x 
 Which is to say the location of this distribution is, by coincidence, also centered on 14. The value of 4 is less than this location, but not extremely-enough lower to be considered as belonging to some other distribution with a different location! 
 The 95% confidence interval of the location on the V test statistic ranges from -infinity to 62.5.
 
-```{r}
+```{r Calculate p-value from signrank test statistic value}
 psignrank(q=4, n=7)
 psignrank(q=1, n=7)
 ```
 
 
-```{r}
+```{r fig.cap= "Null sign rank test statistic distribution for sample size of 7"}
+# sign rank distribution for sample size of 7
+
 upper <- 28
 n <- 7
-df <- data.frame(x=0:upper, y=dsignrank(0:upper, n))
+df <- tibble(x=0:upper, y=dsignrank(0:upper, n))
+
 ggplot(df, (aes(x,y)))+
   geom_col() +
   xlab("V") +
@@ -245,21 +269,29 @@ Since this is a parameter-less test, the null hypothesis is that location of the
 
 We choose the "less" option for the alternative argument in the test.
 
-```{r}
-mightymouse <- read.csv("datasets/mightymouse.csv")
-wilcox.test(Time ~ Group, data = mightymouse, alternative ="less", conf.level=0.95, conf.int=T)
+```{r "Wilcoxon test comparing two groups, aka Mann Whitney test"}
+mightymouse <- read_csv("datasets/mightymouse.csv")
+
+# note use of naming variables with the formula syntax 
+
+wilcox.test(Time ~ Group, 
+            data = mightymouse, 
+            alternative ="less", 
+            conf.level=0.95, 
+            conf.int=T)
 ```
 
 ### Interpretation
 
-The test statistic you see in the output, W, warrants some discussion. W is equal to $U_2$ as defined above. 
+The test statistic you see in the output, $W$, warrants some discussion. $W$ is equal to $U_2$ as defined above. 
 
 By default, R produces $U_2$ (labeled W!) as the test statistic. Most other software packages use $U_1$, which in this case would be 88 (easy to compute in the console given $U_2$). 
 
-Think of W as a value on the x axis of a rank sum distribution for a sample size of `m+n`. The rank sum distribution has a function in R called `dwilcox`. Here it is (note the large value this distribution can take on is `m*n` and the smallest is zero):
+Think of $W$ as a value on the x axis of a rank sum distribution for a sample size of `m+n`. The rank sum distribution has a function in R called `dwilcox`. Here it is (note the large value this distribution can take on is `m*n` and the smallest is zero):
 
-```{r}
-df <- data.frame(x=0:143, y=dwilcox(0:143, 11, 13))
+```{r fig.cap="The null rank sum test statistic distribution for a sample size of m=11 and n=13"}
+df <- tibble(x=0:143, y=dwilcox(0:143, 11, 13))
+
 ggplot(df, (aes(x,y)))+
   geom_col()+
   xlab("W")+
@@ -282,6 +314,27 @@ The 95% confidence interval indicates there is a 95% chance the difference in lo
 
 *There is no difference in performance using the closed chamber test between subjects randomized to anti-anxiety drug (n=11) or to vehicle (n=13) (Mann-Whitney test, W = 55, p = 0.1804).*
 
+### Plot
+
+This is a two group experiment. Every data point represents an independent replicate. 
+
+The `aes` function defines the plot axis. The x-axis is the factor "Group" and it has two levels, "Drugs" and "Vehicle".  The y-axis is "Time" in seconds. 
+
+It is customary to illustrate summary statistics of nonparametric data with box plots. By default these illustrate the median (mid horizontal bar), interquartile ranges (outer horizontal bars) and full ranges (verticle bars). The small dot is a value the `geom_boxplot` function recognizes as an outlier. It can be surpressed with an argument.
+
+It is becoming customary to show all data points. Thus, overlaying the points on a box plot shows all the data and its summary. The visualization illustrates quite well the deviant data. Nonparametric analysis handles this well. This isn't suitable for a t-test.
+
+```{r fig.cap = "A minimal configuration for plotting a 2 group nonparametric experimental design." }
+ggplot(mightymouse, aes(x=Group, y=Time))+
+  geom_boxplot(width=0.3)+
+  geom_jitter(height=0, 
+              width = 0.1, 
+              size = 4, 
+              alpha=0.4)
+
+```
+
+
 ## Wilcoxon Sign Rank Test for paired groups
 
 The classic paired experimental design happens when two measurements are taken from a single independent subject. 
@@ -298,20 +351,38 @@ The independent experimental unit in this design is a pair. We have six pairs, T
 
 We'll measure latency in the dark chamber test. Our random variable will be the difference in latency time between the knockout and the wild type, for each pair.
 
-Here's the data, latency times are in sec units:
+Here's the data, latency times are in sec units. Each animal generates two measurements and has an id value:
 
-```{r}
-mmko <- data.frame(knockout=c(19, 24, 4, 22, 15, 18), wildtype=c(99, 81, 70, 62, 120, 55))
+```{r "A simple tidy munge to long format"}
+# enter the data by hand, no need to use csv files 
+
+mmko <- tibble(
+  id=c("a", "b", "c", "d", "e", "f"),
+  knockout=c(19, 24, 4, 22, 15, 18), 
+  wildtype=c(99, 81, 70, 62, 120, 55)
+  )
+
 #create a long data fram to do formula arguments in wilcox test
-mmkotidy <- gather(mmko, genotype, latency )
 
+mmkotidy <- pivot_longer(mmko, 
+                         - id, 
+                         names_to = "genotype", 
+                         values_to = "latency" 
+                         )
 ```
 
 Scientifically, we predict there will be a difference in latency times within the pairs. Specifically, the knockout will have lower times than their paired wild-type. The null hypothesis is that the difference within pairs will be greater than or equal to zero. The alternative hypothesis is the difference will be less than zero.
 
-```{r}
-wilcox.test(latency ~ genotype, data=mmkotidy, paired=T, conf.level=0.95, conf.int=T, alternative="less")
+```{r "Wilcoxon paired test"}
+wilcox.test(latency ~ genotype, 
+            data=mmkotidy, 
+            paired=T, 
+            conf.level=0.95, 
+            conf.int=T, 
+            alternative="less"
+            )
 ```
+
 ### Interpretation
 
 Note that this is not a rank sum test as for the Mann-Whitney, but a signed rank test. 
@@ -320,10 +391,14 @@ So we have seen the V test statistic before. It's value of 0 is as extreme as ca
 
 In terms of position differences, it is as strong of an effect size as possible.
 
-```{r}
+```{r fig.cap="Null sign rank test statistic distribution when n= 6 pairs."}
 upper <- 21
 n <- 6
-df <- data.frame(x=0:upper, y=dsignrank(0:upper, n))
+
+df <- tibble(x=0:upper, 
+             y=dsignrank(0:upper, n)
+             )
+
 ggplot(df, (aes(x,y)))+
   geom_col() +
   xlab("V") +
@@ -339,6 +414,24 @@ There is a 95% chance the true median of the differences lies between negative i
 ### Write up
 
 *Dark chamber test latency differs markedly within pairs of knockout and wildtype subjects (Wilcoxon Signed Rank Test for pairs, n=6, V = 0, p=0.01563)*
+
+### Plot
+
+Since this is a paired experimental design we create a dot-line-dot plot that illustrates this point. A very common mistake is for people who have a paired experiment to plot means of the two groups, or two bars, without connecting the paired data.
+
+The statistical test, in fact, is not performed on the latency values for the two groups.Group means or medians are irrelevant. Instead, it is performed on the *differences within the pairs*. In other words, the test is run, essentially, on sign ranked values related to the *slopes* of the red lines, not on the values of the dots.
+
+The plot should always reflect the experimental design. 
+
+Here is a minimal concept for this. The `group` aesthetic is the key and definitely a trick worth remembering. If you want to really bob ross this, add `color = id` to the aesthetics.
+
+```{r fig.cap="Paired experimental designs should always be plotted dot-point-dot."}
+ggplot(mmkotidy, aes(genotype, latency, group=id))+
+  geom_line(color="red")+
+  geom_point(size=4)
+ 
+```
+
 
 ## Kruskal-Wallis
 
@@ -362,21 +455,28 @@ Let's analyze the InsectSprays data set, which comes with the `PMCMRplus` packag
 
 Do the insecticides differ? 
 
-```{r}
+```{r fig.cap="Violin plot for counts of insects in crop fields somewhere in Kansas following treatment with different insecticides."}
+
 ggplot(InsectSprays, aes(spray, count))+
-  geom_violin(fill="blue")
+  geom_violin(fill="blue", 
+              color="red",
+              size = 1.5)
 ```
 
 The violin plots (modern day versions of box plots) illustrate how the groups have unequal variance. Such data are appropriate for non-parametric analysis.
 
 
-```{r warning=FALSE}
+```{r warning=FALSE, "Kruskal-Wallis test on insect sprays"}
 #insectsprays <- read.csv("insectsprays.csv")
-kruskal.test(count ~ spray, data=InsectSprays)
-
+kruskal.test(count ~ spray, 
+             data=InsectSprays
+             )
 ```
-```{r}
-kwAllPairsConoverTest(count ~ spray, data=InsectSprays, p.adjust ="bonf")
+```{r "Posthoc group comparisons with Conover test"}
+kwAllPairsConoverTest(count ~ spray, 
+                      data=InsectSprays, 
+                      p.adjust ="bonf"
+                      )
 ```
 
 We first do a Kruskal-Wallis rank sum omnibus test to test the null hypothesis that the locations of the insect distributions for several insecticide groups are the same. 
@@ -417,9 +517,9 @@ There are a few critical questions this experiment hopes to answer. Does isoprot
 
 Each week serves as a block, which is an independent replicate wherein all recorded measurements are more related to each other than they are to measurements in other weeks. The VSMC used each week have a common source, are treated in parallel, and are subject to vagaries peculiar to that week for the multi-step protocol. 
 
-The results are entered in the code below:
+The results are entered in the code below, creating a wide format data frame:
 
-```{r}
+```{r "Enteriing VSMC PKA activity data"}
 
 pki <- tibble(
   replicate=c('week1', 'week2', 'week3', 'week4', 'week5'),
@@ -430,18 +530,22 @@ pki <- tibble(
 )
 ```
 
-Here is a plot of the VSMC data:
+Here is a plot of the VSMC data. Note how it was converted to long format within the ggplot function:
 
 ```{r fig.cap ="PKA activity in VSMC, note related measures within each replicate."}
 ggplot(pki %>% 
-         pivot_longer(-replicate, names_to="stimulus", values_to ="pka"), aes(stimulus, pka, group=replicate, color=replicate))+
+         pivot_longer(-replicate, 
+                      names_to="stimulus", 
+                      values_to ="pka"), 
+       aes(stimulus, pka, group=replicate, color=replicate)
+       )+
   geom_point(size=4)+
   geom_line()+
   labs(y="PKA activity, pmole/mg/min")
 
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, "Table of PKA activity data"}
 kable(pki, caption = "Replicate measurements of PKA enzyme activity (pmole/mg/min) in cultured rat vascular smooth muscle cells (VSMC). ")
 ```
 
@@ -455,35 +559,42 @@ There are a couple of options for performing the test.
 
 The first involves converting the data to a matrix, omitting the values of the `replicate` variable, and passing that matrix of responses into the `friendman.test` function. The final row names decoration is not essential for `friedman.test`, but does help the posthoc tests play nicer.
 
-```{r}
-pkiM <- pki %>% select(basal:iso_GFP) %>% as.matrix()
+```{r "Convert pka activity tibble to matrix"}
+pkiM <- pki %>% 
+  select(basal:iso_GFP) %>% 
+  as.matrix()
 rownames(pkiM) <- 1:5
 ```
 
-```{r}
+```{r "Friedman test"}
 friedman.test(pkiM)
 ```
 
 The second approach is the so-called formula method, which we'll use a lot when we get to regression. First, convert the data to a long format data frame.
 
-```{r}
+```{r "Convert pki to long format"}
 
-pkiL <- pki %>% pivot_longer(-replicate, names_to = "stimulus", values_to="pka")
+pkiL <- pki %>% 
+  pivot_longer(-replicate, 
+               names_to = "stimulus", 
+               values_to="pka")
 
 ```
 
 Now pass that format into `friedman.test`. In English, this formula reads, "run the Friedman test on pka activity by stimulus levels, with related measures by replicate".
 
-```{r}
-friedman.test(pka~stimulus|replicate, data=pkiL)
+```{r "Run the Friedman test in formula mode"}
+friedman.test(pka~stimulus|replicate, 
+              data=pkiL)
 ```
 
 Because this p-value is below a 5% type1 error threshold, this result indicates that levels of the stimulus variable cause differences in PKA activities. 
 
 However, posthoc comparison tests are necessary to find out which differences between stimulus levels are reliable.
 
-```{r}
-frdAllPairsConoverTest(pkiM, p.adjust="bonf")
+```{r "Posthoc multiple comparisons after Friedman test"}
+frdAllPairsConoverTest(pkiM, 
+                       p.adjust="bonf")
 
 ```
 
@@ -495,17 +606,17 @@ For example, if the p-values are unadjusted for multiple comparisons, all of the
 
 Alternately, certain post hoc tests with other p-value adjustment options yield statistical differences.
 
-The question is not "which one is better"? The approach to take is to run realistic simulations in advance of collecting data, learn about the options,and choose accordingly. Write down your choices, and stick with them after the data rolls in.
+The question is not "which one is better"? The approach to take is to run realistic simulations in advance of collecting data, learn about the options by playing with familiar variables, and choose accordingly. Write down your choices for how you you intend to post hoc once the new data is collected, and stick with that plan.
 
 ### Interpretation
 
-Because the probability of the Friedman test statistic is below the 5% threshold, we can reject the null that there are no differences in PKA activity caused by the four stimulus conditions. 
+Because the p-value of the Friedman test statistic is below the 5% threshold, we can reject the null that there are no differences in PKA activity caused by the four stimulus conditions. 
 
-However, the post hoc multiple comparison testing, with appropriate p-value adjustment, is inconclusive. The bloody obvious evidence (as seen by inspecting the table and figure) that the GFP-PKI construct inhibits PKA is unsupported by the statistical analysis. The experiment is underpowered to detect those differences.
+However, the post hoc multiple comparison testing, with appropriate p-value adjustment, is inconclusive. The bloody obvious evidence (as seen by inspecting the table and figure) that the GFP-PKI construct inhibits PKA is unsupported by the statistical analysis. The experiment is underpowered. There are too few independent replicates.
 
-Although there is a proverbial "trending towards significance"^[http://www.academiaobscura.com/still-not-significant/] for two of the comparisons, neither of these are for the most important outcome, which is to observe that GFP-PKI causes PKA activity to be much lower than GFP.
+Although there is a proverbial "trending towards significance"^[http://www.academiaobscura.com/still-not-significant/] for two of the comparisons, neither of these speak to the most important outcome, which is to observe that GFP-PKI inhibits PKA activity.
 
-It turns out transfection inefficiency explained this failure. This was overcome by a significant protocol adjustment.^[http://molpharm.aspetjournals.org/content/54/3/514]
+It turns out transfection inefficiency explained this failure. The data reflect that the inhibitor was working, just not in enough cells. This was overcome by a significant protocol adjustment so that more cells expressed the inhibitor.^[http://molpharm.aspetjournals.org/content/54/3/514]
 
 ### Write up
 
@@ -513,19 +624,21 @@ It turns out transfection inefficiency explained this failure. This was overcome
 
 ## Nonparametric power calculations
 
-To my knowledge, there are no simple power functions in R (or elsewhere) designed for nonparametric testing. I assume the reason for that is that nonparametric tests can be performed on a wide variety of data types, often with crappy parameter estimates. As such, it's hard to create one-size-fits all, plug and play functions that anybody can use.
-
 The function below, `nonpara.pwr` is configured to simulate the power of nonparametric one- and two-group comparisons using the Wilcoxon test function of R. 
 
 The intended use of this function is to establish *a priori* the sample size needed to yield a level of power that you deem acceptable. 
 
-What the function does is simulate a long run of experimental results at a given sample size, from which it calculates the power. This is a Monte Carlo method. Thus, it simulate random values that mimic experimental results based upon "known" population parameters. 
+The function simulates a long run sample results at a given sample size, running a statistical test on each. Power is simply the fraction of these tests that have p-values below a chosen threshold. This is a Monte Carlo method. 
 
-The function strictly takes the argument of a sample size value and returns an experimental power that sample size generates. 
+The function strictly takes the argument of a sample size value and returns an experimental power that sample size generates. For example, after loading the function in your environment, typing `nonparam.pwr(n=5)` in the console will return the power for the test you configured.
 
-But it also requires that you customize your initialization. Do this by entering estimates for parameters of the population you expect to sample. All you need to do this is a pretty good guess of the values for the outcome variable you expect your experiment will produce.
+That configuration customization of the function's initialization. Do this by entering estimates for parameters of the population you expect to sample. All you need for that is a scientific hunch about the values for the outcome variable you expect your experiment will produce.
 
 ### How it works
+
+Monte Carlo is general statistical jargon for repeated simulation. This is a technique widely used in many applications across statistics and data science. 
+
+In this course, Monte Carlo power calculations means that we are mostly running repeated simulations to determine a sample size for a planned experiment. 
 
 #### tl;dr
 
@@ -533,60 +646,60 @@ But it also requires that you customize your initialization. Do this by entering
 2) Run a statistical test on the sample.
 3) Collect the p-value from that test.
 4) Repeat steps 1 through 3 ~1000 times or more.
-5) Calculate the fraction of p-values that are below a threshold, such as 0.05.
-
-Use the initializer to define values for the parameters of the population you're sampling. These are passed into a function that randomly generate values for the outcome variable. A statistical test is performed on that outcome. A secondary 'hit' test asks whether the test result crosses a threshold. Here a 'hit' is counted if the p-value for the simulated test is less than 0.05.
-
-Power is the fraction of p-values that fall below the confidence level that you set. For example, if you set a confidence level of 95%, every p-value less than 0.05 will be scored as a hit. Power = hits/number of simulations.
-
-The function is configured to repeat this simulation/testing/hit count process many times, hundreds or even thousands of times. The more times it simulates a result, the more accurate the power estimate.
+5) Count the p-values that are below a type1 threshold, such as 0.05.
 
 ### Simulating response data
 
-Let's focus for now on the thought process involved in how to initialize it.
+Nonparametric tests are useful for a diverse array of data types. So it is useful to know there are many ways to mimic this diversity. What's most important is mimicking the effect sizes (eg, differences) and variation as realistically as possible.
 
-What's most important is to initialize the function using a random value generator that best simulates the type of data you expect to generate in your experiment. More on 'best simulates' is at the end of this section. Using the random number generator functions of the various probability distributions in R is suitable for many cases. For other problems, random sampling functions like `sample` can do the trick. 
+Using the random number generator functions of the various probability distributions in R is suitable for many cases. Bear in mind, the base distributions we cover in this course are just tip of the iceberg.^[For a comprehensive list of distribution functions in R see https://cran.r-project.org/web/views/Distributions.html] 
+
+For other problems, random sampling functions like `sample` can be configured to do the trick. 
 
 For example, use `rnorm` for measured variables for which you believe you can predict means and standard deviations. Make sure your `sd` estimate is realistic. Most people underestimate `sd`.
 
-```{r}
-# simulate a sample size of 5 for a normally-distributed variable with mean of 100 units and standard deviation of 25 units
+```{r "Simulation of normal data"}
+# simulate a sample size of 5 for a normally-distributed 
+#variable with mean of 100 units and standard deviation of 25 units
 control.1 <- rnorm(n=5, mean=100, sd=25)
 treatment.1 <- rnorm(n=5, mean=150, sd=25)
-sim.set1 <- data.frame(control.1, treatment.1); sim.set1
+sim.set1 <- tibble(control.1, 
+                   treatment.1) 
+sim.set1
 
 ```
 
 Use `rpois` to simulate variables that represent discrete events, such as frequencies. How many depolarizations do you expect at baseline? How many more (or less) do you think your treatment will cause? 
 
-```{r}
+```{r "Simulation of frequency count data"}
 #simulate 5 events, where each occurs at an average frequency of 7.
 
 control.2 <- rpois(n=5, lambda=7)
 treatment.2 <- rpois(n=5, lambda=10)
-sim.set2 <- data.frame(control.2, treatment.2); sim.set2
+sim.set2 <- tibble(control.2, treatment.2); sim.set2
 ```
 
 Use `rlnorm` to simulate variables that have log normal distributions, which just happens a lot in biological systems. It takes some playing to get used to simulating with `rlnorm` but the results can look scary realistic compared to `rnorm`.
 
-```{r}
+```{r "Simulation of lognormal data"}
 # simulate 5 events, from a log normal distribution
 control.3 <- rlnorm(n=5, meanlog=0, sdlog=1)
 treatment.3 <- rlnorm(n=5, meanlog=2, sdlog=1)
-sim.set3 <- data.frame(control.3, treatment.3); sim.set3
+sim.set3 <- tibble(control.3, treatment.3); sim.set3
 
 ```
 
 It's even possible to simulate ordinal data, such as the outcome of likert tests. The `sample()` function can be configured for this purpose. Note how a probability vector argument is used to cast expected distributions of the values 
 
-```{r}
-#simulate 6 replicates scored on a 5-unit ordinal scale, where 1 is the lowest level of an observed outcome and 5 is the highest.
+```{r "Simulation of ordinal data"}
+#simulate 6 replicates scored on a 5-unit ordinal scale, 
+#where 1 is the lowest level of an observed outcome and 5 is the highest.
 
-control <- sample(x=c(1:5), size=6, 
+control.4 <- sample(x=c(1:5), size=6, 
        replace=T, prob=c(.70, .25, .05, 0, 0))
-disease <- sample(x=c(1:5), size=6, 
+treatment.4 <- sample(x=c(1:5), size=6, 
        replace=T, prob=c(0, 0, 0.15, 0.70, 0.15))
-results <- data.frame(control, disease); results
+results <- tibble(control.4, treatment.4); results
 ```
 
 If a more sophisticated simulation of ordinal data is needed, you'll find it is [doable but suprisingly not trivial](https://www.rdatagen.net/post/generating-and-displaying-likert-type-data/).
@@ -613,9 +726,9 @@ The function below calculates the power of experiments that might be expected to
 
 Running this first code chunk reads the custom function into the environment. There's no output, yet. You'll see some code later that uses this function.
 
-Read it line-by-line to see if you can follow the logic.
+Read it line-by-line to see if you can follow the logic. Or read the comments which explain it.
 
-```{r}
+```{r "Custom function nonpara.pwr"}
 
 nonpara.pwr <- function(n){
   
@@ -639,7 +752,7 @@ nonpara.pwr <- function(n){
   
   i <- 1
   repeat{
-    x=rnorm(n, m1, sd1); 
+    x=rnorm(n, m1, sd1); # random data generator motifs
     y=rnorm(n, m2, sd2);
     p <- wilcox.test(x, y, 
                 paired=F, 
@@ -661,7 +774,7 @@ nonpara.pwr <- function(n){
 
 To get some output, pass a sample size of n= 5 per group into the function.
 
-```{r}
+```{r "Test nonpara.pwr" }
 # test it!
 set.seed(1234)
 nonpara.pwr(5)
@@ -675,14 +788,14 @@ Or, more easily, just run `nonpara.pwr` over a range of sample sizes, plotting a
 
 There are a couple of keys here. First, make a simple dataframe with only one variable, a bunch of n values.
 
-```{r}
+```{r "A simple data frame"}
 #frame is a data frame with only one variable, sample size
-frame <- data.frame(n=2:50)
+frame <- tibble(n=2:50)
 ```
 
 Second, use R's `apply` function to, row by row, calculate power for each value of n. This will take some time to run. Hopefully just a few seconds if you have a decent machine.
 
-```{r}
+```{r "Use apply to run nonpara.pwr on the dataframe of n values"}
 #data is a data frame with two variables, sample size and a power value for each
 data <- bind_cols(frame, 
                   power=apply(frame, 1, nonpara.pwr))
@@ -690,7 +803,7 @@ data <- bind_cols(frame,
 
 Now plot it out!
 
-```{r}
+```{r fig.cap= "A power curve for simulated Wilcox testing for an antidiabetic drug effect. "}
 #plot
 ggplot(data, aes(n, power))+
   geom_point() +
