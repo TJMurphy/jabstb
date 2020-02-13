@@ -6,11 +6,15 @@ library(pwr)
 library(car)
 library(broom)
 ```
-The t-tests, otherwise known as "Student's t tests", are for experimental designs that test hypotheses comparing one group to a standard or two groups two each other, or paired measures within replicates **and** where the outcome variable is continuous and on an equal interval scale.
+The t-tests, otherwise known as "Student's t tests", are for experimental designs that test hypotheses comparing responses of
 
-In other words, t-tests are for dependent variables involving measured data and when two or fewer levels of an independent variable are tested. 
+* one group to a nominal standard or 
+* two groups to each other, or 
+* paired measures within replicates. 
 
-To recall, continuous data are on scales that have values between their intervals. For example, we might use a mass balance to measure the mass of individual mice, and then record how their weight change in response to some factor at two different levels. Here, mass would be an equal interval measurement. Mass is continuous, in so far as a theoretically infinite number of values can exist between two units on the scale, depending upon the sensitivity of the measurements.
+The t-tests are for dependent variables involving measured data and when two or fewer levels of discrete (factorial) independent variable are tested. See Chapter \@ref(data).
+
+To recall, measured data are on continuous scales. For example, we might use a mass balance to measure the mass of individual mice, and then record how their weight change in response to some factor at two different levels. Here, mass would be an equal interval measurement (the difference between 16 and 17 g is the same as the difference between 30 and 31 g). Mass is also continuous, in so far as a theoretically infinite number of values can exist between two units on the scale, depending upon the sensitivity of the measurements.
 
 Derivative continuous variables are common in t-testing. For example, growth rate, in grams/week, is a derivative of the mass and time measurement scales. Like mass and time, growth rate is also continuous. 
 
@@ -20,7 +24,7 @@ Just as importantly, the statistics derived from continuous, equal interval data
 
 The following assumptions should be checked to use t-tests properly.
 
-#### Strong assumptions, t tests are invalid if these not met:
+#### Strong assumptions, t-tests are invalid if these not met:
 
 1) The replicate data arise from a randomized process.
 
@@ -28,201 +32,337 @@ The following assumptions should be checked to use t-tests properly.
 
 _Don't confuse a measurement with a replicate. Paired designs have two measurements from one replicate. For example, a measurement after placebo and then a second measurement after drug._
 
+If you are not working with random independent replicates but are collecting data, then you are collecting data and not testing hypotheses. Inferential statistics are for hypothesis testing. There is nothing wrong with collecting data. There is no need to pretend they arose from a formal hypothesis-driven process.
+
+This thinking is why I describe these as strong assumptions.
+
 #### Weak assumptions: t-tests are less robust when these are not met:
 
 3) The sampled population for each group is normally distributed.
 
 4) The variances of the compared groups are equivalent.
 
-We are now at the simplest application of the linear model. Wherein one $x_1$, or more commonly two $x_1,x_2$ levels of the independent variable $X$ predicts the response of the dependent variable $Y$ as \[E(Y) = \beta_0 +\beta_1X+e\]
+##### Residual error and normality testing
 
-The focus of t-testing is to estimate for the value of $\beta_1$ and ask whether it differs statistically from zero. When $\beta_1=0$, a line drawn between the pair of points $x_1,y_1$ and $x_2, y_2$ has a slope of zero. $X$ has no effect on $Y$ and thus $E(Y)$ equals the value of the intercept, $Y = \beta_0$. Think of the intercept as the background or basal level the dependent variable.  
+We have arrived at the simplest application of the linear model. Wherein one level $x_1$, or more commonly two levels $x_1,x_2$ of the independent variable $X$ predicts the response of the dependent variable $Y$ as
 
-Gauss discovered that a property of continuous data when measurements are taken from the linear range on its scale is that residual error $e$ [is normally distributed.](https://www.maa.org/sites/default/files/pdf/upload_library/22/Allendoerfer/stahl96.pdf)
+\begin{equation}
+E(Y) = \beta_0 +\beta_1X+\epsilon
+(\#eq:lm)
+\end{equation}
 
-The smaller the sample size, the more difficult it is to assess the distribution of $e$. Thus, it is hard to validate the latter two assumptions above.
+The focus of t-testing is to estimate for the value of $\beta_1$ and ask whether it differs statistically from zero. When $\beta_1=0$, a line drawn between the pair of points $x_1,y_1$ and $x_2, y_2$ has a slope of zero. This indicates $X$ has no effect on $Y$ and thus $E(Y)$ equals the value of the intercept, $Y = \beta_0$. 
 
-There are two equally valid ways to approach this.
+Think of the intercept as the background or basal level the dependent variable. The slope as the magnitude of the change in the dependent variable caused by one unit of $X$. 
 
-Normality tests such as the Shapiro-Wilk (`shapiro.test`), tests the null hypothesis that the values of a random variable are normally-distributed. Levene's test `library(car), leveneTest` is useful to test the homogeneity of variance assumption. The use of these tests should be declared in advance in the design phase. Unless you're dealing with sample sizes of ~30 or greater, it is probably futile to try to make these assessments.  
+We assume that both $\beta_0$ and $\beta_1$ have fixed values...but we don't know what those values are (they are in Greek letters). Our job as scientists is to estimate these fixed values. 
 
-If their nulls are rejected, the data can be normalized through log or reciprocal transformation. The t-tests are then performed on these transformed values. Alternately, nonparametric analysis with the Wilcoxon tests can be used instead.\@(nonparametrics) Again, these decisions should be declared in advance.
+Let's say I come up with the following estimates for the betas. Then I want to run an experiment to determine values of $Y$ in response to two different values of $X$. I just run it as an R code model.
 
-The performance of t-tests and their nonparametric counterparts are virtually identical when the normality and homoscedasticity assumptions are met. Whereas nonparametrics statistics can be more powerful when these assumptions are unmet.
+```{r error-free linear model}
+beta0 <- 1
+beta1 <- 2
+
+X <- c(1 , 2)
+
+Y <- beta0 +beta1*X
+Y
+```
+
+That's a perfect model and it generates perfect data. Every time you run the chunk you'll get exactly the same result. Perfectly.
+
+Of course, data are never that perfect in real life. 
+
+Real life data has noise, which in jargon is called residual error. Residual error is, simply, an accounting trick. It is a way to account for all the sources of variation in our data that our perfect model cannot explain. 
+
+The unexplained variation could be biological, or it could be measurement, or it could be both. Who knows? If we knew what caused it we would explain it by putting it in our model as another variable, like $Z$. But we can't explain it other than to blame it on random.
+
+Gauss discovered that a property of continuous data is that residual error, $\epsilon$, [tends to be normally distributed.](https://www.maa.org/sites/default/files/pdf/upload_library/22/Allendoerfer/stahl96.pdf)
+
+The R code model is updated below to account for both residual error and Gauss' discovery. Notice how we're adding a term to the model. This term is the random normal $N(\mu=0,\sigma=1)$ and it represents the residual error term, $\epsilon$, from equation\@ref(eq:lm).
+
+If you run that model, you get a different result every time. The only way we have to explain the variation is that it comes from a random normal process.
+
+```{r linear model with random normal error}
+# everytime you run this chunk you'll get a different outcome
+Y <- beta0 +beta1*X + rnorm(length(X))
+
+Y
+```
+##### tl;dr
+
+So the normality assumption for t-testing (and other parametric statistical testing) is really about the normality of the residual error in the sample. And the reason we have this assumption is that all parametric models have a random normal term in them to explain that which we cannot yet explain. That random normal term modifies the influence of the beta coefficients on the values of $Y$ generated by the model.
+
+But here is the big point of all this. Pragmatically, assessing the distribution of $\epsilon$ from small sample sizes is difficult. Which makes it hard to validate the weaker two assumptions. Simulate that code chunk above three times and try to convince yourself from those values alone that you have enough information to declare they are normally distributed (you don't).
+
+As a researcher, particularly a small sample researcher, there are two ways to approach these weaker assumptions.
+
+The first is to go all hybrid cross between Gauss and Alfred E. Neuman and just assume normality and not worry about it. This tends to be a safe bet when working with measured variables, particularly when we've verified that we are working within their linear range. Besides, at the core of the t-test and other parametric statistics are the theoretical distributions of means. The distributions of means ARE normally distributed via the central limit theorem.
+
+The second approach is to run normality tests and to act on those results. That action is typically a data transformation or tossing decision.
+
+Normality tests such as the Shapiro-Wilk (`shapiro.test`), tests the null hypothesis that the values of a random variable are normally-distributed. Levene's test `library(car), leveneTest` is useful to test the homogeneity of variance assumption. 
+
+If their nulls are rejected, something must be done. The data might be normalized through log or reciprocal transformation. Then run the t-tests on these transformed values. Or the test result triggers an outlier removal protocol. Alternately, the decision tree calls for reverting to nonparametric analysis with the Wilcoxon tests instead of t-tests.\@(nonparametrics) 
+
+I'm not a fan of these "normality" tests. The smaller the sample size, the more suspicious I am of their utility or that I have enough information to heed the weaker assumptions. That's mostly why I don't teach them in the course. The other big reason is that, in practice, these decision trees tend to be made up as you go rather than pre-planned protocol.
+
+If not dealing with large sample sizes it is probably futile to try to make these assessments. If they are used in an impactful way, such as in a decision tree to toss outliers or switch analysis and testing, their use should definitely be declared in advance, prior to running the experiment. 
+
+Otherwise, what most are really asking from a normality test is for permission to p-hack, perhaps hoping to rescue "statistical significance" from an otherwise moribund result. 
+
+```{r p-hacking, fig.cap="This is p-hacking. Uncritical allegiance to t-testing's weaker assumptions is frequently a gateway to an integrity crisis."}
+knitr::include_graphics("images/phacking.jpg")
+```
+
+The performance of t-tests and their nonparametric counterparts are virtually identical when the normality and homoscedasticity assumptions are met. Whereas nonparametric statistics can be more powerful when these assumptions are unmet. 
+
+Yet, t-tests are generally held to be robust (aka, perform well) to violations of the weaker assumptions.
+
+YMMV. Here's an illustration for when t-tests are not robust. 
 
 ```{r  echo=FALSE, fig.cap="Comparison of Wilcoxon test power to t-tests when sampling from skewed (lognormal) and normal distributions."}
 knitr::include_graphics("images/pwr_tvw_tests.jpeg")
 ```
 
+What's right for you? It depends on your experimental design and the data you intend to collect, and what you believe to be a scientfically significant result. You can, and should, Monte Carlo simulate the kind of results you expect to see in that next experiment. If you expect deviant data, model deviant data in these simulations. Compare different ways for a statistical analysis of the simulated "outcome" data. 
+
+Which type of analysis performs best in pre-experiment simulations? Use that to guide whether you're going to be orthodox about the weaker assumptions, or not. 
+
 ## The t Statistic
 
 The $t$ statistic is a ratio signifying the signal to noise ratio in a sample. 
 
-The numerator would be a measure for the magnitude of the average effect, whereas the denominator would represent the precision by which those mean differences are determined. There are 3 different ways to calculate the numerators and denominators of $t$, which correspond to three very different experimental designs. 
+The numerator would be a measure for the magnitude of the average effect, whereas the denominator would represent the precision by which those mean differences are determined. 
 
-The decision to use one or the other t-test is entirely scientific and based upon how the experiment is conducted. If you understand your experimental design, you'll know which t test is applicable.
+I'm showing 4 different ways to calculate the numerators and denominators of $t$, which correspond to three very different experimental designs (the unpaired design has two ways to calculate $t$). 
 
-*One sample tests inspect the difference between a sample mean and a hypothetical mean. 
-*Unpaired tests inspect the difference between the means of two groups. 
-*The paired t test inspects the mean of the differences between paired observations.
+The decision to use one or the other t-test is entirely scientific. It is based upon how the experiment is conducted. If you understand your experimental design, you'll know which t-test is applicable.
+
+* One sample tests inspect the difference between a sample mean and a hypothetical mean. 
+* Unpaired tests inspect the difference between the means of two groups. 
+* The paired t test inspects the mean of the differences between paired observations.
 
 *The most common mistake made by statistically naive researchers is running unpaired t-tests on experiments that have a paired design.*
 
 ### One sample t tests
 
-For comparing the mean response $\bar y$ to a single level of a predictor variable against a hypothetical population mean, $\mu$. A group comprised of $n$ independent observations, whose $\bar y$  The one sample t test has $n-1$ degrees of freedom.
+This is for analyzing experiments comparing the mean response $\bar y$ evoked by a single level of a predictor variable to a hypothetical population mean, $\mu$. The group is comprised of $n$ independent measurements, whose mean is $\bar y$.  The one sample t test has $n-1$ degrees of freedom.
 
-\[t=\frac{\bar y-\mu}{\frac{sd}{\sqrt n}}\]
+\begin{equation}
+  t=\frac{\bar y-\mu}{\frac{sd}{\sqrt n}}
+  (\#eq:tone)
+\end{equation}
 
 #### Example
 
-For example, normal blood glucose in mice is 100 mg/dl. Blood glucose is measured in a random sample of mice with a disrupted insulin receptor gene. A one-sample t-test compares their measured glucose values to the $\mu$=100 mg/dl.  
+Everybody knows that normal blood glucose in mice is 100 mg/dl. Blood glucose is measured in a random sample of 12 mice in which the insulin receptor gene has been disrupted. A one-sample t-test compares the mean of theirr measured glucose values to the nominal value, $\mu$=100 mg/dl. The experiment has 12 indendepdent replicates and the t-test has 11 degrees of freedom. 
 
 ### Unpaired t tests
 
-This test is used for experiments in which the measurements are all independent from each other. 
+This test is used for experiments in which the measurements are all independent from each other.
+
+There are two ways to calculate $t$ for these designs.
 
 #### Student's t-test
 
 The unpaired Student's t-test compares the difference between the mean responses to each of two levels, A and B, of a predictor variable. The design is comprised of a total of $n_A + n_B$ observations. A degree of freedom is lost for each of the two calculated group means. $s_p$ would be the pooled standard deviation of the sample. $s^2_p$ is the pooled variance of the sample.
 
-\[t=\frac{\bar y_A-\bar y_B}{\sqrt{\frac{s^2_p}{n_A}+\frac{s^2_p}{n_B}}}\]
+\begin{equation}
+  t=\frac{\bar y_A-\bar y_B}{\sqrt{\frac{s^2_p}{n_A}+\frac{s^2_p}{n_B}}}
+  (\#eq:stup)
+\end{equation}
 
-The pooled variance is calculated using the sum of the squared deviates $SS_A\ and\ SS_B$ from each group as follows: \[s^2_p=\frac{SS_A+SS_B}{df_A+df_B}\], where $df_A=n_A-1$ and $df_B=n_B-1$.
+The pooled variance is calculated using the sum of the squared deviates $SS_A\ and\ SS_B$ from each group as follows:
+
+\begin{equation}
+  s^2_p=\frac{SS_A+SS_B}{df_A+df_B}
+  (\#eq:poolvar)
+\end{equation}
+
+where $df_A=n_A-1$ and $df_B=n_B-1$.
 
 The null sampling distribution for $t$ has $(n_A + n_B)-2$ degrees of freedom.
 
 The denominator of the $t$ ratio is the standard error of the test. The standard error represents the test's precision but note how it represents the standard error of two means.
 
-Inspection of the pooled variance equation and how it factors into the calculation of the test statistic should give you some indication for how unequal sample sizes or variance between groups can be problematic. When unbalanced the calculation can be biased to one of the groups.
+Inspection of the pooled variance equation and how it factors into the calculation of the test statistic should give you some indication for how unequal sample sizes or unequal variance between groups can be problematic. When unbalanced the calculation can be biased to one of the groups.
 
 #### Welch's t-test
 
-Welch's t-test, which is the default in R for comparing group means, differs from Student's t-test. First, Welch does not use a pooled variance term.
+Welch's test differs from Student's t-test and so will generate different output. First, Welch does not use a pooled variance term.
 
-\[t=\frac{\bar y_A-\bar y_B}{\sqrt{\frac{s^2_A}{n_A}+\frac{s^2_B}{n_B}}}\]
+\begin{equation}
+  t=\frac{\bar y_A-\bar y_B}{\sqrt{\frac{s^2_A}{n_A}+\frac{s^2_B}{n_B}}}
+  (\#eq:welch)
+\end{equation}
 
-Second, the degrees of freedom $\nu$ for the null $t$ distribution of the test is calculated differently: \[\nu=\frac{(\frac{s^2_A}{n_A}+\frac{s^2_B}{n_B})^2}{\frac{s^4_A}{n^2_A\nu_A}+\frac{s^4_B}{n^2_b\nu_B}}\]
+Second, the degrees of freedom $\nu$ for the null $t$ distribution of the test is calculated differently: 
 
-It is important to note that in R's `t.test` function the default option `var.equal=F` calls for Welch's test. When set to `TRUE`, it runs the Two Sample t-test. 
+\begin{equation}
+  \nu=\frac{(\frac{s^2_A}{n_A}+\frac{s^2_B}{n_B})^2}{\frac{s^4_A}{n^2_A\nu_A}+\frac{s^4_B}{n^2_b\nu_B}}
+  (\#eq:welchdf)
+\end{equation}
 
-Under some conditions, the two tests can yield quite different values for $t$ and $p-values$ when fed the same data. The Welch t-test is held to perform better under a variety of sampling conditions, but such generalities are about as useful as reading these words costs you. YMMV. 
+In R's `t.test` function the default option `var.equal=F` calls for Welch's test. When set to `TRUE`, it runs the unpaired Student's t-test. 
 
-When conducting power analysis during the experimental design phase, particularly when planning unequal sample sizes or for unequal variances, it is useful to compare how the two tests perform given your expected experiment. It is important to know how these tests perform when evaluating your own variables. And it is easy enough to run the simulation. 
+Under some conditions, the two tests can yield quite different values for $t$ and thus $p-values$. The Welch t-test is held to perform better under a variety of sampling conditions, but such generalities are not as useful as you might think. YMMV. 
+
+When conducting power analysis during the experimental design phase, particularly when planning unequal sample sizes or for unequal variances, it is useful to compare how Welch and Student's perform against each other. It is p-hacking to make these decisions after the data are collected. 
 
 #### Example
 
-A mouse model of diabetes has been established. It is used to test whether novel blood glucose lowering drugs work. A sample of mice are randomly assigned to treatment with either a placebo or with a drug. Blood glucose measurements are taken from all mice, and the two groups are compared. Every measurement stands as an independent replicate.
+Irrespective of choosing to analyze the data using Welch's or Student's t-test, the experimental design is the same. 
+
+A mouse model of diabetes has been established. It is used to test whether novel blood glucose lowering drugs work. A sample of 28 mice are randomly assigned to treatment with either a placebo $n$=14 or with a drug$n$=14. The drug group Blood glucose measurements are taken from all mice. Every measurement is independent of all other measurements. There are two means: $\bar y_{placebo}$ and $\bar_y{drug}$. 
+
+The numerator of the t-statistic is the difference between these two group means. The denominator will be either Student's or Welch's way of calculating the standard error $se$.
 
 ### Paired t tests
 
-This test is used when measurements are intrinsically-linked. Each of $n$ replicates is exposed to both levels, A and B, of a predictor variable. There are $n$ pairs of measurements in the design. The mean difference $\bar d$ of the paired responses is compared to the value of zero. $sd_d$ is the standard deviation of the $n$ differences. The experiment has $n-1$ degrees of freedom, because only the mean of the differences is taken.
+This test is used when measurements are intrinsically-linked. 
 
-\[t=\frac{\bar d}{\frac{sd_d}{\sqrt n}}\]
+Each of $n$ replicates is exposed to both levels, A and B, of a predictor variable. There are $n$ pairs of measurements in the design. The mean difference $\bar d$ of the paired responses is compared to the value of zero. $sd_d$ is the standard deviation of the $n$ differences. The experiment has $n-1$ degrees of freedom, because only the mean of the differences is taken.
+
+\begin{equation}
+  t=\frac{\bar d}{\frac{sd_d}{\sqrt n}}
+  (\#eq:tpair)
+\end{equation}
 
 #### Example
 
-A random sample of a group of diabetic mice is selected from a colony. For each mouse a blood sample is drawn after administration of a placebo in which glucose is measured. Each mouse is next administered a drug. Within hours, a second blood sample is drawn, in which glucose is measured again. The drug effect is calculated as the difference between the glucose measurements after placebo and drug. Each pair of measurements stands as an independent replicate.
+A random sample of 14 diabetic mice is selected from a colony. In a classic before and after design, for each mouse a blood sample is drawn after administration of a placebo. Blood glucose is measured. Each mouse is next administered a drug. Shortly later, a second blood sample is drawn, in which glucose is measured again. 
+
+The difference in blood glucose between the two measurements is calculated for each mouse.  The mean of those differences, $\bar y_{diff}$ is the numerator of the t statistic. The denominator is the standard error of the mean of the differences, $semd$. The total sample size $n$=14 and the test has 13 degrees of freedom. 
+
+Each __pair__ of measurements stands as one independent replicate.
 
 ## t Test Hypotheses
 
-As for whether to choose a paired or unpaired analysis, the choice of t-test hypotheses depends upon the experimental design and the scientific question at hand. In R, the hypothesis via options in the `alternative` argument of the `t.test` function.
+The choice of t-test hypotheses depends upon the experimental design and the scientific question at hand. In R, the hypothesis is set via options in the `alternative` argument of the `t.test` function.
 
 Since t-tests are parametric, hypotheses are stated on the basis of the statistical parameters of the sampled population. In this case, the means of the samples are meant to infer the sampled population, so we revert to Greek notation. 
 
-To put this another way, that the sample shows a difference is a mathematical fact. We don't need a statistical test to tell us that. The test helps us infer whether the populations that were sampled differ.
+To put this another way, that the sample shows a difference is a mathematical fact. We don't need a statistical test to tell us that. The test helps us to infer whether the populations that were sampled differ.
 
 One-sided hypotheses predict the direction of an effect. For example, "the response to treatment will be greater than control." Or, "the response to treatment will be less than control." 
 
 Two-sided hypothesis do not predict the direction of an effect: "The response to treatment will differ from control, either higher or lower." Therefore, use a one-sided hypothesis if you think your treatment will go in a specific direction. Choose a two-sided test when you're not willing to bet on an effect's direction.
 
-This matters because at the 95% confidence level the threshold value of the t statistic will be lower for a one-sided test ( eg,`qt(0.05, 2`) than for a two-sided test (`qt(0.025, 2)`) given the same data. Put another way, the "significance" threshold will always be a higher bar to cross for a two-sided hypothesis. For a one-sided test, all of the 5% cumulative probability is on one side of the distribution. For a two-sided test, that 5% is evenly split to both sides. 
+This matters because at the 95% confidence level the threshold value of the t statistic will be lower for a one-sided test ( eg,`qt(0.05, 2`) than for a two-sided test (`qt(0.05/2, 2)`) given the same data. Put another way, the "significance" threshold will always be a higher bar to cross for a two-sided hypothesis. For a one-sided test, all of the 5% cumulative probability is on one side of the distribution. For a two-sided test, that 5% is evenly split to both sides. 
 
-Therefore, two-sided tests are slightly more stringent. There is a school of thought that all testing should be two-sided. One reason for this is the enhanced stringency. Another is that 95% confidence intervals of the estimate are more readily interpretable as they have both upper and lower bounds. A third reason is that if testing one-sided and the effect goes extreme but in the direction opposite of predicted, the null cannot be rejected formally. The experiment will need to be repeated.
+Therefore, two-sided tests are slightly more stringent. 
+
+### One-sided or two-sided??
+
+There is a school of thought that all testing should be two-sided. One reason for this is the enhanced stringency. Another is that confidence intervals of the estimate are more readily interpretable because they have both upper and lower bounds. You'll soon see (or noticed when we were in the parametrics) that one-sided tests have only one bound, the other side being infinite. Those are hard to interpret. A third reason is that when testing one-sided and the effect goes extreme but in the direction opposite of predicted, the null cannot be rejected formally. No inference could be made, formally.
+
+On the other hand, one-sided hypotheses feel very normal. We usually have good scientific rationale for expecting a treatment to be larger (or smaller) than a control. Why shouldn't we test that statistically?
+
+To keep the stringency of two sides, we can run the t-test at `conf.level=0.975`. Problem solved.
+
+To have a 95% CI with upper and lower bounds we can always calculate and report one: __"...has mean glucose of 100 (two-sided 95% CI 90 to 100, one-sided t-test, p = 0.024)"__ We use the p-value for inference and the CI to report on the accuracy of the point estimate. That's a bit clunky, but problem solved.
+
+I don't have a solution for the third point. If you started an experiment testing "greater" but the data show a statistical difference that is "less", then you should admit you were wrong. Sorry. To do otherwise is to invoke the HARK bias, "hypothesizing after receiving knowledge". 
 
 ### One sample hypotheses
 
 Two sided: Use when, going into an experiment, you are not sure which direction the predictor variable will change the outcome variable relative to the population mean.
 
-H_0: $\bar x = \mu$
+H_0: $\bar y = \mu$
 H_1: $\bar \ne \mu$
 
 One sided: Use when, going into an experiment, you are confident the predictor variable will cause the outcome response to be higher than the population mean.
 
-H_0: $\bar x \le \mu$
-H_1: $\bar x>\mu$
+H_0: $\bar y \le \mu$
+H_1: $\bar y>\mu$
 
 Or you are confident the predictor variable will cause the outcome response to be lower than the population mean.
 
-H_0: $\bar x \ge \mu$
-H_1: $\bar x<\mu$
+H_0: $\bar y \ge \mu$
+H_1: $\bar y<\mu$
 
 ### Unpaired hypotheses
 
 Two sided: Use when, going into an experiment, you are not sure whether level A or B of the predictor will cause a higher outcome response.
 
-H_0: $\bar x_A = \bar x_B$
-H_1: $\bar x_A \ne \bar x_B$
+H_0: $\bar y_A = \bar x_B$
+H_1: $\bar y_A \ne \bar x_B$
 
 One sided: Use when, going into an experiment, you are confident level A of the predictor variable will cause the outcome response to be higher than that for level B. 
 
-H_0: $\bar x_A \le \bar x_B$
-H_1: $\bar x_A > \bar x_B$
+H_0: $\bar y_A \le \bar x_B$
+H_1: $\bar y_A > \bar x_B$
 
 Or when you are confident the level A of the predictor variable will cause the outcome response to be lower than that for level B.
 
-H_0: $\bar x_A \ge \bar x_B$
-H_1: $\bar x_A < \bar x_B$
+H_0: $\bar y_A \ge \bar x_B$
+H_1: $\bar y_A < \bar x_B$
 
 ### Paired hypotheses
 
 Two sided: Use when, going into an experiment, you are not sure whether the mean difference between levels of the predictor variable will be less than or greater than zero. 
 
-H_0: $\bar x = 0$
-H_1: $\bar x \ne 0$
+H_0: $\bar y = 0$
+H_1: $\bar y \ne 0$
 
 One sided: Use when, going into an experiment, you are confident the mean difference between levels of the predictor will be greater than zero. 
 
-H_0: $\bar x \le 0$
-H_1: $\bar x>0$
+H_0: $\bar y \le 0$
+H_1: $\bar y>0$
 
 Or when, going into an experiment, you are confident the mean difference between levels of the predictor will be less than zero.
 
-H_0: $\bar x \ge 0$
-H_1: $\bar x<0$
+H_0: $\bar y \ge 0$
+H_1: $\bar y<0$
 
 ## Confidence Intervals of Means
 
-A 95% confidence interval is an inferential statistic that allows for estimating the accuracy of a sample. The 95% CI is the range of values within which there is 95% confidence the true mean rests.
+A confidence interval has duality. It is an inferential statistic that also allows for estimating the accuracy of a sample. 
 
-A two-sided 95% CI can be calculated as follows: \[mean\pm qt(0.975, df)*\frac{sd}{\sqrt n}\]
+A two-sided 95% CI can be calculated as follows:
 
-For example, given a sample size of n=3, that has a mean of 100. and a standard deviation of 25
+\begin{equation}
+\bar y \pm qt(0.975, df)*\frac{sd}{\sqrt n}
+(\#eq:ci)
+\end{equation}
+
+For example, given a sample size of n=3, the mean is 100. and the standard deviation is 25:
 
 ```{r}
 upper.limit <- 100+qt(0.975, 2)*(25/sqrt(3))
 lower.limit <- 100-qt(0.975, 2)*(25/sqrt(3))
-upper.limit
-lower.limit
+paste("upper limit=", upper.limit)
+paste("lower limit=",lower.limit)
 ```
 
-Thus, the point estimate for the mean is 100 and, _on the basis of this single sample_, we can assert 95% confidence the true population mean is somewhere between 37.89 and 162.10.
+Thus, the point estimate for the mean is 100 and, _on the basis of this single sample_, we can assert 95% confidence the true population mean lies between 37.89 and 162.10.
 
-Another way to think about this is in frequentist terms. If we sampled 100 times, where each sample has n independent replicates, 95% of the resulting confidence intervals would include our point estimate of 100. 
+A slightly more accurate way to think about this is in frequentist terms. If we sampled 100 times, where each sample has n independent replicates, 95% of the resulting confidence intervals would include our point estimate of 100, but their point estimates could range from 37.89 to 162.10. 
+
+The CI is used inferentially. For the hypothesis rejection decision, the CI provides the same information as the p-value.
+
+For example, imagine the sample mean from above (100, 95% CI 37.89 to 162.10) comes from an experiment to test the hypothesis that the mean differs from zero ($H_0:\mu=0$). Since the CI does not include 0, we can reject the null. You would also find a p-value less than 0.05 would be associated with this outcome.
+
+On the other hand, we have a mean of 69 and a 95% CI of -12.1 to 150 that includes the value of zero. In that case, even though our point estimate is 69, we have 95% confidence a value of zero for our point estimate is possible. The null would not be rejected. And you would find a p-value > 0.05 associated with this outcome
+
+The CI should also be interpreted scientifically. The CI range may include values that are scientifically unimpressive. For example, the point estimate for the population mean from the sample is 100. There is 95% confidence the other values in the interval may also explain our variable, too. Perhaps we don't think much, scientifically, of values that are 40 or lower? Yet, since they are in the interval they raise concerns about the scientific quality of the sample, including the point estimate.
 
 I like to think that the standard error of the mean, $SEM$, or $\frac{sd}{\sqrt n}$, provides information about the precision of the mean estimate. As the sample size increases $SEM$ lowers. 
 
-I like to think about the 95% confidence interval as providing information about the accuracy of the mean; the range of values the true mean _might_ be based upon this one sample. Of course, when sampling from unknown hypothetical populations it's never possible to know if something is accurate with perfect certainty. However, it is useful from time to time assert how confident we are in an estimate in terms of the values it might otherwise taken on.
+I like to think about the 95% confidence interval as providing information about the accuracy of the mean; the range of values for what the true mean _might_ be based upon this one sample. Of course, when sampling from unknown hypothetical populations it's never possible to know if something is accurate with perfect certainty. However, it is useful from time to time assert how confident we are in an estimate in terms of the values it might otherwise taken on.
+
+Therefore, be less concerned about whether a CI is wide or narrow. That is not the right question to ask. Be more concerned about whether the CI includes values that don't impress you scientifically. That thinking provides you a check against blind obedience to a p-value.
 
 As we muddle our way through the so-called replication crisis there is growing recognition that data summaries should focus more on confidence intervals and less on point estimates.
 
-For example, one can readily imagine scenarios where the point estimate for a dependent variable of 100 is scientifically meaningful, but a point estimate of 37 is note. When the confidence interval includes values that are not scientifically impressive, the point estimate of 100 requires greater skepticism. The sample could very well be a high outlier.
-
 ## Parameters, small samples, and reliability
 
-A great deal of biomedical research revolves around experiments based upon small samples. A lot of this boils down to assessing the effects of independent variables by  comparing two groups. The t-tests are easily the most frequently used test in biostatistics, whether used appropriately on measured variables, or inappropriately on sorted or ordered variables. 
+A great deal of biomedical research revolves around experiments based upon small samples. A lot of the experimental designs, even those including many variables, boils down to comparing a group to some other or to a constant. 
 
-The t-tests are based upon the sample parameters $\bar y, n, sd, \& sem=\frac{sd}{\sqrt n}$ that are worth understanding intuitively.
+Because of this the t-tests are easily the most frequently used test in biostatistics, whether used appropriately on measured variables, or sometimes inappropriately on sorted or ordered variables. 
+
+The t-tests are based upon the sample parameters $\bar y, n, sd, where\ sem=\frac{sd}{\sqrt n}$ that are worth understanding intuitively.
 
 The figure below illustrates the outcome of repeatedly sampling the __known__ population $N(\mu=100, \sigma=25)$. The coefficient of variation for this simulation is $cv=\frac{\sigma}{\mu}=0.25$, which my sense says is pretty typical for bio-variable with a well behaved signal to noise ratio. But YMMV.
 
@@ -258,9 +398,9 @@ outputs <- bind_rows(outputs)
 
 # plot it!
 ggplot(outputs)+
-  geom_point(aes(n, msamp), color="blue")+
-  geom_point(aes(n, sdsamp), color ="red")+
-  geom_point(aes(n, sesamp), color="black")+
+  geom_point(aes(n, msamp), color="blue", alpha=0.1)+
+  geom_point(aes(n, sdsamp), color ="red", alpha=0.1)+
+  geom_point(aes(n, sesamp), color="black", alpha=0.1)+
   ylab("parameter value")+
   annotate(geom="text", 
            x=c(75,75, 75), 
@@ -277,33 +417,47 @@ What strikes you about this result?
 
 The biggest thing it tells me is that small samples are crappy. 
 
-We __know__ the mean and standard deviation are 100 and 25, respectively. We coded them to be exactly that.  Yet, at low sample sizes, $n$, their estimates from the samples can be pretty far off. And these vary quite a lot, too. By random chance, a sample mean and standard deviation can range anywhere from perfect to awful crappy estimates of the population values. And we'd never know which one we got.
+We __know__ the mean and standard deviation are 100 and 25, respectively. We coded them to be exactly that.  Yet, at low sample sizes, $n$, their estimates from the samples can, on average, be pretty far off. And these vary quite a lot, too. By random chance, a sample mean and standard deviation can range anywhere from being perfect to being awful crappy estimates of the population values. 
 
-The researcher is not at fault for this. This crappiness is inherent to the sampled population. This happens even with exquisite technique and perfectly calibrated pipettes and other instrumentation. Biological systems have variance. And when we do an experimental something to those systems we tend to provoke even more variance.
+And we'd never know which one we got.
+
+The researcher is not at fault for this. This happens even with exquisite technique and perfectly calibrated pipettes and other instrumentation, and slavish attention to detail. 
+
+Biological systems have variance. When we do an experimental something to those systems we tend to provoke even more variance.
 
 When do small samples get less crappy? In some respects that is in the eye of the beholder. To my eye, for this case $n >30$ seems less crappy than under 30. 
 
 Importantly, the coefficient of variation will have a big role in this. Small samples of variables with low $cv$ will be less crappy, relatively speaking. And the larger the effect size the greater latitude we have in tolerating crappy small samples, irrespective of their $cv$. 
 
-This is where power calculations come in very handy. They are designed to tell us how low our sample size can be before we become victims of the crap.
+__This is where power calculations come in very handy. They are designed to tell us how low our sample size can be before we become victims of the craptastic.__
 
-The second thing this illustrator tells me is that $sd$ and $sem$ are not telling me the same thing.  The sample $sd$ reports dispersion in the sample, but that is also an estimate of $\sigma$, the dispersion in the population. 
+The second thing big thing this illustrator tells me is that $sd$ and $sem$ are not telling me the same thing.  The sample $sd$ measures dispersion in the sample, but that is also an estimate of $\sigma$, the dispersion in the population in the same way that $\bar y$ estimates the population mean $\mu$. 
 
-Whereas the $sem$ gets lower and lower as sample size increases, because $sem=\frac{sd}{\sqrt n}$. Theoretically, $sem$ approaches zero.
+As sample size increases the $sem$ gets lower and lower, because $sem=\frac{sd}{\sqrt n}$. 
 
-The $sem$ is actually the standard deviation of the theoretical population of sample means, a concept which is derived from the central limit theorem. As a result, we infer from the $sem$ of a single sample how precisely that sample estimates of population mean. As you can see from this illustrator, the precision by which a mean is estimated improves as sample size increases. Whereas $sd$ oscillates with each sample around a fixed value, reflective of the dispersion of values in the population, $sem$ gets better and better (when one assumes low is better).
+The $sem$ is actually the standard deviation of the theoretical population of sample means, a concept which is derived from the central limit theorem^(In fact, the `sampler` function simulates the central limit theorem. Each blue point is a mean. Imagine calculating the mean and standard deviation of the 50 blue means at each value of $n$. The standard deviation of the 50 means at each $n$ is the $sem$.)  
+
+As a result, we infer from the $sem$ of a single sample how precisely that sample estimates the population mean. As you can see from this illustrator, the precision by which a mean is estimated improves as the sample size used to estimate that mean increases. Whereas $sd$ oscillates with each sample around a fixed value, like the mean, reflective of the dispersion of values in the population, $sem$ gets better and better (when one assumes low is better).
 
 ### Reporting SD or SEM?
 
-Are you estimating the value of a physical constant, such as the mass of a boson, the $K_D$ of a drug receptor interaction, the $K_M$ of an enzyme? Something that should have the same value no matter where in the universe it is estimated? Researchers who are in the business of estimating those values with high precision, such as when those values are under dispute, cannot be faulted for reporting the $sem$. Particularly when the goal of the experiment was to get a better estimate of the physical constant or how a variable changes it.
+#### tl;dr
 
-For everything else just report the SD. 
+When the precision of a measurement is important, show the $sem$, and be sure to provide the sample size as well. For everything else just report the $sd$.
 
-Another consequence of the so-called replication crisis is that journals are requiring authors to show all their data more openly. Use scatter plots to show all data points rather than bar graphs with error bars. With respect to the latter, most people who are honest about why they use SEM error in bar graphs will admit because it makes the data look better. Since the motivation is basically deception, that is not a good reason to use SEM.
+Are you estimating the value of a physical constant, such as the mass of a boson, the $K_D$ of a drug receptor interaction, the $K_M$ of an enzyme for a substrate? Something that should have the same value no matter where in the universe it is estimated? Researchers who are in the business of estimating those values with high precision, such as when those values are under dispute, cannot be faulted for reporting the $sem$. Particularly when the goal of the experiment was to get a better estimate of the physical constant or how a variable changes it. In those cases, precision is more important. 
 
-If you do use SEM in bar graphs, then you must report the exact value of $n$ for each group so a reader can back calculate out the SD. Which gets messy in both figure legends and in graphs.
+The $sd$ estimates the dispersion of the population while also providing insight into the variability of the sample. The illustrator above proves the $sem$ does neither. The reader of your research is usually far better served by getting dispersion information. For example, they may want to replicate your results but need to do a power analysis first.
 
-So just report the SD.
+When you're reporting relative transformations (percent of control, fold, etc) the $sem$ is useless. It is hard to imagine cases where precision has much utility to understand effects written in those units.
+
+Another consequence of the so-called replication crisis is that journals are requiring authors to show all their data more openly. For example, they ask for users to report data as scatter plots to show all data points rather than bar graphs with error bars. 
+
+Most people who are honest about why they use $sem$ error bars in graphs admit it makes the data look better. Although honest about their reasons, and naive because they don't really understand the difference between $sd$ and $sem$, that motivation is basically deception.
+
+Finally, if you do use SEM in bar graphs, then you must report the exact value of $n$ for each group so a reader can back calculate out the $sd$. This can get messy fast for all but the simplest graphs and figure legends.
+
+Do your reader a favor and just report the $sd$.
 
 ## t Tests: Running the analysis
 
@@ -356,8 +510,6 @@ The one-sided `greater` hypothesis greater predicts the sample mean will be grea
 
 * The simplest way to get a "typical" 95% CI in R that has both upper and lower limits is to run a two.sided t.test and pull it out of that.
 
-* There is no Welch's test for one-sample measurements.
-
 ### Unpaired t test
 
 Now we will pull two random samples: one from a normal distribution that has a mean of 200, and the second from a distribution that has a mean of 100. Both have standard deviations of 25. We have the option to run three different hypotheses.
@@ -376,31 +528,33 @@ knitr::kable(bind_rows(tidy(up2), tidy(upL), tidy(upG)), caption="Unpaired t-tes
 
 #### Interpretation
 
-* The interpretation is is similar to the one sample case but there are some evident differences.
+* The interpretation is is similar to the one sample case, so I won't repeat a lot of that, but there are some evident differences.
 
-* The estimate is the difference between the means of each group.
+* The estimate now is the difference between the means of each group.
 
 * Estimate1 and estimate2 are the means of each group.
 
-* Statistic is the value of $t$, in this example calculated by the [Welch method](#### Welch's t-test)
+* Statistic is the value of $t$, in this example calculated by the default [Welch method](#### Welch's t-test). That arises from the default `var.equal=F` argument in the test function.
 
-* Parameter is the value for $df$,in this example also calculated by the [Welch method](#### Welch's t-test). These are almost always fractional, whereas degrees of freedom for the Student's t-test is always an integer value.
+* Parameter is the value for degrees of freedom $df$,in this example also calculated by the [Welch method](#### Welch's t-test). These are almost always fractional, which the Welch formula for calculating $df$ predicts, whereas $df$ for the Student's t-test is always an integer value.
 
-* Although you can calculate the standard error for the test, $se = \frac{estimate}{statistic}$, because there are two means, note how this value is not a standard error of the mean. In fact, each group will have different $sem$ values. Best use R to calculate: `sem <- sd(a)/sqrt(length(a))`
+* Although you can calculate the standard error for the test, $se = \frac{estimate}{statistic}$, because there are two means, note how this value is not a standard error of the mean. In fact, each group will have different $sem$ values. Best use R to calculate sem per group: `sem <- sd(a)/sqrt(length(a))`
 
 * The "mean of x" corresponds to the `a` sample, or the first group in the argument. In the unpaired t test, good practice is to put the 'treatment' as the first data argument, and the 'control' as the second argument.
 
 * That will make interpretation of one-sided test output a LOT easier.
 
-* Welch's test is only for unpaired tests, because it serves as an adjustment for when the sample sizes and variances of the two groups differ. The one-sample doesn't have two groups, whereas the group variances are irrelevant in the paired t-tests.
+* Welch's test is only for unpaired tests, because it serves as an adjustment for when the sample sizes and variances of the two groups differ. The one-sample doesn't have two groups, whereas the group variances are completely irrelevant in the paired t-tests.
 
 ### Paired t Test
 
 The paired test calculates the differences between paired measurements. Then it asks how the mean of these differences differs from zero. 
 
-In fact, although two groups are involved, the test calculates the mean its standard error of a third group: the values for the differences. Thus it is much more like the one-sample t-test than it is like the unpaired t-test. 
+In fact, although two levels of a predictor variable are involved, there are not two groups of replicates. There is only one group. The test calculates the mean and its standard error for the differences between matched measurements within each replicate. The test asks, "what is the relationship of these differences to zero?" Thus. it is much more like the one-sample t-test than it is like the unpaired t-test. 
 
-The structure of the data input matters. If entered as two vectors (like below), the first value of the first vector will be paired with the first value of the second vector, and so on. Alternately, like all t-tests, you can run it using the formula method.
+The structure of the data input matters strictly. If entered as two vectors (like below), the first value of the first vector will be paired with the first value of the second vector, and so on. 
+
+Alternately, like all t-tests, you can run it using the formula method, which reads columns from a tidy dataframe. Good practice is to include replicate id's in these data frames. Though not necessary to run the t-test, replicate ids are necessary to plot the results correctly.
 
 ```{r}
 set.seed(1234)
@@ -413,20 +567,20 @@ pL <- t.test(a, b, alternative="less", paired=T)
 pG <- t.test(a, b, alternative ="greater", paired=T)
 
 #make a data frame suitable for the formula argument
-long <- tibble(replicate=1:3, a, b) %>%  
-  pivot_longer(-replicate, 
-               names_to="group", 
+long <- tibble(replicate_id=1:3, a, b) %>%  
+  pivot_longer(-replicate_id, 
+               names_to="predictor", 
                values_to="response")
 
 #running the formula argument
-l2 <- t.test(response ~ group, data=long, alternative="two.sided", paired=T)
+l2 <- t.test(response ~ predictor, data=long, alternative="two.sided", paired=T)
 
 knitr::kable(bind_rows(tidy(l2), tidy(p2), tidy(pL), tidy(pG)), caption="Paired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common in all tests.")
 ```
 
 #### Interpretation
 
-* The first row of the output is from the formula test. It should have the same everything as the second row.
+* The first row of the output is from the formula test. It should have the same everything as the second row. The formula method is a less old school data input method, and has no other effect on the test.
 
 * The estimate is the mean of the differences between pairs. Group means are irrelevant. What matters in a paired t-test is whether the differences are reliably different from zero.
 
@@ -442,9 +596,9 @@ knitr::kable(bind_rows(tidy(l2), tidy(p2), tidy(pL), tidy(pG)), caption="Paired 
 
 * The paired test has the same number of measurements as the unpaired test, but fewer independent replicates. This is due to the experimental design, which called for paired measurements from each replicate. Which is based entirely upon scientific judgment.
 
-* There is no Welch's test for paired measurements.
+* There is no Welch's test for paired measurements. Welch is all about two groups. There is only one group of replicates in a paired t-test design.
 
-* Good statistical judgment is not conflating the paired and unpaired tests, or assuming they differ trivially. They differ dramatically. 
+* Good statistical judgment is to not conflate the paired and unpaired tests, or to assume they differ trivially, or to assume one is a simple analytic difference from the other. They differ dramatically. 
 
 ## Plotting t Tests
 
@@ -478,7 +632,7 @@ knitr::kable(data.y, caption="Summary statistics for a two group sample.")
 
 Unless there is a scientific reason to report precision (and there rarely is a good one) plot the data points with mean +/- standard deviation.
 
-A straight forward ways to add error bars is by use of the `stat_summary` function:
+A straight forward ways to add error bars is by use of the `stat_summary` function. A few ways exist to do this:
 
 ```{r fig.cap="More journals want small sample t-test data as scatter plots. Use stat_summary geoms to add error bars and use SD not SEM. The argument mult=1 coupled with mean_sdl draws +/- 1 SD"}
 
@@ -495,7 +649,6 @@ ggplot(data.u, aes(Predictor, Response)) +
   #              geom="errorbar", color="red", width=0.2) +
   # stat_summary(fun.y=mean, geom="point", color="red", shape="plus", size=5)
 ```
-
 
 ### Paired
 
@@ -522,23 +675,27 @@ ggplot(data.w, aes(Predictor, Response, group=id)) +
 
 ## t Test Power
 
-See Chapter \@ref(ttestmc) for Monte Carlo-based power calculations. You should find that a properly executed Monte Carlo will give you the same result as a t-test power function.
-
 A power analysis should precede every planned experiment to decide upon an optimal sample size for a severe test of an hypothesis. The principle output of any power function is the sample size that would be necessary to conduct a well-powered experiment.
 
-The `pwr` package in R has the `pwr.t.test` function. It is very simple to execute. This function requires that several decisions be made in advance.
+See Chapter \@ref(ttestmc) for extensive detail on performing Monte Carlo-based power calculations. Below you'll also find a streamlined version of a Monte Carlo function, `t.pwr`.
 
-First, it takes arguments for acceptable type1 error and for intended power. The standard for these in basic biomedical research is 5% and 80%, respectively, but you can use any level you deem appropriate. If you want to run at 86.75309% power, go for it.
+The `pwr` package in R has the `pwr.t.test` function. Given the same effect size you should find that a properly executed Monte Carlo will give you roughly the same result as a `pwr.t.test` function.
 
-Two other arguments are `type`, which is the experimental design, and `alternative`, which is the hypothesis.
+### pwr.t.test
 
-Finally, there is the `d` argument, which is Cohen's $\delta$. This is less obvious, but very important and simple to understand. Cohen's $\delta$ is the signal to noise for the effect size you anticipate.
+It is very simple to execute `pwr.t.test`. This function requires that several decisions be made in advance.
 
-__I strongly recommend against defaulting Cohen's values for "large", "medium" and "small" effects, which apply to common standards in psychological research. They are much too ambiguous to be useful.__
+First, it takes arguments for acceptable type1 error and for intended power. The standard for these in basic biomedical research is 5% and 80%, respectively, but you can use any level you deem appropriate. If you want to run at 86.75309% power and 1% alpha, go for it.
 
-Imagine you anticipate measurements that will have a standard deviation of 25 units. You know this because of familiarity with the assay. You estimate this value on the basis of your own preliminary data or on published information. It takes scientific judgment to settle on that value. 
+Two other arguments are `type`, which is the experimental design, and `alternative`, which is the hypothesis. These selections are scientific decisions.
 
-You also believe the average response to a negative control or basal level of the predictor variable will be around 50 units. In your mind, a minimally scientifically valid treatment effect will have a 100 unit response, or 2-fold above the negative control. 
+Finally, there is the `d` argument, which is Cohen's $\delta$. This is less obvious, but very important and simple to understand: Cohen's $\delta$ is the signal to noise for the effect size you anticipate.
+
+__I strongly recommend AGAINST defaulting to Cohen's values for "large", "medium" and "small" effects, which apply to common standards in psychological research. They are much too ambiguous to be useful.__
+
+Imagine you anticipate measurements that will have a standard deviation of 25 units. You know this because of familiarity with the assay. You estimate this value on the basis of your own preliminary data or on published information. It takes scientific judgment to settle on the SD value. 
+
+You also believe the average response to a negative control or basal level of the predictor variable will be around 50 units. Also, based upon your scientific understanding of the system, in your mind, a minimally scientifically valid treatment effect will have a 100 unit response, or 2-fold above the negative control. 
 
 The signal will be 100-50=50, and the noise will be 25. Cohen's $\delta$ will therefore be 50/25=2.
 
@@ -552,26 +709,124 @@ pwr.t.test(d=2, sig.level=0.05, power=0.8, type="two.sample", alternative="great
 
 The experiment should have a total sample size total of at least 8, 4 in each of two groups. 
 
-Randomly allocate each of two levels of the predictor variable to 4 replicates each. Notice how this function produces a bizarre, fractional sample size. Obviously, there is no such critter as a partial replicate. So always round up.
+Randomly allocate each of two levels of the predictor variable to 4 replicates each. 
 
-People seem to have difficulty with Cohen's delta. It's nothing more complicated than a simple signal-to-noise estimate, just like is the t-statistic. You need some idea about what value to expect for a mean (whether its difference between means or mean of the differences). You need some idea of the standard deviation.
+Notice how this function produces a bizarre, fractional sample size. Obviously, there is no such critter as a partial replicate. So always round up if conservative, or round down if you like to live on the wild side.
 
-Don't make the mistake of putting too fine of a point on Cohen's delta. Scientific judgement is required to calculate the values to use to calculate Cohen's delta. Use your best scientific guess for standard deviation and the response magnitude, and err on the conservative side.
+People seem to have difficulty with Cohen's delta. It's nothing more complicated than a simple signal-to-noise estimate, just like is the t-statistic. You need to be able to predict delta. 
 
-When designing an experiment temper your hoped for effect size with a sense of what you consider to be a minimally scientifically relevant effect size. In some systems, 2-fold is huge, whereas in other systems (with a lot of variation) a 2-fold response is deemed insignificant.
+When designing an experiment temper your hoped for effect size with a sense of what you consider to be a minimally scientifically relevant effect size. In some systems, 2-fold is huge, whereas in other systems (with a lot of variation) a 2-fold response might be deemed insignificant.
 
 I strongly caution against using Cohen's delta values recommended for "small", "medium", and "large" effects. There's a good chance his idea of large effects is a lot smaller probably closer to your idea of small effects.
+
+### t-pwr: A Monte Carlo method
+
+This is a lean custom Monte Carlo function for t-test power. This is designed for you to assess power and sample size relationships prior to running an experiment. I find it to be more intuitive to use. YMMV.
+
+For more expansive versions with more explanation, see Chapter\@ref(ttestmc).
+
+`t.pwr()` takes sample size `n` as an argument, and returns the power of a t-test, given initialization parameters including the means, standard deviations, a correlation coefficient if paired, and configuration of the t-test arguments. 
+
+Feed some expected experimental results into the initializer and it will behave as the population being sampled. The function will simulate a long run of random samples. It will conduct a t-test on each sample. For each t-test a p-value is collected.
+
+For example, if you set a confidence level of 95%, every p-value less than 0.05 will be scored as a hit. Power = hits/total number of tests.
+
+To customize for a specific application, modify the initializer values and the t.test arguments. 
+
+What means and standard deviations should you estimate? Either the values you predict will happen, OR values that you believe would be the minimal scientifically meaningful effect size.
+
+```{r unpaired students t monte carlo}
+t.pwr <- function(n){
+  
+#Intitializers. Place expected values for the means and standard deviations of two groups to be compared here.
+  
+  m1=50 #mean of group 1
+  sd1=25 #standard deviation of group 1
+  
+  m2= 100 #mean of group 2
+  sd2=25 #standard deviation of group 2
+  
+  alpha=0.05 #type1 error tolerance
+  
+  
+  # the monte carlo just repeats the random sampling i=ssims times. For each i, it runs a t-test on that sampe, grabs the p-value and places it in a growing vector, p.values[i]. Then it moves up to the next value of i.
+  ssims=1000
+  
+  p.values <- c()
+  i <- 1
+  repeat{
+    x=rnorm(n, m1, sd1); 
+    y=rnorm(n, m2, sd2);
+    #optional for paired, transform y from above given r coefficient
+    #y=r*x + y*sqrt(1-r^2)
+    #and change test to paired=T
+    p <- t.test(x, y, 
+                paired=F, 
+                alternative="two.sided", 
+                var.equal=T,
+                conf.level=1-alpha)$p.value
+    p.values[i] <- p
+    
+    if (i==ssims) break
+    i = i+1
+    
+    pwr <- length(which(p.values<alpha))/ssims
+  }
+  return(pwr)
+  
+}
+
+```
+
+
+
+#### How to use
+
+What is the power for a two-sided, unpaired experiment with those initializer estimates when run at a sample size of 4? 
+
+After running the `t.pwr` function into the environment, do this: 
+
+```{r}
+t.pwr(4)
+```
+
+Or run t.pwr over a range of sample sizes and plot a power vs sample size curve:
+
+```{r fig.cap="Power curve for two-sided, unpaired t-test, delta=2"}
+
+frame <- data.frame(n=2:50)
+data <- bind_cols(frame, 
+                  power=apply(frame, 1, t.pwr))
+
+#plot
+ggplot(data, aes(n, power))+
+  geom_point() +
+  scale_y_continuous(breaks=c(seq(0, 1, 0.1)))+
+  scale_x_continuous(breaks=c(seq(0,50,2)))
+```
+
+#### Interpret
+
+For unpaired design, n represents the number of replicates per group. 
+
+For paired design, n represents the number of pairs. 
+
+From the power graph, it looks like a sample size of 6 or 7 per group is necessary.
+
+This is not exactly identical to the `pwr.t.test` prediction of sample size. 
+
+There are a few differences, the first being the Monte Carlo is a simulated series and the test is Student's (`var.equal=T`). Since the Monte Carlo is comprised of the t-test configuration that I'll run after the experiment, and is more conservative, I'll go with that.
 
 ## Summary
 
 * Use t-tests for factorial experiments involving measured dependent variables.
-* Assumptions about normality and homoscedacticity are difficult to validate with small samples.
+* Assumptions about normality and homoscedasticity are difficult to validate with small samples.
 * Although people commonly use t-tests on data transformed from proportions to percents, or on ordered data, proportion and nonparametric tests can be better options.
 * The t-test is actually 3 different types of t-tests, only one of which compares the means of two groups.
 * Which t-test to use depends entirely on the experimental design and requires matching scientific judgment with statistical judgment.
 * Plot your data based on the experimental design.
 * Configuration of the test depends upon the statistical hypothesis.
-* The t-test permeates statistical analyis of biomedical experiments, from simple stand alone experiments to posthoc testing testing of ANOVA and regression coefficients. For this reason, you are advised to embrace a spiritual relationship with the t-test. 
+* The t-test permeates statistical analysis of biomedical experiments, from simple stand alone experiments to posthoc testing testing of ANOVA and regression coefficients. For this reason, you are advised to embrace a spiritual relationship with the t-test. 
 
 
 
