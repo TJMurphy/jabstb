@@ -9,70 +9,91 @@ library(tidyverse)
 
 This chapter walks through a statistical design for three different types of t-test experiments; the one-sample, the unpaired and the paired t-tests.
 
-Each of these examples use Monte Carlo simulation to assess experimental power at given sample and effect sizes, so you'd know many replicates are needed for a real life experiment. 
+A key decision while designing an experiment is determining the sample size necessary to give an hypothesis a severe test. Each section illustrates how to use Monte Carlo simulation to assess experimental power at given sample and effect sizes. 
 
-For preliminary data, these all use information in [a mouse diabetes study conducted by the Jackson Labs](https://phenome.jax.org/projects/Jaxwest7). This is done to illustrate how existing data can be used to refine predictions about the values we might expect in our own experiment.
+For preliminary/pilot data these all use information in [a mouse diabetes study conducted by the Jackson Labs](https://phenome.jax.org/projects/Jaxwest7). The intent is to illustrate how existing data is used to refine predictions about the values we might expect in our own experiment.
 
-### Overview
+### Overview of the Monte Carlo
 
-In a single cycle of a Monte Carlo t-test simulation, a random distribution function is used to simulate a random sample. This mimics how the values for replicates might be collected in a real life experiment. The key distinction between real life and simulated samples is that we know the true parameters of the sampled population for the latter...because we code them in!
+In statistics, Monte Carlo is jargon for a repetitive simulation. A Monte Carlo t-test power analysis is therefore a repetitive simulation of a random sample followed by a t-test. The purpose is to determine how a long run of experiments might work. The fraction of p-values from those tests that are less than 0.05 serves as a measure of power.
 
-That's a key difference from real life, because it means we can assess how well the simulated samples lead to a correct answer.
+Tweaking the parameter arguments of the functions can generate random replicate values that closely approximate what are likely to be collected in a real life experiment. The key distinction between real life and simulated samples is that the true parameters of the sampled population are known...because we code them in the function. This allows us to assess how well the simulated test conditions lead to a correct answer.
 
-### Simulating data
+The reason I advocate for these Monte Carlos so strongly is that it helps the researcher plan an experiment explicitly, to visualize the outcome, and to detect any thing they've missed. That should translate to saved time and cost.
 
-In these t-test cases below, we'll use the `rnorm` function to generate sample replicates. Ideally, t-tests are only used on dependent variables that are continuous and normally distributed. In this case, we'll be simulating experiments that involve measuring glucose concentration, which is a continuous, normally distributed variable.
+### tl;dr on data simulation
 
-However, it is important to recognize that you should simulate the kind of data you expect to generate, irrespective of the shape of the distribution you are sampling. If you expect skewed data, for example, lognormal, then you should simulate data shaped like that!! The goal is to try to make the simulation as real life as possible.
+In the cases below we will use the `rnorm` function to generate sample replicates. Ideally, t-tests are only used on random replicates of dependent variables that are continuous and normally distributed. 
 
-Having a simulated sample of a proper sample size, a t-test is next configured to test that sample. We could collect any test parameter we wished from that t-test, but usually we just capture the p-value.  
+We will simulate experiments that involve measuring glucose concentration, which is a continuous, normally distributed variable.
 
-If we're tesing at a 95% confidence level, then a p-value less than 0.05 would be counted as a "hit" indicating treatment effect.
+It is important to recognize that we can simulate any kind of data we expect to generate using the Monte Carlo technique. When expecting skewed data, for example, lognormal shaped data should be simulated using the `rlnorm` function. If we expect unequal variances, we can simulate groups that have unequal variances with `rnorm` or even with `rlnorm`. The idea is to be creative and try to make the simulation as real life as possible. 
 
-A cycle of random sampling, t-testing, and p-value evaluation is repeated anywhere from 100 to 10000 times or more. How many? It depends upon how accurate you'd like to be. 
+### tl;dr on the test
 
-The fraction of 'hits' relative to the number of simulated samples is the power of the test. The higher the number of simulations, the more accurate the Monte Carlo in terms of predicting "hits" and power.
+A t-test is configured to test each simulated sample. We could collect any test parameter we wished from that t-test, but for the power analyses below we'll just capture the p-values.  
 
-### Change n to zero in on the power you want
+When testing at a 95% confidence level, a p-value less than 0.05 would be counted as a "hit" indicative of a 'positive' treatment effect. You can adjust your confidence level and hit threshold to whatever value you wish.
 
-If the result is not an acceptable power, change the sample size `n` in the `rnorm` function until a Monte Carlo simulation run gives you an acceptable fraction of 'hits'. There's your sample size, which is usually the output we want from running this simulation! 
+Cycles of random sampling, t-testing, and p-value collection is repeated anywhere from 100 to 1000 times or more. __The number of 'hits' relative to the number of simulated tests is the power of the test.__
 
-Furthermore, any other assumptions or conditions can be changed, too. Need to re-evaluate the predicted standard deviation? Change it! Will the effect size be larger or smaller than you think? Simulate that! Want to compare a one-tailed to a two-tailed hypothesis? Switch it up! 
+How many cycles to run? It depends upon how accurate you'd like your power estimate to be. Reliable estimates can be had with only a few hundred simulations. More simulations will be more accurate.
 
-The time to do p-hacking and HARKing is during a Monte Carlo, before running the real life experiment.
+### Changing n
 
-### Scenario
+The examples below are designed for running chunk by chunk, then changing n, then re-running chunk by chunk. It is a bit clunky, but the point is to illustrate the modular structure of a Monte Carlo. A streamlined version of this code \@ref()
+
+After the first run through the chunks, if the power value is not ideal, whether too hi or too low, change the sample size `n` in the `rnorm` function. Then re-run all the chunks. 
+
+Repeat this until a Monte Carlo simulation run gives you an acceptable fraction of 'hits' and power. There's your sample size. 
+
+Importantly, not just $n$, but any other assumptions or conditions can be changed, too. Need to re-evaluate the predicted standard deviation? Change it! Will the effect size be larger or smaller than you think? Simulate that! Want to compare a one-tailed to a two-tailed hypothesis? Switch it up! 
+
+The time to do p-hacking and HARKing is during a Monte Carlo power analysis, before running the real life experiment.
+
+### Diabetes drug scenario
 
 Let's imagine we have developed a new drug we hope will be useful for treating type II diabetes. Pretend our role is to generate pre-clinical data in support of an FDA application.
 
-The planning is based on [some mouse phenome data in a diet-induced obesity study in a fancy mouse strain](https://phenome.jax.org/projects/Jaxwest7), which is a common model for type II diabetes. 
+The planning for this scenario is based on [some mouse phenome data in a diet-induced obesity study using a fancy mouse](https://phenome.jax.org/projects/Jaxwest7), which is a common preclinical model for type II diabetes. 
 
 ### What would be a scientifically meaningful response?
 
-A key decision in setting up the Monte Carlo is to predict the mean and standard deviations of the population being sampled along with the effect size of the treatment.
+Most of the effort in a Monte Carlo for t-test power is in figuring out the mean and standard deviations of the population being sampled. These are used to predicted an expected effect size of the treatment or to define a minimally scientifically relevant treatment effect size.
 
+Beyond understanding the relationship of these parameters to data, there isn't a lot of statistics involved in deciding what would be a meaningful effect size. That's a scientific question. 
 
-On the basis of expertise in the field, we make the judgment that a 50% reduction in blood glucose caused by the drug in this diet-induced obesity model would be a scientifically meaningful outcome. We need to design an experiment capable of detecting that 50% effect size.
+On the basis of expertise in the field, and familiarity with the preclinical model, we make the judgment that a 50% reduction in blood glucose caused by the drug in this diet-induced obesity model would be a scientifically meaningful outcome. 
 
-We've [already compiled the phenome data into summary format](\#jaxwest7). We'll use that to guide our estimates in these Monte Carlo. These data show that under diabetogenic conditions the animals have an average blood glucose of 368 and SD = 119 (mg glucose/dl). 
+Therefore, we need to design an experiment capable of detecting that 50% effect size.
 
-Since this is an exercise in prediction and estimation, we'll round those values to 370 and 120, if only to make the point that highly precise numbers misses the point of what we're doing here.  
+If we go to Chapter \@ref(jaxwest7) we've already compiled the phenome data into a summary format useful for our planning. These data show that under diabetogenic conditions the animals have an average blood glucose of 368 and SD = 119 (mg glucose/dl). 
 
-A 50% reduction would yield a target value of about 185 mg/dl.
+Since this is an exercise in prediction and estimation, we'll round those values to 370 and 120. Any more precision misses the point of what this prediction hopes to accomplish.  
 
-Finally, we'd like to run the real life experiments at 90% power. Why? Let's imagine that these are a pretty important test: a "go" vs "no go" inflection point for a novel drug candidate. When the stakes are high so too should be the power of the test. 
+A 50% reduction would therefore yield a target glucose value of about 185 mg/dl.
+
+Finally, we'd like to run the real life experiments at 90% power. Why? Let's imagine that these are a pretty important test: a "go" vs "no go" inflection point for a novel drug candidate. When the stakes are higher the experimental test should be more severe. 
+
+Therefore, we'll run through the code chunks, changing sample size each time, until they return a power value of about 90%.
 
 ## One sample t-test Monte Carlo
 
-In this single arm design, all C57Bl/6J mice are enrolled in an diabetogenic protocol would receive the drug treatment. Blood glucose levels are taken at the end of a proscribed period. 
+In this single arm design, each C57Bl/6J mice enrolled in an diabetogenic protocol would receive the drug treatment. Blood glucose levels are taken once, at the end of a preset drug treatment period. 
 
-The statistical test evaluates the null hypothesis, that mean blood glucose with drug treatment does not differ from the mean blood glucose *that would be expected* in animals that undergo the diabetogenic protocol. 
+The statistical test evaluates the null hypothesis that mean blood glucose with drug treatment is the same as the mean blood glucose in animals that undergo the diabetogenic protocol. 
 
 There is no formal placebo control group.
 
-Step 1: Enter mean and sd parameter estimates for the expected effect of the new drug. The sd estimate is a judgment call to think through and to model out. The entry below is conservative. It assumes the drug-treated group has the same sd as an untreated group. The Jaxwest7 data suggest a lower sd might happen with drug (the sd was 80 for the rosiglitazone group). 
+That may shock someone used to having control groups. When we have strong experience measuring diabetic blood glucose in this model this can be a good design. For example, we have performed lot's of control group measurements in the past. So many that we have with high confidence in that this sample would, on average, have the value we set for $\mu$ in this test. This can be a useful experimental design particularly when the cost for securing a control group is high, such as when non-human primates are involved.
 
-Also enter an estimate for the theoretical mean of the population it will be evaluated against. Finally, enter a value for the sample size of the drug-treated group.
+### Step 1
+
+Initialize the sampling function by entering these mean and sd parameter estimates for the expected values of the new drug. 
+
+The sd estimate is a judgment call to think through and to model out. The entry below is conservative. It assumes the drug-treated group has the same sd as an untreated group. The Jaxwest7 data suggest a lower sd might happen with drug (the sd was 80 for the rosiglitazone group vs 120 for the control group). 
+
+Also enter an estimate for the theoretical mean of the population it will be evaluated against. Finally, enter a best guess value for the sample size of the drug-treated group. We'll come back to change this $n$ to hone in on the right power.
 
 ```{r}
 meanDrug <- 185
@@ -80,10 +101,12 @@ sdDrug <- 120
 
 muCon <- 370
 
-nDrug <- 5
+nDrug <- 3
 ```
 
-Step 2: Declare relevant arguments for the t-test function:
+### Step 2 
+
+Initialize with relevant arguments for the t-test function:
 
 ```{r}
 alt ="two.sided"
@@ -93,14 +116,18 @@ alpha=0.05
 
 ```
 
-Step 3: Declare the number of simulations for the experiment and set up an empty vector to collect p-values generated by the function.
+### Step 3 
+
+Declare the number of simulations for the Monte Carlo. Also set up an empty vector in the environment which will be used to capture a p-value each time one is generated by the function.
 
 ```{r}
 nSims <- 1000
 p <- c()
 ```
 
-Step 4: Run the simulation function. Notice how with each loop it simulates a new random sample then runs a on-sample t-test on that sample, then stores the p-value in a vector that grows with each loop.
+### Step 4 
+
+Run the simulation function. Notice how with each loop it simulates a new random sample based upon the Step 1 initializer above. This also runs a one-sample t-test on that sample based upon the Step 2 initializer. Next it grabs the p-value from the t.test object. Next it stores the p-value in the formally empty vector from step 3. After it hits the bottom it goes back to the top to run another cycle, only stopping after $i == nSims$. The p-value vector grows with each loop.
 
 ```{r}
 for(i in 1:nSims){
@@ -119,40 +146,57 @@ for(i in 1:nSims){
 }
 ```
 
-Step 5: Calculate and show "hits" and power. Remember, a "hit" is a simulation with a p-value < 0.05. Power is the fraction of all simulations that meet this hit critria.
+### Step 5
+
+Calculate and show "hits" and power. Remember, a "hit" is a simulation with a p-value < 0.05. Power is the fraction of all simulations that meet this hit critria.
 
 ```{r}
 # the output
 
-hits <- length(which(p < alpha)); hits
-power <- hits/nSims; power
+hits <- length(which(p < alpha)); paste("hits=", hits)
+power <- hits/nSims; paste("power=", power)
 ```
 
-Step 6: Visualize the p-value output with a histogram. Because it's pretty.
+### Step 6
 
-```{r}
+Visualize the p-value output with a histogram with Emory colors. Because it's pretty.
+
+```{r P-value distribution for a one-sample t-test Monte Carlo power analysis. }
 #now plot the histogram
 
 ggplot(data.frame(p))+
   geom_histogram(aes(p), 
                  color="#f2a900",
                  fill="#012169", 
-                 bins=20)
+                 binwidth=1/100)+
+  scale_x_continuous(breaks = seq(0, 1, 0.05))
 ```
 
-Next steps: The returned power for the estimates above is about 75%. That's a bit lower than a power of 90%, which we'd like here. Change the value of the `nDrug` term to a higher sample size, before re-running the simulation loops, until a power of ~90% is achieved. You can also change the estimate for `sdDrug`, too. How does lowering that influence sample size for 90% power? 
+### Step 7
 
-Why 90%? That's both a scientific and strategic call. In this instance a positive result will have important implications for committing further to a costly drug development process. For that reason, the study should be run at a higher power than what might be chosen for a test that is more exploratory in nature.
+Is the power too low or high? Go back top to change n. 
+
+The returned power for the estimates above should be about 75%. That's a bit lower than a power of 90%, which we'd like here. Change the value of the `nDrug` term in the Step 1 initializer to a higher sample size, before re-running all the code chunks. Iterate until a power of ~90% is achieved.
+
+Why 90%? That's both a scientific and strategic call for this case. In this instance a positive result will have important implications for committing further to a costly drug development process. For that reason, the study should be run at a higher power than what might be chosen for a test that is more exploratory in nature.
+
+Next steps: Now is the time to think about changing all of the other parameters. Is `rnorm` the right distribution to model the sampled population? Are the mean and sd parameters reasonable? Should I consider a smaller effect size? Confidence level? Alternative?
+
+The Monte Carlo is useful to test out a number of different scenarios.
+
+Once we are satisfied we have the right experimental design, we write all of these joices down in our notebook...or register the study online. Save the power script for record keeping or to share with collaborators or with a consulting statistician.
 
 ## Unpaired t-test Monte Carlo
 
-This is an alternative experimental design to the one above. A group is used to directly measure glucose concentration in placebo control for comparison to the drug effect, rather than assume what the glucose concentration would be in the placebo control  
+This is an alternative experimental design to the one above. A group is used to directly measure glucose concentration in placebo control for comparison to the drug effect.   
 
 This design therefore involves two groups of animals. All animals would be subjected to the diabetes-inducing diet. In the control arm, the group would receive a placebo. In the experimental arm, the group would receive the new drug. Each animal would be assumed as statistically independent of every other animal. 
 
 The objective is to test the null hypothesis that the means of the blood glucose concentrations do not differ between the two groups.
 
-Step 1: Let's call the "A" group the placebo, and the "B" group the drug treated. We'll use standard deviation and the mean estimates for blood glucose levels as described above. We'll design for equal sample sizes, though this test can tolerate differences.  
+### Step 1
+
+Let's call the "A" group the placebo, and the "B" group the drug treated. We'll use standard deviation and the mean estimates for blood glucose levels as described above. We'll design for equal sample sizes, though this test can tolerate differences.  
 
 ```{r}
 #Sampled population paramemters
@@ -168,7 +212,9 @@ sdB <- 120
 nB <- 5
 ```
 
-Step 2: Set the t-test function arguments as initializers, rather than down in the loop function, so they are easy to read and to modify. 
+### Step 2
+
+Set the t-test function arguments as initializers, rather than down in the loop function, so they are easy to read and to modify. 
 
 ```{r}
 #t-test function arguments
@@ -179,14 +225,18 @@ alpha <- 0.05
 ```
 
 
-Step 3: Declare the number of simulations. The larger the number of simulations, the more accurate will be the power calculation. Also set up an empty vector for the following function to fill as it cycles through simulations and generates p-values.
+### Step 3
+
+Declare the number of simulations. The larger the number of simulations, the more accurate will be the power calculation. Also set up an empty vector for the following function to fill as it cycles through simulations and generates p-values.
 
 ```{r}
 nSims <- 10000 #number of simulated experiments
 p <- c()
 ```
 
-Step 4: Run the simulation function.
+### Step 4
+
+Run the simulation function.
 
 ```{r}
 # the monte carlo function
@@ -206,17 +256,21 @@ for(i in 1:nSims){ #for each simulated experiment
 }
 ```
 
-Step 5: Print out the power, which is the number of "significant" results divided by the total number of simulations.
+### Step 5
+
+Print out the power, which is the number of "significant" results divided by the total number of simulations.
 
 ```{r}
 # the output
 
-hits <- length(which(p < alpha)); hits
-power <- hits/nSims; power
+hits <- length(which(p < alpha)); paste("hits=", hits)
+power <- hits/nSims; paste("power=", power)
 ```
 
-Step 6: Plot out the distribution of p-values.
-```{r}
+### Step 6
+
+Plot out the distribution of p-values.
+```{r fig.cap="P-value distribution of an unpaired t-test Monte Carlo power analysis."}
 #now plot the histogram
 
 ggplot(data.frame(p))+
@@ -226,68 +280,86 @@ ggplot(data.frame(p))+
                  bins=20)
 ```
  
-Next steps: This configuration with a sample size of 5 in each group is a bit underpowered. Adjust these sample sizes to dervied a power of about 90%. Also experiment with adjusting other features of the test. What happens if the SD for the drug-treated group is lower? What about a one-tailed hypothesis instead of a two-sided? Monte Carlo is the time for p-hacking and harking.
+### Step 7
 
+This configuration with a sample size of 5 in each group is a bit underpowered. Adjust these sample sizes to derive a power of about 90%. 
+
+Also experiment with adjusting other features of the test. What happens if the SD for the drug-treated group is lower? What about a one-tailed hypothesis instead of a two-sided? Monte Carlo is the time for p-hacking and harking.
+
+The Monte Carlo is useful to test out a number of different scenarios.
+
+Once we are satisfied we have the right experimental design, we write all of these joices down in our notebook...or register the study online. Save the power script for record keeping or to share with collaborators or with a consulting statistician.
 
 ## Paired t-test Monte Carlo
 
-Another way to test whether the new drug can reduce blood sugar concentrations is by using a paired design. Paired designs offer some level of control over random variability by accounting for some of it to the variation within subjects. 
+Paired experimental designs tend to be very efficient because they take advantage of the intrinsic relationships between measurements derived from a common replicate. 
 
-For example, individuals may differ wildly in their absolute blood glucose concentrations, but the proportional change due to drug from subject to another will be fairly consistent. 
+For example, individuals may differ a lot in their absolute blood glucose concentrations, but the proportional change due to a drug treatment from one subject to another might be fairly consistent. 
 
-The paired t-test challenges the null hypothesis that the average change in blood glucose caused by the drug is zero. 
+In a paired design glucose is measured twice in each subject: after a placebo and once again after drug treatment. The important response variable per replicate is the difference between these two measurements. Given several independent replicates, the paired t-test challenges the null hypothesis that the mean change in blood glucose caused by the drug is zero. 
 
-Step 1: When simulating data for a paired design it is important to account for the expected correlation between variables. That's best accomplished on the basis of some data. 
+### Step 1
 
-We can use the serial glucose measurements from individual subjects in the [Jaxwest7 data set to extract this information](\{#jaxwest7}). 
+Estimating distribution parameters for groups and deciding upon a minimal valid effect size for a paired experiment is similiar to that for an unpaired test and one-sample tests, but with one crucial distinction.
 
-There are two daily blood glucose measurements taken on days 1, 3, 5, 7, 9, 11 and 12 of a study, from each of 16 different subjects. We can think of each blood collection as a variable, for which 16 independent replicate measurements are taken.
+The power in paired experiments rests in the fact that the two intrinsically-linked measurements are correlated.
 
-Across the blood collections we expect to see high correlation within the replicates. In other words, animals with high values should be consistently high across the study period, and animals with low values should be consistently low across the same time frame. 
+When simulating data for a paired design accounting for the expected correlation between the response values better mimics the instrinsic relationship between measurements. 
+
+Deriving a correlation coefficient to use for these simulations is best accomplished on the basis of some pre-existing data. 
+
+We can use the serial glucose measurements from individual subjects in the [Jaxwest7 data set to extract this important information](\{#jaxwest7}). 
+
+There are two daily blood glucose measurements taken on days 1, 3, 5, 7, 9, 11 and 12 of a study, from each of 16 different subjects. On each day there are two paired measures from each of 16 independent replicate measurements are taken.
+
+Across the blood collections we expect to see high correlation within the replicates. In other words, we would expect that animals with high values should be consistently high across the study period, and animals with low values should be consistently low across the same time frame. 
 
 ```{r message=FALSE, warning=FALSE, echo=T, results='hide'}
-#Copying cells F14:S32 of the Jaxwest7 table (the value at F21 was imputed as the average of its row before pasting) using the datapasta package. 
+#Copying cells F14:S32 of the Jaxwest7 table using datapasta
+#the value at F21 was imputed as the average of its row before pasting
+#colnames a=am, p=pm
 
 bloodGlucose <- data.frame(
-                     day01 = c(136L, 345L, 190L, 434L, 424L, 170L, 487L, 218L, 179L, 260L,
+                     day01a = c(136L, 345L, 190L, 434L, 424L, 170L, 487L, 218L, 179L, 260L,
                                  115L, 526L, 325L, 329L, 230L, 204L),
-                     day01 = c(270L, 518L, 301L, 504L, 486L, 208L, 449L, 273L, 184L, 381L,
+                     day01p = c(270L, 518L, 301L, 504L, 486L, 208L, 449L, 273L, 184L, 381L,
                                  191L, 517L, 252L, 296L, 414L, 120L),
-                     day03 = c(162L, 429L, 311L, 453L, 447L, 134L, 525L, 254L, 124L, 174L,
+                     day03a = c(162L, 429L, 311L, 453L, 447L, 134L, 525L, 254L, 124L, 174L,
                                  132L, 465L, 203L, 212L, 408L, 138L),
-                     day03 = c(165L, 413L, 361L, 392L, 417L, 129L, 419L, 265L, 107L, 140L,
+                     day03p = c(165L, 413L, 361L, 392L, 417L, 129L, 419L, 265L, 107L, 140L,
                                  132L, 394L, 158L, 159L, 179L, 139L),
-                     day05 = c(192L, 456L, 398L, 350L, 496L, 147L, 437L, 338L, 108L, 132L,
+                     day05a = c(192L, 456L, 398L, 350L, 496L, 147L, 437L, 338L, 108L, 132L,
                                  169L, 310L, 135L, 156L, 432L, 157L),
-                     day05 = c(397L, 487L, 465L, 400L, 484L, 141L, 476L, 386L, 149L, 138L,
+                     day05p = c(397L, 487L, 465L, 400L, 484L, 141L, 476L, 386L, 149L, 138L,
                                  158L, 269L, 162L, 200L, 288L, 122L),
-                     day07 = c(172L, 468L, 388L, 458L, 468L, 241L, 525L, 287L, 142L, 164L,
+                     day07a = c(172L, 468L, 388L, 458L, 468L, 241L, 525L, 287L, 142L, 164L,
                                  129L, 213L, 164L, 139L, 163L, 163L),
-                     day07 = c(148L, 419L, 392L, 387L, 423L, 128L, 499L, 236L, 143L, 137L,
+                     day07p = c(148L, 419L, 392L, 387L, 423L, 128L, 499L, 236L, 143L, 137L,
                                  120L, 185L, 181L, 143L, 240L, 168L),
-                     day09 = c(291L, 507L, 453L, 342L, 472L, 162L, 516L, 347L, 112L, 122L,
+                     day09a = c(291L, 507L, 453L, 342L, 472L, 162L, 516L, 347L, 112L, 122L,
                                  122L, 145L, 150L, 164L, 185L, 164L),
-                     day09 = c(239L, 559L, 421L, 368L, 507L, 163L, 485L, 235L, 233L, 140L,
+                     day09p = c(239L, 559L, 421L, 368L, 507L, 163L, 485L, 235L, 233L, 140L,
                                  157L, 201L, 177L, 150L, 208L, 128L),
-                     day11 = c(192L, 420L, 355L, 355L, 458L, 222L, 472L, 432L, 113L, 102L,
+                     day11a = c(192L, 420L, 355L, 355L, 458L, 222L, 472L, 432L, 113L, 102L,
                                  94L, 131L, 162L, 119L, 138L, 129L),
-                     day11 = c(172L, 415L, 381L, 429L, 456L, 438L, 535L, 450L, 137L, 174L,
+                     day11p = c(172L, 415L, 381L, 429L, 456L, 438L, 535L, 450L, 137L, 174L,
                                  141L, 258L, 192L, 193L, 208L, 218L),
-                     day12 = c(235L, 511L, 394L, 373L, 519L, 307L, 500L, 509L, 106L, 120L,
+                     day12a = c(235L, 511L, 394L, 373L, 519L, 307L, 500L, 509L, 106L, 120L,
                                  120L, 114L, 170L, 148L, 153L, 135L),
-                     day12 = c(153L, 464L, 444L, 501L, 570L, 252L, 497L, 326L, 150L, 135L,
+                     day12p = c(153L, 464L, 444L, 501L, 570L, 252L, 497L, 326L, 150L, 135L,
                                  166L, 160L, 162L, 188L, 140L, 182L)
                 )
 ```
 
-We calculate the correlation between any two daily sets of values. In fact, we can calculate the correlation between all possible pairs of daily values. This leaves us with a large number of unique correlation coefficients. We then derive from these an overall average correlation coefficient for use in Monte Carlo function. 
+We calculate the correlation between any two daily sets of values. In fact, we can calculate the correlation between all possible pairs of daily values. This leaves us with a large number of unique correlation coefficients. An overall average correlation coefficient will be used in the Monte Carlo function. 
+
 
 ```{r}
 #create a full correlation matrix
 cormat <- cor(bloodGlucose) 
-#remove lower half of matrix
+#remove lower half of matrix due to duplication
 cormat[lower.tri(cormat)] <- NA
-#remove matrix diagonal
+#remove matrix diagonal as uninformative
 cormat[cormat==1.0000000] <- NA
 ```
 
@@ -300,15 +372,36 @@ mean(cormat, na.rm=T)
 #phew!
 ```
 
-What does this value mean? 
+What does this value mean and how to use it in a Monte Carlo? 
 
-First, it can be show that when the value of the correlation coefficient between the variables $X,Y$ is $r$, then the relationship between each pair of $x_i, y_i$ values in the set is \[y_i=x_i\times r+y_i\sqrt{1-r^2}\]
+First, "it can be shown" that when the value of the correlation coefficient between the variables $X,Y$ is $r$, then the relationship between each pair of $x_i, y_i$ values is
 
-Intuitively, this should make sense. You can see, when $r=0$, then $y_i=y_i$. When $r=1$, then, $y_i=x_i$)
+\begin{equation} 
+  y_i=x_i\times r+y_i\sqrt{1-r^2}
+  (\#eq:cor)
+\end{equation} 
 
-So the correlation coefficeint from the Jaxwest7 data set means that *within* each subject in our experiment the expected correlation between pre-drug glucose concentrations and post-drug glucose concentrations is 0.7666.
+Intuitively, this should make sense. When $r=0$, then $x_i$ does not predict $y_i$, thus $y_i=y_i$. When $r=1$ the prediction is perfect so $y_i=x_i$.
 
-**Step 2:** Initialize the Monte Carlo with estimates for the measurement values. We start with the mean and sd values for the pre-drug blood glucose measurements. Their estimates are derived from the placebo group in the Jaxwest7 data set, rounded to 380 and 120, respectively. 
+Oh what the hell, here's a proof:
+
+```{r}
+x <- rnorm(100000, 0, 1)
+y <- rnorm(100000, 1, 1)
+paste("Random x and y are uncorrelated: r=", cor(x, y))
+r <- 0.76
+yc <- x*r+y*sqrt(1-r^2)
+paste("Now they are: r=", cor(x, yc) )
+
+```
+
+The average correlation coefficiennt from the Jaxwest7 data set means that *within* each subject in our experiment the expected correlation between pre-drug glucose concentrations and post-drug glucose concentrations is about 0.7666.
+
+We take advantage of this deriving this estimate to simulate a group values that will be more life-like.
+
+### Step 2
+
+Initialize the Monte Carlo with estimates for the measurement values. We start with the mean and sd values for the pre-drug blood glucose measurements. Their estimates are derived from the placebo group in the Jaxwest7 data set, rounded to 380 and 120, respectively. 
 
 A scientifically-meaningful effect of the drug would be a 50% reduction in glucose. We want to set up an experiment that can detect that effect.
 
@@ -331,10 +424,12 @@ k <- sqrt(1-r^2)
 
 # number of paired measures
 
-pairs <- 3
+pairs <- 4
 ```
 
-**Step 3:** This step sets the arguments in the t-test function. Even though we predict a reduction in glucose, we'll test this as a two-tailed hypothesis. It's a little more stringent.
+### Step 3
+
+This step sets the arguments in the t-test function. Even though we predict a reduction in glucose, we'll test this as a two-tailed hypothesis. It's a little more stringent.
 
 The `t.test` function needs to be set for `paired=TRUE` so that it runs the appropriate test.
 
@@ -347,7 +442,9 @@ alpha <- 0.05
 ```
 
 
-**Step 4:** Declare the number of simulations. The larger the number of simulations, the more accurate will be the power calculation. 
+## Step 4
+
+Declare the number of simulations. The larger the number of simulations, the more accurate will be the power calculation. 
 
 Also set up an empty vector to fill with p-values, as they are generated each cycle.
 
@@ -356,11 +453,11 @@ nSims <- 10000 #number of simulated experiments
 p <- c()
 ```
 
-**Step 5:** Re-simulate and re-run the t-test `nSims` times.
+### Step 5
 
-The `y1` and `y2` vectors are each a set of randomly generated values for the post- and pre-drug measurements, respectively. Both measures need to be simulated as random variables. But the `y2` vector needs to be corrected for its correlation with `y1`.
+Re-simulate and re-run the t-test `nSims` times.
 
-*NOTE* The correlation only works by always simulating the lower of two mean values as `y1`. 
+The `y1` and `y2` vectors are each a set of randomly generated values for the post- and pre-drug measurements, respectively. They are initially uncorrelated. But in a second step the `y2` vector is corrected by the relatonship in Equation \@ref(eq:cor) aboves so that `cor(y1, y2)=r`.
 
 ```{r}
 for(i in 1:nSims){ #for each simulated experiment
@@ -381,7 +478,9 @@ for(i in 1:nSims){ #for each simulated experiment
 ```
 
 
-**Step 6:** Calculate power as the fraction of p-values less than 0.05.
+### Step 6
+
+Calculate power as the fraction of p-values less than 0.05. 1@ref(### Step 5)
 
 ```{r}
 # the output
@@ -390,7 +489,7 @@ hits <- length(which(p < alpha)); hits
 power <- hits/nSims; power
 ```
 
-**Step 7:** Visualize the p-value distribution.
+Visualize the p-value distribution.
 
 ```{r}
 #now plot the histogram
@@ -402,10 +501,22 @@ ggplot(data.frame(p))+
                  bins=20)
 ```
 
+### Step 7
+
+Once the sample size is dialed in it is useful to re-evaluate assumptions about the effect size and the parameters of the sample. The analysis can also be re-run by changing the hypothesis, or the confidence level.
+
+The Monte Carlo is useful to test out a number of different scenarios.
+
+Once we are satisfied we have the right experimental design, we write all of these joices down in our notebook...or register the study online. Save the power script for record keeping or to share with collaborators or with a consulting statistician.
+
+## Comparison to pwr tests
+
+It's natural not to "trust" Monte Carlo output when you don't fully understand the details.
+
 ```{r}
 library(pwr)
-
-pwr.t.test(n=6, d=1.58, sig.level=0.05, type="paired", alternative="two.sided")
 pwr.t.test(n=8, d=1.58, sig.level=0.05, type="two.sample", alternative="two.sided")
+pwr.t.test(n=6, d=1.58, sig.level=0.05, type="paired", alternative="two.sided")
+
 ```
 
