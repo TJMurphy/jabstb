@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -729,10 +730,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="nonlinearreplicates" class="section level1">
 <h1><span class="header-section-number">Chapter 38</span> Nonlinear regression of independent replicates</h1>
-<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb766-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb766-2" title="2"><span class="kw">library</span>(broom)</a>
-<a class="sourceLine" id="cb766-3" title="3"><span class="kw">library</span>(viridis)</a>
-<a class="sourceLine" id="cb766-4" title="4"><span class="kw">library</span>(knitr)</a></code></pre></div>
+<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb774-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb774-2" title="2"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb774-3" title="3"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb774-4" title="4"><span class="kw">library</span>(knitr)</a></code></pre></div>
 <p>This chapter illustrates how to analyze independent replicates of nonlinear data while testing an hypothesis that a predictor variable changes an outcome response.</p>
 <p>To some extent, this is a chapter about munging a lot of data into a form for nonlinear regression. Then it provides one common approach to conducting statistical inference on the results.</p>
 <p>The scientific prediction is that exposing rats to cigarette smoke changes microsomal theophylline metabolism. Specifically, exposure of cigarette smoke will induce CYP2A1, leading to more rapid theophylline degradation. A hypothesis to test that prediction is that theophylline half-lives differ in microsomes from smoke exposed animals compared to unexposed.</p>
@@ -748,9 +749,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">38.1</span> The dataset</h2>
 <p>The experimental data are in two separate csv files. One file contains the replicates for the smoke-exposed rats (subjects Q, R and S). The other file contains the unexposed rats (subjects T, U and V). Each replicate is comprised of duplicate measurements.</p>
 <p>It’s not unusual in this kind of work for the absolute values for the response variable to vary between replicates but be tight within replicates.</p>
-<div class="sourceCode" id="cb767"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb767-1" title="1"><span class="co">#stringsAsFactors prevents some warnings in later steps</span></a>
-<a class="sourceLine" id="cb767-2" title="2">smokers &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/smoketheo.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> F)</a>
-<a class="sourceLine" id="cb767-3" title="3"><span class="kw">str</span>(smokers)</a></code></pre></div>
+<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb775-1" title="1"><span class="co">#stringsAsFactors prevents some warnings in later steps</span></a>
+<a class="sourceLine" id="cb775-2" title="2">smokers &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/smoketheo.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> F)</a>
+<a class="sourceLine" id="cb775-3" title="3"><span class="kw">str</span>(smokers)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    61 obs. of  8 variables:
 ##  $ min  : int  0 2 4 6 8 10 12 14 16 18 ...
 ##  $ smoke: chr  &quot;Y&quot; &quot;Y&quot; &quot;Y&quot; &quot;Y&quot; ...
@@ -760,8 +761,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  $ r2   : num  159 139 135 128 102 ...
 ##  $ s1   : num  236 208 198 178 169 ...
 ##  $ s2   : num  228 216 204 185 172 ...</code></pre>
-<div class="sourceCode" id="cb769"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb769-1" title="1">nonsmokers &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/nosmoketheo.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> F)</a>
-<a class="sourceLine" id="cb769-2" title="2"><span class="kw">str</span>(nonsmokers)</a></code></pre></div>
+<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb777-1" title="1">nonsmokers &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/nosmoketheo.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> F)</a>
+<a class="sourceLine" id="cb777-2" title="2"><span class="kw">str</span>(nonsmokers)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    61 obs. of  8 variables:
 ##  $ min  : int  0 2 4 6 8 10 12 14 16 18 ...
 ##  $ smoke: chr  &quot;N&quot; &quot;N&quot; &quot;N&quot; &quot;N&quot; ...
@@ -777,21 +778,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="average-the-technical-replicates" class="section level3">
 <h3><span class="header-section-number">38.2.1</span> Average the technical replicates</h3>
 <p>We have a few data processing steps to clean things up. First, let’s average the technical duplicates for each time point.</p>
-<div class="sourceCode" id="cb771"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb771-1" title="1">smokers1 &lt;-<span class="st"> </span><span class="kw">group_by</span>(smokers, smoke, min) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb771-2" title="2"><span class="st">  </span><span class="kw">summarise</span>(</a>
-<a class="sourceLine" id="cb771-3" title="3">    <span class="dt">q=</span><span class="kw">mean</span>(<span class="kw">c</span>(q1,q2)),</a>
-<a class="sourceLine" id="cb771-4" title="4">    <span class="dt">r=</span><span class="kw">mean</span>(<span class="kw">c</span>(r1,r2)),</a>
-<a class="sourceLine" id="cb771-5" title="5">    <span class="dt">s=</span><span class="kw">mean</span>(<span class="kw">c</span>(s1,s2))</a>
-<a class="sourceLine" id="cb771-6" title="6">  ) </a>
-<a class="sourceLine" id="cb771-7" title="7"></a>
-<a class="sourceLine" id="cb771-8" title="8">nonsmokers1 &lt;-<span class="st"> </span><span class="kw">group_by</span>(nonsmokers, smoke, min) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb771-9" title="9"><span class="st">  </span><span class="kw">summarise</span>(</a>
-<a class="sourceLine" id="cb771-10" title="10">    <span class="dt">t=</span><span class="kw">mean</span>(<span class="kw">c</span>(t1,t2)),</a>
-<a class="sourceLine" id="cb771-11" title="11">    <span class="dt">u=</span><span class="kw">mean</span>(<span class="kw">c</span>(u1,u2)),</a>
-<a class="sourceLine" id="cb771-12" title="12">    <span class="dt">v=</span><span class="kw">mean</span>(<span class="kw">c</span>(v1,v2))</a>
-<a class="sourceLine" id="cb771-13" title="13">  )</a>
-<a class="sourceLine" id="cb771-14" title="14"><span class="co">#check to see if it worked!</span></a>
-<a class="sourceLine" id="cb771-15" title="15"><span class="kw">str</span>(smokers1); <span class="kw">str</span>(nonsmokers1)</a></code></pre></div>
+<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb779-1" title="1">smokers1 &lt;-<span class="st"> </span><span class="kw">group_by</span>(smokers, smoke, min) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb779-2" title="2"><span class="st">  </span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb779-3" title="3">    <span class="dt">q=</span><span class="kw">mean</span>(<span class="kw">c</span>(q1,q2)),</a>
+<a class="sourceLine" id="cb779-4" title="4">    <span class="dt">r=</span><span class="kw">mean</span>(<span class="kw">c</span>(r1,r2)),</a>
+<a class="sourceLine" id="cb779-5" title="5">    <span class="dt">s=</span><span class="kw">mean</span>(<span class="kw">c</span>(s1,s2))</a>
+<a class="sourceLine" id="cb779-6" title="6">  ) </a>
+<a class="sourceLine" id="cb779-7" title="7"></a>
+<a class="sourceLine" id="cb779-8" title="8">nonsmokers1 &lt;-<span class="st"> </span><span class="kw">group_by</span>(nonsmokers, smoke, min) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb779-9" title="9"><span class="st">  </span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb779-10" title="10">    <span class="dt">t=</span><span class="kw">mean</span>(<span class="kw">c</span>(t1,t2)),</a>
+<a class="sourceLine" id="cb779-11" title="11">    <span class="dt">u=</span><span class="kw">mean</span>(<span class="kw">c</span>(u1,u2)),</a>
+<a class="sourceLine" id="cb779-12" title="12">    <span class="dt">v=</span><span class="kw">mean</span>(<span class="kw">c</span>(v1,v2))</a>
+<a class="sourceLine" id="cb779-13" title="13">  )</a>
+<a class="sourceLine" id="cb779-14" title="14"><span class="co">#check to see if it worked!</span></a>
+<a class="sourceLine" id="cb779-15" title="15"><span class="kw">str</span>(smokers1); <span class="kw">str</span>(nonsmokers1)</a></code></pre></div>
 <pre><code>## Classes &#39;grouped_df&#39;, &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:  61 obs. of  5 variables:
 ##  $ smoke: chr  &quot;Y&quot; &quot;Y&quot; &quot;Y&quot; &quot;Y&quot; ...
 ##  $ min  : int  0 2 4 6 8 10 12 14 16 18 ...
@@ -818,13 +819,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="create-one-table" class="section level3">
 <h3><span class="header-section-number">38.2.2</span> Create one table</h3>
 <p>There are a couple of ways to combine the data into one table. One way is to convert each table into long format, before binding them together.</p>
-<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb774-1" title="1">smokers1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">gather</span>(smokers1, id, theo, <span class="op">-</span>smoke, <span class="op">-</span>min)</a>
-<a class="sourceLine" id="cb774-2" title="2"></a>
-<a class="sourceLine" id="cb774-3" title="3">nonsmokers1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">gather</span>(nonsmokers1, id, theo, <span class="op">-</span>smoke, <span class="op">-</span>min)</a>
-<a class="sourceLine" id="cb774-4" title="4"></a>
-<a class="sourceLine" id="cb774-5" title="5">theodata &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(smokers1<span class="fl">.1</span>, nonsmokers1<span class="fl">.1</span>)</a>
-<a class="sourceLine" id="cb774-6" title="6"></a>
-<a class="sourceLine" id="cb774-7" title="7">theodata</a></code></pre></div>
+<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb782-1" title="1">smokers1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">gather</span>(smokers1, id, theo, <span class="op">-</span>smoke, <span class="op">-</span>min)</a>
+<a class="sourceLine" id="cb782-2" title="2"></a>
+<a class="sourceLine" id="cb782-3" title="3">nonsmokers1<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">gather</span>(nonsmokers1, id, theo, <span class="op">-</span>smoke, <span class="op">-</span>min)</a>
+<a class="sourceLine" id="cb782-4" title="4"></a>
+<a class="sourceLine" id="cb782-5" title="5">theodata &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(smokers1<span class="fl">.1</span>, nonsmokers1<span class="fl">.1</span>)</a>
+<a class="sourceLine" id="cb782-6" title="6"></a>
+<a class="sourceLine" id="cb782-7" title="7">theodata</a></code></pre></div>
 <pre><code>## # A tibble: 366 x 4
 ## # Groups:   smoke [2]
 ##    smoke   min id     theo
@@ -844,10 +845,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="plot-the-data-1" class="section level3">
 <h3><span class="header-section-number">38.2.3</span> Plot the data</h3>
 <p>It’s a good idea to visualize each replicate prior any transformations. It’s not clear from this view that cigarette smoke has any effect, is it?</p>
-<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb776-1" title="1"><span class="kw">ggplot</span>(theodata, <span class="kw">aes</span>(min, theo, <span class="dt">group=</span>id))<span class="op">+</span></a>
-<a class="sourceLine" id="cb776-2" title="2"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb776-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color=</span>smoke))<span class="op">+</span></a>
-<a class="sourceLine" id="cb776-4" title="4"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb784-1" title="1"><span class="kw">ggplot</span>(theodata, <span class="kw">aes</span>(min, theo, <span class="dt">group=</span>id))<span class="op">+</span></a>
+<a class="sourceLine" id="cb784-2" title="2"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb784-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color=</span>smoke))<span class="op">+</span></a>
+<a class="sourceLine" id="cb784-4" title="4"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-409-1.png" width="672" />
 ### Run the regressions</p>
 <ul>
@@ -856,19 +857,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>sapply</code> ‘feeds’ values of <code>reps</code> into the function one-by-one, each time generating an <code>nls</code> object for that replicate</li>
 <li><code>output</code> is a list of six <code>nls</code> class objects; lists are a pain</li>
 </ul>
-<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb777-1" title="1">output &lt;-<span class="st"> </span><span class="kw">sapply</span>(</a>
-<a class="sourceLine" id="cb777-2" title="2">  </a>
-<a class="sourceLine" id="cb777-3" title="3">  reps &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;t&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;v&quot;</span>),</a>
-<a class="sourceLine" id="cb777-4" title="4">  </a>
-<a class="sourceLine" id="cb777-5" title="5">  <span class="cf">function</span>(reps) <span class="kw">nls</span>(theo<span class="op">~</span>(yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>min)<span class="op">+</span>ylo, </a>
-<a class="sourceLine" id="cb777-6" title="6">                     <span class="dt">start=</span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb777-7" title="7">                       <span class="dt">yhi=</span><span class="dv">200</span>, </a>
-<a class="sourceLine" id="cb777-8" title="8">                       <span class="dt">ylo=</span><span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb777-9" title="9">                       <span class="dt">k=</span><span class="fl">0.03</span>),</a>
-<a class="sourceLine" id="cb777-10" title="10">                     <span class="dt">data=</span><span class="kw">subset</span>(theodata, id<span class="op">==</span>reps)</a>
-<a class="sourceLine" id="cb777-11" title="11">  ), </a>
-<a class="sourceLine" id="cb777-12" title="12">  <span class="dt">simplify =</span> F</a>
-<a class="sourceLine" id="cb777-13" title="13">)</a></code></pre></div>
+<div class="sourceCode" id="cb785"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb785-1" title="1">output &lt;-<span class="st"> </span><span class="kw">sapply</span>(</a>
+<a class="sourceLine" id="cb785-2" title="2">  </a>
+<a class="sourceLine" id="cb785-3" title="3">  reps &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;t&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;v&quot;</span>),</a>
+<a class="sourceLine" id="cb785-4" title="4">  </a>
+<a class="sourceLine" id="cb785-5" title="5">  <span class="cf">function</span>(reps) <span class="kw">nls</span>(theo<span class="op">~</span>(yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>min)<span class="op">+</span>ylo, </a>
+<a class="sourceLine" id="cb785-6" title="6">                     <span class="dt">start=</span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb785-7" title="7">                       <span class="dt">yhi=</span><span class="dv">200</span>, </a>
+<a class="sourceLine" id="cb785-8" title="8">                       <span class="dt">ylo=</span><span class="dv">50</span>,</a>
+<a class="sourceLine" id="cb785-9" title="9">                       <span class="dt">k=</span><span class="fl">0.03</span>),</a>
+<a class="sourceLine" id="cb785-10" title="10">                     <span class="dt">data=</span><span class="kw">subset</span>(theodata, id<span class="op">==</span>reps)</a>
+<a class="sourceLine" id="cb785-11" title="11">  ), </a>
+<a class="sourceLine" id="cb785-12" title="12">  <span class="dt">simplify =</span> F</a>
+<a class="sourceLine" id="cb785-13" title="13">)</a></code></pre></div>
 </div>
 <div id="clean-up-regression-results" class="section level3">
 <h3><span class="header-section-number">38.2.4</span> Clean up regression results</h3>
@@ -879,13 +880,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>onephaseFits</code> is just a tidy way of listing all of the parameter estimates from the <code>output</code> list</li>
 <li>We use <code>kable</code> to print out only the rate constants, <code>k</code></li>
 </ul>
-<div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb778-1" title="1">onephaseFits &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(</a>
-<a class="sourceLine" id="cb778-2" title="2">  <span class="kw">lapply</span>(output, tidy)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb778-3" title="3"><span class="st">  </span><span class="kw">add_column</span>(</a>
-<a class="sourceLine" id="cb778-4" title="4">    <span class="dt">reps=</span><span class="kw">rep</span>(reps, <span class="dt">each=</span><span class="dv">3</span>), </a>
-<a class="sourceLine" id="cb778-5" title="5">    <span class="dt">.before=</span>T)</a>
-<a class="sourceLine" id="cb778-6" title="6"></a>
-<a class="sourceLine" id="cb778-7" title="7"><span class="kw">kable</span>(onephaseFits[<span class="kw">seq</span>(<span class="dv">3</span>,<span class="dv">18</span>,<span class="dv">3</span>),])</a></code></pre></div>
+<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb786-1" title="1">onephaseFits &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(</a>
+<a class="sourceLine" id="cb786-2" title="2">  <span class="kw">lapply</span>(output, tidy)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb786-3" title="3"><span class="st">  </span><span class="kw">add_column</span>(</a>
+<a class="sourceLine" id="cb786-4" title="4">    <span class="dt">reps=</span><span class="kw">rep</span>(reps, <span class="dt">each=</span><span class="dv">3</span>), </a>
+<a class="sourceLine" id="cb786-5" title="5">    <span class="dt">.before=</span>T)</a>
+<a class="sourceLine" id="cb786-6" title="6"></a>
+<a class="sourceLine" id="cb786-7" title="7"><span class="kw">kable</span>(onephaseFits[<span class="kw">seq</span>(<span class="dv">3</span>,<span class="dv">18</span>,<span class="dv">3</span>),])</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1037,17 +1038,17 @@ k
 <div id="t-test-on-half-lives" class="section level2">
 <h2><span class="header-section-number">38.3</span> T-test on half-lives</h2>
 <p>We now just need to create a results table for the half-lives, which we’ll use to pass into a t-test function.</p>
-<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb779-1" title="1">results &lt;-<span class="st"> </span><span class="kw">select</span>(</a>
-<a class="sourceLine" id="cb779-2" title="2">  onephaseFits[<span class="kw">seq</span>(<span class="dv">3</span>,<span class="dv">18</span>,<span class="dv">3</span>),], </a>
-<a class="sourceLine" id="cb779-3" title="3">  reps, </a>
-<a class="sourceLine" id="cb779-4" title="4">  estimate</a>
-<a class="sourceLine" id="cb779-5" title="5">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb779-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb779-7" title="7">    <span class="dt">halflife=</span><span class="kw">log</span>(<span class="dv">2</span>)<span class="op">/</span>estimate</a>
-<a class="sourceLine" id="cb779-8" title="8">    ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb779-9" title="9"><span class="st">  </span><span class="kw">bind_cols</span>(<span class="dt">smoke=</span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;N&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb779-10" title="10">            )</a>
-<a class="sourceLine" id="cb779-11" title="11"><span class="kw">kable</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb787"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb787-1" title="1">results &lt;-<span class="st"> </span><span class="kw">select</span>(</a>
+<a class="sourceLine" id="cb787-2" title="2">  onephaseFits[<span class="kw">seq</span>(<span class="dv">3</span>,<span class="dv">18</span>,<span class="dv">3</span>),], </a>
+<a class="sourceLine" id="cb787-3" title="3">  reps, </a>
+<a class="sourceLine" id="cb787-4" title="4">  estimate</a>
+<a class="sourceLine" id="cb787-5" title="5">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb787-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb787-7" title="7">    <span class="dt">halflife=</span><span class="kw">log</span>(<span class="dv">2</span>)<span class="op">/</span>estimate</a>
+<a class="sourceLine" id="cb787-8" title="8">    ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb787-9" title="9"><span class="st">  </span><span class="kw">bind_cols</span>(<span class="dt">smoke=</span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;N&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb787-10" title="10">            )</a>
+<a class="sourceLine" id="cb787-11" title="11"><span class="kw">kable</span>(results)</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1152,18 +1153,18 @@ N
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb780-1" title="1"><span class="kw">group_by</span>(results, smoke) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb780-2" title="2"><span class="st">  </span><span class="kw">summarise</span>(</a>
-<a class="sourceLine" id="cb780-3" title="3">    <span class="dt">mean=</span><span class="kw">mean</span>(halflife),</a>
-<a class="sourceLine" id="cb780-4" title="4">    <span class="dt">sd=</span><span class="kw">sd</span>(halflife)</a>
-<a class="sourceLine" id="cb780-5" title="5">    )</a></code></pre></div>
+<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb788-1" title="1"><span class="kw">group_by</span>(results, smoke) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb788-2" title="2"><span class="st">  </span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb788-3" title="3">    <span class="dt">mean=</span><span class="kw">mean</span>(halflife),</a>
+<a class="sourceLine" id="cb788-4" title="4">    <span class="dt">sd=</span><span class="kw">sd</span>(halflife)</a>
+<a class="sourceLine" id="cb788-5" title="5">    )</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
 ##   smoke  mean    sd
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 N      29.4 0.632
 ## 2 Y      15.9 0.957</code></pre>
 <p>And now, finally, the t-test. This evaluates the null hypothesis that theophylline half-lives in smoking and nonsmoking microsomes are the same.</p>
-<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb782-1" title="1"><span class="kw">t.test</span>(halflife<span class="op">~</span>smoke, <span class="dt">data=</span>results, <span class="dt">var.equal=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb790-1" title="1"><span class="kw">t.test</span>(halflife<span class="op">~</span>smoke, <span class="dt">data=</span>results, <span class="dt">var.equal=</span>T)</a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -1188,8 +1189,8 @@ N
 <h2><span class="header-section-number">38.5</span> Summary figure</h2>
 <p>The figure above is not quite ready for publication or presentation. The absolute values of theophylline differ from replicate to replicate. The figure also fails to convey, from a glance, that the smoke exposure has any effect.</p>
 <p>It is very simple to rescale the data and replot. There are a few conceivable ways to do this, but one is percent of maximum within each replicate.</p>
-<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb784-1" title="1">theodatapm &lt;-<span class="st"> </span><span class="kw">group_by</span>(theodata, id) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pmax=</span><span class="dv">100</span><span class="op">*</span>theo<span class="op">/</span><span class="kw">max</span>(theo))</a>
-<a class="sourceLine" id="cb784-2" title="2">theodatapm</a></code></pre></div>
+<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb792-1" title="1">theodatapm &lt;-<span class="st"> </span><span class="kw">group_by</span>(theodata, id) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">pmax=</span><span class="dv">100</span><span class="op">*</span>theo<span class="op">/</span><span class="kw">max</span>(theo))</a>
+<a class="sourceLine" id="cb792-2" title="2">theodatapm</a></code></pre></div>
 <pre><code>## # A tibble: 366 x 5
 ## # Groups:   id [6]
 ##    smoke   min id     theo  pmax
@@ -1208,20 +1209,20 @@ N
 <p>Finally, a plot of the results.</p>
 <p>A couple of important things happen to the data on-the-fly within the ggplot function. Means and standard deviations are calculated to derive data points with error bars. And the nonlinear regression best fit line is calculated and drawn.</p>
 <p>This is a convincing result showing a marked effect of cigarette exposure on caffeine metabolism.</p>
-<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb786-1" title="1"><span class="kw">ggplot</span>(theodatapm, <span class="kw">aes</span>(min, pmax, <span class="dt">color=</span>smoke, <span class="dt">group=</span>smoke))<span class="op">+</span></a>
-<a class="sourceLine" id="cb786-2" title="2"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data=</span> <span class="st">&quot;mean_sdl&quot;</span>, </a>
-<a class="sourceLine" id="cb786-3" title="3">               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb786-4" title="4">               )<span class="op">+</span></a>
-<a class="sourceLine" id="cb786-5" title="5"><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;nls&quot;</span>,</a>
-<a class="sourceLine" id="cb786-6" title="6">              <span class="dt">method.args=</span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb786-7" title="7">                <span class="dt">start=</span><span class="kw">c</span>(<span class="dt">yhi=</span><span class="dv">100</span>, <span class="dt">ylo=</span><span class="dv">10</span>, <span class="dt">k=</span><span class="fl">0.03</span>)),</a>
-<a class="sourceLine" id="cb786-8" title="8">              <span class="dt">formula=</span><span class="st">&quot;y~ylo+((yhi-ylo)*exp(-k*x))&quot;</span>,</a>
-<a class="sourceLine" id="cb786-9" title="9">              <span class="dt">se=</span>F</a>
-<a class="sourceLine" id="cb786-10" title="10">              )<span class="op">+</span></a>
-<a class="sourceLine" id="cb786-11" title="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;Theophylline, % of maximum&quot;</span>, </a>
-<a class="sourceLine" id="cb786-12" title="12">       <span class="dt">y=</span><span class="st">&quot;minutes&quot;</span></a>
-<a class="sourceLine" id="cb786-13" title="13">       )<span class="op">+</span></a>
-<a class="sourceLine" id="cb786-14" title="14"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb794-1" title="1"><span class="kw">ggplot</span>(theodatapm, <span class="kw">aes</span>(min, pmax, <span class="dt">color=</span>smoke, <span class="dt">group=</span>smoke))<span class="op">+</span></a>
+<a class="sourceLine" id="cb794-2" title="2"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data=</span> <span class="st">&quot;mean_sdl&quot;</span>, </a>
+<a class="sourceLine" id="cb794-3" title="3">               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb794-4" title="4">               )<span class="op">+</span></a>
+<a class="sourceLine" id="cb794-5" title="5"><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;nls&quot;</span>,</a>
+<a class="sourceLine" id="cb794-6" title="6">              <span class="dt">method.args=</span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb794-7" title="7">                <span class="dt">start=</span><span class="kw">c</span>(<span class="dt">yhi=</span><span class="dv">100</span>, <span class="dt">ylo=</span><span class="dv">10</span>, <span class="dt">k=</span><span class="fl">0.03</span>)),</a>
+<a class="sourceLine" id="cb794-8" title="8">              <span class="dt">formula=</span><span class="st">&quot;y~ylo+((yhi-ylo)*exp(-k*x))&quot;</span>,</a>
+<a class="sourceLine" id="cb794-9" title="9">              <span class="dt">se=</span>F</a>
+<a class="sourceLine" id="cb794-10" title="10">              )<span class="op">+</span></a>
+<a class="sourceLine" id="cb794-11" title="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;Theophylline, % of maximum&quot;</span>, </a>
+<a class="sourceLine" id="cb794-12" title="12">       <span class="dt">y=</span><span class="st">&quot;minutes&quot;</span></a>
+<a class="sourceLine" id="cb794-13" title="13">       )<span class="op">+</span></a>
+<a class="sourceLine" id="cb794-14" title="14"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/percent%20max%20replicate%20nonlinear%20regressions-1.png" width="672" /></p>
 
 </div>

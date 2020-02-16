@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -730,7 +731,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="correl" class="section level1">
 <h1><span class="header-section-number">Chapter 34</span> Correlation</h1>
 <p><em>Something for your pipe: Having high confidence in a non-zero correlation is not the same as concluding a strong correlation exists!</em></p>
-<div class="sourceCode" id="cb697"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb697-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb705"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb705-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <p>Use correlation analysis to assess if two measured variables co-vary. If two variables co-vary they are said to be associated.</p>
 <p>You’ll recall discussing the concept of association back when we dealt with discrete data. For example, an association between smoking and cancer could be tested by counting the frequency of cancers within a group of smokers, such as in a case-control design.</p>
 <p>The main way correlation differs from these previous tests of association is that correlation analysis is conducted using measured rather than discrete (ie, counted) variables. For example, in a cancer study we might attempt to correlate lifetime levels of carcinogen exposure with age of cancer diagnosis. Here, both carcinogen levels and age are measured variables, and correlation analysis would be more appropriate than association analysis.</p>
@@ -816,22 +817,22 @@ One-sided null hypothesis: <span class="math inline">\(\rho\le0\)</span> or <spa
 <p>It is very easy to do correlation analysis in R, which requires two simple functions: <code>cor</code> and <code>cor.test</code>.</p>
 <p>The former is used to only generate correlation coefficients, whereas the latter will generate these coefficients and also run posthoc “significance” tests.</p>
 <p>Below, the random variables x and y are generated to illustrate uncorrelated data. Correlated data are illustrated by calculating the random variable z, from x and y, so that z has a pre-specified (in the example r = 0.9) correlation with y.</p>
-<div class="sourceCode" id="cb698"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb698-1" title="1"><span class="kw">set.seed</span>(<span class="dv">12345</span>)</a>
-<a class="sourceLine" id="cb698-2" title="2">r &lt;-<span class="st"> </span><span class="fl">0.9</span> <span class="co">#correlation coefficient between y and z</span></a>
-<a class="sourceLine" id="cb698-3" title="3">x &lt;-<span class="st">  </span><span class="kw">rnorm</span>(<span class="dv">300</span>, <span class="dv">30</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb698-4" title="4">y &lt;-<span class="st">  </span><span class="kw">rnorm</span>(<span class="dv">300</span>, <span class="dv">30</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb698-5" title="5">z &lt;-<span class="st"> </span>r<span class="op">*</span>y<span class="op">+</span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>r<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>x</a>
-<a class="sourceLine" id="cb698-6" title="6"></a>
-<a class="sourceLine" id="cb698-7" title="7">spur &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x, y, z) </a></code></pre></div>
+<div class="sourceCode" id="cb706"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb706-1" title="1"><span class="kw">set.seed</span>(<span class="dv">12345</span>)</a>
+<a class="sourceLine" id="cb706-2" title="2">r &lt;-<span class="st"> </span><span class="fl">0.9</span> <span class="co">#correlation coefficient between y and z</span></a>
+<a class="sourceLine" id="cb706-3" title="3">x &lt;-<span class="st">  </span><span class="kw">rnorm</span>(<span class="dv">300</span>, <span class="dv">30</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb706-4" title="4">y &lt;-<span class="st">  </span><span class="kw">rnorm</span>(<span class="dv">300</span>, <span class="dv">30</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb706-5" title="5">z &lt;-<span class="st"> </span>r<span class="op">*</span>y<span class="op">+</span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>r<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>x</a>
+<a class="sourceLine" id="cb706-6" title="6"></a>
+<a class="sourceLine" id="cb706-7" title="7">spur &lt;-<span class="st"> </span><span class="kw">data.frame</span>(x, y, z) </a></code></pre></div>
 </div>
 <div id="plot-the-correlations" class="section level3">
 <h3><span class="header-section-number">34.3.6</span> Plot the correlations</h3>
 <p>One can readily see the “shotgun” pattern of an uncorrelated sample (blue) as opposed to the elliptical “galaxy” pattern in the correlated sample with greater centroid density.</p>
-<div class="sourceCode" id="cb699"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb699-1" title="1">spur <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(x, y)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb699-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;#002878&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb699-3" title="3"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb699-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(z,y), <span class="dt">color=</span><span class="st">&quot;#d28e00&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb699-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;x or z&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb707"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb707-1" title="1">spur <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(x, y)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb707-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;#002878&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb707-3" title="3"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb707-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(z,y), <span class="dt">color=</span><span class="st">&quot;#d28e00&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb707-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;x or z&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-367-1.png" width="672" /></p>
 </div>
 <div id="calculate-a-correlation-coefficient-and-posthoc-test" class="section level3">
@@ -839,19 +840,19 @@ One-sided null hypothesis: <span class="math inline">\(\rho\le0\)</span> or <spa
 <p>The script below tidy’s up the simulated data from above. It then runs some calculations to compare outputs. Note how the output of the <code>cor</code> function can be replicated exactly <code>by.hand</code>. The functions <code>cor</code>, <code>cov</code> and <code>var</code> are each components of the basic <code>stats</code> package and have utilities in their own rights.</p>
 <p>Notice how <span class="math inline">\(r\)</span> and <span class="math inline">\(r_s\)</span> give similar but different values. Not unexpected, they are different calculations!</p>
 <p>The <code>cor.test</code> function will provide a confidence interval only for the <code>pearson</code> method.</p>
-<div class="sourceCode" id="cb700"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb700-1" title="1">X &lt;-<span class="st"> </span>spur<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb700-2" title="2">Y &lt;-<span class="st"> </span>spur<span class="op">$</span>y</a>
-<a class="sourceLine" id="cb700-3" title="3">Z &lt;-<span class="st"> </span>spur<span class="op">$</span>z</a>
-<a class="sourceLine" id="cb700-4" title="4"></a>
-<a class="sourceLine" id="cb700-5" title="5"><span class="kw">cor</span>(X, Y, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb708"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb708-1" title="1">X &lt;-<span class="st"> </span>spur<span class="op">$</span>x</a>
+<a class="sourceLine" id="cb708-2" title="2">Y &lt;-<span class="st"> </span>spur<span class="op">$</span>y</a>
+<a class="sourceLine" id="cb708-3" title="3">Z &lt;-<span class="st"> </span>spur<span class="op">$</span>z</a>
+<a class="sourceLine" id="cb708-4" title="4"></a>
+<a class="sourceLine" id="cb708-5" title="5"><span class="kw">cor</span>(X, Y, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] 0.02426448</code></pre>
-<div class="sourceCode" id="cb702"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb702-1" title="1">by.hand &lt;-<span class="st"> </span><span class="kw">cov</span>(X,Y)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(X)<span class="op">*</span><span class="kw">var</span>(Y)); by.hand</a></code></pre></div>
+<div class="sourceCode" id="cb710"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb710-1" title="1">by.hand &lt;-<span class="st"> </span><span class="kw">cov</span>(X,Y)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(X)<span class="op">*</span><span class="kw">var</span>(Y)); by.hand</a></code></pre></div>
 <pre><code>## [1] 0.02426448</code></pre>
-<div class="sourceCode" id="cb704"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb704-1" title="1"><span class="kw">cor</span>(Z,Y, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb712"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb712-1" title="1"><span class="kw">cor</span>(Z,Y, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] 0.8956038</code></pre>
-<div class="sourceCode" id="cb706"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb706-1" title="1"><span class="kw">cor</span>(Z, Y, <span class="dt">method=</span><span class="st">&quot;spearman&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb714"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb714-1" title="1"><span class="kw">cor</span>(Z, Y, <span class="dt">method=</span><span class="st">&quot;spearman&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] 0.8648838</code></pre>
-<div class="sourceCode" id="cb708"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb708-1" title="1"><span class="kw">cor.test</span>(X, Y, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>, <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="dt">conf.level=</span><span class="fl">0.95</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb716"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb716-1" title="1"><span class="kw">cor.test</span>(X, Y, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>, <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="dt">conf.level=</span><span class="fl">0.95</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
@@ -863,7 +864,7 @@ One-sided null hypothesis: <span class="math inline">\(\rho\le0\)</span> or <spa
 ## sample estimates:
 ##        cor 
 ## 0.02426448</code></pre>
-<div class="sourceCode" id="cb710"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb710-1" title="1"><span class="kw">cor.test</span>(Z, Y, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>, <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="dt">conf.level=</span><span class="fl">0.95</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb718"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb718-1" title="1"><span class="kw">cor.test</span>(Z, Y, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>, <span class="dt">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="dt">conf.level=</span><span class="fl">0.95</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 

@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -729,12 +730,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="onewayanova" class="section level1">
 <h1><span class="header-section-number">Chapter 27</span> One-way ANOVA Completely Randomized</h1>
-<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb573-1" title="1"><span class="kw">library</span>(magrittr)</a>
-<a class="sourceLine" id="cb573-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb573-3" title="3"><span class="kw">library</span>(ggformula)</a>
-<a class="sourceLine" id="cb573-4" title="4"><span class="kw">library</span>(DescTools)</a>
-<a class="sourceLine" id="cb573-5" title="5"><span class="kw">library</span>(ez)</a>
-<a class="sourceLine" id="cb573-6" title="6"><span class="kw">library</span>(lsr)</a></code></pre></div>
+<div class="sourceCode" id="cb581"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb581-1" title="1"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb581-2" title="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb581-3" title="3"><span class="kw">library</span>(ggformula)</a>
+<a class="sourceLine" id="cb581-4" title="4"><span class="kw">library</span>(DescTools)</a>
+<a class="sourceLine" id="cb581-5" title="5"><span class="kw">library</span>(ez)</a>
+<a class="sourceLine" id="cb581-6" title="6"><span class="kw">library</span>(lsr)</a></code></pre></div>
 <p>If you haven’t yet read the ANOVA big picture, <a href="introanova.html#introanova">this is worth reading</a>)</p>
 <div id="using-ezanova" class="section level2">
 <h2><span class="header-section-number">27.1</span> Using <code>ezANOVA</code></h2>
@@ -749,13 +750,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="inspect-the-data" class="section level3">
 <h3><span class="header-section-number">27.2.1</span> Inspect the data</h3>
 <p>The next few scripts involve inspecting the data set, which should always be done prior to running any statistical tests.</p>
-<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb574-1" title="1"><span class="kw">data</span>(chickwts)</a>
-<a class="sourceLine" id="cb574-2" title="2"><span class="co">#take a look at the data structure, depending upon how you like to view data</span></a>
-<a class="sourceLine" id="cb574-3" title="3"><span class="kw">str</span>(chickwts)</a></code></pre></div>
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb582-1" title="1"><span class="kw">data</span>(chickwts)</a>
+<a class="sourceLine" id="cb582-2" title="2"><span class="co">#take a look at the data structure, depending upon how you like to view data</span></a>
+<a class="sourceLine" id="cb582-3" title="3"><span class="kw">str</span>(chickwts)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    71 obs. of  2 variables:
 ##  $ weight: num  179 160 136 227 217 168 108 124 143 140 ...
 ##  $ feed  : Factor w/ 6 levels &quot;casein&quot;,&quot;horsebean&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb576-1" title="1">chickwts</a></code></pre></div>
+<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb584-1" title="1">chickwts</a></code></pre></div>
 <pre><code>##    weight      feed
 ## 1     179 horsebean
 ## 2     160 horsebean
@@ -829,16 +830,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 70    283    casein
 ## 71    332    casein</code></pre>
 <p>It is also helpful to calculate some descriptive stats for inspection:</p>
-<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb578-1" title="1">cw1 &lt;-<span class="st"> </span>chickwts <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb578-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(feed) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb578-3" title="3"><span class="st">  </span><span class="kw">summarise</span>(</a>
-<a class="sourceLine" id="cb578-4" title="4">    <span class="dt">mean=</span> <span class="kw">mean</span>(weight),</a>
-<a class="sourceLine" id="cb578-5" title="5">    <span class="dt">median=</span><span class="kw">median</span>(weight),</a>
-<a class="sourceLine" id="cb578-6" title="6">    <span class="dt">sd=</span> <span class="kw">sd</span>(weight),</a>
-<a class="sourceLine" id="cb578-7" title="7">    <span class="dt">n =</span> <span class="kw">n</span>(),</a>
-<a class="sourceLine" id="cb578-8" title="8">    <span class="dt">var=</span><span class="kw">var</span>(weight)</a>
-<a class="sourceLine" id="cb578-9" title="9">    )</a>
-<a class="sourceLine" id="cb578-10" title="10">cw1</a></code></pre></div>
+<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb586-1" title="1">cw1 &lt;-<span class="st"> </span>chickwts <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb586-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(feed) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb586-3" title="3"><span class="st">  </span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb586-4" title="4">    <span class="dt">mean=</span> <span class="kw">mean</span>(weight),</a>
+<a class="sourceLine" id="cb586-5" title="5">    <span class="dt">median=</span><span class="kw">median</span>(weight),</a>
+<a class="sourceLine" id="cb586-6" title="6">    <span class="dt">sd=</span> <span class="kw">sd</span>(weight),</a>
+<a class="sourceLine" id="cb586-7" title="7">    <span class="dt">n =</span> <span class="kw">n</span>(),</a>
+<a class="sourceLine" id="cb586-8" title="8">    <span class="dt">var=</span><span class="kw">var</span>(weight)</a>
+<a class="sourceLine" id="cb586-9" title="9">    )</a>
+<a class="sourceLine" id="cb586-10" title="10">cw1</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 6
 ##   feed       mean median    sd     n   var
 ##   &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
@@ -850,15 +851,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 6 sunflower  329.   328   48.8    12 2385.</code></pre>
 <p>The means and medians are about equal within each group. That’s a quick and dirty way to suggest no skew. Overall sample size is 71, distributed as 10-14 replicates per group, it’s a little unbalanced. But within acceptable limits. The variances are not equivalent, but are they unequal? Levene’s test in the ANOVA will provide that answer.</p>
 <p>Plot the data for a look. Simply looking at the data graphically goes a long way to ensuring this is a one-way ANOVA design. Jitter plots are a great way to see group data like this. I like the <code>crossbar</code> geom to overlay some summary stats.</p>
-<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb580-1" title="1"><span class="kw">ggplot</span>(chickwts, <span class="kw">aes</span>(feed, weight))<span class="op">+</span></a>
-<a class="sourceLine" id="cb580-2" title="2"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb580-3" title="3"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_sdl, </a>
-<a class="sourceLine" id="cb580-4" title="4">               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb580-5" title="5">               <span class="dt">geom=</span><span class="st">&quot;crossbar&quot;</span>, </a>
-<a class="sourceLine" id="cb580-6" title="6">               <span class="dt">width=</span><span class="fl">0.2</span>, </a>
-<a class="sourceLine" id="cb580-7" title="7">               <span class="dt">color=</span><span class="st">&quot;red&quot;</span></a>
-<a class="sourceLine" id="cb580-8" title="8">               ) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb580-9" title="9"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb588-1" title="1"><span class="kw">ggplot</span>(chickwts, <span class="kw">aes</span>(feed, weight))<span class="op">+</span></a>
+<a class="sourceLine" id="cb588-2" title="2"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb588-3" title="3"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_sdl, </a>
+<a class="sourceLine" id="cb588-4" title="4">               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult=</span><span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb588-5" title="5">               <span class="dt">geom=</span><span class="st">&quot;crossbar&quot;</span>, </a>
+<a class="sourceLine" id="cb588-6" title="6">               <span class="dt">width=</span><span class="fl">0.2</span>, </a>
+<a class="sourceLine" id="cb588-7" title="7">               <span class="dt">color=</span><span class="st">&quot;red&quot;</span></a>
+<a class="sourceLine" id="cb588-8" title="8">               ) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb588-9" title="9"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-301-1.png" width="672" /></p>
 </div>
 </div>
@@ -876,25 +877,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">27.3.1</span> Run the chickwts One Way ANOVA</h3>
 <p>First, ezANOVA requires a ‘wid’, which is a unique ID variable for each independent replicate.</p>
 <p>We need to add one to the chickwts data set. Since all the measures are independent, we’ll just do that by row number. At the same time we’ll convert the integer to a factor so ezANOVA won’t bark at us.</p>
-<div class="sourceCode" id="cb581"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb581-1" title="1">chickwts<span class="op">$</span>ID &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(chickwts))</a></code></pre></div>
+<div class="sourceCode" id="cb589"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb589-1" title="1">chickwts<span class="op">$</span>ID &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(chickwts))</a></code></pre></div>
 <p>You should look at R’s help for ezANOVA <code>?ezANOVA</code> to understand these test arguments. The help page is pretty clear for most of these.</p>
 <p>Since we don’t use the term ‘dependent variable’ much in this course, to be clear, ‘dv’ is the outcome response variable. We have to specify it in the <code>ezANOVA</code> arguments.</p>
 <p>If measurements for levels of the factor are not instrinsically-linked, if they are distributed to each replicate independently, the design is completely randomized. That factor should be listed in the function using a ‘between’ argument.</p>
 <p>If measurements for levels of the factor are intrinsically-linked, it is arelated/repeated measures design. List it as a ‘within’ argument, rather than ‘between’.</p>
 <p>Here, the <code>feed</code> factor is <code>between</code>. Every chick was randomly assigned a level of feed.</p>
 <p>Notice that <code>ezANOVA</code> is a function. Use it to create a list object called <code>my.ezaov</code>, which has all of the output information. The object name could have been <code>foo</code>. We call specific elements from the <code>my.ezaov</code> object to see the results.</p>
-<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb582-1" title="1">my.ezaov &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(</a>
-<a class="sourceLine" id="cb582-2" title="2">            <span class="dt">data =</span> chickwts, </a>
-<a class="sourceLine" id="cb582-3" title="3">            <span class="dt">wid =</span> ID, </a>
-<a class="sourceLine" id="cb582-4" title="4">            <span class="dt">dv =</span> weight, </a>
-<a class="sourceLine" id="cb582-5" title="5">            <span class="dt">between =</span> feed,</a>
-<a class="sourceLine" id="cb582-6" title="6">            <span class="dt">type =</span> <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb582-7" title="7">            <span class="dt">return_aov =</span> T, </a>
-<a class="sourceLine" id="cb582-8" title="8">            <span class="dt">detailed =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb590-1" title="1">my.ezaov &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(</a>
+<a class="sourceLine" id="cb590-2" title="2">            <span class="dt">data =</span> chickwts, </a>
+<a class="sourceLine" id="cb590-3" title="3">            <span class="dt">wid =</span> ID, </a>
+<a class="sourceLine" id="cb590-4" title="4">            <span class="dt">dv =</span> weight, </a>
+<a class="sourceLine" id="cb590-5" title="5">            <span class="dt">between =</span> feed,</a>
+<a class="sourceLine" id="cb590-6" title="6">            <span class="dt">type =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb590-7" title="7">            <span class="dt">return_aov =</span> T, </a>
+<a class="sourceLine" id="cb590-8" title="8">            <span class="dt">detailed =</span> T)</a></code></pre></div>
 <pre><code>## Warning: Data is unbalanced (unequal N per group). Make sure you specified a
 ## well-considered value for the type argument to ezANOVA().</code></pre>
 <pre><code>## Coefficient covariances computed by hccm()</code></pre>
-<div class="sourceCode" id="cb585"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb585-1" title="1">my.ezaov</a></code></pre></div>
+<div class="sourceCode" id="cb593"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb593-1" title="1">my.ezaov</a></code></pre></div>
 <pre><code>## $ANOVA
 ##   Effect DFn DFd      SSn    SSd       F           p p&lt;.05       ges
 ## 1   feed   5  65 231129.2 195556 15.3648 5.93642e-10     * 0.5416855
@@ -914,9 +915,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Residual standard error: 54.85029
 ## Estimated effects may be unbalanced</code></pre>
-<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb587-1" title="1"><span class="co"># my.ezaov$ANOVA</span></a>
-<a class="sourceLine" id="cb587-2" title="2"><span class="co"># my.ezaov$Levene</span></a>
-<a class="sourceLine" id="cb587-3" title="3"><span class="co"># my.ezaov$aov</span></a></code></pre></div>
+<div class="sourceCode" id="cb595"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb595-1" title="1"><span class="co"># my.ezaov$ANOVA</span></a>
+<a class="sourceLine" id="cb595-2" title="2"><span class="co"># my.ezaov$Levene</span></a>
+<a class="sourceLine" id="cb595-3" title="3"><span class="co"># my.ezaov$aov</span></a></code></pre></div>
 </div>
 <div id="interpreting-the-one-way-cr-anova-output" class="section level3">
 <h3><span class="header-section-number">27.3.2</span> Interpreting the One-Way CR ANOVA Output</h3>
@@ -1003,8 +1004,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4><span class="header-section-number">27.4.1.2</span> Examples</h4>
 <p><strong>No p-value adjustment</strong>: Sometimes it’s useful to generate p-values that are not corrected for multiple comparisons. For example, although you’ve done a simple ANOVA, the intention all along was to test only one hypothesis between two groups. The <code>pairwise.t.test</code> function produces a matrix of all comparisons, within which you can find the p-value for the comparison of interest.</p>
 <p>The script below will generate a matrix of p-values for t tests of all possible comparisons, none of which are adjusted for multiple comparisons. When running the other scripts below, come back to this to see how adjusted p-value methods changes these results</p>
-<div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb588-1" title="1">allPairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">p.adjust=</span> <span class="st">&quot;none&quot;</span>)</a>
-<a class="sourceLine" id="cb588-2" title="2">allPairs</a></code></pre></div>
+<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb596-1" title="1">allPairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">p.adjust=</span> <span class="st">&quot;none&quot;</span>)</a>
+<a class="sourceLine" id="cb596-2" title="2">allPairs</a></code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using t tests with pooled SD 
 ## 
@@ -1019,9 +1020,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## P value adjustment method: none</code></pre>
 <p>The unadjusted p-value output from the <code>pairwise.t.test</code> function is a matrix, which is important to know when the need arises to pull out specific elements of the analysis.</p>
-<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb590-1" title="1"><span class="kw">class</span>(allPairs<span class="op">$</span>p.value)</a></code></pre></div>
+<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb598-1" title="1"><span class="kw">class</span>(allPairs<span class="op">$</span>p.value)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
-<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb592-1" title="1">allPairs<span class="op">$</span>p.value</a></code></pre></div>
+<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb600-1" title="1">allPairs<span class="op">$</span>p.value</a></code></pre></div>
 <pre><code>##                 casein    horsebean      linseed   meatmeal      soybean
 ## horsebean 2.067997e-09           NA           NA         NA           NA
 ## linseed   1.493344e-05 1.522197e-02           NA         NA           NA
@@ -1029,11 +1030,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## soybean   6.654079e-04 3.246269e-04 2.041446e-01 0.17255391           NA
 ## sunflower 8.124949e-01 8.203777e-10 6.211836e-06 0.02643548 0.0002980438</code></pre>
 <p>To quickly scan which comparisons are below the p &lt; 0.05 threshold we can apply this custom <code>extreme</code> function across the matrix:</p>
-<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb594-1" title="1">extreme &lt;-<span class="st"> </span><span class="cf">function</span>(x){</a>
-<a class="sourceLine" id="cb594-2" title="2">  <span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb594-3" title="3">}</a>
-<a class="sourceLine" id="cb594-4" title="4"></a>
-<a class="sourceLine" id="cb594-5" title="5"><span class="kw">apply</span>(allPairs<span class="op">$</span>p.value, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), extreme)</a></code></pre></div>
+<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb602-1" title="1">extreme &lt;-<span class="st"> </span><span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb602-2" title="2">  <span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb602-3" title="3">}</a>
+<a class="sourceLine" id="cb602-4" title="4"></a>
+<a class="sourceLine" id="cb602-5" title="5"><span class="kw">apply</span>(allPairs<span class="op">$</span>p.value, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), extreme)</a></code></pre></div>
 <pre><code>##           casein horsebean linseed meatmeal soybean
 ## horsebean   TRUE        NA      NA       NA      NA
 ## linseed     TRUE      TRUE      NA       NA      NA
@@ -1045,8 +1046,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Thus, in an experiment with 15 possible comparisons, the adjusted type1 error threshold for each comparison would be <span class="math inline">\(\alpha_K\)</span> = 0.05/15 = 0.003333.</p>
 <p>The adjusted p-value functions, however, makes the correction and then recalibrate the p-values back to the confidence level of choice. This can be a bit confusing for the first time. But you’ll note that the net effect is to increase each p-value. Some that were below the threshold unadjusted are greater than the threshold after the adjustment.</p>
 <p>For example, you can see that the p-values adjusted using the Bonferroni correction below are all higher than they were above, when unadjusted.</p>
-<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb596-1" title="1">bonf.adjustedAllpairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="dt">p.adjust =</span> <span class="st">&quot;bonferroni&quot;</span>)</a>
-<a class="sourceLine" id="cb596-2" title="2">bonf.adjustedAllpairs</a></code></pre></div>
+<div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb604-1" title="1">bonf.adjustedAllpairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="dt">p.adjust =</span> <span class="st">&quot;bonferroni&quot;</span>)</a>
+<a class="sourceLine" id="cb604-2" title="2">bonf.adjustedAllpairs</a></code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using t tests with pooled SD 
 ## 
@@ -1061,11 +1062,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## P value adjustment method: bonferroni</code></pre>
 <p>And here’s a quick scan for which of these are now below a FWER p &lt; 0.05. Note how a handful of comparisons that were scored extreme by this simple test above, without a p-value adjustment, are no longer extreme with the p-value adjustment.</p>
-<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb598-1" title="1">extreme &lt;-<span class="st"> </span><span class="cf">function</span>(x){</a>
-<a class="sourceLine" id="cb598-2" title="2">  <span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb598-3" title="3">  </a>
-<a class="sourceLine" id="cb598-4" title="4">}</a>
-<a class="sourceLine" id="cb598-5" title="5"><span class="kw">apply</span>(bonf.adjustedAllpairs<span class="op">$</span>p.value, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), extreme)</a></code></pre></div>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb606-1" title="1">extreme &lt;-<span class="st"> </span><span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb606-2" title="2">  <span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb606-3" title="3">  </a>
+<a class="sourceLine" id="cb606-4" title="4">}</a>
+<a class="sourceLine" id="cb606-5" title="5"><span class="kw">apply</span>(bonf.adjustedAllpairs<span class="op">$</span>p.value, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), extreme)</a></code></pre></div>
 <pre><code>##           casein horsebean linseed meatmeal soybean
 ## horsebean   TRUE        NA      NA       NA      NA
 ## linseed     TRUE     FALSE      NA       NA      NA
@@ -1079,27 +1080,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Often, we don’t want to burn so much type1 error making scientifically uninteresting comparisons. In such cases, we instead want to compare subsets.</p>
 <p>Here’s a three step procedure for doing just that.</p>
 <p>Step1: First, run the <code>pairwise.t.test</code> function, setting the argument <code>p.adjust="none"</code>. The output includes a matrix of p-values we’ll name <code>allPairs</code>, providing all possible comparisons.</p>
-<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb600-1" title="1"><span class="co">#just repeating from above</span></a>
-<a class="sourceLine" id="cb600-2" title="2">allPairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">p.adjust=</span> <span class="st">&quot;none&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb608-1" title="1"><span class="co">#just repeating from above</span></a>
+<a class="sourceLine" id="cb608-2" title="2">allPairs &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(chickwts<span class="op">$</span>weight, chickwts<span class="op">$</span>feed, <span class="dt">p.adjust=</span> <span class="st">&quot;none&quot;</span>)</a></code></pre></div>
 <p>Step2: Select from the <code>allPairs</code> matrix only the p-values that correspond to the comparisons you’d like to make. Name that vector of unadjusted p-values, <code>selectPairs</code>. This takes a bit of cleverness depending on what you want to grab from the matrix.</p>
 <p>For example, we only want to compare all of the diets to casein. The comparisons we want are all in the first column. Use your matrix indexing skillz to grab only the unadjusted p-values from that first column:</p>
-<div class="sourceCode" id="cb601"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb601-1" title="1">selectPairs &lt;-<span class="st"> </span>allPairs<span class="op">$</span>p.value[, <span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb601-2" title="2">selectPairs</a></code></pre></div>
+<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb609-1" title="1">selectPairs &lt;-<span class="st"> </span>allPairs<span class="op">$</span>p.value[, <span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb609-2" title="2">selectPairs</a></code></pre></div>
 <pre><code>##    horsebean      linseed     meatmeal      soybean    sunflower 
 ## 2.067997e-09 1.493344e-05 4.556672e-02 6.654079e-04 8.124949e-01</code></pre>
 <p>Step3: Pass unadjusted p-values in the <code>selectPairs</code> vector into the <code>p.adjust</code> function.</p>
 <p>The output of this step is a vector of adjusted p-values for the selected group of comparisons.</p>
-<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb603-1" title="1">adjustedPvalues &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(selectPairs, <span class="dt">method=</span><span class="st">&quot;bonferroni&quot;</span>)</a>
-<a class="sourceLine" id="cb603-2" title="2">adjustedPvalues</a></code></pre></div>
+<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb611-1" title="1">adjustedPvalues &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(selectPairs, <span class="dt">method=</span><span class="st">&quot;bonferroni&quot;</span>)</a>
+<a class="sourceLine" id="cb611-2" title="2">adjustedPvalues</a></code></pre></div>
 <pre><code>##    horsebean      linseed     meatmeal      soybean    sunflower 
 ## 1.033998e-08 7.466720e-05 2.278336e-01 3.327039e-03 1.000000e+00</code></pre>
 <p>Which of these are extreme? If it’s not clear by inspection (or too large), use a simple boolean:</p>
-<div class="sourceCode" id="cb605"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb605-1" title="1">adjustedPvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span></a></code></pre></div>
+<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb613-1" title="1">adjustedPvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span></a></code></pre></div>
 <pre><code>## horsebean   linseed  meatmeal   soybean sunflower 
 ##      TRUE      TRUE     FALSE      TRUE     FALSE</code></pre>
 <p><strong>Fisher LSD</strong> This also doesn’t make adjustments for multiple comparisons. Notice how the p-values are no different than if using the <code>p.adjust="none"</code>. Fisher LSD is better than ‘none’ because it provides CI’s on the differences. Note: diff = difference between diet means.</p>
-<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb607-1" title="1"><span class="co">#from the DescTools package</span></a>
-<a class="sourceLine" id="cb607-2" title="2"><span class="kw">PostHocTest</span>(my.ezaov<span class="op">$</span>aov, <span class="dt">method =</span> <span class="st">&quot;lsd&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb615-1" title="1"><span class="co">#from the DescTools package</span></a>
+<a class="sourceLine" id="cb615-2" title="2"><span class="kw">PostHocTest</span>(my.ezaov<span class="op">$</span>aov, <span class="dt">method =</span> <span class="st">&quot;lsd&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##   Posthoc multiple comparisons of means : Fisher LSD 
 ##     95% family-wise confidence level
@@ -1132,7 +1133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Dunnett’s is nice because it gives you the effect size (diff) and the confidence interval limits for the difference, as well.</p>
 <p>Note: diff = the difference between diet means for the compared groups.</p>
 <p>Here’s an example comparing the weight effect of the various food sources back to casein. Adjusted for mulitple comparisons, horsebean, linseed and soybean each differ from casein.</p>
-<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb609-1" title="1"><span class="kw">DunnettTest</span>(weight <span class="op">~</span><span class="st"> </span>feed, <span class="dt">data =</span> chickwts)</a></code></pre></div>
+<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb617-1" title="1"><span class="kw">DunnettTest</span>(weight <span class="op">~</span><span class="st"> </span>feed, <span class="dt">data =</span> chickwts)</a></code></pre></div>
 <pre><code>## 
 ##   Dunnett&#39;s test for comparing several treatments with a control :  
 ##     95% family-wise confidence level
@@ -1148,7 +1149,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p><strong>Tukey HSD</strong>: A method based upon the Studentized range, doing all comparisons, and providing adjusted p-values along with confidence intervals. Used when the question is, “Are there any group differences here at all?”</p>
-<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb611-1" title="1"><span class="kw">TukeyHSD</span>(my.ezaov<span class="op">$</span>aov, <span class="st">&quot;feed&quot;</span>, <span class="dt">ordered =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb619-1" title="1"><span class="kw">TukeyHSD</span>(my.ezaov<span class="op">$</span>aov, <span class="st">&quot;feed&quot;</span>, <span class="dt">ordered =</span> T)</a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ##     factor levels have been ordered

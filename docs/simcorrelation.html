@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -729,8 +730,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="simcorrelation" class="section level1">
 <h1><span class="header-section-number">Chapter 24</span> Simulating correlated variables</h1>
-<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb518-1" title="1"><span class="kw">library</span>(pwr)</a>
-<a class="sourceLine" id="cb518-2" title="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb526-1" title="1"><span class="kw">library</span>(pwr)</a>
+<a class="sourceLine" id="cb526-2" title="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <p>Experimental designs involving paired (or related/repeated) measures are executed when two or more groups of measurements are expected to be intrinsically-linked.</p>
 <p>Take for example, a before and after design. A measure is taken before the imposition of some level of a predictor variable. Then the measure is taken afterwards. The difference between those two measures is the size of the effect.</p>
 <p>Those two measures are intrinsically-linked because they arise from a common subject. Subjects are tuned differently. You can imagine a subject who displays a low basal level of the measure will generate a low-end response after some inducer, whereas one with a high basal level will generate a high-end response.</p>
@@ -810,10 +811,10 @@ P14
 </table>
 <p>The data show that the luciferase values in response to vehicle wanders substantially across passages over a 10-fold range. Yet the drug response as a ratio to the vehicle is more consistent from passage to passage.</p>
 <p>In fact, the two variables, vehicle and drug, are actually very highly correlated:</p>
-<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb519-1" title="1"><span class="kw">cor</span>(df<span class="op">$</span>vehicle, df<span class="op">$</span>drug)</a></code></pre></div>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb527-1" title="1"><span class="kw">cor</span>(df<span class="op">$</span>vehicle, df<span class="op">$</span>drug)</a></code></pre></div>
 <pre><code>## [1] 0.9955158</code></pre>
-<div class="sourceCode" id="cb521"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb521-1" title="1"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(vehicle, drug))<span class="op">+</span></a>
-<a class="sourceLine" id="cb521-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#012169&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb529-1" title="1"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(vehicle, drug))<span class="op">+</span></a>
+<a class="sourceLine" id="cb529-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#012169&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-270-1.png" width="384" /></p>
 <p>This example points to how you can derive an estimate for the correlation coefficient between two variables. Simply plot out their replicates as <span class="math inline">\(XY\)</span> pairs and calculate their correlation coefficient using R’s <code>cor</code> function.</p>
 <p>Where do you find values for these variables? They can come from pilot or from published data.</p>
@@ -824,31 +825,31 @@ P14
 <p>Thus, we can first simulate a random pair of <span class="math inline">\(X,Y\)</span> values, then convert the values of <span class="math inline">\(Y\)</span> into <span class="math inline">\(Z\)</span>, such that the <span class="math inline">\(X,Z\)</span> values are correlated.</p>
 <p>Using the luciferase example above, here’s some code to accomplish that. Each pair is initially uncorrelated, but then becomes correlated after using the relationship above.</p>
 <p>There is a slight twist in this. When using an <code>rnorm</code> function with the means and sd estimates from the table above, negative values will be produced. However, the luciferase values are a ratio scale, with an absolute 0 value. The code below uses the <code>abs</code>to simulate only positive values. This generates a skewed normal distribution</p>
-<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb522-1" title="1"><span class="co">#first simulate and view uncorrelated random variables</span></a>
-<a class="sourceLine" id="cb522-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb522-3" title="3">x &lt;-<span class="st"> </span><span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">10000</span>, <span class="dv">10</span>, <span class="dv">8</span>))</a>
-<a class="sourceLine" id="cb522-4" title="4">y &lt;-<span class="st"> </span><span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">10000</span>, <span class="dv">17</span>, <span class="dv">15</span>))</a>
-<a class="sourceLine" id="cb522-5" title="5"><span class="kw">cor</span>(x,y)</a></code></pre></div>
+<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb530-1" title="1"><span class="co">#first simulate and view uncorrelated random variables</span></a>
+<a class="sourceLine" id="cb530-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
+<a class="sourceLine" id="cb530-3" title="3">x &lt;-<span class="st"> </span><span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">10000</span>, <span class="dv">10</span>, <span class="dv">8</span>))</a>
+<a class="sourceLine" id="cb530-4" title="4">y &lt;-<span class="st"> </span><span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">10000</span>, <span class="dv">17</span>, <span class="dv">15</span>))</a>
+<a class="sourceLine" id="cb530-5" title="5"><span class="kw">cor</span>(x,y)</a></code></pre></div>
 <pre><code>## [1] 0.004357573</code></pre>
-<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb524-1" title="1"><span class="co">#scatter plot the simulated vectors</span></a>
-<a class="sourceLine" id="cb524-2" title="2"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb524-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" title="1"><span class="co">#scatter plot the simulated vectors</span></a>
+<a class="sourceLine" id="cb532-2" title="2"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb532-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-271-1.png" width="672" /></p>
-<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb525-1" title="1"><span class="co">#now convert y to z, so that it correlates to x</span></a>
-<a class="sourceLine" id="cb525-2" title="2">r=<span class="fl">0.99</span></a>
-<a class="sourceLine" id="cb525-3" title="3">k&lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>r<span class="op">^</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb525-4" title="4">z &lt;-<span class="st"> </span>r<span class="op">*</span>x<span class="op">+</span>k<span class="op">*</span>y</a>
-<a class="sourceLine" id="cb525-5" title="5"></a>
-<a class="sourceLine" id="cb525-6" title="6"><span class="co">#confirm the correlation</span></a>
-<a class="sourceLine" id="cb525-7" title="7"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,z), <span class="kw">aes</span>(x,z))<span class="op">+</span></a>
-<a class="sourceLine" id="cb525-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb533-1" title="1"><span class="co">#now convert y to z, so that it correlates to x</span></a>
+<a class="sourceLine" id="cb533-2" title="2">r=<span class="fl">0.99</span></a>
+<a class="sourceLine" id="cb533-3" title="3">k&lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>r<span class="op">^</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb533-4" title="4">z &lt;-<span class="st"> </span>r<span class="op">*</span>x<span class="op">+</span>k<span class="op">*</span>y</a>
+<a class="sourceLine" id="cb533-5" title="5"></a>
+<a class="sourceLine" id="cb533-6" title="6"><span class="co">#confirm the correlation</span></a>
+<a class="sourceLine" id="cb533-7" title="7"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,z), <span class="kw">aes</span>(x,z))<span class="op">+</span></a>
+<a class="sourceLine" id="cb533-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-271-2.png" width="672" /></p>
-<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb526-1" title="1"><span class="kw">cor</span>(x, z)</a></code></pre></div>
+<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb534-1" title="1"><span class="kw">cor</span>(x, z)</a></code></pre></div>
 <pre><code>## [1] 0.9673284</code></pre>
-<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb528-1" title="1"><span class="co">#explore the distribution of z</span></a>
-<a class="sourceLine" id="cb528-2" title="2"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,z))<span class="op">+</span></a>
-<a class="sourceLine" id="cb528-3" title="3"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(z))<span class="op">+</span></a>
-<a class="sourceLine" id="cb528-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(x))</a></code></pre></div>
+<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb536-1" title="1"><span class="co">#explore the distribution of z</span></a>
+<a class="sourceLine" id="cb536-2" title="2"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,z))<span class="op">+</span></a>
+<a class="sourceLine" id="cb536-3" title="3"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(z))<span class="op">+</span></a>
+<a class="sourceLine" id="cb536-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(x))</a></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-271-3.png" width="672" /></p>
@@ -856,46 +857,46 @@ P14
 <div id="monte-carlo-simulation" class="section level2">
 <h2><span class="header-section-number">24.3</span> Monte Carlo simulation</h2>
 <p>Here’s a Monte Carlo simulation of a paired t-test between an A and a B group. The “true” effect size programmed to be very modest. The code also factors in a fairly strong correlation between the two measures of the variable.</p>
-<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb530-1" title="1"><span class="co">#Initial Parameters</span></a>
-<a class="sourceLine" id="cb530-2" title="2"><span class="co"># sample A intial true parameters</span></a>
-<a class="sourceLine" id="cb530-3" title="3">nA &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb530-4" title="4">meanA &lt;-<span class="st"> </span><span class="fl">1.5</span></a>
-<a class="sourceLine" id="cb530-5" title="5">sdA &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb530-6" title="6"></a>
-<a class="sourceLine" id="cb530-7" title="7"><span class="co"># sample B intial true parameters</span></a>
-<a class="sourceLine" id="cb530-8" title="8">nB &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb530-9" title="9">meanB &lt;-<span class="st"> </span><span class="fl">2.0</span></a>
-<a class="sourceLine" id="cb530-10" title="10">sdB &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb530-11" title="11"></a>
-<a class="sourceLine" id="cb530-12" title="12">alpha &lt;-<span class="st"> </span><span class="fl">0.05</span></a>
-<a class="sourceLine" id="cb530-13" title="13">nSims &lt;-<span class="st"> </span><span class="dv">10000</span> <span class="co">#number of simulated experiments</span></a>
-<a class="sourceLine" id="cb530-14" title="14">p &lt;-<span class="kw">numeric</span>(nSims) <span class="co">#set up empty container for all simulated p-values</span></a>
-<a class="sourceLine" id="cb530-15" title="15"></a>
-<a class="sourceLine" id="cb530-16" title="16"><span class="co"># correlation coefficient</span></a>
-<a class="sourceLine" id="cb530-17" title="17">r &lt;-<span class="st"> </span><span class="fl">0.8</span></a>
-<a class="sourceLine" id="cb530-18" title="18"></a>
-<a class="sourceLine" id="cb530-19" title="19"><span class="co"># the monte carlo function</span></a>
-<a class="sourceLine" id="cb530-20" title="20"></a>
-<a class="sourceLine" id="cb530-21" title="21"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nSims){ <span class="co">#for each simulated experiment</span></a>
-<a class="sourceLine" id="cb530-22" title="22">  x&lt;-<span class="kw">rnorm</span>(<span class="dt">n =</span> nA, <span class="dt">mean =</span> meanA, <span class="dt">sd =</span> sdA) <span class="co">#produce n simulated participants</span></a>
-<a class="sourceLine" id="cb530-23" title="23">  <span class="co">#with mean and SD</span></a>
-<a class="sourceLine" id="cb530-24" title="24">  y&lt;-<span class="kw">rnorm</span>(<span class="dt">n =</span> nB, <span class="dt">mean =</span> meanB, <span class="dt">sd =</span> sdB) <span class="co">#produce n simulated participants</span></a>
-<a class="sourceLine" id="cb530-25" title="25">  <span class="co">#with mean and SD</span></a>
-<a class="sourceLine" id="cb530-26" title="26">  <span class="co">#correlated</span></a>
-<a class="sourceLine" id="cb530-27" title="27">  w &lt;-<span class="st"> </span>r<span class="op">*</span>x<span class="op">+</span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>r<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>y</a>
-<a class="sourceLine" id="cb530-28" title="28">  z&lt;-<span class="kw">t.test</span>(x,w, <span class="dt">paired=</span>T) <span class="co">#perform the t-test</span></a>
-<a class="sourceLine" id="cb530-29" title="29">  p[i]&lt;-z<span class="op">$</span>p.value <span class="co">#get the p-value and store it</span></a>
-<a class="sourceLine" id="cb530-30" title="30">}</a>
-<a class="sourceLine" id="cb530-31" title="31"></a>
-<a class="sourceLine" id="cb530-32" title="32"><span class="co"># the output</span></a>
-<a class="sourceLine" id="cb530-33" title="33"></a>
-<a class="sourceLine" id="cb530-34" title="34">hits &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(p <span class="op">&lt;</span><span class="st"> </span>alpha));hits</a></code></pre></div>
+<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb538-1" title="1"><span class="co">#Initial Parameters</span></a>
+<a class="sourceLine" id="cb538-2" title="2"><span class="co"># sample A intial true parameters</span></a>
+<a class="sourceLine" id="cb538-3" title="3">nA &lt;-<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb538-4" title="4">meanA &lt;-<span class="st"> </span><span class="fl">1.5</span></a>
+<a class="sourceLine" id="cb538-5" title="5">sdA &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb538-6" title="6"></a>
+<a class="sourceLine" id="cb538-7" title="7"><span class="co"># sample B intial true parameters</span></a>
+<a class="sourceLine" id="cb538-8" title="8">nB &lt;-<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb538-9" title="9">meanB &lt;-<span class="st"> </span><span class="fl">2.0</span></a>
+<a class="sourceLine" id="cb538-10" title="10">sdB &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb538-11" title="11"></a>
+<a class="sourceLine" id="cb538-12" title="12">alpha &lt;-<span class="st"> </span><span class="fl">0.05</span></a>
+<a class="sourceLine" id="cb538-13" title="13">nSims &lt;-<span class="st"> </span><span class="dv">10000</span> <span class="co">#number of simulated experiments</span></a>
+<a class="sourceLine" id="cb538-14" title="14">p &lt;-<span class="kw">numeric</span>(nSims) <span class="co">#set up empty container for all simulated p-values</span></a>
+<a class="sourceLine" id="cb538-15" title="15"></a>
+<a class="sourceLine" id="cb538-16" title="16"><span class="co"># correlation coefficient</span></a>
+<a class="sourceLine" id="cb538-17" title="17">r &lt;-<span class="st"> </span><span class="fl">0.8</span></a>
+<a class="sourceLine" id="cb538-18" title="18"></a>
+<a class="sourceLine" id="cb538-19" title="19"><span class="co"># the monte carlo function</span></a>
+<a class="sourceLine" id="cb538-20" title="20"></a>
+<a class="sourceLine" id="cb538-21" title="21"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nSims){ <span class="co">#for each simulated experiment</span></a>
+<a class="sourceLine" id="cb538-22" title="22">  x&lt;-<span class="kw">rnorm</span>(<span class="dt">n =</span> nA, <span class="dt">mean =</span> meanA, <span class="dt">sd =</span> sdA) <span class="co">#produce n simulated participants</span></a>
+<a class="sourceLine" id="cb538-23" title="23">  <span class="co">#with mean and SD</span></a>
+<a class="sourceLine" id="cb538-24" title="24">  y&lt;-<span class="kw">rnorm</span>(<span class="dt">n =</span> nB, <span class="dt">mean =</span> meanB, <span class="dt">sd =</span> sdB) <span class="co">#produce n simulated participants</span></a>
+<a class="sourceLine" id="cb538-25" title="25">  <span class="co">#with mean and SD</span></a>
+<a class="sourceLine" id="cb538-26" title="26">  <span class="co">#correlated</span></a>
+<a class="sourceLine" id="cb538-27" title="27">  w &lt;-<span class="st"> </span>r<span class="op">*</span>x<span class="op">+</span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>r<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>y</a>
+<a class="sourceLine" id="cb538-28" title="28">  z&lt;-<span class="kw">t.test</span>(x,w, <span class="dt">paired=</span>T) <span class="co">#perform the t-test</span></a>
+<a class="sourceLine" id="cb538-29" title="29">  p[i]&lt;-z<span class="op">$</span>p.value <span class="co">#get the p-value and store it</span></a>
+<a class="sourceLine" id="cb538-30" title="30">}</a>
+<a class="sourceLine" id="cb538-31" title="31"></a>
+<a class="sourceLine" id="cb538-32" title="32"><span class="co"># the output</span></a>
+<a class="sourceLine" id="cb538-33" title="33"></a>
+<a class="sourceLine" id="cb538-34" title="34">hits &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(p <span class="op">&lt;</span><span class="st"> </span>alpha));hits</a></code></pre></div>
 <pre><code>## [1] 7027</code></pre>
-<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" title="1">power &lt;-<span class="st"> </span>hits<span class="op">/</span>nSims;power</a></code></pre></div>
+<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb540-1" title="1">power &lt;-<span class="st"> </span>hits<span class="op">/</span>nSims;power</a></code></pre></div>
 <pre><code>## [1] 0.7027</code></pre>
-<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb534-1" title="1"><span class="co">#now plot the histogram</span></a>
-<a class="sourceLine" id="cb534-2" title="2"><span class="co">#main=&quot;Histogram of p-values under the null&quot;,</span></a>
-<a class="sourceLine" id="cb534-3" title="3"><span class="kw">hist</span>(p, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10000</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="fl">0.0</span>, <span class="fl">1.0</span>), <span class="dt">main =</span><span class="st">&quot;Histogram of simulated p-values&quot;</span>, <span class="dt">xlab=</span>(<span class="st">&quot;Observed p-value&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb542"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb542-1" title="1"><span class="co">#now plot the histogram</span></a>
+<a class="sourceLine" id="cb542-2" title="2"><span class="co">#main=&quot;Histogram of p-values under the null&quot;,</span></a>
+<a class="sourceLine" id="cb542-3" title="3"><span class="kw">hist</span>(p, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10000</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="fl">0.0</span>, <span class="fl">1.0</span>), <span class="dt">main =</span><span class="st">&quot;Histogram of simulated p-values&quot;</span>, <span class="dt">xlab=</span>(<span class="st">&quot;Observed p-value&quot;</span>))</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-272-1.png" width="672" /></p>
 <p>The result as written above is a bit underpowered, but not too shabby.</p>
 <p>Now run the code by dialing down the correlation to an r = 0. How much more underpowered is the planned experiment? Factoring in the correlation between variables makes a huge difference.</p>

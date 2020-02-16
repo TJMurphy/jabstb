@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -729,10 +730,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="jaxwest2" class="section level1">
 <h1><span class="header-section-number">Chapter 32</span> Reproducible Data Munging Mostly with Tidyverse</h1>
-<div class="sourceCode" id="cb662"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb662-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb662-2" title="2"><span class="kw">library</span>(readxl)</a>
-<a class="sourceLine" id="cb662-3" title="3"><span class="kw">library</span>(viridis)</a>
-<a class="sourceLine" id="cb662-4" title="4"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
+<div class="sourceCode" id="cb670"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb670-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb670-2" title="2"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb670-3" title="3"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb670-4" title="4"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
 <p>Reproducibility is when someone who has your data can conduct the same analysis, arriving at the same parameter estimates and conclusions. The data processing steps of an analysis are perhaps the most critical determinant of reproducibility. Ideally, this is performed using a breadcrumbs process, where each step is traceable.</p>
 <p>That’s what R scripts do and why they are better than munging data in GUI software, such as excel or other stats packages.</p>
 <p>Here’s an example of what I mean by an R script munge. I thought it would be interesting to try and pull this off using mostly tidyverse functions, if possible.</p>
@@ -771,12 +772,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We’ll read in all but the first header row. The function <code>read_excel</code> is from the <code>readxl</code> package, which is <a href="https://readxl.tidyverse.org/">part of the tidyverse</a> but you may need to install it separately.</p>
 <p>The script below creates the object <code>jw2</code>, which is a data frame of 103 variables! Except for the first header row, <code>jw2</code> contains all of the data in the first sheet of the source file.</p>
 <p>Note how <code>jaxwest2.xls</code> is otherwise untouched. No changes have been made locally to the original source file. That’s important because it is good reproducible practice.</p>
-<div class="sourceCode" id="cb663"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb663-1" title="1">jw2 &lt;-<span class="st">&quot;datasets/jaxwest2.xls&quot;</span> <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb663-2" title="2"><span class="st">  </span><span class="kw">read_excel</span>(</a>
-<a class="sourceLine" id="cb663-3" title="3">    <span class="dt">skip=</span><span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb663-4" title="4">    <span class="dt">sheet=</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb663-5" title="5">    )</a>
-<a class="sourceLine" id="cb663-6" title="6">jw2</a></code></pre></div>
+<div class="sourceCode" id="cb671"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb671-1" title="1">jw2 &lt;-<span class="st">&quot;datasets/jaxwest2.xls&quot;</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb671-2" title="2"><span class="st">  </span><span class="kw">read_excel</span>(</a>
+<a class="sourceLine" id="cb671-3" title="3">    <span class="dt">skip=</span><span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb671-4" title="4">    <span class="dt">sheet=</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb671-5" title="5">    )</a>
+<a class="sourceLine" id="cb671-6" title="6">jw2</a></code></pre></div>
 <pre><code>## # A tibble: 35 x 103
 ##    strain sex   mouse_ID birth               arrival             cage_code
 ##    &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;    
@@ -827,13 +828,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The test group variable will initially serve as a check to know we grabbed the right data. We can omit it later.</p>
 <p><code>contains</code> is really helpful because the tumor volume variables for each day of measurement have a slightly different name, yet each contain the characters <code>tumor_vol_</code> as a common stem.</p>
 <p>We’ll create a new object, <code>jw2vol</code> to represent the data. Notice how in subsequent chunks <code>jw2vol</code> is modified as we successively munge the data into shape.</p>
-<div class="sourceCode" id="cb665"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb665-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb665-2" title="2"><span class="st">  </span><span class="kw">select</span>(</a>
-<a class="sourceLine" id="cb665-3" title="3">    mouse_ID, </a>
-<a class="sourceLine" id="cb665-4" title="4">    test_group, </a>
-<a class="sourceLine" id="cb665-5" title="5">    <span class="kw">contains</span>(<span class="st">&quot;tumor_vol_&quot;</span>)</a>
-<a class="sourceLine" id="cb665-6" title="6">    )</a>
-<a class="sourceLine" id="cb665-7" title="7">jw2vol</a></code></pre></div>
+<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb673-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb673-2" title="2"><span class="st">  </span><span class="kw">select</span>(</a>
+<a class="sourceLine" id="cb673-3" title="3">    mouse_ID, </a>
+<a class="sourceLine" id="cb673-4" title="4">    test_group, </a>
+<a class="sourceLine" id="cb673-5" title="5">    <span class="kw">contains</span>(<span class="st">&quot;tumor_vol_&quot;</span>)</a>
+<a class="sourceLine" id="cb673-6" title="6">    )</a>
+<a class="sourceLine" id="cb673-7" title="7">jw2vol</a></code></pre></div>
 <pre><code>## # A tibble: 35 x 15
 ##    mouse_ID test_group tumor_vol_17 tumor_vol_18 tumor_vol_19 `tumor_vol_ 22`
 ##       &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;          
@@ -855,11 +856,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="trim-the-cases" class="section level2">
 <h2><span class="header-section-number">32.5</span> Trim the cases</h2>
 <p>We only want a subset of the test_groups. Looking at <code>jw2vol</code> we can see those happen to be the first 11 cases in the data set. We’ll <code>slice</code> them out, throwing away the rest.</p>
-<div class="sourceCode" id="cb667"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb667-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb667-2" title="2"><span class="st">  </span><span class="kw">filter</span>(</a>
-<a class="sourceLine" id="cb667-3" title="3">    test_group <span class="op">==</span><span class="st"> &quot;Control (no vehicle)&quot;</span></a>
-<a class="sourceLine" id="cb667-4" title="4">    )</a>
-<a class="sourceLine" id="cb667-5" title="5">jw2vol</a></code></pre></div>
+<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb675-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb675-2" title="2"><span class="st">  </span><span class="kw">filter</span>(</a>
+<a class="sourceLine" id="cb675-3" title="3">    test_group <span class="op">==</span><span class="st"> &quot;Control (no vehicle)&quot;</span></a>
+<a class="sourceLine" id="cb675-4" title="4">    )</a>
+<a class="sourceLine" id="cb675-5" title="5">jw2vol</a></code></pre></div>
 <pre><code>## # A tibble: 11 x 15
 ##    mouse_ID test_group tumor_vol_17 tumor_vol_18 tumor_vol_19 `tumor_vol_ 22`
 ##       &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;          
@@ -883,14 +884,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">32.6</span> Go long</h2>
 <p>The iteration above is 15 columns wide. We use the <code>gather</code> function to make it long, and only 4 columns wide.</p>
 <p>Importantly, the new variable <code>measurement</code> is intended to be an intermediate. It has the information about day of measurement within the character string, which we’ll pull out in a moment. First, make it long:</p>
-<div class="sourceCode" id="cb669"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb669-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb669-2" title="2"><span class="st">  </span><span class="kw">gather</span>(</a>
-<a class="sourceLine" id="cb669-3" title="3">    measurement, </a>
-<a class="sourceLine" id="cb669-4" title="4">    tumor_vol, </a>
-<a class="sourceLine" id="cb669-5" title="5">    <span class="op">-</span>mouse_ID, </a>
-<a class="sourceLine" id="cb669-6" title="6">    <span class="op">-</span>test_group</a>
-<a class="sourceLine" id="cb669-7" title="7">    )</a>
-<a class="sourceLine" id="cb669-8" title="8">jw2vol</a></code></pre></div>
+<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb677-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb677-2" title="2"><span class="st">  </span><span class="kw">gather</span>(</a>
+<a class="sourceLine" id="cb677-3" title="3">    measurement, </a>
+<a class="sourceLine" id="cb677-4" title="4">    tumor_vol, </a>
+<a class="sourceLine" id="cb677-5" title="5">    <span class="op">-</span>mouse_ID, </a>
+<a class="sourceLine" id="cb677-6" title="6">    <span class="op">-</span>test_group</a>
+<a class="sourceLine" id="cb677-7" title="7">    )</a>
+<a class="sourceLine" id="cb677-8" title="8">jw2vol</a></code></pre></div>
 <pre><code>## # A tibble: 143 x 4
 ##    mouse_ID test_group           measurement  tumor_vol         
 ##       &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;        &lt;chr&gt;             
@@ -911,13 +912,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In the preceding step, all of the values for the measurement variable begin with the same character string. Getting rid of that will leave us with the day number.</p>
 <p><code>str_remove_all</code> is from the <code>stringr</code> package and <code>transmute</code> is a <code>dplyr</code> function. All are from the <a href="https://www.tidyverse.org/packages/">tidyverse</a>.</p>
 <p>We want the resulting object to be a data frame with three variables. One each for the day, mouse_ID, and tumor volume. Having confirmed the cases are from the group we want, we no longer need a test_group variable.</p>
-<div class="sourceCode" id="cb671"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb671-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb671-2" title="2"><span class="st">  </span><span class="kw">transmute</span>(</a>
-<a class="sourceLine" id="cb671-3" title="3">  <span class="dt">day=</span><span class="kw">str_remove_all</span>(measurement, <span class="st">&quot;tumor_vol_&quot;</span>),</a>
-<a class="sourceLine" id="cb671-4" title="4">  mouse_ID,</a>
-<a class="sourceLine" id="cb671-5" title="5">  tumor_vol</a>
-<a class="sourceLine" id="cb671-6" title="6">  )</a>
-<a class="sourceLine" id="cb671-7" title="7">jw2vol</a></code></pre></div>
+<div class="sourceCode" id="cb679"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb679-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb679-2" title="2"><span class="st">  </span><span class="kw">transmute</span>(</a>
+<a class="sourceLine" id="cb679-3" title="3">  <span class="dt">day=</span><span class="kw">str_remove_all</span>(measurement, <span class="st">&quot;tumor_vol_&quot;</span>),</a>
+<a class="sourceLine" id="cb679-4" title="4">  mouse_ID,</a>
+<a class="sourceLine" id="cb679-5" title="5">  tumor_vol</a>
+<a class="sourceLine" id="cb679-6" title="6">  )</a>
+<a class="sourceLine" id="cb679-7" title="7">jw2vol</a></code></pre></div>
 <pre><code>## # A tibble: 143 x 3
 ##    day   mouse_ID tumor_vol         
 ##    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;             
@@ -936,13 +937,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="convert-day-to-numeric" class="section level2">
 <h2><span class="header-section-number">32.8</span> Convert day to numeric</h2>
 <p>Because they are characters the values for days may be out of sequence (they were on my machine). Converting them to numeric should retain the correct order. Later, we’ll convert the day variable to a factor for plotting and ANOVA purposes.</p>
-<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb673-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb673-2" title="2"><span class="st">  </span><span class="kw">transmute</span>(</a>
-<a class="sourceLine" id="cb673-3" title="3">    <span class="dt">day=</span>(<span class="kw">as.numeric</span>(day)),</a>
-<a class="sourceLine" id="cb673-4" title="4">    mouse_ID,</a>
-<a class="sourceLine" id="cb673-5" title="5">    tumor_vol</a>
-<a class="sourceLine" id="cb673-6" title="6">    )</a>
-<a class="sourceLine" id="cb673-7" title="7">jw2vol</a></code></pre></div>
+<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb681-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb681-2" title="2"><span class="st">  </span><span class="kw">transmute</span>(</a>
+<a class="sourceLine" id="cb681-3" title="3">    <span class="dt">day=</span>(<span class="kw">as.numeric</span>(day)),</a>
+<a class="sourceLine" id="cb681-4" title="4">    mouse_ID,</a>
+<a class="sourceLine" id="cb681-5" title="5">    tumor_vol</a>
+<a class="sourceLine" id="cb681-6" title="6">    )</a>
+<a class="sourceLine" id="cb681-7" title="7">jw2vol</a></code></pre></div>
 <pre><code>## # A tibble: 143 x 3
 ##      day mouse_ID tumor_vol         
 ##    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;             
@@ -961,16 +962,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="convert-tumor_vol-to-numeric" class="section level2">
 <h2><span class="header-section-number">32.9</span> Convert tumor_vol to numeric</h2>
 <p>You may have noticed above that R read the tumor_vol values as character. Here we convert them to numeric, and then round their values to 1 significant digit.</p>
-<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb675-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb675-2" title="2"><span class="st">  </span><span class="kw">transmute</span>(</a>
-<a class="sourceLine" id="cb675-3" title="3">    <span class="dt">tumor_vol=</span><span class="kw">round</span>(<span class="kw">as.numeric</span>(tumor_vol), </a>
-<a class="sourceLine" id="cb675-4" title="4">                    <span class="dv">1</span></a>
-<a class="sourceLine" id="cb675-5" title="5">                    ), </a>
-<a class="sourceLine" id="cb675-6" title="6">    mouse_ID, </a>
-<a class="sourceLine" id="cb675-7" title="7">    day</a>
-<a class="sourceLine" id="cb675-8" title="8">    )</a></code></pre></div>
+<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb683-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb683-2" title="2"><span class="st">  </span><span class="kw">transmute</span>(</a>
+<a class="sourceLine" id="cb683-3" title="3">    <span class="dt">tumor_vol=</span><span class="kw">round</span>(<span class="kw">as.numeric</span>(tumor_vol), </a>
+<a class="sourceLine" id="cb683-4" title="4">                    <span class="dv">1</span></a>
+<a class="sourceLine" id="cb683-5" title="5">                    ), </a>
+<a class="sourceLine" id="cb683-6" title="6">    mouse_ID, </a>
+<a class="sourceLine" id="cb683-7" title="7">    day</a>
+<a class="sourceLine" id="cb683-8" title="8">    )</a></code></pre></div>
 <pre><code>## Warning: NAs introduced by coercion</code></pre>
-<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb677-1" title="1">jw2vol</a></code></pre></div>
+<div class="sourceCode" id="cb685"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb685-1" title="1">jw2vol</a></code></pre></div>
 <pre><code>## # A tibble: 143 x 3
 ##    tumor_vol mouse_ID   day
 ##        &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
@@ -992,14 +993,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>There are two options when confronted with NA values. De-list or impute.</p>
 <p>Since this is a repeated measures design, delisting this one of a string of repeated values would mean losing all of the data on the mouse. Ugh.</p>
 <p>Since we have 10 other values for day 17, it makes sense to impute a value for 43, on their bias. We’ll take the means of all cases on day 17 and replace the NA with that value. First, check the means. Second, replace.</p>
-<div class="sourceCode" id="cb679"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb679-1" title="1">means &lt;-<span class="st"> </span><span class="kw">group_by</span>(</a>
-<a class="sourceLine" id="cb679-2" title="2">  jw2vol, day</a>
-<a class="sourceLine" id="cb679-3" title="3">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb679-4" title="4"><span class="st">  </span><span class="kw">summarise</span>(</a>
-<a class="sourceLine" id="cb679-5" title="5">    <span class="dt">mean=</span><span class="kw">mean</span>(tumor_vol, <span class="dt">na.rm=</span>T)</a>
-<a class="sourceLine" id="cb679-6" title="6">    )</a>
-<a class="sourceLine" id="cb679-7" title="7"></a>
-<a class="sourceLine" id="cb679-8" title="8">means</a></code></pre></div>
+<div class="sourceCode" id="cb687"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb687-1" title="1">means &lt;-<span class="st"> </span><span class="kw">group_by</span>(</a>
+<a class="sourceLine" id="cb687-2" title="2">  jw2vol, day</a>
+<a class="sourceLine" id="cb687-3" title="3">  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb687-4" title="4"><span class="st">  </span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb687-5" title="5">    <span class="dt">mean=</span><span class="kw">mean</span>(tumor_vol, <span class="dt">na.rm=</span>T)</a>
+<a class="sourceLine" id="cb687-6" title="6">    )</a>
+<a class="sourceLine" id="cb687-7" title="7"></a>
+<a class="sourceLine" id="cb687-8" title="8">means</a></code></pre></div>
 <pre><code>## # A tibble: 13 x 2
 ##      day   mean
 ##    &lt;dbl&gt;  &lt;dbl&gt;
@@ -1016,13 +1017,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 11    38  854. 
 ## 12    40 1122. 
 ## 13    44 1422.</code></pre>
-<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb681-1" title="1">jw2vol &lt;-jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb681-2" title="2"><span class="st">  </span><span class="kw">replace_na</span>(</a>
-<a class="sourceLine" id="cb681-3" title="3">    <span class="kw">list</span>(<span class="dt">tumor_vol=</span>means<span class="op">$</span>mean[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb681-4" title="4">         )</a>
-<a class="sourceLine" id="cb681-5" title="5">    )</a>
-<a class="sourceLine" id="cb681-6" title="6"></a>
-<a class="sourceLine" id="cb681-7" title="7">jw2vol</a></code></pre></div>
+<div class="sourceCode" id="cb689"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb689-1" title="1">jw2vol &lt;-jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb689-2" title="2"><span class="st">  </span><span class="kw">replace_na</span>(</a>
+<a class="sourceLine" id="cb689-3" title="3">    <span class="kw">list</span>(<span class="dt">tumor_vol=</span>means<span class="op">$</span>mean[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb689-4" title="4">         )</a>
+<a class="sourceLine" id="cb689-5" title="5">    )</a>
+<a class="sourceLine" id="cb689-6" title="6"></a>
+<a class="sourceLine" id="cb689-7" title="7">jw2vol</a></code></pre></div>
 <pre><code>## # A tibble: 143 x 3
 ##    tumor_vol mouse_ID   day
 ##        &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
@@ -1041,12 +1042,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="convert-variables-to-factor" class="section level2">
 <h2><span class="header-section-number">32.11</span> Convert variables to factor</h2>
 <p>ANOVA are called factorial analyses. That’s because the predictor variable is a factor. We need to convert the day variable into a factor. While we’re at it, we’ll convert the mouse_ID into a factor, too, so that it plays nice with ggplot and ANOVA.</p>
-<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb683-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb683-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb683-3" title="3">    <span class="dt">mouse_ID=</span><span class="kw">as.factor</span>(mouse_ID), </a>
-<a class="sourceLine" id="cb683-4" title="4">    <span class="dt">day=</span><span class="kw">as.factor</span>(day)</a>
-<a class="sourceLine" id="cb683-5" title="5">    )</a>
-<a class="sourceLine" id="cb683-6" title="6">jw2vol</a></code></pre></div>
+<div class="sourceCode" id="cb691"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb691-1" title="1">jw2vol &lt;-<span class="st"> </span>jw2vol <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb691-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb691-3" title="3">    <span class="dt">mouse_ID=</span><span class="kw">as.factor</span>(mouse_ID), </a>
+<a class="sourceLine" id="cb691-4" title="4">    <span class="dt">day=</span><span class="kw">as.factor</span>(day)</a>
+<a class="sourceLine" id="cb691-5" title="5">    )</a>
+<a class="sourceLine" id="cb691-6" title="6">jw2vol</a></code></pre></div>
 <pre><code>## # A tibble: 143 x 3
 ##    tumor_vol mouse_ID day  
 ##        &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt;
@@ -1066,13 +1067,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">32.12</span> Plot the data</h2>
 <p>Repeated measures on subjects is the primary feature of this data set. Within each mouse_ID, every measurement is intrinsically-related to every other measurement. Point-to-point graphing illustrates this.</p>
 <p>Here’s all the data! It’s beautiful.</p>
-<div class="sourceCode" id="cb685"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb685-1" title="1"><span class="kw">ggplot</span>(jw2vol, <span class="kw">aes</span>(</a>
-<a class="sourceLine" id="cb685-2" title="2">  day, tumor_vol, <span class="dt">group=</span>mouse_ID, <span class="dt">color=</span>mouse_ID))<span class="op">+</span></a>
-<a class="sourceLine" id="cb685-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb685-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb685-5" title="5"><span class="st">  </span><span class="co">#scale_color_brewer(palette=&quot;Paired&quot;)+</span></a>
-<a class="sourceLine" id="cb685-6" title="6"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)<span class="op">+</span></a>
-<a class="sourceLine" id="cb685-7" title="7"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb693"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb693-1" title="1"><span class="kw">ggplot</span>(jw2vol, <span class="kw">aes</span>(</a>
+<a class="sourceLine" id="cb693-2" title="2">  day, tumor_vol, <span class="dt">group=</span>mouse_ID, <span class="dt">color=</span>mouse_ID))<span class="op">+</span></a>
+<a class="sourceLine" id="cb693-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb693-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb693-5" title="5"><span class="st">  </span><span class="co">#scale_color_brewer(palette=&quot;Paired&quot;)+</span></a>
+<a class="sourceLine" id="cb693-6" title="6"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)<span class="op">+</span></a>
+<a class="sourceLine" id="cb693-7" title="7"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-357-1.png" width="672" /></p>
 
 </div>

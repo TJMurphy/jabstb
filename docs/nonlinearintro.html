@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -741,7 +742,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Nonlinear regression modeling can be one of those deer-in-the-headlights moments in a course like this.</p>
 <p>Chances are you haven’t worked with nonlinear modeling previously, so you’re unfamiliar with the basic concept of nonlinearity. These types of experiments tend to involve a lot more data points. The need to write formulas (rather than select them from a list in a GUI-based software) seems daunting. The statistical output seems more complicated. The statistical functions tend to be buggier, more prone to not working straight out of the box. All of that can be frustrating.</p>
 <p>But it is a lot easier than it looks.</p>
-<div class="sourceCode" id="cb724"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb724-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/keep_calm.jpg&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb732"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb732-1" title="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;images/keep_calm.jpg&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-379"></span>
 <img src="images/keep_calm.jpg" alt="Performing nonlinear regression requires some supervision on your part." width="30%" />
 <p class="caption">
@@ -791,33 +792,33 @@ Figure 36.1: Performing nonlinear regression requires some supervision on your p
 <p>The code passes <em>linear values</em> of <span class="math inline">\(X\)</span> into a hyperbolic formula that’s been written for regression. Some initial, arbitrary parameter values are entered to give the data shape and location.</p>
 <p>I strongly urge you to use this code chunk as a sandbox. Leave the formula alone but play around with with the values of the initial variables, including the predictor, <span class="math inline">\(x\)</span>. That’s the best way to see how they all work together.</p>
 <p>The two graphs plot identical values for both the <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> variables. The only difference is the plotting background, one is log scale and the other is not. Note how that is accomplished using ggplot arguments. You can think of the plot on the left as being drawn on linear graph paper, and the one on the right as being drawn on semi-log graph paper. The latter rescales the x-variable without changing it’s values.</p>
-<div class="sourceCode" id="cb725"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb725-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>)</a>
-<a class="sourceLine" id="cb725-2" title="2"></a>
-<a class="sourceLine" id="cb725-3" title="3"><span class="co">#initial values, arbitrary units</span></a>
-<a class="sourceLine" id="cb725-4" title="4">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb725-5" title="5">k &lt;-<span class="st"> </span><span class="fl">3e-7</span></a>
-<a class="sourceLine" id="cb725-6" title="6">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
-<a class="sourceLine" id="cb725-7" title="7">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
-<a class="sourceLine" id="cb725-8" title="8"></a>
-<a class="sourceLine" id="cb725-9" title="9"><span class="co">#hyperbolic formula for linear scale</span></a>
-<a class="sourceLine" id="cb725-10" title="10">y &lt;-<span class="st"> </span>ylo<span class="op">+</span><span class="st"> </span>((yhi<span class="op">-</span>ylo)<span class="op">*</span>x<span class="op">^</span>h)<span class="op">/</span>(k<span class="op">^</span>h<span class="op">+</span>x<span class="op">^</span>h)</a>
-<a class="sourceLine" id="cb725-11" title="11"></a>
-<a class="sourceLine" id="cb725-12" title="12"><span class="co">#linear x scale</span></a>
-<a class="sourceLine" id="cb725-13" title="13"><span class="kw">ggplot</span>(</a>
-<a class="sourceLine" id="cb725-14" title="14">  <span class="kw">data.frame</span>(x, y), </a>
-<a class="sourceLine" id="cb725-15" title="15">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb725-16" title="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb725-17" title="17"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits=</span><span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">1e-5</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb725-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Linear scale&quot;</span>)</a>
-<a class="sourceLine" id="cb725-19" title="19"></a>
-<a class="sourceLine" id="cb725-20" title="20"><span class="co">#log10 x scale</span></a>
-<a class="sourceLine" id="cb725-21" title="21"><span class="kw">ggplot</span>(</a>
-<a class="sourceLine" id="cb725-22" title="22">  <span class="kw">data.frame</span>(x, y), </a>
-<a class="sourceLine" id="cb725-23" title="23">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb725-24" title="24"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb725-25" title="25"><span class="st">  </span><span class="co">#scale_x_log10()+</span></a>
-<a class="sourceLine" id="cb725-26" title="26"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&quot;log10&quot;</span>, <span class="dt">limits=</span> <span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">1e-5</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb725-27" title="27"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Log10 scaled aesthetic&quot;</span>, <span class="dt">x=</span><span class="st">&quot;log10[X]&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb733"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb733-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>)</a>
+<a class="sourceLine" id="cb733-2" title="2"></a>
+<a class="sourceLine" id="cb733-3" title="3"><span class="co">#initial values, arbitrary units</span></a>
+<a class="sourceLine" id="cb733-4" title="4">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb733-5" title="5">k &lt;-<span class="st"> </span><span class="fl">3e-7</span></a>
+<a class="sourceLine" id="cb733-6" title="6">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb733-7" title="7">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
+<a class="sourceLine" id="cb733-8" title="8"></a>
+<a class="sourceLine" id="cb733-9" title="9"><span class="co">#hyperbolic formula for linear scale</span></a>
+<a class="sourceLine" id="cb733-10" title="10">y &lt;-<span class="st"> </span>ylo<span class="op">+</span><span class="st"> </span>((yhi<span class="op">-</span>ylo)<span class="op">*</span>x<span class="op">^</span>h)<span class="op">/</span>(k<span class="op">^</span>h<span class="op">+</span>x<span class="op">^</span>h)</a>
+<a class="sourceLine" id="cb733-11" title="11"></a>
+<a class="sourceLine" id="cb733-12" title="12"><span class="co">#linear x scale</span></a>
+<a class="sourceLine" id="cb733-13" title="13"><span class="kw">ggplot</span>(</a>
+<a class="sourceLine" id="cb733-14" title="14">  <span class="kw">data.frame</span>(x, y), </a>
+<a class="sourceLine" id="cb733-15" title="15">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb733-16" title="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb733-17" title="17"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits=</span><span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">1e-5</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb733-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Linear scale&quot;</span>)</a>
+<a class="sourceLine" id="cb733-19" title="19"></a>
+<a class="sourceLine" id="cb733-20" title="20"><span class="co">#log10 x scale</span></a>
+<a class="sourceLine" id="cb733-21" title="21"><span class="kw">ggplot</span>(</a>
+<a class="sourceLine" id="cb733-22" title="22">  <span class="kw">data.frame</span>(x, y), </a>
+<a class="sourceLine" id="cb733-23" title="23">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb733-24" title="24"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb733-25" title="25"><span class="st">  </span><span class="co">#scale_x_log10()+</span></a>
+<a class="sourceLine" id="cb733-26" title="26"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans=</span><span class="st">&quot;log10&quot;</span>, <span class="dt">limits=</span> <span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">1e-5</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb733-27" title="27"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Log10 scaled aesthetic&quot;</span>, <span class="dt">x=</span><span class="st">&quot;log10[X]&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-380-1.png" width="672" /><img src="jabstb_files/figure-html/unnamed-chunk-380-2.png" width="672" /></p>
 <div id="logx-scaling-the-hyperbolic-function" class="section level4">
 <h4><span class="header-section-number">36.2.2.1</span> LogX scaling the hyperbolic function</h4>
@@ -825,113 +826,113 @@ Figure 36.1: Performing nonlinear regression requires some supervision on your p
 <p>When using a vector on a log scale, the regression is performed using a semi-log transformation of the hyperbolic function: <span class="math display">\[Y=\frac{Y_{max}}{1+10^{(log10K-X)\times h}}\]</span></p>
 <p>Note in the code below that the <span class="math inline">\(X\)</span> is transformed from a linear to log10 scale. Since we are regressing on <span class="math inline">\(log_{10}\)</span> values of <span class="math inline">\(X\)</span>, we solve the <span class="math inline">\(K\)</span> parameter in in log units, as well. The values of <span class="math inline">\(Y\)</span> remain on a linear scale.</p>
 <p>Note also that the log10 of 3e-8 is -7.523, which is approximately a half log unit between 1e-8 and 1e-7. A value of 5e-8, which is half-way between 1e-8 and 1e-7 on a linear scale, is about a third of a log unit (-7.301) between -8 and -7.</p>
-<div class="sourceCode" id="cb726"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb726-1" title="1">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>))</a>
-<a class="sourceLine" id="cb726-2" title="2"><span class="co">#or you could just write these out:</span></a>
-<a class="sourceLine" id="cb726-3" title="3"><span class="co">#x &lt;- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)</span></a>
-<a class="sourceLine" id="cb726-4" title="4"></a>
-<a class="sourceLine" id="cb726-5" title="5">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb726-6" title="6"></a>
-<a class="sourceLine" id="cb726-7" title="7">logk &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="fl">3e-7</span>)</a>
-<a class="sourceLine" id="cb726-8" title="8"></a>
-<a class="sourceLine" id="cb726-9" title="9">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
-<a class="sourceLine" id="cb726-10" title="10">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
-<a class="sourceLine" id="cb726-11" title="11"></a>
-<a class="sourceLine" id="cb726-12" title="12"><span class="co">#hyperbolic semi-log model rewritten as a formula</span></a>
-<a class="sourceLine" id="cb726-13" title="13">y=ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>((logk<span class="op">-</span>x)<span class="op">*</span>h)))</a>
-<a class="sourceLine" id="cb726-14" title="14"></a>
-<a class="sourceLine" id="cb726-15" title="15"><span class="kw">ggplot</span>(</a>
-<a class="sourceLine" id="cb726-16" title="16">  <span class="kw">data.frame</span>(x, y), </a>
-<a class="sourceLine" id="cb726-17" title="17">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb726-18" title="18"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb726-19" title="19"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Linearized X scale by log10(X) transform&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb734"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb734-1" title="1">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>))</a>
+<a class="sourceLine" id="cb734-2" title="2"><span class="co">#or you could just write these out:</span></a>
+<a class="sourceLine" id="cb734-3" title="3"><span class="co">#x &lt;- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)</span></a>
+<a class="sourceLine" id="cb734-4" title="4"></a>
+<a class="sourceLine" id="cb734-5" title="5">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb734-6" title="6"></a>
+<a class="sourceLine" id="cb734-7" title="7">logk &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="fl">3e-7</span>)</a>
+<a class="sourceLine" id="cb734-8" title="8"></a>
+<a class="sourceLine" id="cb734-9" title="9">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb734-10" title="10">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
+<a class="sourceLine" id="cb734-11" title="11"></a>
+<a class="sourceLine" id="cb734-12" title="12"><span class="co">#hyperbolic semi-log model rewritten as a formula</span></a>
+<a class="sourceLine" id="cb734-13" title="13">y=ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>((logk<span class="op">-</span>x)<span class="op">*</span>h)))</a>
+<a class="sourceLine" id="cb734-14" title="14"></a>
+<a class="sourceLine" id="cb734-15" title="15"><span class="kw">ggplot</span>(</a>
+<a class="sourceLine" id="cb734-16" title="16">  <span class="kw">data.frame</span>(x, y), </a>
+<a class="sourceLine" id="cb734-17" title="17">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb734-18" title="18"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb734-19" title="19"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Linearized X scale by log10(X) transform&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-381-1.png" width="672" /></p>
 </div>
 <div id="simulating-hyperbolic-data-with-random-variation" class="section level4">
 <h4><span class="header-section-number">36.2.2.2</span> Simulating hyperbolic data with random variation</h4>
 <p>Sometimes it’s useful to simulate more realistic data possessing random variation (eg, Monte Carlo simulation). In fact, it’s not possible to run the<code>nls</code> function to draw simulated curves using perfect data.</p>
 <p>Simply add a random term (<code>rnorm()</code>), in units of <span class="math inline">\(Y\)</span>, to the formula for the hyperbolic model as shown below:</p>
-<div class="sourceCode" id="cb727"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb727-1" title="1">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>))</a>
-<a class="sourceLine" id="cb727-2" title="2"><span class="co">#x &lt;- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)</span></a>
-<a class="sourceLine" id="cb727-3" title="3"></a>
-<a class="sourceLine" id="cb727-4" title="4">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb727-5" title="5"></a>
-<a class="sourceLine" id="cb727-6" title="6">logk &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="fl">3e-7</span>)</a>
-<a class="sourceLine" id="cb727-7" title="7"></a>
-<a class="sourceLine" id="cb727-8" title="8">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
-<a class="sourceLine" id="cb727-9" title="9">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
-<a class="sourceLine" id="cb727-10" title="10"></a>
-<a class="sourceLine" id="cb727-11" title="11"><span class="co">#hyperbolic function</span></a>
-<a class="sourceLine" id="cb727-12" title="12">y=ylo<span class="op">+</span>(yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>((logk<span class="op">-</span>x)<span class="op">*</span>h)) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(x), <span class="dv">0</span>, <span class="dv">45</span>)</a>
-<a class="sourceLine" id="cb727-13" title="13"></a>
-<a class="sourceLine" id="cb727-14" title="14"><span class="kw">ggplot</span>(</a>
-<a class="sourceLine" id="cb727-15" title="15">  <span class="kw">data.frame</span>(x, y), </a>
-<a class="sourceLine" id="cb727-16" title="16">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb727-17" title="17"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb727-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Linearized X scale by log10(X) transform&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb735-1" title="1">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>))</a>
+<a class="sourceLine" id="cb735-2" title="2"><span class="co">#x &lt;- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)</span></a>
+<a class="sourceLine" id="cb735-3" title="3"></a>
+<a class="sourceLine" id="cb735-4" title="4">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb735-5" title="5"></a>
+<a class="sourceLine" id="cb735-6" title="6">logk &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="fl">3e-7</span>)</a>
+<a class="sourceLine" id="cb735-7" title="7"></a>
+<a class="sourceLine" id="cb735-8" title="8">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb735-9" title="9">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
+<a class="sourceLine" id="cb735-10" title="10"></a>
+<a class="sourceLine" id="cb735-11" title="11"><span class="co">#hyperbolic function</span></a>
+<a class="sourceLine" id="cb735-12" title="12">y=ylo<span class="op">+</span>(yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>((logk<span class="op">-</span>x)<span class="op">*</span>h)) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(x), <span class="dv">0</span>, <span class="dv">45</span>)</a>
+<a class="sourceLine" id="cb735-13" title="13"></a>
+<a class="sourceLine" id="cb735-14" title="14"><span class="kw">ggplot</span>(</a>
+<a class="sourceLine" id="cb735-15" title="15">  <span class="kw">data.frame</span>(x, y), </a>
+<a class="sourceLine" id="cb735-16" title="16">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb735-17" title="17"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb735-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Linearized X scale by log10(X) transform&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-382-1.png" width="672" />
 #### Creating a best fit curve in graph</p>
 <p>It’s very simple to generate an on-the-fly best fit curve using ggplot. This doesn’t yield regression output and parameter values, but it does draw a pretty picture.</p>
 <p>This is on simulated data, but all you’d need to do is pass a data frame of your own <span class="math inline">\(x,y\)</span> data into ggplot and add the <code>stat_smooth function</code> to achieve the same effect. It really is that simple!</p>
 <p>The only trick is knowing the formula that you’d like to model to the data, and coming up with a list of some starting parameter values.</p>
 <p>Note below how it’s been fed some start estimates that are a bit off the mark, given the data points, but it still arrives at a solution that fits well. You should experiment with changing those estimates to get a sense of how far off is too far off before the <code>nls</code> function fails to provide a curve.</p>
-<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb728-1" title="1">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>))</a>
-<a class="sourceLine" id="cb728-2" title="2"><span class="co">#x &lt;- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)</span></a>
-<a class="sourceLine" id="cb728-3" title="3"></a>
-<a class="sourceLine" id="cb728-4" title="4">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb728-5" title="5"></a>
-<a class="sourceLine" id="cb728-6" title="6">logk &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="fl">3e-7</span>)</a>
-<a class="sourceLine" id="cb728-7" title="7"></a>
-<a class="sourceLine" id="cb728-8" title="8">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
-<a class="sourceLine" id="cb728-9" title="9">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
-<a class="sourceLine" id="cb728-10" title="10"></a>
-<a class="sourceLine" id="cb728-11" title="11"><span class="co">#hyperbolic function</span></a>
-<a class="sourceLine" id="cb728-12" title="12">y=ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>((logk<span class="op">-</span>x)<span class="op">*</span>h))) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(x), <span class="dv">0</span>, <span class="dv">45</span>)</a>
-<a class="sourceLine" id="cb728-13" title="13"></a>
-<a class="sourceLine" id="cb728-14" title="14"><span class="kw">ggplot</span>(</a>
-<a class="sourceLine" id="cb728-15" title="15">  <span class="kw">data.frame</span>(x, y), </a>
-<a class="sourceLine" id="cb728-16" title="16">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb728-17" title="17"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb728-18" title="18"><span class="st">  </span><span class="kw">geom_smooth</span>(</a>
-<a class="sourceLine" id="cb728-19" title="19">    <span class="dt">method=</span>nls,</a>
-<a class="sourceLine" id="cb728-20" title="20">    <span class="dt">formula =</span> <span class="st">&quot;y~ylo+((yhi-ylo)/(1+10^((logk-x)*h)))&quot;</span>,</a>
-<a class="sourceLine" id="cb728-21" title="21">              <span class="dt">method.args =</span> <span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb728-22" title="22">                <span class="dt">start=</span><span class="kw">c</span>(<span class="dt">yhi=</span><span class="dv">150</span>,</a>
-<a class="sourceLine" id="cb728-23" title="23">                        <span class="dt">ylo=</span><span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb728-24" title="24">                        <span class="dt">logk=</span><span class="op">-</span><span class="dv">7</span>)</a>
-<a class="sourceLine" id="cb728-25" title="25">                               ),</a>
-<a class="sourceLine" id="cb728-26" title="26">              <span class="dt">se=</span>F, <span class="co">#you need this line for nls smooths!!</span></a>
-<a class="sourceLine" id="cb728-27" title="27">              <span class="dt">color=</span><span class="st">&quot;red&quot;</span></a>
-<a class="sourceLine" id="cb728-28" title="28">    </a>
-<a class="sourceLine" id="cb728-29" title="29">  )<span class="op">+</span></a>
-<a class="sourceLine" id="cb728-30" title="30"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Best fit for random Y values; Linearized X by Log10(X) transform&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb736"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb736-1" title="1">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>))</a>
+<a class="sourceLine" id="cb736-2" title="2"><span class="co">#x &lt;- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)</span></a>
+<a class="sourceLine" id="cb736-3" title="3"></a>
+<a class="sourceLine" id="cb736-4" title="4">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb736-5" title="5"></a>
+<a class="sourceLine" id="cb736-6" title="6">logk &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="fl">3e-7</span>)</a>
+<a class="sourceLine" id="cb736-7" title="7"></a>
+<a class="sourceLine" id="cb736-8" title="8">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb736-9" title="9">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
+<a class="sourceLine" id="cb736-10" title="10"></a>
+<a class="sourceLine" id="cb736-11" title="11"><span class="co">#hyperbolic function</span></a>
+<a class="sourceLine" id="cb736-12" title="12">y=ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>((logk<span class="op">-</span>x)<span class="op">*</span>h))) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(x), <span class="dv">0</span>, <span class="dv">45</span>)</a>
+<a class="sourceLine" id="cb736-13" title="13"></a>
+<a class="sourceLine" id="cb736-14" title="14"><span class="kw">ggplot</span>(</a>
+<a class="sourceLine" id="cb736-15" title="15">  <span class="kw">data.frame</span>(x, y), </a>
+<a class="sourceLine" id="cb736-16" title="16">  <span class="kw">aes</span>(x, y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb736-17" title="17"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb736-18" title="18"><span class="st">  </span><span class="kw">geom_smooth</span>(</a>
+<a class="sourceLine" id="cb736-19" title="19">    <span class="dt">method=</span>nls,</a>
+<a class="sourceLine" id="cb736-20" title="20">    <span class="dt">formula =</span> <span class="st">&quot;y~ylo+((yhi-ylo)/(1+10^((logk-x)*h)))&quot;</span>,</a>
+<a class="sourceLine" id="cb736-21" title="21">              <span class="dt">method.args =</span> <span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb736-22" title="22">                <span class="dt">start=</span><span class="kw">c</span>(<span class="dt">yhi=</span><span class="dv">150</span>,</a>
+<a class="sourceLine" id="cb736-23" title="23">                        <span class="dt">ylo=</span><span class="dv">50</span>,</a>
+<a class="sourceLine" id="cb736-24" title="24">                        <span class="dt">logk=</span><span class="op">-</span><span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb736-25" title="25">                               ),</a>
+<a class="sourceLine" id="cb736-26" title="26">              <span class="dt">se=</span>F, <span class="co">#you need this line for nls smooths!!</span></a>
+<a class="sourceLine" id="cb736-27" title="27">              <span class="dt">color=</span><span class="st">&quot;red&quot;</span></a>
+<a class="sourceLine" id="cb736-28" title="28">    </a>
+<a class="sourceLine" id="cb736-29" title="29">  )<span class="op">+</span></a>
+<a class="sourceLine" id="cb736-30" title="30"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Best fit for random Y values; Linearized X by Log10(X) transform&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-383-1.png" width="672" /></p>
 </div>
 <div id="smoothing" class="section level4">
 <h4><span class="header-section-number">36.2.2.3</span> Smoothing</h4>
 <p>Smoothing is an artistic method to draw a nonlinear regression-ish line through the data. Smooths are more akin to polynomial fits. Every little twist and turn in a smooth would have a corresponding parameter if it were a polynomial regression!</p>
 <p>The underlying calculation is a regression run over a sliding window, called <code>span</code> in R. If that span is small, the smooth is closer to point-to-point. And if the span is larger, the smooth is smoother. You simply adjust the value of span to dial in a curve that suites your eye.</p>
-<div class="sourceCode" id="cb729"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb729-1" title="1"><span class="kw">set.seed</span>(<span class="dv">12345</span>)</a>
-<a class="sourceLine" id="cb729-2" title="2">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>))</a>
-<a class="sourceLine" id="cb729-3" title="3"><span class="co">#x &lt;- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)</span></a>
-<a class="sourceLine" id="cb729-4" title="4"></a>
-<a class="sourceLine" id="cb729-5" title="5">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb729-6" title="6"></a>
-<a class="sourceLine" id="cb729-7" title="7">logk &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="fl">3e-7</span>)</a>
-<a class="sourceLine" id="cb729-8" title="8"></a>
-<a class="sourceLine" id="cb729-9" title="9">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
-<a class="sourceLine" id="cb729-10" title="10">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
-<a class="sourceLine" id="cb729-11" title="11"></a>
-<a class="sourceLine" id="cb729-12" title="12"><span class="co">#hyperbolic function</span></a>
-<a class="sourceLine" id="cb729-13" title="13">y=ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>((logk<span class="op">-</span>x)<span class="op">*</span>h))) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(x), <span class="dv">0</span>, <span class="dv">45</span>)</a>
-<a class="sourceLine" id="cb729-14" title="14"></a>
-<a class="sourceLine" id="cb729-15" title="15"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), (<span class="kw">aes</span>(x, y)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb729-16" title="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb729-17" title="17"><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;auto&quot;</span>,</a>
-<a class="sourceLine" id="cb729-18" title="18">             <span class="dt">se=</span>F,</a>
-<a class="sourceLine" id="cb729-19" title="19">              <span class="dt">color=</span><span class="st">&quot;red&quot;</span> ,</a>
-<a class="sourceLine" id="cb729-20" title="20">              <span class="dt">span=</span><span class="fl">0.8</span></a>
-<a class="sourceLine" id="cb729-21" title="21">              )<span class="op">+</span></a>
-<a class="sourceLine" id="cb729-22" title="22"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;mRNA levels&quot;</span>, <span class="dt">x=</span><span class="st">&quot;time, min&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb737-1" title="1"><span class="kw">set.seed</span>(<span class="dv">12345</span>)</a>
+<a class="sourceLine" id="cb737-2" title="2">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="fl">1e-8</span>, <span class="fl">3e-8</span>, <span class="fl">1e-7</span>, <span class="fl">3e-7</span>, <span class="fl">1e-6</span>, <span class="fl">3e-6</span>, <span class="fl">1e-5</span>))</a>
+<a class="sourceLine" id="cb737-3" title="3"><span class="co">#x &lt;- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)</span></a>
+<a class="sourceLine" id="cb737-4" title="4"></a>
+<a class="sourceLine" id="cb737-5" title="5">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb737-6" title="6"></a>
+<a class="sourceLine" id="cb737-7" title="7">logk &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="fl">3e-7</span>)</a>
+<a class="sourceLine" id="cb737-8" title="8"></a>
+<a class="sourceLine" id="cb737-9" title="9">ylo &lt;-<span class="st"> </span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb737-10" title="10">yhi &lt;-<span class="st"> </span><span class="dv">330</span></a>
+<a class="sourceLine" id="cb737-11" title="11"></a>
+<a class="sourceLine" id="cb737-12" title="12"><span class="co">#hyperbolic function</span></a>
+<a class="sourceLine" id="cb737-13" title="13">y=ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>((logk<span class="op">-</span>x)<span class="op">*</span>h))) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(x), <span class="dv">0</span>, <span class="dv">45</span>)</a>
+<a class="sourceLine" id="cb737-14" title="14"></a>
+<a class="sourceLine" id="cb737-15" title="15"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), (<span class="kw">aes</span>(x, y)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb737-16" title="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">4</span>, <span class="dt">color=</span><span class="st">&quot;#f2a900&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb737-17" title="17"><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;auto&quot;</span>,</a>
+<a class="sourceLine" id="cb737-18" title="18">             <span class="dt">se=</span>F,</a>
+<a class="sourceLine" id="cb737-19" title="19">              <span class="dt">color=</span><span class="st">&quot;red&quot;</span> ,</a>
+<a class="sourceLine" id="cb737-20" title="20">              <span class="dt">span=</span><span class="fl">0.8</span></a>
+<a class="sourceLine" id="cb737-21" title="21">              )<span class="op">+</span></a>
+<a class="sourceLine" id="cb737-22" title="22"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;mRNA levels&quot;</span>, <span class="dt">x=</span><span class="st">&quot;time, min&quot;</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-384-1.png" width="672" /></p>
 </div>
@@ -981,24 +982,24 @@ Figure 36.2: Choosing the right model for your data is a scientific decision.
 <p>Hyperbolic models can either be stimulation or inhibitory. There are a few different ways to model the latter.</p>
 <p>The simplest is to use a negative Hill slope in the standard hyperbolic formula.</p>
 <p><code>y &lt;- ylo+ ((yhi-ylo)*x^h)/(k^h+x^h)</code></p>
-<div class="sourceCode" id="cb731"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb731-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
-<a class="sourceLine" id="cb731-2" title="2"></a>
-<a class="sourceLine" id="cb731-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb731-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb731-5" title="5">h &lt;-<span class="st"> </span><span class="dv">-1</span></a>
-<a class="sourceLine" id="cb731-6" title="6">k &lt;-<span class="st"> </span><span class="dv">30</span></a>
-<a class="sourceLine" id="cb731-7" title="7"></a>
-<a class="sourceLine" id="cb731-8" title="8">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span>x<span class="op">^</span>h)<span class="op">/</span>(k<span class="op">^</span>h<span class="op">+</span>x<span class="op">^</span>h)</a>
-<a class="sourceLine" id="cb731-9" title="9"></a>
-<a class="sourceLine" id="cb731-10" title="10"><span class="co">#linear plot</span></a>
-<a class="sourceLine" id="cb731-11" title="11"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb731-12" title="12"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb731-13" title="13"></a>
-<a class="sourceLine" id="cb731-14" title="14"><span class="co">#log plot</span></a>
-<a class="sourceLine" id="cb731-15" title="15"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb731-16" title="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb731-17" title="17"><span class="st">  </span><span class="kw">scale_x_log10</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb731-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Log10(x)&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb739-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
+<a class="sourceLine" id="cb739-2" title="2"></a>
+<a class="sourceLine" id="cb739-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb739-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb739-5" title="5">h &lt;-<span class="st"> </span><span class="dv">-1</span></a>
+<a class="sourceLine" id="cb739-6" title="6">k &lt;-<span class="st"> </span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb739-7" title="7"></a>
+<a class="sourceLine" id="cb739-8" title="8">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span>x<span class="op">^</span>h)<span class="op">/</span>(k<span class="op">^</span>h<span class="op">+</span>x<span class="op">^</span>h)</a>
+<a class="sourceLine" id="cb739-9" title="9"></a>
+<a class="sourceLine" id="cb739-10" title="10"><span class="co">#linear plot</span></a>
+<a class="sourceLine" id="cb739-11" title="11"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb739-12" title="12"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb739-13" title="13"></a>
+<a class="sourceLine" id="cb739-14" title="14"><span class="co">#log plot</span></a>
+<a class="sourceLine" id="cb739-15" title="15"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb739-16" title="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb739-17" title="17"><span class="st">  </span><span class="kw">scale_x_log10</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb739-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Log10(x)&quot;</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-386"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-386-1.png" alt="Inhibition: Linear and log plots" width="288" /><img src="jabstb_files/figure-html/unnamed-chunk-386-2.png" alt="Inhibition: Linear and log plots" width="288" />
 <p class="caption">
@@ -1008,24 +1009,24 @@ Figure 36.3: Inhibition: Linear and log plots
 <p>Alternately, the hyperbolic function can be inverted algebraically, deriving this model:</p>
 <p><span class="math display">\[Y=\frac{Y_{max}}{1+\frac{X^h}{K^h}}\]</span></p>
 <p>Whose formula is <code>y=ylo+((yhi-ylo)/(1+x^h/k^h))</code></p>
-<div class="sourceCode" id="cb732"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb732-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
-<a class="sourceLine" id="cb732-2" title="2"></a>
-<a class="sourceLine" id="cb732-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb732-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb732-5" title="5">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb732-6" title="6">k &lt;-<span class="st"> </span><span class="dv">30</span></a>
-<a class="sourceLine" id="cb732-7" title="7"></a>
-<a class="sourceLine" id="cb732-8" title="8">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>x<span class="op">^</span>h<span class="op">/</span>k<span class="op">^</span>h))</a>
-<a class="sourceLine" id="cb732-9" title="9"></a>
-<a class="sourceLine" id="cb732-10" title="10"><span class="co">#linear</span></a>
-<a class="sourceLine" id="cb732-11" title="11"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb732-12" title="12"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb732-13" title="13"></a>
-<a class="sourceLine" id="cb732-14" title="14"><span class="co">#log</span></a>
-<a class="sourceLine" id="cb732-15" title="15"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb732-16" title="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb732-17" title="17"><span class="st">  </span><span class="kw">scale_x_log10</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb732-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Log10(x)&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb740"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb740-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
+<a class="sourceLine" id="cb740-2" title="2"></a>
+<a class="sourceLine" id="cb740-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb740-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb740-5" title="5">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb740-6" title="6">k &lt;-<span class="st"> </span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb740-7" title="7"></a>
+<a class="sourceLine" id="cb740-8" title="8">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>((yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>x<span class="op">^</span>h<span class="op">/</span>k<span class="op">^</span>h))</a>
+<a class="sourceLine" id="cb740-9" title="9"></a>
+<a class="sourceLine" id="cb740-10" title="10"><span class="co">#linear</span></a>
+<a class="sourceLine" id="cb740-11" title="11"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb740-12" title="12"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb740-13" title="13"></a>
+<a class="sourceLine" id="cb740-14" title="14"><span class="co">#log</span></a>
+<a class="sourceLine" id="cb740-15" title="15"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb740-16" title="16"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb740-17" title="17"><span class="st">  </span><span class="kw">scale_x_log10</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb740-18" title="18"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Log10(x)&quot;</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-387"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-387-1.png" alt="More inhibition: Linear and log plots" width="288" /><img src="jabstb_files/figure-html/unnamed-chunk-387-2.png" alt="More inhibition: Linear and log plots" width="288" />
 <p class="caption">
@@ -1035,19 +1036,19 @@ Figure 36.4: More inhibition: Linear and log plots
 <p>Finally, a model for inhibition on a log10 scale would be:</p>
 <p><span class="math inline">\(Y=\frac{Y_{max}}{1+10^{(X-log10(K))*h}}\)</span></p>
 <p><code>y=ylo+(yhi-ylo)/(1+10^(x-log10(K))*h)</code></p>
-<div class="sourceCode" id="cb733"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb733-1" title="1">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>))</a>
-<a class="sourceLine" id="cb733-2" title="2"></a>
-<a class="sourceLine" id="cb733-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb733-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb733-5" title="5">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb733-6" title="6">K  &lt;-<span class="st"> </span><span class="dv">45</span></a>
-<a class="sourceLine" id="cb733-7" title="7"></a>
-<a class="sourceLine" id="cb733-8" title="8">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>(yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>(x<span class="op">-</span><span class="kw">log10</span>(K))<span class="op">*</span>h) </a>
-<a class="sourceLine" id="cb733-9" title="9"></a>
-<a class="sourceLine" id="cb733-10" title="10"></a>
-<a class="sourceLine" id="cb733-11" title="11"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb733-12" title="12"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb733-13" title="13"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Log10(x)&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb741"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb741-1" title="1">x &lt;-<span class="st"> </span><span class="kw">log10</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>))</a>
+<a class="sourceLine" id="cb741-2" title="2"></a>
+<a class="sourceLine" id="cb741-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb741-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb741-5" title="5">h &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb741-6" title="6">K  &lt;-<span class="st"> </span><span class="dv">45</span></a>
+<a class="sourceLine" id="cb741-7" title="7"></a>
+<a class="sourceLine" id="cb741-8" title="8">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>(yhi<span class="op">-</span>ylo)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="dv">10</span><span class="op">^</span>(x<span class="op">-</span><span class="kw">log10</span>(K))<span class="op">*</span>h) </a>
+<a class="sourceLine" id="cb741-9" title="9"></a>
+<a class="sourceLine" id="cb741-10" title="10"></a>
+<a class="sourceLine" id="cb741-11" title="11"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb741-12" title="12"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb741-13" title="13"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Log10(x)&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-388-1.png" width="672" /></p>
 </div>
 <div id="time-series" class="section level4">
@@ -1056,40 +1057,40 @@ Figure 36.4: More inhibition: Linear and log plots
 <p>Here, the independent variable is time <span class="math inline">\(t\)</span>, in whatever units. The rate constant for a first order process has units of reciprocal time and is related to half-life: <span class="math inline">\(k=0.693/t_{1/2}\)</span></p>
 <p>Here’s a generalized formula of it: <code>y=ylo+(yhi-ylo)*exp(-k*x)</code></p>
 <p>A diagnostic of a first order decay process is that log10 transformation of <span class="math inline">\(Y\)</span> yields a linear response with time.</p>
-<div class="sourceCode" id="cb734"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb734-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
-<a class="sourceLine" id="cb734-2" title="2"></a>
-<a class="sourceLine" id="cb734-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb734-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb734-5" title="5">k &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">2</span>)<span class="op">/</span><span class="dv">30</span></a>
-<a class="sourceLine" id="cb734-6" title="6"></a>
-<a class="sourceLine" id="cb734-7" title="7">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>(yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>x)</a>
-<a class="sourceLine" id="cb734-8" title="8"></a>
-<a class="sourceLine" id="cb734-9" title="9"><span class="co">#linear</span></a>
-<a class="sourceLine" id="cb734-10" title="10"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x, y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb734-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb742"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb742-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
+<a class="sourceLine" id="cb742-2" title="2"></a>
+<a class="sourceLine" id="cb742-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb742-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb742-5" title="5">k &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">2</span>)<span class="op">/</span><span class="dv">30</span></a>
+<a class="sourceLine" id="cb742-6" title="6"></a>
+<a class="sourceLine" id="cb742-7" title="7">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>(yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>x)</a>
+<a class="sourceLine" id="cb742-8" title="8"></a>
+<a class="sourceLine" id="cb742-9" title="9"><span class="co">#linear</span></a>
+<a class="sourceLine" id="cb742-10" title="10"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x, y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb742-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-389-1.png" width="672" /></p>
-<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb735-1" title="1"><span class="co">#log</span></a>
-<a class="sourceLine" id="cb735-2" title="2"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x, y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb735-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb735-4" title="4"><span class="st">  </span><span class="kw">scale_y_log10</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb735-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;Log10(y)&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb743-1" title="1"><span class="co">#log</span></a>
+<a class="sourceLine" id="cb743-2" title="2"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x, y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb743-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb743-4" title="4"><span class="st">  </span><span class="kw">scale_y_log10</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb743-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;Log10(y)&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-389-2.png" width="672" /></p>
 </div>
 <div id="rythmic-functions" class="section level4">
 <h4><span class="header-section-number">36.3.2.3</span> Rythmic functions</h4>
 <p>Rhythmic phenomena can be modeled using sine-wave function for given amplitudes <span class="math inline">\(\alpha\)</span>, wavelengths <span class="math inline">\(\lambda\)</span> and/or frequencies <span class="math inline">\(\frac{1}{\lambda}\)</span> and phase shifts <span class="math inline">\(\varphi\)</span>: <span class="math display">\[Y=\alpha sin\frac{2\pi}{\lambda}X+\varphi\]</span></p>
 <p>Here’s a formula: <code>y=ylo+(yhi-ylo)*sin(2*(pi/lambda)*x)+phi</code></p>
-<div class="sourceCode" id="cb736"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb736-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
-<a class="sourceLine" id="cb736-2" title="2"></a>
-<a class="sourceLine" id="cb736-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb736-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb736-5" title="5">lambda &lt;-<span class="dv">20</span></a>
-<a class="sourceLine" id="cb736-6" title="6">phi &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb736-7" title="7"></a>
-<a class="sourceLine" id="cb736-8" title="8">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>(yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>(pi<span class="op">/</span>lambda)<span class="op">*</span>x)<span class="op">+</span>phi</a>
-<a class="sourceLine" id="cb736-9" title="9"></a>
-<a class="sourceLine" id="cb736-10" title="10"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb736-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb744"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb744-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
+<a class="sourceLine" id="cb744-2" title="2"></a>
+<a class="sourceLine" id="cb744-3" title="3">ylo &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb744-4" title="4">yhi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb744-5" title="5">lambda &lt;-<span class="dv">20</span></a>
+<a class="sourceLine" id="cb744-6" title="6">phi &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb744-7" title="7"></a>
+<a class="sourceLine" id="cb744-8" title="8">y &lt;-<span class="st"> </span>ylo<span class="op">+</span>(yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>(pi<span class="op">/</span>lambda)<span class="op">*</span>x)<span class="op">+</span>phi</a>
+<a class="sourceLine" id="cb744-9" title="9"></a>
+<a class="sourceLine" id="cb744-10" title="10"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x,y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb744-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-390-1.png" width="672" /></p>
 </div>
 <div id="polynomial-functions" class="section level4">
@@ -1097,19 +1098,19 @@ Figure 36.4: More inhibition: Linear and log plots
 <p>Virtually any nonlinear process can be modeled with outstanding fit using a high-order polynomial function. For example: <span class="math display">\[Y=\beta_0 + \beta_1X + \beta_2X^2 + \beta_3X^3 + \beta_4X^4 + \beta_5X^5 \]</span></p>
 <p>Often, however, it is not clear exactly what are the physical parameters that correspond to those coefficients. Polynomials can give you incredibly good uninterpretable fits to data.</p>
 <p>Nevertheless, here is the formula: <code>y=beta0+beta1*x+beta2*x^2+beta3*x^3+beta4*x^4+beta5*x^5</code></p>
-<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb737-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
-<a class="sourceLine" id="cb737-2" title="2"></a>
-<a class="sourceLine" id="cb737-3" title="3">beta0 &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb737-4" title="4">beta1 &lt;-<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb737-5" title="5">beta2 &lt;-<span class="st"> </span><span class="fl">0.01</span></a>
-<a class="sourceLine" id="cb737-6" title="6">beta3 &lt;-<span class="st"> </span><span class="fl">0.001</span></a>
-<a class="sourceLine" id="cb737-7" title="7">beta4 &lt;-<span class="st"> </span><span class="fl">0.0001</span></a>
-<a class="sourceLine" id="cb737-8" title="8">beta5 &lt;-<span class="st"> </span><span class="fl">-0.00001</span></a>
-<a class="sourceLine" id="cb737-9" title="9"></a>
-<a class="sourceLine" id="cb737-10" title="10">y &lt;-<span class="st"> </span>beta0<span class="op">+</span>beta1<span class="op">*</span>x<span class="op">+</span>beta2<span class="op">*</span>x<span class="op">^</span><span class="dv">2</span><span class="op">+</span>beta3<span class="op">*</span>x<span class="op">^</span><span class="dv">3</span><span class="op">+</span>beta4<span class="op">*</span>x<span class="op">^</span><span class="dv">4</span><span class="op">+</span>beta5<span class="op">*</span>x<span class="op">^</span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb737-11" title="11"></a>
-<a class="sourceLine" id="cb737-12" title="12"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x, y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb737-13" title="13"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb745-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">60</span>)</a>
+<a class="sourceLine" id="cb745-2" title="2"></a>
+<a class="sourceLine" id="cb745-3" title="3">beta0 &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb745-4" title="4">beta1 &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb745-5" title="5">beta2 &lt;-<span class="st"> </span><span class="fl">0.01</span></a>
+<a class="sourceLine" id="cb745-6" title="6">beta3 &lt;-<span class="st"> </span><span class="fl">0.001</span></a>
+<a class="sourceLine" id="cb745-7" title="7">beta4 &lt;-<span class="st"> </span><span class="fl">0.0001</span></a>
+<a class="sourceLine" id="cb745-8" title="8">beta5 &lt;-<span class="st"> </span><span class="fl">-0.00001</span></a>
+<a class="sourceLine" id="cb745-9" title="9"></a>
+<a class="sourceLine" id="cb745-10" title="10">y &lt;-<span class="st"> </span>beta0<span class="op">+</span>beta1<span class="op">*</span>x<span class="op">+</span>beta2<span class="op">*</span>x<span class="op">^</span><span class="dv">2</span><span class="op">+</span>beta3<span class="op">*</span>x<span class="op">^</span><span class="dv">3</span><span class="op">+</span>beta4<span class="op">*</span>x<span class="op">^</span><span class="dv">4</span><span class="op">+</span>beta5<span class="op">*</span>x<span class="op">^</span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb745-11" title="11"></a>
+<a class="sourceLine" id="cb745-12" title="12"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x, y), <span class="kw">aes</span>(x,y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb745-13" title="13"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-391-1.png" width="672" /></p>
 
 </div>

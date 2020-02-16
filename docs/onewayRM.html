@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -729,11 +730,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="onewayRM" class="section level1">
 <h1><span class="header-section-number">Chapter 28</span> One-way ANOVA Related Measures</h1>
-<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb613-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb613-2" title="2"><span class="kw">library</span>(readxl)</a>
-<a class="sourceLine" id="cb613-3" title="3"><span class="kw">library</span>(viridis)</a>
-<a class="sourceLine" id="cb613-4" title="4"><span class="kw">library</span>(ez)</a>
-<a class="sourceLine" id="cb613-5" title="5"><span class="kw">library</span>(lme4)</a></code></pre></div>
+<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb621-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb621-2" title="2"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb621-3" title="3"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb621-4" title="4"><span class="kw">library</span>(ez)</a>
+<a class="sourceLine" id="cb621-5" title="5"><span class="kw">library</span>(lme4)</a></code></pre></div>
 <p>The analysis, interpretation and presentation of a one-way ANOVA related/repeated measures experimental design is covered in this chapter.</p>
 <p>This design has one predictor variable that is imposed at three or more levels.</p>
 <p>But the essential feature of the RM design that distinguishes it from a CR design is that the measurements of the outcome variable are intrinsically related for all levels of the predictor. Thus, a train of measurements, one for each level of the predictor variable, are taken from a single independent replicate.</p>
@@ -747,12 +748,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">28.1</span> Data prep</h2>
 <p>The data are in a file called <code>Jaxwest2.xls</code>, which can be downloaded from the Jackson Labs <a href="https://phenome.jax.org/projects/Jaxwest2">here</a>. That site offers more details about the study design than are listd here.</p>
 <p>The munge <a href="jaxwest2.html#jaxwest2">has already been done conducted</a>. For clarity, the script won’t be shown again here. However, it is used in this chapter to create a data frame object <code>jw2vol</code> to be used for plotting and statistical analysis.</p>
-<div class="sourceCode" id="cb614"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb614-1" title="1"><span class="kw">ggplot</span>(jw2vol, <span class="kw">aes</span>(</a>
-<a class="sourceLine" id="cb614-2" title="2">  day, tumor_vol, <span class="dt">group=</span>mouse_ID, <span class="dt">color=</span>mouse_ID))<span class="op">+</span></a>
-<a class="sourceLine" id="cb614-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">3</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb614-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb614-5" title="5"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)<span class="op">+</span></a>
-<a class="sourceLine" id="cb614-6" title="6"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb622"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb622-1" title="1"><span class="kw">ggplot</span>(jw2vol, <span class="kw">aes</span>(</a>
+<a class="sourceLine" id="cb622-2" title="2">  day, tumor_vol, <span class="dt">group=</span>mouse_ID, <span class="dt">color=</span>mouse_ID))<span class="op">+</span></a>
+<a class="sourceLine" id="cb622-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">3</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb622-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb622-5" title="5"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)<span class="op">+</span></a>
+<a class="sourceLine" id="cb622-6" title="6"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
 <div class="figure"><span id="fig:Plot"></span>
 <img src="jabstb_files/figure-html/Plot-1.png" alt="Connected points illustrate each replicate and the repeated-measures aspect of the experimental design." width="480" />
 <p class="caption">
@@ -769,14 +770,14 @@ Figure 28.1: Connected points illustrate each replicate and the repeated-measure
 <p>A detailed ANOVA table is called. There are additional arguments that could be made for custom situations. Consult <code>?ezANOVA</code> for more information.</p>
 <p>The model for the RM design has two components, one for <code>day</code> and the other for the <code>mouse_ID</code>. The SS partitioning for the complete model is <span class="math inline">\(SS_{total}=SS_{day} + SS_{error}\)</span>, where <span class="math inline">\(SS_{error}= SS_{mouse_ID} + SS_{residual}\)</span>. Because it is a repeated measures design, we can account for the random variation associated with differences in mice, <span class="math inline">\(SS_{mouse_ID}\)</span>. Thereby using a reduced error term, <span class="math inline">\(SS_{residual}\)</span>, in the F-test for the effect of <code>day</code>.</p>
 <p>There are a few ways to output the analysis. Here’s the simplest:</p>
-<div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb615-1" title="1">one_wayRM &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(<span class="dt">data =</span> jw2vol,</a>
-<a class="sourceLine" id="cb615-2" title="2">                     <span class="dt">dv =</span> tumor_vol,</a>
-<a class="sourceLine" id="cb615-3" title="3">                     <span class="dt">wid =</span> mouse_ID,</a>
-<a class="sourceLine" id="cb615-4" title="4">                     <span class="dt">within =</span> day,</a>
-<a class="sourceLine" id="cb615-5" title="5">                     <span class="dt">type =</span> <span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb615-6" title="6">                     <span class="dt">detailed =</span>T,</a>
-<a class="sourceLine" id="cb615-7" title="7">                     <span class="dt">return_aov=</span>F)</a>
-<a class="sourceLine" id="cb615-8" title="8">one_wayRM</a></code></pre></div>
+<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb623-1" title="1">one_wayRM &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(<span class="dt">data =</span> jw2vol,</a>
+<a class="sourceLine" id="cb623-2" title="2">                     <span class="dt">dv =</span> tumor_vol,</a>
+<a class="sourceLine" id="cb623-3" title="3">                     <span class="dt">wid =</span> mouse_ID,</a>
+<a class="sourceLine" id="cb623-4" title="4">                     <span class="dt">within =</span> day,</a>
+<a class="sourceLine" id="cb623-5" title="5">                     <span class="dt">type =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb623-6" title="6">                     <span class="dt">detailed =</span>T,</a>
+<a class="sourceLine" id="cb623-7" title="7">                     <span class="dt">return_aov=</span>F)</a>
+<a class="sourceLine" id="cb623-8" title="8">one_wayRM</a></code></pre></div>
 <pre><code>## $ANOVA
 ##        Effect DFn DFd      SSn     SSd         F            p p&lt;.05       ges
 ## 1 (Intercept)   1  10 25544522 2479228 103.03417 1.385832e-06     * 0.8203288
@@ -803,13 +804,13 @@ The value of 0.829 can be interpreted as follows: 82.9% of the observed variatio
 <p>First, all pairwise comparisons are made using a paired t-test to generate a matrix of all p-values. Importantly, these p-values are unadjusted.</p>
 <p>Second, a vector of select p-values will be collected from this matrix. These p-values will then passed into the <code>p.adjust</code> function so that they are adjusted for multiple comparisons.</p>
 <p>First, the pairwise t-test. Note the arguments. No adjustment is made (yet) and a two-sided paired t-test is called. The output of the function is stored in an object named <code>m</code>.</p>
-<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb617-1" title="1">m &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(<span class="dt">x =</span> jw2vol<span class="op">$</span>tumor_vol, </a>
-<a class="sourceLine" id="cb617-2" title="2">                     <span class="dt">g =</span> jw2vol<span class="op">$</span>day, </a>
-<a class="sourceLine" id="cb617-3" title="3">                     <span class="dt">p.adjust =</span> <span class="st">&quot;none&quot;</span>, </a>
-<a class="sourceLine" id="cb617-4" title="4">                     <span class="dt">paired =</span> T,</a>
-<a class="sourceLine" id="cb617-5" title="5">                     <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span></a>
-<a class="sourceLine" id="cb617-6" title="6">                     )</a>
-<a class="sourceLine" id="cb617-7" title="7">m</a></code></pre></div>
+<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb625-1" title="1">m &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(<span class="dt">x =</span> jw2vol<span class="op">$</span>tumor_vol, </a>
+<a class="sourceLine" id="cb625-2" title="2">                     <span class="dt">g =</span> jw2vol<span class="op">$</span>day, </a>
+<a class="sourceLine" id="cb625-3" title="3">                     <span class="dt">p.adjust =</span> <span class="st">&quot;none&quot;</span>, </a>
+<a class="sourceLine" id="cb625-4" title="4">                     <span class="dt">paired =</span> T,</a>
+<a class="sourceLine" id="cb625-5" title="5">                     <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span></a>
+<a class="sourceLine" id="cb625-6" title="6">                     )</a>
+<a class="sourceLine" id="cb625-7" title="7">m</a></code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using paired t tests 
 ## 
@@ -844,7 +845,7 @@ The value of 0.829 can be interpreted as follows: 82.9% of the observed variatio
 ## 
 ## P value adjustment method: none</code></pre>
 <p>The <code>pairwise.t.test output</code> <code>m</code> is a list of 4 elements.</p>
-<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb619-1" title="1"><span class="kw">str</span>(m)</a></code></pre></div>
+<div class="sourceCode" id="cb627"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb627-1" title="1"><span class="kw">str</span>(m)</a></code></pre></div>
 <pre><code>## List of 4
 ##  $ method         : chr &quot;paired t tests&quot;
 ##  $ data.name      : chr &quot;jw2vol$tumor_vol and jw2vol$day&quot;
@@ -855,22 +856,22 @@ The value of 0.829 can be interpreted as follows: 82.9% of the observed variatio
 ##  $ p.adjust.method: chr &quot;none&quot;
 ##  - attr(*, &quot;class&quot;)= chr &quot;pairwise.htest&quot;</code></pre>
 <p>The most important of these is <code>$p.value</code>, which you can see is a matrix.</p>
-<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb621-1" title="1"><span class="kw">class</span>(m<span class="op">$</span>p.value)</a></code></pre></div>
+<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb629-1" title="1"><span class="kw">class</span>(m<span class="op">$</span>p.value)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <p>The matrix contains p-values that represent the outcome of paired t-tests for tumor_vol between all possible combinations of days.</p>
 <p>Thus, the p-value in the cell defined by the first row and first column of the matrix (<code>m$p.value[1,1]=0.00182</code>) reflects that for the mean difference in tumor_vol between the 17th and 18th days.</p>
 <p>The first column of p-values, <code>m$p.value[,1]</code>, are paired t-test comparisons of tumor_vol between the 17th day and each of the days 18 through 44.</p>
-<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb623-1" title="1">pv &lt;-<span class="st"> </span>m<span class="op">$</span>p.value[,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb623-2" title="2">pv</a></code></pre></div>
+<div class="sourceCode" id="cb631"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb631-1" title="1">pv &lt;-<span class="st"> </span>m<span class="op">$</span>p.value[,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb631-2" title="2">pv</a></code></pre></div>
 <pre><code>##           18           19           22           24           26           29 
 ## 1.820962e-03 6.908852e-05 4.070177e-05 4.196400e-04 6.396672e-05 2.284286e-05 
 ##           31           33           36           38           40           44 
 ## 1.434352e-05 1.320905e-05 1.030862e-06 1.299382e-06 6.341556e-06 7.021455e-07</code></pre>
 <p>To create the adjusted p-values, we pass the vector of p-values <code>pv</code> selected from the p-value matrix <code>m</code> into the <code>p.adjust</code> function. Use your judgement to select an adjustment method that you deem most appropriate.</p>
-<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb625-1" title="1"><span class="kw">p.adjust</span>(<span class="dt">p =</span> pv,</a>
-<a class="sourceLine" id="cb625-2" title="2">         <span class="dt">method =</span> <span class="st">&quot;holm&quot;</span>,</a>
-<a class="sourceLine" id="cb625-3" title="3">         <span class="dt">n =</span> <span class="kw">length</span>(pv)</a>
-<a class="sourceLine" id="cb625-4" title="4">         )</a></code></pre></div>
+<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb633-1" title="1"><span class="kw">p.adjust</span>(<span class="dt">p =</span> pv,</a>
+<a class="sourceLine" id="cb633-2" title="2">         <span class="dt">method =</span> <span class="st">&quot;holm&quot;</span>,</a>
+<a class="sourceLine" id="cb633-3" title="3">         <span class="dt">n =</span> <span class="kw">length</span>(pv)</a>
+<a class="sourceLine" id="cb633-4" title="4">         )</a></code></pre></div>
 <pre><code>##           18           19           22           24           26           29 
 ## 1.820962e-03 2.558669e-04 2.035088e-04 8.392799e-04 2.558669e-04 1.370571e-04 
 ##           31           33           36           38           40           44 
