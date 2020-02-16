@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -772,23 +773,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4><span class="header-section-number">40.2.1.1</span> Graphical relationships between proportions, odds and logit</h4>
 <p>Sometimes it’s helpful to visualize the relationships between these parameters graphically.</p>
 <p>The first graph, which is on a linear scale, illustrates how odds are an exponential function of probability. The second graph is on a semi-log scale. Log transformation of odds yields logit, which has a log-linear relationship with probability.</p>
-<div class="sourceCode" id="cb835"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb835-1" title="1">a &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">99</span>, <span class="dv">1</span>, <span class="dv">-1</span>)</a>
-<a class="sourceLine" id="cb835-2" title="2">d &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">99</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb835-3" title="3"></a>
-<a class="sourceLine" id="cb835-4" title="4">p &lt;-<span class="st"> </span>a<span class="op">/</span>(a<span class="op">+</span>d)</a>
-<a class="sourceLine" id="cb835-5" title="5">odds &lt;-<span class="st"> </span>p<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>p)</a>
-<a class="sourceLine" id="cb835-6" title="6">logit &lt;-<span class="st"> </span><span class="kw">log</span>(p<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>p))</a>
-<a class="sourceLine" id="cb835-7" title="7"></a>
-<a class="sourceLine" id="cb835-8" title="8"><span class="kw">ggplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb835-9" title="9"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(p, odds))</a></code></pre></div>
+<div class="sourceCode" id="cb843"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb843-1" title="1">a &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">99</span>, <span class="dv">1</span>, <span class="dv">-1</span>)</a>
+<a class="sourceLine" id="cb843-2" title="2">d &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">99</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb843-3" title="3"></a>
+<a class="sourceLine" id="cb843-4" title="4">p &lt;-<span class="st"> </span>a<span class="op">/</span>(a<span class="op">+</span>d)</a>
+<a class="sourceLine" id="cb843-5" title="5">odds &lt;-<span class="st"> </span>p<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>p)</a>
+<a class="sourceLine" id="cb843-6" title="6">logit &lt;-<span class="st"> </span><span class="kw">log</span>(p<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>p))</a>
+<a class="sourceLine" id="cb843-7" title="7"></a>
+<a class="sourceLine" id="cb843-8" title="8"><span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb843-9" title="9"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(p, odds))</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-4401"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-440-1.png" alt="Odds are an exponential function of probability." width="672" />
 <p class="caption">
 Figure 40.1: Odds are an exponential function of probability.
 </p>
 </div>
-<div class="sourceCode" id="cb836"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb836-1" title="1"><span class="kw">ggplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb836-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(p, logit))</a></code></pre></div>
+<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb844-1" title="1"><span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb844-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(p, logit))</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-4402"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-440-2.png" alt="Odds are an exponential function of probability." width="672" />
 <p class="caption">
@@ -796,13 +797,13 @@ Figure 40.2: Odds are an exponential function of probability.
 </p>
 </div>
 <p>The graph below provides, I think, the most intuitive way to think about what logit values mean. Their relationship to probability is almost switch-like. For example, a log odds value of 3 indicates that an outcome is highly probable.</p>
-<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb837-1" title="1">logit &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb837-2" title="2"></a>
-<a class="sourceLine" id="cb837-3" title="3">p &lt;-<span class="st"> </span><span class="kw">exp</span>(logit)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="kw">exp</span>(logit))</a>
-<a class="sourceLine" id="cb837-4" title="4"></a>
-<a class="sourceLine" id="cb837-5" title="5"><span class="kw">ggplot</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb837-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(logit, p))<span class="op">+</span></a>
-<a class="sourceLine" id="cb837-7" title="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">-6</span><span class="op">:</span><span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb845-1" title="1">logit &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb845-2" title="2"></a>
+<a class="sourceLine" id="cb845-3" title="3">p &lt;-<span class="st"> </span><span class="kw">exp</span>(logit)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="kw">exp</span>(logit))</a>
+<a class="sourceLine" id="cb845-4" title="4"></a>
+<a class="sourceLine" id="cb845-5" title="5"><span class="kw">ggplot</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb845-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(logit, p))<span class="op">+</span></a>
+<a class="sourceLine" id="cb845-7" title="7"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">-6</span><span class="op">:</span><span class="dv">6</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-441"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-441-1.png" alt="Changing the axis illustrates the nonlinear switch-like relationship between logit and probability." width="672" />
 <p class="caption">
@@ -843,22 +844,22 @@ Figure 40.3: Changing the axis illustrates the nonlinear switch-like relationshi
 <p>It is VERY important to recognize that every stork is statistically independent of every other stork. The experiment below has 34 independent replicates.</p>
 <p>Note how the outcome variable, <code>death</code>, is comprised of zeroes and ones. Nonevents and events.</p>
 <p>The variable <code>cort</code> is measured corticosterone levels in nestlings after they had received a stress. But it is used here as a predictor variable. It serves as an index of the severity induced in each nestling treatment. A common stress treatment delivered to each nestling is refactored to a continuous predictor variable that signals the impact of that treatment.</p>
-<div class="sourceCode" id="cb838"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb838-1" title="1">cort &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">26</span>,<span class="fl">28.2</span>,<span class="fl">29.8</span>,<span class="fl">34.9</span>,<span class="fl">34.9</span>,<span class="fl">35.9</span>,<span class="fl">37.4</span>,<span class="fl">37.6</span>,<span class="fl">38.3</span>,<span class="fl">39.9</span>,<span class="fl">41.6</span>,<span class="fl">42.3</span>,<span class="dv">52</span>,<span class="fl">26.6</span>,<span class="dv">27</span>,<span class="fl">27.9</span>,<span class="fl">31.1</span>,<span class="fl">31.2</span>,<span class="fl">34.9</span>,<span class="fl">35.9</span>,<span class="fl">41.8</span>,<span class="dv">43</span>,<span class="fl">45.1</span>,<span class="fl">46.8</span>,<span class="fl">46.8</span>,<span class="fl">47.4</span>,<span class="fl">47.4</span>,<span class="fl">47.7</span>,<span class="fl">47.8</span>,<span class="fl">50.7</span>,<span class="fl">51.6</span>,<span class="fl">56.4</span>,<span class="fl">57.6</span>,<span class="fl">61.1</span>)</a>
-<a class="sourceLine" id="cb838-2" title="2"></a>
-<a class="sourceLine" id="cb838-3" title="3">death &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb838-4" title="4"></a>
-<a class="sourceLine" id="cb838-5" title="5">stork &lt;-<span class="st"> </span><span class="kw">data.frame</span>(cort, death)</a>
-<a class="sourceLine" id="cb838-6" title="6"></a>
-<a class="sourceLine" id="cb838-7" title="7"><span class="kw">ggplot</span>(stork, <span class="kw">aes</span>(cort, death))<span class="op">+</span></a>
-<a class="sourceLine" id="cb838-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">shape=</span><span class="dv">1</span>, <span class="dt">size=</span><span class="dv">8</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb838-9" title="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;P(dead)&quot;</span>, <span class="dt">x=</span><span class="st">&quot;corticosterone, ng/nl&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb846-1" title="1">cort &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">26</span>,<span class="fl">28.2</span>,<span class="fl">29.8</span>,<span class="fl">34.9</span>,<span class="fl">34.9</span>,<span class="fl">35.9</span>,<span class="fl">37.4</span>,<span class="fl">37.6</span>,<span class="fl">38.3</span>,<span class="fl">39.9</span>,<span class="fl">41.6</span>,<span class="fl">42.3</span>,<span class="dv">52</span>,<span class="fl">26.6</span>,<span class="dv">27</span>,<span class="fl">27.9</span>,<span class="fl">31.1</span>,<span class="fl">31.2</span>,<span class="fl">34.9</span>,<span class="fl">35.9</span>,<span class="fl">41.8</span>,<span class="dv">43</span>,<span class="fl">45.1</span>,<span class="fl">46.8</span>,<span class="fl">46.8</span>,<span class="fl">47.4</span>,<span class="fl">47.4</span>,<span class="fl">47.7</span>,<span class="fl">47.8</span>,<span class="fl">50.7</span>,<span class="fl">51.6</span>,<span class="fl">56.4</span>,<span class="fl">57.6</span>,<span class="fl">61.1</span>)</a>
+<a class="sourceLine" id="cb846-2" title="2"></a>
+<a class="sourceLine" id="cb846-3" title="3">death &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb846-4" title="4"></a>
+<a class="sourceLine" id="cb846-5" title="5">stork &lt;-<span class="st"> </span><span class="kw">data.frame</span>(cort, death)</a>
+<a class="sourceLine" id="cb846-6" title="6"></a>
+<a class="sourceLine" id="cb846-7" title="7"><span class="kw">ggplot</span>(stork, <span class="kw">aes</span>(cort, death))<span class="op">+</span></a>
+<a class="sourceLine" id="cb846-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">shape=</span><span class="dv">1</span>, <span class="dt">size=</span><span class="dv">8</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb846-9" title="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;P(dead)&quot;</span>, <span class="dt">x=</span><span class="st">&quot;corticosterone, ng/nl&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-442-1.png" width="672" /></p>
 <p>This plot can be a bit disorientating. Remember, deaths are events and so are assigned a value of 1. If you assume higher cortisol is proportional to stress intensity experienced by the birds, a quick glance suggests higher early stress events offer a survival advantage.</p>
 <p>Given the nature of the binary response variable, we can model it logistically as such: <span class="math display">\[logit(survive)=\beta_0+\beta_1(cort)\]</span></p>
 <p>Let’s run a quick linear regression.</p>
 <p>We use <code>glm</code> because we can’t use <code>lm</code> on binomial response data, and we need to tell it what family of data for the dependent variable (response) to model.</p>
-<div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb839-1" title="1">stork.model &lt;-<span class="st"> </span><span class="kw">glm</span>(death<span class="op">~</span>cort, <span class="dt">family=</span><span class="kw">binomial</span>(), stork)</a>
-<a class="sourceLine" id="cb839-2" title="2"><span class="kw">summary</span>(stork.model)</a></code></pre></div>
+<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb847-1" title="1">stork.model &lt;-<span class="st"> </span><span class="kw">glm</span>(death<span class="op">~</span>cort, <span class="dt">family=</span><span class="kw">binomial</span>(), stork)</a>
+<a class="sourceLine" id="cb847-2" title="2"><span class="kw">summary</span>(stork.model)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = death ~ cort, family = binomial(), data = stork)
@@ -885,7 +886,7 @@ Figure 40.3: Changing the axis illustrates the nonlinear switch-like relationshi
 <h3><span class="header-section-number">40.3.1</span> Interpretation of output</h3>
 <p>First, let’s try to make sense of this graphically.</p>
 <p>Using <code>augment</code> from the <code>broom</code> package is a nifty way to see the predicted values of the fitted model. We’ll plot those out three different ways below to visualize the survival response to stress levels. In each graph, the fitted values of the model are used. They’re just transformed in the latter two.</p>
-<div class="sourceCode" id="cb841"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb841-1" title="1"><span class="kw">augment</span>(stork.model)</a></code></pre></div>
+<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb849-1" title="1"><span class="kw">augment</span>(stork.model)</a></code></pre></div>
 <pre><code>## # A tibble: 34 x 9
 ##    death  cort .fitted .se.fit .resid   .hat .sigma .cooksd .std.resid
 ##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
@@ -901,28 +902,28 @@ Figure 40.3: Changing the axis illustrates the nonlinear switch-like relationshi
 ## 10     1  39.9 -0.481    0.375  1.39  0.0333   1.13  0.0288      1.41 
 ## # … with 24 more rows</code></pre>
 <p>A plot of the fitted linear model values in units of logit onto the corticosterone scale. The plot is, of course, linear. The ordinate is scale logit or log odds. Logit is not particularly intuitive unless you use it a lot.</p>
-<div class="sourceCode" id="cb843"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb843-1" title="1"><span class="kw">ggplot</span>(<span class="kw">augment</span>(stork.model), <span class="kw">aes</span>(cort, .fitted))<span class="op">+</span></a>
-<a class="sourceLine" id="cb843-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb843-3" title="3"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;.fitted aka logit&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb843-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;logit=2.703-0.0798*cort&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb851"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb851-1" title="1"><span class="kw">ggplot</span>(<span class="kw">augment</span>(stork.model), <span class="kw">aes</span>(cort, .fitted))<span class="op">+</span></a>
+<a class="sourceLine" id="cb851-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb851-3" title="3"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;.fitted aka logit&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb851-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;logit=2.703-0.0798*cort&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-445-1.png" width="672" /></p>
 <p>Next, we’ll rescale the fitted values as odds through taking the exponent on both sides. The graph’s ordinate is now in units of odds. Recall, odds are the ratio of the probability of an event to its complement.</p>
 <p>The result is an exponential relationship, negative in this case. The odds of stork death drop with the magnitude of nestling corticosterone (as a stress marker).</p>
-<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb844-1" title="1"><span class="kw">ggplot</span>(<span class="kw">augment</span>(stork.model), <span class="kw">aes</span>(cort, <span class="dt">y=</span><span class="kw">exp</span>(.fitted)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb844-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb844-3" title="3"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;exp(.fitted) aka odds&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb844-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;odds=exp(2.703-0.0798*cort)&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb852-1" title="1"><span class="kw">ggplot</span>(<span class="kw">augment</span>(stork.model), <span class="kw">aes</span>(cort, <span class="dt">y=</span><span class="kw">exp</span>(.fitted)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb852-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb852-3" title="3"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;exp(.fitted) aka odds&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb852-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;odds=exp(2.703-0.0798*cort)&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-446-1.png" width="672" /></p>
 <p>Lastly, we’ll transform the fitted values to probabilities. This also happens to be the scale of the original data, so we’ll add those experimental values to the fitted values. The fitted values are nonlinear on this scale, an S-shaped curve is ever-so-faint. The probability of death is reduced as stress levels increase.</p>
-<div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb845-1" title="1"><span class="kw">ggplot</span>(<span class="kw">augment</span>(stork.model), <span class="kw">aes</span>(cort, <span class="dt">y=</span><span class="kw">exp</span>(.fitted)<span class="op">/</span>(<span class="kw">exp</span>(.fitted)<span class="op">+</span><span class="dv">1</span>)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb845-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb845-3" title="3"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;odds/odds+1 aka P(death)&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb845-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;P=exp(2.703-0.0798*cort)/exp(2.703-0.0798*cort)+1&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb845-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>stork, <span class="kw">aes</span>(<span class="dt">y=</span>death), <span class="dt">shape=</span><span class="dv">1</span>, <span class="dt">size=</span><span class="dv">8</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb853"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb853-1" title="1"><span class="kw">ggplot</span>(<span class="kw">augment</span>(stork.model), <span class="kw">aes</span>(cort, <span class="dt">y=</span><span class="kw">exp</span>(.fitted)<span class="op">/</span>(<span class="kw">exp</span>(.fitted)<span class="op">+</span><span class="dv">1</span>)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb853-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb853-3" title="3"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;odds/odds+1 aka P(death)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb853-4" title="4"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;P=exp(2.703-0.0798*cort)/exp(2.703-0.0798*cort)+1&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb853-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>stork, <span class="kw">aes</span>(<span class="dt">y=</span>death), <span class="dt">shape=</span><span class="dv">1</span>, <span class="dt">size=</span><span class="dv">8</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-447-1.png" width="672" /></p>
 <div id="coefficient-values" class="section level4">
 <h4><span class="header-section-number">40.3.1.1</span> Coefficient values</h4>
-<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb846-1" title="1"><span class="kw">kable</span>(<span class="kw">tidy</span>(stork.model))</a></code></pre></div>
+<div class="sourceCode" id="cb854"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb854-1" title="1"><span class="kw">kable</span>(<span class="kw">tidy</span>(stork.model))</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -984,22 +985,22 @@ cort
 <p>Bear in mind that Y is logit, or log-odds units, allows for linearization of a nonlinear phenomenon and may not be intuitively useful. Nevertheless, plugging the coefficient values into the formula the linear model for the data is <span class="math inline">\(logit(Y)=2.7030-0.0798*X\)</span></p>
 <p>It can be more interpretable to convert from log-odds to odds or to proportions.</p>
 <p>To convert log-odds to ordinary proportions we use equation 1 above. For example, what proportions of storks with a corticosterone level of 30 or 60 ng/ml are predicted to die?</p>
-<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb847-1" title="1"><span class="co">#let `l` be our linear model</span></a>
-<a class="sourceLine" id="cb847-2" title="2">c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">60</span>)</a>
-<a class="sourceLine" id="cb847-3" title="3">l &lt;-<span class="st"> </span><span class="fl">2.7030-0.0798</span><span class="op">*</span>c</a>
-<a class="sourceLine" id="cb847-4" title="4">p &lt;-<span class="st"> </span><span class="kw">exp</span>(l)<span class="op">/</span>(<span class="kw">exp</span>(l)<span class="op">+</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb847-5" title="5">p</a></code></pre></div>
+<div class="sourceCode" id="cb855"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb855-1" title="1"><span class="co">#let `l` be our linear model</span></a>
+<a class="sourceLine" id="cb855-2" title="2">c &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">60</span>)</a>
+<a class="sourceLine" id="cb855-3" title="3">l &lt;-<span class="st"> </span><span class="fl">2.7030-0.0798</span><span class="op">*</span>c</a>
+<a class="sourceLine" id="cb855-4" title="4">p &lt;-<span class="st"> </span><span class="kw">exp</span>(l)<span class="op">/</span>(<span class="kw">exp</span>(l)<span class="op">+</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb855-5" title="5">p</a></code></pre></div>
 <pre><code>## [1] 0.5766412 0.1105633</code></pre>
 <p>Thus, a 57.7% death rate is predicted for nestling stress corresponding to cort levels of 30 ng/ml. Doubling the stress reduced the death rate to 11%.</p>
 <p>The coefficients allow for predicting the fractional contribution of a unit change in level of the explanatory variable:</p>
 <p><span class="math inline">\(percent \ change=(logit-1)*100\)</span> or <span class="math inline">\(percent \ change=(odds-1)*100\)</span></p>
 <p>For example, by what percent does a 1 ng/ml increase in cort change the odds of survival?</p>
 <p>To calculate in terms of odds, note how we do an exponential transform of the value of the coefficient from log-odds to odds:</p>
-<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb849-1" title="1">(<span class="kw">exp</span>(<span class="op">-</span><span class="fl">0.0798</span>)<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">100</span></a></code></pre></div>
+<div class="sourceCode" id="cb857"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb857-1" title="1">(<span class="kw">exp</span>(<span class="op">-</span><span class="fl">0.0798</span>)<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">100</span></a></code></pre></div>
 <pre><code>## [1] -7.669901</code></pre>
 <p>Thus, a 1 ng/ml increase in cort would be associated with a 7.67% decrease in death.</p>
 <p>If we’d like to have confidence intervals, in logit units, those are easy to compute:</p>
-<div class="sourceCode" id="cb851"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb851-1" title="1"><span class="kw">confint</span>(stork.model)</a></code></pre></div>
+<div class="sourceCode" id="cb859"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb859-1" title="1"><span class="kw">confint</span>(stork.model)</a></code></pre></div>
 <pre><code>## Waiting for profiling to be done...</code></pre>
 <pre><code>##                  2.5 %       97.5 %
 ## (Intercept) -0.5583249 6.434585e+00
@@ -1008,7 +1009,7 @@ cort
 <div id="deviance" class="section level4">
 <h4><span class="header-section-number">40.3.1.2</span> Deviance</h4>
 <p>The regression model includes the calculation of two deviance values:</p>
-<div class="sourceCode" id="cb854"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb854-1" title="1"><span class="kw">kable</span>(<span class="kw">glance</span>(stork.model))</a></code></pre></div>
+<div class="sourceCode" id="cb862"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb862-1" title="1"><span class="kw">kable</span>(<span class="kw">glance</span>(stork.model))</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1077,14 +1078,14 @@ df.residual
 <p>Since we can think of the intercept as the death rate uninfluenced by stress, another way to think about this is that these two deviances can be used to test the intercept only model fits better than a model that includes the corticosterone variable.</p>
 <p>In other words, the null hypothesis is that the null (intercept only) deviance is less than or equal to the model deviance.</p>
 <p>There are a few ways to test this null hypothesis. Fortunately, both yield the same result. By hand, simply derive a p-value from the <span class="math inline">\(\chi^2\)</span> distribution for the difference between the two model deviances:</p>
-<div class="sourceCode" id="cb855"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb855-1" title="1"><span class="dv">1</span><span class="op">-</span><span class="kw">pchisq</span>(<span class="fl">45.234-41.396</span>, <span class="dv">33-32</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb863-1" title="1"><span class="dv">1</span><span class="op">-</span><span class="kw">pchisq</span>(<span class="fl">45.234-41.396</span>, <span class="dv">33-32</span>)</a></code></pre></div>
 <pre><code>## [1] 0.05010325</code></pre>
-<div class="sourceCode" id="cb857"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb857-1" title="1"><span class="co">#which is the same as...</span></a>
-<a class="sourceLine" id="cb857-2" title="2"></a>
-<a class="sourceLine" id="cb857-3" title="3"><span class="kw">pchisq</span>(<span class="fl">45.234-41.396</span>, <span class="dv">33-32</span>, <span class="dt">lower.tail=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb865-1" title="1"><span class="co">#which is the same as...</span></a>
+<a class="sourceLine" id="cb865-2" title="2"></a>
+<a class="sourceLine" id="cb865-3" title="3"><span class="kw">pchisq</span>(<span class="fl">45.234-41.396</span>, <span class="dv">33-32</span>, <span class="dt">lower.tail=</span>F)</a></code></pre></div>
 <pre><code>## [1] 0.05010325</code></pre>
 <p>Or by <code>anova</code>, specifying the chi-square test as an argument. This way gives the same result as above. When you’re used to ANOVA tables you’ll find this can be less confusing the others.</p>
-<div class="sourceCode" id="cb859"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb859-1" title="1"><span class="kw">anova</span>(stork.model, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb867"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb867-1" title="1"><span class="kw">anova</span>(stork.model, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
 <pre><code>## Analysis of Deviance Table
 ## 
 ## Model: binomial, link: logit

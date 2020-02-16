@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-02-15" />
+<meta name="date" content="2020-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -427,8 +427,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
 </ul></li>
 <li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.1</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.2</b> Paired</a></li>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
 </ul></li>
 <li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
 <li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
@@ -729,9 +730,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="anovamc" class="section level1">
 <h1><span class="header-section-number">Chapter 33</span> ANOVA power using Monte Carlo</h1>
-<div class="sourceCode" id="cb686"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb686-1" title="1"><span class="kw">library</span>(ez)</a>
-<a class="sourceLine" id="cb686-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb686-3" title="3"><span class="kw">library</span>(viridis)</a></code></pre></div>
+<div class="sourceCode" id="cb694"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb694-1" title="1"><span class="kw">library</span>(ez)</a>
+<a class="sourceLine" id="cb694-2" title="2"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb694-3" title="3"><span class="kw">library</span>(viridis)</a></code></pre></div>
 <p>Monte Carlo simulation is a great tool for experimental design.</p>
 <p>Monte Carlo forces you to do several things that, taken together, we can characterize as good statistical hygiene.</p>
 <ul>
@@ -792,35 +793,35 @@ where <span class="math inline">\(\eta^2=\frac{SS_{model}}{SS_{total}}\)</span> 
 <p>I like making these Monte Carlo projects using a stand-alone initializer section. The whole point of the script is to play around with different initial parameters! Using an initializer section means you change these in only one place.</p>
 <p>Here’s the logic:</p>
 <p>First, provide an estimate for the expected mean of the outcome variable under basal conditions. Next, predict the fold-to-basal effect sizes for the positive control and also the treatment we’re planning to test. Next, estimate the value of the standard deviation of the Outcome variable. Finally, select the number of replicates per group (n per k) that we might run.</p>
-<div class="sourceCode" id="cb687"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb687-1" title="1">b =<span class="st"> </span><span class="dv">100</span> <span class="co">#expected basal outcome value</span></a>
-<a class="sourceLine" id="cb687-2" title="2">a =<span class="st"> </span><span class="fl">1.25</span> <span class="co">#expected fold-to-basal effect of our positive control</span></a>
-<a class="sourceLine" id="cb687-3" title="3">f =<span class="st"> </span><span class="fl">1.4</span> <span class="co">#minimal scientifically relevant fold-to-basal effect of our treatment</span></a>
-<a class="sourceLine" id="cb687-4" title="4">sd =<span class="st"> </span><span class="dv">25</span> <span class="co">#expected standard deviation of Outcome variable</span></a>
-<a class="sourceLine" id="cb687-5" title="5">n =<span class="st"> </span><span class="dv">3</span> <span class="co"># number of independent replicates per group</span></a>
-<a class="sourceLine" id="cb687-6" title="6">sims =<span class="st"> </span><span class="dv">100</span> <span class="co">#number of Monte Carlo simulations to run. </span></a></code></pre></div>
+<div class="sourceCode" id="cb695"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb695-1" title="1">b =<span class="st"> </span><span class="dv">100</span> <span class="co">#expected basal outcome value</span></a>
+<a class="sourceLine" id="cb695-2" title="2">a =<span class="st"> </span><span class="fl">1.25</span> <span class="co">#expected fold-to-basal effect of our positive control</span></a>
+<a class="sourceLine" id="cb695-3" title="3">f =<span class="st"> </span><span class="fl">1.4</span> <span class="co">#minimal scientifically relevant fold-to-basal effect of our treatment</span></a>
+<a class="sourceLine" id="cb695-4" title="4">sd =<span class="st"> </span><span class="dv">25</span> <span class="co">#expected standard deviation of Outcome variable</span></a>
+<a class="sourceLine" id="cb695-5" title="5">n =<span class="st"> </span><span class="dv">3</span> <span class="co"># number of independent replicates per group</span></a>
+<a class="sourceLine" id="cb695-6" title="6">sims =<span class="st"> </span><span class="dv">100</span> <span class="co">#number of Monte Carlo simulations to run. </span></a></code></pre></div>
 </div>
 <div id="step-2-visualize-one-random-sample" class="section level3">
 <h3><span class="header-section-number">33.3.3</span> Step 2: Visualize one random sample</h3>
 <p>This produces one graph illustrating an example of the type of random samples we’re generating in the Monte Carlo. No two samples will be the same, because they’re each random! So this figure will change every time it is run, even with the same initial parameter values. And because variances can differ a lot between groups with small sample sizes (n&lt;35).</p>
-<div class="sourceCode" id="cb688"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb688-1" title="1"><span class="co"># Use this script to simulate your custom sample.</span></a>
-<a class="sourceLine" id="cb688-2" title="2"></a>
-<a class="sourceLine" id="cb688-3" title="3">CRdataMaker &lt;-<span class="st"> </span><span class="cf">function</span>(n, b, a, f, sd) { </a>
-<a class="sourceLine" id="cb688-4" title="4">  </a>
-<a class="sourceLine" id="cb688-5" title="5">  </a>
-<a class="sourceLine" id="cb688-6" title="6">  a1 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, b, sd) <span class="co">#basal or negative ctrl</span></a>
-<a class="sourceLine" id="cb688-7" title="7">  a2 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, (b<span class="op">*</span>a), sd) <span class="co">#positive control or some other treatment</span></a>
-<a class="sourceLine" id="cb688-8" title="8">  a3 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, (b<span class="op">*</span>f), sd) <span class="co">#treatment effect</span></a>
-<a class="sourceLine" id="cb688-9" title="9">    </a>
-<a class="sourceLine" id="cb688-10" title="10">    Outcome &lt;-<span class="st"> </span><span class="kw">c</span>(a1, a2, a3)</a>
-<a class="sourceLine" id="cb688-11" title="11">    Predictor &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a1&quot;</span>, <span class="st">&quot;a2&quot;</span>, <span class="st">&quot;a3&quot;</span>), <span class="dt">each =</span> n))</a>
-<a class="sourceLine" id="cb688-12" title="12">    ID &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(Predictor)))</a>
-<a class="sourceLine" id="cb688-13" title="13">    df &lt;-<span class="kw">data.frame</span>(ID, Predictor, Outcome)</a>
-<a class="sourceLine" id="cb688-14" title="14">    }</a>
-<a class="sourceLine" id="cb688-15" title="15"></a>
-<a class="sourceLine" id="cb688-16" title="16">dat &lt;-<span class="st"> </span><span class="kw">CRdataMaker</span>(n,b,a,f,sd)</a>
-<a class="sourceLine" id="cb688-17" title="17"></a>
-<a class="sourceLine" id="cb688-18" title="18"><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(Predictor, Outcome))<span class="op">+</span></a>
-<a class="sourceLine" id="cb688-19" title="19"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width=</span><span class="fl">0.1</span>,<span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb696"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb696-1" title="1"><span class="co"># Use this script to simulate your custom sample.</span></a>
+<a class="sourceLine" id="cb696-2" title="2"></a>
+<a class="sourceLine" id="cb696-3" title="3">CRdataMaker &lt;-<span class="st"> </span><span class="cf">function</span>(n, b, a, f, sd) { </a>
+<a class="sourceLine" id="cb696-4" title="4">  </a>
+<a class="sourceLine" id="cb696-5" title="5">  </a>
+<a class="sourceLine" id="cb696-6" title="6">  a1 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, b, sd) <span class="co">#basal or negative ctrl</span></a>
+<a class="sourceLine" id="cb696-7" title="7">  a2 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, (b<span class="op">*</span>a), sd) <span class="co">#positive control or some other treatment</span></a>
+<a class="sourceLine" id="cb696-8" title="8">  a3 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, (b<span class="op">*</span>f), sd) <span class="co">#treatment effect</span></a>
+<a class="sourceLine" id="cb696-9" title="9">    </a>
+<a class="sourceLine" id="cb696-10" title="10">    Outcome &lt;-<span class="st"> </span><span class="kw">c</span>(a1, a2, a3)</a>
+<a class="sourceLine" id="cb696-11" title="11">    Predictor &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a1&quot;</span>, <span class="st">&quot;a2&quot;</span>, <span class="st">&quot;a3&quot;</span>), <span class="dt">each =</span> n))</a>
+<a class="sourceLine" id="cb696-12" title="12">    ID &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(Predictor)))</a>
+<a class="sourceLine" id="cb696-13" title="13">    df &lt;-<span class="kw">data.frame</span>(ID, Predictor, Outcome)</a>
+<a class="sourceLine" id="cb696-14" title="14">    }</a>
+<a class="sourceLine" id="cb696-15" title="15"></a>
+<a class="sourceLine" id="cb696-16" title="16">dat &lt;-<span class="st"> </span><span class="kw">CRdataMaker</span>(n,b,a,f,sd)</a>
+<a class="sourceLine" id="cb696-17" title="17"></a>
+<a class="sourceLine" id="cb696-18" title="18"><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(Predictor, Outcome))<span class="op">+</span></a>
+<a class="sourceLine" id="cb696-19" title="19"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width=</span><span class="fl">0.1</span>,<span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-360-1.png" width="672" /></p>
 <p>Is that what you expect to see? Should there be more variation? Is the effect size larger or smaller than what you anticipate? Should you add more or fewer groups?</p>
 <p>Edit the code in the initializer to make it as real life as possible.</p>
@@ -831,30 +832,30 @@ where <span class="math inline">\(\eta^2=\frac{SS_{model}}{SS_{total}}\)</span> 
 <p>Change n in the initializer above to see what it takes to get 80% or better power.</p>
 <p>Carefully look at this code. It creates an ezANOVA output object, and then goes in to collect the p-value of the ANOVA F test from the ANOVA table.</p>
 <p>This could be modified. For example, it could be extended to collect the result of post hoc analysis.</p>
-<div class="sourceCode" id="cb689"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb689-1" title="1">pval &lt;-<span class="st"> </span><span class="kw">replicate</span>(</a>
-<a class="sourceLine" id="cb689-2" title="2">  sims, {</a>
-<a class="sourceLine" id="cb689-3" title="3"> </a>
-<a class="sourceLine" id="cb689-4" title="4">    sample.df &lt;-<span class="st"> </span><span class="kw">CRdataMaker</span>(n, b, a, f, sd)</a>
-<a class="sourceLine" id="cb689-5" title="5">    </a>
-<a class="sourceLine" id="cb689-6" title="6">    sim.ezaov &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(</a>
-<a class="sourceLine" id="cb689-7" title="7">            <span class="dt">data =</span> sample.df, </a>
-<a class="sourceLine" id="cb689-8" title="8">            <span class="dt">wid =</span> ID,</a>
-<a class="sourceLine" id="cb689-9" title="9">            <span class="dt">dv =</span> Outcome,</a>
-<a class="sourceLine" id="cb689-10" title="10">            <span class="dt">between =</span> Predictor,</a>
-<a class="sourceLine" id="cb689-11" title="11">            <span class="dt">type =</span> <span class="dv">2</span></a>
-<a class="sourceLine" id="cb689-12" title="12">            )</a>
-<a class="sourceLine" id="cb689-13" title="13">  </a>
-<a class="sourceLine" id="cb689-14" title="14">  pval &lt;-<span class="st"> </span>sim.ezaov<span class="op">$</span>ANOVA[<span class="dv">1</span>,<span class="dv">5</span>]</a>
-<a class="sourceLine" id="cb689-15" title="15">    </a>
-<a class="sourceLine" id="cb689-16" title="16">    }</a>
-<a class="sourceLine" id="cb689-17" title="17">  )</a>
-<a class="sourceLine" id="cb689-18" title="18"></a>
-<a class="sourceLine" id="cb689-19" title="19">pwr.pct &lt;-<span class="st"> </span><span class="kw">sum</span>(pval<span class="op">&lt;</span><span class="fl">0.05</span>)<span class="op">/</span>sims<span class="op">*</span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb689-20" title="20"><span class="kw">paste</span>(pwr.pct, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>, <span class="st">&quot;% power. Change &#39;n&#39; in your initializer for higher or lower power.&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb697"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb697-1" title="1">pval &lt;-<span class="st"> </span><span class="kw">replicate</span>(</a>
+<a class="sourceLine" id="cb697-2" title="2">  sims, {</a>
+<a class="sourceLine" id="cb697-3" title="3"> </a>
+<a class="sourceLine" id="cb697-4" title="4">    sample.df &lt;-<span class="st"> </span><span class="kw">CRdataMaker</span>(n, b, a, f, sd)</a>
+<a class="sourceLine" id="cb697-5" title="5">    </a>
+<a class="sourceLine" id="cb697-6" title="6">    sim.ezaov &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(</a>
+<a class="sourceLine" id="cb697-7" title="7">            <span class="dt">data =</span> sample.df, </a>
+<a class="sourceLine" id="cb697-8" title="8">            <span class="dt">wid =</span> ID,</a>
+<a class="sourceLine" id="cb697-9" title="9">            <span class="dt">dv =</span> Outcome,</a>
+<a class="sourceLine" id="cb697-10" title="10">            <span class="dt">between =</span> Predictor,</a>
+<a class="sourceLine" id="cb697-11" title="11">            <span class="dt">type =</span> <span class="dv">2</span></a>
+<a class="sourceLine" id="cb697-12" title="12">            )</a>
+<a class="sourceLine" id="cb697-13" title="13">  </a>
+<a class="sourceLine" id="cb697-14" title="14">  pval &lt;-<span class="st"> </span>sim.ezaov<span class="op">$</span>ANOVA[<span class="dv">1</span>,<span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb697-15" title="15">    </a>
+<a class="sourceLine" id="cb697-16" title="16">    }</a>
+<a class="sourceLine" id="cb697-17" title="17">  )</a>
+<a class="sourceLine" id="cb697-18" title="18"></a>
+<a class="sourceLine" id="cb697-19" title="19">pwr.pct &lt;-<span class="st"> </span><span class="kw">sum</span>(pval<span class="op">&lt;</span><span class="fl">0.05</span>)<span class="op">/</span>sims<span class="op">*</span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb697-20" title="20"><span class="kw">paste</span>(pwr.pct, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>, <span class="st">&quot;% power. Change &#39;n&#39; in your initializer for higher or lower power.&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;27% power. Change &#39;n&#39; in your initializer for higher or lower power.&quot;</code></pre>
-<div class="sourceCode" id="cb691"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb691-1" title="1"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(pval))<span class="op">+</span></a>
-<a class="sourceLine" id="cb691-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(pval), <span class="dt">color=</span><span class="st">&quot;#d28e00&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb691-3" title="3"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;p-value&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb699"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb699-1" title="1"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(pval))<span class="op">+</span></a>
+<a class="sourceLine" id="cb699-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(pval), <span class="dt">color=</span><span class="st">&quot;#d28e00&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb699-3" title="3"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;p-value&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-361-1.png" width="672" /></p>
 </div>
 <div id="step-4-optimize-for-suitable-power" class="section level3">
@@ -886,71 +887,71 @@ where <span class="math inline">\(\eta^2=\frac{SS_{model}}{SS_{total}}\)</span> 
 <div id="step-1-initial-values" class="section level3">
 <h3><span class="header-section-number">33.5.1</span> Step 1: Initial values</h3>
 <p>Here’s our initializers. Note the added terms <code>r</code> and <code>k</code>. <a href="simcorrelation.html#simcorrelation">Read this</a> to understand what they represent and how you can estimate them for your own system.</p>
-<div class="sourceCode" id="cb692"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb692-1" title="1">b &lt;-<span class="st">  </span><span class="dv">100</span> <span class="co">#expected basal outcome value</span></a>
-<a class="sourceLine" id="cb692-2" title="2">a &lt;-<span class="st">  </span><span class="fl">1.25</span> <span class="co">#expected fold-to-basal effect of our positive control</span></a>
-<a class="sourceLine" id="cb692-3" title="3">f &lt;-<span class="st">  </span><span class="fl">1.4</span> <span class="co">#minimal scientifically relevant fold-to-basal effect of our treatment</span></a>
-<a class="sourceLine" id="cb692-4" title="4">sd &lt;-<span class="st">  </span><span class="dv">25</span> <span class="co">#expected standard deviation of Outcome variable</span></a>
-<a class="sourceLine" id="cb692-5" title="5">n &lt;-<span class="st">  </span><span class="dv">3</span> <span class="co"># number of independent replicates per group</span></a>
-<a class="sourceLine" id="cb692-6" title="6">r &lt;-<span class="st"> </span><span class="fl">0.9</span> <span class="co">#correlation between groups of outcome values across replicates</span></a>
-<a class="sourceLine" id="cb692-7" title="7">k &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>r<span class="op">^</span><span class="dv">2</span>) <span class="co">#a conversion factor</span></a>
-<a class="sourceLine" id="cb692-8" title="8">sims =<span class="st"> </span><span class="dv">100</span> <span class="co">#number of Monte Carlo simulations to run. Keep it low to start.</span></a></code></pre></div>
+<div class="sourceCode" id="cb700"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb700-1" title="1">b &lt;-<span class="st">  </span><span class="dv">100</span> <span class="co">#expected basal outcome value</span></a>
+<a class="sourceLine" id="cb700-2" title="2">a &lt;-<span class="st">  </span><span class="fl">1.25</span> <span class="co">#expected fold-to-basal effect of our positive control</span></a>
+<a class="sourceLine" id="cb700-3" title="3">f &lt;-<span class="st">  </span><span class="fl">1.4</span> <span class="co">#minimal scientifically relevant fold-to-basal effect of our treatment</span></a>
+<a class="sourceLine" id="cb700-4" title="4">sd &lt;-<span class="st">  </span><span class="dv">25</span> <span class="co">#expected standard deviation of Outcome variable</span></a>
+<a class="sourceLine" id="cb700-5" title="5">n &lt;-<span class="st">  </span><span class="dv">3</span> <span class="co"># number of independent replicates per group</span></a>
+<a class="sourceLine" id="cb700-6" title="6">r &lt;-<span class="st"> </span><span class="fl">0.9</span> <span class="co">#correlation between groups of outcome values across replicates</span></a>
+<a class="sourceLine" id="cb700-7" title="7">k &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">-</span>r<span class="op">^</span><span class="dv">2</span>) <span class="co">#a conversion factor</span></a>
+<a class="sourceLine" id="cb700-8" title="8">sims =<span class="st"> </span><span class="dv">100</span> <span class="co">#number of Monte Carlo simulations to run. Keep it low to start.</span></a></code></pre></div>
 </div>
 <div id="step-2-visualize-one-sample" class="section level3">
 <h3><span class="header-section-number">33.5.2</span> Step 2: Visualize one sample</h3>
 <p>Make sure you understand how the a2 and a3 variables were each correlated to the a1 variable. Let’s call a1 the pivot variable. When simulating correlated values, your pivot variable should be the lowest expected outcome value in the data set.</p>
-<div class="sourceCode" id="cb693"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb693-1" title="1"><span class="co"># Use this script to simulate your sample.</span></a>
-<a class="sourceLine" id="cb693-2" title="2"></a>
-<a class="sourceLine" id="cb693-3" title="3">RMdataMaker &lt;-<span class="st"> </span><span class="cf">function</span>(n, b, a, f, sd, r, k) { </a>
-<a class="sourceLine" id="cb693-4" title="4">  </a>
-<a class="sourceLine" id="cb693-5" title="5">  </a>
-<a class="sourceLine" id="cb693-6" title="6">  a1 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, b, sd) <span class="co">#basal or negative ctrl</span></a>
-<a class="sourceLine" id="cb693-7" title="7">  a2 &lt;-<span class="st"> </span>a1<span class="op">*</span>r<span class="op">+</span>k<span class="op">*</span><span class="kw">rnorm</span>(n, (b<span class="op">*</span>a), sd) <span class="co">#positive control or some other treatment</span></a>
-<a class="sourceLine" id="cb693-8" title="8">  a3 &lt;-<span class="st"> </span>a1<span class="op">*</span>r<span class="op">+</span>k<span class="op">*</span><span class="kw">rnorm</span>(n, (b<span class="op">*</span>f), sd) <span class="co">#treatment effect</span></a>
-<a class="sourceLine" id="cb693-9" title="9">    </a>
-<a class="sourceLine" id="cb693-10" title="10">    Outcome &lt;-<span class="st"> </span><span class="kw">c</span>(a1, a2, a3)</a>
-<a class="sourceLine" id="cb693-11" title="11">    Predictor &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a1&quot;</span>, <span class="st">&quot;a2&quot;</span>, <span class="st">&quot;a3&quot;</span>), <span class="dt">each =</span> n))</a>
-<a class="sourceLine" id="cb693-12" title="12">    ID &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>n)))</a>
-<a class="sourceLine" id="cb693-13" title="13">    df &lt;-<span class="kw">data.frame</span>(ID, Predictor, Outcome)</a>
-<a class="sourceLine" id="cb693-14" title="14">    }</a>
-<a class="sourceLine" id="cb693-15" title="15"></a>
-<a class="sourceLine" id="cb693-16" title="16">dat &lt;-<span class="st"> </span><span class="kw">RMdataMaker</span>(n,b,a,f,sd,r,k)</a>
-<a class="sourceLine" id="cb693-17" title="17"></a>
-<a class="sourceLine" id="cb693-18" title="18"><span class="kw">ggplot</span>(dat, </a>
-<a class="sourceLine" id="cb693-19" title="19">       <span class="kw">aes</span>(Predictor, Outcome, <span class="dt">color=</span>ID, <span class="dt">group=</span>ID)</a>
-<a class="sourceLine" id="cb693-20" title="20">       )<span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb693-21" title="21"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb693-22" title="22"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">5</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb693-23" title="23"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)<span class="op">+</span></a>
-<a class="sourceLine" id="cb693-24" title="24"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb701"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb701-1" title="1"><span class="co"># Use this script to simulate your sample.</span></a>
+<a class="sourceLine" id="cb701-2" title="2"></a>
+<a class="sourceLine" id="cb701-3" title="3">RMdataMaker &lt;-<span class="st"> </span><span class="cf">function</span>(n, b, a, f, sd, r, k) { </a>
+<a class="sourceLine" id="cb701-4" title="4">  </a>
+<a class="sourceLine" id="cb701-5" title="5">  </a>
+<a class="sourceLine" id="cb701-6" title="6">  a1 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, b, sd) <span class="co">#basal or negative ctrl</span></a>
+<a class="sourceLine" id="cb701-7" title="7">  a2 &lt;-<span class="st"> </span>a1<span class="op">*</span>r<span class="op">+</span>k<span class="op">*</span><span class="kw">rnorm</span>(n, (b<span class="op">*</span>a), sd) <span class="co">#positive control or some other treatment</span></a>
+<a class="sourceLine" id="cb701-8" title="8">  a3 &lt;-<span class="st"> </span>a1<span class="op">*</span>r<span class="op">+</span>k<span class="op">*</span><span class="kw">rnorm</span>(n, (b<span class="op">*</span>f), sd) <span class="co">#treatment effect</span></a>
+<a class="sourceLine" id="cb701-9" title="9">    </a>
+<a class="sourceLine" id="cb701-10" title="10">    Outcome &lt;-<span class="st"> </span><span class="kw">c</span>(a1, a2, a3)</a>
+<a class="sourceLine" id="cb701-11" title="11">    Predictor &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a1&quot;</span>, <span class="st">&quot;a2&quot;</span>, <span class="st">&quot;a3&quot;</span>), <span class="dt">each =</span> n))</a>
+<a class="sourceLine" id="cb701-12" title="12">    ID &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>n)))</a>
+<a class="sourceLine" id="cb701-13" title="13">    df &lt;-<span class="kw">data.frame</span>(ID, Predictor, Outcome)</a>
+<a class="sourceLine" id="cb701-14" title="14">    }</a>
+<a class="sourceLine" id="cb701-15" title="15"></a>
+<a class="sourceLine" id="cb701-16" title="16">dat &lt;-<span class="st"> </span><span class="kw">RMdataMaker</span>(n,b,a,f,sd,r,k)</a>
+<a class="sourceLine" id="cb701-17" title="17"></a>
+<a class="sourceLine" id="cb701-18" title="18"><span class="kw">ggplot</span>(dat, </a>
+<a class="sourceLine" id="cb701-19" title="19">       <span class="kw">aes</span>(Predictor, Outcome, <span class="dt">color=</span>ID, <span class="dt">group=</span>ID)</a>
+<a class="sourceLine" id="cb701-20" title="20">       )<span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb701-21" title="21"><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb701-22" title="22"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">shape=</span><span class="dv">5</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb701-23" title="23"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">discrete=</span>T)<span class="op">+</span></a>
+<a class="sourceLine" id="cb701-24" title="24"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-363-1.png" width="672" /></p>
 </div>
 <div id="step-3-run-the-power-simulator-1" class="section level3">
 <h3><span class="header-section-number">33.5.3</span> Step 3: Run the power simulator</h3>
 <p>Now we can simulate a long run of random samples like above, capturing how many of them yielded a positive result!</p>
-<div class="sourceCode" id="cb694"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb694-1" title="1">pval &lt;-<span class="st"> </span><span class="kw">replicate</span>(</a>
-<a class="sourceLine" id="cb694-2" title="2">  sims, {</a>
-<a class="sourceLine" id="cb694-3" title="3"> </a>
-<a class="sourceLine" id="cb694-4" title="4">    sample.df &lt;-<span class="st"> </span><span class="kw">RMdataMaker</span>(n, b, a, f, sd, r, k)</a>
-<a class="sourceLine" id="cb694-5" title="5">    </a>
-<a class="sourceLine" id="cb694-6" title="6">    sim.ezaov &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(</a>
-<a class="sourceLine" id="cb694-7" title="7">            <span class="dt">data =</span> sample.df, </a>
-<a class="sourceLine" id="cb694-8" title="8">            <span class="dt">wid =</span> ID,</a>
-<a class="sourceLine" id="cb694-9" title="9">            <span class="dt">dv =</span> Outcome,</a>
-<a class="sourceLine" id="cb694-10" title="10">            <span class="dt">within =</span> Predictor,</a>
-<a class="sourceLine" id="cb694-11" title="11">            <span class="dt">type =</span> <span class="dv">2</span></a>
-<a class="sourceLine" id="cb694-12" title="12">            )</a>
-<a class="sourceLine" id="cb694-13" title="13">  </a>
-<a class="sourceLine" id="cb694-14" title="14">  pval &lt;-<span class="st"> </span>sim.ezaov<span class="op">$</span>ANOVA[<span class="dv">1</span>,<span class="dv">5</span>]</a>
-<a class="sourceLine" id="cb694-15" title="15">    </a>
-<a class="sourceLine" id="cb694-16" title="16">    }</a>
-<a class="sourceLine" id="cb694-17" title="17">  )</a>
-<a class="sourceLine" id="cb694-18" title="18"></a>
-<a class="sourceLine" id="cb694-19" title="19">pwr.pct &lt;-<span class="st"> </span><span class="kw">sum</span>(pval<span class="op">&lt;</span><span class="fl">0.05</span>)<span class="op">/</span>sims<span class="op">*</span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb694-20" title="20"><span class="kw">paste</span>(pwr.pct, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>, <span class="st">&quot;% power. Change &#39;n&#39; in your initializer for higher or lower power.&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb702"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb702-1" title="1">pval &lt;-<span class="st"> </span><span class="kw">replicate</span>(</a>
+<a class="sourceLine" id="cb702-2" title="2">  sims, {</a>
+<a class="sourceLine" id="cb702-3" title="3"> </a>
+<a class="sourceLine" id="cb702-4" title="4">    sample.df &lt;-<span class="st"> </span><span class="kw">RMdataMaker</span>(n, b, a, f, sd, r, k)</a>
+<a class="sourceLine" id="cb702-5" title="5">    </a>
+<a class="sourceLine" id="cb702-6" title="6">    sim.ezaov &lt;-<span class="st"> </span><span class="kw">ezANOVA</span>(</a>
+<a class="sourceLine" id="cb702-7" title="7">            <span class="dt">data =</span> sample.df, </a>
+<a class="sourceLine" id="cb702-8" title="8">            <span class="dt">wid =</span> ID,</a>
+<a class="sourceLine" id="cb702-9" title="9">            <span class="dt">dv =</span> Outcome,</a>
+<a class="sourceLine" id="cb702-10" title="10">            <span class="dt">within =</span> Predictor,</a>
+<a class="sourceLine" id="cb702-11" title="11">            <span class="dt">type =</span> <span class="dv">2</span></a>
+<a class="sourceLine" id="cb702-12" title="12">            )</a>
+<a class="sourceLine" id="cb702-13" title="13">  </a>
+<a class="sourceLine" id="cb702-14" title="14">  pval &lt;-<span class="st"> </span>sim.ezaov<span class="op">$</span>ANOVA[<span class="dv">1</span>,<span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb702-15" title="15">    </a>
+<a class="sourceLine" id="cb702-16" title="16">    }</a>
+<a class="sourceLine" id="cb702-17" title="17">  )</a>
+<a class="sourceLine" id="cb702-18" title="18"></a>
+<a class="sourceLine" id="cb702-19" title="19">pwr.pct &lt;-<span class="st"> </span><span class="kw">sum</span>(pval<span class="op">&lt;</span><span class="fl">0.05</span>)<span class="op">/</span>sims<span class="op">*</span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb702-20" title="20"><span class="kw">paste</span>(pwr.pct, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>, <span class="st">&quot;% power. Change &#39;n&#39; in your initializer for higher or lower power.&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;98% power. Change &#39;n&#39; in your initializer for higher or lower power.&quot;</code></pre>
-<div class="sourceCode" id="cb696"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb696-1" title="1"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(pval))<span class="op">+</span></a>
-<a class="sourceLine" id="cb696-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(pval), <span class="dt">color=</span><span class="st">&quot;#d28e00&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb696-3" title="3"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;p-value&quot;</span>, <span class="dt">title=</span><span class="st">&quot;p-value distribution&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb704"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb704-1" title="1"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(pval))<span class="op">+</span></a>
+<a class="sourceLine" id="cb704-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(pval), <span class="dt">color=</span><span class="st">&quot;#d28e00&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb704-3" title="3"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;p-value&quot;</span>, <span class="dt">title=</span><span class="st">&quot;p-value distribution&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-364-1.png" width="672" /></p>
 </div>
 <div id="step-4-should-anything-be-changed" class="section level3">
