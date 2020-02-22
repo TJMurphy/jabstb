@@ -1,0 +1,402 @@
+# ANOVA Posthoc Comparisons {#posthoc}
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(DescTools)
+library(ez)
+library(lsr)
+```
+
+
+Where example data is shown below it is base upon the ANOVA analysis of the chickwts data set as shown Chapter\@ref(onewayanova) .
+
+## Overview of options
+
+The major issue to address in ANOVA posthoc testing is the multiple comparison problem. We have a family of comparisons. Every comparison is a hypothesis test. Every hypothesis test carries type1 and type2 error risk. Testing too many hypotheses in a family at once leads to certain error. 
+
+There are two fundamental ways to control the family-wise error rate (FWER) after ANOVA: 1) p-value adjustments, or 2) range tests.
+
+The menagerie of options within each of these is large and confusing. That largely stems from the fact that nobody really agrees on the best way to control FWER. When a fist fight breaks out at a international statistics conference you can almost be certain it is due to FWER. In fact, it would seem everyone who has ever had a strong opinion on the matter has contributed an eponymous test.
+
+I say this to make it clear that you have a judgment to make on what the best approach is for the problem you are trying to solve with your own experiment.
+
+Here's what is most important to keep in mind. Sometimes we do these multi-factorial experiments in an exploratory mindset, without precise planning for the groups we might want to compare. We may even compare every group to all other groups, and sometimes that is all right. __Know that there are post hoc tests more suited for that "hit seeking" mindset compared to other tests.__
+
+Other times we've set up a severe test of a crucial scientific prediction. We have a clear idea of the comparisons we want to make. We hope the result will be the foundation of the next few years of work. We (should) have very low tolerance for type1 error in a situation like that. __Know there are post hoc tests more suited than others for protecting against type1 error in cases like that.__ 
+
+### Pairwise.t.test with p-value adjustments
+
+I promote posthoc testing using the `pairwise.t.test`. There are a few reasons for this. 
+
+* We are already familiar with t-tests. 
+* We only need one function for many kinds of uses. 
+* It can be used for both completely randomized (unpaired) and for related measure (paired) designs.
+* Several p-value adjustment options are available.
+
+The `pairwise.t.test` function is not the `t.test` function. The `pairwise.t.test` denominator uses standard error derived from the residual variance from the full experiment, rather than just that for each pair in a comparison. This is statistically appropriate because it takes into account the context in which all the data was collected. 
+
+A downside of using the pairwise.t.test is that the function only produces adjusted p-values. It does not produce adjusted confidence intervals. Indeed, except for the straight Bonferroni, adjusted confidence intervals are not readily derived from these step procedures. 
+
+If confidence intervals are sought for inferential purposes, using a range test, such as the TukeyHSD, is a better post hoc option.  For that, `DescTools::PostHocTest(method = "hsd")` 
+
+#### P-value adjustment methods
+
+When using the `pairwise.t.test` we need to select a p-value adjustment method. Here are the options. The output of the test will be an array of adjusted p-values, corresponding to each of the comparisons made. 
+
+We reject the null for any comparisons where the adjusted p-values are lower than the pre-determined type1 FWER threshold (eg, 5%). 
+
+The table below compares the performance of these adjustment algorithms on a common vector of unadjusted p-values (see the none column). The pattern from left to right is clear. Both the Bonferroni and Holm offer the most severe type1 protection, the BY is balanced between type1 and type2, the Hommel and Hochberg are liberal and perform about the same, and the BH (aka FDR) is the most liberal. 
+
+```{r compare p-value adjustments, echo=FALSE}
+
+set.seed(1234)
+p <- runif(5, 0, 0.025)
+
+post <- tibble(none= p.adjust(p, "none"),
+               BH_FDR = p.adjust(p, "BH"),
+               hochberg= p.adjust(p, "hochberg"),
+               hommel = p.adjust(p, "hommel"),
+               BY =  p.adjust(p, "BY"),
+               holm=p.adjust(p, "holm"),
+               bonferroni = p.adjust(p, "bonferroni"),
+               )
+
+knitr::kable(post, caption="Comparison of p-values adjustment methods available in the pairwise.t.test function; most liberal on left to most conservative on right .") 
+
+```
+
+##### Bonferroni
+
+The simplest to understand. Multiplies each unadjusted p-value, $p$, by $m$ total comparisons made. 
+
+\begin{equation}
+    p_{adjust} = m \times p
+\end{equation}
+
+Use the Bonferroni correction when seeking strong protection against type1 error. Of all of these p-adjustment methods, only the Bonferroni includes a pathway to calculate confidence intervals that are coherent with the adjusted p-values.
+
+##### Sidak (unavailable)
+
+Although not an option in R's `p.adjust.methods` it is easy enough to code. Sidak adjusts each p by the total number of comparisons, m, using the following relationship.
+
+\begin(equation)
+    p_{adjust}=1-(1-p)^m
+\end(equation)
+
+Use the Sidak correction when you wish strong protection against type1 error, but perhaps not as strong as Bonferroni.
+
+##### Holm
+
+Selecting the `"holm"` option in the  `p.adjust.methods` function executes a step-based Bonferroni correction procedure otherwise known as the Holm-Bonferroni. The step procedure accounts for why the adjustments can share the same value. This operates after first ranking the unadjusted p-values from smallest to largest p-value, stepping up through them. At each step $i$, the comparison value used in the Bonferroni is reduced to account for those already made. The cumulative maximum is reported.
+
+\begin{equation}
+  p_{adjust}=(m+1-i)\times p
+\end{equation}
+
+Use the Holm correction when you wish strong protection against type1 error, but perhaps a bit less strong than the Bonferroni.
+
+##### Hochberg
+
+Selecting the `"hochberg"` option in the  `p.adjust.methods` function also executes a step-based Bonferroni correction procedure. This differs markedly from the Holm procedure . The `"hochberg"` works by first ranking the unadjusted p-values from highest to lowest. And rather than return the cumulative maxima, it returns the minima. This will leave the highest original p-value unadjusted while the lowest p-value gets the maximal Bonferroni adjustment. 
+
+The overall outcome of the `"hochberg"` is a liberal p-value adjustment on the input array compared to the Holm and Bonferroni.
+
+\begin(equation)
+    p_{adjust}=(m+1-i)\times p
+\end(equation)
+
+Use the Hochberg correction on experiments where you want strong protection against type2 errors. For example, if the experiment is designed more exploratory, closer to a hit screen than to a true hypothesis test.
+
+##### Hommel
+
+Everybody seems to agree the Hommel procedures is the most difficult to describe. Even if I showed the code here I'm not sure I could describe it.^[Hommel, Biometrika (1988) 75, 2, pp383-6] 
+
+As is evident from the result in the table of options, it performs along the lines of the Hochberg. As a general rule, I try to avoid using things I don't understand.
+
+##### Benjamini-Hochberg (BM, FDR)
+
+Selecting the `"BH"` option executes the same step-down procedure as for the `"hochberg"` but with a different correction. Furthermore, the `"BH"` and the `"fdr"` selections run the same calculation, yielding identical output. `"BH"` and `"fdr"` are one and the same in the table above and for this description.
+
+To perform the step-down, the unadjusted p-values are re-ranked from highest to lowest and multiplied by a ratio of the total comparisons to their original low-to-high index value. The net effect is that the highest p-value is uncorrected, the lowest p-value get's the full Bonferroni, while the others are corrected between these two extremes. Cumulative minima are reported in the output. 
+
+The net net outcome is that the Benjamini-Hochberg procedure is even more liberal than the Hochberg.
+
+\begin(equation)
+    p_{adjust}=\frac{m}{i}\times p
+\end(equation)
+
+Use the Benjamini-Hochberg correction on experiments where you want strong protection against type2 errors. For example, if the experiment is designed to be more exploratory, more like a hit screen than to a true hypothesis test. Indeed, you'll find the BH/fdr used a lot in testing for hits in procedures on large "-omics" data sets.
+
+##### Benjamini-Yekutieli
+
+Selecting the `"BY"` method applies a Hochberg-like step-down based p-value correction that is considerably more impactful on type1 error than the Benjamini-Hochberg (FDR) method. 
+
+\begin(equation)
+  p_{adjust}=(\sum_{m=1}^{m}\frac{1}{m})\times\frac{m}{i}\times p
+\end(equation)
+
+This strikes an interesting balance between very strong control of type1 error while allowing for a more liberal evasion of type2 error. This is probably a good choice for experiments with objectives that straddle severe hypothesis testing along with hit screening.
+
+#### Examples
+
+**No p-value adjustment**
+
+Sometimes it's useful to generate p-values that are not corrected for multiple comparisons. For example, when we wish to create a p-value array that we will next subset to focus in on planned comparisons.
+
+The script below generates a matrix of p-values for t tests of all possible comparisons, none of which are adjusted for multiple comparisons. 
+
+Parenthetically, these p-values are what would be observed if the Fisher LSD test were applied. The Fisher LSD test actually does not adjust p-values. 
+
+```{r}
+allPairs <- pairwise.t.test(chickwts$weight, chickwts$feed, paired=FALSE, pooled.sd=TRUE, p.adjust= "none")
+allPairs
+```
+
+The unadjusted p-value output from the `pairwise.t.test` function is a matrix, which is important to know when the need arises to pull out specific elements of the analysis. 
+
+```{r}
+class(allPairs$p.value)
+allPairs$p.value
+
+```
+
+For example, to quickly scan which comparisons are below the p < 0.05 threshold we apply a simple custom `extreme` function across the matrix:
+
+```{r}
+extreme <- function(x){
+  ifelse(x < 0.05, TRUE, FALSE)
+}
+
+apply(allPairs$p.value, c(1, 2), extreme)
+```
+
+So we can easily see that without adjustment all but 3 of the 15 possible comparisons are statistically different.
+
+**Subsets of comparisons**
+
+Let's imagine we've just started a new postdoc position in a lab that studies chick weights. To set up a new line of research that will span the next few years we need to make a decision on the best way to feed the chicks.
+
+The standard chow protocol is casein. Are there any other chows that would be better?
+
+The experiment is a one-way completely randomized ANOVA design that measures chick weight on 6 different diets including the casein diet. Let's stipulate the experiment passes an omnibus F test. We now wish to conduct posthoc comparisons to test whether any of the 5 other diets differ from casein.
+
+Here's a three step procedure for doing just that. 
+
+Step1: First, run the `pairwise.t.test` function, setting the argument `p.adjust="none"`. The output includes a matrix of p-values we'll name `allPairs`, providing all possible comparisons.
+
+```{r}
+#just repeating from above
+allPairs <- pairwise.t.test(chickwts$weight, chickwts$feed, alternative = "two.sided", p.adjust= "none")
+```
+
+Step2: Select from the `allPairs` matrix only the p-values that correspond to the comparisons you'd like to make. Name that vector of unadjusted p-values, `selectPairs`. This takes a bit of cleverness depending on what you want to grab from the matrix.
+
+For example, we only want to compare all of the diets to casein. The comparisons we want are all in the first column. Use your matrix indexing skillz to grab only the unadjusted p-values from that first column:
+
+```{r}
+selectPairs <- allPairs$p.value[, 1]
+selectPairs
+selectPairs < 0.05
+```
+
+Step3: Now pass these unadjusted p-values in the `selectPairs` vector into the `p.adjust` function. We choose a stringent Bonferroni test because our foreseeable life depends on the outcome of this test. We have low tolerance for type1 error.
+
+The output of this step is a vector of adjusted p-values for the selected group of comparisons.
+
+```{r}
+adjustedPvalues <- p.adjust(selectPairs, method="bonferroni")
+adjustedPvalues
+```
+
+Which of these are extreme? If it's not clear by inspection (or too large), use a simple Boolean: 
+
+```{r}
+adjustedPvalues < 0.05
+```
+
+We reject the null that mean chick weights are the same between casein and horsebean, or linseed or soybean. Chick weights on meatmeal and sunflower diets show no statistical difference from casein.
+
+How would we act on this information? That's a scientific judgment. Perhaps the sunflower diet is less expensive, or we are from Kansas.
+
+It is important to recognize that we have NOT run a test of equivalence. We cannot conclude that chick weights on casein, meatmeal and sunflower are equivalent. The statistical analysis only suggests that they don't differ, given these sampling conditions. That sounds like the same thing but it is not. For example, if the sample size were larger we might observe a statistical difference.
+
+**Making all possible comparisons**
+
+Imagine that we were just exploring different feeds and we were interested in comparing all feeds to all other feeds.
+
+```{r}
+bonf.adjustedAllpairs <- pairwise.t.test(chickwts$weight, chickwts$feed, alternative = "two.sided", p.adjust = "bonferroni")
+bonf.adjustedAllpairs
+```
+
+And here's a quick scan for which of these are now below a FWER p < 0.05. Note how a handful of comparisons that were scored extreme by this simple test above, without a p-value adjustment, are no longer extreme with the p-value adjustment.
+
+```{r}
+extreme <- function(x){
+  ifelse(x < 0.05, TRUE, FALSE)
+  
+}
+apply(bonf.adjustedAllpairs$p.value, c(1, 2), extreme)
+```
+
+In contrast to what we observed running this trick on the unadjusted p-values, with the Bonferroni we go from twelve statistically different comparisons to eight.
+
+### Range tests
+
+These range tests are designed to test group means. They do not test the means of differences between two levels of a factor. Group means are irrelevant in related measures designs.
+
+They should only be used as posthoc for completely randomized designs. When the design is related measures, the posthoc testing should be performed using the pairwise.t.test with p-value adjustments, as covered in the section above.
+
+These tests differ in a fundamental way from the p-value adjustments associated with pairwise.t.testing. They operate not on p-values, but on the differences between group means. Their adjusted p-values are derived from their unique "Studentized" probability distributions of these differences.  
+
+Range tests first calculate a critical threshold for differences between group means, then compare every group mean to this critical difference. Statistically different comparisons are those that have differences that are greater than the critical difference.
+
+The adjustment for multiple comparisons comes from probability distribution of a statistic used to calculate these critical differences.
+
+you'll recognize these procedures as analogous to calculating confidence intervals and for calculating the critical value for a test statistic value to define the boundary of statistical extremeness. 
+
+For range tests, that boundary is called the critical difference. Any differences more extreme are ruled as statistically different. 
+
+#### How this works
+
+An array of group mean differences can be calculated from a vector of group means. 
+
+Suppose we had a way of declaring some critical difference between group means. Any differences observed in our array above that critical difference value would be taken as statistically different.
+
+Imagine a set of ANOVA data comprised of $N$ total replicates. There are $n$ replicate values are in each of $k$ groups. The largest group mean for the response is $\bar y_{max}$ and the smallest is $\bar y_{min}$. The pooled variance for all replicate values in the set is $s^2$. 
+
+Then the random variable \[q =\frac{\bar y_{max}-\bar y_{min}}{\sqrt\frac{s^2}{n}}\]
+
+has what is called a Studentized range distribution. 
+
+Given a confidence level $1-\alpha$, the number of groups $k$, and the residual error degrees of freedom $df=N-k$, a critical value of $q$ can be derived from an appropriate studentized distribution.
+
+This critical $q$ value is used to define the critical difference between group means in a data set where the residual variance is $MS_{residual}$. 
+
+For example, the critical difference for the TukeyHSD test is:  \[Tukey\ critical\ difference = q_{(conf.level, k, df)}\times\sqrt\frac{MS_{residual}}{n}\] 
+
+##### Example of Tukey by hand
+
+Imagine a one-way ANOVA analysis where there are 5 groups, each having 4 replicates within. The $MS_{residual}= 4.0333$ and has $df = 15$. From these values we can calculate a critical difference between group means as follows.
+
+In the old days, we would find a table for Tukey's HSD q values in the back of a statistics textbook. R's `qtukey` function is useful to calculate a value for $q$. 
+
+```{r}
+q <- qtukey(0.05, 5, 15, lower.tail=F);q
+```
+
+The critical difference for the TukeyHSD test would be
+
+```{r}
+critdiff <- q*sqrt(4.0333/4); critdiff
+```
+ 
+With 5 groups there are $k(k-1)/2=10$ differences between group means to calculate. For those differences that exceed the value $critdiff = 4.385125$ we would reject the null that there is no difference between those group means.
+
+##### Example doing Tukey with R
+
+Let's run through a one-way ANOVA using the chickwt data with a TukeyHSD posthoc as follow up. 
+
+We do this to produce an `aov` object that we can pass into the `PostHocTest` function.
+
+```{r paged.print=FALSE}
+chickwts$ID <- as.factor(1:nrow(chickwts))
+my.ezaov <- ezANOVA(
+            data = chickwts, 
+            wid = ID, 
+            dv = weight, 
+            between = feed,
+            type = 2, 
+            return_aov = T, 
+            detailed = T)
+# my.ezaov$ANOVA, this is a dataframe
+# my.ezaov$Levene, this is also a dataframe
+# my.ezaov$aov, this is an aov object that we can pass into posthoc functions. 
+```
+
+Now run the TukeyHSD test:
+
+```{r}
+PostHocTest(my.ezaov$aov, conf.level = 0.95, method="hsd")
+```
+The test calculates the measured difference between each group. Application of the range test formula to the dataset yields confidence intervals for each comparison of interest. Those that do not include the value for the critical difference are flagged with an asterisk as statistically different. Adjusted p-values are also produced. 
+
+We see that the TukeyHSD posthoc test flags eight group mean differences as extreme.
+
+
+#### Dunnett's test
+
+This post hoc method differs from those above because it is for conducting multiple dependent comparisons, on just a subset of the group means. For example, use Dunnett's to compare each of a group of test means back to the negative control mean. 
+
+The fewer comparisons don't spread the allowed FWER as thin as the other options. The following script is configured to compare the means at each level of feed to the mean response to the horsebean feed (to illustrate how to define the control group). 
+
+Dunnett's is nice because it gives you the effect size (diff) and the confidence interval limits for the difference, as well.
+
+Note: diff = the difference between diet means for the compared groups.
+
+The p-values are adjusted for multiple comparisons.
+
+```{r}
+DunnettTest(weight ~ feed, control = "horsebean", data = chickwts)
+```
+
+#### Which range test is best?
+
+Just like for the p-value adjustment methods, the range tests operate over a range from fairly liberal to fairly conservative control over type1 error. The best one to use depends upon the overarching scope of the experiment. When it is exploratory and we want protection from type2 error we choose a liberal test. When testing a crucial hypothesis and needing protection from type1 error, we choose a more conservative test.
+
+__Fisher's LSD:__ Only use the Fisher LSD after a positive ANOVA for a small, 3 group experiment.
+
+A 3 group experiment has a positive control, a negative control, and the test group. A one-way ANOVA of the data yields an extreme F statistic and a null rejection. The ANOVA doesn't tell us whether that's due to the positive control or due to the test group yielding a good response. 
+
+In fact, there is only one scientific question of interest: Is the test group different from the negative control? In this case, the Fisher LSD is used as a posthoc to answer that question under the type1 error expended in the ANOVA test. A p-value adjustment is unnecessary because the ANOVA test already serves to "protect" the FWER. But it does allow for testing whether the test group differs from a control group.
+
+__Newman-Keuls:__ The most liberal of range tests that do make adjustments. This should be used in exploratory experiments seeking potential hits, where type1 error is less of a concern.
+
+__Duncan and TukeyHSD__ These tests offer moderate protection from type1 and type2 error. As you can see below, although not identical they perform about the same.
+
+__Scheffe and Dunn__ Almost has the ring of a Nashville recording duo, doesn't it? Or a trendy Beltline tapas place.  These offer the most protection against type1 error, and we are also sure to miss some "hits" with these two tests. These two tests should be avoided when the experiment is more exploratory in nature. 
+
+```{r range test comparisons, echo=FALSE}
+blah <- PostHocTest(my.ezaov$aov, conf.level = 0.95, method="hsd")$feed
+contrast <- names(PostHocTest(my.ezaov$aov, conf.level = 0.95, method="hsd")$feed[,1])
+TukeyHSD <- unname(PostHocTest(my.ezaov$aov, conf.level = 0.95, method="hsd")$feed[,4])
+LSD <- unname(PostHocTest(my.ezaov$aov, conf.level = 0.95, method="lsd")$feed[,4])
+Duncan <- unname(PostHocTest(my.ezaov$aov, conf.level = 0.95, method="duncan")$feed[,4])
+Scheffe <- unname(PostHocTest(my.ezaov$aov, conf.level = 0.95, method="scheffe")$feed[,4])
+Newman_Keuls <- unname(PostHocTest(my.ezaov$aov, conf.level = 0.95, method="newmankeuls")$feed[,4])
+Dunn <- unname(PostHocTest(my.ezaov$aov, conf.level = 0.95, method="bonferroni")$feed[,4])
+
+rangeTests <- data.frame(contrast, LSD, Newman_Keuls, Duncan, TukeyHSD, Scheffe, Dunn)
+knitr::kable(rangeTests, caption="Adjusted p-values from range tests applied to the chickwts data; left to right, liberal to conservative.")
+```
+
+## Reporting the result
+
+It is imperative to state how FWER has been controlled when performing multiple comparisons as an ANOVA follow up.
+
+A surprising number of papers describe analyzing data as using ANOVA, then doing many group comparisons and speckling their figures with many asterisks, without ever mentioning the posthoc procedures. Did they do any? What exactly are these p-values and what exactly do the asterisks represent?
+
+Somewhere we MUST write, "A *some way* ANOVA was followed by *insert posthoc range test or p-value adjustment name here*
+
+If true, when describing a set of p-values or confidence intervals in a figure or table legend, always use the phrase, "adjusted for multiple comparisons". This makes it clear that we are reporting adjusted, rather than unadjusted p-values.
+
+A very common mistake occurs when someone runs the posthoc but acts upon the unadjusted p-values rather than the adjusted p-values. This is probably due to the fact that they find posthoc testing confusing.
+
+## Summary
+
+* Yes, posthoc testing is confusing, given the many options and LOT's of output.
+* Everybody agrees it is wise to control FWER, but nobody agrees on how best to do it.
+* There are two basic procedures: p-value adjustments or range tests.
+* Range tests compare group means, and group means are irrelevant in related measures designs. Don't use range tests on related measure designs.
+* Otherwise, before choosing an option, ask yourself: Is this exploratory or is this a severe test?
+* For exploratory experiments, choose the liberal procedures. They are the ones on the left in the tables above.
+* For severe tests, choose conservative procedures. They are the ones on the right in the tables above.
+
+
+
+
+
+
+
+
+
