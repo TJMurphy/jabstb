@@ -13,6 +13,8 @@ knitr::include_graphics("images/anova_heuristic.jpg")
 
 The analysis of variance (ANOVA) is a method to design and evaluate experiments in which the predictor variable(s) are discrete factors with three or more levels and when the outcome variable is on some continuous measured scale. ANOVA is also univariate, in so far as the analysis involves only a single outcome variable.
 
+## Assumptions
+
 The validity of an ANOVA depends upon fulfilling the following assumptions. These are basically the same as we discussed for t-testing.
 
 Strong assumptions, do not use ANOVA when violated
@@ -20,22 +22,26 @@ Strong assumptions, do not use ANOVA when violated
 * Every replicate is independent of all others.
 * Some random process is used when generating measurements.
 
-Weaker assumptions, ANOVA is robust to violations of the following
+Weaker assumptions, ANOVA is said to be robust to violations of the following
 
 * The distribution for the residuals from which the outcome variable is derived is continuous random normal.
 * The variances of the groups are approximately equal.
 
-With small samples it is usually difficult to conclude that the 3rd and 4th assumptions are met. Both affirmative and negative results of tests of normality, tests for homogeneity of variance and outlier tests should be taken with a grain of salt. The smaller the sample size, the larger the grain of salt. 
+With small samples it is usually difficult to conclude that these weaker assumptions are met. Both affirmative and negative results of tests of normality, tests for homogeneity of variance and outlier tests should be taken with a grain of salt. The smaller the sample size, the larger the grain of salt. 
 
-Use your judgment. Do you have any reason to believe the variable is not normally distributed? Are you not up against a zero boundary? Are you confident the variable is measured in a linear range? 
+Use your judgment. Do you have any reason to believe the variable is not normally distributed? Are you not up against a zero boundary? Are you confident the variable is measured in a linear range of your assay procedure? If in doubt, analyze the data with some other procedure. 
 
-Data that appears markedly skewed can be transformed using log or reciprocal functions. The resulting distributions are ~ normal. ANOVA testing can be performed on those transformed values. As we discussed with previously, the nonparametric analogs of ANOVA (Kruskal-Wallis and Friedman tests) are suitable options when normality is violated. 
+Data that appears markedly skewed can be transformed using log or reciprocal functions. The resulting distributions are ~ normal. ANOVA testing can be performed on those transformed values. As we discussed previously, the nonparametric analogs of ANOVA (Kruskal-Wallis and Friedman tests) are suitable options when normality is violated. 
 
-There are alternative analytic options as will be detailed below. In particular, there is no need to use ANOVA for discrete types of outcome data. ANOVA is not designed to analyze such data, which is not continuous. Additionally, regression, either linear or nonlinear, is often a preferred method of analysis when the predictor variable is continuous rather than discrete.
+There are alternative analytic options as will be detailed below. In particular, there is no need to use ANOVA for discrete types of outcome data. ANOVA is not designed to analyze non-continuous data. Additionally, regression, either linear or nonlinear, is often a preferred method of analysis when the predictor variable is continuous rather than discrete.
 
-ANOVA represents a family of about a dozen or so statistical tests. These differ by how many predictor factors are involved and whether or not the measurements are intrinsically-related such that replicates are completely randomized or repeated/related. 
+## Types of designs
 
-ANOVA experiments tend to design themselves since they are fairly intuitive way of asking questions. In fact, ANOVA is probably the most widely used experimental design in the biomedical sciences. If we randomly access any article in our favorite journal, chances are it will have a figure or table depicting an ANOVA design. They tend to look something like these.
+__tl;dr:__ ANOVA represents a family of about a dozen different statistical models. These differ by how many predictor factors are involved and whether or not the measurements are intrinsically-related. A given factor can be applied in either a completely randomized or repeated/related measures format. Experiments can involve one, two or even three factors. 
+
+ANOVA experiments tend to design themselves since they are fairly intuitive way of asking questions. In fact, ANOVA is probably the most widely used experimental design in the biomedical sciences. If we randomly access any article in our favorite journal, chances are it will have a figure or table depicting an ANOVA design.
+
+They tend to look something like these.
 
 ```{r echo=FALSE, fig.cap="Typical graphs depicting some of the different ANOVA designs.", fig.height=3, fig.show="hold", fig.width=5, message=TRUE, warning=TRUE}
 
@@ -109,27 +115,29 @@ ggplot(three.way, aes(factorA, response, fill=factorB))+
                
 ```
 
-The reasons why ANOVA is so popular are very simple.
+Why is ANOVA so common?
 
-First, ANOVA is versatile. ANOVA allows for testing many groups simultaneously, for one or more factors, each at several levels. We can test for the main effect of each factor, or for interactions between factors. We can also test for differences between specific individual groups, using post hoc analysis. Repeated/related designs are readily accommodated, including mixed designs where one factor is completely randomized and another is related measure within a single multi-factor experiments.
+First, ANOVA is versatile. One or more factors, each at several levels, can be tested simultaneously. We can test for the main effect of each factor, or for interactions between factors. We can also test for differences between specific individual groups within a context of many other groups, using post hoc analysis. Designs involving multiple instrinsically-related measurements from a common replicate are readily accommodated. We can have mixed designs where one factor is completely randomized and another is related measure within a single multi-factor experiments.
 
-Second, ANOVA is efficient. As a general rule, fewer experimental units are needed to make the same number of pairwise group comparisons than would otherwise be necessary using a t-test-based experimental design. That efficiency can improve modestly as the number of groups increases.
+Second, ANOVA is efficient. As a general rule, fewer replicates are needed to make the same number of pairwise group comparisons than would otherwise be necessary using a t-test-based experimental design. That efficiency can improve modestly as the number of groups increases.
 
-Each individual hypothesis test carries a risk of type1 error. In one sense, ANOVA serves as a protocol to detect differences between many groups while ensuring that the overall type1 error, the so-called experimentwise error or the family-wise error rate (FWER), remains fixed at the same tolerable threshold we'd set for a single t-test between two groups.
+Third, we can test many hypotheses simultaneously or a grand hypothesis. Since each individual hypothesis test carries a risk of type1 error, ANOVA serves as a protocol to detect differences between many groups while ensuring that the overall type1 error, the so-called experimentwise error or the family-wise error rate (FWER), won't inflate to intolerable levels.
 
 ## Jargon: Factors and levels
 
-In ANOVA jargon, predictor variables are classified as "factors". ANOVA designs are said to be factorial. They are multifactorial if more than a single factor is involved. 
+In jargon, ANOVA predictor variables are classified as "factors". ANOVA designs are said to be factorial. They are multifactorial if more than a single factor is involved. 
 
-In other corners, ANOVA is referred to as factorial analysis (which should not be confused with factor analysis). Where some people describe an ANOVA experiment as a "one-way ANOVA" others might describe it as "one-factor ANOVA". It's all the same.
+In other corners, ANOVA is referred to as factorial analysis (which should not be confused with factor analysis). Where some people describe an ANOVA experiment as a "one-way ANOVA" others might describe it as "one-factor ANOVA". Yet elsewhere it is called multiple regression. It's all the same.
 
 The factors of ANOVA represent categorical, discrete variables that are each applied at two or more levels. For example, a factor at three levels is a predictor variable that has three discrete values.
 
-Imagine an experiment to explore how a particular gene influences blood glucose levels. Blood glucose levels, a continuous response variable, are measured in experimental units comprising a total of three different genotypes: wild-type, heterozygous knockouts of that gene, and homozygous knockouts of the gene. Here, genotype is a discrete predictor variable, a factor, which has three levels.
+Imagine an experiment to explore how a particular gene influences blood glucose levels. Blood glucose levels, a continuous variable, are measured in subjects that have three different genotypes for the gene: either wild-type, or heterozygous knockouts, or homozygous knockouts. Here, genotype is a discrete predictor variable, a factor, which has three levels.
 
-To run functions related to ANOVA, R requires that your predictor variables are classified as factors in data sets. 
+### Woring with factors in R
 
-The following script creates a vector object called `genotype`. The object is a representation of the genotype variable. The data class for that vector is `character` because it is comprised of character strings. But look what happens when it is packaged into a data frame called `my.factors`. R coerces `genotype` into a factor variable with 3 levels. Which is nice.
+R requires that ANOVA predictor variables are classified as factors in data sets. 
+
+The following script creates a vector object called `genotype`. The object is a representation of the genotype variable. The data class for that vector is `character` because it is comprised of character strings. But look what happens when it is packaged into a data frame called `my.factors` using the `data.frame`. R coerces `genotype` into a factor variable with 3 levels. Which is nice.
 
 ```{r}
 genotype <- c("wild-type", "heterozygote", "homozygote")
@@ -141,7 +149,7 @@ str(my.factors)
 
 ```
 
-But beware. The tidyverse `tibble` function is an analog of `data.frame`. Yet `tibble` does not coerce factors from character vectors. We'll need to do that by hand if using `tibble` or functions that create tibbles, such as `read_csv`.
+But beware. The tidyverse `tibble` function is an analog of `data.frame`. Yet `tibble` does not coerce factors from character vectors. If using `tibble` or functions that create tibbles, such as `read_csv`, we'll need to remember to convert by hand using functions like `as_factor`.
 
 ```{r}
 genotype <- c("wild-type", "heterozygote", "homozygote")
@@ -152,7 +160,9 @@ str(my.factors)
 as_factor(genotype)
 ```
 
-This coercion won't occur if a factor in an experiment represents a variable with numeric values. To illustrate what I mean by this, imagine adding a factor to the genotype experiment. We would test for the effect of an antidiabetic drug on blood glucose at 0, 10 and 30 microgram/kg. These effects would be measured at each level of the genotype factor. 
+This coercion won't occur if a factor in an experiment represents a variable with numeric values. To illustrate what I mean by this, imagine adding a second factor to the genotype experiment. 
+
+We wish to test for the effect of an antidiabetic drug on blood glucose at 0, 10 and 30 microgram/kg. These effects would be measured at each level of the genotype factor, leading to a nifty 3 X 3 factorial design. 
 
 We would create the vector `drug` as an object representing the drug variable and its three levels as follows. Note however that here, R does not coerce numeric values as factors:
 
@@ -164,38 +174,43 @@ class(drug)
 
 ```
 
-That's easily fixed using the `as.factor` function
+That's easily fixed using the `as.factor` or `as_factor` function. Whatev.
 
 ```{r}
-drug <- as.factor(c(0, 10, 30))
+drug <- as_factor(c(0, 10, 30))
 my.factors <- data.frame(genotype, drug)
 str(my.factors)
 class(drug)
 
 ```
 
-Alternately, we would enter the drug levels as character strings, which would be coerced into a factor at two levels when added to a data frame, like for the first example above:
+Alternately, we would enter the drug levels as character strings (tossing in some other random character value), which would be coerced into a factor at two levels when added to a data frame, like for the first example above:
 
 ```{r}
-drug <- c("zero", "ten", "thirty")
+drug <- c("zero", "dark", "thirty")
 ```
 
+When you forget to convert a variable to a factor, R's anova functions will bark at you and you won't know what the problem is because the error messages are confusing. R doesn't know that you don't know you should be using factors.
 
-**I bring this up to point out that you can do ANOVA with continuous predictor variables. You just have to treat them as factors.**
+**You can do ANOVA with continuous predictor variables. You just have to treat them as factors.**
 
-When a continuous predictor variable is used at many levels (eg, a time series, a dose series, etc), regression *per se* may can be a better alternative to ANOVA. Regression allows for capturing additional information encoded within continuous variables (eg, rate constants, half-lives, etc). 
+When a continuous predictor variable is used at many levels (eg, a time series, a dose series, etc), regression *per se* can be a better alternative to ANOVA. Regression allows for capturing additional information encoded within continuous variables (eg, rate constants, half-lives, etc). 
 
-But that decision is more scientific than it is statistical. For example, you would use regression rather than ANOVA if the goal is to derive regression parameter estimates, such as slopes for rates or affinity constants. Only use ANOVA when the goal is to determine whether the factor has any effect at all, or if it interacts with some other factor.
-
-Just be aware that R will bark out error messages when we use continuous variables as factors without actually converting them to factor class objects.
+But that decision is more scientific than it is statistical. 
 
 ## ANOVA models: One-, Two-, and Three-way
 
-If an experiment has only one factor, it a one-way ANOVA design (alternately, "one-factor ANOVA"). If an experiment has two factors, it is a two-way ANOVA or two factor design. Three factors? Three-way ANOVA. These models can also be either completely randomized, repeated/related measures, or mixed. 
+If an experiment has only one factor, it is a one-way ANOVA design (alternately, "one-factor ANOVA"). 
 
-In a completely randomized structure, every level of the factor(s) is randomly assigned to replicates. Every replicate measurement is independent from all others.  
+If an experiment has two factors, it is a two-way ANOVA or two factor design. 
 
-In a related measures structure, measurements within an experimental unit are intrinsically-linked. Every replicate receives *all* levels of a factor (eg, before-after, stepped dosing, or when subjects are highly homogeneous, such as cultured cells or inbred animals).
+Three factors? Three-way ANOVA. 
+
+All of these models can also be either completely randomized, repeated/related measures, or mixed. 
+
+In a completely randomized structure, every level of the factor(s) is randomly assigned to replicates. Every replicate measurement is independent from all others. The two group analog is the unpaired t-test. 
+
+In a related measures structure, measurements within an experimental unit are intrinsically-linked. Every replicate receives *all* levels of a factor (eg, before-after, stepped dosing, or when subjects are highly homogeneous, such as cultured cells or inbred animals, or repeated recording from the same cell, etc).
 
 Thus, the possible ANOVA models are quite diverse:
 
@@ -204,86 +219,92 @@ Thus, the possible ANOVA models are quite diverse:
 * Two-way ANOVA -completely randomized on both factors
 * Two-way ANOVA -related measures on both factors
 * Two-way ANOVA -mixed, one factor completely randomized, the other factor related measures
-* Three-way ANOVA -can be CR, RM or mixed, 
+* Three-way ANOVA -can be purely CR, ourely RM or mixed
 
 I should mention that ANOVA for even more than three factors is conceptually possible. However, such large, complex designs have considerable downside where, by ANOVA analysis, it is difficult to tease out which factor and level is responsible for what.
 
-Three-way ANOVA, for example, allows for such a large number of hypotheses to be tested (three different main effects and four possible interaction effects, not to mention the large number of post hoc group comparisons) that it can be difficult to conclude what is responsible for any observed effects. These larger designs also tend to break the efficiency rule, it's fair to say that three way ANOVA designs tend to be over-ambitious experiments...over-designed and usually under powered for the large number of hypotheses they can test.
+Three-way ANOVA, for example, allows for such a large number of hypotheses to be tested (three different main effects and four possible interaction effects, not to mention the large number of post hoc group comparisons) that it can be difficult to conclude exactly which factor at what level is responsible for any observed effects. 
 
-Designing an experiment as completely randomized or related measures is largely a scientific, not a statistical, decision. What that means is this: measurements are either intrinsically-linked or they are not. Making that determination is a scientific call, based upon the nature of the biological material that we have at hand. When we've concluded that measurements are intrinsically-linked, then the choice must be a related measures design and analysis.
+These larger designs also tend to break the efficiency rule, it's fair to say that three way ANOVA designs tend to be over-ambitious experiments...over-designed and usually under powered for the large number of hypotheses they can test. As a general rule, I advise against doing them.
 
-Similarly, choosing to run experiments as one-way or two-way ANOVA designs is also scientific. In fact, we choose these mostly to test whether two factors interact. When uninterested in whether two factors interact it is usually best not to combine them in an experiment. The questions could be answered using separate one-way ANOVAs, instead.
+Designing an experiment as completely randomized or related measures is largely a scientific, not a statistical, decision. Measurements are either intrinsically-linked or they are not based upon the nature of the biological material that we have at hand. Or because of the way the experiment is being conducted. When we've concluded that measurements are intrinsically-linked, then the choice must be a related measures design and analysis.
 
-We'll discuss interaction hypotheses and effects in more detail later.
+Similarly, choosing to run experiments as one-way or two-way ANOVA designs is also scientific. In fact, intuitively, we choose a two-way design mostly to test whether two factors interact. When not interested in an interaction, it is usually best not to combine them in an experiment. The main effect questions may be more safely answered using separate one-way ANOVAs, instead.
 
-## ANOVA inference protocol
+We'll discuss interaction hypotheses and effects in more detail when we arrive at our two-way ANOVA discussion in the course.
 
-ANOVA can be used inferentially as stand alone test, or as an omnibus test. Most of the time we see it used as the latter. The test statistic for ANOVA is the F-test, which will be described below. 
+## Inference
 
-A positive F-test result can be used to infer whether a factor, or an interaction between factors, is effective. 
+ANOVA can be used inferentially as stand alone test for the main effect of a factor. More commonly, it is used as an omnibus test for permission to explore group differences. Most of the time we see it used as the latter but there is no "rule" that this must be so. 
 
-Given the example above, I can use positive F-test to conclude that genotype at a given locus influences blood glucose. And just leave it at that, without demonstrating which conditions differ from each other.  
+A positive ANOVA test result can be used to infer whether a factor, or an interaction between factors, is effective. 
 
-Alternately, a positive F-test result can be used as an omnibus. Here, a positive F-test implies that at least two levels of a factor differ from each other. The positive F-test grants access to find where those differences exist. This is done by making posthoc pairwise comparisons.
+Continuing with the example, I can use a positive F-test to conclude that genotype at a given locus influences blood glucose. And just leave it at that, without demonstrating which levels of the genotype differ from each other. I would write it up as follows: *The genotype influences blood glucose (one-way related measures ANOVA, F(2,15)=11.48, p=0.0009).* Then I will point to the data, which will speak for itself revealing which groups actually differ.  
+
+Alternately, a positive F-test result can be used as an omnibus. Here, a positive F-test implies that at least two levels of a factor differ from each other. The positive F-test grants us access to finding exactly where those differences exist. This is done by making posthoc pairwise comparisons.
+
+We would, perhaps, compare each of the responses to the three genotypes to each other; for a total of 3 t-test like comparisons. I would adjust the p-values of each of those outcomes to control the FWER for those multiple comparisons.
 
 The decision to use the F-test as a stand alone or as an omnibus is driven by our scientific objectives.
 
-```{r echo=FALSE, fig.cap="ANOVA work flow if working at a 5% type1 error threshold.", message=FALSE, warning=FALSE}
+```{r echo=FALSE, fig.cap="ANOVA work flow at a 5% type1 error threshold.", message=FALSE, warning=FALSE}
 knitr::include_graphics("images/anova_process.jpg")
 ```
+### A quick peek at posthoc testing
 
-These "post hoc" pairwise comparisons are, essentially, any of several variations on the t-test designed to adjust p-values on the basis of the multiple comparisons.
+These "post hoc" comparisons are, essentially, any of several variations on the t-test that are performed simultaneously. See Chapter \@ref(posthoc) for more information about these.
 
-The choices of comparisons after the F-test are driven by scientific, rather than statistical, reasoning. We can compare all levels of all factors to each other, or we can compare a much more limited subset. 
+These are designed in a way to limit the FWER to the predetermined type1 error threshold. Instead of all 5% error being devoted to compare two groups, the 5% is distrubuted across many comparisions. Sometimes dozens or more.
+
+The choices for comparisons after the F-test can be either planned or unplanned. They should be driven by scientific, rather than statistical, reasoning. 
+
+Unplanned is comparing all levels of all factors to each other. We might do that if we are looking for any and all differences on a project that is more exploratory in scope, such as in a hit screen.  Planned comparisons focus in on a much more limited subset of groups. We do this when the experiment is designed to test a fairly specific hypothesis or group of hypotheses. 
 
 What is important, statistically, is to make adjustments to the p-value threshold given all the comparisons made, so that the overall experimentwise type1 error does not exceed our declared threshold (usually 5%).
 
 In an experiment whose number of groups equals $k$, there are a total of $m=\frac{k(k-1)}{2}$ possible comparisons to make.
 
-Let's use the simplest case of a $k=3$ groups ANOVA as an example. 
+Let's use the simplest case of a $k=3$ groups ANOVA as an example, such as the glucose genotype discussed above. 
 
-There are $m=\frac{3(3-1)}{2}=3$ comparisons that can be made. Using the Bonferroni correction ($p_{adjust}=\frac{0.05}{m}=0.01667$). 
+There are $m=\frac{3(3-1)}{2}=3$ comparisons that can be made an imagine using the Bonferroni correction ($\alpha_{adjust}=\frac{0.05}{m}=0.01667$) the type1 error threshold is now 0.01667. 
 
 Thus, our adjusted threshold for declaring a statistical difference between 2 groups is now p < 0.01667, rather than p < 0.05.
 
+If doing the 3 X 3 two-way ANOVA with genotype and drug as two factors, we now have $k=9$ groups, yielding 36 possible comparisons and the threshold $\alpha_{adjust}=\frac{0.05}{m}=0.001389$ for each comparison.
+
 ## ANOVA calculations
 
-The simplest way to think about ANOVA is that it operates like a variance budgeting tool. In the final analysis, the higher the ratio of the variance associated with the grouping factor(s) compared to the residual variance, the more likely that some group means will differ. 
+The simplest way to think about ANOVA is that it operates like a variance budgeting tool. In the final analysis, the more variance associated with the grouping factor(s) compared to the residual variance, the more likely that some group means will differ. 
 
 ANOVA uses the least squares method to derive and account for sources of variation within a data set.
 
-Recall that the variance of a random variable $Y$ is estimated through sampling. Our measurements have values of $y_i$. Variance is calculated by dividing the sum of its squared deviates, $SS$, by the sample degrees of freedom (df). 
+Recall, our measurements of the random variable $Y$ have values of $y_i$ for $i=1, 2,..n$ and a sample mean $\bar y$. Variance is calculated by dividing the sum of its squared deviates, $SS$, by the sample degrees of freedom (df). 
 
 \[var(Y)=\frac{\sum_{i=1}^n(y_i-\bar y)^2}{n-1}=\frac{SS}{df}=MS\]
 
 In ANOVA jargon the variance is also commonly referred to as the mean square $MS$. This jargon emphasizes that variance can be thought of as an averaged deviation for sample measurements from their mean values.
 
-Now, that formula only illustrates how variance is calculated for a single sample group. What about multiple groups? As you might imagine, we have to incorporate information from all of the groups. 
+That formula only illustrates how variance is calculated for a single sample group. What about multiple groups? As you might imagine, we have to incorporate information from all of the groups. 
 
-To begin to understand that, recognize that all ANOVAs, irrespective of the specific design have two fundamental sources of variation:
+To begin to understand that, recognize that all ANOVAs, irrespective of the specific design are assumed to have two fundamental sources of variation:
 
 1) Variation due to the experimental model, which is determined by the nature of responses to the predictor variables.
-2) Residual variation, which is variation that cannot be explained by predictor variables.
+2) Residual variation, which is variation that cannot be explained by the predictor variables.
 
-Using sums of squared deviates the total variation within an experiment, whether due to known or known sources, can be accounted for.
-
-That total variation within an experiment can be expressed as the sum of the squared deviates. This represents the sum of the squared deviates for both the model and residual components: \[SS_{total}=SS_{model}+SS_{residual} \]
-
-$SS_{model}$ is the variation we can explain by the effects of our factors. $SS_{residual}$ is the variation our factors cannot explain.
-
-Perhaps it helps if we first think about this visually.
+__Law of Conservation of SS:__ That total variation within an experiment can be expressed as the sum of the squared deviates for these two sources.  \[SS_{total}=SS_{model}+SS_{residual} \]
 
 Let's imagine a simple one-way completely randomized ANOVA data set that looks like the graph below. There is only one factor, which has three levels. Each group has five independent replicates, for a total of 15 replicates within the entire experiment. 
 
 Our model seeks to account for the effect of genotype
 \[SS_{model}=SS_{genotype} \]
 
-and thus \[SS_{total}=SS_{genotype}+SS_{residual}\]
-
+Models are perfect but data are not. Not every data point is equal to the value of the black bar it is near. The residual variation are these differences and thus \[SS_{total}=SS_{genotype}+SS_{residual}\]
 
 The graph illustrates each data point, the means for each group (black bars) and the grand mean of the sample (gold bars). 
 
-We can readily imagine the distances from the data points to the group means and to the grand means. 
+We can readily imagine the distances from the data points to the grand mean.
+
+We can readily imagine the distances from the data points to the group means. 
 
 One can also appreciate and the distances from the group means to the grand mean. 
 
@@ -321,9 +342,9 @@ ggplot(data, aes(genotype, blood_glucose))+
 
 The first step in an ANOVA involves partitioning the variation in a data set using sums of squares.
 
-In this experiment, there are $i=1, 2..n$ independent replicates. There are also $j=1, 2..k$ groups.
+In this experiment, there are $i=1, 2,...n$ independent replicates. There are also $j=1, 2,...k$ groups.
 
-The total sum of squares is the sum of the squared deviation from all data points to $\hat y$, which is the grand mean of the sample. 
+The total sum of squares is the sum of the squared deviation from all data points to $\hat y$, which represents the grand mean of the sample. 
 
 \[SS_{total}=\sum_{j=1}^k\sum_{i=1}^n(y_i-\hat y)^2\]
 
@@ -331,9 +352,7 @@ The sum of squares for the genotype effect is sum of the weighted squared deviat
 
 \[SS_{genotype}=\sum_{j=1}^kn_j(\bar y_j-\hat y)^2\]
 
-Some software refers to this variation as the "treatment" sum of squares.
-
-Parenthetically, let's pause to reflect for a moment to consider one consequence of how that equation shows the weighting of group deviation by sample size. The level of model variation can skew to one group when its sample size differs markedly from the others. This explains why you want to keep group sizes reasonably balanced, or roughly equivalent, when designing experiments.
+Anova software usually refers to this variation as the "treatment" sum of squares.
 
 Finally, the residual sum of squares is calculated as the sum of the squared deviation between replicate values and group means, 
 
@@ -343,28 +362,29 @@ which, because the total variation amount of is fixed, can also be calculated as
 
 \[SS_{residual}=SS_{total}-SS_{genotype}\]
 
-In some software residual variation is referred to as "error". The term "error" arises from ANOVA theory, which holds that the true population means represented by these sample groups are "fixed" in the population. Thus, any variation associated with our estimate of the values for means must be in error. 
+Software will tend to label this as either residual variation or as "error". The term "error" arises from ANOVA theory, which holds that the true population means represented by these sample groups are "fixed" in the population. Thus, any deviation from the means is explained by random error. 
 
-Residuals are the measurements of that "error".
+Residual is jargon for the measurements of that "error".
 
-Perhaps we can intuit a few things. First, the residual variation is the variation unaccounted for by the model. Meaning that whatever its causes, they are not under experimental control.
+Perhaps we can intuit a few things. 
 
-Second, if the variation around each group mean remains similar, but as the group means differ from each other more, the greater the fraction of the overall variation that will be associated with the model, and the less that will be associated with the residual. 
+First, the residual variation is the variation unaccounted for by the model. Meaning that whatever its causes, they are not under experimental control. If the data were perfectly explained by the model, every data point would be identical to a value of a group mean.
+
+Second, if the variation around each group mean remains the same, but as the group means differ from each other more and more, the greater the fraction of the overall variation that will be associated with the model, and the less that will be associated with the residual. 
 
 Third, when the noise around those group means increases, less of the total variation will be associated with the model of group means, and the more with the residual. 
 
-In other words, noisy experiments tend to hide detectable differences between means, while clean experiments favor detecting these differences.
+In other words, big effect sizes are easier to detect, while noisy experiments tend to hide detectable differences between means, whereas clean experiments favor detecting these differences.
 
 If this seems bloody obvious, and it is simple, then we should not have any problem processing how ANOVA works. 
 
-The following two graphs emphasize these observations. In the null graph, the group means are roughly equivalent and very nearly the same as the grand mean. There's very little model variation relative to the grand mean. Most of the variation is in the residuals, relative to each group mean.
+The following two graphs emphasize these observations. In the null graph, the group means are roughly equivalent and very nearly the same as the grand mean. There's very little model variation relative to the grand mean. Most of the variation is in the residuals, relative to each group mean. 
 
 In the effective treatment graph, where the means truly differ because I coded them to differ, the residual variation is about the same as the null. The distance from each point to its group mean is about the same as in the null case.
 
-But we can see there is a lot more model variation, at least compared to the null graph. The group means (black bars) really separate from the grand mean (gold line).
+But we can see there is a lot more model variation, at least compared to the null graph: The group means (black bars) really separate from the grand mean (gold line).
 
-ANOVA tests become very simple when we understand this. If the model variation is the signal and the residual variation is the noise, and the ratio between the two grows high, then the model explains the signal!!
-
+__ANOVA tests become very simple when we understand this. The variation associated with the model is the signal and the residual variation is the noise. F tests are simple ratios between the model variance (or elements of the model) and residual variance. F tests are simple signal-to-noise ratios, just like every other statistical test.__
 
 ```{r echo=FALSE, fig.height=2, fig.width=3, message=FALSE, warning=FALSE, fig.show="hold"}
 set.seed(123456)
@@ -410,33 +430,11 @@ ggplot(data, aes(genotype, blood_glucose))+
  
 ```
 
-### Degrees of freedom
-
-Again, variance is an averaged deviation. To calculate a variance we'll need to divide the sum of squares for a component by its degrees of freedom. Just as sum of squares are calculated differently depending on whether it is total, or model or residual, so too are degrees of freedom.
-
-The theory behind $df$ is a bit more complicated than this, as a general rule, we lose a degree of freedom every time the calculation of a mean is involved in determination of a given $SS$.   The basic idea is this: For that mean value to be true, one of the replicates must remain fixed, while all the others are free to vary. 
-
-The degrees of freedom for total variance are $df_{total}=N-1$. We use all 15 replicates, $N$, to calculate $\hat y$, the grand mean. We lose a degree of freedom because for that grand mean to be true, one of those replicate values must be fixed while the others are free to vary. 
-
-We have $k$ predictor levels. The degrees of freedom for the genotype model variance are $df_{genotype}=k-1$, because the calculation is based upon the group means, two of which can be free to vary.
-
-The residual degrees of freedom are $df_{residual}=N-k$.
-
-### The mean squares
-
-The mean squares are ANOVA jargon to represent variances. Think of variance as averaged variation.
-
-Total variance is \[MS_{total}=\frac{SS_{total}}{df_{total}} \]
-
-The variance associated with the model is \[MS_{model}=\frac{SS_{model}}{df_{model}} \]
-
-And the residual variance is \[MS_{residual}=\frac{SS_{residual}}{df_{residual}} \]
-
 ### The ANOVA table
 
 The typical ANOVA table lists the following:
 
-*source of variation, 
+* source of variation, 
 * its $df$, 
 * its $SS$, 
 * its $MS$ 
@@ -449,13 +447,43 @@ ANOVA functions in R vary in their output. But here's the ANOVA table output for
 anova(lm(blood_glucose ~ genotype, data))
 ```
 
-### The F statistic
+#### Sums of squares
 
-The value of F is the ratio of two variances. For the result in the ANOVA table above $F=\frac{10588.4}{460.8}=22.979$. We can interpret that as the variance associated with the genotype model is 22.979x greater than the residual variance.
+As described above. These are the absolute measures of variation or deviation. Their values are in squared units of the response variable. Weird. But all $SS$ sources will sum to $SS_{total}$ and that is helpful.
+
+#### Degrees of freedom
+
+Variance is averaged deviation. The $SS$ averaged. To calculate a variance we'll need to divide the sum of squares by the degrees of freedom for that sum of squares. Just as sum of squares are calculated differently depending on whether it is total, or model or residual, so too are degrees of freedom.
+
+The mathematical theory behind $df$ is a bit more complicated than this, but as a general rule, we lose a degree of freedom every time the calculation of a mean is involved in determination of a given $SS$.   The basic idea is this: For that mean value to be true, one of the values used in the calculation must remain fixed, while all the others are free to vary. 
+
+The degrees of freedom for total variance are $df_{total}=N-1$. We use all 15 replicates, $N$, to calculate the grand mean $\hat y$. One degree of freedom is lost for that grand mean to be true, one of those replicate values must be fixed while the others are free to vary. 
+
+We have $k$ predictor levels. The degrees of freedom for the genotype model variance are $df_{genotype}=k-1$, because the $SS_{model}$ calculation is based upon the group means, the value of one group mean must be fixed while two are free to vary.
+
+The residual degrees of freedom are $df_{residual}=N-k$ because although residual values are calculated for each data point, one degree of freedom is lost to calculate each group mean. 
+
+#### The mean squares
+
+The mean squares are ANOVA jargon to represent variances. Think of variance as averaged variation or averaged deviation.
+
+Total variance is \[MS_{total}=\frac{SS_{total}}{df_{total}} \]
+
+The variance associated with the model is \[MS_{model}=\frac{SS_{model}}{df_{model}} \]
+
+And the residual variance is \[MS_{residual}=\frac{SS_{residual}}{df_{residual}} \]
+
+#### The F statistic and p-value
+
+The null distributions of the F statistic are explained in Chapter \@ref(fdistr).
+
+The value of F is the ratio of two variances. For the result in the ANOVA table above $F_{2,12}=\frac{10588.4}{460.8}=22.979$. 
+
+We can interpret that as saying the variance associated with the genotype model is 22.979-fold greater than the residual variance.
 
 But is an F-statistic value of 22.979 with 2 and 12 degrees of freedom extreme?
 
-The p-value is derived from an F probability distribution that has 2 and 12 degrees of freedom. The p-value result in the table (`Pr(>F)`) can be mimicked using R's [`pf` function](@\fdistr)):
+The p-value is derived from an null F probability distribution that has 2 and 12 degrees of freedom. The p-value result in the table (`Pr(>F)`) is obtained using R's `pf` function:
 
 ```{r}
 pf(22.979, 2, 12, lower.tail=F)
@@ -465,19 +493,19 @@ The example above is a simple one factor completely randomized model for which t
 
 ### Post-hoc group comparisons
 
-A positive F test only tells you that the model (or its component) explains the response better than null.
+A positive ANOVA F test only tells you that the model (or its component) explains the response better than null.
 
-An final stage of ANOVA, which is optional but done very commonly, is to run what are essentially t-test comparisons between groups. These posthoc tests identify the specific factor levels that actually differ from each other.  
+The final stage of ANOVA, which is optional but done very commonly, is to run what are essentially t-test-like comparisons between groups. These posthoc tests help identify the specific factor levels that actually differ from each other. 
 
-For example, an experiment with $k$ groups may be designed to test which of several groups differ from a negative control. The total number of comparisons that could be made are $\frac{k(k-1)}{2}$. 
+The total number of comparisons that could be made are $\frac{k(k-1)}{2}$. Sometimes we are fishing and want to do just that. Other timest, for scientific reasons, only a specific subset are of any interest. For example, we would only want to compare test groups to a negative control group.
 
-Yet, for scientific reasons, only a specific $k-1$ subset are of any interest. 
+There are several ways to run these post-hoc group comparisons. See Chapter \@ref(posthoc) for more information about these various options. 
 
-There are several ways to run these post-hoc group comparisons. What is most important, however, is these be done in a way that keeps the family-wise error rate (FWER) below the pre-set type1 error threshold. That's commonly 5% in biomedical research, but its value can be whatever you decide.
+What is most important, however, is these be done in a way that keeps the family-wise error rate (FWER) below the pre-set type1 error threshold. That threshold is commonly 5% in biomedical research, but its value can be whatever you decide. 
+
+When would we change that threshold? Consider when we are conducting an exploratory "hit" screen involving large numbrers of groups. For example, we have a lot of RNAseq data. Scientifically the mistake of throwing away false negatives might be worse than the mistake of accepting false positives. In that case, raising  the type1 error threshold to 10% has merit. 
 
 ## Completely randomized or related measures
-
-Up until now we've discussed ANOVA in its simplest use case, the one-way completely randomized (CR) ANOVA. 
 
 Related measures (RM) ANOVA is done when the measurements are not completely independent, but instead are intrinsically-linked. 
 
@@ -499,25 +527,25 @@ An RM design involves taking multiple measurements from each independent replica
 
 The CR vs RM design decision has a few important consequences. 
 
-First, when within-subject correlation is high, RM are much more efficient and less costly to produce. How much more? You can run Monte Carlo simulations to establish this for virtually any set of conditions.
+First, when within-subject correlation is high, RM are much more efficient and less costly to produce. How much more? You can run Monte Carlo simulations to establish this for virtually any set of conditions you can imagine.
 
-Second, over the course of any experiment it is possible to lose specific response values here and there. For example, a data value may be lost due to a bad lane in a replicate western blot, you accidentally throw away a tube from a series, or any of a number of such primitive errors.
+Second, over the course of any experiment it is possible to lose specific response values here and there. For example, a data value may be lost due to a bad lane in a replicate western blot, or we accidentally throw away a tube from a series, or we have a spill, or any of a number of such primitive errors.
 
 CR ANOVA is tolerant of such losses. That leads to a missing replicate, and an unbalanced data sets, but it's only one or a few values out of many.
 
-That is not the case with related measures designs. All of the values for every level of every factor for every replicate must be included. If any values are missing for a given replicate, all of the remaining values for that replicate either have to be censored, or the missing values should be imputed. 
+That is not always the case with related measures designs. All of the values for every level of every factor for every replicate must be included for the analysis. If any values are missing for a given replicate, all of the remaining values for that replicate either have to be censored, or the missing values should be imputed. 
 
-The missing data problem becomes amplified in two way and three way related measures ANOVA! Those experiments tend to have more groups, meaning more data is at risk of being censored.
+The missing data problem becomes amplified in two way and three way related measures ANOVA. Those experiments tend to have more groups, meaning more data is at risk of being censored.
 
 Researchers often ask if it is reasonable to 'flip' to a completely randomized analysis when they notice too many values are missing from their data set. 
 
-No, it is not reasonable. The type of experimental design is scientifically-driven. Intrinsically-linked measurements are not independent, and should not be analyzed as if they are independent. To do so violates one of the two primary assumptions of the statistical analysis.
+No, it is not reasonable. In fact, that's a horrible p-value hack. The type of experimental design is scientifically-driven. Intrinsically-linked measurements are not independent, and should not be analyzed as if they are independent. To do so violates one of the two primary assumptions of the statistical analysis.
 
-There are a few options to deal with this, and both happen in planning. 
+How to avoid this problem?
 
 First, where possible, include an extra replicate or two as a hedge over what the power analysis suggests is necessary. 
 
-Second, don't make a RM design too over-ambitious. Limit the number of levels to that which is scientifically important. 
+Second, don't make a RM design too over-ambitious. Limit the number of levels to those that are scientifically important. 
 
 Third, be aware of the risk of lost values. Is the experimental protocol difficult? Are any protocol steps at high risk of failure? Are there any intrinsic barriers to efficiently collecting the data?
 
@@ -709,15 +737,12 @@ To begin, if we have $k$ levels of predictor variables in our experiment it has 
 
 The `pairwise.t.test` is the function to use for this purpose. Use it to make the group comparisons that interest you. choosing the `p.adjust.method` that strikes your fancy. Two of the latter are listed below.
 
-##### Bonferroni Correction
+## Summary
 
-If $m$ is the number of comparisons to be tested, whether or not it is equal to $k(k-1)/2$, and if $\alpha$ is the type1 error threshold you've set for the entire experiment, then the corrected type1 error threshold for each comparison is $\alpha_m=\frac{alpha}{m}$. 
-
-Thus, you would reject the null hypothesis for any comparison for which a t-test yields a p-value that is less than $\alpha_m$.
-
-##### Sidak Correction
-
-This is a modestly more liberal alternative to the Bonferroni correction. Here, for $m$ comparisons and an experimentwise type1 error threshold $\alpha$, the corrected per comparison threshold would be $\alpha_m=1-(1-\alpha)^\frac{1}{m}$. 
-
-Again, for a given comparison reject, the null if its p-value is less than $\alpha_m$.
+* We conduct ANOVA designed experiments intuitively, any time we have 3 or more groups.
+* In R make sure that variable you want to be a factor is coded as a factor.
+* Accounting for combinations of factors and whether the factor is applied randomized or related measures, We have at least 12 different ANOVA designs at our disposal.
+* F-tests compare model variance to residual variance; if F is large, the model is extreme.
+* ANOVA test results can infer effects of factors, or be permission for posthoc testing
+* Several ANOVA methods exist in R. When configured the same, they should give the same output. 
 
