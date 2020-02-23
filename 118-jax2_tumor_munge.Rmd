@@ -4,7 +4,6 @@
 library(tidyverse)
 library(readxl)
 library(viridis)
-library(RColorBrewer)
 ```
 
 Reproducibility is when someone who has your data can conduct the same analysis, arriving at the same parameter estimates and conclusions. The data processing steps of an analysis are perhaps the most critical determinant of reproducibility. Ideally, this is performed using a breadcrumbs process, where each step is traceable. 
@@ -79,7 +78,7 @@ They explain how, except for the first header row, `jw2` contains all of the dat
 
 Skipping a useless, incomplete row helps us immensely. And R is stupid, we have tell it explicitly what sheet to read.
 
-Note how `jaxwest2.xls` is otherwise untouched. No changes have been made locally to the original source file. That's important because it is good reproducible practice.
+Note that `jaxwest2.xls` is otherwise untouched. No changes have been made locally to the original source file. That's important because it is good reproducible practice.
 
 ```{r message=FALSE, warning=FALSE, paged.print=TRUE}
 jw2 <-"datasets/jaxwest2.xls" %>%
@@ -87,12 +86,26 @@ jw2 <-"datasets/jaxwest2.xls" %>%
     skip=1, 
     sheet=1
     )
-jw2
+
+# remove whitespace
+names(jw2) <- str_remove_all(names(jw2)," ")
+```
+
+Note: Here is an optional method to read in the data. In two parts. This forces the bulk of the numeric data to be read in as numeric. You'll see in a moment why this matters. 
+
+```{r warning=FALSE}
+right <- read_excel("datasets/jaxwest2.xls", skip=1, sheet=1, range="I2:CY37", col_types="numeric")
+
+left <- read_excel("datasets/jaxwest2.xls", skip=1, sheet=1, range="A2:H37")
+
+alt <- bind_cols(left, right)
+
+names(alt) <- str_remove_all(names(alt), " ")
 ```
 
 ## Step 2: Select the variables
 
-We slim the data set considerably using the `select` function. We don't have to call it a new object, but that's done just to illustrate how much better things are compared to the excel file after two simple steps.
+We slim the `jw2` data set considerably using the `select` function. We don't have to call it a new object, but that's done just to illustrate how much better things are compared to the excel file after two simple steps.
 
 We want only the mouse_ID, the test group, and all the columns that correspond to a tumor volume measurement on a given day. We get the latter using the [`contains` function](https://dplyr.tidyverse.org/reference/select.html#useful-functions). 
 
@@ -104,7 +117,7 @@ The function `contains` is super helpful because the tumor volume variables for 
 
 Give it a shot. Try to grab a different set of variables using `contains`.
 
-We'll create a new object, `jw2vol` to represent the data. Notice how in subsequent chunks `jw2vol` is modified as we successively munge the data into shape.
+We'll create a new object, `jw2vol` to represent the data only for tumor volumes. Notice how in subsequent chunks `jw2vol` is modified as we successively munge the data into shape.
 
 ```{r}
 jw2vol <- jw2 %>% 
@@ -113,7 +126,6 @@ jw2vol <- jw2 %>%
     test_group, 
     contains("tumor_vol_")
     )
-jw2vol
 ```
 
 ## Step 3: Trim the cases
@@ -127,7 +139,6 @@ jw2vol <- jw2vol %>%
   filter(
     test_group == "Control (no vehicle)"
     )
-jw2vol
 ```
 
 ## Step 4: We have a variable problem to fix
@@ -142,7 +153,11 @@ What happened??
 
 In a word, *&%!ing NA values.
 
-__NA's caused character coercion:__ This problem was unavoidable. It happened at the read stage. If a column of numeric values contains just one non-numeric character, the read_excel function will classify that column as character variable. We've thrown away a lot of rows and columns since the read step, but the original jaxwest file is full of NAs. There must have been an NA (or some other excel trash) in every column except that for tumor_vol_19.
+__NA's caused character coercion:__ This problem is avoidable by forcing a column type to be numeric on read (see `alt` above). 
+
+We didn't do that with `jw2`. If a column of numeric values contains just one non-numeric character, [the read_excel function will classify that column as character variable](https://readxl.tidyverse.org/index.html).
+
+We've trimmed away a lot of rows and columns since the read step, but the original jaxwest file is full of NAs.
 
 NA values present two problems to solve: a data munging problem and a scientific problem.
 
@@ -192,7 +207,7 @@ So we'll use the mean of the grouped variable instead.
 
 ```{r}
 
-jw2vol %>% replace_na(
+jw2vol <- jw2vol %>% replace_na(
   list(tumor_vol_17 = mean(jw2vol$tumor_vol_17, na.rm=T)))
 ```
 
@@ -225,8 +240,7 @@ The predictor variable must be a factor. Here, the predictor is day
 ```{r}
 jw2vol <- jw2vol %>% 
   mutate(
-    mouse_ID=as.factor(mouse_ID), 
-    day=as.factor(day), 
+    mouse_ID=as.factor(mouse_ID),
     test_group=as.factor(test_group)
     )
 jw2vol
@@ -241,17 +255,18 @@ This calls for a spaghetti plot.
 Here's all the data! It's beautiful.
 
 ```{r}
-ggplot(jw2vol, aes(
-  day, vol, group=mouse_ID, color=mouse_ID))+
-  geom_point()+
-  geom_line()+
-  #scale_color_brewer(palette="Paired")+
+ggplot(jw2vol, aes(as.numeric(day), vol, color=mouse_ID, group=mouse_ID))+
   scale_color_viridis(discrete=T)+
-  theme_classic()
+  geom_point(size=2)+
+  geom_line()+
+  xlab("Day after implant")+
+  ylab("Tumor volume")
 ```
 
 ## Step 9: Run the ANOVA
 
 See Chapter \@ref(onewayRM).
+
+
 
 
