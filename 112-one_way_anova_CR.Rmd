@@ -282,9 +282,17 @@ Although the p-values differ in this selected group compared to the full matrix,
 
 ### Range tests
 
-One way completely randomized ANOVAs, as opposed to related measures ANOVA, lend themselves well to range tests because the questions revolve around the differences between group means.
+All range tests operate very differently from p-value adjustment methods.
 
-In these designs we are frequently interested in a comparison back to a control value. These are referred to as dependent comparisons, because every comparison is back to the same group mean.  Dunnett's test was created for exactly this type of situation.
+Range tests compare each of a data set's differences between group means to a critical value for the difference between two group means, which is calculated based upon the number of groups and their sample sizes. Any differences between group means that exceed the critical value difference are deemed "significant". In addition, these functions calculated adjusted p-values and adjusted confidence intervals given the method selected.
+
+One-way completely randomized ANOVAs, as opposed to related measures ANOVA, lend themselves well to range tests because the posthoc questions revolve around the differences between group means. Range tests are nice because they compute confidence intervals adjusted for multiple comparisons, in addition to producing p-values adjusted for multiple comparisons.
+
+But these should be avoided on related measures ANOVA, due to the fact that range tests are designed for unpaired comparisons, not for paired comparisons.
+
+#### Dunnett's test
+
+In some designs we are frequently interested in a comparison back to a control value. These are referred to as dependent comparisons, because every comparison is back to the same group mean.  Dunnett's test was created for exactly this type of situation.
 
 Let's imagine the researcher is interested in knowing if any of the feeds cause difference in chick weights compared to the casein feed.  
 
@@ -294,7 +302,7 @@ DunnettTest(weight ~ feed, control="casein", data = chickwts)
 
 Note how the R method is to subtract the casein control from the test groups. We can reject the null that chick weight on casein is the same as on horsebean, linseed and soybean. There is no evidence that chick weight differs on meatmeal and sunflower compared to casein.
 
-## Reporting the result
+#### Reporting the result
 
 If you have CI's, flaunt them.
 
@@ -302,5 +310,23 @@ When using Dunnett's there is no need to report both the 95% CI and the p-value,
 
 __"Chick weights differ on feed type (one-way completely randomized ANOVA, F(5, 65)=15.36, p=5.9e-10). Specifically, posthoc Dunnett's test show group mean chick weights differ between casein compared to horsebean (-163, adjusted 95%CI -223 to -102), linseed(-104, adjusted 95%CI -162 to -42), and soybean (-77,adjusted 95%CI -132 to -21)"__
 
+
+#### Tukey test and related
+
+Other times we are interested in all possible combinations of comparisons. The `PostHocTest` function in the `DescTools` package allows for running any of several distinct adjustments. Pass into `PostHocTest` the aov object produced by ezANOVA and all the work is done for you.
+
+```{r}
+
+PostHocTest(my.ezaov$aov, method="hsd", conf.level=0.95)
+
+```
+
+## Summary
+
+*One-way completely randomized ANOVA is for experiments where every measurement represents an independent replicate.
+*The results of the F test for the main effect tell us whether or not your one factor, no matter how many levels, has an effect on the response.
+*We choose a posthoc analysis only if interested in knowing which levels of the factor might explain the positive F test.
+*We can use either range tests or p-value adjusted pairwise.t.tests in posthoc
+*The range test functions provide effect sizes and adjusted confidence intervals
 
 
