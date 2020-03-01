@@ -18,7 +18,7 @@ A hybrid of the two above is called a two-way mixed ANOVA experimental design. I
 
 The ChickWeight study is a good example for visualizing how a two-way mixed ANOVA would operate.
 
-## ChickWeight Dataset
+## ChickWeight Data set
 
 The ChickWeight dataset in base R is from a study testing the effect of 4 diets on the growth of chicks. You can learn more about it by typing `?ChickWeight` in the console.
 
@@ -32,7 +32,7 @@ If that's not entirely clear, it should become more obvious by looking at a plot
 
 ## Munge ChickWeight data
 
-We have several things to do before the ANOVA can be run. First, let's just look at the data graphically. That makes the study design a bit easier to understand.
+We have several things to do before running ANOVA. First, let's just look at the data graphically. That makes the study design a bit easier to understand.
 
 Then we'll clean it up for what we need to do.
 
@@ -127,7 +127,7 @@ head(ChickWeight1)
 str(ChickWeight1)
 ```
 
-Done with the munge!
+Done with the munge! Woot!
 
 ## The test
 
@@ -135,21 +135,17 @@ The main scientific objective of this study is to learn whether growth differs b
 
 The study design calls for a two-way mixed ANOVA analysis as an omnibus test. If that passes, we'll have access to compare the diets post-hoc.
 
-We're not particularly interested in the effect of the Time factor, per se. We know the chicks will grow with time. Nor are we particularly interested in the interaction effect between Time and Diet. Which is to say that we don't want to know at what times the various levels of the diets differ.
+We're not particularly interested in the effect of the Time factor, per se. We know the chicks will grow with time. In one sense, Time is something of a nuisance factor. Nor are we particularly interested in the interaction effect between Time and Diet. Which is to say that we don't want to know at what times the various levels of the diets differ.
 
-We just want to know if the diets differ.
+We just want to know if the diets differ. So the experiment, although pretty, is a bit over-designed.
 
 Having said that, the repeated measures of weight on time seems, intuitively, a solid way for designing the experiment, compared to a few conceivable alternatives. 
 
-It collects 12 different weights per replicate than a study that only weighed each critter once, say, on the 21st day. Thus, there is more thorough information on how each replicate responded to the diet. Which seems useful. 
+It collects 12 different weights per replicate. That seems better than a study that only weighs each critter once, say, on the 21st day. Thus, there is more thorough information on how each replicate responded to the diet. Which seems useful at some level. ANOVA will not allow us to extract that utility, unfortunately. 
 
 But we're not explicitly applying a rate model to the data to derive growth rate constants that might be compared. The growth rate is more implicit...it's the information buried within the repeated measures. 
 
-And we're also not particularly interested in knowing at what specific time points the various diets might differ.  
-
-We just want to know if the four diets differ from each other.
-
-Here's how that's done.
+We just want to know if the four diets differ from each other. The Diet variable is completely randomized. Every weight measurement for a chick on diet 1 is independent of every measurement for a chick on diet 2, and so on. No chick is receiving all four diets, yet every chick is receiving all timed measurements.
 
 To encode a two-way mixed ANOVA using ezANOVA, simply configure the arguments such that the repeated measure factor is `within` and the completely randomized factor is `between`. An object named `two_wayMM`, which could have been named foo, is used to store the ANOVA output.
 
@@ -161,7 +157,8 @@ two_wayMM <- ezANOVA(data = ChickWeight1,
                      between = Diet,
                      within = Time,
                      type = 3,
-                     detailed = T
+                     detailed = T,
+                     return_aov=F
                      )
 two_wayMM
 ```
@@ -172,17 +169,17 @@ two_wayMM
  * $ANOVA
  * $Mauchly's Test for Sphericity
  * $Sphericity Corrections`
- * $aov (not shown)
+ * $aov (not called)
 
 ### $ANOVA: The ANOVA table
 
-Before partioning for sujects, the total residual sums of squares in the sample would be the sum of the residual error terms, or $295322.5 + 313495.0 = 608817.5$. 
+Before partitioning for subjects, the total residual sums of squares in the sample would be the sum of the residual error terms, or $295322.5 + 313495.0 = 608817.5$. 
 
 Because weight measurements were repeated on each chick over time, this procedure allows us to account for some of the variation in the Time variable as that due to variation among the chicks. 
 
 Pulling 313495 out from the overall residual provides a new (and lower than otherwise) residual term for the effect of Diet, while lowering the residual term for the effect of Time and the interaction.
 
-The plot above gives you a sense of what's going on. What's really noticable, I think, is a lot of chick-to-chick variation, irrespective of the diet. There's also a lot of variation across the time frame. But the chick-to-chick variation grows really prominent near the end of the time course. 
+The plot above gives you a sense of what's going on. What's really noticeable, I think, is a lot of chick-to-chick variation, irrespective of the diet. There's also a lot of variation across the time frame. But the chick-to-chick variation grows really prominent near the end of the time course. 
 
 What this does is help to isolate from the variation over the time course that which is due to the differences between the 45 chicks. It doesn't explain why that variation between the chicks occurs, its obviously biological, but it does allow us to partition it out from the Time effect.  
 
@@ -212,44 +209,56 @@ Mauchly's test, with its extreme F-statistic value, indicates we can reject the 
 
 Because of that, we correct the Time result for sphericity using the Geiser-Greenhouse correction. We do this by using the value of p[GG] as a p-value for our test. The correction is dramatic, at least with respect to the p-value correction for the interaction effect. The p[GG]= 0.01045 for the interaction test is that which should be used for inference.
 
-## Post hoc pairwise tests
+## Post hoc
 
 A positive F-test opens the gate to perform post hoc analysis of any groups that interest us. The F tests for the two factors and the interaction shows that there are effects of time and diet on the growth of chicks. The effect of time is not particularly interesting since it is no surprise that chicks grow.
 
 What the F tests haven't told us is which diets differ. Is one better than any other? Is one worse than any other?
 
-The approach that we'll use to answer these questions is the TukeyHSD test, which is used to make a variety of comparisons between groups.  The only groups that are of interest scientifically, however, are those associated with the main effects of the diet. Even so, we should make those comparisons in the context of the overall experimental design.
 
-The TukeyHSD test runs in three steps.
+### Pairwise.t.tests
+
+As has been made clear, we only care whether any of the 4 diets differ from each other.
+
+Therefore, we test all differences between each of the diets, making a p-value adjustment for multiple comparisons. This test focuses in on the diets. By using the pooled SD we take into account all of the variation within the experiment. Note how a method for p-value adjustment 
+
+```{r}
+pairwise.t.test(ChickWeight1$weight, ChickWeight1$Diet, 
+                paired=F, conf.level=0.95, p.adjust="holm")
+```
+
+Thus we can conclude that the effect on chick weights of Diets 3 (Holm adjusted p=0.00012) and 4 (Holm adjusted p=0.00165) differ from Diet 1. There is no evidence for any other differences between diets.
+
+### Tukey test: A range test
+
+Since there is a completely randomized arm in this experiment (Diet) it is possible to a range test on that arm. However, it is a bit of a contraption to get there. 
+
+Unfortunately, the aov object produced by ezANOVA is incompatible with `PostHocTest`.
+
+The protocol for doing a TukeyHSD test in this case runs in three steps.
 
 The first step is to create a linear model of the design. The second step is to create an anova object from that model. And the third step is the reason for the first two. The TukeyHSD test function takes an aov object as its data source before running the group comparisons.
 
-Because it has a related measures component, the two-way mixed ANOVA experimental design is also known as a general linear mixed-effects model. Exactly what this means will be more clear when we get to discussing general linear models.
+Because it has a related measures component, the two-way mixed ANOVA experimental design is also known as a linear mixed-effects model. Exactly what this means will be more clear when we get to discussing linear models.
 
 We use the `lme` function from the `nlme` package to regress the model on the ChickWeight1 dataset, generating a large table of coefficients for all the model elements. 
 
+
 ```{r}
 model <- lme(weight ~ Diet + Time + Diet*Time, data=ChickWeight1, random = ~ 1|Chick)
-model
 
 ```
 
-Next, that linear model is passed into the `aov` function, to create an aov object. Why not use ezANOVA to create this? It doesn't create an object of the proper R class for the posthoc function. This is passed
-
-Finally, we run the TukeyHSD test. This function is in the `DescTools` package. We specify Diet so that it only returns all ofthe possible comparisons between Diet groups. (If you remove the list argument it will return all posssible combinations of every group in the experiment! ) 
-
-```{r}
-bark <- lme(weight ~ Diet + Time + Diet*Time, data=ChickWeight1, random = ~ 1|Chick)
-```
+Next, that linear model is passed into the `aov` function, to create an aov object. Because R is cool, we do that inside the `PostHocTest` function from the `DescTools` package. We specify Diet so that this only performs comparisons between Diet groups. (If you remove the `which` argument it will return all possible combinations of every group in the experiment!) 
 
 
 ```{r}
-PostHocTest(aov(bark,data=ChickWeight1), which="Diet", method="hsd")
+PostHocTest(aov(model,data=ChickWeight1), which="Diet", method="hsd", conf.level=0.95)
 ```
 
-What I like about the TukeyHSD test run this way is that it yields effect size, confidence intervals, and adjusted p-values for each comparison. For example, the difference in mean weight between the first and the second diets is 14.9 grams (95%CI(adjusted): 4.4 to 25.5 grams, adjusted p-value=0.0016).
+What I like about the TukeyHSD test run this way is that it yields effect size, adjusted confidence intervals, and adjusted p-values for each comparison. For example, the difference in mean weight between the first and the second diets is 14.9 grams (95%CI(adjusted): 4.4 to 25.5 grams, adjusted p-value=0.0016).
 
-### Here's what's been discovered
+### Here's what's been discovered by the TukeyHSD test
 
 Thus, in terms of how the 4 levels of the Diet factor differ in causing chick weight we can conclude: a) all diets are better than Diet 1, b) Diets 3 and 4 are better than Diet 2, c) Diets 3 and 4 do not differ. 
 
@@ -259,5 +268,27 @@ Thus, in terms of how the 4 levels of the Diet factor differ in causing chick we
 
 Ideally, report the last sentence in a table, showing the results. 
 
-*It's very important to understand here that we took the p-value of p[GG] from the sphericity correction table, rather than that for Time from the ANOVA table, as our inference for this experiment*
+*It is important to understand that we took the p-value of p[GG] from the sphericity correction table, rather than that for Time from the ANOVA table, as our inference for this experiment*
+
+### Why is the TukeyHSD result so different than the pairwise.t.test??
+
+In a word, because they are completely different tests. In statistics, completely different tests will usually generate different results.
+
+TukeyHSD is a range test that defines a critical difference between group means and declares any difference more than that an asterisk. P-value adjustment is an adjustment of a p-value. The two operate on different assumptions and formulas.
+
+The fact that Tukey yields so many more "significant" differences than a Holm p-value adjustment simply points to the fact that Tukey is much more liberal in this case. Presumably it does not protect against type1 error as well. Swap out "hsd" in the code above with "scheffe" and you'll see how range tests can differ from each other, too.
+
+_This emphasizes the need to decide on which posthoc strategy to take PRIOR to conducting the experiment._
+
+## Summary
+
+*In mixed two way ANOVA one variable is completely randomized and the second is related/repeated measures.
+*Notice how we just tossed out chicks with missing data. For thus with many missing time points that makes sense. For those with fewer missing time points, we might have been more cautious. Whatever.
+*This an unbalanced data set, good for exploring differences in typeI,II, III SS calculations.
+*Posthoc options include range tests for the completely randomized variable, but use `lme` to create a model to create an `aov` object for the posthoc function (whew!).
+*Great data set for illustrating the importance of preplanning.
+
+
+
+
 
