@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 35 Multivariate Analysis of Variance (MANOVA) | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R." />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 35 Multivariate Analysis of Variance (MANOVA) | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 35 Multivariate Analysis of Variance (MANOVA) | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
+
+
+<meta name="date" content="2020-03-23" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="anovamc.html"/>
+<link rel="next" href="correl.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author and book</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a><ul>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#spring-2020-term-versions"><i class="fa fa-check"></i><b>3.1</b> Spring 2020 term versions</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.1.1</b> What are these?</a></li>
+<li class="chapter" data-level="3.1.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.1.2</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.1.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.1.3</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.1.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.1.4</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.1.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-software-for-your-machine"><i class="fa fa-check"></i><b>3.1.5</b> Rule 4: Install the right software for your machine</a></li>
+<li class="chapter" data-level="3.1.6" data-path="software.html"><a href="software.html#rule-5-use-this-installation-guide"><i class="fa fa-check"></i><b>3.1.6</b> Rule 5: Use this installation guide</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.2</b> After installation</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.2.1</b> What is R?</a></li>
+<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#r-packages"><i class="fa fa-check"></i><b>3.2.2</b> R packages</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#important-avoid-compiling"><i class="fa fa-check"></i><b>3.3</b> Important: Avoid compiling</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.3.1</b> Reasons not to compile</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a><ul>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a><ul>
+<li class="chapter" data-level="6.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>6.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>6.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="6.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>6.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="6.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>6.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="6.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>6.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>7</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>7.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>7.1.1</b> A simple test to define the experimental unit</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>7.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>7.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="7.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>7.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>7.3</b> Random process</a></li>
+<li class="chapter" data-level="7.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>7.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>7.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="7.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>7.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="7.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>7.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="7.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>7.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>7.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>8</b> Data Classification</a><ul>
+<li class="chapter" data-level="8.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>8.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="data.html"><a href="data.html#statistical-notation"><i class="fa fa-check"></i><b>8.1.1</b> Statistical notation</a></li>
+<li class="chapter" data-level="8.1.2" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>8.1.2</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>8.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>8.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="8.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>8.2.2</b> Discrete categorical and ordinal variables</a></li>
+<li class="chapter" data-level="8.2.3" data-path="data.html"><a href="data.html#rescaling-variables"><i class="fa fa-check"></i><b>8.2.3</b> Rescaling variables</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="data.html"><a href="data.html#working-with-data"><i class="fa fa-check"></i><b>8.3</b> Working with data</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="data.html"><a href="data.html#entering-data"><i class="fa fa-check"></i><b>8.3.1</b> Entering data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>9</b> Variability, Accuracy and Precision</a><ul>
+<li class="chapter" data-level="9.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>9.0.1</b> Data are messy</a></li>
+<li class="chapter" data-level="9.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>9.1</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="9.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>9.2</b> Variance: Quantifying variation by least squares</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>9.2.1</b> Definition of variance</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>9.3</b> Standard deviation</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>9.3.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="9.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>9.3.2</b> Ways of describing sample variability</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>9.4</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="9.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>9.5</b> Standard error</a><ul>
+<li class="chapter" data-level="9.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>9.5.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="9.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>9.5.2</b> “Should I use SD or SEM?”</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>9.6</b> Confidence intervals</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>9.6.1</b> CI Definition</a></li>
+<li class="chapter" data-level="9.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>9.6.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="9.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>9.6.3</b> CI Simulation tools</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>9.7</b> Key take aways</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>10</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="10.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>10.1</b> The decision process</a></li>
+<li class="chapter" data-level="10.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>10.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="10.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>10.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>11</b> Error</a><ul>
+<li class="chapter" data-level="11.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>11.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>11.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="11.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>11.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>11.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="11.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>11.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>12</b> P Values</a><ul>
+<li class="chapter" data-level="12.1" data-path="pvalues.html"><a href="pvalues.html#definition"><i class="fa fa-check"></i><b>12.1</b> Definition</a></li>
+<li class="chapter" data-level="12.2" data-path="pvalues.html"><a href="pvalues.html#test-statistics-come-from-null-distributions"><i class="fa fa-check"></i><b>12.2</b> Test statistics come from null distributions</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="pvalues.html"><a href="pvalues.html#p-value-behavior"><i class="fa fa-check"></i><b>12.2.1</b> P-value behavior</a></li>
+<li class="chapter" data-level="12.2.2" data-path="pvalues.html"><a href="pvalues.html#p-values-and-the-decision-process"><i class="fa fa-check"></i><b>12.2.2</b> P-values and the decision process</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="pvalues.html"><a href="pvalues.html#a-blood-glucose-p-value"><i class="fa fa-check"></i><b>12.3</b> A blood glucose p-value</a></li>
+<li class="chapter" data-level="12.4" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>12.4</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="12.5" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>12.5</b> Interpretation</a></li>
+<li class="chapter" data-level="12.6" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>12.6</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>13</b> Reproducible Data Munging in R</a><ul>
+<li class="chapter" data-level="13.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-glucose-data"><i class="fa fa-check"></i><b>13.1</b> Jaxwest7 glucose data</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="jaxwest7.html"><a href="jaxwest7.html#inspect-the-jaxwest7-data"><i class="fa fa-check"></i><b>13.1.1</b> Inspect the Jaxwest7 data</a></li>
+<li class="chapter" data-level="13.1.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-concentration-data-into-r"><i class="fa fa-check"></i><b>13.1.2</b> Munge the glucose concentration data into R</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="jaxwest7.html"><a href="jaxwest7.html#explore-the-jaxwest7-data"><i class="fa fa-check"></i><b>13.2</b> Explore the Jaxwest7 data</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>14</b> The Binomial Distribution</a><ul>
+<li class="chapter" data-level="14.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>14.1</b> dbinom</a></li>
+<li class="chapter" data-level="14.2" data-path="binomial.html"><a href="binomial.html#pbinom"><i class="fa fa-check"></i><b>14.2</b> pbinom</a></li>
+<li class="chapter" data-level="14.3" data-path="binomial.html"><a href="binomial.html#qbinom"><i class="fa fa-check"></i><b>14.3</b> qbinom</a></li>
+<li class="chapter" data-level="14.4" data-path="binomial.html"><a href="binomial.html#rbinom"><i class="fa fa-check"></i><b>14.4</b> rbinom</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="poisson.html"><a href="poisson.html"><i class="fa fa-check"></i><b>15</b> The Poisson Distribution</a><ul>
+<li class="chapter" data-level="15.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>15.1</b> Poisson Events</a></li>
+<li class="chapter" data-level="15.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>15.2</b> dpois</a></li>
+<li class="chapter" data-level="15.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>15.3</b> ppois</a></li>
+<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>15.4</b> qpois</a></li>
+<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.5</b> rpois</a></li>
+<li class="chapter" data-level="15.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.6</b> Overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>16</b> The Normal Distribution</a><ul>
+<li class="chapter" data-level="16.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>16.0.1</b> The Standard Normal</a></li>
+<li class="chapter" data-level="16.1" data-path="normal.html"><a href="normal.html#dnorm"><i class="fa fa-check"></i><b>16.1</b> dnorm</a></li>
+<li class="chapter" data-level="16.2" data-path="normal.html"><a href="normal.html#pnorm"><i class="fa fa-check"></i><b>16.2</b> pnorm</a><ul>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-p-values-using-pnorm"><i class="fa fa-check"></i>Calculating “p-values”" using pnorm</a></li>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-percentiles-using-pnorm"><i class="fa fa-check"></i>Calculating percentiles using pnorm</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="normal.html"><a href="normal.html#qnorm"><i class="fa fa-check"></i><b>16.3</b> qnorm</a></li>
+<li class="chapter" data-level="16.4" data-path="normal.html"><a href="normal.html#rnorm"><i class="fa fa-check"></i><b>16.4</b> rnorm</a><ul>
+<li class="chapter" data-level="16.4.1" data-path="normal.html"><a href="normal.html#plotting-histograms-of-some-rnorm-samples"><i class="fa fa-check"></i><b>16.4.1</b> Plotting histograms of some rnorm samples</a></li>
+<li class="chapter" data-level="16.4.2" data-path="normal.html"><a href="normal.html#bins-and-binwidth"><i class="fa fa-check"></i><b>16.4.2</b> Bins and Binwidth</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="categorical.html"><a href="categorical.html"><i class="fa fa-check"></i><b>17</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="17.1" data-path="categorical.html"><a href="categorical.html#types-of-categorical-data"><i class="fa fa-check"></i><b>17.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="categorical.html"><a href="categorical.html#proportions"><i class="fa fa-check"></i><b>17.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="17.1.2" data-path="categorical.html"><a href="categorical.html#frequencies"><i class="fa fa-check"></i><b>17.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="17.1.3" data-path="categorical.html"><a href="categorical.html#associations"><i class="fa fa-check"></i><b>17.1.3</b> Associations</a></li>
+<li class="chapter" data-level="17.1.4" data-path="categorical.html"><a href="categorical.html#statistics-covered-here"><i class="fa fa-check"></i><b>17.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="categorical.html"><a href="categorical.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>17.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="17.2.1" data-path="categorical.html"><a href="categorical.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>17.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="categorical.html"><a href="categorical.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>17.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="categorical.html"><a href="categorical.html#proportion-analysis"><i class="fa fa-check"></i><b>17.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="17.3.2" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>17.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="17.3.3" data-path="categorical.html"><a href="categorical.html#contingency-analysis"><i class="fa fa-check"></i><b>17.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="categorical.html"><a href="categorical.html#comparing-proportions"><i class="fa fa-check"></i><b>17.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="17.4.1" data-path="categorical.html"><a href="categorical.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>17.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="17.4.2" data-path="categorical.html"><a href="categorical.html#calculating-proportions"><i class="fa fa-check"></i><b>17.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="17.4.3" data-path="categorical.html"><a href="categorical.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>17.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="17.4.4" data-path="categorical.html"><a href="categorical.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>17.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="17.4.5" data-path="categorical.html"><a href="categorical.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>17.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="17.4.6" data-path="categorical.html"><a href="categorical.html#an-exact-test-for-one-proportion"><i class="fa fa-check"></i><b>17.4.6</b> An exact test for one proportion</a></li>
+<li class="chapter" data-level="17.4.7" data-path="categorical.html"><a href="categorical.html#comparing-two-proportions"><i class="fa fa-check"></i><b>17.4.7</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="categorical.html"><a href="categorical.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>17.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="17.6" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>17.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="17.6.1" data-path="categorical.html"><a href="categorical.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>17.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="17.6.2" data-path="categorical.html"><a href="categorical.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>17.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="17.7" data-path="categorical.html"><a href="categorical.html#contingency-testing"><i class="fa fa-check"></i><b>17.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="17.7.1" data-path="categorical.html"><a href="categorical.html#interpretation-of-contingency-results"><i class="fa fa-check"></i><b>17.7.1</b> Interpretation of Contingency Results</a></li>
+<li class="chapter" data-level="17.7.2" data-path="categorical.html"><a href="categorical.html#write-up-4"><i class="fa fa-check"></i><b>17.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="17.7.3" data-path="categorical.html"><a href="categorical.html#interpretation-of-chi-square-output"><i class="fa fa-check"></i><b>17.7.3</b> Interpretation of chi-square output</a></li>
+<li class="chapter" data-level="17.7.4" data-path="categorical.html"><a href="categorical.html#write-up-5"><i class="fa fa-check"></i><b>17.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="17.7.5" data-path="categorical.html"><a href="categorical.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>17.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="17.7.6" data-path="categorical.html"><a href="categorical.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>17.7.6</b> Higher dimension contingency analysis</a></li>
+<li class="chapter" data-level="17.7.7" data-path="categorical.html"><a href="categorical.html#other-experimental-designs-involving-categorical-data"><i class="fa fa-check"></i><b>17.7.7</b> Other experimental designs involving categorical data</a></li>
+</ul></li>
+<li class="chapter" data-level="17.8" data-path="categorical.html"><a href="categorical.html#power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>17.8</b> Power analysis for proportion tests</a></li>
+<li class="chapter" data-level="17.9" data-path="categorical.html"><a href="categorical.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>17.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="17.10" data-path="categorical.html"><a href="categorical.html#graphing-proportions"><i class="fa fa-check"></i><b>17.10</b> Graphing Proportions</a></li>
+<li class="chapter" data-level="17.11" data-path="categorical.html"><a href="categorical.html#key-takeaways"><i class="fa fa-check"></i><b>17.11</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="chisquare.html"><a href="chisquare.html"><i class="fa fa-check"></i><b>18</b> The Chi-square Distribution</a><ul>
+<li class="chapter" data-level="18.1" data-path="chisquare.html"><a href="chisquare.html#background"><i class="fa fa-check"></i><b>18.1</b> Background</a></li>
+<li class="chapter" data-level="18.2" data-path="chisquare.html"><a href="chisquare.html#dchisq"><i class="fa fa-check"></i><b>18.2</b> dchisq</a></li>
+<li class="chapter" data-level="18.3" data-path="chisquare.html"><a href="chisquare.html#pchisq"><i class="fa fa-check"></i><b>18.3</b> pchisq</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="chisquare.html"><a href="chisquare.html#calculating-p-values-from-pchisq"><i class="fa fa-check"></i><b>18.3.1</b> Calculating p-values from pchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="chisquare.html"><a href="chisquare.html#qchisq"><i class="fa fa-check"></i><b>18.4</b> qchisq</a></li>
+<li class="chapter" data-level="18.5" data-path="chisquare.html"><a href="chisquare.html#rchisq"><i class="fa fa-check"></i><b>18.5</b> rchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="nonparametrics.html"><a href="nonparametrics.html"><i class="fa fa-check"></i><b>19</b> Nonparametric Statistical Tests</a><ul>
+<li class="chapter" data-level="19.1" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-sampling-distributions"><i class="fa fa-check"></i><b>19.1</b> Nonparametric sampling distributions</a></li>
+<li class="chapter" data-level="19.2" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-discrete-data"><i class="fa fa-check"></i><b>19.2</b> Experiments involving discrete data</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="nonparametrics.html"><a href="nonparametrics.html#ordered-data-1"><i class="fa fa-check"></i><b>19.2.1</b> Ordered data</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-deviant-data"><i class="fa fa-check"></i><b>19.3</b> Experiments involving deviant Data</a></li>
+<li class="chapter" data-level="19.4" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>19.4</b> Sign Test</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>19.4.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>19.4.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="19.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>19.5</b> Wilcoxon Sign Rank Test for One Group</a><ul>
+<li class="chapter" data-level="19.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>19.5.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>19.5.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.5.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>19.5.3</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="19.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>19.6</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
+<li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>19.6.2</b> Write Up</a></li>
+<li class="chapter" data-level="19.6.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot"><i class="fa fa-check"></i><b>19.6.3</b> Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="19.7" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>19.7</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
+<li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.7.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>19.7.2</b> Write up</a></li>
+<li class="chapter" data-level="19.7.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot-1"><i class="fa fa-check"></i><b>19.7.3</b> Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="19.8" data-path="nonparametrics.html"><a href="nonparametrics.html#kruskal-wallis"><i class="fa fa-check"></i><b>19.8</b> Kruskal-Wallis</a><ul>
+<li class="chapter" data-level="19.8.1" data-path="nonparametrics.html"><a href="nonparametrics.html#the-experimental-design"><i class="fa fa-check"></i><b>19.8.1</b> The experimental design</a></li>
+<li class="chapter" data-level="19.8.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-10"><i class="fa fa-check"></i><b>19.8.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="19.9" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>19.9</b> Friedman test</a><ul>
+<li class="chapter" data-level="19.9.1" data-path="nonparametrics.html"><a href="nonparametrics.html#blocked-experimental-design"><i class="fa fa-check"></i><b>19.9.1</b> Blocked experimental design</a></li>
+<li class="chapter" data-level="19.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-5"><i class="fa fa-check"></i><b>19.9.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.9.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-11"><i class="fa fa-check"></i><b>19.9.3</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="19.10" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-power-calculations"><i class="fa fa-check"></i><b>19.10</b> Nonparametric power calculations</a><ul>
+<li class="chapter" data-level="19.10.1" data-path="nonparametrics.html"><a href="nonparametrics.html#how-it-works"><i class="fa fa-check"></i><b>19.10.1</b> How it works</a></li>
+<li class="chapter" data-level="19.10.2" data-path="nonparametrics.html"><a href="nonparametrics.html#simulating-response-data"><i class="fa fa-check"></i><b>19.10.2</b> Simulating response data</a></li>
+<li class="chapter" data-level="19.10.3" data-path="nonparametrics.html"><a href="nonparametrics.html#an-example"><i class="fa fa-check"></i><b>19.10.3</b> An example</a></li>
+<li class="chapter" data-level="19.10.4" data-path="nonparametrics.html"><a href="nonparametrics.html#nonpara.pwr"><i class="fa fa-check"></i><b>19.10.4</b> nonpara.pwr</a></li>
+</ul></li>
+<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-1"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>20</b> Signed Rank Distribution</a><ul>
+<li class="chapter" data-level="20.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>20.1</b> Transformation of data into sign ranks</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="signrank.html"><a href="signrank.html#for-a-one-group-sample"><i class="fa fa-check"></i><b>20.1.1</b> For a one group sample</a></li>
+<li class="chapter" data-level="20.1.2" data-path="signrank.html"><a href="signrank.html#for-a-paired-sample"><i class="fa fa-check"></i><b>20.1.2</b> For a paired sample</a></li>
+<li class="chapter" data-level="20.1.3" data-path="signrank.html"><a href="signrank.html#the-sign-rank-test-statistic-in-r"><i class="fa fa-check"></i><b>20.1.3</b> The sign rank test statistic in R</a></li>
+</ul></li>
+<li class="chapter" data-level="20.2" data-path="signrank.html"><a href="signrank.html#rs-four-sign-rank-distribution-functions"><i class="fa fa-check"></i><b>20.2</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="20.2.1" data-path="signrank.html"><a href="signrank.html#dsignrank"><i class="fa fa-check"></i><b>20.2.1</b> dsignrank</a></li>
+<li class="chapter" data-level="20.2.2" data-path="signrank.html"><a href="signrank.html#psignrank"><i class="fa fa-check"></i><b>20.2.2</b> psignrank</a></li>
+<li class="chapter" data-level="20.2.3" data-path="signrank.html"><a href="signrank.html#qsignrank"><i class="fa fa-check"></i><b>20.2.3</b> qsignrank</a></li>
+<li class="chapter" data-level="20.2.4" data-path="signrank.html"><a href="signrank.html#rsignrank"><i class="fa fa-check"></i><b>20.2.4</b> rsignrank</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="ranksum.html"><a href="ranksum.html"><i class="fa fa-check"></i><b>21</b> Rank Sum Distribution</a><ul>
+<li class="chapter" data-level="21.0.1" data-path="ranksum.html"><a href="ranksum.html#transformation-of-data-into-rank-summs"><i class="fa fa-check"></i><b>21.0.1</b> Transformation of data into rank summs</a></li>
+<li class="chapter" data-level="21.0.2" data-path="ranksum.html"><a href="ranksum.html#the-sign-rank-test-statistic-in-r-1"><i class="fa fa-check"></i><b>21.0.2</b> The sign rank test statistic in R</a></li>
+<li class="chapter" data-level="21.1" data-path="ranksum.html"><a href="ranksum.html#rs-four-sign-rank-distribution-functions-1"><i class="fa fa-check"></i><b>21.1</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="21.1.1" data-path="ranksum.html"><a href="ranksum.html#dwilcox"><i class="fa fa-check"></i><b>21.1.1</b> dwilcox</a></li>
+<li class="chapter" data-level="21.1.2" data-path="ranksum.html"><a href="ranksum.html#pwilcox"><i class="fa fa-check"></i><b>21.1.2</b> pwilcox</a></li>
+<li class="chapter" data-level="21.1.3" data-path="ranksum.html"><a href="ranksum.html#qwilcox"><i class="fa fa-check"></i><b>21.1.3</b> qwilcox</a></li>
+<li class="chapter" data-level="21.1.4" data-path="ranksum.html"><a href="ranksum.html#rwilcox"><i class="fa fa-check"></i><b>21.1.4</b> rwilcox</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>22</b> The t-tests</a><ul>
+<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Data assumptions for t-tests</a></li>
+<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a><ul>
+<li class="chapter" data-level="22.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.2.1</b> One sample t tests</a></li>
+<li class="chapter" data-level="22.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.2.2</b> Unpaired t tests</a></li>
+<li class="chapter" data-level="22.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.2.3</b> Paired t tests</a></li>
+</ul></li>
+<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.3</b> t Test Hypotheses</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.3.1</b> One-sided or two-sided??</a></li>
+<li class="chapter" data-level="22.3.2" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.3.2</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="22.3.3" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.3.3</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="22.3.4" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.3.4</b> Paired hypotheses</a></li>
+</ul></li>
+<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>22.4</b> Confidence Intervals of Means</a></li>
+<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#parameters-small-samples-and-reliability"><i class="fa fa-check"></i><b>22.5</b> Parameters, small samples, and reliability</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.5.1</b> Reporting SD or SEM?</a></li>
+</ul></li>
+<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>22.6</b> t Tests: Running the analysis</a><ul>
+<li class="chapter" data-level="22.6.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.6.1</b> One sample t test</a></li>
+<li class="chapter" data-level="22.6.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.6.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
+<li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
+<li class="chapter" data-level="22.8.2" data-path="ttests.html"><a href="ttests.html#interpretation-9"><i class="fa fa-check"></i><b>22.8.2</b> Interpretation</a></li>
+<li class="chapter" data-level="22.8.3" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.8.3</b> t-pwr: A Monte Carlo method</a></li>
+</ul></li>
+<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#summary-2"><i class="fa fa-check"></i><b>22.9</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>23</b> Statistical design of t-tests</a><ul>
+<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a><ul>
+<li class="chapter" data-level="23.1.1" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.1.1</b> Overview of the Monte Carlo</a></li>
+<li class="chapter" data-level="23.1.2" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-data-simulation"><i class="fa fa-check"></i><b>23.1.2</b> tl;dr on data simulation</a></li>
+<li class="chapter" data-level="23.1.3" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-the-test"><i class="fa fa-check"></i><b>23.1.3</b> tl;dr on the test</a></li>
+<li class="chapter" data-level="23.1.4" data-path="ttestmc.html"><a href="ttestmc.html#changing-n"><i class="fa fa-check"></i><b>23.1.4</b> Changing n</a></li>
+<li class="chapter" data-level="23.1.5" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.1.5</b> Diabetes drug scenario</a></li>
+<li class="chapter" data-level="23.1.6" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.1.6</b> What would be a scientifically meaningful response?</a></li>
+</ul></li>
+<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> One sample t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1"><i class="fa fa-check"></i><b>23.2.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2"><i class="fa fa-check"></i><b>23.2.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.2.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3"><i class="fa fa-check"></i><b>23.2.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.2.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4"><i class="fa fa-check"></i><b>23.2.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.2.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5"><i class="fa fa-check"></i><b>23.2.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.2.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6"><i class="fa fa-check"></i><b>23.2.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.2.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7"><i class="fa fa-check"></i><b>23.2.7</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.3</b> Unpaired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.3.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-1"><i class="fa fa-check"></i><b>23.3.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.3.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-1"><i class="fa fa-check"></i><b>23.3.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.3.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-1"><i class="fa fa-check"></i><b>23.3.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.3.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-1"><i class="fa fa-check"></i><b>23.3.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.3.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-1"><i class="fa fa-check"></i><b>23.3.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.3.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-1"><i class="fa fa-check"></i><b>23.3.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.3.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.3.7</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.4</b> Paired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.4.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.4.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.4.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.4.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.4.3</b> Step 3</a></li>
+</ul></li>
+<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.5</b> Step 4</a><ul>
+<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.5.1</b> Step 5</a></li>
+<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.5.2</b> Step 6</a></li>
+<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.5.3</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.6</b> Comparison to pwr tests</a></li>
+<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.7</b> dt</a></li>
+<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.8</b> pt</a></li>
+<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.9</b> qt</a></li>
+<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.10</b> rt</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="simcorrelation.html"><a href="simcorrelation.html"><i class="fa fa-check"></i><b>24</b> Simulating correlated variables</a><ul>
+<li class="chapter" data-level="24.1" data-path="simcorrelation.html"><a href="simcorrelation.html#estimating-correlation-between-two-variables"><i class="fa fa-check"></i><b>24.1</b> Estimating correlation between two variables</a></li>
+<li class="chapter" data-level="24.2" data-path="simcorrelation.html"><a href="simcorrelation.html#simulating-correlated-variables"><i class="fa fa-check"></i><b>24.2</b> Simulating correlated variables</a></li>
+<li class="chapter" data-level="24.3" data-path="simcorrelation.html"><a href="simcorrelation.html#monte-carlo-simulation"><i class="fa fa-check"></i><b>24.3</b> Monte Carlo simulation</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="introanova.html"><a href="introanova.html"><i class="fa fa-check"></i><b>25</b> Introduction to ANOVA</a><ul>
+<li class="chapter" data-level="25.1" data-path="introanova.html"><a href="introanova.html#assumptions"><i class="fa fa-check"></i><b>25.1</b> Assumptions</a></li>
+<li class="chapter" data-level="25.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>25.2</b> Types of designs</a></li>
+<li class="chapter" data-level="25.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>25.3</b> Jargon: Factors and levels</a><ul>
+<li class="chapter" data-level="25.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>25.3.1</b> Woring with factors in R</a></li>
+</ul></li>
+<li class="chapter" data-level="25.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>25.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
+<li class="chapter" data-level="25.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>25.5</b> Inference</a><ul>
+<li class="chapter" data-level="25.5.1" data-path="introanova.html"><a href="introanova.html#a-quick-peek-at-posthoc-testing"><i class="fa fa-check"></i><b>25.5.1</b> A quick peek at posthoc testing</a></li>
+</ul></li>
+<li class="chapter" data-level="25.6" data-path="introanova.html"><a href="introanova.html#anova-calculations"><i class="fa fa-check"></i><b>25.6</b> ANOVA calculations</a><ul>
+<li class="chapter" data-level="25.6.1" data-path="introanova.html"><a href="introanova.html#sums-of-squares-partitioning"><i class="fa fa-check"></i><b>25.6.1</b> Sums of Squares partitioning</a></li>
+<li class="chapter" data-level="25.6.2" data-path="introanova.html"><a href="introanova.html#the-anova-table"><i class="fa fa-check"></i><b>25.6.2</b> The ANOVA table</a></li>
+<li class="chapter" data-level="25.6.3" data-path="introanova.html"><a href="introanova.html#post-hoc-group-comparisons"><i class="fa fa-check"></i><b>25.6.3</b> Post-hoc group comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="25.7" data-path="introanova.html"><a href="introanova.html#completely-randomized-or-related-measures"><i class="fa fa-check"></i><b>25.7</b> Completely randomized or related measures</a><ul>
+<li class="chapter" data-level="25.7.1" data-path="introanova.html"><a href="introanova.html#the-problem-of-lost-data-in-related-measures-designs"><i class="fa fa-check"></i><b>25.7.1</b> The problem of lost data in related measures designs</a></li>
+</ul></li>
+<li class="chapter" data-level="25.8" data-path="introanova.html"><a href="introanova.html#two-way-anova"><i class="fa fa-check"></i><b>25.8</b> Two-way ANOVA</a></li>
+<li class="chapter" data-level="25.9" data-path="introanova.html"><a href="introanova.html#other-anova-models"><i class="fa fa-check"></i><b>25.9</b> Other ANOVA models</a><ul>
+<li class="chapter" data-level="25.9.1" data-path="introanova.html"><a href="introanova.html#r-and-anova"><i class="fa fa-check"></i><b>25.9.1</b> R and ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="25.10" data-path="introanova.html"><a href="introanova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>25.10</b> Alternatives to ANOVA</a><ul>
+<li class="chapter" data-level="25.10.1" data-path="introanova.html"><a href="introanova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>25.10.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
+</ul></li>
+<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-3"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="26" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>26</b> The F distribution</a><ul>
+<li class="chapter" data-level="26.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>26.1</b> Background</a><ul>
+<li class="chapter" data-level="26.1.1" data-path="fdistr.html"><a href="fdistr.html#sample-variance-and-fs-pdf"><i class="fa fa-check"></i><b>26.1.1</b> Sample Variance and F’s PDF</a></li>
+</ul></li>
+<li class="chapter" data-level="26.2" data-path="fdistr.html"><a href="fdistr.html#df"><i class="fa fa-check"></i><b>26.2</b> df</a></li>
+<li class="chapter" data-level="26.3" data-path="fdistr.html"><a href="fdistr.html#pf"><i class="fa fa-check"></i><b>26.3</b> pf</a></li>
+<li class="chapter" data-level="26.4" data-path="fdistr.html"><a href="fdistr.html#qf"><i class="fa fa-check"></i><b>26.4</b> qf</a></li>
+<li class="chapter" data-level="26.5" data-path="fdistr.html"><a href="fdistr.html#rf"><i class="fa fa-check"></i><b>26.5</b> rf</a></li>
+</ul></li>
+<li class="chapter" data-level="27" data-path="onewayanova.html"><a href="onewayanova.html"><i class="fa fa-check"></i><b>27</b> One-way ANOVA Completely Randomized</a><ul>
+<li class="chapter" data-level="27.1" data-path="onewayanova.html"><a href="onewayanova.html#using-ezanova"><i class="fa fa-check"></i><b>27.1</b> Using <code>ezANOVA</code></a></li>
+<li class="chapter" data-level="27.2" data-path="onewayanova.html"><a href="onewayanova.html#the-chickwt-data-set"><i class="fa fa-check"></i><b>27.2</b> The chickwt data set</a><ul>
+<li class="chapter" data-level="27.2.1" data-path="onewayanova.html"><a href="onewayanova.html#inspect-the-data"><i class="fa fa-check"></i><b>27.2.1</b> Inspect the data</a></li>
+</ul></li>
+<li class="chapter" data-level="27.3" data-path="onewayanova.html"><a href="onewayanova.html#run-the-anova"><i class="fa fa-check"></i><b>27.3</b> Run the ANOVA</a><ul>
+<li class="chapter" data-level="27.3.1" data-path="onewayanova.html"><a href="onewayanova.html#run-the-chickwts-one-way-anova"><i class="fa fa-check"></i><b>27.3.1</b> Run the chickwts One Way ANOVA</a></li>
+<li class="chapter" data-level="27.3.2" data-path="onewayanova.html"><a href="onewayanova.html#interpreting-the-one-way-cr-anova-output"><i class="fa fa-check"></i><b>27.3.2</b> Interpreting the One-Way CR ANOVA Output</a></li>
+</ul></li>
+<li class="chapter" data-level="27.4" data-path="onewayanova.html"><a href="onewayanova.html#post-hoc-pairwise-comparisons"><i class="fa fa-check"></i><b>27.4</b> Post hoc pairwise comparisons</a><ul>
+<li class="chapter" data-level="27.4.1" data-path="onewayanova.html"><a href="onewayanova.html#range-tests"><i class="fa fa-check"></i><b>27.4.1</b> Range tests</a></li>
+</ul></li>
+<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-4"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="28" data-path="onewayRM.html"><a href="onewayRM.html"><i class="fa fa-check"></i><b>28</b> One-way ANOVA Related Measures</a><ul>
+<li class="chapter" data-level="28.1" data-path="onewayRM.html"><a href="onewayRM.html#data-prep"><i class="fa fa-check"></i><b>28.1</b> Data prep</a></li>
+<li class="chapter" data-level="28.2" data-path="onewayRM.html"><a href="onewayRM.html#data-visualization"><i class="fa fa-check"></i><b>28.2</b> Data visualization</a><ul>
+<li class="chapter" data-level="28.2.1" data-path="onewayRM.html"><a href="onewayRM.html#visualize-the-statistical-design"><i class="fa fa-check"></i><b>28.2.1</b> Visualize the statistical design</a></li>
+</ul></li>
+<li class="chapter" data-level="28.3" data-path="onewayRM.html"><a href="onewayRM.html#the-anova"><i class="fa fa-check"></i><b>28.3</b> The ANOVA</a><ul>
+<li class="chapter" data-level="28.3.1" data-path="onewayRM.html"><a href="onewayRM.html#running-ezanova"><i class="fa fa-check"></i><b>28.3.1</b> Running ezANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-10"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
+<li class="chapter" data-level="28.5" data-path="onewayRM.html"><a href="onewayRM.html#post-hoc-analysis"><i class="fa fa-check"></i><b>28.5</b> Post-hoc analysis</a></li>
+<li class="chapter" data-level="28.6" data-path="onewayRM.html"><a href="onewayRM.html#write-up-12"><i class="fa fa-check"></i><b>28.6</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="29" data-path="twowayCR.html"><a href="twowayCR.html"><i class="fa fa-check"></i><b>29</b> Two-way ANOVA Completely Randomized</a><ul>
+<li class="chapter" data-level="29.1" data-path="twowayCR.html"><a href="twowayCR.html#effect-of-strain-and-diet-on-liver"><i class="fa fa-check"></i><b>29.1</b> Effect of Strain and Diet on Liver</a></li>
+<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
+<li class="chapter" data-level="29.3" data-path="twowayCR.html"><a href="twowayCR.html#interpretation-of-2-way-cr-anova-output"><i class="fa fa-check"></i><b>29.3</b> Interpretation of 2 Way CR ANOVA Output</a><ul>
+<li class="chapter" data-level="29.3.1" data-path="twowayCR.html"><a href="twowayCR.html#levenes"><i class="fa fa-check"></i><b>29.3.1</b> Levene’s</a></li>
+<li class="chapter" data-level="29.3.2" data-path="twowayCR.html"><a href="twowayCR.html#anova-table"><i class="fa fa-check"></i><b>29.3.2</b> ANOVA Table</a></li>
+</ul></li>
+<li class="chapter" data-level="29.4" data-path="twowayCR.html"><a href="twowayCR.html#post-hoc-multiple-comparisons"><i class="fa fa-check"></i><b>29.4</b> Post Hoc Multiple Comparisons</a><ul>
+<li class="chapter" data-level="29.4.1" data-path="twowayCR.html"><a href="twowayCR.html#pairwise.t.tests"><i class="fa fa-check"></i><b>29.4.1</b> Pairwise.t.tests</a></li>
+<li class="chapter" data-level="29.4.2" data-path="twowayCR.html"><a href="twowayCR.html#write-up-13"><i class="fa fa-check"></i><b>29.4.2</b> Write Up</a></li>
+<li class="chapter" data-level="29.4.3" data-path="twowayCR.html"><a href="twowayCR.html#range-tests-1"><i class="fa fa-check"></i><b>29.4.3</b> Range tests</a></li>
+</ul></li>
+<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-5"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="30" data-path="twowayRM.html"><a href="twowayRM.html"><i class="fa fa-check"></i><b>30</b> Two-way ANOVA Related Measures</a><ul>
+<li class="chapter" data-level="30.1" data-path="twowayRM.html"><a href="twowayRM.html#cell-culture"><i class="fa fa-check"></i><b>30.1</b> Cell culture</a></li>
+<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-1"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
+<li class="chapter" data-level="30.3" data-path="twowayRM.html"><a href="twowayRM.html#interpretation-of-the-output"><i class="fa fa-check"></i><b>30.3</b> Interpretation of the output</a><ul>
+<li class="chapter" data-level="30.3.1" data-path="twowayRM.html"><a href="twowayRM.html#anova-table-1"><i class="fa fa-check"></i><b>30.3.1</b> ANOVA Table</a></li>
+<li class="chapter" data-level="30.3.2" data-path="twowayRM.html"><a href="twowayRM.html#mauchlys-sphericity-test"><i class="fa fa-check"></i><b>30.3.2</b> Mauchly’s Sphericity Test</a></li>
+</ul></li>
+<li class="chapter" data-level="30.4" data-path="twowayRM.html"><a href="twowayRM.html#post-hoc-multiple-comparisons-1"><i class="fa fa-check"></i><b>30.4</b> Post Hoc multiple comparisons</a></li>
+<li class="chapter" data-level="30.5" data-path="twowayRM.html"><a href="twowayRM.html#write-up-14"><i class="fa fa-check"></i><b>30.5</b> Write Up</a></li>
+<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-6"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="31" data-path="twowaymixed.html"><a href="twowaymixed.html"><i class="fa fa-check"></i><b>31</b> Two-way ANOVA RM/CR</a><ul>
+<li class="chapter" data-level="31.1" data-path="twowaymixed.html"><a href="twowaymixed.html#chickweight-data-set"><i class="fa fa-check"></i><b>31.1</b> ChickWeight Data set</a></li>
+<li class="chapter" data-level="31.2" data-path="twowaymixed.html"><a href="twowaymixed.html#munge-chickweight-data"><i class="fa fa-check"></i><b>31.2</b> Munge ChickWeight data</a></li>
+<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-2"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
+<li class="chapter" data-level="31.4" data-path="twowaymixed.html"><a href="twowaymixed.html#interpreting-the-anova-output"><i class="fa fa-check"></i><b>31.4</b> Interpreting the ANOVA output</a><ul>
+<li class="chapter" data-level="31.4.1" data-path="twowaymixed.html"><a href="twowaymixed.html#anova-the-anova-table-1"><i class="fa fa-check"></i><b>31.4.1</b> $ANOVA: The ANOVA table</a></li>
+<li class="chapter" data-level="31.4.2" data-path="twowaymixed.html"><a href="twowaymixed.html#mauchlys-test-and-corrections"><i class="fa fa-check"></i><b>31.4.2</b> Mauchly’s Test and Corrections</a></li>
+</ul></li>
+<li class="chapter" data-level="31.5" data-path="twowaymixed.html"><a href="twowaymixed.html#post-hoc"><i class="fa fa-check"></i><b>31.5</b> Post hoc</a><ul>
+<li class="chapter" data-level="31.5.1" data-path="twowaymixed.html"><a href="twowaymixed.html#pairwise.t.tests-1"><i class="fa fa-check"></i><b>31.5.1</b> Pairwise.t.tests</a></li>
+<li class="chapter" data-level="31.5.2" data-path="twowaymixed.html"><a href="twowaymixed.html#tukey-test-a-range-test"><i class="fa fa-check"></i><b>31.5.2</b> Tukey test: A range test</a></li>
+<li class="chapter" data-level="31.5.3" data-path="twowaymixed.html"><a href="twowaymixed.html#heres-whats-been-discovered-by-the-tukeyhsd-test"><i class="fa fa-check"></i><b>31.5.3</b> Here’s what’s been discovered by the TukeyHSD test</a></li>
+<li class="chapter" data-level="31.5.4" data-path="twowaymixed.html"><a href="twowaymixed.html#why-is-the-tukeyhsd-result-so-different-than-the-pairwise.t.test"><i class="fa fa-check"></i><b>31.5.4</b> Why is the TukeyHSD result so different than the pairwise.t.test??</a></li>
+</ul></li>
+<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-7"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="32" data-path="posthoc.html"><a href="posthoc.html"><i class="fa fa-check"></i><b>32</b> ANOVA Posthoc Comparisons</a><ul>
+<li class="chapter" data-level="32.1" data-path="posthoc.html"><a href="posthoc.html#overview-of-options"><i class="fa fa-check"></i><b>32.1</b> Overview of options</a><ul>
+<li class="chapter" data-level="32.1.1" data-path="posthoc.html"><a href="posthoc.html#pairwise.t.test-with-p-value-adjustments"><i class="fa fa-check"></i><b>32.1.1</b> Pairwise.t.test with p-value adjustments</a></li>
+<li class="chapter" data-level="32.1.2" data-path="posthoc.html"><a href="posthoc.html#range-tests-2"><i class="fa fa-check"></i><b>32.1.2</b> Range tests</a></li>
+</ul></li>
+<li class="chapter" data-level="32.2" data-path="posthoc.html"><a href="posthoc.html#reporting-the-result-1"><i class="fa fa-check"></i><b>32.2</b> Reporting the result</a></li>
+<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-8"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="jaxwest2.html"><a href="jaxwest2.html"><i class="fa fa-check"></i><b>33</b> Reproducible Data Munging Mostly with Tidyverse</a><ul>
+<li class="chapter" data-level="33.1" data-path="jaxwest2.html"><a href="jaxwest2.html#look-at-the-original-data-carefully"><i class="fa fa-check"></i><b>33.1</b> Look at the original data carefully</a></li>
+<li class="chapter" data-level="33.2" data-path="jaxwest2.html"><a href="jaxwest2.html#our-goal"><i class="fa fa-check"></i><b>33.2</b> Our goal</a></li>
+<li class="chapter" data-level="33.3" data-path="jaxwest2.html"><a href="jaxwest2.html#step-1-read-the-data-into-r"><i class="fa fa-check"></i><b>33.3</b> Step 1: Read the data into R</a></li>
+<li class="chapter" data-level="33.4" data-path="jaxwest2.html"><a href="jaxwest2.html#step-2-select-the-variables"><i class="fa fa-check"></i><b>33.4</b> Step 2: Select the variables</a></li>
+<li class="chapter" data-level="33.5" data-path="jaxwest2.html"><a href="jaxwest2.html#step-3-trim-the-cases"><i class="fa fa-check"></i><b>33.5</b> Step 3: Trim the cases</a></li>
+<li class="chapter" data-level="33.6" data-path="jaxwest2.html"><a href="jaxwest2.html#step-4-we-have-a-variable-problem-to-fix"><i class="fa fa-check"></i><b>33.6</b> Step 4: We have a variable problem to fix</a></li>
+<li class="chapter" data-level="33.7" data-path="jaxwest2.html"><a href="jaxwest2.html#step-5-impute-or-delete"><i class="fa fa-check"></i><b>33.7</b> Step 5: Impute or Delete</a></li>
+<li class="chapter" data-level="33.8" data-path="jaxwest2.html"><a href="jaxwest2.html#step-6-go-long"><i class="fa fa-check"></i><b>33.8</b> Step 6: Go long</a></li>
+<li class="chapter" data-level="33.9" data-path="jaxwest2.html"><a href="jaxwest2.html#step-7-convert-other-variables-to-factor"><i class="fa fa-check"></i><b>33.9</b> Step 7: Convert other variables to factor</a></li>
+<li class="chapter" data-level="33.10" data-path="jaxwest2.html"><a href="jaxwest2.html#step-8-plot"><i class="fa fa-check"></i><b>33.10</b> Step 8: Plot</a></li>
+<li class="chapter" data-level="33.11" data-path="jaxwest2.html"><a href="jaxwest2.html#step-9-run-the-anova"><i class="fa fa-check"></i><b>33.11</b> Step 9: Run the ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="34" data-path="anovamc.html"><a href="anovamc.html"><i class="fa fa-check"></i><b>34</b> ANOVA power using Monte Carlo</a><ul>
+<li class="chapter" data-level="34.1" data-path="anovamc.html"><a href="anovamc.html#alternatives-to-monte-carlo"><i class="fa fa-check"></i><b>34.1</b> Alternatives to Monte Carlo</a></li>
+<li class="chapter" data-level="34.2" data-path="anovamc.html"><a href="anovamc.html#what-is-monte-carlo"><i class="fa fa-check"></i><b>34.2</b> What is Monte Carlo</a></li>
+<li class="chapter" data-level="34.3" data-path="anovamc.html"><a href="anovamc.html#one-way-completely-randomized-anova-monte-carlo"><i class="fa fa-check"></i><b>34.3</b> One-way completely randomized ANOVA Monte Carlo</a><ul>
+<li class="chapter" data-level="34.3.1" data-path="anovamc.html"><a href="anovamc.html#directions"><i class="fa fa-check"></i><b>34.3.1</b> Directions</a></li>
+<li class="chapter" data-level="34.3.2" data-path="anovamc.html"><a href="anovamc.html#step-1-create-initial-values"><i class="fa fa-check"></i><b>34.3.2</b> Step 1: Create initial values</a></li>
+<li class="chapter" data-level="34.3.3" data-path="anovamc.html"><a href="anovamc.html#step-2-visualize-one-random-sample"><i class="fa fa-check"></i><b>34.3.3</b> Step 2: Visualize one random sample</a></li>
+<li class="chapter" data-level="34.3.4" data-path="anovamc.html"><a href="anovamc.html#step-3-run-the-power-simulator"><i class="fa fa-check"></i><b>34.3.4</b> Step 3: Run The Power Simulator</a></li>
+<li class="chapter" data-level="34.3.5" data-path="anovamc.html"><a href="anovamc.html#step-4-optimize-for-suitable-power"><i class="fa fa-check"></i><b>34.3.5</b> Step 4: Optimize for suitable power</a></li>
+<li class="chapter" data-level="34.3.6" data-path="anovamc.html"><a href="anovamc.html#notes-and-considerations"><i class="fa fa-check"></i><b>34.3.6</b> Notes And Considerations</a></li>
+</ul></li>
+<li class="chapter" data-level="34.4" data-path="anovamc.html"><a href="anovamc.html#one-way-related-measures-anova-monte-carlo"><i class="fa fa-check"></i><b>34.4</b> One-way related measures ANOVA Monte Carlo</a></li>
+<li class="chapter" data-level="34.5" data-path="anovamc.html"><a href="anovamc.html#directions-1"><i class="fa fa-check"></i><b>34.5</b> Directions</a><ul>
+<li class="chapter" data-level="34.5.1" data-path="anovamc.html"><a href="anovamc.html#step-1-initial-values"><i class="fa fa-check"></i><b>34.5.1</b> Step 1: Initial values</a></li>
+<li class="chapter" data-level="34.5.2" data-path="anovamc.html"><a href="anovamc.html#step-2-visualize-one-sample"><i class="fa fa-check"></i><b>34.5.2</b> Step 2: Visualize one sample</a></li>
+<li class="chapter" data-level="34.5.3" data-path="anovamc.html"><a href="anovamc.html#step-3-run-the-power-simulator-1"><i class="fa fa-check"></i><b>34.5.3</b> Step 3: Run the power simulator</a></li>
+<li class="chapter" data-level="34.5.4" data-path="anovamc.html"><a href="anovamc.html#step-4-should-anything-be-changed"><i class="fa fa-check"></i><b>34.5.4</b> Step 4: Should anything be changed?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="manova.html"><a href="manova.html"><i class="fa fa-check"></i><b>35</b> Multivariate Analysis of Variance (MANOVA)</a><ul>
+<li class="chapter" data-level="35.1" data-path="manova.html"><a href="manova.html#what-does-manova-test"><i class="fa fa-check"></i><b>35.1</b> What does MANOVA test?</a></li>
+<li class="chapter" data-level="35.2" data-path="manova.html"><a href="manova.html#types-of-experiments"><i class="fa fa-check"></i><b>35.2</b> Types of experiments</a></li>
+<li class="chapter" data-level="35.3" data-path="manova.html"><a href="manova.html#manova-is-not-many-anovas"><i class="fa fa-check"></i><b>35.3</b> MANOVA is not many ANOVAs</a><ul>
+<li class="chapter" data-level="35.3.1" data-path="manova.html"><a href="manova.html#why-manova"><i class="fa fa-check"></i><b>35.3.1</b> Why MANOVA?</a></li>
+</ul></li>
+<li class="chapter" data-level="35.4" data-path="manova.html"><a href="manova.html#assumptions-1"><i class="fa fa-check"></i><b>35.4</b> Assumptions</a><ul>
+<li class="chapter" data-level="35.4.1" data-path="manova.html"><a href="manova.html#multicolinearity"><i class="fa fa-check"></i><b>35.4.1</b> Multicolinearity</a></li>
+</ul></li>
+<li class="chapter" data-level="35.5" data-path="manova.html"><a href="manova.html#calculating-variation"><i class="fa fa-check"></i><b>35.5</b> Calculating variation</a><ul>
+<li class="chapter" data-level="35.5.1" data-path="manova.html"><a href="manova.html#eigenvectors-and-eigenvalues"><i class="fa fa-check"></i><b>35.5.1</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="35.5.2" data-path="manova.html"><a href="manova.html#manova-test-statistics"><i class="fa fa-check"></i><b>35.5.2</b> MANOVA test statistics</a></li>
+<li class="chapter" data-level="35.5.3" data-path="manova.html"><a href="manova.html#which-manova-test-statistic-is-best"><i class="fa fa-check"></i><b>35.5.3</b> Which MANOVA test statistic is best?</a></li>
+</ul></li>
+<li class="chapter" data-level="35.6" data-path="manova.html"><a href="manova.html#drug-clearance-example"><i class="fa fa-check"></i><b>35.6</b> Drug clearance example</a><ul>
+<li class="chapter" data-level="35.6.1" data-path="manova.html"><a href="manova.html#rationale-for-manova"><i class="fa fa-check"></i><b>35.6.1</b> Rationale for MANOVA</a></li>
+<li class="chapter" data-level="35.6.2" data-path="manova.html"><a href="manova.html#data-structure"><i class="fa fa-check"></i><b>35.6.2</b> Data structure</a></li>
+<li class="chapter" data-level="35.6.3" data-path="manova.html"><a href="manova.html#manova-procedure"><i class="fa fa-check"></i><b>35.6.3</b> MANOVA procedure</a></li>
+</ul></li>
+<li class="chapter" data-level="35.7" data-path="manova.html"><a href="manova.html#planning-manova-experiments"><i class="fa fa-check"></i><b>35.7</b> Planning MANOVA experiments</a><ul>
+<li class="chapter" data-level="35.7.1" data-path="manova.html"><a href="manova.html#manova-monte-carlo-power-analysis"><i class="fa fa-check"></i><b>35.7.1</b> MANOVA Monte Carlo Power Analysis</a></li>
+<li class="chapter" data-level="35.7.2" data-path="manova.html"><a href="manova.html#an-manova-monte-carlo-power-function"><i class="fa fa-check"></i><b>35.7.2</b> An MANOVA Monte Carlo Power function</a></li>
+</ul></li>
+<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-9"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="correl.html"><a href="correl.html"><i class="fa fa-check"></i><b>36</b> Correlation</a><ul>
+<li class="chapter" data-level="36.1" data-path="correl.html"><a href="correl.html#correlation-causation"><i class="fa fa-check"></i><b>36.1</b> Correlation != Causation</a></li>
+<li class="chapter" data-level="36.2" data-path="correl.html"><a href="correl.html#correlation-in-multivariate-outcomes-and-paired-designs"><i class="fa fa-check"></i><b>36.2</b> Correlation in Multivariate Outcomes and Paired Designs</a></li>
+<li class="chapter" data-level="36.3" data-path="correl.html"><a href="correl.html#correlation-coefficients"><i class="fa fa-check"></i><b>36.3</b> Correlation coefficients</a><ul>
+<li class="chapter" data-level="36.3.1" data-path="correl.html"><a href="correl.html#pearsons-correlation-coefficient"><i class="fa fa-check"></i><b>36.3.1</b> Pearson’s correlation coefficient</a></li>
+<li class="chapter" data-level="36.3.2" data-path="correl.html"><a href="correl.html#spearmans-rank-correlation"><i class="fa fa-check"></i><b>36.3.2</b> Spearman’s rank correlation</a></li>
+<li class="chapter" data-level="36.3.3" data-path="correl.html"><a href="correl.html#kendalls-tau"><i class="fa fa-check"></i><b>36.3.3</b> Kendall’s tau</a></li>
+<li class="chapter" data-level="36.3.4" data-path="correl.html"><a href="correl.html#which-correlation-method-to-use"><i class="fa fa-check"></i><b>36.3.4</b> Which correlation method to use?</a></li>
+<li class="chapter" data-level="36.3.5" data-path="correl.html"><a href="correl.html#r-correlation-analysis-functions"><i class="fa fa-check"></i><b>36.3.5</b> R correlation analysis functions</a></li>
+<li class="chapter" data-level="36.3.6" data-path="correl.html"><a href="correl.html#plot-the-correlations"><i class="fa fa-check"></i><b>36.3.6</b> Plot the correlations</a></li>
+<li class="chapter" data-level="36.3.7" data-path="correl.html"><a href="correl.html#calculate-a-correlation-coefficient-and-posthoc-test"><i class="fa fa-check"></i><b>36.3.7</b> Calculate a correlation coefficient and posthoc test</a></li>
+<li class="chapter" data-level="36.3.8" data-path="correl.html"><a href="correl.html#interpretation-of-correlation-output"><i class="fa fa-check"></i><b>36.3.8</b> Interpretation of correlation output</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="regress.html"><a href="regress.html"><i class="fa fa-check"></i><b>37</b> Linear Regression</a><ul>
+<li class="chapter" data-level="37.1" data-path="regress.html"><a href="regress.html#the-linear-regression-model"><i class="fa fa-check"></i><b>37.1</b> The linear regression model</a></li>
+<li class="chapter" data-level="37.2" data-path="regress.html"><a href="regress.html#least-squares-fitting"><i class="fa fa-check"></i><b>37.2</b> Least squares fitting</a></li>
+<li class="chapter" data-level="37.3" data-path="regress.html"><a href="regress.html#the-practical-importance-of-linear-model-parameters"><i class="fa fa-check"></i><b>37.3</b> The practical importance of linear model parameters</a></li>
+<li class="chapter" data-level="37.4" data-path="regress.html"><a href="regress.html#linear-model-standard-errors"><i class="fa fa-check"></i><b>37.4</b> Linear model standard errors</a></li>
+<li class="chapter" data-level="37.5" data-path="regress.html"><a href="regress.html#linear-regression-in-r"><i class="fa fa-check"></i><b>37.5</b> Linear regression in R</a></li>
+<li class="chapter" data-level="37.6" data-path="regress.html"><a href="regress.html#intepretation"><i class="fa fa-check"></i><b>37.6</b> Intepretation</a><ul>
+<li class="chapter" data-level="37.6.1" data-path="regress.html"><a href="regress.html#residuals"><i class="fa fa-check"></i><b>37.6.1</b> Residuals</a></li>
+<li class="chapter" data-level="37.6.2" data-path="regress.html"><a href="regress.html#coefficients"><i class="fa fa-check"></i><b>37.6.2</b> Coefficients</a></li>
+<li class="chapter" data-level="37.6.3" data-path="regress.html"><a href="regress.html#degrees-of-freedom-1"><i class="fa fa-check"></i><b>37.6.3</b> Degrees of freedom</a></li>
+<li class="chapter" data-level="37.6.4" data-path="regress.html"><a href="regress.html#r-squared"><i class="fa fa-check"></i><b>37.6.4</b> R-squared</a></li>
+<li class="chapter" data-level="37.6.5" data-path="regress.html"><a href="regress.html#f-statistic"><i class="fa fa-check"></i><b>37.6.5</b> F-statistic</a></li>
+<li class="chapter" data-level="37.6.6" data-path="regress.html"><a href="regress.html#plotting-regression-results"><i class="fa fa-check"></i><b>37.6.6</b> Plotting regression results</a></li>
+<li class="chapter" data-level="37.6.7" data-path="regress.html"><a href="regress.html#visualizing-residuals"><i class="fa fa-check"></i><b>37.6.7</b> Visualizing residuals</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="38" data-path="nonlinearintro.html"><a href="nonlinearintro.html"><i class="fa fa-check"></i><b>38</b> Non-linear regression introduction</a><ul>
+<li class="chapter" data-level="38.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#uses-for-nonlinear-regression"><i class="fa fa-check"></i><b>38.1</b> Uses for nonlinear regression</a></li>
+<li class="chapter" data-level="38.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#nonlinear-models-and-parameters"><i class="fa fa-check"></i><b>38.2</b> Nonlinear models and parameters</a><ul>
+<li class="chapter" data-level="38.2.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#hyperbolic-stimulus-response-functions"><i class="fa fa-check"></i><b>38.2.1</b> Hyperbolic stimulus response functions</a></li>
+<li class="chapter" data-level="38.2.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#visualizing-nonlinear-data-and-log-scaling"><i class="fa fa-check"></i><b>38.2.2</b> Visualizing nonlinear data and log scaling</a></li>
+</ul></li>
+<li class="chapter" data-level="38.3" data-path="nonlinearintro.html"><a href="nonlinearintro.html#how-do-regression-fits-happen"><i class="fa fa-check"></i><b>38.3</b> How do regression fits happen?</a><ul>
+<li class="chapter" data-level="38.3.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#selecting-the-right-model"><i class="fa fa-check"></i><b>38.3.1</b> Selecting the right model</a></li>
+<li class="chapter" data-level="38.3.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#from-models-to-formulas"><i class="fa fa-check"></i><b>38.3.2</b> From models to formulas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="nestedregress.html"><a href="nestedregress.html"><i class="fa fa-check"></i><b>39</b> Nested-model nonlinear regression</a><ul>
+<li class="chapter" data-level="39.1" data-path="nestedregress.html"><a href="nestedregress.html#read-and-plot-the-data"><i class="fa fa-check"></i><b>39.1</b> Read and plot the data</a></li>
+<li class="chapter" data-level="39.2" data-path="nestedregress.html"><a href="nestedregress.html#perform-the-nonlinear-regression"><i class="fa fa-check"></i><b>39.2</b> Perform the nonlinear regression</a><ul>
+<li class="chapter" data-level="39.2.1" data-path="nestedregress.html"><a href="nestedregress.html#troubleshooting-the-regression"><i class="fa fa-check"></i><b>39.2.1</b> Troubleshooting the regression</a></li>
+<li class="chapter" data-level="39.2.2" data-path="nestedregress.html"><a href="nestedregress.html#interpreting-the-parameters"><i class="fa fa-check"></i><b>39.2.2</b> Interpreting the parameters</a></li>
+<li class="chapter" data-level="39.2.3" data-path="nestedregress.html"><a href="nestedregress.html#residual-plots-to-compare-fits"><i class="fa fa-check"></i><b>39.2.3</b> Residual plots to compare fits</a></li>
+<li class="chapter" data-level="39.2.4" data-path="nestedregress.html"><a href="nestedregress.html#f-test-for-model-comparison"><i class="fa fa-check"></i><b>39.2.4</b> F test for model comparison</a></li>
+<li class="chapter" data-level="39.2.5" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>39.2.5</b> Compare AIC</a></li>
+<li class="chapter" data-level="39.2.6" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>39.2.6</b> Other ways to compare models</a></li>
+<li class="chapter" data-level="39.2.7" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.7</b> Interpretation of this one replicate</a></li>
+<li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.8</b> Alternate analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-10"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html"><i class="fa fa-check"></i><b>40</b> Nonlinear regression of independent replicates</a><ul>
+<li class="chapter" data-level="40.1" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#the-dataset"><i class="fa fa-check"></i><b>40.1</b> The dataset</a></li>
+<li class="chapter" data-level="40.2" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#munging-for-regression-analysis"><i class="fa fa-check"></i><b>40.2</b> Munging for regression analysis</a><ul>
+<li class="chapter" data-level="40.2.1" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#average-the-technical-replicates"><i class="fa fa-check"></i><b>40.2.1</b> Average the technical replicates</a></li>
+<li class="chapter" data-level="40.2.2" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#create-one-table"><i class="fa fa-check"></i><b>40.2.2</b> Create one table</a></li>
+<li class="chapter" data-level="40.2.3" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#plot-the-data"><i class="fa fa-check"></i><b>40.2.3</b> Plot the data</a></li>
+<li class="chapter" data-level="40.2.4" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#run-the-regressions"><i class="fa fa-check"></i><b>40.2.4</b> Run the regressions</a></li>
+<li class="chapter" data-level="40.2.5" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#clean-up-regression-results"><i class="fa fa-check"></i><b>40.2.5</b> Clean up regression results</a></li>
+</ul></li>
+<li class="chapter" data-level="40.3" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#t-test-on-half-lives"><i class="fa fa-check"></i><b>40.3</b> T-test on half-lives</a></li>
+<li class="chapter" data-level="40.4" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#conclusion"><i class="fa fa-check"></i><b>40.4</b> Conclusion</a></li>
+<li class="chapter" data-level="40.5" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#summary-figure"><i class="fa fa-check"></i><b>40.5</b> Summary figure</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="multregress.html"><a href="multregress.html"><i class="fa fa-check"></i><b>41</b> Multiple regression</a><ul>
+<li class="chapter" data-level="41.1" data-path="multregress.html"><a href="multregress.html#the-linear-regression-model-1"><i class="fa fa-check"></i><b>41.1</b> The linear regression model</a></li>
+<li class="chapter" data-level="41.2" data-path="multregress.html"><a href="multregress.html#multiple-regression-models"><i class="fa fa-check"></i><b>41.2</b> Multiple regression models</a></li>
+<li class="chapter" data-level="41.3" data-path="multregress.html"><a href="multregress.html#experimental-multiple-regression"><i class="fa fa-check"></i><b>41.3</b> Experimental multiple regression</a><ul>
+<li class="chapter" data-level="41.3.1" data-path="multregress.html"><a href="multregress.html#a-one-factor-experiment-with-3-groups"><i class="fa fa-check"></i><b>41.3.1</b> A one factor experiment with 3 groups</a></li>
+<li class="chapter" data-level="41.3.2" data-path="multregress.html"><a href="multregress.html#a-two-factor-experiment-with-6-groups"><i class="fa fa-check"></i><b>41.3.2</b> A two factor experiment with 6 groups</a></li>
+</ul></li>
+<li class="chapter" data-level="41.4" data-path="multregress.html"><a href="multregress.html#multiple-linear-mixed-models"><i class="fa fa-check"></i><b>41.4</b> Multiple linear mixed models</a></li>
+<li class="chapter" data-level="41.5" data-path="multregress.html"><a href="multregress.html#multiple-regression-of-observational-data"><i class="fa fa-check"></i><b>41.5</b> Multiple regression of observational data</a></li>
+</ul></li>
+<li class="chapter" data-level="42" data-path="logregress.html"><a href="logregress.html"><i class="fa fa-check"></i><b>42</b> Logistic regression</a><ul>
+<li class="chapter" data-level="42.1" data-path="logregress.html"><a href="logregress.html#uses-of-logistic-regression"><i class="fa fa-check"></i><b>42.1</b> Uses of logistic regression</a><ul>
+<li class="chapter" data-level="42.1.1" data-path="logregress.html"><a href="logregress.html#sidebar-doing-logistic-regression-is-machine-learning"><i class="fa fa-check"></i><b>42.1.1</b> Sidebar: Doing logistic regression is machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="42.2" data-path="logregress.html"><a href="logregress.html#derivation-of-the-logistic-regression-model"><i class="fa fa-check"></i><b>42.2</b> Derivation of the logistic regression model</a><ul>
+<li class="chapter" data-level="42.2.1" data-path="logregress.html"><a href="logregress.html#relationship-of-logit-to-odds-to-the-model-coefficients-and-probability"><i class="fa fa-check"></i><b>42.2.1</b> Relationship of logit to odds to the model coefficients and probability</a></li>
+<li class="chapter" data-level="42.2.2" data-path="logregress.html"><a href="logregress.html#additional-types-of-logistic-regression-models"><i class="fa fa-check"></i><b>42.2.2</b> Additional types of logistic regression models</a></li>
+</ul></li>
+<li class="chapter" data-level="42.3" data-path="logregress.html"><a href="logregress.html#stress-and-survival"><i class="fa fa-check"></i><b>42.3</b> Stress and survival</a><ul>
+<li class="chapter" data-level="42.3.1" data-path="logregress.html"><a href="logregress.html#interpretation-of-output"><i class="fa fa-check"></i><b>42.3.1</b> Interpretation of output</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="43" data-path="mixedlogistic.html"><a href="mixedlogistic.html"><i class="fa fa-check"></i><b>43</b> Mixed model logistic regression</a><ul>
+<li class="chapter" data-level="43.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#mixed-models-fixed-and-random-effects"><i class="fa fa-check"></i><b>43.1</b> Mixed models, fixed and random effects</a><ul>
+<li class="chapter" data-level="43.1.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#nfat-localization-within-smooth-muscle-cells"><i class="fa fa-check"></i><b>43.1.1</b> NFAT localization within smooth muscle cells</a></li>
+</ul></li>
+<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-1"><i class="fa fa-check"></i><b>43.2</b> Data</a></li>
+<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#linear-model"><i class="fa fa-check"></i><b>43.3</b> Linear model</a><ul>
+<li class="chapter" data-level="43.3.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.3.1</b> Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="43.4" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.4</b> Alternative analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="44" data-path="lda.html"><a href="lda.html"><i class="fa fa-check"></i><b>44</b> Linear discriminant analysis</a></li>
+<li class="chapter" data-level="45" data-path="lognormal.html"><a href="lognormal.html"><i class="fa fa-check"></i><b>45</b> The lognormal distribution</a><ul>
+<li class="chapter" data-level="45.1" data-path="lognormal.html"><a href="lognormal.html#dlnorm"><i class="fa fa-check"></i><b>45.1</b> dlnorm</a></li>
+<li class="chapter" data-level="45.2" data-path="lognormal.html"><a href="lognormal.html#plnorm"><i class="fa fa-check"></i><b>45.2</b> plnorm</a></li>
+<li class="chapter" data-level="45.3" data-path="lognormal.html"><a href="lognormal.html#qlnorm"><i class="fa fa-check"></i><b>45.3</b> qlnorm</a></li>
+<li class="chapter" data-level="45.4" data-path="lognormal.html"><a href="lognormal.html#rlnorm"><i class="fa fa-check"></i><b>45.4</b> rlnorm</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="manova" class="section level1">
+<h1><span class="header-section-number">Chapter 35</span> Multivariate Analysis of Variance (MANOVA)</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(car)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(broom)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(mvtnorm)</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(datapasta)</a></code></pre></div>
+<p>MANOVA is a procedure to analyze experimental data involving simultaneous measurements of two or more dependent variables in response to two or more predictor groups. The basic MANOVA designs are no different than the various t-test or ANOVA designs. Paired, unpaired, one-way (one-factor), two-way (two-factor) and even three-way (three-factor) (or more way) MANOVA experiments are possible. They can be structured either as independent (completely randomized) or intrinsically-linked (related/repeated measures) or a mixture of the two.</p>
+<p>What differs is taking measurements for more than one dependent variable.</p>
+<p>The statistical jargon for such experiments is they are “multivariate”, whereas ANOVA is “univariate”. This term is owed to a mathematical feature of underlying MANOVA which involves calculating linear combinations of these dependent variables to uncover latent “variates”. The statistical test is actually performed on these latent variates.</p>
+<p><em>Statistical jargon is very confusing most of the time. When we have experiments that involve more than one treatment variable (each at many levels) and only one outcome variable, such as a two-way ANOVA, we call these “multivariable” experiments. But they are also known as “univariate” tests. When we have experiments that have one or more treatment variables and multiple outcome variables, such as one- or two-way MANOVA, we call these multivariate tests. I’m sorry.</em></p>
+<div id="what-does-manova-test" class="section level2">
+<h2><span class="header-section-number">35.1</span> What does MANOVA test?</h2>
+<p>Exactly what is that null hypothesis?</p>
+<p>Like ANOVA, MANOVA experiments involve groups of factorial predictor variables (it is possible to run MANOVA on only two groups). The null hypothesis addresses whether there are any differences between groups of means. As in ANOVA, this is accomplished by partitioning variance. Therefore, as for ANOVA, the test is whether the variance in the MANOVA model exceeds the residual variance.</p>
+<p>However, in MANOVA this operates on the basis of statistical parameters for a composite dependent variable, which is calculated from the array of dependent variables in the experiment.</p>
+<p>You’ll see that the MANOVA test output per se generates an F statistic. In that regard the inferential procedure is very much like ANOVA. If the F value is extreme, the model variance exceeds the residual variance, and it has a low p-value. A p-value falling below a preset type1 error threshold favors a rejection of null hypotheses.</p>
+<p>However, this is a funny F statistic.</p>
+<p>First it is an approximated F, which is mapped to the F test statistic distribution. MANOVA data sets have one column for each dependent variable, which creates a matrix when there are multiple dependent variables.</p>
+<p>The MANOVA test statistic operates on a matrix parameter called the eigenvalue. Eigenvalues are scaling factors for eigenvectors, which are also matrix parameters. Eigenvectors are ways of reducing the complexity of matrix data. Eigenvectors represent latent variates within these multivariate datasets. Note the plural. There can be more than one eigenvector in a multivariate dataset, the number for which is related to the number of dependent and independent variables.</p>
+<p>In fact, there are four MANOVA test statistics: Wilks’ Lambda, Hotelling-Lawley Trace, Pillai’s Trace, and Roy’s Largest Root. Each are calculated differently. Given the same input data, each test statistic is then used to generate an F statistic.</p>
+<p>Like a lot of things in statistics, they represent different ways to achieve the same objective, but generate different results in the process. Their inventors believe they offer a better mousetrap.</p>
+<p>Choosing which of the MANOVA test statistics to use for inference is not unlike choosing which multiple correction method to use following ANOVA. It can be confusing.</p>
+</div>
+<div id="types-of-experiments" class="section level2">
+<h2><span class="header-section-number">35.2</span> Types of experiments</h2>
+<p>We imagine a gene expression study that measures transcripts from several different genes within every sample simultaneously. Each transcript represents a unique dependent variable since they come from different genes, each with its own network of transcription factors. But we can also imagine underlying latent relationships between the genes. We might be interested in how different genes are expressed over time and in the absence or presence of certain stimuli. Time and stimuli are each predictor variables. The sample source informs whether the design is completely randomized or related/repeated measure.</p>
+<p>Or we are interested in quantifying several different proteins simultaneously by western blot technique. We might be interested in testing how different groups of stimuli or certain mutations affects each of their levels. Or we are able to measure multiple proteins simultaneously in cells using differentially colored fluorescent tags. Each protein (each color) is a unique dependent variable.</p>
+<p>Or we’ve placed a set of animals through some protocol comparing three or more groups of treatments. The animals are run through some behavioral assay, such as a latency test. Afterwards, specimens are collected for bloodwork, and also for quantitative histochemical and gene expression analysis. The latency test, the various measures from the blood, and the markers and genes assayed post -mortum are each a unique dependent variable. There might be a dozen or more of these outcome variables measured in each replicate!</p>
+</div>
+<div id="manova-is-not-many-anovas" class="section level2">
+<h2><span class="header-section-number">35.3</span> MANOVA is not many ANOVAs</h2>
+<p>In one respect, you can think of experiments involving multiple dependent variables as running a bunch of ANOVA experiments.</p>
+<p>In fact, that’s the mistake most researchers make. They treat each dependent variable as if it came from a distinct experiment involving separate replicates, when in fact they all come from just one experiment. They subsequently run a series of ANOVAs in parallel, one each for all of the dependent variables.</p>
+<p>The most common mistake is holding each ANOVA at the standard 5% error threshold, following each with multiple post hoc comparisons. The family-wise error rate (FWER) for this single experiment explodes. A cacophony of undeserved asterisks are splattered all over the chart. It doesn’t help that the data are plotted in a way to make the dependent variables look like they are predictor variables. Maybe they have been treated as predictors?! What a mess!</p>
+<p>Minimally, MANOVA provides a handy way to manage the FWER when probing several different dependent variables simultaneously. As an omnibus test MANOVA provides fairly strong type1 error protection in cases where many dependent variables are assessed simultaneously.</p>
+<p>But it is important to recall what was mentioned above. MANOVA is not really testing for the signal-to-noise for the effects of the independent variables on each of the dependent variables. MANOVA tests whether there are treatment effects on a combination of the outcome variables. The advantage is that this is performed in a way that maximizes the treatment group differences.</p>
+<div id="why-manova" class="section level3">
+<h3><span class="header-section-number">35.3.1</span> Why MANOVA?</h3>
+<p>For experiments that measure multiple dependent variables the main alternative to MANOVA is to run separate ANOVAs, each with a multiple comparison correction to limit the FWER. For example, if there are five dependent variables, use the Bonferroni correction to run the ANOVA for each under at type1 error threshold of 1%, meaning we only reject the null when the F p-value &lt; 0.01.</p>
+<p>There are good reasons to run MANOVA instead.</p>
+<p>The first is as an omnibus test offering protection against inflated type1 error, as when running a series of ANOVA’s for each dependent variable. Particularly when the latter are uncorrected for multiple comparison.</p>
+<p>The second is testing more dependent variables increases the chances of identifying treatment effects. For example, a given stimulus condition may not affect the expression of three genes, but it does affect that for a fourth. Had the fourth gene not been added to the analysis we might have concluded that stimulus condition is ineffective.</p>
+<p>Third, because it operates on a composite variable, sometimes MANOVA detects effects that ANOVA misses. Imagine studying the effect of diet on growth. We could measure just the weight (or length) of a critter and be done with it. However, with only a little extra effort measuring both weight and height, we have measures in two dimensions instead of just one. In some cases the effects of diet on weight alone or on height alone may be weak, but stronger when assessed in combination.</p>
+<p>Select variable to measure judiciously. MANOVA works best when dependent variables are negatively correlated or modestly correlated, and does not work well when they are uncorrelated or strongly positively correlated.</p>
+</div>
+</div>
+<div id="assumptions-1" class="section level2">
+<h2><span class="header-section-number">35.4</span> Assumptions</h2>
+<p>Some of these should look very familiar by now:</p>
+<p><em>All replicates are independent of each other (of course, repeated/related measurements of one variable my be collected from a single replicate, but this must be accounted for).
+</em>Data collection must involve some random process.</p>
+<p>Here are some proscriptions unique to MANOVA but with univariate congeners:</p>
+<p><em>The dependent variables are linearly related.
+</em>The distribution of residuals are multivariate normal.
+*The residual variance-covariance matrices of all groups are approximately equal or homogeneous.</p>
+<p>As a general rule MANOVA is thought to be more sensitive to violations of these latter three assumptions than is ANOVA.</p>
+<p>Several adjustments can help prevent this:</p>
+<p><em>Strive for balanced data (have equal or near-equal sample sizes in each group).
+</em>Transform variables with outliers or that have nonlinearity to lessen their impact (or establish other a priori rules to deal with them if they arise).
+*Avoid multicolinearity.</p>
+<div id="multicolinearity" class="section level3">
+<h3><span class="header-section-number">35.4.1</span> Multicolinearity</h3>
+<p>Multicolinearity occurs in a couple of ways. When one dependent variable is derived from other variables in the set (or if they represent two ways to measure the same response) they may have a very high <span class="math inline">\(R^2\)</span> value. More rarely, dependent variables may be highly correlated naturally. In these cases one of the offending variables should be removed. For example, multicolinearity is likely to happen if including a body mass index (BMI) as a dependent variable along with variables for height and weight, since the BMI is calculated from the others.</p>
+<p>Multicolinearity collapse will also occur when the number of replicates are fewer than the number of dependent variables being assessed.</p>
+<p>Don’t skimp on replicates and avoid the urge to be too ambitious in terms of the numbers of dependent variables collected and the number of treatment groups. As a general rule, if the dataset rows are replicates and the columns are dependent variables, we want the dataset to be longer than it is wide.</p>
+</div>
+</div>
+<div id="calculating-variation" class="section level2">
+<h2><span class="header-section-number">35.5</span> Calculating variation</h2>
+<p>There are many parallels between ANOVA and MANOVA.</p>
+<p>Both are based upon the general linear model <span class="math display">\[Y=\beta X+\epsilon\]</span></p>
+<p>However, for MANOVA, <span class="math inline">\(Y\)</span> is an <span class="math inline">\(n \times m\)</span> matrix of dependent variables, <span class="math inline">\(X\)</span> is an <span class="math inline">\(n \times p\)</span> matrix of predictor variables, <span class="math inline">\(\beta\)</span> is an <span class="math inline">\(p \times m\)</span> matrix of regression coefficients and <span class="math inline">\(\epsilon\)</span> is a <span class="math inline">\(n \times m\)</span> matrix of residuals.</p>
+<p>Least squares regression for calculating the <span class="math inline">\(SS\)</span> for each dependent variable is performed in MANOVA as for ANOVA. In addition, variation is also tabulated from cross products between all possible combinations of dependent variables. As for ANOVA, the conservation of variation law applies for cross products just as it does for <span class="math inline">\(SS\)</span>,</p>
+<p><span class="math display">\[CP_{total}=CP_{model}\ +CP_{residual}\]</span></p>
+<p>For illustration, consider the simplest MANOVA experiment with only two dependent variables (<span class="math inline">\(dv1, dv2\)</span>). The cross product for total variation is:</p>
+<p><span class="math display">\[CP_{total}= \sum_{i=1}^n(y_{i,dv1}-\bar y_{grand, dv1})(y_{i,dv2}-\bar y_{grand, dv2}) \]</span></p>
+<p>The cross product for variation associated with the model (group means) is:</p>
+<p><span class="math display">\[CP_{model}= \sum_{j=1}^kn\times(\bar y_{group_j,dv1}-\bar y_{grand, dv1})(\bar y_{group_j,dv2}-\bar y_{grand, dv2}) \]</span></p>
+<p>And the cross product, <span class="math inline">\(CP\)</span>, for residual variation is:</p>
+<p><span class="math display">\[CP_{residual}= \sum_{i=1}^n(y_{i,dv1}-\bar y_{group_j, dv1})(y_{i,dv2}-\bar y_{group_j, dv2}) \]</span></p>
+<p>For partitioning of the overall variation, these cross products, along with their related <span class="math inline">\(SS\)</span> are assembled into <span class="math inline">\(T\)</span>, <span class="math inline">\(H\)</span> and <span class="math inline">\(E\)</span> matrices. These letters reflect a historical MANOVA jargon representing total, hypothesis and error variation. These correspond to the total, model and residual terms we’ve adopted in this course for discussing ANOVA.</p>
+<p><span class="math display">\[T = \begin{pmatrix} SS_{total,dv1} &amp; CP_{total} \\
+CP_{total} &amp; SS_{total,dv2}
+\end{pmatrix}\]</span></p>
+<p><span class="math display">\[H = \begin{pmatrix} SS_{model,dv1} &amp; CP_{model} \\
+CP_{model} &amp; SS_{model,dv2}
+\end{pmatrix}\]</span></p>
+<p><span class="math display">\[E = \begin{pmatrix} SS_{residual,dv1} &amp; CP_{residual} \\
+CP_{residual} &amp; SS_{residual,dv2}
+\end{pmatrix}\]</span></p>
+<p>The most important take away is that MANOVA not only accounts for the variation within each dependent variable via <span class="math inline">\(SS\)</span> in the usual way, the <span class="math inline">\(CP\)</span> computes the variation associated with all possible relationships between each of the dependent variables.</p>
+<p>Note: When experiments have even more dependent variables, there is more variation to track. For example an experiment with three independent variables has a T matrix of 9 cells with 3 unique cross-product values, each duplicated:</p>
+<p><span class="math display">\[T = \begin{pmatrix} SS_{total,dv1} &amp; CP_{total,dv1\times dv2} &amp; CP_{total,dv1\times dv3} \\
+CP_{total, dv2\times dv1} &amp; SS_{total,dv2}  &amp; CP_{total,dv2\times dv3}\\
+CP_{total,dv3\times d1} &amp; CP_{total,dv3\times dv2} &amp; SS_{total, dv3}
+\end{pmatrix}\]</span></p>
+<p>The conservation of variation rule applies to these matrices just as in univariate ANOVA. The total variation is equal to the sum of the model and the residual variation. The same applies in MANOVA, which is expressed by the simple matrix algebraic relationship: <span class="math inline">\(T=H+E\)</span>.</p>
+<div id="eigenvectors-and-eigenvalues" class="section level3">
+<h3><span class="header-section-number">35.5.1</span> Eigenvectors and eigenvalues</h3>
+<p>To deal with this mathematically all of the computations necessary to sort out whether anything is meaningful involve matrix algebra, where the focus is upon “decomposing” these matrices into their eigenvectors and eigenvalues.</p>
+<p>What is an eigenvector? The best way I’ve been able to answer this is an eigenvector represents a base dimension in multivariate data, and the eigenvalues serve as the magnitude of that dimension.</p>
+<p>MANOVA datasets have multiple response variables, <span class="math inline">\(p\)</span>, and also multiple predictor groups, <span class="math inline">\(k\)</span>. How many dimensions can these datasets possess? They will have either <span class="math inline">\(p\)</span> or <span class="math inline">\(k-1\)</span> dimensions, whichever is smaller.</p>
+<p>The mathematics of these are beyond where I want to go on this topic. If interested in learning more the <a href="https://www.khanacademy.org/math/linear-algebra/alternate-bases#eigen-everything">Kahn Academy has a nice primer</a>. <a href="https://rpubs.com/aaronsc32/eigenvalues-eigenvectors-r">Here is a good place to start for an introduction to R applications</a>. <a href="https://setosa.io/ev/eigenvectors-and-eigenvalues/">Here’s a graphical approach that explains this further</a>.</p>
+<p>It is not necessary to fully understand these fundamentals of matrix algebra in order to operate MANOVA for experimental data. However, it is worth understanding that the MANOVA test statistics operate on something that represents a dimension of the original data set.</p>
+</div>
+<div id="manova-test-statistics" class="section level3">
+<h3><span class="header-section-number">35.5.2</span> MANOVA test statistics</h3>
+<p>Recall in ANOVA the F statistic is derived from the ratio of the model variance with <span class="math inline">\(df1\)</span> degrees of freedom to residual variance with <span class="math inline">\(df2\)</span> degrees of freedom. In MANOVA these variances are essentially replaced by matrix determinants.</p>
+<p>The congeners to ANOVA’s model and residual variances in MANOVA are the hypothesis <span class="math inline">\(H\)</span> and error <span class="math inline">\(E\)</span> matrices, which have <span class="math inline">\(h\)</span> and <span class="math inline">\(e\)</span> degrees of freedom, respectively. There are <span class="math inline">\(p\)</span> dependent variables. Let the eigenvalues for the matrices <span class="math inline">\(HE^{-1}\)</span>, <span class="math inline">\(H(H+E)^{-1}\)</span>, and <span class="math inline">\(E(H+E)^{-1}\)</span> be <span class="math inline">\(\phi\)</span>, <span class="math inline">\(\theta\)</span>, and <span class="math inline">\(\lambda\)</span>, respectively.</p>
+<p>From these let’s catch a glimpse of the four test statistic options available to the researcher when using MANOVA. When we read a MANOVA table in R the <code>test stat</code> column will have values calculated from the parameters below.</p>
+<div id="pillai" class="section level4">
+<h4><span class="header-section-number">35.5.2.1</span> Pillai</h4>
+<p><span class="math display">\[V^{(s)}=\sum_{j=1}^s\theta_j \]</span> where <span class="math inline">\(s=min(p,h)\)</span>
+$V^{(s)} is then used in the calculation of an adjusted F statistic, from which p-values are derived. Calculation not shown^.</p>
+</div>
+<div id="wilks" class="section level4">
+<h4><span class="header-section-number">35.5.2.2</span> Wilks</h4>
+<p><span class="math display">\[\Lambda = \prod_{j=1}^p(1-\theta_j) \]</span>
+<span class="math inline">\(\Lambda\)</span> is then used to calculate an adjusted F statistic, from which p-values are derived. Calculation not shown.</p>
+</div>
+<div id="hotelling-lawley" class="section level4">
+<h4><span class="header-section-number">35.5.2.3</span> Hotelling-Lawley</h4>
+<p><span class="math display">\[T_g^s = e\sum_{j=1}^s\theta_j \]</span> where <span class="math inline">\(g=\frac{ph-2}{2}\)</span></p>
+<p><span class="math inline">\(T_g^s\)</span> is then used to calculate an adjusted F statistic, from which p-values are derived. Calculation not shown.</p>
+</div>
+<div id="roy" class="section level4">
+<h4><span class="header-section-number">35.5.2.4</span> Roy</h4>
+<p><span class="math display">\[F_{(2v_1+2, 2v_2+2)}=\frac{2v_1+2}{2v_2+2}\phi_{max} \]</span> where <span class="math inline">\(v1=(|p-h|-1)/2\)</span> and <span class="math inline">\(v2=(|e-p|-1)/2\)</span></p>
+<p>Unlike the other MANOVA test statistics, Roy’s greatest root (<span class="math inline">\(\phi_max\)</span>) is used in a fairly direct calculation of an adjusted F statistic, so that is shown here. Note how the degrees of freedom are calculated.</p>
+<p>One purpose of showing these test statistics is to illustrate that each are calculated differently. Why? The statisticians who created these worked from different assumptions and objectives, believing their statistic would perform well under certain conditions.</p>
+<p>A second reason to show these is so the researcher avoids freeze when looking at MANOVA output: “OMG! What the heck??!”</p>
+<p>Yes, the numbers in the MANOVA table can be intimidating at first, even if when we have a pretty good idea of what we are up to. There are three columns for degrees of freedom and two for test statistics. Then there is the p-value. And then there is a MANOVA table for each independent variable. And if we don’t argue a specific test, we might get all four!! Yikes.</p>
+</div>
+</div>
+<div id="which-manova-test-statistic-is-best" class="section level3">
+<h3><span class="header-section-number">35.5.3</span> Which MANOVA test statistic is best?</h3>
+<p>That’s actually very difficult to answer.</p>
+<p>In practice, the researcher should go into a MANOVA analysis with one test in mind, declared in a planning note, ideally based upon some simulation runs. This is no different than running a Monte Carlo before a t-test experiment, or an ANOVA experiment. <strong>Knowing in advance how to conduct the statistical analysis is always the most unbiased approach.</strong></p>
+<p>Otherwise, the temptation will be to produce output with all four tests and choose the one that yields the lowest p-value. In most instances the four tests should lead to the same conclusion, though they will not always generate the same p-values.</p>
+<p>The most commonly used test seems to be Wilk’s lambda. The Pillai test is held to be more robust against violations of testing conditions assumptions listed above and is a reasonable choice.</p>
+</div>
+</div>
+<div id="drug-clearance-example" class="section level2">
+<h2><span class="header-section-number">35.6</span> Drug clearance example</h2>
+<p><a href="https://malariajournal.biomedcentral.com/articles/10.1186/s12936-019-2860-5">Mimche and colleagues</a> developed a mouse model to test how drug metabolism is influenced by a malaria-like infection (Plasmodium chaubadi chaubadi AS, or PccAS).</p>
+<p>On the day of peak parisitaemia an experiment was performed to derive values for clearance (in units of volume/time) of four drugs. Clearance values are derived from a regression procedure on data for repeated measurements of drug levels in plasma at various time points following an injection. Any factor causing lower clearance indicates drug metabolism is reduced.</p>
+<p>Thus, the clearance values for each drug are the dependent variables in the study. All four drugs were assessed simultaneously within each replicate. The independent variable is treatment, which is at two levels, naive or infection with PccAS, a murine plasmodium parasite. Ten mice were randomly assigned to either of these two treatments.</p>
+<div id="rationale-for-manova" class="section level3">
+<h3><span class="header-section-number">35.6.1</span> Rationale for MANOVA</h3>
+<p>The overarching scientific hypothesis is that parasite infection alters drug metabolism.</p>
+<p>The drug panel tested here surveys a range of drug metabolizing enzymes. Limiting the clearance study to only a single drug would preclude an opportunity to gain insight into the broader group of drug metabolizing systems that might be affected by malaria.</p>
+<p>Thus, there is good scientific reason to test multiple dependent variables. Together, they answer one question: Is drug metabolism influenced by the parasite? Clearance values are also collected in one experiment in which all four drugs are injected as a cocktail and measured simultaneously. This cannot be treated as four separate experiments statistically.</p>
+<p>The main reason to use MANOVA in this case is as an omnibus test to protect type1 error while considering all of the information for the experiment simultaneously.</p>
+</div>
+<div id="data-structure" class="section level3">
+<h3><span class="header-section-number">35.6.2</span> Data structure</h3>
+<p>Read in the data. Note that each dependent variable is it’s own column, just as for the predictor variable. An ID variable is good data hygiene.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">pkdata &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/pkdata.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2">pkdata</a></code></pre></div>
+<pre><code>##    id treatment   caffeine tolbutamide buproprion   midazolam
+## 1  M1     naïve 0.08929834 0.008239704  1.2445632 0.005845354
+## 2  M2     naïve 0.07622691 0.010257611  0.6566237 0.004149744
+## 3  M3     naïve 0.23075655 0.010771581  0.9107329 0.001229257
+## 4  M4     naïve 0.06696628 0.013519425  0.8779273 0.005178790
+## 5  M5     naïve 0.08224076 0.008576711  0.9820787 0.003787842
+## 6  I1     pccas 0.03732863 0.007392392  0.2951946 0.001619670
+## 7  I2     pccas 0.04832825 0.002130560  0.4369309 0.002034126
+## 8  I3     pccas 0.02322334 0.000701000  0.1728363 0.000431000
+## 9  I4     pccas 0.02793257 0.004093938  0.2421983 0.001170104
+## 10 I5     pccas 0.04521240 0.006612965  0.2541623 0.001632887</code></pre>
+</div>
+<div id="manova-procedure" class="section level3">
+<h3><span class="header-section-number">35.6.3</span> MANOVA procedure</h3>
+<p>The <code>Manova</code> function in the <code>car</code> package can take several types of models as an argument. In this case, we have a two group treatment variable so a linear model is defined using the base R <code>lm</code>.</p>
+<p>Recall the linear model, <span class="math display">\[Y=\beta_o+\beta_1X+\epsilon\]</span> Here we have one model for each of the four dependent variables.</p>
+<p>In this experiment we have four <span class="math inline">\(Y\)</span> variables, each corresponding to one of the drugs. The same <span class="math inline">\(X\)</span> variable (at two levels) applies to all four dependent variables.</p>
+<p><span class="math inline">\(\beta_0\)</span> is the y-intercept, and <span class="math inline">\(\beta_1\)</span> is the coefficient. Each dependent variable will have an intercept and a coefficient. <span class="math inline">\(\epsilon\)</span> is the residual error, accounting for the variation in the data unexplained by the model parameters for that dependent variable.</p>
+<p>By including each of the dependent variable names as arguments within a <code>cbind</code> function we effectively instruct <code>lm</code> to treat these columns as a matrix and run a linear model on each.</p>
+<p>Here is the omnibus test. The Pillai test statistic is chosen because it is more robust than the others to violations of the uniform variance assumptions:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">mod &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">cbind</span>(caffeine, tolbutamide, buproprion, midazolam) <span class="op">~</span><span class="st"> </span>treatment, pkdata)</a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw">Manova</span>(mod, <span class="dt">test.statistic =</span> <span class="st">&quot;Pillai&quot;</span>)</a></code></pre></div>
+<pre><code>## 
+## Type II MANOVA Tests: Pillai test statistic
+##           Df test stat approx F num Df den Df   Pr(&gt;F)   
+## treatment  1   0.90525   11.943      4      5 0.009017 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The approximated F statistic of 11.943 is extreme on a null distribution of 4 and 5 degrees of freedom with a p-value of 0.009017. Reject the null hypothesis that the variance associated with the combination of linear models is less than or equal to the combined residual error variance.</p>
+<p>Since this is a linear model for independent group means this result indicates that there are difference between group means.</p>
+<p>Additional information about the Manova test can be obtained using the <code>summary</code> function. Note the matrices for the error and hypothesis, which are as described above.</p>
+<p>Also not the output for the four different test statistics. In this simple case of one independent variable with two groups, they all produce an identical approximate F and the p-values that flows from it. The test values do differ, however, although the Hotelling-Lawley and the Roy generate the same values. More complex experimental designs tend to shatter this uniform agreement between the tests.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">summary</span>(<span class="kw">Manova</span>(mod))</a></code></pre></div>
+<pre><code>## 
+## Type II MANOVA Tests:
+## 
+## Sum of squares and products for error:
+##                  caffeine   tolbutamide    buproprion     midazolam
+## caffeine     1.923586e-02  5.674854e-05  0.0045996194 -3.979750e-04
+## tolbutamide  5.674854e-05  5.034943e-05 -0.0008619943  2.415136e-06
+## buproprion   4.599619e-03 -8.619943e-04  0.2178219304  7.290553e-04
+## midazolam   -3.979750e-04  2.415136e-06  0.0007290553  1.402593e-05
+## 
+## ------------------------------------------
+##  
+## Term: treatment 
+## 
+## Sum of squares and products for the hypothesis:
+##                caffeine  tolbutamide  buproprion    midazolam
+## caffeine    0.013210583 1.106172e-03 0.118874544 4.835230e-04
+## tolbutamide 0.001106172 9.262391e-05 0.009953812 4.048719e-05
+## buproprion  0.118874544 9.953812e-03 1.069684582 4.350949e-03
+## midazolam   0.000483523 4.048719e-05 0.004350949 1.769751e-05
+## 
+## Multivariate Tests: treatment
+##                  Df test stat approx F num Df den Df    Pr(&gt;F)   
+## Pillai            1  0.905253 11.94302      4      5 0.0090167 **
+## Wilks             1  0.094747 11.94302      4      5 0.0090167 **
+## Hotelling-Lawley  1  9.554419 11.94302      4      5 0.0090167 **
+## Roy               1  9.554419 11.94302      4      5 0.0090167 **
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div id="now-what" class="section level4">
+<h4><span class="header-section-number">35.6.3.1</span> Now what?</h4>
+<p>Here are the data visualized. The red lines connect group means. This is presented as a way to illustrate the linear model output.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">ggplot</span>(pkdata <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="st">         </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span>caffeine<span class="op">:</span>midazolam,</a>
+<a class="sourceLine" id="cb8-3" title="3">                      <span class="dt">names_to =</span><span class="st">&quot;drug&quot;</span>, </a>
+<a class="sourceLine" id="cb8-4" title="4">                      <span class="dt">values_to=</span><span class="st">&quot;clearance&quot;</span>), </a>
+<a class="sourceLine" id="cb8-5" title="5">       <span class="kw">aes</span>(treatment, clearance))<span class="op">+</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width=</span><span class="fl">0.1</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y=</span>mean, <span class="dt">colour=</span><span class="st">&quot;red&quot;</span>, </a>
+<a class="sourceLine" id="cb8-8" title="8">               <span class="dt">geom=</span><span class="st">&quot;line&quot;</span>, <span class="kw">aes</span>(<span class="dt">group =</span> <span class="dv">1</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>drug, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-5"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-5-1.png" alt="Drug clearance in a mouse model for malaria." width="672" />
+<p class="caption">
+Figure 35.1: Drug clearance in a mouse model for malaria.
+</p>
+</div>
+<p>Print the linear model results to view the effect sizes as regression coefficients:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">mod</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = cbind(caffeine, tolbutamide, buproprion, midazolam) ~ 
+##     treatment, data = pkdata)
+## 
+## Coefficients:
+##                 caffeine   tolbutamide  buproprion  midazolam
+## (Intercept)      0.109098   0.010273     0.934385    0.004038
+## treatmentpccas  -0.072693  -0.006087    -0.654121   -0.002661</code></pre>
+<p>Considering the graph above it should be clear what the intercept values represent. They are the means for the naive treatment groups. The ‘treatmentpccas’ values are the differences between the naive and pccas group means. Their values are equivalent to the slopes of the red lines in the graph. In other words, the ‘treatmentpccas’ values are the means of the pccas groups subtracted from the means of the naive groups.</p>
+<p>Intercept and treatmentpccas correspond respectively to the general linear model parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
+<p>Another way to think about this is the intercept (<span class="math inline">\(\beta_0\)</span>) is an estimate for the value of the dependent variable when the independent variable is without any effect, or <span class="math inline">\(X=0\)</span>. In this example, if pccas has no influence on metabolism, then drug clearance is simply <span class="math inline">\(Y= \beta_0\)</span></p>
+<p><strong>In regression the intercept can cause confusion. In part, this happens because R operates alphanumerically by default. It will always subtract the second group from the first. Scientifically, we want the pccas means to be subtracted from naive….because our hypothesis is that malaria will lower clearance. Fortunately, n comes before p in the alphabet, so the group means for p will be subtracted from group means for n and this happens automagically. For simplicity, it is always a good idea to name your variables with this default alphanumeric behavior in mind. </strong></p>
+</div>
+<div id="manova-post-hoc" class="section level4">
+<h4><span class="header-section-number">35.6.3.2</span> MANOVA post hoc</h4>
+<p>In this the data passes and omnibus MANOVA. It tells us that somewhere among the four dependent variables there are differences between the naive and pccas group means. The question is which ones?</p>
+<p>As a follow on procedure we want to know which of the downward slopes are truly negative, and which are no different than zero.</p>
+<p>We answer that in the summary of the linear model. There is a lot of information here, but two things are most important. First, the estimate values for the treatmentpccas term. These are differences in group means between naive and pccas. Second, statistics and p-values associated with the ‘treatmentpccas’ effect. These are a one-sample t-test.</p>
+<p>These each ask, “Is the Estimate value, given its standard error, equal to zero?” For example, the estimate for caffeine is -0.07269, which is the slope of the red line above. The t-statistic value is -2.344 and it has a p-value just under 0.05.</p>
+<p>We’re usually not interested in the information on the intercept term or the statistical test for it. It is the group mean for the control condition, in this case, demonstrating the background level of clearance. Whether that differs from zero not important to know.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">tidy</span>(mod)</a></code></pre></div>
+<pre><code>## # A tibble: 8 x 6
+##   response    term           estimate std.error statistic    p.value
+##   &lt;chr&gt;       &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 caffeine    (Intercept)     0.109    0.0219        4.97 0.00109   
+## 2 caffeine    treatmentpccas -0.0727   0.0310       -2.34 0.0471    
+## 3 tolbutamide (Intercept)     0.0103   0.00112       9.16 0.0000163 
+## 4 tolbutamide treatmentpccas -0.00609  0.00159      -3.84 0.00497   
+## 5 buproprion  (Intercept)     0.934    0.0738       12.7  0.00000142
+## 6 buproprion  treatmentpccas -0.654    0.104        -6.27 0.000241  
+## 7 midazolam   (Intercept)     0.00404  0.000592      6.82 0.000135  
+## 8 midazolam   treatmentpccas -0.00266  0.000837     -3.18 0.0131</code></pre>
+<p>Therefore to make the p-value adjustment we should only be interested in the estimates for the ‘treatmentpccas’ terms. We shouldn’t waste precious alpha on the intercept values.</p>
+<p>Here’s how we do that:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">tidy</span>(mod) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="st">  </span><span class="kw">select</span>(response, estimate, p.value) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="st">  </span><span class="kw">filter</span>(<span class="kw">row_number</span>() <span class="op">%%</span><span class="st"> </span><span class="dv">2</span> <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p.value_adjusted=</span><span class="kw">p.adjust</span>(p.value, </a>
+<a class="sourceLine" id="cb13-5" title="5">                                   <span class="dt">method=</span><span class="st">&quot;bonferroni&quot;</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+##   response    estimate  p.value p.value_adjusted
+##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;
+## 1 caffeine    -0.0727  0.0471           0.188   
+## 2 tolbutamide -0.00609 0.00497          0.0199  
+## 3 buproprion  -0.654   0.000241         0.000964
+## 4 midazolam   -0.00266 0.0131           0.0522</code></pre>
+<p>Given a family-wise type1 error threshold of 5%, we can conclude that PccAS infection changes tolbutamide and buproprion clearance relative to naive animals. There is no statistical difference for caffeine and midazolam clearance between PccAS-infected and naive animals.</p>
+<p>It should be noted that this is a very conservative adjustment. In fact, were the Holm adjustment used instead all four drugs would have shown statistical differences.</p>
+</div>
+<div id="write-up-15" class="section level4">
+<h4><span class="header-section-number">35.6.3.3</span> Write up</h4>
+<p><strong>The drug clearance experiment evaluates the effect of PccAS infection on the metabolism of caffeine, tolbutamide, buproprion and midazolam simultaneously in two treatment groups, naive and PccAS-infected, with five independent replicates within each group. Clearance data were analyzed by a multiple linear model using MANOVA as an omnibus test (Pillai test statistic = 0.905 with 1 df, F(4,5)=11.943, p=0.009). Posthoc analysis usig t-tests indicates PccAS the reductions in clearance relative to naive for tolbutamide (-0.006 clearance units) and buproprion (-0.654 clearance units) are statistically different than zero (Bonferroni adjusted p-values are 0.0199 and 0.0009, respectively).</strong></p>
+</div>
+</div>
+</div>
+<div id="planning-manova-experiments" class="section level2">
+<h2><span class="header-section-number">35.7</span> Planning MANOVA experiments</h2>
+<p>Collecting several types of measurements from every replicate in one experiment is a lot of work. In these cases, front end statistical planning can really pay off.</p>
+<p>We need to put some thought into choosing the dependent variables.</p>
+<p>MANOVA doesn’t work well when too many dependent variables in the dataset are too highly correlated and all are pointing in the same general direction. For example, when several different mRNAs increase in the same way in response to a treatment. They will be statistically redundant, which can cause computational difficulties and the regression fails to converge to a solution. The only recovery from that is to add the variables back to a model one at a time until the offending variable is found. Which invariably causes the creepy bias feeling.</p>
+<p>Besides, it seems wasteful to measure the same thing many different ways.</p>
+<p>Therefore, omit some redundant variables. Be sure to offset positively correlated variables with negatively correlated variables in the dataset. Similarly, MANOVA uncorrelated dependent variables should be avoided.</p>
+<p>Use pilot studies, other information, or intuition to understand relationships between the variables. How are they correlated? Once we have that we can calculate covariances?</p>
+<div id="manova-monte-carlo-power-analysis" class="section level3">
+<h3><span class="header-section-number">35.7.1</span> MANOVA Monte Carlo Power Analysis</h3>
+<p>The Monte Carlo procedure is the same as for any other test:
+1)Simulate a set of expected data.
+2)Run an MANOVA analysis, defining and counting “hits”.
+3)Repeat many times to get a long run performance average.
+4)Change conditions (sample size, add/remove variables, remodel, etc)
+5)Iterate through step 1 again.</p>
+<div id="design-an-mvme" class="section level4">
+<h4><span class="header-section-number">35.7.1.1</span> Design an MVME</h4>
+<p>Let’s simulate a minimally viable MANOVA experiment (MVME) involving three dependent variables. For each there are a negative and positive control and a test group, for a total of 3 treatment groups.</p>
+<p>For all three dependent variables we have decent pilot data for the negative and positive controls. We have a general idea of what we would consider minimally meaningful scientific responses for the test group.</p>
+<p>One of our dependent variables represents a molecular measurement (ie, an mRNA), the second DV represents a biochemical measurement (ie, an enzyme activity), and the third DV represents a measurement at the organism level (ie, a behavior). We’ll make the organism measurement decrease with treatment so that it is negatively correlated with the other two.</p>
+<p>We must assume each of these dependent variables in normally distributed, <span class="math inline">\(N(\mu, \sigma^2)\)</span>. We have a decent idea of the values of these parameters. We have a decent idea of how correlated they may be.</p>
+<p>All three of the measurements are taken from each replicate. Replicates are randomized to receiving one and only one of the three treatment groups.</p>
+<p>The model is essentially one-way completely randomized MANOVA; in other words, one factorial independent variable at three levels, with three dependent variables.</p>
+</div>
+<div id="simulate-multivariate-normal-data" class="section level4">
+<h4><span class="header-section-number">35.7.1.2</span> Simulate multivariate normal data</h4>
+<p>The <code>rmvtnorm</code> function in the <code>mvtnorm</code> package provides a nice way to simulate several vectors of correlated data simultaneously, the kind of data you’d expect to generate and then analyze with MANOVA.</p>
+<p>But it takes a willingness to wrestle with effect size predictions, correlations, variances and covariances, and matrices to take full advantage.</p>
+<p><code>rmvtnorm</code> takes as arguments the expected means of each variable, and sigma, which is a covariance matrix.</p>
+<p>First, estimate some expected means and then their standard deviations. Then simply square the latter to calculate variances.</p>
+<p>To predict standard deviations, it is easiest to think in terms of coefficient of variation: What is the noise to signal for the measurement? What is the typical ratio of standard deviation to mean that you see for that variable? 10%, 20%, more, less?</p>
+<p>For this example, we’re assuming homoscedasticity, which means that the variance is about the same no matter the treatment level. But when we know there will be heterscedasticity, we should code it in here.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 35.1: </span>Estimated statistical parameters for an experiment with three treatment groups and three dependent variables.</caption>
+<thead>
+<tr class="header">
+<th align="left">treat</th>
+<th align="left">param</th>
+<th align="right">molec</th>
+<th align="right">bioch</th>
+<th align="right">organ</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">neg</td>
+<td align="left">mean</td>
+<td align="right">270</td>
+<td align="right">900</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">neg</td>
+<td align="left">sd</td>
+<td align="right">60</td>
+<td align="right">100</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">neg</td>
+<td align="left">var</td>
+<td align="right">3600</td>
+<td align="right">10000</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">pos</td>
+<td align="left">mean</td>
+<td align="right">400</td>
+<td align="right">300</td>
+<td align="right">-20</td>
+</tr>
+<tr class="odd">
+<td align="left">pos</td>
+<td align="left">sd</td>
+<td align="right">60</td>
+<td align="right">100</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">pos</td>
+<td align="left">var</td>
+<td align="right">3600</td>
+<td align="right">10000</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">test</td>
+<td align="left">mean</td>
+<td align="right">350</td>
+<td align="right">450</td>
+<td align="right">-10</td>
+</tr>
+<tr class="even">
+<td align="left">test</td>
+<td align="left">sd</td>
+<td align="right">60</td>
+<td align="right">100</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">test</td>
+<td align="left">var</td>
+<td align="right">3600</td>
+<td align="right">10000</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">##### Bu</td>
+<td align="left">ilding a</td>
+<td align="right">covaria</td>
+<td align="right">nce matr</td>
+<td align="right">ix</td>
+</tr>
+</tbody>
+</table>
+<p>For the next step we estimate the correlation coefficients between the dependent variables. We predict the biochem measurements and the organ will be reduced by the positive control and test treatments. That means they will be negatively correlated with the molec variables, where the positive and test are predicted to increase the response.</p>
+<p>Where do these correlation coefficients come from? They are estimates based upon pilot data. But they can be from some other source. Or they can be based upon scientific intuition. Estimating these coefficients is no different than estimating means, standard deviations and effect sizes. We use imagination and scientific judgment to make these predictions.</p>
+<p>We pop them into a matrix here. We’ll need this in a matrix form to create our covariance matrix.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">-0.8</span>, <span class="fl">-0.3</span>, <span class="fl">-0.8</span>, <span class="dv">1</span>, <span class="fl">0.6</span>, <span class="fl">-0.3</span>, <span class="fl">0.6</span>, <span class="dv">1</span> ), </a>
+<a class="sourceLine" id="cb15-2" title="2">       <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">byrow=</span>F, </a>
+<a class="sourceLine" id="cb15-3" title="3">       <span class="dt">dimnames=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;molec&quot;</span>, <span class="st">&quot;biochem&quot;</span>, <span class="st">&quot;organ&quot;</span>),</a>
+<a class="sourceLine" id="cb15-4" title="4">                     <span class="kw">c</span>(<span class="st">&quot;molec&quot;</span>, <span class="st">&quot;biochem&quot;</span>, <span class="st">&quot;organ&quot;</span>)</a>
+<a class="sourceLine" id="cb15-5" title="5">                     )</a>
+<a class="sourceLine" id="cb15-6" title="6">       )</a>
+<a class="sourceLine" id="cb15-7" title="7">A</a></code></pre></div>
+<pre><code>##         molec biochem organ
+## molec     1.0    -0.8  -0.3
+## biochem  -0.8     1.0   0.6
+## organ    -0.3     0.6   1.0</code></pre>
+<p>Next we can build out a variance product matrix, using the variances estimated in the table above. The value in each cell in this matrix is the square root of the product of the corresponding variance estimates (<span class="math inline">\(\sqrt {var(Y_1)var(Y_2)}\)</span>. We do this for every combination of variances, which should yield a symmetrical matrix.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">3600</span>,<span class="dv">6000</span>,<span class="dv">300</span>,<span class="dv">6000</span>,<span class="dv">10000</span>,<span class="dv">500</span>,<span class="dv">300</span>,<span class="dv">500</span>,<span class="dv">25</span>), <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">byrow=</span>F,  </a>
+<a class="sourceLine" id="cb17-2" title="2">            <span class="dt">dimnames=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;molec&quot;</span>, <span class="st">&quot;biochem&quot;</span>, <span class="st">&quot;organ&quot;</span>),</a>
+<a class="sourceLine" id="cb17-3" title="3">                     <span class="kw">c</span>(<span class="st">&quot;molec&quot;</span>, <span class="st">&quot;biochem&quot;</span>, <span class="st">&quot;organ&quot;</span>)</a>
+<a class="sourceLine" id="cb17-4" title="4">                     ))</a>
+<a class="sourceLine" id="cb17-5" title="5">B</a></code></pre></div>
+<pre><code>##         molec biochem organ
+## molec    3600    6000   300
+## biochem  6000   10000   500
+## organ     300     500    25</code></pre>
+<p>Here’s why we’ve done this. The relationship between any two dependent variables, <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span> is</p>
+<p><span class="math display">\[cor(Y_1, Y_2) = \frac{cov(Y_1, Y_2)}{\sqrt {var(Y_1)var(Y_2)}}]\]</span></p>
+<p>Therefore, the covariance matrix we want for the sigma argument in the <code>rmvnorm</code> function is calculated by multiplying the variance product matrix by the correlation matrix.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">sigmas &lt;-<span class="st"> </span>A<span class="op">*</span>B</a>
+<a class="sourceLine" id="cb19-2" title="2">sigmas</a></code></pre></div>
+<pre><code>##         molec biochem organ
+## molec    3600   -4800   -90
+## biochem -4800   10000   300
+## organ     -90     300    25</code></pre>
+<p>Since we assume homescedasticity we can use sigmas for each of the three treatment groups. Now it is just a matter of simulating the dataset with that one sigma and the means for each of the variables and groups.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">n &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb21-2" title="2"></a>
+<a class="sourceLine" id="cb21-3" title="3">negMeans &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">270</span>, <span class="dv">900</span>, <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb21-4" title="4">posMeans &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">400</span>, <span class="dv">300</span>, <span class="dv">-20</span>)</a>
+<a class="sourceLine" id="cb21-5" title="5">testMeans &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">350</span>, <span class="dv">450</span>, <span class="dv">-10</span>)</a>
+<a class="sourceLine" id="cb21-6" title="6"></a>
+<a class="sourceLine" id="cb21-7" title="7"></a>
+<a class="sourceLine" id="cb21-8" title="8">neg &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(n,<span class="dt">mean=</span>negMeans, <span class="dt">sigma=</span>sigmas)</a>
+<a class="sourceLine" id="cb21-9" title="9">pos &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(n,<span class="dt">mean=</span>posMeans, <span class="dt">sigma=</span>sigmas)</a>
+<a class="sourceLine" id="cb21-10" title="10">test &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(n,<span class="dt">mean=</span>testMeans, <span class="dt">sigma=</span>sigmas)</a>
+<a class="sourceLine" id="cb21-11" title="11"></a>
+<a class="sourceLine" id="cb21-12" title="12">outMat &lt;-<span class="st"> </span><span class="kw">rbind</span>(neg, pos, test)</a></code></pre></div>
+<p>Parenthetically, if we are expecting heteroscedasticity, we would need to calculate a different sigma for each of the groups.</p>
+<p>Pop it into a data frame and summarise by groups to see how well the simulation meets our plans. Keep in mind this is a small random sample. Increase the sample size, <span class="math inline">\(n\)</span>, to get a more accurate picture.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">sim &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">treatment=</span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;neg_ctrl&quot;</span>, n), </a>
+<a class="sourceLine" id="cb22-2" title="2">                          <span class="kw">rep</span>(<span class="st">&quot;pos_ctrl&quot;</span>, n), </a>
+<a class="sourceLine" id="cb22-3" title="3">                          <span class="kw">rep</span>(<span class="st">&quot;test&quot;</span>, n)</a>
+<a class="sourceLine" id="cb22-4" title="4">                          ),</a>
+<a class="sourceLine" id="cb22-5" title="5">              <span class="dt">molec =</span> outMat[ , <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb22-6" title="6">              <span class="dt">bioch =</span> outMat[ , <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb22-7" title="7">              <span class="dt">organ =</span> outMat[ , <span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb22-8" title="8">              )</a>
+<a class="sourceLine" id="cb22-9" title="9">sim <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">meanMol=</span><span class="kw">mean</span>(molec),</a>
+<a class="sourceLine" id="cb22-10" title="10">                                          <span class="dt">sdMol=</span><span class="kw">sd</span>(molec),</a>
+<a class="sourceLine" id="cb22-11" title="11">                                          <span class="dt">meanBio=</span><span class="kw">mean</span>(bioch),</a>
+<a class="sourceLine" id="cb22-12" title="12">                                          <span class="dt">sdBio=</span><span class="kw">sd</span>(bioch),</a>
+<a class="sourceLine" id="cb22-13" title="13">                                          <span class="dt">meanOrg=</span><span class="kw">mean</span>(organ),</a>
+<a class="sourceLine" id="cb22-14" title="14">                                          <span class="dt">sdOrg=</span><span class="kw">sd</span>(organ))</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 7
+##   treatment meanMol sdMol meanBio sdBio meanOrg sdOrg
+##   &lt;fct&gt;       &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+## 1 neg_ctrl     256.  76.5    925.  77.8    2.67  3.43
+## 2 pos_ctrl     394.  95.8    294. 103.   -20.1   4.45
+## 3 test         348.  72.0    487.  74.8   -8.30  2.50</code></pre>
+<p>Now we run a the “sample” through a manova. We’re switching to base R’s manova here because it plays nicer than <code>Manova</code> with Monte Carlo</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">cbind</span>(molec, bioch, organ) <span class="op">~</span><span class="st"> </span>treatment, <span class="dt">data=</span>sim)</a>
+<a class="sourceLine" id="cb24-2" title="2"></a>
+<a class="sourceLine" id="cb24-3" title="3">man &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">manova</span>(model))</a>
+<a class="sourceLine" id="cb24-4" title="4">man</a></code></pre></div>
+<pre><code>##           Df Pillai approx F num Df den Df   Pr(&gt;F)    
+## treatment  2 1.3961   8.4765      6     22 7.77e-05 ***
+## Residuals 12                                           
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Assuming this Manova test gives a positive response, we follow up with look post hoc at the key comparison, because we’d want to power up an experiment to ensure this one is detected.</p>
+<p>Our scientific strategy is to assure the organ effect of the test group. Because one has nothig without the animal model, right?</p>
+<p>So out of all the posthoc comparisons we could make, we’ll focus in on that.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">tidy</span>(model)</a></code></pre></div>
+<pre><code>## # A tibble: 9 x 6
+##   response term              estimate std.error statistic  p.value
+##   &lt;chr&gt;    &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 molec    (Intercept)         256.       36.7       6.98 1.47e- 5
+## 2 molec    treatmentpos_ctrl   137.       51.9       2.65 2.13e- 2
+## 3 molec    treatmenttest        92.1      51.9       1.77 1.01e- 1
+## 4 bioch    (Intercept)         925.       38.6      24.0  1.66e-11
+## 5 bioch    treatmentpos_ctrl  -630.       54.5     -11.6  7.34e- 8
+## 6 bioch    treatmenttest      -438.       54.5      -8.03 3.63e- 6
+## 7 organ    (Intercept)           2.67      1.59      1.68 1.18e- 1
+## 8 organ    treatmentpos_ctrl   -22.8       2.25    -10.1  3.08e- 7
+## 9 organ    treatmenttest       -11.0       2.25     -4.88 3.77e- 4</code></pre>
+<p>The comparison in the 9th row is between the test and the negative control for the organ variable. The estimate means its value is -11.46 units less than the negative control. The unadjusted p-value for that difference is 0.0041. Assuming we’d also compare the test to negative controls for the other two variables, were’s how we can collect that p-value while adjusting it for multiple comparisons simultaneously.</p>
+<p>The code below comes from finding a workable way to create test output so the parameter of interest is easy to grab. Unfortunately, output from the <code>Manova</code> function is more difficult to handle.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">p.adjust</span>(<span class="kw">unname</span>(<span class="kw">as_vector</span>(<span class="kw">tidy</span>(model)[<span class="dv">9</span>,<span class="dv">6</span>])),<span class="dt">method=</span><span class="st">&quot;bonferroni&quot;</span>, <span class="dt">n=</span><span class="dv">3</span>)</a></code></pre></div>
+<pre><code>## [1] 0.001130672</code></pre>
+</div>
+</div>
+<div id="an-manova-monte-carlo-power-function" class="section level3">
+<h3><span class="header-section-number">35.7.2</span> An MANOVA Monte Carlo Power function</h3>
+<p>The purpose of this function is to determine the sample size of suitable power for an MANOVA experiment.</p>
+<p>This function pulls all of the above together into a single script. The input of this script is a putative sample size. The output is the power of the MANOVA, and the power of the most important posthoc comparison: that between the test group and negative control for the organ variable.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">manpwr &lt;-<span class="st"> </span><span class="cf">function</span>(n){</a>
+<a class="sourceLine" id="cb30-2" title="2"><span class="co">#initializers </span></a>
+<a class="sourceLine" id="cb30-3" title="3">  <span class="co">#covariance matrix</span></a>
+<a class="sourceLine" id="cb30-4" title="4">  A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">-0.8</span>, <span class="fl">-0.3</span>, </a>
+<a class="sourceLine" id="cb30-5" title="5">                <span class="fl">-0.8</span>, <span class="dv">1</span>, <span class="fl">0.6</span>, </a>
+<a class="sourceLine" id="cb30-6" title="6">                <span class="fl">-0.3</span>, <span class="fl">0.6</span>, <span class="dv">1</span> ), </a>
+<a class="sourceLine" id="cb30-7" title="7">         <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">byrow=</span>F, </a>
+<a class="sourceLine" id="cb30-8" title="8">           <span class="dt">dimnames=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;molec&quot;</span>, <span class="st">&quot;biochem&quot;</span>, <span class="st">&quot;organ&quot;</span>),</a>
+<a class="sourceLine" id="cb30-9" title="9">                     <span class="kw">c</span>(<span class="st">&quot;molec&quot;</span>, <span class="st">&quot;biochem&quot;</span>, <span class="st">&quot;organ&quot;</span>)</a>
+<a class="sourceLine" id="cb30-10" title="10">                     ))</a>
+<a class="sourceLine" id="cb30-11" title="11">  </a>
+<a class="sourceLine" id="cb30-12" title="12">  B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">3600</span>,<span class="dv">6000</span>,<span class="dv">300</span>,</a>
+<a class="sourceLine" id="cb30-13" title="13">                <span class="dv">6000</span>,<span class="dv">10000</span>,<span class="dv">500</span>,</a>
+<a class="sourceLine" id="cb30-14" title="14">                <span class="dv">300</span>,<span class="dv">500</span>,<span class="dv">25</span>), </a>
+<a class="sourceLine" id="cb30-15" title="15">            <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">byrow=</span>F,  </a>
+<a class="sourceLine" id="cb30-16" title="16">            <span class="dt">dimnames=</span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;molec&quot;</span>, <span class="st">&quot;biochem&quot;</span>, <span class="st">&quot;organ&quot;</span>),</a>
+<a class="sourceLine" id="cb30-17" title="17">                     <span class="kw">c</span>(<span class="st">&quot;molec&quot;</span>, <span class="st">&quot;biochem&quot;</span>, <span class="st">&quot;organ&quot;</span>)</a>
+<a class="sourceLine" id="cb30-18" title="18">                     ))</a>
+<a class="sourceLine" id="cb30-19" title="19">  sigmas &lt;-<span class="st"> </span>A<span class="op">*</span>B</a>
+<a class="sourceLine" id="cb30-20" title="20">  <span class="co">#predicted means</span></a>
+<a class="sourceLine" id="cb30-21" title="21">  negMeans &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">270</span>, <span class="dv">900</span>, <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb30-22" title="22">  posMeans &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">400</span>, <span class="dv">300</span>, <span class="dv">-20</span>)</a>
+<a class="sourceLine" id="cb30-23" title="23">  testMeans &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">350</span>, <span class="dv">450</span>, <span class="dv">-10</span>)</a>
+<a class="sourceLine" id="cb30-24" title="24">  <span class="co">#misc function running variables</span></a>
+<a class="sourceLine" id="cb30-25" title="25">  manpval &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
+<a class="sourceLine" id="cb30-26" title="26">  orgpval &lt;-<span class="st"> </span><span class="kw">c</span>()</a>
+<a class="sourceLine" id="cb30-27" title="27">  i &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb30-28" title="28">  ssims &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb30-29" title="29">  alpha &lt;-<span class="st"> </span><span class="fl">0.05</span></a>
+<a class="sourceLine" id="cb30-30" title="30"><span class="co">#Data simulator</span></a>
+<a class="sourceLine" id="cb30-31" title="31"> <span class="cf">repeat</span> {</a>
+<a class="sourceLine" id="cb30-32" title="32">    neg &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(n,<span class="dt">mean=</span>negMeans, <span class="dt">sigma=</span>sigmas)</a>
+<a class="sourceLine" id="cb30-33" title="33">    pos &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(n,<span class="dt">mean=</span>posMeans, <span class="dt">sigma=</span>sigmas)</a>
+<a class="sourceLine" id="cb30-34" title="34">    test &lt;-<span class="st"> </span><span class="kw">rmvnorm</span>(n,<span class="dt">mean=</span>testMeans, <span class="dt">sigma=</span>sigmas)</a>
+<a class="sourceLine" id="cb30-35" title="35">    outMat &lt;-<span class="st"> </span><span class="kw">rbind</span>(neg, pos, test)</a>
+<a class="sourceLine" id="cb30-36" title="36">    sim &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">treatment=</span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;neg_ctrl&quot;</span>, n), </a>
+<a class="sourceLine" id="cb30-37" title="37">                          <span class="kw">rep</span>(<span class="st">&quot;pos_ctrl&quot;</span>, n), </a>
+<a class="sourceLine" id="cb30-38" title="38">                          <span class="kw">rep</span>(<span class="st">&quot;test&quot;</span>, n)</a>
+<a class="sourceLine" id="cb30-39" title="39">                          ),</a>
+<a class="sourceLine" id="cb30-40" title="40">              <span class="dt">molec =</span> outMat[ , <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb30-41" title="41">              <span class="dt">bioch =</span> outMat[ , <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb30-42" title="42">              <span class="dt">organ =</span> outMat[ , <span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb30-43" title="43">              )</a>
+<a class="sourceLine" id="cb30-44" title="44">      model &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">cbind</span>(molec, bioch, organ) <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb30-45" title="45"><span class="st">                    </span>treatment, <span class="dt">data=</span>sim)</a>
+<a class="sourceLine" id="cb30-46" title="46"></a>
+<a class="sourceLine" id="cb30-47" title="47">      manp &lt;-<span class="st"> </span><span class="kw">summary</span>(<span class="kw">manova</span>(model))<span class="op">$</span>stat[<span class="dv">11</span>]</a>
+<a class="sourceLine" id="cb30-48" title="48">      manpval[i] &lt;-<span class="st"> </span>manp</a>
+<a class="sourceLine" id="cb30-49" title="49">  <span class="co">#grab the p-value for the most important posthoc </span></a>
+<a class="sourceLine" id="cb30-50" title="50">      <span class="cf">if</span> (manp <span class="op">&lt;</span><span class="st"> </span>alpha) {</a>
+<a class="sourceLine" id="cb30-51" title="51"></a>
+<a class="sourceLine" id="cb30-52" title="52">          otp &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(<span class="kw">unname</span>(</a>
+<a class="sourceLine" id="cb30-53" title="53">                <span class="kw">as_vector</span>(</a>
+<a class="sourceLine" id="cb30-54" title="54">                <span class="kw">tidy</span>(model)[<span class="dv">9</span>,<span class="dv">6</span>])),</a>
+<a class="sourceLine" id="cb30-55" title="55">                <span class="dt">method=</span><span class="st">&quot;bonferroni&quot;</span>, <span class="dt">n=</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb30-56" title="56"></a>
+<a class="sourceLine" id="cb30-57" title="57">          orgpval[i] &lt;-<span class="st"> </span>otp</a>
+<a class="sourceLine" id="cb30-58" title="58">      }</a>
+<a class="sourceLine" id="cb30-59" title="59">      <span class="cf">if</span> (i<span class="op">==</span>ssims) <span class="cf">break</span></a>
+<a class="sourceLine" id="cb30-60" title="60">      i=i<span class="op">+</span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb30-61" title="61">  <span class="co">#prepare output  </span></a>
+<a class="sourceLine" id="cb30-62" title="62">        manpwer &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(manpval<span class="op">&lt;</span>alpha))<span class="op">/</span>ssims</a>
+<a class="sourceLine" id="cb30-63" title="63">        orgpwr &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">which</span>(orgpval<span class="op">&lt;</span>alpha))<span class="op">/</span>ssims</a>
+<a class="sourceLine" id="cb30-64" title="64"> }  </a>
+<a class="sourceLine" id="cb30-65" title="65">   <span class="kw">c</span>(<span class="kw">paste</span>(<span class="st">&quot;manova power=&quot;</span>, manpwer, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>),</a>
+<a class="sourceLine" id="cb30-66" title="66">     <span class="kw">paste</span>(<span class="st">&quot;posthoc power=&quot;</span>, orgpwr, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
+<a class="sourceLine" id="cb30-67" title="67">}</a></code></pre></div>
+<p>Here’s how to run <code>manpwr</code>. It’s a check to see the power for a sample size of 5 replicates per group.</p>
+<p>The output is interesting. Although the MANOVA test is overpowered, the critical finding of interest is underpowered at this sample size. Repeat the function at higher values of n until the posthoc power is sufficient.</p>
+<p>It is crucial to understand that powering up for the posthoc results can be so important.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">manpwr</span>(<span class="dv">5</span>)</a></code></pre></div>
+<pre><code>## [1] &quot;manova power=0.99&quot;  &quot;posthoc power=0.74&quot;</code></pre>
+</div>
+</div>
+<div id="summary-9" class="section level2">
+<h2><span class="header-section-number">35.8</span> Summary</h2>
+<p><em>MANOVA is an option for statistical testing of multivariate experiments.
+</em>The dependent variables are random normal
+<em>The test is more senstive than other parametrics to violations of normality and homogeneity of variance.
+</em>MANOVA tests whether independent variables affect an abstract combination of dependent variables.
+<em>For most, use MANOVA as an omnibus test followed by post hoc comparisons of interest to control FWER.
+</em>Care should be taken in selecting the dependent variables of interest.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">sessionInfo</span>()</a></code></pre></div>
+<pre><code>## R version 3.6.2 (2019-12-12)
+## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## Running under: Windows 10 x64 (build 18363)
+## 
+## Matrix products: default
+## 
+## locale:
+## [1] LC_COLLATE=English_United States.1252 
+## [2] LC_CTYPE=English_United States.1252   
+## [3] LC_MONETARY=English_United States.1252
+## [4] LC_NUMERIC=C                          
+## [5] LC_TIME=English_United States.1252    
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] datapasta_3.0.0 mvtnorm_1.0-11  broom_0.5.3     car_3.0-6      
+##  [5] carData_3.0-3   forcats_0.4.0   stringr_1.4.0   dplyr_0.8.3    
+##  [9] purrr_0.3.3     readr_1.3.1     tidyr_1.0.0     tibble_2.1.3   
+## [13] ggplot2_3.2.1   tidyverse_1.3.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.3        lubridate_1.7.4   lattice_0.20-38   utf8_1.1.4       
+##  [5] assertthat_0.2.1  zeallot_0.1.0     digest_0.6.23     R6_2.4.1         
+##  [9] cellranger_1.1.0  backports_1.1.5   reprex_0.3.0      evaluate_0.14    
+## [13] highr_0.8         httr_1.4.1        pillar_1.4.3      rlang_0.4.2      
+## [17] lazyeval_0.2.2    curl_4.3          readxl_1.3.1      rstudioapi_0.10  
+## [21] data.table_1.12.8 rmarkdown_2.0     labeling_0.3      foreign_0.8-72   
+## [25] munsell_0.5.0     compiler_3.6.2    modelr_0.1.5      xfun_0.11        
+## [29] pkgconfig_2.0.3   htmltools_0.4.0   tidyselect_0.2.5  bookdown_0.16    
+## [33] rio_0.5.16        fansi_0.4.0       crayon_1.3.4      dbplyr_1.4.2     
+## [37] withr_2.1.2       grid_3.6.2        nlme_3.1-142      jsonlite_1.6     
+## [41] gtable_0.3.0      lifecycle_0.1.0   DBI_1.1.0         magrittr_1.5     
+## [45] scales_1.1.0      zip_2.0.4         cli_2.0.0         stringi_1.4.4    
+## [49] farver_2.0.1      fs_1.3.1          xml2_1.2.2        generics_0.0.2   
+## [53] vctrs_0.2.1       openxlsx_4.1.4    tools_3.6.2       glue_1.3.1       
+## [57] hms_0.5.2         abind_1.4-5       yaml_2.2.0        colorspace_1.4-1 
+## [61] rvest_0.3.5       knitr_1.26        haven_2.2.0</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="anovamc.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="correl.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+},
+"search": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
