@@ -46,7 +46,6 @@ The former requires estimates for model (between) and residual (within) variance
 The latter requires an entry for Cohen's $f$. \[f=\sqrt{\frac{\eta^2}{1-\eta^2}}\]
 where $\eta^2=\frac{SS_{model}}{SS_{total}}$ for a completely randomized factor, whereas for a related measures factor it is $\eta_p^2=\frac{SS_{model}}{SS_{model}+SS_{residual}}$
 
-
 ## What is Monte Carlo
 
 As the name implies, Monte Carlo is based on random chance.
@@ -96,8 +95,8 @@ First, provide an estimate for the expected mean of the outcome variable under b
 
 ```{r}
 b = 100 #expected basal outcome value
-a = 1.25 #expected fold-to-basal effect of our positive control
-f = 1.4 #minimal scientifically relevant fold-to-basal effect of our treatment
+a = 1.5 #expected fold-to-basal effect of our positive control
+f = 1.25 #minimal scientifically relevant fold-to-basal effect of our treatment
 sd = 25 #expected standard deviation of Outcome variable
 n = 3 # number of independent replicates per group
 sims = 100 #number of Monte Carlo simulations to run. 
@@ -145,8 +144,6 @@ Change n in the initializer above to see what it takes to get 80% or better powe
 
 Carefully look at this code. It creates an ezANOVA output object, and then goes in to collect the p-value of the ANOVA F test from the ANOVA table.
 
-This could be modified. For example, it could be extended to collect the result of post hoc analysis. 
-
 
 ```{r message=FALSE, warning=FALSE}
 pval <- replicate(
@@ -170,6 +167,26 @@ pval <- replicate(
 pwr.pct <- sum(pval<0.05)/sims*100
 paste(pwr.pct, sep="", "% power. Change 'n' in your initializer for higher or lower power.")
 
+ggplot(data.frame(pval))+
+  geom_histogram(aes(pval), color="#d28e00")+
+  labs(x="p-value")
+```
+
+This could be modified. For example, here it collects the post hoc comparison between the test group and the negative control. Why is the power so much lower for this comparison compared to the power for a positive ANOVA?
+
+```{r}
+pval <- replicate(
+  sims, {
+ 
+    sample.df <- CRdataMaker(n, b, a, f, sd)
+    
+    pval <- pairwise.t.test(sample.df$Outcome, sample.df$Predictor)$p.value[2,1]
+    
+    }
+  )
+
+pwr.pct <- sum(pval<0.05)/sims*100
+paste(pwr.pct, sep="", "% power. Change 'n' in your initializer for higher or lower power.")
 ggplot(data.frame(pval))+
   geom_histogram(aes(pval), color="#d28e00")+
   labs(x="p-value")
