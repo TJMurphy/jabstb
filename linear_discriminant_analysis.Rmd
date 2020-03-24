@@ -1,0 +1,19 @@
+# Linear discriminant analysis {#lda}
+
+
+MANOVA is the same, mathematically, as linear discriminant analysis. Both of these techniques are treated in this chapter. The focus of MANOVA is inferential, to test whether independent variables have any effects on a composite variable constructed from all of the dependent variables. The focus of linear discriminant analysis is prediction and explanatory, to define groupings based upon the latent composite variable.
+
+The important take home about $HE^{-1}$ is that it represents a ratio of model to residual variance, or signal to noise. But is also a matrix with $p^2$ cells, where $p$ is the number of dependent variables. $HE^{-1}$ is a complex value with a lot of information embedded within it. How do we reduce its complexity into something useful?
+
+## Flipping the general model
+
+What if we flipped the general linear model? \[Y=\beta X+\epsilon\] Here, we measure response values of $Y$ given different levels $X$. The $\beta$ coeffiecient represents the slope of the linear relationship between $X$ and $Y$ while $\epsilon$ is the residual error, which is normally distributed. 
+
+Once we have a good estimate for the regression coefficient $\beta$ (which we'd derive from an experiment we're left with a model to predict values of $Y$ for any imagined levels of $X$. 
+
+For example, if $Y$ was weight and $X$ was diet, knowing the regression coefficient $\beta$ for some level of diet would allow for predicting the weight! That could be very useful for making decisions about what to eat. \[weight = \beta \times diet + \epsilon\]
+
+We could add a second predictor variable and do the same \[Y=\beta_1 X_1 +\beta_2X_2 +\epsilon\] Here, $Y$ might represent weight, $X_1$ might be diet, while $X_2$ might be exercise. Knowing the coefficients and the levels of diet and exercise predicts weight. That's even more useful than knowing what to eat, especially if diet and exercise interact, which we could test for using ANOVA \[weight = \beta_{diet} \times diet + \beta_{exercise} \times exercise\] Now let's apply that linear-model-way-of-thinking to the multivariate state. What if we flipped the general linear model and turned our dependent variables into predictors? In general, \[V=\beta_1 Y_1+\beta_2Y_2+\epsilon\] where $Y_1$ and $Y_2$ represent two dependent variables, while $V$ is some variate they predict.In statistical jargon, $V$ is known as a discriminate function variate, but we'll get to that soon.  
+Continuing with the example, here, $Y_1$ and $Y_2$ are weights and heights that we've measured in response to different levels of diets and exercises. $beta_1$ and $beta_2$ are regression coefficients with values that are estimated from the same experiments (they aren't the same coefficients as the ones above which you can tell by the different subscripts). \[V=\beta_{weight}\times weight+ \beta_{height} \times height\] 
+
+$V$ is a latent variable. It's completely imaginary and weird...which you can tell just by looking at its units. The units are a combination of weight and height. What this is, conceptually, is a new dimension of the data. $V$ represents a linear combination of those two response variables, which in turn are each predicted by diet and exercise.
