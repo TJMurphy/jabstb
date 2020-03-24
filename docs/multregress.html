@@ -812,12 +812,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here’s a simulation of a simple factorial experiment, comparing responses of a stimulus and its negative control. Every measurement is independent of all other measurements. Thus, the sample has 6 independent replicates.</p>
 <p>The predictor variable, FactorA, comes at two levels: control and stimulus. The response is a continuous variable. In your own mind substitute things for these. For me, the response is a transcription factor-driven luciferease activity, a negative control, and an agonist of a receptor is the stimulus.</p>
 <p>We obtain the following random sample:</p>
-<div class="sourceCode" id="cb866"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb866-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb866-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb866-3" title="3">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb866-4" title="4"></a>
-<a class="sourceLine" id="cb866-5" title="5">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)</a>
-<a class="sourceLine" id="cb866-6" title="6">data</a></code></pre></div>
+<div class="sourceCode" id="cb870"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb870-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
+<a class="sourceLine" id="cb870-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb870-3" title="3">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb870-4" title="4"></a>
+<a class="sourceLine" id="cb870-5" title="5">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)</a>
+<a class="sourceLine" id="cb870-6" title="6">data</a></code></pre></div>
 <pre><code>##    factorA response
 ## 1  control 48.79293
 ## 2  control 50.27743
@@ -828,8 +828,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The linear model for this experiment can be expressed as follows: <span class="math display">\[response=control+\beta \times stimulus + residual\]</span></p>
 <p>The model formula can be configured in several optional ways.</p>
 <p>Adding the term <code>+0</code> to the model formula in the <code>lm</code> function suppresses the intercept, allowing for a glance at the sample group means. These make sense with what was coded above.</p>
-<div class="sourceCode" id="cb868"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb868-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span><span class="dv">0</span>, data)</a>
-<a class="sourceLine" id="cb868-2" title="2">model</a></code></pre></div>
+<div class="sourceCode" id="cb872"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb872-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span><span class="dv">0</span>, data)</a>
+<a class="sourceLine" id="cb872-2" title="2">model</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA + 0, data = data)
@@ -838,8 +838,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  factorAcontrol  factorAstimulus  
 ##           50.05            74.53</code></pre>
 <p>Knowing those group mean values helps to understand the meaning of the regression coefficients derived from the more conventional approach, which is not to suppress the intercept.</p>
-<div class="sourceCode" id="cb870"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb870-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a>
-<a class="sourceLine" id="cb870-2" title="2">model</a></code></pre></div>
+<div class="sourceCode" id="cb874"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb874-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a>
+<a class="sourceLine" id="cb874-2" title="2">model</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -855,7 +855,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The coefficient for the stimulus term in this model formula is not the mean of the response to the stimulus, but is instead the difference between between the mean response to the stimulus and the mean response of the control.</p>
 <p>Perhaps that reminds you of the numerator for the unpaired t-test, between two levels of a factor, control and stimulus? <span class="math display">\[t=\frac{mean_{stimulus}-mean_{control}}{SE}\]</span></p>
 <p>Let’s see if a t-test between stimulus and control gives us the same result as the linear regression. First, let’s complete the linear model analysis.</p>
-<div class="sourceCode" id="cb872"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb872-1" title="1"><span class="kw">summary</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb876"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb876-1" title="1"><span class="kw">summary</span>(model)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -879,7 +879,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Woohoo!</p>
 <p>To be clear, when the predictor variable was continuous, we previously discussed these <span class="math inline">\(\beta\)</span> coefficients as the “slope” of the linear regression line. That’s still the case here. R coerces a distance of 1 on the abscissa between the factorA values of control and stimulus. Thus, the difference between their means <span class="math inline">\(\Delta y\)</span> divided by 1 <span class="math inline">\(\Delta x\)</span> is the slope of an imaginary line between them.</p>
 <p>Now let’s look at an unpaired t-test between the two factors.</p>
-<div class="sourceCode" id="cb874"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb874-1" title="1"><span class="kw">t.test</span>(response<span class="op">~</span>factorA, data, <span class="dt">var.equal=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb878"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb878-1" title="1"><span class="kw">t.test</span>(response<span class="op">~</span>factorA, data, <span class="dt">var.equal=</span>T)</a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -915,14 +915,14 @@ That denominator is the standard error of the difference between means, which is
 <p>Using the <code>relevel</code> function provides you a bit more control to define the intercept value in linear regression compared to the default alphanumeric way.</p>
 <p>Here’s some simulated data. The predictor variable, hart, has 4 levels: art, bart, cart, and dart. It’s on an alphanumeric scale. Smelly is the response variable. As you can see, each level of hart yields a different smelly response.</p>
 <p>Even though I list the hart variable levels from <code>d</code> to <code>a</code> in the dataframe, R coerces them from <code>a</code> to <code>d</code> in the regression model, thereby forcing art to serve as the intercept</p>
-<div class="sourceCode" id="cb876"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb876-1" title="1">art &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb876-2" title="2">bart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb876-3" title="3">cart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb876-4" title="4">dart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">200</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb876-5" title="5"></a>
-<a class="sourceLine" id="cb876-6" title="6">hart &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;dart&quot;</span>, <span class="st">&quot;cart&quot;</span>, <span class="st">&quot;bart&quot;</span>, <span class="st">&quot;aart&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb876-7" title="7">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(hart, <span class="dt">smelly=</span><span class="kw">c</span>(dart, cart, bart, art))</a>
-<a class="sourceLine" id="cb876-8" title="8">data</a></code></pre></div>
+<div class="sourceCode" id="cb880"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb880-1" title="1">art &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb880-2" title="2">bart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb880-3" title="3">cart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb880-4" title="4">dart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">200</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb880-5" title="5"></a>
+<a class="sourceLine" id="cb880-6" title="6">hart &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;dart&quot;</span>, <span class="st">&quot;cart&quot;</span>, <span class="st">&quot;bart&quot;</span>, <span class="st">&quot;aart&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb880-7" title="7">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(hart, <span class="dt">smelly=</span><span class="kw">c</span>(dart, cart, bart, art))</a>
+<a class="sourceLine" id="cb880-8" title="8">data</a></code></pre></div>
 <pre><code>##    hart       smelly
 ## 1  dart 199.88971451
 ## 2  dart 199.48899049
@@ -936,7 +936,7 @@ That denominator is the standard error of the difference between means, which is
 ## 10 aart  49.42526004
 ## 11 aart  49.45336814
 ## 12 aart  49.43554800</code></pre>
-<div class="sourceCode" id="cb878"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb878-1" title="1"><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</a></code></pre></div>
+<div class="sourceCode" id="cb882"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb882-1" title="1"><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = smelly ~ hart, data = data)
@@ -947,11 +947,11 @@ That denominator is the standard error of the difference between means, which is
 <p>What do those coefficient values mean? Well, they are all in units of smelly, referenced to the level of smelly in the presence of art. Because it begins with the letter ‘a’, art is the lowest alphanumeric value of the four predictors. Therefore, it is assigned as the intercept factor. In smelly units, the intercept is the response to art; bart is about 50 more than art; cart is about 50 less than art; and dart is about 150 more than art.</p>
 <p>But let’s say we’d instead like to reference everything to the value of cart, which has a smelly value of 0. We’d use the <code>relevel</code> function for that.</p>
 <p>First we have to define the variable hart as a factorial variable explicitly. Then, we relevel the values of hart so that cart is referenced as the intercept.</p>
-<div class="sourceCode" id="cb880"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb880-1" title="1">hart &lt;-<span class="st"> </span><span class="kw">factor</span>(hart) <span class="co">#don&#39;t skip this step, without it the next gives an error!!!</span></a>
-<a class="sourceLine" id="cb880-2" title="2">data<span class="op">$</span>hart &lt;-<span class="st"> </span><span class="kw">relevel</span>(hart, <span class="dt">ref=</span><span class="st">&quot;cart&quot;</span>)</a>
-<a class="sourceLine" id="cb880-3" title="3"></a>
-<a class="sourceLine" id="cb880-4" title="4"></a>
-<a class="sourceLine" id="cb880-5" title="5"><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</a></code></pre></div>
+<div class="sourceCode" id="cb884"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb884-1" title="1">hart &lt;-<span class="st"> </span><span class="kw">factor</span>(hart) <span class="co">#don&#39;t skip this step, without it the next gives an error!!!</span></a>
+<a class="sourceLine" id="cb884-2" title="2">data<span class="op">$</span>hart &lt;-<span class="st"> </span><span class="kw">relevel</span>(hart, <span class="dt">ref=</span><span class="st">&quot;cart&quot;</span>)</a>
+<a class="sourceLine" id="cb884-3" title="3"></a>
+<a class="sourceLine" id="cb884-4" title="4"></a>
+<a class="sourceLine" id="cb884-5" title="5"><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = smelly ~ hart, data = data)
@@ -968,14 +968,14 @@ That denominator is the standard error of the difference between means, which is
 <p>T-tests are for comparing 2 groups. ANOVA’s are for comparing 3 or more groups. It turns out, you can use multiple linear regression to mimic an ANOVA test, too.</p>
 <p>Let’s add one more level for the predictor variable (and its responses) to the experiment. Since it now has 3 groups, and 9 independent replicates, we shouldn’t do t-tests. We could do ANOVA, but we could also do a multiple regression model, too.</p>
 <p>That model is <span class="math display">\[response=control+\beta_1 stimulus1+\beta_2 stimulus2\]</span></p>
-<div class="sourceCode" id="cb882"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb882-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb882-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb882-3" title="3">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb882-4" title="4"></a>
-<a class="sourceLine" id="cb882-5" title="5">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)</a>
-<a class="sourceLine" id="cb882-6" title="6"></a>
-<a class="sourceLine" id="cb882-7" title="7">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a>
-<a class="sourceLine" id="cb882-8" title="8"><span class="kw">summary</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb886"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb886-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
+<a class="sourceLine" id="cb886-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb886-3" title="3">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb886-4" title="4"></a>
+<a class="sourceLine" id="cb886-5" title="5">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)</a>
+<a class="sourceLine" id="cb886-6" title="6"></a>
+<a class="sourceLine" id="cb886-7" title="7">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a>
+<a class="sourceLine" id="cb886-8" title="8"><span class="kw">summary</span>(model)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -998,7 +998,7 @@ That denominator is the standard error of the difference between means, which is
 <p>Notice how the coefficient value for stimulus2 is the difference between the mean response value for stimulus2 (~175 units) and the mean response value for control (~50 units). Each coefficient t-test asks whether the value of the coefficient differs from zero.</p>
 <p>In linear regression with only a single predictor variable, that coefficient was the slope of a straight line through all the <span class="math inline">\(xy\)</span> data pairs. In multiple linear regression you have to imagine separate straight lines connecting the mean intercept response value and the response values for each of the predictors.</p>
 <p>We can compare the regression model output to that for an ANOVA test on the data. Here is the equivalent of a one-way completely randomized ANOVA.</p>
-<div class="sourceCode" id="cb884"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb884-1" title="1"><span class="kw">Anova</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb888"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb888-1" title="1"><span class="kw">Anova</span>(model)</a></code></pre></div>
 <pre><code>## Anova Table (Type II tests)
 ## 
 ## Response: response
@@ -1014,22 +1014,22 @@ That denominator is the standard error of the difference between means, which is
 <div id="a-two-factor-experiment-with-6-groups" class="section level3">
 <h3><span class="header-section-number">41.3.2</span> A two factor experiment with 6 groups</h3>
 <p>Now we’ll add a second factorial variable, factorB, to the design above. FactorB has two levels. The simulated design is akin to a two-way completely randomized ANOVA. We’ll also simulate in an interaction effect between the two variables.</p>
-<div class="sourceCode" id="cb886"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb886-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb886-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>), <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb886-3" title="3">factorB &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;cofactor1&quot;</span>, <span class="st">&quot;cofactor2&quot;</span>), <span class="dt">each=</span><span class="dv">9</span>)</a>
-<a class="sourceLine" id="cb886-4" title="4">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb886-5" title="5">              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb886-6" title="6">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb886-7" title="7">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb886-8" title="8">              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb886-9" title="9">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">700</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb886-10" title="10">              )</a>
-<a class="sourceLine" id="cb886-11" title="11"></a>
-<a class="sourceLine" id="cb886-12" title="12">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, factorB, response)</a></code></pre></div>
+<div class="sourceCode" id="cb890"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb890-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
+<a class="sourceLine" id="cb890-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>), <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb890-3" title="3">factorB &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;cofactor1&quot;</span>, <span class="st">&quot;cofactor2&quot;</span>), <span class="dt">each=</span><span class="dv">9</span>)</a>
+<a class="sourceLine" id="cb890-4" title="4">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb890-5" title="5">              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb890-6" title="6">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb890-7" title="7">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb890-8" title="8">              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb890-9" title="9">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">700</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb890-10" title="10">              )</a>
+<a class="sourceLine" id="cb890-11" title="11"></a>
+<a class="sourceLine" id="cb890-12" title="12">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, factorB, response)</a></code></pre></div>
 <p>There are a handful of linear models we could run on this. They should be scientifically driven. Since we wouldn’t design an experiment like this unless we thought there would be an interaction between the two factors, we’ll focus on that. The coefficients for the interacting model would serve as effect sizes to describe the level of interaction that occurs.</p>
 <p>Coefficients can be confusing. Here’s a way to clarify what’s going on. It turns out, a model’s intercept is calculated differently, depending upon how the model is defined.</p>
 <p>First, a factor-less model. This output represents the grand mean of all the values in the data.</p>
-<div class="sourceCode" id="cb887"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb887-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span><span class="dv">1</span>, data)</a></code></pre></div>
+<div class="sourceCode" id="cb891"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb891-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span><span class="dv">1</span>, data)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ 1, data = data)
@@ -1038,7 +1038,7 @@ That denominator is the standard error of the difference between means, which is
 ## (Intercept)  
 ##         233</code></pre>
 <p>Next is a linear model just for the 3 levels of factorA. The intercept is the mean for all the data in the control groups under both cofactor1 and cofactor2.</p>
-<div class="sourceCode" id="cb889"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb889-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a></code></pre></div>
+<div class="sourceCode" id="cb893"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb893-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -1047,7 +1047,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorAstimulus1  factorAstimulus2  
 ##            74.63            112.67            362.33</code></pre>
 <p>Here’s a linear model for the second variable alone. The intercept represents the mean of all the groups under cofactor1</p>
-<div class="sourceCode" id="cb891"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb891-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorB, data)</a></code></pre></div>
+<div class="sourceCode" id="cb895"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb895-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorB, data)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorB, data = data)
@@ -1056,7 +1056,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorBcofactor2  
 ##            99.67            266.59</code></pre>
 <p>Now we have the linear model for the two factors combined. This intercept is the sum of the intercepts for factorA and factorB, less the grand mean for all the data. The negative value is a hint of an interaction effect between the two factors.</p>
-<div class="sourceCode" id="cb893"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb893-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span>factorB, data)</a></code></pre></div>
+<div class="sourceCode" id="cb897"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb897-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span>factorB, data)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA + factorB, data = data)
@@ -1065,7 +1065,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorAstimulus1  factorAstimulus2  factorBcofactor2  
 ##           -58.66            112.67            362.33            266.59</code></pre>
 <p>Finally we have the full linear model for the two factors combined, including an interaction term. Here the intercept is the value of control. All coefficients values are the difference between their absolute effect sizes and the value for control (intercept).</p>
-<div class="sourceCode" id="cb895"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb895-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data)</a></code></pre></div>
+<div class="sourceCode" id="cb899"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb899-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA * factorB, data = data)
@@ -1079,7 +1079,7 @@ That denominator is the standard error of the difference between means, which is
 ##                            176.39                             475.89</code></pre>
 <p>Since the values each discrete predictor variable level can take on is either 1 (if present) or 0 (if not), all of these coefficient values serve as an effect size for the indicated group, relative to control (intercept).</p>
 <p>The linear model is <span class="math display">\[Y=50.05+24.48\times stimulus1+124.39\times stimulus2+49.16\times cofactor2+176.39\times stimulus1/cofactor2 +475.89\times stimulus2/cofactor2\]</span></p>
-<div class="sourceCode" id="cb897"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb897-1" title="1"><span class="kw">summary</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</a></code></pre></div>
+<div class="sourceCode" id="cb901"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb901-1" title="1"><span class="kw">summary</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA * factorB, data = data)
@@ -1108,7 +1108,7 @@ That denominator is the standard error of the difference between means, which is
 <p>Or something like that.</p>
 <p>The F test is a ratio of the variance associated with the model to the residual variance. It’s not particularly useful other than to announce that the model explains the data better than does residual variation.</p>
 <p>Passing the model into an the <code>Anova</code> function from the <code>car</code> package provides F tests for the main effects of each factor and for the interaction, providing the familiar ANOVA way of interpreting the data if desired.</p>
-<div class="sourceCode" id="cb899"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb899-1" title="1"><span class="kw">Anova</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</a></code></pre></div>
+<div class="sourceCode" id="cb903"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb903-1" title="1"><span class="kw">Anova</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</a></code></pre></div>
 <pre><code>## Anova Table (Type II tests)
 ## 
 ## Response: response
@@ -1134,15 +1134,15 @@ That denominator is the standard error of the difference between means, which is
 <p>So “mixed” multiple linear regression models have a mixture of terms for the fixed and for the random effects within an experiment. Mixed models are therefore the linear regression analogs of paired/related measure designs.</p>
 <p>The <code>sleepstudy</code> data set in the <code>lme4</code> package is one such mixed effect study. The study measured reaction times (in ms) under conditions of worsening sleep deprivation. Repeated reaction time measurements were taken from each of 18 subjects over a 9 day period of sleep deprivation. These 18 subjects represent a random sample of the type of person who might become sleep deprived.</p>
 <p>Here’s a chart showing how it went for each subject. For some, reaction times are noticeably longer. For others, reaction lengthening is less bloody obvious. For subject 335 sleep deprivation might have slightly quickened reaction times!</p>
-<div class="sourceCode" id="cb901"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb901-1" title="1"><span class="kw">ggplot</span>(sleepstudy, <span class="kw">aes</span>(Days, Reaction))<span class="op">+</span></a>
-<a class="sourceLine" id="cb901-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb901-3" title="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span>F)<span class="op">+</span></a>
-<a class="sourceLine" id="cb901-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Subject)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-471-1.png" width="672" /></p>
+<div class="sourceCode" id="cb905"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb905-1" title="1"><span class="kw">ggplot</span>(sleepstudy, <span class="kw">aes</span>(Days, Reaction))<span class="op">+</span></a>
+<a class="sourceLine" id="cb905-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb905-3" title="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span>F)<span class="op">+</span></a>
+<a class="sourceLine" id="cb905-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Subject)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-472-1.png" width="672" /></p>
 <p>Here’s the question everybody wants answered from this study: What effect does sleep deprivation have on reaction time?</p>
 <p>Note, the question is NOT, “is the effect of sleep deprivation on reaction time”significant?"" That’s much less compelling than actually quantifying the effect size.</p>
 <p>If we completely ignore the presumed correlation within the repeated measurements within each subject we would use the <code>lm</code> function in R’s base <code>stats</code> package.</p>
-<div class="sourceCode" id="cb902"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb902-1" title="1"><span class="kw">summary</span>(<span class="kw">lm</span>(Reaction <span class="op">~</span><span class="st"> </span>Days, sleepstudy))</a></code></pre></div>
+<div class="sourceCode" id="cb906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb906-1" title="1"><span class="kw">summary</span>(<span class="kw">lm</span>(Reaction <span class="op">~</span><span class="st"> </span>Days, sleepstudy))</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Reaction ~ Days, data = sleepstudy)
@@ -1166,9 +1166,9 @@ That denominator is the standard error of the difference between means, which is
 <p><span class="math display">\[Reaction=251.4+10.4\times Days\]</span></p>
 <p>But we shouldn’t ignore the repeated measures of the design. And it would also be nice to have some estimate for the standard deviation of the effect.</p>
 <p>For those reasons we run a mixed model regression to account for the random effect of the 18 subjects.</p>
-<div class="sourceCode" id="cb904"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb904-1" title="1">mm1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(Days<span class="op">|</span>Subject), <span class="dt">REML=</span>F, sleepstudy)</a>
-<a class="sourceLine" id="cb904-2" title="2"></a>
-<a class="sourceLine" id="cb904-3" title="3"><span class="kw">summary</span>(mm1)</a></code></pre></div>
+<div class="sourceCode" id="cb908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb908-1" title="1">mm1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(Days<span class="op">|</span>Subject), <span class="dt">REML=</span>F, sleepstudy)</a>
+<a class="sourceLine" id="cb908-2" title="2"></a>
+<a class="sourceLine" id="cb908-3" title="3"><span class="kw">summary</span>(mm1)</a></code></pre></div>
 <pre><code>## Linear mixed model fit by maximum likelihood  [&#39;lmerMod&#39;]
 ## Formula: Reaction ~ Days + (Days | Subject)
 ##    Data: sleepstudy
@@ -1205,8 +1205,8 @@ That denominator is the standard error of the difference between means, which is
 <p>Since I know a little bit about blood pressure, but mostly because blood pressure is a continuous variable, I thought it would be interesting to explore how the various cofactors might influence systolic blood pressure. So I’ll use systolic blood pressure as a response variable in the regressions below. Some of the other variables will be used as predictor variables.</p>
 <p>I should make an important point. In practice you don’t just crack open and explore a data set willy nilly. I’m not the PI of the study. I’m just writing another chapter on statistical methods using data to illustrate statistical concepts. The authors of the study were testing the hypothesis that the so-called type-A personality was at higher risk of coronary heart disease. They are bound by restricting their analysis to testing preset hypotheses.</p>
 <p>These systolic blood pressure readings are just a variable that were vacuumed up in the study design, but were not hypothesized as the intended response variable.</p>
-<div class="sourceCode" id="cb906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb906-1" title="1"><span class="kw">data</span>(wcgs)</a>
-<a class="sourceLine" id="cb906-2" title="2"><span class="kw">head</span>(wcgs)</a></code></pre></div>
+<div class="sourceCode" id="cb910"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb910-1" title="1"><span class="kw">data</span>(wcgs)</a>
+<a class="sourceLine" id="cb910-2" title="2"><span class="kw">head</span>(wcgs)</a></code></pre></div>
 <pre><code>##     id age0 height0 weight0 sbp0 dbp0 chol0 behpat0 ncigs0 dibpat0 chd69
 ## 1 2001   49      73     150  110   76   225       2     25       1     0
 ## 2 2002   42      70     160  154   84   177       2     20       1     0
@@ -1221,11 +1221,11 @@ That denominator is the standard error of the difference between means, which is
 ## 4       0    3064      0
 ## 5       1    1885      1
 ## 6       0    3102      0</code></pre>
-<div class="sourceCode" id="cb908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb908-1" title="1">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(sbp0<span class="op">~</span>age0<span class="op">+</span>height0<span class="op">+</span>weight0<span class="op">+</span></a>
-<a class="sourceLine" id="cb908-2" title="2"><span class="st">            </span>chol0<span class="op">+</span>ncigs0<span class="op">+</span></a>
-<a class="sourceLine" id="cb908-3" title="3"><span class="st">            </span>dibpat0<span class="op">+</span>chd69, </a>
-<a class="sourceLine" id="cb908-4" title="4">          wcgs)</a>
-<a class="sourceLine" id="cb908-5" title="5"><span class="kw">summary</span>(fit)</a></code></pre></div>
+<div class="sourceCode" id="cb912"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb912-1" title="1">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(sbp0<span class="op">~</span>age0<span class="op">+</span>height0<span class="op">+</span>weight0<span class="op">+</span></a>
+<a class="sourceLine" id="cb912-2" title="2"><span class="st">            </span>chol0<span class="op">+</span>ncigs0<span class="op">+</span></a>
+<a class="sourceLine" id="cb912-3" title="3"><span class="st">            </span>dibpat0<span class="op">+</span>chd69, </a>
+<a class="sourceLine" id="cb912-4" title="4">          wcgs)</a>
+<a class="sourceLine" id="cb912-5" title="5"><span class="kw">summary</span>(fit)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = sbp0 ~ age0 + height0 + weight0 + chol0 + ncigs0 + 
@@ -1256,12 +1256,12 @@ That denominator is the standard error of the difference between means, which is
 <div id="sandbox" class="section level4">
 <h4><span class="header-section-number">41.5.0.1</span> Sandbox</h4>
 <p>Here’s a simulated sample. The causes of the outcome are known. Only the multiple model predicts the outcome accurately. Knowing what covariates to include in the model is not straightforward.</p>
-<div class="sourceCode" id="cb910"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb910-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb910-2" title="2">covariate &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb910-3" title="3">exposure  &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">+</span>(<span class="fl">0.3</span><span class="op">*</span>covariate)</a>
-<a class="sourceLine" id="cb910-4" title="4">outcome   &lt;-<span class="st"> </span><span class="fl">2.0</span><span class="op">+</span>(<span class="fl">0.5</span><span class="op">*</span>exposure)<span class="op">+</span>(<span class="fl">0.25</span><span class="op">*</span>covariate)</a>
-<a class="sourceLine" id="cb910-5" title="5"></a>
-<a class="sourceLine" id="cb910-6" title="6"><span class="kw">lm</span>(outcome<span class="op">~</span>exposure)</a></code></pre></div>
+<div class="sourceCode" id="cb914"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb914-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb914-2" title="2">covariate &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb914-3" title="3">exposure  &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">+</span>(<span class="fl">0.3</span><span class="op">*</span>covariate)</a>
+<a class="sourceLine" id="cb914-4" title="4">outcome   &lt;-<span class="st"> </span><span class="fl">2.0</span><span class="op">+</span>(<span class="fl">0.5</span><span class="op">*</span>exposure)<span class="op">+</span>(<span class="fl">0.25</span><span class="op">*</span>covariate)</a>
+<a class="sourceLine" id="cb914-5" title="5"></a>
+<a class="sourceLine" id="cb914-6" title="6"><span class="kw">lm</span>(outcome<span class="op">~</span>exposure)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = outcome ~ exposure)
@@ -1269,7 +1269,7 @@ That denominator is the standard error of the difference between means, which is
 ## Coefficients:
 ## (Intercept)     exposure  
 ##      1.9670       0.7185</code></pre>
-<div class="sourceCode" id="cb912"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb912-1" title="1"><span class="kw">lm</span>(outcome<span class="op">~</span>exposure<span class="op">+</span>covariate)</a></code></pre></div>
+<div class="sourceCode" id="cb916"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb916-1" title="1"><span class="kw">lm</span>(outcome<span class="op">~</span>exposure<span class="op">+</span>covariate)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = outcome ~ exposure + covariate)

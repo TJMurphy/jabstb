@@ -843,13 +843,13 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
 <div id="linear-regression-in-r" class="section level2">
 <h2><span class="header-section-number">37.5</span> Linear regression in R</h2>
 <p>First we create vectors for the values of our Y and our X variables. Although a data frame is not necessary to run the linear regression function, it will be useful for plotting latter.</p>
-<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb791-1" title="1">X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">18</span>)</a>
-<a class="sourceLine" id="cb791-2" title="2">Y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb791-3" title="3"></a>
-<a class="sourceLine" id="cb791-4" title="4">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X, Y)</a></code></pre></div>
+<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb795-1" title="1">X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">18</span>)</a>
+<a class="sourceLine" id="cb795-2" title="2">Y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb795-3" title="3"></a>
+<a class="sourceLine" id="cb795-4" title="4">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X, Y)</a></code></pre></div>
 <p>Think of a regression model not so much as describing a relationship between X and Y, but the degree by which the values of X predicts the values of Y.</p>
 <p>Thus, the command <code>lm(Y~X)</code> in English would read, “linear model for Y predicted by X”, or “Y by X”. Let’s name an object ‘model’, run it and print the results. In regression, it’s almost always useful to create objects like ‘model’ since there are so many additional functions that can be run on the model:</p>
-<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb792-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(Y<span class="op">~</span>X); model</a></code></pre></div>
+<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb796-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(Y<span class="op">~</span>X); model</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -859,13 +859,13 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
 ##      14.190       -0.619</code></pre>
 <p>The sparse output yields two model parameters, or cryptically named coefficients: the y-intercept (intercept) and the slope (X). There’s actually quite a bit more information not being printed, including all the residual values, which you can explore by typing <code>str(lim(Y~X))</code> in the console.</p>
 <p>Because 95% confidence intervals are always useful, use the <code>confit</code> function to calculate these ranges for both model parameters!</p>
-<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb794-1" title="1"><span class="kw">confint</span>(model, <span class="dt">level=</span><span class="fl">0.95</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb798-1" title="1"><span class="kw">confint</span>(model, <span class="dt">level=</span><span class="fl">0.95</span>)</a></code></pre></div>
 <pre><code>##                 2.5 %     97.5 %
 ## (Intercept)  5.828676 22.5522765
 ## X           -1.358133  0.1200381</code></pre>
 <p>Thus, there is a 95% chance the true y-intercept is between 5.8 and 22.5, while the sample estimates the true slope is between -1.358 and 0.12. The fact that the latter range of values includes the value of zero foreshadows that the slope will not differ from zero upon statistical testing!</p>
 <p>R’s <code>summary</code> function is the standard way to print additional detail about the model and its analysis.</p>
-<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb796-1" title="1"><span class="kw">summary</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb800-1" title="1"><span class="kw">summary</span>(model)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -920,7 +920,7 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
 <div id="f-statistic" class="section level3">
 <h3><span class="header-section-number">37.6.5</span> F-statistic</h3>
 <p>The F-statistic in linear regression is the same F-statistic that we saw in ANOVA. In fact, you can run an ANOVA on the model and get some of the same results as you see in the <code>summary(model)</code> output, just in different form. For example, the F statistic, df’s and the p-value’s are all identical!</p>
-<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb798-1" title="1"><span class="kw">anova</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb802-1" title="1"><span class="kw">anova</span>(model)</a></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: Y
@@ -944,49 +944,49 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
 <div id="plotting-regression-results" class="section level3">
 <h3><span class="header-section-number">37.6.6</span> Plotting regression results</h3>
 <p>This is very simple to do using <code>ggplot</code>. The basic plotting function is shown below. The <code>stat_smooth</code> function is quite versatile. By default, it produces an error band for the regression to illustrate the uncertainty. Note how the error varies across the range of predictor values and is greatest for extreme values of the predictor. It is typical for such confidence bands of regressions to have this ‘bow tie’ look.</p>
-<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb800-1" title="1"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(X, Y)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb800-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(</a>
-<a class="sourceLine" id="cb800-3" title="3">    <span class="dt">size=</span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb800-4" title="4">    )<span class="op">+</span></a>
-<a class="sourceLine" id="cb800-5" title="5"><span class="st">  </span><span class="kw">stat_smooth</span>(</a>
-<a class="sourceLine" id="cb800-6" title="6">    <span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, </a>
-<a class="sourceLine" id="cb800-7" title="7">    <span class="dt">color=</span><span class="st">&quot;#002878&quot;</span></a>
-<a class="sourceLine" id="cb800-8" title="8">    )<span class="op">+</span></a>
-<a class="sourceLine" id="cb800-9" title="9"><span class="st">  </span><span class="kw">theme_classic</span>(</a>
-<a class="sourceLine" id="cb800-10" title="10">    </a>
-<a class="sourceLine" id="cb800-11" title="11">  )</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-413-1.png" width="672" /></p>
+<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb804-1" title="1"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(X, Y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb804-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(</a>
+<a class="sourceLine" id="cb804-3" title="3">    <span class="dt">size=</span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb804-4" title="4">    )<span class="op">+</span></a>
+<a class="sourceLine" id="cb804-5" title="5"><span class="st">  </span><span class="kw">stat_smooth</span>(</a>
+<a class="sourceLine" id="cb804-6" title="6">    <span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, </a>
+<a class="sourceLine" id="cb804-7" title="7">    <span class="dt">color=</span><span class="st">&quot;#002878&quot;</span></a>
+<a class="sourceLine" id="cb804-8" title="8">    )<span class="op">+</span></a>
+<a class="sourceLine" id="cb804-9" title="9"><span class="st">  </span><span class="kw">theme_classic</span>(</a>
+<a class="sourceLine" id="cb804-10" title="10">    </a>
+<a class="sourceLine" id="cb804-11" title="11">  )</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-414-1.png" width="672" /></p>
 </div>
 <div id="visualizing-residuals" class="section level3">
 <h3><span class="header-section-number">37.6.7</span> Visualizing residuals</h3>
 <p>Residuals are used to evaluate, visually, how well the model fits the data. For example, a linear model may not fit well some part of the data set.</p>
 <p>To create residual plots, we can grab the residual values (for completeness) and also the predicted values (to plot) for the <code>model</code> object by passing our model through the <code>residuals</code> and <code>predict</code> functions, respectively. Recall we created the object <code>model</code> above and promised that it could be put to a lot of use. We can call produce the data while simultaneously adding them to <code>data</code>, our original data frame:</p>
-<div class="sourceCode" id="cb801"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb801-1" title="1">data<span class="op">$</span>residuals &lt;-<span class="st"> </span><span class="kw">residuals</span>(model)</a>
-<a class="sourceLine" id="cb801-2" title="2">data<span class="op">$</span>predicted &lt;-<span class="st"> </span><span class="kw">predict</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb805"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb805-1" title="1">data<span class="op">$</span>residuals &lt;-<span class="st"> </span><span class="kw">residuals</span>(model)</a>
+<a class="sourceLine" id="cb805-2" title="2">data<span class="op">$</span>predicted &lt;-<span class="st"> </span><span class="kw">predict</span>(model)</a></code></pre></div>
 <p>To plot residuals, we just add things by layer:</p>
-<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb802-1" title="1"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(X, Y))<span class="op">+</span></a>
-<a class="sourceLine" id="cb802-2" title="2"><span class="st">  </span><span class="kw">geom_segment</span>(</a>
-<a class="sourceLine" id="cb802-3" title="3">    <span class="kw">aes</span>(<span class="dt">xend=</span>X, <span class="dt">yend=</span>predicted)</a>
-<a class="sourceLine" id="cb802-4" title="4">    )<span class="op">+</span></a>
-<a class="sourceLine" id="cb802-5" title="5"><span class="st">   </span><span class="kw">geom_smooth</span>(</a>
-<a class="sourceLine" id="cb802-6" title="6">     <span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, </a>
-<a class="sourceLine" id="cb802-7" title="7">     <span class="dt">size=</span><span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb802-8" title="8">     <span class="dt">se=</span>F, </a>
-<a class="sourceLine" id="cb802-9" title="9">     <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span></a>
-<a class="sourceLine" id="cb802-10" title="10">     )<span class="op">+</span></a>
-<a class="sourceLine" id="cb802-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>(</a>
-<a class="sourceLine" id="cb802-12" title="12">    <span class="dt">color=</span><span class="st">&quot;#002878&quot;</span>, </a>
-<a class="sourceLine" id="cb802-13" title="13">    <span class="dt">size=</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb802-14" title="14">    )<span class="op">+</span></a>
-<a class="sourceLine" id="cb802-15" title="15"><span class="st">  </span><span class="kw">geom_point</span>(</a>
-<a class="sourceLine" id="cb802-16" title="16">    <span class="kw">aes</span>(<span class="dt">y=</span>predicted), </a>
-<a class="sourceLine" id="cb802-17" title="17">    <span class="dt">color=</span><span class="st">&quot;#d28e00&quot;</span>, </a>
-<a class="sourceLine" id="cb802-18" title="18">    <span class="dt">size=</span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb802-19" title="19">    )<span class="op">+</span></a>
-<a class="sourceLine" id="cb802-20" title="20"><span class="st">  </span><span class="kw">theme_classic</span>(</a>
-<a class="sourceLine" id="cb802-21" title="21">    </a>
-<a class="sourceLine" id="cb802-22" title="22">  )</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-415-1.png" width="672" /></p>
+<div class="sourceCode" id="cb806"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb806-1" title="1"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(X, Y))<span class="op">+</span></a>
+<a class="sourceLine" id="cb806-2" title="2"><span class="st">  </span><span class="kw">geom_segment</span>(</a>
+<a class="sourceLine" id="cb806-3" title="3">    <span class="kw">aes</span>(<span class="dt">xend=</span>X, <span class="dt">yend=</span>predicted)</a>
+<a class="sourceLine" id="cb806-4" title="4">    )<span class="op">+</span></a>
+<a class="sourceLine" id="cb806-5" title="5"><span class="st">   </span><span class="kw">geom_smooth</span>(</a>
+<a class="sourceLine" id="cb806-6" title="6">     <span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, </a>
+<a class="sourceLine" id="cb806-7" title="7">     <span class="dt">size=</span><span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb806-8" title="8">     <span class="dt">se=</span>F, </a>
+<a class="sourceLine" id="cb806-9" title="9">     <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span></a>
+<a class="sourceLine" id="cb806-10" title="10">     )<span class="op">+</span></a>
+<a class="sourceLine" id="cb806-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>(</a>
+<a class="sourceLine" id="cb806-12" title="12">    <span class="dt">color=</span><span class="st">&quot;#002878&quot;</span>, </a>
+<a class="sourceLine" id="cb806-13" title="13">    <span class="dt">size=</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb806-14" title="14">    )<span class="op">+</span></a>
+<a class="sourceLine" id="cb806-15" title="15"><span class="st">  </span><span class="kw">geom_point</span>(</a>
+<a class="sourceLine" id="cb806-16" title="16">    <span class="kw">aes</span>(<span class="dt">y=</span>predicted), </a>
+<a class="sourceLine" id="cb806-17" title="17">    <span class="dt">color=</span><span class="st">&quot;#d28e00&quot;</span>, </a>
+<a class="sourceLine" id="cb806-18" title="18">    <span class="dt">size=</span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb806-19" title="19">    )<span class="op">+</span></a>
+<a class="sourceLine" id="cb806-20" title="20"><span class="st">  </span><span class="kw">theme_classic</span>(</a>
+<a class="sourceLine" id="cb806-21" title="21">    </a>
+<a class="sourceLine" id="cb806-22" title="22">  )</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-416-1.png" width="672" /></p>
 <p>The effect isn’t particular dramatic with this trivial data set, But these residual plots become much more interesting when working with more complex models or data sets with far more values and complexity. For example, if the residuals “fit” better on one end of the predictor scale but not the other, we would probably seek out a better model and see if that fits the data better.</p>
 
 </div>
