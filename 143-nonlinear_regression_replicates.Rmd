@@ -5,11 +5,15 @@ library(tidyverse)
 library(broom)
 library(viridis)
 library(knitr)
+library(nlfitr)
+library(minpack.lm)
 ```
 
 This chapter illustrates how to analyze independent replicates of nonlinear data while testing an hypothesis that a predictor variable changes an outcome response.
 
 To some extent, this is a chapter about munging a lot of data into a form for nonlinear regression. Then it provides one common approach to conducting statistical inference on the results.
+
+## The problem
 
 The scientific prediction is that exposing rats to cigarette smoke changes microsomal theophylline metabolism. Specifically, exposure of cigarette smoke will induce CYP2A1, leading to more rapid theophylline degradation. A hypothesis to test that prediction is that theophylline half-lives differ in microsomes from smoke exposed animals compared to unexposed.  
 
@@ -23,11 +27,11 @@ A non-saturating level of theophylline was added to microsomes and then measured
 
 If CYP1A2 is induced by cigarette smoke in this model, theophylline should decay faster. 
 
-One phase half-lives will be calculated by an exponential decay function 
+One phase half-lives will be calculated by an exponential decay function whose formula for regression in R is 
 
 \[y=y_{lo}+(y_{hi}-y_{lo})e^{-kx}+y_{lo}\] where `k` is the rate constant, `x` is time, in minutes, and `yhi` and `ylo` are the maximal and minimal levels of theophylline within each run.
 
-You might wonder how I knew to select this model for this problem? That comes from experience and scientific judgement. If you're interested in some phenomenon and notice someone is conducting nonlinear modeling, pay close attention to the nonlinear model they used!
+Someone might wonder how I knew to select this model for this problem? That comes from experience and scientific judgement. When we're interested in some phenomenon and notice someone is conducting nonlinear modeling, pay close attention to the nonlinear model they used!
 
 ## The dataset
 
@@ -84,9 +88,9 @@ theodata
 
 ### Plot the data
 
-It's a good idea to visualize each replicate prior any transformations. It's not clear from this view that cigarette smoke has any effect, is it? 
+It's a good idea to visualize each replicate prior any transformations. It's not clear from this view that cigarette smoke has any effect on half-life, is it? 
 
-```{r}
+```{r fig.cap="Replicate rat microsomal theophylline metabolism data."}
 ggplot(theodata, aes(min, theo, group=id))+
   geom_line()+
   geom_point(aes(color=smoke))+
@@ -104,7 +108,7 @@ output <- sapply(
   
   reps <- c("q", "r", "s", "t", "u", "v"),
   
-  function(reps) nls(theo~(yhi-ylo)*exp(-k*min)+ylo, 
+  function(reps) nlsLM(theo~(yhi-ylo)*exp(-k*min)+ylo, 
                      start=list(
                        yhi=200, 
                        ylo=50,
@@ -114,6 +118,20 @@ output <- sapply(
   simplify = F
 )
 
+```
+
+Here's how to do the same thing using `nlfitr`. The output includes parameter estimates for each of the independent replicates
+
+```{r}
+nloutput <- sapply(
+  
+  reps <- c("q", "r", "s", "t", "u", "v"),
+  
+  function(reps) fitdecay1(min, theo, data=subset(theodata, id==reps), 
+                           k=0.03, ylo=50, yhi=200, weigh=F),
+  simplify = F
+)
+nloutput
 ```
 
 ### Clean up regression results
@@ -130,12 +148,12 @@ The output for one nonlinear regression has a lot of extraneous information. The
 ```{r}
 
 onephaseFits <- bind_rows(
-  lapply(output, tidy)) %>% 
+  lapply(nloutput, tidy)) %>% 
   add_column(
     reps=rep(reps, each=3), 
     .before=T)
 
-kable(onephaseFits[seq(3,18,3),])
+kable(onephaseFits[seq(1,18,3),])
 ```
 
 ## T-test on half-lives
@@ -144,7 +162,7 @@ We now just need to create a results table for the half-lives, which we'll use t
 
 ```{r}
 results <- select(
-  onephaseFits[seq(3,18,3),], 
+  onephaseFits[seq(1,18,3),], 
   reps, 
   estimate
   ) %>% 
@@ -194,7 +212,7 @@ A couple of important things happen to the data on-the-fly within the ggplot fun
 
 This is a convincing result showing a marked effect of cigarette exposure on caffeine metabolism.
 
-```{r percent max replicate nonlinear regressions}
+```{r percent max replicate nonlinear regressions, message=FALSE}
 ggplot(theodatapm, aes(min, pmax, color=smoke, group=smoke))+
   stat_summary(fun.data= "mean_sdl", 
                fun.args = list(mult=1)
