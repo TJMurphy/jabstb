@@ -1,52 +1,26 @@
 # Non-linear regression introduction {#nonlinearintro}
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 library(tidyverse)
+library(nlfitr) #not on CRAN, devtools::install_github("TJMurphy/nlfitr")
+library(cowplot)
+library(minpack.lm)
 ```
 
-Nonlinear models are used to explain data arising from nonlinear processes. They are important since so many processes in biological systems are nonlinear. Nonlinear regression is a statistical method to fit nonlinear models to a data set that possesses a nonlinear relationship between predictor and response variables.
+Nonlinear regression is a statistical method to fit nonlinear models to the kinds of data sets that have nonlinear relationships between predictor and dependent variables. The regression fits produce estimates of the model parameters. These model parameters are useful because they provide a way to quantify some biological process (eg, rate and equilibrium constants, minimal and maximal responses, etc). 
 
-Recall that models are just mathematical equations that are useful to summarize data sets into simpler relationships.
+Nonlinear regression has added importance since biological systems tend to operate in nonlinear ways.
 
-Conceptually, statistical analysis involving nonlinear models is identical to that for linear models. As for linear models, regression customizes the fit of some nonlinear model to the data by solving for values of formula coefficients that fit the data best. These best fits are determined by a minimization of the sum of the squared residuals between the model values for the response and the experimentally-derived values.
+In general, models are just mathematical equations that describe how $Y$ is produced by $X$. In nonlinear regression we'll feed a model formula pairs of $X,Y$ data from an experiment. The model parameters responsible for giving nonlinear shape to the relationship between $X$ and $Y$ are then determined by the regression method.
 
-In R, think of the formula as a practical way to express a model. R regression functions require that you translate a model equation into a formula that it can read. A formula's coefficient values correspond to a model's parameters. 
+The statistical analysis involving nonlinear models is nearly identical to that for linear models. The regression technique itself customizes the fit of a chosen nonlinear model to some data produced in the lab. These best fits are determined by a minimization of the sum of the squared residuals between the model values for the response and the experimentally-derived values. The only difference is that nonlinear regression solves the problem iteratively, rather than mathematically.
 
-In turn, the parameters have biological meaning; they can be half-lives, equilibrium constants, affinities, site densities, maximal and minimal effect values, and so on. Which of these parameters is important to you depends upon the scientific objectives of your experiment. 
+A common misconception is that a data set is fed into some mythical omnibus function, which then identifies the right model and fits it to the data. 
 
-It's common to be interested in only a single parameter, but to get that from a model that has a handful of other parameters. That's ok. I'll illustrate a case like that for you.
+Nobody really has that one...yet. There are too many ways nonlinear data can happen, yet in biology, only some of these ways are important. Therefore, it takes the expertise of a researcher to select the right model for the data.
 
-There are many different nonlinear models to choose from that are routinely deployed for analysis of biological systems. Every model has parameters that carry specific biological meaning. 
+By important I mean that the models have some theoretical basis. Most of the time we're working on experiments where the right models to choose are obvious. For example, if we are doing enzyme kinetics we are probably using the Michaelis-Menten model. If we are doing binding assays we are using a model based upon the mass action law. And so on.
 
-To put all of this another way, nonlinear models give you the ability to parameterize data collected from nonlinear biological processes, and then use these parameters as outcome variables in hypothesis testing. Does some treatment you impose on a system alter the value of a parameter that operates within a nonlinear process?
-
-In some cases it is also useful to differentiate the fits of nested models to test hypotheses about which model fits better. This allows you to ask meaningful questions: Are there two affinity states in this system or one? Are there two decay phases or one? If there are two, what are the proportions for each? Does some predictor variable (mutated genes, different drug, presence of some co-factor) change any of these?
-
-Nonlinear regression modeling can be one of those deer-in-the-headlights moments in a course like this. 
-
-Chances are you haven't worked with nonlinear modeling previously, so you're unfamiliar with the basic concept of nonlinearity. These types of experiments tend to involve a lot more data points. The need to write formulas (rather than select them from a list in a GUI-based software) seems daunting. The statistical output seems more complicated. The statistical functions tend to be buggier, more prone to not working straight out of the box. All of that can be frustrating.
-
-But it is a lot easier than it looks. 
-
-```{r fig.align='center', fig.cap="Performing nonlinear regression requires some supervision on your part.", out.width="30%"}
-knitr::include_graphics("images/keep_calm.jpg")
-```
-
-
-It's not necessary to learn every nonlinear model. Chances are that if you need nonlinear regression in your work you're working with a given nonlinear system. You'll probably find yourself specializing in just one or a few models, which you'll get to know very well. And chances are you'll be using a well-understood, "off the shelf" model, rather than writing a new custom model.
-
-What is most important for now is to learn how to recognize nonlinear data, and to familiarize yourself with the process involved in choosing a correct model and then fitting it to your data.
-
-To this end, I strongly encourage you to go to the GraphPad Prism Statistics Guide to explore this world. GraphPad offers [an excellent comprehensive resource](https://www.graphpad.com/guides/prism/8/curve-fitting/index.htm?Reg_Classic_DR_variable.htm) for nonlinear regression, including a couple of dozen different functions. You may recognize the shape of your own data in some of these. All of the basic concepts that are part of solving nonlinear regression problems using the Prism software apply to using R (or any other software).
-
-To illustrate nonlinear regression for you, I'm going to focus on only two types of models: 1) hyperbolic stimulus-response models, and 2) first order nonlinear decay models. 
-
-They're chosen because they are the basis of a large number of biologic processes. Very few biological processes cannot be modeled by one or the other of these or by their close cousins.
-
-In the first case, I'll point out the importance of visualizing data to see how the model describes a relationship between predictor and response variables; to working with log-scales; and to giving you a sense of what model parameters can imply biologically.
-
-In the second case we'll use the models to deal with nonlinear time series data. The focus on this will be on running and interpreting nonlinear regression functions in R. We'll start that off with analysis of a single replicate. This will involve testing two nested models to decide if one fits the data better than another.
-
-Then we'll illustrate how to work with multiple independent replications of a time series. That will be used as a basis to illustrate how to conduct hypothesis testing and statistical inference on parameters derived from nonlinear regression.
+If there is no pre-existing theoretical framework, as a general rule, the nonlinear regression process is flexible enough to accept completely new models.
 
 ## Uses for nonlinear regression
 
@@ -56,13 +30,204 @@ There are three big reasons why you'd use nonlinear regression:
 * Interpolation (and simulation)
 * Conducting statistical inference
 
-Sometimes we have nonlinear data and all we want to do is draw a pretty line through the points. The objective is purely visual. Sometimes we'll run a model-based regression to get the pretty curve. Other times we'll use a smoothing regression that is, truly, just a pretty curve. You'll see how to do both of those below.
+Sometimes we have nonlinear data and all we want to do is draw a pretty curve through the points. The objective is purely visual. Sometimes we'll run a model-based regression to get the pretty curve. Other times we'll use a smoothing regression that is, truly, just a pretty curve. You'll see how to do both of those below.
 
-Other times we have measured values of $Y$ for which we want to impute values of $X$. That's achieved by nonlinear regression of an $X,Y$ standard curve (eg, ELISA), which is used to interpolate values for unknown samples. If you've ever done a protein assay you've probably done the linear regression version of this.
+Other times we have measured values of $Y$ for which we want to impute values of $X$. That's achieved by nonlinear regression of an $X,Y$ standard curve (eg, ELISA), which is used to interpolate values for unknown samples.
 
 Conceptually related to this is simulating nonlinear data for a range of $X$ values using a given model and fixed parameter values. There are several use cases for simulation. Perhaps the most important is in trying to write a custom model that looks like data you've generated. Or to figure out what a model really means, by playing with it as in a sandbox. There's no better way to learn it quickly than by simulating data with it. Extensions of this include creating explanatory or comparative figures, and performing Monte Carlo-based preplanning.
 
 The most common statistical use is to estimate the parameter values of the nonlinear model that best fits some sample data, and then conduct statistical inference on those values. These parameter values from our data represent "constants" that represent an important biological feature. 
+
+## Example of the process
+
+Some common laboratory phenomena in their pre-depletion states can be described using exponential growth models. For example, bacterial growth in culture, or the polymerase chain reaction.
+
+### It starts with nonlinear data
+
+We wish to estimate the growth rate and initial inoculate of a bacterial culture by taking aliquots at the indicated times through measuring optical density (A600 nm) on a spectrophotometer.
+
+We have a data set (`edata`) of $x, y$ pairs. The variable names are actually `hours` and `A600`, respectively, and plotted in panel A of the figure below. 
+
+The response $A600$ is clearly nonlinear on values of $hours$. 
+
+```{r include=FALSE}
+library(nlfitr)
+set.seed(1234)
+edata <- nlfitr::simhetegro(x=1:10, k=0.5, ylo=100, cv=0.25, reps=3)$data
+names(edata) <- c("hours", "predicted", "A600")
+edata <- select(edata, hours, A600)
+```
+```{r echo=FALSE, fig.cap="A. Primary nonlinear data looks exponential. B. Same data as A log-transformed looks linear."}
+p1 <- ggplot(edata, aes(hours, A600))+geom_point()
+p2 <- ggplot(edata, aes(hours, log(A600)))+geom_point()
+plot_grid(p1, p2, labels="AUTO")
+```
+
+### What nonlinear model describes that data? 
+
+We remember enough algebra to realize an exponential function could have produced something like the data in panel A. Consistent with this, natural log transformation of the values of $Y$ linearizes the response (see panel B in the figure). 
+
+We can write a general exponential growth model as follows: \[y=y_{min}\times e^{k*x}\] In this form the parameter $k$ is a constant with units of reciprocal $x$. The parameter $y_{min}$ is the lower asymptote, serving to estimate the value of $Y$ in the absence of $X$. Therefore, $k$ modifies the exponential rate by which $Y$ changes with $X$.
+
+The nonlinear regression method in general exists to obtain estimates for $k$ and $y_{min}$ from experimental data such as that shown in figure A. 
+
+That's useful when these model parameters have biological meaning. Sometimes we are interested in only $k$ or in $y_{min}$. Other times, both parameters are important in drawing some scientific picture. It depends on the project we're working on.
+
+### Fitting a model to data
+
+To get those estimates we run a regression to fit an exponential model to the data. 
+
+Here, we're using a fitting function from the `nlfitr` package. Why `fitegro` and not some other function? The function `fitegro` has the right model for this purpose. 
+
+```{r}
+myfit <- fitegro(x=hours, y=A600, data=edata, k=1, ylo=0, weigh=T)
+myfit
+```
+### Interpreting regression model output
+
+Let's go over that output.
+
+First of all, understand that `fitegro` is just a wrapper function for `nlsLM`, which is also a wrapper function for `nls`. It produces class "nls" R object. There is a lot more information produced through the regression besides the default `nls` output seen here. This additional information can be accessed by other generic functions (eg, `confint`, `summary`, `predict`, `residuals`, etc). See `?nlsLM` for more details.
+
+Second, it states the model, not in general terms, but in terms of the input variables. In spoken English reading from right to left, the model says, "fit this model to the A600 values". This is worthy of a look just to make sure we have the right model.
+
+The output estimates for the parameters k and ylo are the most important features of this regression output. They are what we most want. $k=0.5092 per hour$ while $ylo=77.08 in A600 units$
+
+We'll discuss later how we work with these parameter estimates statistically when doing experiments.  
+
+The fact that the regression converges to a solution is hopeful. It suggests a good fit but that's not always the case. It is important to look at that fit because sometimes regression can converge to an absurd solution.
+
+### Check the fit graphically
+
+As a first step, the bloody obvious test is the best way to assess a fit of the model to the data. That comes from looking at the regression fit graphically. Does that curve look good and right?
+
+In the code chunk below shows two regression fits. The blue line is similar to the fitted output, but not identical because it is unweighted. The regression for the blue line is actually performed within ggplot2's `geom_smooth` function. It's the way to go when doing unweighted regression.
+
+Some quirks. Note how the formula must be argued in a generic form. The ggplot `aes` previously defined x=hours and y=A600. Notice the start argument values, put there to make it easier to get the right solution. Without them the regression may or may not self start. I'd say that blue curve is a pretty good fit. But YMMV.
+
+Drawing the model that is the precise fit of the `fitegro` function is executed using the `stat_function`. Remember homework 4 when we did this with the dnorm function? We simply take the regression parameter values and pop them into a custom function.
+
+```{r fig.cap="Look at the model's curves to check on the fit."}
+ggplot(edata, 
+       aes(hours, A600))+
+  geom_point()+
+  geom_smooth(method=minpack.lm::nlsLM,
+      formula = "y ~ ylo*exp(k*x)", #note how this is a general formula
+      method.args = list(
+        start=c(ylo=77,k=0.5)),
+      se=F)+
+  stat_function(fun = function(.x) 77.0827*exp(.x*0.5092), color="red")
+```
+
+Notice how the red line is not equivalent to the blue line. That is the effect of weighted regression. 
+
+### Convergence?
+
+Now a word about the word convergence, which has pragmatic importance.
+
+Nonlinear regression in R (and commercial software) resolves parameter values by an iterative algorithm that converges onto the solution. Iterative minimization of the residual error via ordinary least squares lies at the core of this method. 
+
+The model these algorithms are actually working with has an added term for residual error, $\epsilon$
+
+\[y=y_{min}\times e^{k*x}+\epsilon\]
+
+The nonlinear regression algorithm calculates values for $y_{min}$ and $k$ that also give the lowest possible value of $\epsilon$. Best fit happens when the sum of the residual differences from the data points to the model's curve are minimized with any additional changes in $y_{min}$ and $k$.
+
+The software method takes the data along with starting parameter estimates fed by the researcher, calculates residuals, modifies those estimates, re-calculates residuals, modifies the parameter values again, and so on. Usually it takes a half-dozen or more of these cycles to converge on a stable minimization of residual error. It took 13 cycles in the example above.
+
+### Convergence is not idiot proof
+
+Getting regression to converge is the key. But did it converge correctly?
+
+It is important to understand that several factors influence how well regression goes and whether it converges. 
+
+The starting values the researcher suggests can affect how well convergence to a solution works. Bad estimates can cause convergence to not occur, or to veer off into a nonsense fit. 
+
+The fitting algorithm itself impacts whether there is convergence to a solution. Of the 4 options (see below), I think the Levenberg-Marquardt algorithm plays best with typical biological models and over a range of data from crappy to tight. YMMV. 
+
+Noisy data is hard to look at and even harder for the fitting algorithms to solve. When the data is crappy, don't expect a fit to work. This isn't reading tea leaves.
+
+Use as many data points as possible. Nonlinear regression feasts on data points. The more data points in a data set, the better things work. There are a few ways to do this. When the set has technical replicates, leave them all there. Don't average them. When doing time courses or dose-responses, add more time points or doses. 
+
+The number of parameters influences convergence. Every model parameter comes at the cost of a degree of freedom. A model with too many parameters and too few data points is probably not going to work. If there are only 6 dose levels, no replicates, and 4 parameters in the model, it is probably not going to converge. YMMV.
+
+Finally, when there are results, the question is did this function produce the the best fit? 
+
+Technically, yes, when convergence is achieved, by the standard of minimizing $\epsilon$, these parameter values are the best fit __of that model__. That is not the same as asking whether this model is the best for that data. There may be other models that fit better. Nested model nonlinear regression is a way to test if one of two related models fit. 
+
+The bottom line is that compared to the other statistical methods we've covered to this point in the course, nonlinear regression is bit more hands on. We have to know our models. We have to know our data. Which means we have to know what the model parameters mean, and we have to know what values we can reasonably expect for them.
+
+## Nonlinear models in general
+
+There are many different nonlinear models to choose from that are routinely deployed for analysis of biological systems. Every model has parameters that carry specific biological meaning.
+
+It's not necessary to learn every nonlinear model. Chances are that if we need nonlinear regression in our work we're working with a single model or maybe a pair. Chances are we'll need one that is a well-understood, "off the shelf" model, rather than writing a new custom model.
+
+The GraphPad Prism Statistics Guide offers [an excellent comprehensive resource](https://www.graphpad.com/guides/prism/8/curve-fitting/index.htm?Reg_Classic_DR_variable.htm) for nonlinear regression, including a couple of dozen different functions. You may recognize the shape of your own data in some of these. All of the basic concepts that are part of solving nonlinear regression problems using the Prism software apply to using R (or any other software).
+
+## nlfitr
+
+We (myself, Jessica Hoffman, Austin Nuckols and Lauren Jeffers) are working on a package called `nlfitr`. You can install the most current MVP (minimal viable product) onto your R version from Github. Our vision is for nlfitr to be a comprehensive resource for nonlinear regression in R.
+
+The ultimate goal of the package is to offer researchers off the shelf functionality in terms of specific models, along with the better behaved Levenberg-Marquardt algorithm. This can go a long ways towards making nonlinear regression in R easier.
+
+At its current stage, the functions in nlfitr fall into two classes: simulation or fitting functions. The simulation functions are intended to serve as sandboxes for learning how a given nonlinear model works. That's through playing with the model parameters and variables and see how that affects the curves. 
+
+These sim functions are also intended for use in experimental planning, such as establishing feasibility, Monte Carlo testing, and so on. The sim functions with heterscedastic simulation capability offer a way to simulate a very common feature of biological data...higher variance at higher input levels.
+
+The fitting functions are for fitting a given nonlinear model to some experimental data. In effect, they are wrapper functions for `nlsLM`. For the most part, they do the formula specification work for the user, which makes using nlsLM much easier.
+
+## Nonlinear regression functions in R
+
+From here on the assumption is the researcher wishes to use `nls` or `nlsLM` directly, and not `nlfitr`. This section also provides more information about nonlinear regression in R that is worth understanding.
+
+The main nonlinear regression functions in R are `nls` in the base `stats` package and also `nlsLM` from the `minpack.lm` package. `nlsLM` is a wrapper function for `nls`, designed to run virtually the same as `nls`. 
+
+### The fitting algorithms
+
+The fitting algorithms used in `nls` are the real engine in nonlinear regression. The three fitting algorithm options in `nls` include the Gauss-Newton, Golub_Pereyra and Port. `nlsLM` offers a fourth--the Levenberg-Marquardt. The details of these are beyond the scope. When they work, all four will give very close to the same results, but not exactly the same. 
+
+Pragmatically, their main differences is that they don't always work on a given dataset.
+
+The researcher can select among these to find one that solves their own nonlinear regression. Of the four, my general impression is that the Levenberg-Marquardt plays nicest, which means it is less likely to fail to reach convergence than the others. That explains why we use it in the `nlfitr` package. YMMV. 
+
+Let's just keep things simple for a moment and talk as if `nls` and `nlsLM` are the same thing and discuss the key features:
+
+### formula
+
+Nonlinear regression functions require the researcher to define a nonlinear formula.  A formula is a translation of a nonlinear model equation into a format that R can work with. For example, here again is the exponential model: \[y=y_{min}\times e^{k*x}\]
+
+Here is the corresponding general formula for nls: \[y \sim~ ylo*exp(k*x) \]
+
+When using the nls-based functions, the formula has to be modified further to correspond to the variables in the working dataset. For our bacterial growth example above we have to tell the `nlsLM` function exactly which variables to regress. Note how y and x in the formula are replaced by A600 and hours:
+
+```{r}
+nlsLM(A600~ylo*exp(k*hours), data=edata, start=list(ylo=100, k=1))
+```
+
+A point of confusion: ggplot has a different standard (see the graph above with the fitted curve). In geom_smooth, the formula is kept in general terms.
+
+### data
+
+We have experimental data as $x, y$ pairs. Both are continuous variables. Create a data frame that has a column for each. When the experiment has multiple replicates, whether independent or technical, list all replicates under either of the two columns. Add a third column with a replicate ID. 
+
+R differs from other software. You don't want a separate column for every replicate. `pivot_longer` is your friend.
+
+The column names can, and should, be natural. Name the variables as you would otherwise. There is no need to label them $X$ and $Y$. 
+
+### start
+
+Although nls can self Start without any hints for the values of the model parameters, it's usually best to feed a list of starting values. These get the iterations off on the right track. They only need to be rough guesses of what the final values might be.
+
+### weighting
+
+In OLS the data points that are furthest from the model's curve contribute more to the overall sums of squares. As a result, the curve tends to be "pulled" in the direction of these outliers. 
+
+It is very common for nonlinear biological data to have greater variation at higher values of responses than at lower values. Therefore, when we don't adjust for this heteroscedasticity the regression solutions are biased towards the data points in the sample that are further away from the curve. 
+
+Weighted nonlinear regression is just a method to discount this excessive variation and give all data points a more equal contribution to the overall regression solution. Weighted nonlinear regression minimizes the weighted sums of squares rather than minimizing the unweighted sums of squares.
+
+There are a variety of weighting schemes. The one recommended for continuous data is the reciprocal y^2 method. Reciprocation is a simple way of reducing variance without changing the relationship of a variables values. Thus, the sums of squares are minimized using $1/y^2$ values rather than $y$.
 
 ## Nonlinear models and parameters
 
@@ -70,19 +235,39 @@ A nonlinear model is just an equation or function that describes the relationshi
 
 ### Hyperbolic stimulus response functions
 
-I'll illustrate some aspects of nonlinear data, function parameters and plotting by discussing the general hyperbolic function, \[Y=\frac{y_{max}\times X^h}{K^h + X^h}\]
+The general hyperbolic function is, \[Y=\frac{y_{max}\times X^h}{K^h + X^h}\]
 
-This function, **and its many derivatives**, are used to model a diverse array of stimulus-response systems in biology. The basis of these phenomena is the mass action principle, $X+Y \rightleftharpoons  XY$, where $XY$ represents any response dependent upon both $X$ and $Y$. These include Michaelis-Menten enzyme kinetics, stimulus/dose-response phenomena, bi-molecular binding, and much more.
+This function, **and its many derivatives**, are used to model a diverse array of stimulus-response systems in biology, making it perhaps the most important mathematical relationship in the field.
 
-The equation has three parameters: The maximal value of $Y$ is estimated asymptotically as $y_{max}$. The parameter $K$ represents the value of $X$ that yields the half-maximal response,$\frac{y_{max}}{2}$. The Hill slope, $h$, operates in the function as an exponential coefficient. Therefore, it determines the steepness and the sign of the relationship between $Y$ and $X$. 
+The basis of these phenomena is the mass action principle, \[X+Y \rightleftharpoons  XY\], where $XY$ represents any response dependent upon both $X$ and $Y$. 
+
+These include Michaelis-Menten enzyme kinetics, stimulus/dose-response phenomena, bi-molecular binding, and much more.
+
+The equation has three parameters: The maximal value of $Y$ is estimated asymptotically as $y_{max}$. The parameter $K$ represents the value of $X$ that yields the half-maximal response, or $\frac{y_{max}}{2}$. The Hill slope, $h$, operates in the function as an exponential coefficient. Therefore, it determines both the steepness and the sign of the relationship between $Y$ and $X$. 
 
 Each of these parameters can have different physical meanings, depending upon the biological process that the hyperbolic function is applied to.
 
-For example, with bi molecular binding data, $y_{max}$ represents the number of binding sites or complexes, $XY$; $K$ represents the equilibrium dissociation constant, or affinity, between the two molecules; and the value of $h$ provides insights into whether the binding deviates from simple mass action. For example, the Hill slope value may suggest positive ($h>1$) or negative ($0<h<1$) cooperativity. Negative values of $h$ generate downward-sloping curves; for example, inhibition of $Y$ by $X$ occur when $h<0$.
+For example, with bi molecular binding data, $y_{max}$ represents the number of binding sites or complexes, $XY$; $K$ represents the equilibrium dissociation constant, or affinity, between the two molecules; and the value of $h$ provides insights into whether the binding deviates from simple mass action. For example, the Hill slope value may suggest positive ($h>1$) or negative ($0<h<1$) cooperativity. Negative values of $h$ generate downward-sloping curves; for example, inhibition of $Y$ by $X$ occur when $h<0$, and these can be very steep or shallow, too.
 
 Hyperbolic functions are responsible for graded responses that can occur over a wide range of values of the predictor variable. When plotted on a linear X-scale, the predictor-response relationship has a hyperbolic-like shape, thus their name. 
 
+```{r fig.cap="A. Linear scale plot of hyperbolic data. B. Log10 scale plot of hyperbolic data."}
+set.seed(1234)
+p1 <- simhetdr(x=c(1,3,10,30,100,300,1000,3000), k=100, ylo=100, yhi=300, h=1, cv=0.15, reps=3, log=F)
+set.seed(1234)
+p2 <- simhetdr(x=c(1,3,10,30,100,300,1000,3000), k=100, ylo=100, yhi=300, h=1, cv=0.15, reps=3, log=T)
+plot_grid(p1, p2, labels="AUTO")
+```
+
 The same data appear more 'S' shaped when plotted on a log x-scale. However, it is important to point out that extreme values of $h$ can dramatically change these more typical relationships. As values of $h$ get larger, the $Y$ response to $X$ is more switch-like than graded.
+
+```{r fig.cap="Influence of higher Hill slope. A. Linear scale plot of hyperbolic data. B. Log10 scale plot of hyperbolic data."}
+set.seed(1233)
+p1 <- simhetdr(x=c(1,3,10,30,100,300,1000,3000), k=100, ylo=100, yhi=300, h=2, cv=0.15, reps=3, log=F)
+set.seed(1234)
+p2 <- simhetdr(x=c(1,3,10,30,100,300,1000,3000), k=100, ylo=100, yhi=300, h=2, cv=0.15, reps=3, log=T)
+plot_grid(p1, p2, labels="AUTO")
+```
 
 S-shaped curves have lower and upper plateaus. These plateau values correspond to the `ylo` and `yhi` parameter values that you'll see in the formulas for the nonlinear models below. The span between the plateaus represents the dynamic range of the response variable, $y_{max}=yhi-ylo$. 
 
@@ -100,7 +285,7 @@ I strongly urge you to use this code chunk as a sandbox. Leave the formula alone
 
 The two graphs plot identical values for both the $Y$ and $X$ variables. The only difference is the plotting background, one is log scale and the other is not. Note how that is accomplished using ggplot arguments. You can think of the plot on the left as being drawn on linear graph paper, and the one on the right as being drawn on semi-log graph paper. The latter rescales the x-variable without changing it's values.
 
-```{r fig.show="hold"}
+```{r fig.cap="A closer look at linear log10 scaling."}
 x <- c(1e-8, 3e-8, 1e-7, 3e-7, 1e-6, 3e-6, 1e-5)
 
 #initial values, arbitrary units
@@ -113,7 +298,7 @@ yhi <- 330
 y <- ylo+ ((yhi-ylo)*x^h)/(k^h+x^h)
 
 #linear x scale
-ggplot(
+p3 <- ggplot(
   data.frame(x, y), 
   aes(x, y))+
   geom_point(size=4, color="#f2a900")+
@@ -121,13 +306,15 @@ ggplot(
   labs(title="Linear scale")
 
 #log10 x scale
-ggplot(
+p4 <- ggplot(
   data.frame(x, y), 
   aes(x, y))+
   geom_point(size=4, color="#f2a900")+
   #scale_x_log10()+
   scale_x_continuous(trans="log10", limits= c(1e-8, 1e-5))+
   labs(title="Log10 scaled aesthetic", x="log10[X]")
+
+plot_grid(p3, p4, labels="AUTO")
 ```
 
 #### LogX scaling the hyperbolic function
@@ -162,34 +349,6 @@ ggplot(
   labs(title="Linearized X scale by log10(X) transform")
 ```
 
-#### Simulating hyperbolic data with random variation
-
-Sometimes it's useful to simulate more realistic data possessing random variation (eg, Monte Carlo simulation). In fact, it's not possible to run the`nls` function to draw simulated curves using perfect data. 
-
-Simply add a random term (`rnorm()`), in units of $Y$, to the formula for the hyperbolic model as shown below:
-
-```{r}
-x <- log10(c(1e-8, 3e-8, 1e-7, 3e-7, 1e-6, 3e-6, 1e-5))
-#x <- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)
-
-h <- 1
-
-logk <- log10(3e-7)
-
-ylo <- 30
-yhi <- 330
-
-#hyperbolic function
-y=ylo+(yhi-ylo)/(1+10^((logk-x)*h)) + rnorm(length(x), 0, 45)
-
-ggplot(
-  data.frame(x, y), 
-  aes(x, y))+
-  geom_point(size=4, color="#f2a900")+
-  labs(title="Linearized X scale by log10(X) transform")
-
-
-```
 #### Creating a best fit curve in graph
 
 It's very simple to generate an on-the-fly best fit curve using ggplot. This doesn't yield regression output and parameter values, but it does draw a pretty picture.
@@ -226,7 +385,7 @@ ggplot(
                         ylo=50,
                         logk=-7)
                                ),
-              se=F, #you need this line for nls smooths!!
+              se=F, #you need this line for nls graphs and it is not obvious!!
               color="red"
     
   )+
@@ -265,59 +424,31 @@ ggplot(data.frame(x,y), (aes(x, y)))+
   labs(y="mRNA levels", x="time, min")
 ```
 
-## How do regression fits happen?
-
-Now let's turn our attention to the regression, proper.
-
-The short answer for fitting is usually by the least squares method. That's the case for R's`nls` and `nlsLM` functions. An alternative method uses maximum likelihood estimation. That's used in generalized linear model regression. At some point I'll need to cover MLE in detail, but for now, [here is a good sandbox introduction to MLE with R](https://www.r-bloggers.com/fitting-a-model-by-maximum-likelihood/).
-
-For least squares, the fitting involves iterative cycles. Each cycle permutes values for the function's parameter(s). Each cycle ends with a check to see if the sum of the squared residual difference between the values of $y$ and its corresponding model value, $\hat y$, over each level of $x$ have been minimized. This process continues until "the least squares solution" is arrived at. After this point, the fit cannot be improved, having reached the "best fit" solution.
-
-There are different algorithms used for least squares regression. The [Levenberg-Marquardt algorithm](https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm) is used in `nlsLM`, whereas `nls` operates on the [Gauss-Newton algorithm](https://en.wikipedia.org/wiki/Gauss%E2%80%93Newton_algorithm) as default, while offering two others as options.
-
-Nonlinear regression functions can fail in two basic ways. The least squares fitting algorithm can error out, failing to reach a solution. There can be many reasons for that. The error codes are often cryptic and don't suggest an immediate solution.
-
-Alternately, the algorithm arrives at a nonsense solution that hone in on and 'fit' nonsense parameter values to the data. You don't receive an error code for this. You can only detect these by looking at the results to see the parameter value estimates don't make any sense. This takes judgement. Is the dynamic range consistent with what you know about he data? Do the rate constants make sense with what you know about the data? 
-
-Both of these errors require some attention to overcome.
-
-#### Troubleshooting
-
-Chances are you need to twiddle with the formula. It may be missing a parentheses or something else, and thus calculating a value for `y` that you don't intend. Once you are sure the formula is correct, next evaluate your `start list`. The values you entered may be off too much, and you need to feed it better start estimates. Next, try different algorithms (`plinear` or `port` or the L-M in `nlsLM`). Or you can toggle some `control` arguments, or perform a weighted analysis. 
-
-Do you have enough degrees of freedom for the model? Models with more parameters need more degrees of freedom to have a better chance at fitting. Rather than regressing on an average of technical replicates, run your regression using all technical replicate values, which doubles your degrees of freedom. If none of this helps, you may not have data that is fittable by a complex model. In that case, choose a simpler model instead. 
-
-Simulation *a priori* is the best way to know how many data points are necessary to test a given model. A three parameter model can be fit by a bit fewer than 12 well-behaved $x,y$ pairs. A five parameter model might be solvable with twice that many, and could likely need more degrees of freedom. It all depends on the model and the quality of the data. 
-
-Finally, and **most importantly**, most fitting problems can be avoided by proper experimental design. Design experiments with several data points that "bracket" the expected parameter values symmetrically. This is done by choosing appropriate values of the $X$ variable for which to collect responses. This usually entails conducting one or a few preliminary 'scoping' experiments to get a sense of the curves shape.
-
-For example, let's say the goal of the experiment is to estimate $K$ which is in units of the predictor, $X$. Assuming you have some general idea of what value for $K$ to expect, test a handful of values for $X$ each on both side of $K$ in your experiment. $K$ would be a mid-point on a graph, with about 5 or so data points each to its left and right. 
-
-If most of the data points are on a plateau phase, the regression might hone in on an artifact in that region and solve that. When the parameter value of interest is within a data point desert, it might be lost for good!
-
 ### Selecting the right model
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="Choosing the right model for your data is a scientific decision."}
 knitr::include_graphics("images/nonlinear_model_choices.jpg")
 ```
 
-Once you realize you have a nonlinear process, you'll need to lean on your scientific judgement to select the most appropriate model. Simply reach up to your metaphorical equation shelf to select one. Do this based upon your expertise (or willingness to become an expert!) with the biological system.
+We lean on scientific judgement to select the most appropriate nonlinear model for our data. Simply reach up to our metaphorical equation shelf to select one based upon our expertise (or willingness to become an expert) with the biological system.
 
-As I mentioned before, if you don't know what model to use, first take a look at [GraphPad's nonlinear regression guide](https://www.graphpad.com/guides/prism/8/curve-fitting/index.htm?REG_Exponential_decay_2phase.htm). 
+At some point, `nlfitr` will be such a book shelf. Fork it on Github and keep an eye on our progress. Or write your own function and send a pull request to have it incorporated into the package. Whatever.
 
-If the model you need is not there, you've got something pretty unusual and will need to create one. That's doable, [but usually not straightforward](https://stats.stackexchange.com/questions/62995/how-to-choose-initial-values-for-nonlinear-least-squares-fit).
+As I mentioned before, when unclear on what model to use inspiration can be found at [GraphPad's nonlinear regression guide](https://www.graphpad.com/guides/prism/7/curve-fitting/reg_a_guide_to_nonlinear_regressio.htm). 
 
-With R, the next step is to convert that model into a formula readable by the `nls` function. You'll also want to learn how to plot the function, as above. Finally, it's important to get familiar with working with log-transformations, plotting on log transformed scales, and so forth. Because nonlinear is synonymous with loggier.
+If the model you need is not there, you've probably got something pretty unusual and will need to create one. That's doable, [but usually not straightforward](https://stats.stackexchange.com/questions/62995/how-to-choose-initial-values-for-nonlinear-least-squares-fit).
 
 ### From models to formulas
 
-This section provides a potpourri view of nonlinear models. It focuses on translating nonlinear model equations into a formula needed to operate within a nonlinear regression function in R. These R functions (e.g., `nls` or `nlsLM`) require the user to enter a formula argument. They don't have the formulas for you to choose. You need to provide one.
+This section provides a potpourri view of nonlinear models. It focuses on translating nonlinear model equations into a formula needed to operate within a nonlinear regression function in R. 
+
+#### Michaelis-Menten
 
 Take for example the generic hyperbolic model, which has many descendants and cousins. For example, one descendant is the Michaelis-Menten model for reaction kinetics: \[v=\frac{V_{max}\times S}{K_M + S}\] 
 
-The velocity of a reaction $v$ at a given substrate concentration $S$ is bounded by the enzymes $K_m$ and maximal velocity $V_{max}$. An experiment typically involves measuring product formation under initial velocity conditions over a broad range of substrate concentrations. The goal of the experiment to derive estimates for $V_{max}$ and $K_m$. Nonlinear regression is needed to get those estimates.
+The initial velocity of a reaction $v$ at a given substrate concentration $S$ is bounded by the enzymes $K_m$ and maximal velocity $V_{max}$. An experiment typically involves measuring product formation under initial velocity conditions over a broad range of substrate concentrations. The goal of the experiment to derive estimates for $V_{max}$ and $K_m$. Nonlinear regression is needed to get those estimates.
 
-Here's a generalized formula readable by R's nonlinear regression functions that can be used to regress Michaelis-Menten data: `y=ylo+((yhi-ylo)*x)/(K+x)`
+Here's a generalized formula readable by R's nonlinear regression functions that can be used to regress Michaelis-Menten data: \[y=ylo+((yhi-ylo)*x)/(K+x)\]
 
 The value of $Y$ at it's lowest and highest levels are `ylo` and `yhi`, respectively. The difference between those two values is the amplitude or dynamic range of the data, `y_{max}`, which corresponds to $V_{max}$. The regression solves values for `ylo` and `yhi`. Later, you can calculate`y_{max}`.
 
@@ -381,12 +512,12 @@ ggplot(data.frame(x,y), aes(x,y))+
 
 Finally, a model for inhibition on a log10 scale would be:
 
-$Y=\frac{Y_{max}}{1+10^{(X-log10(K))*h}}$
+\[Y=\frac{Y_{max}}{1+10^{(X-log10(K))*h}}\]
 
-`y=ylo+(yhi-ylo)/(1+10^(x-log10(K))*h)`
+Its formula is `y=ylo+(yhi-ylo)/(1+10^(x-log10(K))*h)`
 
 ```{r fig.show="hold"}
-x <- log10(c(1:60))
+x <- log10(seq(1,600, 10))
 
 ylo <- 0
 yhi <- 1
@@ -432,7 +563,7 @@ ggplot(data.frame(x, y), aes(x,y))+
   labs(y="Log10(y)")
 ```
 
-#### Rythmic functions
+#### Rhythmic functions
 
 Rhythmic phenomena can be modeled using sine-wave function for given amplitudes $\alpha$, wavelengths $\lambda$ and/or frequencies $\frac{1}{\lambda}$ and phase shifts $\varphi$: \[Y=\alpha sin\frac{2\pi}{\lambda}X+\varphi\]
 
