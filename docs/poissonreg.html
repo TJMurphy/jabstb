@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 A Brief History of Experimental Design | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <title>Chapter 44 Poisson regression | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
   <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 A Brief History of Experimental Design | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:title" content="Chapter 44 Poisson regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 A Brief History of Experimental Design | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta name="twitter:title" content="Chapter 44 Poisson regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
   
   <meta name="twitter:description" content="Experimental biostatistics using R." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="author.html"/>
-<link rel="next" href="software.html"/>
+<link rel="prev" href="mixedlogistic.html"/>
+<link rel="next" href="surv.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -832,38 +832,176 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="history" class="section level1">
-<h1><span class="header-section-number">Chapter 2</span> A Brief History of Experimental Design</h1>
-<p>Researchers in the pre-statistics days lacked the statistical framework that today’s researchers take for granted. Our ancestor scientists were remarkably adept at the scientific method, in making observations, and in collecting data with great care. However, they struggled with designing experiments, in summarizing the data, and in drawing unbiased inference from it.</p>
-The statistical approach to experimental design we use today was first enumerated about a century ago, largely by Sir RA Fisher. His story is interesting in part because it is just so classically accidental.
-<div class="figure"><span id="fig:unnamed-chunk-4"></span>
-<img src="images/ra_fisher.jpg" alt="RA Fisher in 1913, from the [Adelaide Digital Archive](https://digital.library.adelaide.edu.au/dspace/handle/2440/3860)" width="146" />
-<p class="caption">
-Figure 2.1: RA Fisher in 1913, from the <a href="https://digital.library.adelaide.edu.au/dspace/handle/2440/3860">Adelaide Digital Archive</a>
-</p>
+<div id="poissonreg" class="section level1">
+<h1><span class="header-section-number">Chapter 44</span> Poisson regression</h1>
+<div class="sourceCode" id="cb973"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb973-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb973-2" title="2"><span class="kw">library</span>(COUNT)</a></code></pre></div>
+<p>Poisson regression is analogous to logistic regression. Both are for outcome variables that are discrete. Whereas logistic regression is conducted when the dependent variables are proportions, Poisson regression operates on discrete counts representing frequency data. These have been <a href="data.html#data">discussed previously in some detail</a>. They are variables representing events counted in some time or space.</p>
+<p>The method we’ll use to conduct Poisson regression analysis is the generalized linear model. This will involve the functions <code>glm</code> for regular regression or <code>glmer</code>for mixed model regression. Mixed model is just regression jargon for repeated/related measures.</p>
+<p>The Poisson regression models that we’ll cover are also known as log linear models.</p>
+<p>In this chapter we’ll deal with the statistical analysis of experiments that generate count data and involve three or more predictor groups. Think of this as the ANOVA equivalent but for count data.</p>
+<div id="why-not-anova" class="section level2">
+<h2><span class="header-section-number">44.1</span> Why not ANOVA?</h2>
+<p>A very common mistake is for researchers to conduct parametric tests (t-tests, ANOVA, linear and general regression) on count data, either directly or after transformation to percents or some other pseudo-continuous scale. In other words, they take the averages of counts, calculate their standard deviations and standard error of means, variances, and so forth.</p>
+<p>This can be a mistake for a few reasons. First, counts are discrete whereas parametric tests should be reserved for continuous variables. Second, count data is frequently skewed. Parametric tests assume normally-distributed variables. Third, count data are lower-bounded at zero. It is not possible to have negative counts or counts of events that do not happen. This becomes a problem in two ways. Some variables represent low frequency events in which zero values or values near zero are common. With such data parametric regression will sometimes ‘predict’ coefficients with negative values, which are absurd.</p>
+<p>This touches on a more generally important phenomenon. When count data is transformed to continuous scales and compared to Poisson regression analysis of the same data, although type1 error rates are probably no different for well-powered studies, <a href="https://onlinelibrary.wiley.com/doi/epdf/10.1002/ece3.3807">the estimates for effect sizes can be far off of the mark compared to the coefficients produced via Poisson regression</a>. This calls for using Poisson regression over transformation and parametric testing.</p>
+<div id="counting-markers" class="section level3">
+<h3><span class="header-section-number">44.1.1</span> Counting markers</h3>
+<p>For example, we are interested in whether cells bear a certain marker. We have some method to label that marker and then count cells in a sample that show it. We are interested in knowing whether various treatments influence the expression of that marker, from stimuli, to suppression or activation of genes, to strain of animal and more. All experiments with the technique generate frequency measurements. If the technique involves a fluorescent probe, we don’t confuse the intensity of fluorescence, which is a continuous variable, for whether the signal satisfies a threshold so that it deserves to be counted.</p>
 </div>
-<p>At the outset of his career Fisher did not foresee authoring the foundational principles of experimental design and statistics practiced by most of us today. He took that trajectory by accident.</p>
-<p>For about five years after graduating from Cambridge, Fisher worked as a census bureaucrat and part time math teacher.</p>
-<p>He was smitten by Darwin’s theory of evolution, which was the hot discovery of the day, of course. Fisher’s side hustle was to work on mathematical problems related to evolutionary genetics. Today, we would probably recognize him as a hobbyist quantitative geneticist or perhaps even as one of the first bioinformaticians. That’s certainly where his career ambitions seem laid. He never lost an interest in evolution and would go on to become, unfortunately, a prominent eugenicist. The take-away from that, alone, is that statistics is not a fool-proof antibias framework.</p>
-<p>Still, one big contribution he made during this early stage was no small feat. He defined variance and its relationship to the mean of a population. He proposed that variance is useful as a descriptive statistic for the variability within a population. Further developed, it would soon become the foundation of the powerful multigroup experimental designs that are called ANOVA, the analysis of variance, which are widely used today in the biomedical sciences.</p>
-<p>In 1919 Fisher was hired as a temporary statistician by Sir John Russell, the new director of the Rothamsted Experimental Research center in England.</p>
-<p>After decades of underfunding Rothamsted had become a bit rundown. Russell, an agricultural chemist who today we would probably categorize as a biochemist, was hired to beef up postwar (WWI) agricultural research in the UK. Upon arrival he realized the station had a large repository of data. Fully expecting to create even more under his leadership. Russell believed bringing a mathematician on board could help him make sense of this data they already had on hand.</p>
-<p>Thus, Russell hired Fisher to take a temporary position. Today, we would recognize Fisher early in his Rothamsted role as a freelance data scientist charged with conjuring meaning from reams of the station’s data, some of which represented serial agricultural experiments that had been running for decades.</p>
-<p>As he dug in Fisher saw a lot of flaws in the Rothamsted dataset. He had difficulty making sense of much of it. Mostly because the experiments were, in his view, so poorly designed the results were uninterpretable. If that sounds at all familiar then I’ve achieved my objective for mentioning it. There’s nothing worse than spending months of painstaking effort collecting data that can’t be analyzed.</p>
-<p>Here’s when the paradigm shifted. Fisher began to think about the process by which experimental data <strong>should</strong> be collected. Almost immediately after digging into his Rothamsted work he invented concepts like confounding, randomization, replication, blocking, the latin square and other factorial designs. As I mentioned above, his invention of the <strong>analysis of variance</strong> extended his prior work on variance. The procedure of maximum likelihood estimation soon followed, as well.</p>
-<p>It was a truly remarkable period. In 1925 Fisher published a small book, <a href="https://psychclassics.yorku.ca/Fisher/Methods/"><em>Statistical Methods for Research Workers</em></a>. In 1934 he published its extension, <a href="https://www.phil.vt.edu/dmayo/PhilStatistics/b%20Fisher%20design%20of%20experiments.pdf"><em>Design of Experiments</em></a>. In these works lay the foundations of how researchers today approach their experiments. His statistical procedures, developed with agricultural science in mind, would soon cross oceans…and then disciplines.</p>
-<p>It is telling that the first academic statistics department was at Iowa State University, in the heart of the corn belt, in the 1920’s. George Snedecor started it. George Snedecor is also the author of the F-distribution and the F-test, which is used to make decisions on ANOVA experimental designs. By the 1950’s statistical methods were spreading rapidly through the medical literature.</p>
-<p>Today, experiments that we would recognize as statistically rigorous are those in which Fisher’s early principles operate as procedures. We know today that randomization and pre-planned levels of replication are essential for doing unbiased research. The block ANOVA designs he mapped out then are among the most common experimental designs that we see in the biological and biomedical literature today.</p>
-<p>There’s much more to this history, including many additional players and plenty of controversy that remains unsettled to this day. I emphasize Fisher mostly because his experimental design and analysis procedures remain the standard for prospective experiments today.</p>
+<div id="counting-depolarizations" class="section level3">
+<h3><span class="header-section-number">44.1.2</span> Counting depolarizations</h3>
+<p>Every biological scientist learned in middle school that the depolarization of an excitable cell is an all or none phenomenon.</p>
+<p>We poke a neuron or some other excitable cell with an electrode. We stimulate with a current or some other stimulus and count the number of times the cell depolarizes in response. We repeat this paradigm under a variety of treatment conditions. We might be interested in how a drug or a gene or co-factor or anything else influences the number of depolarizations.</p>
+<p>These are just plain old counts. Discrete. Non-continuous. All or none event. We don’t have any information on the number of times the cell fails to depolarize. From one condition or replicate to another the counts have only integer values. There are no decimal places in any row of the data set.</p>
+</div>
+<div id="lever-presses" class="section level3">
+<h3><span class="header-section-number">44.1.3</span> Lever presses</h3>
+<p>In behavioral research subjects can be trained to request more of a reward by pressing a lever. The technique is common in addiction research, for example.</p>
+<p>The protocol involves recording the number of times the test subjects presses a lever to request a reward from the researcher. We are interested in how different variables, such as pyschostimulants, influence this reward-seeking behavior.</p>
+<p>We don’t have a count for all of the cells or places that don’t bear the marker of interest. We can’t count the number of times the cell fails to depolarize. We can’t count the number of times a subject does not press the lever. But we do have a record of the frequency of events in response to treatments.</p>
+</div>
+</div>
+<div id="the-poisson-generalized-linear-model" class="section level2">
+<h2><span class="header-section-number">44.2</span> The Poisson generalized linear model</h2>
+<p>The Poisson distribution is frequently used to model count data. When <span class="math inline">\(Y\)</span> is the number of discrete counts the Poisson probability distribution is <span class="math display">\[f(y)=\frac{\mu^ye^{-\mu}}{y!}\]</span> where <span class="math inline">\(\mu\)</span> is the average number of occurrences and <span class="math inline">\(E(Y)=\mu=var(Y)\)</span>. In Poisson regression the effects of predictors on <span class="math inline">\(Y\)</span> are therefore modeled through the parameter <span class="math inline">\(\mu\)</span>.</p>
+<p>Poisson model assumes sets of counts to be compared come from an equivalent exposure. For example, the few cells that take up a specific marker dye are counted on a culture plate. These counts come from a fixed area of the plate containing unstained cells. The total number of cells in this area bounds the exposure. Although the count data are not ratio transformed for analysis, such as counts per <span class="math inline">\(mm^2\)</span>, they might latter referred to by their exposure as “depolarizations over three minutes”. That there is an equivalent exposure is an underlying assumption of the Poisson generalized linear model: <span class="math display">\[E(Y_i)=\mu_i=n_i\theta_i\]</span></p>
+<p>Here <span class="math inline">\(Y_i\)</span> is the number of stained cells in response a set of conditions. This depends on a product between the total number of cells <span class="math inline">\(n_i\)</span> within the counting area and other conditions <span class="math inline">\(\theta_i\)</span> that influence the counts. Indeed, <span class="math inline">\(\theta_i\)</span> depends upon the predictor variables as <span class="math display">\[\theta_i=e^{\beta_1 X_1+\beta_2 X_2+..\beta_p X_p}\]</span> The generalized linear model is <span class="math display">\[E(Y)=\mu_i=n_ie^{\beta_1 X_1+\beta_2 X_2+..\beta_p X_p}\\Y_i\sim Po(\mu_i)\]</span> and the link function is the natural logarithmic function: <span class="math display">\[log(\mu_i)=log(n_i)+\beta_1 X_1+\beta_2 X_2+..\beta_p X_p\]</span></p>
+</div>
+<div id="length-of-hospital-stay" class="section level2">
+<h2><span class="header-section-number">44.3</span> Length of hospital stay</h2>
+<p>The <code>azpro</code> data set in the <code>COUNT</code> package counts the length of hospital stay, in days, of patients treated for coronary disease. Days are counted as discrete integer values.</p>
+<p>One of the predictor variables is procedure, which is either a percutaneous transluminal coronary angioplasty (PTCA) or a coronary artery bypass graft (CABG).</p>
+<p>This histogram shows the length of hospital stay variable (los), with patients colored on the basis of procedure (0=PTCA, 1=CABG). The two distributions are low bounded at zero, overlap extensively but not exactly, and show the typically Poisson-like left-leaning skewed shape.</p>
+<div class="sourceCode" id="cb974"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb974-1" title="1"><span class="kw">data</span>(azpro)</a>
+<a class="sourceLine" id="cb974-2" title="2"></a>
+<a class="sourceLine" id="cb974-3" title="3"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(azpro))<span class="op">+</span></a>
+<a class="sourceLine" id="cb974-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x=</span>los, <span class="dt">fill=</span><span class="kw">as.factor</span>(procedure)), <span class="dt">binwidth=</span><span class="dv">1</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb974-5" title="5"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span><span class="kw">c</span>(<span class="st">&quot;#002878&quot;</span>, <span class="st">&quot;#d28e00&quot;</span>))<span class="op">+</span></a>
+<a class="sourceLine" id="cb974-6" title="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Length of stay, days&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-510-1.png" width="672" /></p>
+<p>To keep things simple, we’ll start by regressing length of stay only on the procedure and admit variables. Together, they provide k=4 groups of predictor variables.</p>
+<p>This asks whether the length of stay differs due to both the procedure type and admit condition.</p>
+<div class="sourceCode" id="cb975"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb975-1" title="1">modpa &lt;-<span class="st"> </span><span class="kw">glm</span>(los<span class="op">~</span>procedure<span class="op">+</span>admit, <span class="dt">family=</span>poisson, <span class="dt">data=</span>azpro)</a>
+<a class="sourceLine" id="cb975-2" title="2"><span class="kw">summary</span>(modpa)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = los ~ procedure + admit, family = poisson, data = azpro)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -3.3427  -1.1413  -0.4825   0.5084  12.2296  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  1.40475    0.01334  105.31   &lt;2e-16 ***
+## procedure    0.94910    0.01215   78.08   &lt;2e-16 ***
+## admit        0.34265    0.01207   28.38   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 16265.0  on 3588  degrees of freedom
+## Residual deviance:  9089.2  on 3586  degrees of freedom
+## AIC: 22601
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+<div id="output-interpretation" class="section level2">
+<h2><span class="header-section-number">44.4</span> Output interpretation</h2>
+<p>Ideally, the deviance residuals would be symmetrically distributed, as log normal. That’s not the case here. This could be a sign that the Poisson model is not a good one for this data. Perhaps due to over-dispersion.</p>
+<p>The values for the coefficient estimates are log counts. The log count for the effect of procedure is 0.949, when exponentiated it is equivalent to about 2.5 days.</p>
+<p>Each coefficient has an Wald test to determine if the coefficient value differs from zero. They do.</p>
+<p>The interpretation is that a one unit change in procedure adds log count 0.949 days to the length of stay. Since PCTA is keyed as 0 and CABG as 1, this means that the CABG procedure extends the length of stay about 2.5 days compared to PCTA.</p>
+<p>The admit status also matters. This variable was keyed at 0 = elective and 1 = urgent. The log count for admit is 0.342, or about 1.4 days. Thus, and urgent admit extends the length of stay about 1.4 days relative to an elective admit.</p>
+<p>Whether the intercept differs from zero is usually not interesting. This coefficient represents the log count of days that are not explained by the model. The intercept inflates as the predictor variables are removed, as shown below.</p>
+<div class="sourceCode" id="cb977"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb977-1" title="1">modp &lt;-<span class="st"> </span><span class="kw">glm</span>(los<span class="op">~</span>procedure, <span class="dt">family=</span>poisson, <span class="dt">data=</span>azpro)</a>
+<a class="sourceLine" id="cb977-2" title="2"><span class="kw">summary</span>(modp)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = los ~ procedure, family = poisson, data = azpro)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -3.3517  -1.4993  -0.5318   0.5354  12.9430  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  1.64093    0.01007  163.03   &lt;2e-16 ***
+## procedure    0.92563    0.01213   76.31   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 16265.0  on 3588  degrees of freedom
+## Residual deviance:  9925.1  on 3587  degrees of freedom
+## AIC: 23435
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>And the intercept is reduced further as more variables are factored into the regression.</p>
+<div class="sourceCode" id="cb979"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb979-1" title="1"><span class="kw">summary</span>(<span class="kw">glm</span>(los<span class="op">~</span><span class="st"> </span>procedure <span class="op">+</span><span class="st"> </span>admit <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>age75 <span class="op">+</span><span class="st"> </span>hospital, <span class="dt">family=</span>poisson,  <span class="dt">data=</span>azpro))</a></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = los ~ procedure + admit + sex + age75 + hospital, 
+##     family = poisson, data = azpro)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -3.1981  -1.2081  -0.4208   0.4802  12.6572  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  1.4566687  0.0212952  68.404   &lt;2e-16 ***
+## procedure    0.9602916  0.0122175  78.600   &lt;2e-16 ***
+## admit        0.3266013  0.0121244  26.937   &lt;2e-16 ***
+## sex         -0.1239367  0.0118125 -10.492   &lt;2e-16 ***
+## age75        0.1222160  0.0124491   9.817   &lt;2e-16 ***
+## hospital    -0.0001489  0.0030984  -0.048    0.962    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 16265.0  on 3588  degrees of freedom
+## Residual deviance:  8874.1  on 3583  degrees of freedom
+## AIC: 22392
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>Of all the variables, only the hospital is inconsequential. Furthermore, hospital length of stay is reduced 0.124 log counts for males relative to females. All other factors increase the length of stay.</p>
+<p>Finally we can test whether one nested model is a better fit than another. The result below indicates that the addition of the admit factor improves the model fit compared to its absence.</p>
+<div class="sourceCode" id="cb981"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb981-1" title="1"><span class="kw">anova</span>(modp, modpa, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: los ~ procedure
+## Model 2: los ~ procedure + admit
+##   Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    
+## 1      3587     9925.1                          
+## 2      3586     9089.2  1   835.86 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>However, the result below illustrates the addition of a factor to the model that does not improve the fit.</p>
+<div class="sourceCode" id="cb983"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb983-1" title="1">modfull &lt;-<span class="st"> </span><span class="kw">glm</span>(los<span class="op">~</span><span class="st"> </span>procedure <span class="op">+</span><span class="st"> </span>admit <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>age75 <span class="op">+</span><span class="st"> </span>hospital, <span class="dt">family=</span>poisson,  <span class="dt">data=</span>azpro)</a>
+<a class="sourceLine" id="cb983-2" title="2">modless1&lt;-<span class="st"> </span><span class="kw">glm</span>(los<span class="op">~</span><span class="st"> </span>procedure <span class="op">+</span><span class="st"> </span>admit <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>age75, <span class="dt">family=</span>poisson,  <span class="dt">data=</span>azpro)</a></code></pre></div>
+<div class="sourceCode" id="cb984"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb984-1" title="1"><span class="kw">anova</span>(modless1, modfull, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: los ~ procedure + admit + sex + age75
+## Model 2: los ~ procedure + admit + sex + age75 + hospital
+##   Resid. Df Resid. Dev Df  Deviance Pr(&gt;Chi)
+## 1      3584     8874.1                      
+## 2      3583     8874.1  1 0.0023087   0.9617</code></pre>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="author.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="software.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="mixedlogistic.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="surv.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

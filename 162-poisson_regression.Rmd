@@ -1,0 +1,124 @@
+# Poisson regression {#poissonreg}
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(COUNT)
+```
+
+Poisson regression is analogous to logistic regression. Both are for outcome variables that are discrete. Whereas logistic regression is conducted when the dependent variables are proportions, Poisson regression operates on discrete counts representing frequency data. These have been [discussed previously in some detail](#data). They are variables representing events counted in some time or space.
+
+The method we'll use to conduct Poisson regression analysis is the generalized linear model. This will involve the functions `glm` for regular regression or `glmer`for mixed model regression. Mixed model is just regression jargon for repeated/related measures.
+
+The Poisson regression models that we'll cover are also known as log linear models.
+
+In this chapter we'll deal with the statistical analysis of experiments that generate count data and involve three or more predictor groups. Think of this as the ANOVA equivalent but for count data.
+
+## Why not ANOVA?
+
+A very common mistake is for researchers to conduct parametric tests (t-tests, ANOVA, linear and general regression) on count data, either directly or after transformation to percents or some other pseudo-continuous scale. In other words, they take the averages of counts, calculate their standard deviations and standard error of means, variances, and so forth. 
+
+This can be a mistake for a few reasons. First, counts are discrete whereas parametric tests should be reserved for continuous variables. Second, count data is frequently skewed. Parametric tests assume normally-distributed variables. Third, count data are lower-bounded at zero. It is not possible to have negative counts or counts of events that do not happen. This becomes a problem in two ways. Some variables represent low frequency events in which zero values or values near zero are common. With such data parametric regression will sometimes 'predict' coefficients with negative values, which are absurd.
+
+This touches on a more generally important phenomenon. When count data is transformed to continuous scales and compared to Poisson regression analysis of the same data, although type1 error rates are probably no different for well-powered studies, [the estimates for effect sizes can be far off of the mark compared to the coefficients produced via Poisson regression](https://onlinelibrary.wiley.com/doi/epdf/10.1002/ece3.3807). This calls for using Poisson regression over transformation and parametric testing.
+
+### Counting markers
+
+For example, we are interested in whether cells bear a certain marker. We have some method to label that marker and then count cells in a sample that show it. We are interested in knowing whether various treatments influence the expression of that marker, from stimuli, to suppression or activation of genes, to strain of animal and more. All experiments with the technique generate frequency measurements. If the technique involves a fluorescent probe, we don't confuse the intensity of fluorescence, which is a continuous variable, for whether the signal satisfies a threshold so that it deserves to be counted.
+
+### Counting depolarizations
+
+Every biological scientist learned in middle school that the depolarization of an excitable cell is an all or none phenomenon.
+
+We poke a neuron or some other excitable cell with an electrode. We stimulate with a current or some other stimulus and count the number of times the cell depolarizes in response. We repeat this paradigm under a variety of treatment conditions. We might be interested in how a drug or a gene or co-factor or anything else influences the number of depolarizations. 
+
+These are just plain old counts. Discrete. Non-continuous. All or none event. We don't have any information on the number of times the cell fails to depolarize. From one condition or replicate to another the counts have only integer values. There are no decimal places in any row of the data set.
+
+### Lever presses
+
+In behavioral research subjects can be trained to request more of a reward by pressing a lever. The technique is common in addiction research, for example.
+
+The protocol involves recording the number of times the test subjects presses a lever to request a reward from the researcher. We are interested in how different variables, such as pyschostimulants, influence this reward-seeking behavior.
+
+ 
+We don't have a count for all of the cells or places that don't bear the marker of interest. We can't count the number of times the cell fails to depolarize. We can't count the number of times a subject does not press the lever. But we do have a record of the frequency of events in response to treatments.
+
+## The Poisson generalized linear model
+
+The Poisson distribution is frequently used to model count data. When $Y$ is the number of discrete counts the Poisson probability distribution is \[f(y)=\frac{\mu^ye^{-\mu}}{y!}\] where $\mu$ is the average number of occurrences and $E(Y)=\mu=var(Y)$. In Poisson regression the effects of predictors on $Y$ are therefore modeled through the parameter $\mu$.
+
+Poisson model assumes sets of counts to be compared come from an equivalent exposure. For example, the few cells that take up a specific marker dye are counted on a culture plate. These counts come from a fixed area of the plate containing unstained cells. The total number of cells in this area bounds the exposure. Although the count data are not ratio transformed for analysis, such as counts per $mm^2$, they might latter referred to by their exposure as "depolarizations over three minutes". That there is an equivalent exposure is an underlying assumption of the Poisson generalized linear model: \[E(Y_i)=\mu_i=n_i\theta_i\] 
+
+Here $Y_i$ is the number of stained cells in response a set of conditions. This depends on a product between the total number of cells $n_i$ within the counting area and other conditions $\theta_i$ that influence the counts. Indeed, $\theta_i$ depends upon the predictor variables as \[\theta_i=e^{\beta_1 X_1+\beta_2 X_2+..\beta_p X_p}\] The generalized linear model is \[E(Y)=\mu_i=n_ie^{\beta_1 X_1+\beta_2 X_2+..\beta_p X_p}\\Y_i\sim Po(\mu_i)\] and the link function is the natural logarithmic function: \[log(\mu_i)=log(n_i)+\beta_1 X_1+\beta_2 X_2+..\beta_p X_p\]
+
+## Length of hospital stay
+
+The `azpro` data set in the `COUNT` package counts the length of hospital stay, in days, of patients treated for coronary disease. Days are counted as discrete integer values.
+
+One of the predictor variables is procedure, which is either a percutaneous transluminal coronary angioplasty (PTCA) or a coronary artery bypass graft (CABG).
+
+This histogram shows the length of hospital stay variable (los), with patients colored on the basis of procedure (0=PTCA, 1=CABG). The two distributions are low bounded at zero, overlap extensively but not exactly, and show the typically Poisson-like left-leaning skewed shape. 
+
+```{r message=FALSE}
+data(azpro)
+
+ggplot(data.frame(azpro))+
+  geom_histogram(aes(x=los, fill=as.factor(procedure)), binwidth=1)+
+  scale_fill_manual(values=c("#002878", "#d28e00"))+
+  labs(x="Length of stay, days")
+
+```
+
+To keep things simple, we'll start by regressing length of stay only on the procedure and admit variables. Together, they provide k=4 groups of predictor variables.
+
+This asks whether the length of stay differs due to both the procedure type and admit condition. 
+
+```{r}
+modpa <- glm(los~procedure+admit, family=poisson, data=azpro)
+summary(modpa)
+```
+
+## Output interpretation
+
+Ideally, the deviance residuals would be symmetrically distributed, as log normal. That's not the case here. This could be a sign that the Poisson model is not a good one for this data. Perhaps due to over-dispersion.
+
+The values for the coefficient estimates are log counts. The log count for the effect of procedure is 0.949, when exponentiated it is equivalent to about 2.5 days.
+
+Each coefficient has an Wald test to determine if the coefficient value differs from zero. They do.
+
+The interpretation is that a one unit change in procedure adds log count 0.949 days to the length of stay. Since PCTA is keyed as 0 and CABG as 1, this means that the CABG procedure extends the length of stay about 2.5 days compared to PCTA.
+
+The admit status also matters. This variable was keyed at 0 = elective and 1 = urgent. The log count for admit is 0.342, or about 1.4 days. Thus, and urgent admit extends the length of stay about 1.4 days relative to an elective admit.
+
+Whether the intercept differs from zero is usually not interesting. This coefficient represents the log count of days that are not explained by the model. The intercept inflates as the predictor variables are removed, as shown below.
+
+```{r}
+modp <- glm(los~procedure, family=poisson, data=azpro)
+summary(modp)
+```
+
+And the intercept is reduced further as more variables are factored into the regression.
+
+```{r}
+summary(glm(los~ procedure + admit + sex + age75 + hospital, family=poisson,  data=azpro))
+```
+
+Of all the variables, only the hospital is inconsequential. Furthermore, hospital length of stay is reduced 0.124 log counts for males relative to females. All other factors increase the length of stay.
+
+Finally we can test whether one nested model is a better fit than another. The result below indicates that the addition of the admit factor improves the model fit compared to its absence.
+
+```{r}
+anova(modp, modpa, test="Chisq")
+```
+
+However, the result below illustrates the addition of a factor to the model that does not improve the fit.
+
+```{r}
+modfull <- glm(los~ procedure + admit + sex + age75 + hospital, family=poisson,  data=azpro)
+modless1<- glm(los~ procedure + admit + sex + age75, family=poisson,  data=azpro)
+```
+
+```{r}
+anova(modless1, modfull, test="Chisq")
+```
+
+
