@@ -59,38 +59,52 @@ __Given a record of start and end dates/times, we'll either have to first calcul
 
 ### Deriving times from recorded dates
 
-The duration to an event is something that is calculated during data processing, or a data frame with start and end times can be passed directly into `survival` package functions, which will calculate survival time. Rather than show that, instead, I'm using this as an opportunity to illustrate how to deal with date/time variables more generally.
+The duration to an event is something that is calculated during data processing. It is important to pass into the `Surv` function (below) values in units of time. They should not be simple numeric values. 
 
 Survival analysis can be conducted over any time scale. 
 
 Scales of days, weeks, months and even years are common. In such designs calendar date variables are commonly used. For example, in a cancer trial a date is recorded for the date a mouse is implanted with a tumor. Subsequently, the date an event (eg, death or censure) occurs is also recorded. The time between these days is then calculated during data processing.
 
-It turns out that dates can be a tricky variable in any computer language due to shifts such as time zones, the number of days in a month, daylight savings, leap years and even leap seconds. Strictly, unlike for seconds (which always have a fixed duration) time variables in units of minutes, hours, days, weeks, months and years (and more) might be approximate unless we account for these shifts.
+It turns out that dates can be a tricky variable in any computer language due to their imprecision. Shifts such as time zones, the number of days in a month, daylight savings, leap years and even leap seconds occur. Strictly, unlike for seconds (which always have a fixed duration) time variables in units of minutes, hours, days, weeks, months and years (and more) might be approximate unless we account for these shifts. See `?POSIXct` for more information.
 
-The `lubridate` package has several utilities to deal with this when using date/time data. Our main concern is converting date or date/time entries into numeric values on whatever scale useful for our survival analysis algorithms.
+The `lubridate` package has several utilities to deal with date/time data. Our main concern is converting date or date/time entries into time values on whatever scale useful for our survival analysis algorithms.
 
 Let's image the simple case where we record the start dates for enrollment for each case in a study, and then record the date of the event or censure entry. 
 
-Compute this interval and then divide by the period to calculate numeric values for variables for either the days, weeks or months of survival. Note how the interval spans a leap year, so this calculation is fairly sophisticated in its accuracy.
+Note how each vector is that of character strings
 
 ```{r}
 start_date <- c("2020-01-14", "2020-01-12", "2020-01-30", "2020-01-29")
 
 end_date <- c("2020-07-29", "2021-01-19", "2020-08-04", "2020-02-29")
 
+```
+
+The simplest way to calculate the time interval is to first convert the character strings into date objects using the `ymd` function. Then subtract. Note how, by default, time units of days are the output. Note this produces a `difftime` object.
+
+```{r}
+days <- ymd(end_date) - ymd(start_date)
+days
+class(days)
+
+```
+
+When the need is for numeric values as output rather than difftime, or when calcuating intervals greater than week (difftime does not have units of months or years), the method below takes character strings and produces numeric values in the sought for units.
+
+```{r}
+
 # illustrating how to calculate four different time scales
 # usually there is only one scale of interest
 # The divisor can be set to any length: days(7) == week(1)
 
-dataSet <- tibble(start_date, end_date) %>% 
+dateSet <- tibble(start_date, end_date) %>% 
   mutate(days = interval(start_date, end_date)/days(1),
          weeks = interval(start_date, end_date)/weeks(1),
          months = interval(start_date, end_date)/months(1), 
          years = interval(start_date, end_date)/years(1)
          )
 
-dataSet
-
+dateSet
 
 ```
 
@@ -157,10 +171,6 @@ The glioma data set below comes from the `coin` package. Note it contains 37 cas
 
 We'll just focus on survival associated with histology, which you'll recognize as two different types of glioma.
 
-```{r}
-glioma
-```
-
 The first step is to create a survival model of the data. The `Surv` function from the `survival` package in conjunction with the `survfit` function summarizes the events while calculating the survival probability for each event and its associated time points (which are in months), along with some useful summary statistics. 
 
 Hopefully the formula `Surv(time, event) ~ 1` below strikes as reminiscent of that which is used in regression. Here, the `survfit` function calculates the numbers at risk, the numbers of events and the survival, along with standard error and confidence interval for each time point. **This is how to regress the data WITHOUT accounting for the effects of any of the predictors.** This is being done to illustrate a couple of points.
@@ -169,6 +179,8 @@ Hopefully the formula `Surv(time, event) ~ 1` below strikes as reminiscent of th
 modelAll <- survfit(Surv(time, event) ~ 1, data = glioma)
 
 summary(modelAll)
+
+modelAll
 ```
 
 The overall median survival calculated for these 37 cases is 31 months (95% CI is 15 to NA).
