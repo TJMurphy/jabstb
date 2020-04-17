@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-04-13" />
+<meta name="date" content="2020-04-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -793,6 +793,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="45.4" data-path="surv.html"><a href="surv.html#kaplan-meier-plots"><i class="fa fa-check"></i><b>45.4</b> Kaplan-Meier plots</a></li>
 <li class="chapter" data-level="45.5" data-path="surv.html"><a href="surv.html#log-rank-tests"><i class="fa fa-check"></i><b>45.5</b> Log rank tests</a><ul>
 <li class="chapter" data-level="45.5.1" data-path="surv.html"><a href="surv.html#write-up-of-log-rank-test"><i class="fa fa-check"></i><b>45.5.1</b> Write up of log rank test</a></li>
+<li class="chapter" data-level="45.5.2" data-path="surv.html"><a href="surv.html#comparing-more-than-two-survival-curves"><i class="fa fa-check"></i><b>45.5.2</b> Comparing more than two survival curves</a></li>
 </ul></li>
 <li class="chapter" data-level="45.6" data-path="surv.html"><a href="surv.html#cox-proportional-hazards-analysis"><i class="fa fa-check"></i><b>45.6</b> Cox proportional hazards analysis</a><ul>
 <li class="chapter" data-level="45.6.1" data-path="surv.html"><a href="surv.html#cox-proportional-hazards-regression-of-glioma"><i class="fa fa-check"></i><b>45.6.1</b> Cox proportional hazards regression of glioma</a></li>
@@ -834,10 +835,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="lda" class="section level1">
 <h1><span class="header-section-number">Chapter 46</span> Linear discriminant analysis</h1>
-<div class="sourceCode" id="cb1015"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1015-1" title="1"><span class="kw">library</span>(car)</a>
-<a class="sourceLine" id="cb1015-2" title="2"><span class="kw">library</span>(ez)</a>
-<a class="sourceLine" id="cb1015-3" title="3"><span class="kw">library</span>(MASS)</a>
-<a class="sourceLine" id="cb1015-4" title="4"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1020-1" title="1"><span class="kw">library</span>(car)</a>
+<a class="sourceLine" id="cb1020-2" title="2"><span class="kw">library</span>(ez)</a>
+<a class="sourceLine" id="cb1020-3" title="3"><span class="kw">library</span>(MASS)</a>
+<a class="sourceLine" id="cb1020-4" title="4"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <p>Linear discriminant analysis (LDA) is identical to MANOVA, mathematically. The focus of MANOVA is inferential, to test whether independent variables have any effects on a latent composite variables constructed from all of the dependent variables. The focus of LDA is prediction and explanatory, usually to define groupings based upon the latent composite variable.</p>
 <div id="flipping-the-general-linear-model" class="section level2">
 <h2><span class="header-section-number">46.1</span> Flipping the general linear model</h2>
@@ -857,25 +858,25 @@ OCD is characterized by repetitive behaviors and thoughtful impulses to start a 
 <p>30 subjects were enrolled in the study. 10 subjects were randomized to each of either 3 treatment interventions: either cognitive behavioral therapy (cbt), behavioral therapy (bt), or no therapy (nt).</p>
 <p>In a subsequent testing period they recorded the number of times the subjects engaged in OCD actions (a) and also the number of times they had OCD thoughts (t). Thus, two dependent variables (a and t) are recorded.</p>
 <p>Construct an ocd data set. 3 treatments (cbt, bt, nt) followed by 2 outcomes (actions, thoughts). This dataset is derived from <a href="https://www.discoveringstatistics.com/books/dsus/">Discovering Statistics Through SPSS, 3rd edition, Stanley Field, Chapt 16</a></p>
-<div class="sourceCode" id="cb1016"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1016-1" title="1"><span class="co"># create vectors for the outcome responses following each of the therapies</span></a>
-<a class="sourceLine" id="cb1016-2" title="2">a.cbt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">7</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb1016-3" title="3">a.bt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb1016-4" title="4">a.nt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb1016-5" title="5">t.cbt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">14</span>,<span class="dv">11</span>,<span class="dv">16</span>,<span class="dv">13</span>,<span class="dv">12</span>,<span class="dv">14</span>,<span class="dv">12</span>,<span class="dv">15</span>,<span class="dv">16</span>,<span class="dv">11</span>)</a>
-<a class="sourceLine" id="cb1016-6" title="6">t.bt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">14</span>,<span class="dv">15</span>,<span class="dv">13</span>,<span class="dv">14</span>,<span class="dv">15</span>,<span class="dv">19</span>,<span class="dv">13</span>,<span class="dv">18</span>,<span class="dv">14</span>,<span class="dv">17</span>)</a>
-<a class="sourceLine" id="cb1016-7" title="7">t.nt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">13</span>,<span class="dv">15</span>,<span class="dv">14</span>,<span class="dv">14</span>,<span class="dv">13</span>,<span class="dv">20</span>,<span class="dv">13</span>,<span class="dv">16</span>,<span class="dv">14</span>,<span class="dv">18</span>)</a>
-<a class="sourceLine" id="cb1016-8" title="8"></a>
-<a class="sourceLine" id="cb1016-9" title="9"><span class="co"># synthesize a data frame</span></a>
-<a class="sourceLine" id="cb1016-10" title="10">ID &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">30</span>)))</a>
-<a class="sourceLine" id="cb1016-11" title="11"><span class="co">#type &lt;- c(rep(c(&quot;actions&quot;, &quot;thoughts&quot;), each = 30))</span></a>
-<a class="sourceLine" id="cb1016-12" title="12">treat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;cbt&quot;</span>, <span class="st">&quot;bt&quot;</span>, <span class="st">&quot;nt&quot;</span>), <span class="dt">each =</span> <span class="dv">10</span>))</a>
-<a class="sourceLine" id="cb1016-13" title="13"><span class="co">#outcome &lt;- c(a.cbt, a.bt, a.nt, t.cbt, t.bt, t.nt)</span></a>
-<a class="sourceLine" id="cb1016-14" title="14">actions &lt;-<span class="st"> </span><span class="kw">c</span>(a.cbt, a.bt, a.nt)</a>
-<a class="sourceLine" id="cb1016-15" title="15">thoughts &lt;-<span class="st"> </span><span class="kw">c</span>(t.cbt, t.bt, t.nt)</a>
-<a class="sourceLine" id="cb1016-16" title="16">ocd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(ID, actions, thoughts, treat)</a>
-<a class="sourceLine" id="cb1016-17" title="17"></a>
-<a class="sourceLine" id="cb1016-18" title="18"><span class="co">#check the dataframe to ensure it is correct</span></a>
-<a class="sourceLine" id="cb1016-19" title="19">ocd</a></code></pre></div>
+<div class="sourceCode" id="cb1021"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1021-1" title="1"><span class="co"># create vectors for the outcome responses following each of the therapies</span></a>
+<a class="sourceLine" id="cb1021-2" title="2">a.cbt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">7</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb1021-3" title="3">a.bt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb1021-4" title="4">a.nt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb1021-5" title="5">t.cbt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">14</span>,<span class="dv">11</span>,<span class="dv">16</span>,<span class="dv">13</span>,<span class="dv">12</span>,<span class="dv">14</span>,<span class="dv">12</span>,<span class="dv">15</span>,<span class="dv">16</span>,<span class="dv">11</span>)</a>
+<a class="sourceLine" id="cb1021-6" title="6">t.bt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">14</span>,<span class="dv">15</span>,<span class="dv">13</span>,<span class="dv">14</span>,<span class="dv">15</span>,<span class="dv">19</span>,<span class="dv">13</span>,<span class="dv">18</span>,<span class="dv">14</span>,<span class="dv">17</span>)</a>
+<a class="sourceLine" id="cb1021-7" title="7">t.nt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">13</span>,<span class="dv">15</span>,<span class="dv">14</span>,<span class="dv">14</span>,<span class="dv">13</span>,<span class="dv">20</span>,<span class="dv">13</span>,<span class="dv">16</span>,<span class="dv">14</span>,<span class="dv">18</span>)</a>
+<a class="sourceLine" id="cb1021-8" title="8"></a>
+<a class="sourceLine" id="cb1021-9" title="9"><span class="co"># synthesize a data frame</span></a>
+<a class="sourceLine" id="cb1021-10" title="10">ID &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">30</span>)))</a>
+<a class="sourceLine" id="cb1021-11" title="11"><span class="co">#type &lt;- c(rep(c(&quot;actions&quot;, &quot;thoughts&quot;), each = 30))</span></a>
+<a class="sourceLine" id="cb1021-12" title="12">treat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;cbt&quot;</span>, <span class="st">&quot;bt&quot;</span>, <span class="st">&quot;nt&quot;</span>), <span class="dt">each =</span> <span class="dv">10</span>))</a>
+<a class="sourceLine" id="cb1021-13" title="13"><span class="co">#outcome &lt;- c(a.cbt, a.bt, a.nt, t.cbt, t.bt, t.nt)</span></a>
+<a class="sourceLine" id="cb1021-14" title="14">actions &lt;-<span class="st"> </span><span class="kw">c</span>(a.cbt, a.bt, a.nt)</a>
+<a class="sourceLine" id="cb1021-15" title="15">thoughts &lt;-<span class="st"> </span><span class="kw">c</span>(t.cbt, t.bt, t.nt)</a>
+<a class="sourceLine" id="cb1021-16" title="16">ocd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(ID, actions, thoughts, treat)</a>
+<a class="sourceLine" id="cb1021-17" title="17"></a>
+<a class="sourceLine" id="cb1021-18" title="18"><span class="co">#check the dataframe to ensure it is correct</span></a>
+<a class="sourceLine" id="cb1021-19" title="19">ocd</a></code></pre></div>
 <pre><code>##    ID actions thoughts treat
 ## 1   1       5       14   cbt
 ## 2   2       5       11   cbt
@@ -909,21 +910,21 @@ OCD is characterized by repetitive behaviors and thoughtful impulses to start a 
 ## 30 30       5       18    nt</code></pre>
 <div id="graph" class="section level3">
 <h3><span class="header-section-number">46.1.1</span> graph</h3>
-<div class="sourceCode" id="cb1018"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1018-1" title="1"><span class="kw">ggplot</span>(ocd, <span class="kw">aes</span>(<span class="dt">x=</span>treat))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1018-2" title="2"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">y=</span>actions, <span class="dt">color=</span><span class="st">&quot;actions&quot;</span>), <span class="dt">width=</span><span class="fl">0.1</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb1018-3" title="3"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">y=</span>thoughts, <span class="dt">color=</span><span class="st">&quot;thoughts&quot;</span>), <span class="dt">width=</span><span class="fl">0.1</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb1018-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;Score&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Treatment&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-533-1.png" width="672" /></p>
-<div class="sourceCode" id="cb1019"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1019-1" title="1">ocd<span class="fl">.1</span> &lt;-<span class="st"> </span>ocd<span class="op">%&gt;%</span><span class="kw">gather</span>(symptoms, score, <span class="op">-</span>ID, <span class="op">-</span>treat)</a>
-<a class="sourceLine" id="cb1019-2" title="2"></a>
-<a class="sourceLine" id="cb1019-3" title="3"><span class="kw">ggplot</span>(ocd<span class="fl">.1</span>, (<span class="kw">aes</span>(<span class="dt">x=</span>symptoms, <span class="dt">y=</span>score)))<span class="op">+</span></a>
-<a class="sourceLine" id="cb1019-4" title="4"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">color=</span>treat), <span class="dt">size=</span><span class="dv">3</span>, <span class="dt">width=</span><span class="fl">0.025</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb1019-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>ID))</a></code></pre></div>
+<div class="sourceCode" id="cb1023"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1023-1" title="1"><span class="kw">ggplot</span>(ocd, <span class="kw">aes</span>(<span class="dt">x=</span>treat))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1023-2" title="2"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">y=</span>actions, <span class="dt">color=</span><span class="st">&quot;actions&quot;</span>), <span class="dt">width=</span><span class="fl">0.1</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1023-3" title="3"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">y=</span>thoughts, <span class="dt">color=</span><span class="st">&quot;thoughts&quot;</span>), <span class="dt">width=</span><span class="fl">0.1</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1023-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;Score&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Treatment&quot;</span>)</a></code></pre></div>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-534-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1024"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1024-1" title="1">ocd<span class="fl">.1</span> &lt;-<span class="st"> </span>ocd<span class="op">%&gt;%</span><span class="kw">gather</span>(symptoms, score, <span class="op">-</span>ID, <span class="op">-</span>treat)</a>
+<a class="sourceLine" id="cb1024-2" title="2"></a>
+<a class="sourceLine" id="cb1024-3" title="3"><span class="kw">ggplot</span>(ocd<span class="fl">.1</span>, (<span class="kw">aes</span>(<span class="dt">x=</span>symptoms, <span class="dt">y=</span>score)))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1024-4" title="4"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">color=</span>treat), <span class="dt">size=</span><span class="dv">3</span>, <span class="dt">width=</span><span class="fl">0.025</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1024-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group=</span>ID))</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-535-1.png" width="672" /></p>
 <p>Do manova on data directly</p>
-<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1020-1" title="1">ocd.man &lt;-<span class="st"> </span><span class="kw">manova</span>(<span class="kw">lm</span>(<span class="kw">cbind</span>(actions, thoughts)<span class="op">~</span>treat, ocd))</a>
-<a class="sourceLine" id="cb1020-2" title="2"><span class="co">#ocd.man</span></a>
-<a class="sourceLine" id="cb1020-3" title="3">ocd.man</a></code></pre></div>
+<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1025-1" title="1">ocd.man &lt;-<span class="st"> </span><span class="kw">manova</span>(<span class="kw">lm</span>(<span class="kw">cbind</span>(actions, thoughts)<span class="op">~</span>treat, ocd))</a>
+<a class="sourceLine" id="cb1025-2" title="2"><span class="co">#ocd.man</span></a>
+<a class="sourceLine" id="cb1025-3" title="3">ocd.man</a></code></pre></div>
 <pre><code>## Call:
 ##    manova(lm(cbind(actions, thoughts) ~ treat, ocd))
 ## 
@@ -935,18 +936,18 @@ OCD is characterized by repetitive behaviors and thoughtful impulses to start a 
 ## 
 ## Residual standard errors: 1.374369 2.125681
 ## Estimated effects may be unbalanced</code></pre>
-<div class="sourceCode" id="cb1022"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1022-1" title="1"><span class="kw">summary</span>(ocd.man)</a></code></pre></div>
+<div class="sourceCode" id="cb1027"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1027-1" title="1"><span class="kw">summary</span>(ocd.man)</a></code></pre></div>
 <pre><code>##           Df  Pillai approx F num Df den Df  Pr(&gt;F)  
 ## treat      2 0.31845   2.5567      4     54 0.04904 *
 ## Residuals 27                                         
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb1024"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1024-1" title="1"><span class="co"># a couple of ways</span></a>
-<a class="sourceLine" id="cb1024-2" title="2"><span class="co">#summary.aov(ocd.man)</span></a>
-<a class="sourceLine" id="cb1024-3" title="3"><span class="co">#summary(Anova(ocd.man), univariate = T, multivariate = F, p.adjust.method = T)</span></a></code></pre></div>
+<div class="sourceCode" id="cb1029"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1029-1" title="1"><span class="co"># a couple of ways</span></a>
+<a class="sourceLine" id="cb1029-2" title="2"><span class="co">#summary.aov(ocd.man)</span></a>
+<a class="sourceLine" id="cb1029-3" title="3"><span class="co">#summary(Anova(ocd.man), univariate = T, multivariate = F, p.adjust.method = T)</span></a></code></pre></div>
 <p>Or do a linear model</p>
-<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1025-1" title="1">locd.man &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">cbind</span>(actions, thoughts) <span class="op">~</span><span class="st"> </span>treat, <span class="dt">data =</span> ocd)</a>
-<a class="sourceLine" id="cb1025-2" title="2"><span class="kw">summary</span>(locd.man)</a></code></pre></div>
+<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1030-1" title="1">locd.man &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">cbind</span>(actions, thoughts) <span class="op">~</span><span class="st"> </span>treat, <span class="dt">data =</span> ocd)</a>
+<a class="sourceLine" id="cb1030-2" title="2"><span class="kw">summary</span>(locd.man)</a></code></pre></div>
 <pre><code>## Response actions :
 ## 
 ## Call:
@@ -989,11 +990,11 @@ OCD is characterized by repetitive behaviors and thoughtful impulses to start a 
 ## Residual standard error: 2.126 on 27 degrees of freedom
 ## Multiple R-squared:  0.1376, Adjusted R-squared:  0.07372 
 ## F-statistic: 2.154 on 2 and 27 DF,  p-value: 0.1355</code></pre>
-<div class="sourceCode" id="cb1027"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1027-1" title="1"><span class="co">#summary(locd.man)</span></a>
-<a class="sourceLine" id="cb1027-2" title="2"><span class="co">#summary(Anova(locd.man), univariate = T, multivariate = T, p.adjust.methods=T)</span></a></code></pre></div>
+<div class="sourceCode" id="cb1032"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1032-1" title="1"><span class="co">#summary(locd.man)</span></a>
+<a class="sourceLine" id="cb1032-2" title="2"><span class="co">#summary(Anova(locd.man), univariate = T, multivariate = T, p.adjust.methods=T)</span></a></code></pre></div>
 <p>+, : and * for main effects, interactions, main effects plus interactions</p>
-<div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1028-1" title="1">ocd.lda &lt;-<span class="st"> </span><span class="kw">lda</span>(treat<span class="op">~</span>actions <span class="op">+</span>thoughts, <span class="dt">data=</span>ocd)</a>
-<a class="sourceLine" id="cb1028-2" title="2">ocd.lda</a></code></pre></div>
+<div class="sourceCode" id="cb1033"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1033-1" title="1">ocd.lda &lt;-<span class="st"> </span><span class="kw">lda</span>(treat<span class="op">~</span>actions <span class="op">+</span>thoughts, <span class="dt">data=</span>ocd)</a>
+<a class="sourceLine" id="cb1033-2" title="2">ocd.lda</a></code></pre></div>
 <pre><code>## Call:
 ## lda(treat ~ actions + thoughts, data = ocd)
 ## 
@@ -1015,7 +1016,7 @@ OCD is characterized by repetitive behaviors and thoughtful impulses to start a 
 ## Proportion of trace:
 ##    LD1    LD2 
 ## 0.8219 0.1781</code></pre>
-<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1030-1" title="1"><span class="kw">prcomp</span>(ocd[,<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">-4</span>)])</a></code></pre></div>
+<div class="sourceCode" id="cb1035"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1035-1" title="1"><span class="kw">prcomp</span>(ocd[,<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">-4</span>)])</a></code></pre></div>
 <pre><code>## Standard deviations (1, .., p=2):
 ## [1] 2.211557 1.451454
 ## 
@@ -1023,13 +1024,13 @@ OCD is characterized by repetitive behaviors and thoughtful impulses to start a 
 ##                 PC1         PC2
 ## actions  0.06786041  0.99769483
 ## thoughts 0.99769483 -0.06786041</code></pre>
-<div class="sourceCode" id="cb1032"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1032-1" title="1"><span class="kw">plot</span>(ocd.lda)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-538-1.png" width="672" /></p>
-<div class="sourceCode" id="cb1033"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1033-1" title="1">ocd.man &lt;-<span class="st"> </span><span class="kw">manova</span>(<span class="kw">cbind</span>(actions, thoughts) <span class="op">~</span><span class="st"> </span>treat, ocd)</a></code></pre></div>
+<div class="sourceCode" id="cb1037"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1037-1" title="1"><span class="kw">plot</span>(ocd.lda)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-539-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1038"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1038-1" title="1">ocd.man &lt;-<span class="st"> </span><span class="kw">manova</span>(<span class="kw">cbind</span>(actions, thoughts) <span class="op">~</span><span class="st"> </span>treat, ocd)</a></code></pre></div>
 <p>Here, ocd.man is an object of class “manova”</p>
-<div class="sourceCode" id="cb1034"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1034-1" title="1"><span class="kw">class</span>(ocd.man)</a></code></pre></div>
+<div class="sourceCode" id="cb1039"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1039-1" title="1"><span class="kw">class</span>(ocd.man)</a></code></pre></div>
 <pre><code>## [1] &quot;manova&quot; &quot;maov&quot;   &quot;aov&quot;    &quot;mlm&quot;    &quot;lm&quot;</code></pre>
-<div class="sourceCode" id="cb1036"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1036-1" title="1">ocd.man</a></code></pre></div>
+<div class="sourceCode" id="cb1041"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1041-1" title="1">ocd.man</a></code></pre></div>
 <pre><code>## Call:
 ##    manova(cbind(actions, thoughts) ~ treat, ocd)
 ## 
@@ -1041,13 +1042,13 @@ OCD is characterized by repetitive behaviors and thoughtful impulses to start a 
 ## 
 ## Residual standard errors: 1.374369 2.125681
 ## Estimated effects may be unbalanced</code></pre>
-<div class="sourceCode" id="cb1038"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1038-1" title="1"><span class="kw">summary</span>(ocd.man, <span class="dt">test =</span> <span class="st">&quot;Roy&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1043"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1043-1" title="1"><span class="kw">summary</span>(ocd.man, <span class="dt">test =</span> <span class="st">&quot;Roy&quot;</span>)</a></code></pre></div>
 <pre><code>##           Df    Roy approx F num Df den Df  Pr(&gt;F)  
 ## treat      2 0.3348   4.5198      2     27 0.02027 *
 ## Residuals 27                                        
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb1040"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1040-1" title="1"><span class="kw">summary.aov</span>(ocd.man)</a></code></pre></div>
+<div class="sourceCode" id="cb1045"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1045-1" title="1"><span class="kw">summary.aov</span>(ocd.man)</a></code></pre></div>
 <pre><code>##  Response actions :
 ##             Df Sum Sq Mean Sq F value  Pr(&gt;F)  
 ## treat        2 10.467  5.2333  2.7706 0.08046 .

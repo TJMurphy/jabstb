@@ -59,38 +59,54 @@ __Given a record of start and end dates/times, we'll either have to first calcul
 
 ### Deriving times from recorded dates
 
-The duration to an event is something that is calculated during data processing, or a data frame with start and end times can be passed directly into `survival` package functions, which will calculate survival time. Rather than show that, instead, I'm using this as an opportunity to illustrate how to deal with date/time variables more generally.
+The duration to an event is something that is calculated during data processing. It is important to pass into the `Surv` function (below) values in units of time. They should not be simple numeric values. 
 
 Survival analysis can be conducted over any time scale. 
 
 Scales of days, weeks, months and even years are common. In such designs calendar date variables are commonly used. For example, in a cancer trial a date is recorded for the date a mouse is implanted with a tumor. Subsequently, the date an event (eg, death or censure) occurs is also recorded. The time between these days is then calculated during data processing.
 
-It turns out that dates can be a tricky variable in any computer language due to shifts such as time zones, the number of days in a month, daylight savings, leap years and even leap seconds. Strictly, unlike for seconds (which always have a fixed duration) time variables in units of minutes, hours, days, weeks, months and years (and more) might be approximate unless we account for these shifts.
+It turns out that dates can be a tricky variable in any computer language due to their imprecision. Shifts such as time zones, the number of days in a month, daylight savings, leap years and even leap seconds occur. Strictly, unlike for seconds (which always have a fixed duration) time variables in units of minutes, hours, days, weeks, months and years (and more) might be approximate unless we account for these shifts. See `?POSIXct` for more information.
 
-The `lubridate` package has several utilities to deal with this when using date/time data. Our main concern is converting date or date/time entries into numeric values on whatever scale useful for our survival analysis algorithms.
+The `lubridate` package has several utilities to deal with date/time data. Our main concern is converting date or date/time entries into time values on whatever scale useful for our survival analysis algorithms.
 
 Let's image the simple case where we record the start dates for enrollment for each case in a study, and then record the date of the event or censure entry. 
 
-Compute this interval and then divide by the period to calculate numeric values for variables for either the days, weeks or months of survival. Note how the interval spans a leap year, so this calculation is fairly sophisticated in its accuracy.
+Note how each vector is that of character strings
 
 ```{r}
 start_date <- c("2020-01-14", "2020-01-12", "2020-01-30", "2020-01-29")
 
 end_date <- c("2020-07-29", "2021-01-19", "2020-08-04", "2020-02-29")
 
+```
+
+The simplest way to calculate the time interval is to first convert the character strings into date objects using the `ymd` function. Then subtract. 
+
+Note how in this case, by default, time units of days are the output. Note this produces a `difftime` object.
+
+```{r}
+days <- ymd(end_date) - ymd(start_date)
+days
+class(days)
+
+```
+
+When the need is for numeric values as output rather than conversion to difftime, or when calcuating intervals greater than week (difftime does not have units of months or years), the method below takes character strings and produces numeric values in the sought for units.
+
+```{r}
+
 # illustrating how to calculate four different time scales
 # usually there is only one scale of interest
 # The divisor can be set to any length: days(7) == week(1)
 
-dataSet <- tibble(start_date, end_date) %>% 
+dateSet <- tibble(start_date, end_date) %>% 
   mutate(days = interval(start_date, end_date)/days(1),
          weeks = interval(start_date, end_date)/weeks(1),
          months = interval(start_date, end_date)/months(1), 
          years = interval(start_date, end_date)/years(1)
          )
 
-dataSet
-
+dateSet
 
 ```
 
@@ -157,10 +173,6 @@ The glioma data set below comes from the `coin` package. Note it contains 37 cas
 
 We'll just focus on survival associated with histology, which you'll recognize as two different types of glioma.
 
-```{r}
-glioma
-```
-
 The first step is to create a survival model of the data. The `Surv` function from the `survival` package in conjunction with the `survfit` function summarizes the events while calculating the survival probability for each event and its associated time points (which are in months), along with some useful summary statistics. 
 
 Hopefully the formula `Surv(time, event) ~ 1` below strikes as reminiscent of that which is used in regression. Here, the `survfit` function calculates the numbers at risk, the numbers of events and the survival, along with standard error and confidence interval for each time point. **This is how to regress the data WITHOUT accounting for the effects of any of the predictors.** This is being done to illustrate a couple of points.
@@ -169,6 +181,8 @@ Hopefully the formula `Surv(time, event) ~ 1` below strikes as reminiscent of th
 modelAll <- survfit(Surv(time, event) ~ 1, data = glioma)
 
 summary(modelAll)
+
+modelAll
 ```
 
 The overall median survival calculated for these 37 cases is 31 months (95% CI is 15 to NA).
@@ -198,7 +212,7 @@ The `survival` package has base plotting functions, but we use functions in the 
 
 First a bare bones plot of the unsegmented data. Notice how the median surival line is drawn. Also notice the discrete nature of the 95% confidence intervals (shaded).
 
-```{r}
+```{r fig.cap="Overall survival in the glioma data, irrespective of tumor type."}
 ggsurvplot(modelAll,
            surv.median.line = "hv", # Specify median survival
            palette = c("#002878"))
@@ -206,7 +220,7 @@ ggsurvplot(modelAll,
 
 Next we plot the survival curves based upon the histology variable. Note how Grade3 survival never reaches 0.5, thus a median survival time is not possible to calculate.
 
-```{r}
+```{r fig.cap="Glioma survival by type of tumor."}
 ggsurvplot(modelHis,
           conf.int = TRUE,
           surv.median.line = "hv", # Specify median survival
@@ -253,13 +267,22 @@ The column sum is $\chi^2=12.28$ with 1 degree of freedom.  Use the `chisq` dist
 pchisq(12.28, df=1, lower.tail=F)
 ```
 
-Although the test statistic and p-values for these two log rank tests are similar, they are not identical. The values should agree in well-powered experiments. To avoid p-hacking temptations, make the decision to use one or the other for inference in advance.
+Although the test statistic and p-values for these two log rank tests are similar, they are not identical. The values should agree in well-powered experiments. To avoid p-hacking temptations, make the decision in advance to use one or the other.
 
-Nevertheless, both tests generate an extreme $\chi^2$ test statistic and corresponding low p-value, below the typical type1 error threshold of 0.05. On this basis the null hypothesis is rejected.
+Nevertheless, either test generates an extreme $\chi^2$ test statistic and corresponding low p-value, below the typical type1 error threshold of 0.05. On this basis reject the null hypothesis that the survival associated with both cancers is the same.
 
 ### Write up of log rank test
 
 __Survival with Grade3 (median survival = undetermined months, 95%CI = 53 to undetermined) differs from survival with GBM (median survival = 14 months, 95%CI = 11 to 31 months; Mantel-Haenszel log rank test, chisq= 13.4, p=2e-4).__
+
+### Comparing more than two survival curves
+
+The log rank test can be performed on multiple curves simultaneously. There are two inferential options. 
+
+* Conclude from the overall chi-square test that at least one of the treatment levels differs from the others, using the bloody obvious test to draw further conclusions.
+* Use the overall chi-square test as an omnibus test, much like an ANOVA F-test, granting permission to perform multiple post-hoc comparisons. 
+
+For the latter we run the `pairwise_survdiff` function from the `survminer` package. This is very simple to execute. Selecting "none" as a p-value adjustment method allows for pulling out a vector of unadjusted p-values, to focus on only the comparisons of interest.
 
 ## Cox proportional hazards analysis
 
@@ -298,26 +321,30 @@ From the output above, printing the regression model alone is comprehensive exce
 
 #### Log hazard ratio/relative risk
 
-The `coef` value corresponds to $\beta$ from the hazard equation above, which equals $log(\frac{\lambda(t)}{\lambda_0(t)})$. Thus we can say the log hazard ratio is -1.6401. 
+The `coef` value corresponds to $\beta$ from the hazard equation above, which in general terms equals $log(\frac{\lambda(t)}{\lambda_0(t)})$. Thus we can say the log hazard ratio is -1.6401. 
 
-But what does that actually mean?
+But what does that actually mean, and who is what in this case?
 
-Remember that $\lambda$ symbolizes survival rates. And there are two survival rates of interest in this case: one for GBM and another for Grade3. Furthermore, we can bloody obvious tell from the plot above that the survival rate for Grade3 is larger than that for GBM. Think about that carefully for a moment.
+First, recall R's quirk in regression. R does not know if we want GBM or Grade3 to be the intercept. When we don't tell it, that means that it will go choose the first alphanumerical as the intercept. In this case, that is GBM.
 
-Log fractions can confuse. By algebra $log(\lambda(t))-log(\lambda_0(t))=-1.6401$. The negative value of this difference means that $\lambda_0(t)$ must be greater than than $\lambda(t)$. Therefore we can deduce that this R function has coerced Grade3 as baseline, or \[coef=log \ hazard \ ratio=log(\frac{\lambda_{GBM}(t)}{\lambda _{Grade3}(t)})=-1.6401\]
+Remember that $\lambda$ symbolizes survival rates. And there are two survival rates of interest in this case: one for GBM and another for Grade3. Furthermore, we can bloody obvious tell from the plot above that the survival rate for Grade3 is larger than that for GBM. Think about that carefully for a moment before reading on.
 
-The z statistic and p-value for `coef` correspond to a Wald test (a ratio of the coefficient value to its SE). This tests the null hypothesis that `coef`= 0. If the null is true it would indicate there is no evidence that factor associated with that coefficient affects the log hazard ratio.
+Log fractions can confuse. Here we know that $log(\lambda(t))-log(\lambda_0(t))=-1.6401$. The negative value of this difference means that $\lambda_0(t)$ must be greater than than $\lambda(t)$. Therefore we can deduce that this R function has coerced Grade3 as the denominator, or \[coef=log \ hazard \ ratio=log(\frac{\lambda_{GBM}(t)}{\lambda _{Grade3}(t)})=-1.6401\]
+
+The z statistic and p-value for `coef` correspond to a Wald test (a ratio of the coefficient value to its SE). This tests the null hypothesis that `coef`= 0 (if two survival rates are the same, their ratio is 1, null coef=log(1)=0). If the null is true it would indicate there is no evidence that factor associated with that coefficient affects the log hazard ratio.
 
 #### Hazard ratio/relative risk
 
-Now for the `exp(coef)`. This is the **hazard ratio**, otherwise known as the **relative risk**. Either of these two terms are used commonly and interchangeably. They also have greater descriptive efficacy than the log hazard ratio because logs tend to confuse people.
+Now for the `exp(coef)`. This is the **hazard ratio**, otherwise known as the **relative risk**. Either of these two terms are used commonly and interchangeably. They also have greater descriptive efficacy than the log hazard ratio simply because logs tend to confuse people.
 
-It is worth repeating is that the hazard ratio nothing more complicated than a ratio of survival rates. 
+**Hazard == survival rate**. It is worth repeating that the hazard ratio nothing more complicated than a ratio of survival rates....and no logs are involved. 
 \[\frac{\lambda(t)}{\lambda_0(t)}=e^{\beta}=\frac{\lambda_{GBM}(t)}{\lambda _{Grade3}(t)}=0.1940\]
 
 Since the value of the hazard ratio is below 1, and $\lambda$ symbolizes survival rates, this result shows that the survival rate with GBM is lower than the survival with Grade3 tumors. That is bloody obvious from inspection of the plot above.
 
 In fact, the GBM survival rate is 19.4% the survival rate for Grade3. Or we can say the relative risk of death due to Grade3 tumors is 19.4% of GBM tumors. or we can say hazard associated with Grade3 tumors is 19.4% of that for GBM.
+
+Or we would just report the hazard ratio as a descriptive: Grade3 to GBM HR = 0.194.
 
 Now please note the `exp(-coef)` column. This is merely the reciprocal of the hazard ratio. A personal preference might be to use this. Is so, one would say that the hazard rate of GBM is 5.156 times greater than that for Grade3. Alternately the relative risk of GBM to Grade3 glioma is 5.156.
 
@@ -331,16 +358,18 @@ It takes professional judgement to decide whether that range is scientifically m
 
 Finally on to the statistical tests. 
 
-This function by default generates 3 inferential tests. In well-powered experiments all three should converge to a similar conclusion but won't have the exact same values. It is up to the researcher to decide in advance of testing which one to use.
+This function by default generates 3 inferential tests and the researcher chooses one of these via preference. In well-powered experiments all three should converge to a similar conclusion but won't have the exact same values. On close calls, when the researcher decides in advance of testing which one to use the temptation to p-hack is averted.
 
 The log rank test is handled in the section above. The Wald test won't be discussed here in detail. It is an extension of the Wald test used above for the single coefficient value. The main difference is that the Wald test for the overall regression handles many coefficients simultaneously. That's not an issue in this simple case, but it would be if other predictor variables were added to the regression model.
 
 Likelihood ratio tests are most commonly used. They always compare the fits of two different models, usually nested, to a common data set. 
 
-The likelihood function first calculates parameter values for each model that are most likely to fit the data the best. The test statistic is then the ratio of these two likelihoods:  \[LR=-2log\frac{L(resricted \ model)}{L(full \ model)}=2(loglike(full \ model)-loglike(restricted \ model)\]
+The likelihood function first calculates parameter values for each model that are most likely to fit the data the best. The test statistic is then the ratio of these two likelihoods, generally:  \[LR=-2log\frac{L(resricted \ model)}{L(full \ model)}=2(loglike(full \ model)-loglike(restricted \ model)\]
 LR is distributed approximately $\chi^2$ with degrees of freedom equal to the number of restricted parameters. 
 
-In this case the full model is that which includes the histology variable and corresponding $\beta$ coefficient as a parameter. The restricted model lacks any predictor variable altogether. 
+In this case the full model is that which includes the histology variable and corresponding $\beta$ coefficient as a parameter. The restricted model lacks any predictor variable altogether. The restrictive model is the overall survival of glioma, irrespective of tumore type. Therefore, it helps answer the question: Does the histology variable influence survival at all, relative to the overall survival.
+
+Clearly, the answer is yes.
 
 ### Write up
 

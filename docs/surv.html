@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-04-13" />
+<meta name="date" content="2020-04-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -793,6 +793,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="45.4" data-path="surv.html"><a href="surv.html#kaplan-meier-plots"><i class="fa fa-check"></i><b>45.4</b> Kaplan-Meier plots</a></li>
 <li class="chapter" data-level="45.5" data-path="surv.html"><a href="surv.html#log-rank-tests"><i class="fa fa-check"></i><b>45.5</b> Log rank tests</a><ul>
 <li class="chapter" data-level="45.5.1" data-path="surv.html"><a href="surv.html#write-up-of-log-rank-test"><i class="fa fa-check"></i><b>45.5.1</b> Write up of log rank test</a></li>
+<li class="chapter" data-level="45.5.2" data-path="surv.html"><a href="surv.html#comparing-more-than-two-survival-curves"><i class="fa fa-check"></i><b>45.5.2</b> Comparing more than two survival curves</a></li>
 </ul></li>
 <li class="chapter" data-level="45.6" data-path="surv.html"><a href="surv.html#cox-proportional-hazards-analysis"><i class="fa fa-check"></i><b>45.6</b> Cox proportional hazards analysis</a><ul>
 <li class="chapter" data-level="45.6.1" data-path="surv.html"><a href="surv.html#cox-proportional-hazards-regression-of-glioma"><i class="fa fa-check"></i><b>45.6.1</b> Cox proportional hazards regression of glioma</a></li>
@@ -975,29 +976,37 @@ placebo
 <p><strong>Given a record of start and end dates/times, we’ll either have to first calculate their difference before passing such data into survival functions, or argue a function so that it will do this given this information.</strong></p>
 <div id="deriving-times-from-recorded-dates" class="section level3">
 <h3><span class="header-section-number">45.1.1</span> Deriving times from recorded dates</h3>
-<p>The duration to an event is something that is calculated during data processing, or a data frame with start and end times can be passed directly into <code>survival</code> package functions, which will calculate survival time. Rather than show that, instead, I’m using this as an opportunity to illustrate how to deal with date/time variables more generally.</p>
+<p>The duration to an event is something that is calculated during data processing. It is important to pass into the <code>Surv</code> function (below) values in units of time. They should not be simple numeric values.</p>
 <p>Survival analysis can be conducted over any time scale.</p>
 <p>Scales of days, weeks, months and even years are common. In such designs calendar date variables are commonly used. For example, in a cancer trial a date is recorded for the date a mouse is implanted with a tumor. Subsequently, the date an event (eg, death or censure) occurs is also recorded. The time between these days is then calculated during data processing.</p>
-<p>It turns out that dates can be a tricky variable in any computer language due to shifts such as time zones, the number of days in a month, daylight savings, leap years and even leap seconds. Strictly, unlike for seconds (which always have a fixed duration) time variables in units of minutes, hours, days, weeks, months and years (and more) might be approximate unless we account for these shifts.</p>
-<p>The <code>lubridate</code> package has several utilities to deal with this when using date/time data. Our main concern is converting date or date/time entries into numeric values on whatever scale useful for our survival analysis algorithms.</p>
+<p>It turns out that dates can be a tricky variable in any computer language due to their imprecision. Shifts such as time zones, the number of days in a month, daylight savings, leap years and even leap seconds occur. Strictly, unlike for seconds (which always have a fixed duration) time variables in units of minutes, hours, days, weeks, months and years (and more) might be approximate unless we account for these shifts. See <code>?POSIXct</code> for more information.</p>
+<p>The <code>lubridate</code> package has several utilities to deal with date/time data. Our main concern is converting date or date/time entries into time values on whatever scale useful for our survival analysis algorithms.</p>
 <p>Let’s image the simple case where we record the start dates for enrollment for each case in a study, and then record the date of the event or censure entry.</p>
-<p>Compute this interval and then divide by the period to calculate numeric values for variables for either the days, weeks or months of survival. Note how the interval spans a leap year, so this calculation is fairly sophisticated in its accuracy.</p>
+<p>Note how each vector is that of character strings</p>
 <div class="sourceCode" id="cb988"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb988-1" title="1">start_date &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2020-01-14&quot;</span>, <span class="st">&quot;2020-01-12&quot;</span>, <span class="st">&quot;2020-01-30&quot;</span>, <span class="st">&quot;2020-01-29&quot;</span>)</a>
 <a class="sourceLine" id="cb988-2" title="2"></a>
-<a class="sourceLine" id="cb988-3" title="3">end_date &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2020-07-29&quot;</span>, <span class="st">&quot;2021-01-19&quot;</span>, <span class="st">&quot;2020-08-04&quot;</span>, <span class="st">&quot;2020-02-29&quot;</span>)</a>
-<a class="sourceLine" id="cb988-4" title="4"></a>
-<a class="sourceLine" id="cb988-5" title="5"><span class="co"># illustrating how to calculate four different time scales</span></a>
-<a class="sourceLine" id="cb988-6" title="6"><span class="co"># usually there is only one scale of interest</span></a>
-<a class="sourceLine" id="cb988-7" title="7"><span class="co"># The divisor can be set to any length: days(7) == week(1)</span></a>
-<a class="sourceLine" id="cb988-8" title="8"></a>
-<a class="sourceLine" id="cb988-9" title="9">dataSet &lt;-<span class="st"> </span><span class="kw">tibble</span>(start_date, end_date) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb988-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">days =</span> <span class="kw">interval</span>(start_date, end_date)<span class="op">/</span><span class="kw">days</span>(<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb988-11" title="11">         <span class="dt">weeks =</span> <span class="kw">interval</span>(start_date, end_date)<span class="op">/</span><span class="kw">weeks</span>(<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb988-12" title="12">         <span class="dt">months =</span> <span class="kw">interval</span>(start_date, end_date)<span class="op">/</span><span class="kw">months</span>(<span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb988-13" title="13">         <span class="dt">years =</span> <span class="kw">interval</span>(start_date, end_date)<span class="op">/</span><span class="kw">years</span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb988-14" title="14">         )</a>
-<a class="sourceLine" id="cb988-15" title="15"></a>
-<a class="sourceLine" id="cb988-16" title="16">dataSet</a></code></pre></div>
+<a class="sourceLine" id="cb988-3" title="3">end_date &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2020-07-29&quot;</span>, <span class="st">&quot;2021-01-19&quot;</span>, <span class="st">&quot;2020-08-04&quot;</span>, <span class="st">&quot;2020-02-29&quot;</span>)</a></code></pre></div>
+<p>The simplest way to calculate the time interval is to first convert the character strings into date objects using the <code>ymd</code> function. Then subtract.</p>
+<p>Note how in this case, by default, time units of days are the output. Note this produces a <code>difftime</code> object.</p>
+<div class="sourceCode" id="cb989"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb989-1" title="1">days &lt;-<span class="st"> </span><span class="kw">ymd</span>(end_date) <span class="op">-</span><span class="st"> </span><span class="kw">ymd</span>(start_date)</a>
+<a class="sourceLine" id="cb989-2" title="2">days</a></code></pre></div>
+<pre><code>## Time differences in days
+## [1] 197 373 187  31</code></pre>
+<div class="sourceCode" id="cb991"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb991-1" title="1"><span class="kw">class</span>(days)</a></code></pre></div>
+<pre><code>## [1] &quot;difftime&quot;</code></pre>
+<p>When the need is for numeric values as output rather than conversion to difftime, or when calcuating intervals greater than week (difftime does not have units of months or years), the method below takes character strings and produces numeric values in the sought for units.</p>
+<div class="sourceCode" id="cb993"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb993-1" title="1"><span class="co"># illustrating how to calculate four different time scales</span></a>
+<a class="sourceLine" id="cb993-2" title="2"><span class="co"># usually there is only one scale of interest</span></a>
+<a class="sourceLine" id="cb993-3" title="3"><span class="co"># The divisor can be set to any length: days(7) == week(1)</span></a>
+<a class="sourceLine" id="cb993-4" title="4"></a>
+<a class="sourceLine" id="cb993-5" title="5">dateSet &lt;-<span class="st"> </span><span class="kw">tibble</span>(start_date, end_date) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb993-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">days =</span> <span class="kw">interval</span>(start_date, end_date)<span class="op">/</span><span class="kw">days</span>(<span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb993-7" title="7">         <span class="dt">weeks =</span> <span class="kw">interval</span>(start_date, end_date)<span class="op">/</span><span class="kw">weeks</span>(<span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb993-8" title="8">         <span class="dt">months =</span> <span class="kw">interval</span>(start_date, end_date)<span class="op">/</span><span class="kw">months</span>(<span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb993-9" title="9">         <span class="dt">years =</span> <span class="kw">interval</span>(start_date, end_date)<span class="op">/</span><span class="kw">years</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb993-10" title="10">         )</a>
+<a class="sourceLine" id="cb993-11" title="11"></a>
+<a class="sourceLine" id="cb993-12" title="12">dateSet</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 6
 ##   start_date end_date    days weeks months  years
 ##   &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -1022,13 +1031,13 @@ placebo
 <h2><span class="header-section-number">45.2</span> Kaplan-Meier estimator</h2>
 <p>Everyone will recognize the familiar step-down Kaplan-Meier “survival” curve, even though we might not know its name or function. These plot an updated survival probability each time the number at risk (<span class="math inline">\(N_t\)</span>) in the study changes. The number at risk can change either due to an event (<span class="math inline">\(D_t\)</span>) or due to censoring (<span class="math inline">\(C_t\)</span>). <span class="math inline">\(S_{t+1}\)</span> is the surival probability we are computing due to an event or censoring, while <span class="math inline">\(S_t\)</span> is the survival probility just before this. <span class="math display">\[S_{t+1}=S_t \frac{N_{t+1}-D_{t+1}}{N_{t+1}}\]</span></p>
 <p>Perhaps this is easier to understand through illustration. We begin a study with 10 subjects. We have only one group (no comparisons are involved) and everyone is enrolled simultaneously, to keep it simple. Thus, 10 subjects are at risk of not surviving the protocol. At the intial time, 100% are survivors.</p>
-<div class="sourceCode" id="cb990"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb990-1" title="1">months &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">5</span>,<span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb990-2" title="2">Nt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb990-3" title="3">Dt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="st">&quot;&quot;</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb990-4" title="4">Ct &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="dv">1</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="dv">1</span>, <span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb990-5" title="5">Stplus1&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.788</span>, <span class="fl">.675</span>, <span class="fl">.675</span>, <span class="fl">.404</span>)</a>
-<a class="sourceLine" id="cb990-6" title="6"></a>
-<a class="sourceLine" id="cb990-7" title="7"><span class="kw">kable</span>(<span class="kw">data.frame</span>(months, Nt, Dt, Ct, Stplus1))</a></code></pre></div>
+<div class="sourceCode" id="cb995"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb995-1" title="1">months &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">5</span>,<span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb995-2" title="2">Nt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb995-3" title="3">Dt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="st">&quot;&quot;</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb995-4" title="4">Ct &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="dv">1</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="dv">1</span>, <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb995-5" title="5">Stplus1&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.788</span>, <span class="fl">.675</span>, <span class="fl">.675</span>, <span class="fl">.404</span>)</a>
+<a class="sourceLine" id="cb995-6" title="6"></a>
+<a class="sourceLine" id="cb995-7" title="7"><span class="kw">kable</span>(<span class="kw">data.frame</span>(months, Nt, Dt, Ct, Stplus1))</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1167,50 +1176,11 @@ Stplus1
 <p>Let’s look at some data for exploring statistical inference.</p>
 <p>The glioma data set below comes from the <code>coin</code> package. Note it contains 37 cases listing the survival times for people with either Grade3 or GBM gliomas. Notice also that it contains a few grouping factors, including histology, sex, and group.</p>
 <p>We’ll just focus on survival associated with histology, which you’ll recognize as two different types of glioma.</p>
-<div class="sourceCode" id="cb991"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb991-1" title="1">glioma</a></code></pre></div>
-<pre><code>##    no. age    sex histology   group event time
-## 1    1  41 Female    Grade3     RIT  TRUE   53
-## 2    2  45 Female    Grade3     RIT FALSE   28
-## 3    3  48   Male    Grade3     RIT FALSE   69
-## 4    4  54   Male    Grade3     RIT FALSE   58
-## 5    5  40 Female    Grade3     RIT FALSE   54
-## 6    6  31   Male    Grade3     RIT  TRUE   25
-## 7    7  53   Male    Grade3     RIT FALSE   51
-## 8    8  49   Male    Grade3     RIT FALSE   61
-## 9    9  36   Male    Grade3     RIT FALSE   57
-## 10  10  52   Male    Grade3     RIT FALSE   57
-## 11  11  57   Male    Grade3     RIT FALSE   50
-## 12  12  55 Female       GBM     RIT FALSE   43
-## 13  13  70   Male       GBM     RIT  TRUE   20
-## 14  14  39 Female       GBM     RIT  TRUE   14
-## 15  15  40 Female       GBM     RIT FALSE   36
-## 16  16  47 Female       GBM     RIT FALSE   59
-## 17  17  58   Male       GBM     RIT  TRUE   31
-## 18  18  40 Female       GBM     RIT  TRUE   14
-## 19  19  36   Male       GBM     RIT  TRUE   36
-## 20   1  27   Male    Grade3 Control  TRUE   34
-## 21   2  32   Male    Grade3 Control  TRUE   32
-## 22   3  53 Female    Grade3 Control  TRUE    9
-## 23   4  46   Male    Grade3 Control  TRUE   19
-## 24   5  33 Female    Grade3 Control FALSE   50
-## 25   6  19 Female    Grade3 Control FALSE   48
-## 26   7  32 Female       GBM Control  TRUE    8
-## 27   8  70   Male       GBM Control  TRUE    8
-## 28   9  72   Male       GBM Control  TRUE   11
-## 29  10  46   Male       GBM Control  TRUE   12
-## 30  11  44   Male       GBM Control  TRUE   15
-## 31  12  83 Female       GBM Control  TRUE    5
-## 32  13  57 Female       GBM Control  TRUE    8
-## 33  14  71 Female       GBM Control  TRUE    8
-## 34  15  61   Male       GBM Control  TRUE    6
-## 35  16  65   Male       GBM Control  TRUE   14
-## 36  17  50   Male       GBM Control  TRUE   13
-## 37  18  42 Female       GBM Control  TRUE   25</code></pre>
 <p>The first step is to create a survival model of the data. The <code>Surv</code> function from the <code>survival</code> package in conjunction with the <code>survfit</code> function summarizes the events while calculating the survival probability for each event and its associated time points (which are in months), along with some useful summary statistics.</p>
 <p>Hopefully the formula <code>Surv(time, event) ~ 1</code> below strikes as reminiscent of that which is used in regression. Here, the <code>survfit</code> function calculates the numbers at risk, the numbers of events and the survival, along with standard error and confidence interval for each time point. <strong>This is how to regress the data WITHOUT accounting for the effects of any of the predictors.</strong> This is being done to illustrate a couple of points.</p>
-<div class="sourceCode" id="cb993"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb993-1" title="1">modelAll &lt;-<span class="st"> </span><span class="kw">survfit</span>(<span class="kw">Surv</span>(time, event) <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> glioma)</a>
-<a class="sourceLine" id="cb993-2" title="2"></a>
-<a class="sourceLine" id="cb993-3" title="3"><span class="kw">summary</span>(modelAll)</a></code></pre></div>
+<div class="sourceCode" id="cb996"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb996-1" title="1">modelAll &lt;-<span class="st"> </span><span class="kw">survfit</span>(<span class="kw">Surv</span>(time, event) <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> glioma)</a>
+<a class="sourceLine" id="cb996-2" title="2"></a>
+<a class="sourceLine" id="cb996-3" title="3"><span class="kw">summary</span>(modelAll)</a></code></pre></div>
 <pre><code>## Call: survfit(formula = Surv(time, event) ~ 1, data = glioma)
 ## 
 ##  time n.risk n.event survival std.err lower 95% CI upper 95% CI
@@ -1231,16 +1201,21 @@ Stplus1
 ##    34     16       1    0.428  0.0820        0.294        0.623
 ##    36     15       1    0.399  0.0813        0.268        0.595
 ##    53      8       1    0.349  0.0851        0.217        0.563</code></pre>
+<div class="sourceCode" id="cb998"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb998-1" title="1">modelAll</a></code></pre></div>
+<pre><code>## Call: survfit(formula = Surv(time, event) ~ 1, data = glioma)
+## 
+##       n  events  median 0.95LCL 0.95UCL 
+##      37      23      31      15      NA</code></pre>
 <p>The overall median survival calculated for these 37 cases is 31 months (95% CI is 15 to NA).</p>
-<div class="sourceCode" id="cb995"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb995-1" title="1">modelAll</a></code></pre></div>
+<div class="sourceCode" id="cb1000"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1000-1" title="1">modelAll</a></code></pre></div>
 <pre><code>## Call: survfit(formula = Surv(time, event) ~ 1, data = glioma)
 ## 
 ##       n  events  median 0.95LCL 0.95UCL 
 ##      37      23      31      15      NA</code></pre>
 <p>Now let’s focus on comparing the two groups under the histology variable to ask whether the type of tumor influences survival. We are NOT going to factor in the effects of age, sex or the group variable, in order to keep things simple.</p>
 <p>First we change the formula from above:</p>
-<div class="sourceCode" id="cb997"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb997-1" title="1">modelHis &lt;-<span class="st"> </span><span class="kw">survfit</span>(<span class="kw">Surv</span>(time, event) <span class="op">~</span><span class="st"> </span>histology, <span class="dt">data =</span> glioma)</a>
-<a class="sourceLine" id="cb997-2" title="2"><span class="kw">summary</span>(modelHis)</a></code></pre></div>
+<div class="sourceCode" id="cb1002"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1002-1" title="1">modelHis &lt;-<span class="st"> </span><span class="kw">survfit</span>(<span class="kw">Surv</span>(time, event) <span class="op">~</span><span class="st"> </span>histology, <span class="dt">data =</span> glioma)</a>
+<a class="sourceLine" id="cb1002-2" title="2"><span class="kw">summary</span>(modelHis)</a></code></pre></div>
 <pre><code>## Call: survfit(formula = Surv(time, event) ~ histology, data = glioma)
 ## 
 ##                 histology=GBM 
@@ -1267,7 +1242,7 @@ Stplus1
 ##    34     12       1    0.697  0.1136        0.506        0.959
 ##    53      7       1    0.597  0.1341        0.385        0.927</code></pre>
 <p>The two groups differ in median survival. For the cases with GBM it is 14 months (95%CI is 11 to 31 months). The median survival for Grade3 cases is undefined. That’s because the survival rate is greater than 0.5…they have not reached the median point!</p>
-<div class="sourceCode" id="cb999"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb999-1" title="1">modelHis</a></code></pre></div>
+<div class="sourceCode" id="cb1004"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1004-1" title="1">modelHis</a></code></pre></div>
 <pre><code>## Call: survfit(formula = Surv(time, event) ~ histology, data = glioma)
 ## 
 ##                   n events median 0.95LCL 0.95UCL
@@ -1278,17 +1253,27 @@ Stplus1
 <h2><span class="header-section-number">45.4</span> Kaplan-Meier plots</h2>
 <p>The <code>survival</code> package has base plotting functions, but we use functions in the <code>survminer</code> package to generate ggplots of survival curves.</p>
 <p>First a bare bones plot of the unsegmented data. Notice how the median surival line is drawn. Also notice the discrete nature of the 95% confidence intervals (shaded).</p>
-<div class="sourceCode" id="cb1001"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1001-1" title="1"><span class="kw">ggsurvplot</span>(modelAll,</a>
-<a class="sourceLine" id="cb1001-2" title="2">           <span class="dt">surv.median.line =</span> <span class="st">&quot;hv&quot;</span>, <span class="co"># Specify median survival</span></a>
-<a class="sourceLine" id="cb1001-3" title="3">           <span class="dt">palette =</span> <span class="kw">c</span>(<span class="st">&quot;#002878&quot;</span>))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-526-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1006"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1006-1" title="1"><span class="kw">ggsurvplot</span>(modelAll,</a>
+<a class="sourceLine" id="cb1006-2" title="2">           <span class="dt">surv.median.line =</span> <span class="st">&quot;hv&quot;</span>, <span class="co"># Specify median survival</span></a>
+<a class="sourceLine" id="cb1006-3" title="3">           <span class="dt">palette =</span> <span class="kw">c</span>(<span class="st">&quot;#002878&quot;</span>))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-527"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-527-1.png" alt="Overall survival in the glioma data, irrespective of tumor type." width="672" />
+<p class="caption">
+Figure 45.1: Overall survival in the glioma data, irrespective of tumor type.
+</p>
+</div>
 <p>Next we plot the survival curves based upon the histology variable. Note how Grade3 survival never reaches 0.5, thus a median survival time is not possible to calculate.</p>
-<div class="sourceCode" id="cb1002"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1002-1" title="1"><span class="kw">ggsurvplot</span>(modelHis,</a>
-<a class="sourceLine" id="cb1002-2" title="2">          <span class="dt">conf.int =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb1002-3" title="3">          <span class="dt">surv.median.line =</span> <span class="st">&quot;hv&quot;</span>, <span class="co"># Specify median survival</span></a>
-<a class="sourceLine" id="cb1002-4" title="4">          <span class="dt">ggtheme =</span> <span class="kw">theme_bw</span>(), <span class="co"># Change ggplot2 theme</span></a>
-<a class="sourceLine" id="cb1002-5" title="5">          <span class="dt">palette =</span> <span class="kw">c</span>(<span class="st">&quot;#002878&quot;</span>, <span class="st">&quot;#d28e00&quot;</span>))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-527-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1007"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1007-1" title="1"><span class="kw">ggsurvplot</span>(modelHis,</a>
+<a class="sourceLine" id="cb1007-2" title="2">          <span class="dt">conf.int =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb1007-3" title="3">          <span class="dt">surv.median.line =</span> <span class="st">&quot;hv&quot;</span>, <span class="co"># Specify median survival</span></a>
+<a class="sourceLine" id="cb1007-4" title="4">          <span class="dt">ggtheme =</span> <span class="kw">theme_bw</span>(), <span class="co"># Change ggplot2 theme</span></a>
+<a class="sourceLine" id="cb1007-5" title="5">          <span class="dt">palette =</span> <span class="kw">c</span>(<span class="st">&quot;#002878&quot;</span>, <span class="st">&quot;#d28e00&quot;</span>))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-528"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-528-1.png" alt="Glioma survival by type of tumor." width="672" />
+<p class="caption">
+Figure 45.2: Glioma survival by type of tumor.
+</p>
+</div>
 </div>
 <div id="log-rank-tests" class="section level2">
 <h2><span class="header-section-number">45.5</span> Log rank tests</h2>
@@ -1305,7 +1290,7 @@ Stplus1
 <p>The default mode for the <code>survdiff</code> function in the <code>survival</code> package runs a Mantel-Haenszel log rank test producing a <span class="math inline">\(\chi^2\)</span> test statistic with 1 degree of freedom. <span class="math display">\[\chi^2=\frac{(\sum O_{1t}-\sum E_{1t})^2}{\sum Var(E_{1t})}\]</span></p>
 <p>Here <span class="math inline">\(\sum O_{it}\)</span> and <span class="math inline">\(\sum E_{it}\)</span> are the sum of the observed and expected number of events in group 1 over all event times. The denominator is the sum of the variances for all events, <span class="math display">\[Var(E_{1t})=\frac{N_{1t}\times N_{2t}\times (N_t-O_t)}{N_t^2\times(N_t-1)}\]</span> Here <span class="math inline">\(N\)</span> represents the total numbers at risk at a given time point, while <span class="math inline">\(N_1\)</span> and <span class="math inline">\(N_2\)</span> are the at risk within each group.</p>
 <p>Here is how to run the test.</p>
-<div class="sourceCode" id="cb1003"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1003-1" title="1"><span class="kw">survdiff</span>(<span class="kw">Surv</span>(time, event) <span class="op">~</span><span class="st"> </span>histology, <span class="dt">data =</span> glioma)</a></code></pre></div>
+<div class="sourceCode" id="cb1008"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1008-1" title="1"><span class="kw">survdiff</span>(<span class="kw">Surv</span>(time, event) <span class="op">~</span><span class="st"> </span>histology, <span class="dt">data =</span> glioma)</a></code></pre></div>
 <pre><code>## Call:
 ## survdiff(formula = Surv(time, event) ~ histology, data = glioma)
 ## 
@@ -1316,13 +1301,22 @@ Stplus1
 ##  Chisq= 13.4  on 1 degrees of freedom, p= 2e-04</code></pre>
 <p>Note that the column labeled <code>(O-E)^2/E</code> reports the <span class="math inline">\(\chi^2\)</span> values for each of the two groups. When summed, they become the classic Mantel-Cox log rank test statistic, which can be used as an alternative for inference rather than the default.</p>
 <p>The column sum is <span class="math inline">\(\chi^2=12.28\)</span> with 1 degree of freedom. Use the <code>chisq</code> distribution to compute its p-value:</p>
-<div class="sourceCode" id="cb1005"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1005-1" title="1"><span class="kw">pchisq</span>(<span class="fl">12.28</span>, <span class="dt">df=</span><span class="dv">1</span>, <span class="dt">lower.tail=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb1010"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1010-1" title="1"><span class="kw">pchisq</span>(<span class="fl">12.28</span>, <span class="dt">df=</span><span class="dv">1</span>, <span class="dt">lower.tail=</span>F)</a></code></pre></div>
 <pre><code>## [1] 0.0004578384</code></pre>
-<p>Although the test statistic and p-values for these two log rank tests are similar, they are not identical. The values should agree in well-powered experiments. To avoid p-hacking temptations, make the decision to use one or the other for inference in advance.</p>
-<p>Nevertheless, both tests generate an extreme <span class="math inline">\(\chi^2\)</span> test statistic and corresponding low p-value, below the typical type1 error threshold of 0.05. On this basis the null hypothesis is rejected.</p>
+<p>Although the test statistic and p-values for these two log rank tests are similar, they are not identical. The values should agree in well-powered experiments. To avoid p-hacking temptations, make the decision in advance to use one or the other.</p>
+<p>Nevertheless, either test generates an extreme <span class="math inline">\(\chi^2\)</span> test statistic and corresponding low p-value, below the typical type1 error threshold of 0.05. On this basis reject the null hypothesis that the survival associated with both cancers is the same.</p>
 <div id="write-up-of-log-rank-test" class="section level3">
 <h3><span class="header-section-number">45.5.1</span> Write up of log rank test</h3>
 <p><strong>Survival with Grade3 (median survival = undetermined months, 95%CI = 53 to undetermined) differs from survival with GBM (median survival = 14 months, 95%CI = 11 to 31 months; Mantel-Haenszel log rank test, chisq= 13.4, p=2e-4).</strong></p>
+</div>
+<div id="comparing-more-than-two-survival-curves" class="section level3">
+<h3><span class="header-section-number">45.5.2</span> Comparing more than two survival curves</h3>
+<p>The log rank test can be performed on multiple curves simultaneously. There are two inferential options.</p>
+<ul>
+<li>Conclude from the overall chi-square test that at least one of the treatment levels differs from the others, using the bloody obvious test to draw further conclusions.</li>
+<li>Use the overall chi-square test as an omnibus test, much like an ANOVA F-test, granting permission to perform multiple post-hoc comparisons.</li>
+</ul>
+<p>For the latter we run the <code>pairwise_survdiff</code> function from the <code>survminer</code> package. This is very simple to execute. Selecting “none” as a p-value adjustment method allows for pulling out a vector of unadjusted p-values, to focus on only the comparisons of interest.</p>
 </div>
 </div>
 <div id="cox-proportional-hazards-analysis" class="section level2">
@@ -1341,8 +1335,8 @@ In the simple case where the predictor variable <span class="math inline">\(X\)<
 <div id="cox-proportional-hazards-regression-of-glioma" class="section level3">
 <h3><span class="header-section-number">45.6.1</span> Cox proportional hazards regression of glioma</h3>
 <p>In the code below Cox regression is executed on the glioma data, testing only the histology variable for the difference in survival between the GBM and Grade3 gliomas. Again, we ignore the other predictors.</p>
-<div class="sourceCode" id="cb1007"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1007-1" title="1">modelHis.cox &lt;-<span class="st"> </span><span class="kw">coxph</span>(<span class="kw">Surv</span>(time, event) <span class="op">~</span><span class="st"> </span>histology, <span class="dt">data =</span> glioma)</a>
-<a class="sourceLine" id="cb1007-2" title="2">modelHis.cox</a></code></pre></div>
+<div class="sourceCode" id="cb1012"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1012-1" title="1">modelHis.cox &lt;-<span class="st"> </span><span class="kw">coxph</span>(<span class="kw">Surv</span>(time, event) <span class="op">~</span><span class="st"> </span>histology, <span class="dt">data =</span> glioma)</a>
+<a class="sourceLine" id="cb1012-2" title="2">modelHis.cox</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = Surv(time, event) ~ histology, data = glioma)
 ## 
@@ -1351,11 +1345,11 @@ In the simple case where the predictor variable <span class="math inline">\(X\)<
 ## 
 ## Likelihood ratio test=13.24  on 1 df, p=0.0002738
 ## n= 37, number of events= 23</code></pre>
-<div class="sourceCode" id="cb1009"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1009-1" title="1"><span class="kw">print</span>(<span class="st">&quot;/////////////////////////////////////&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1014"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1014-1" title="1"><span class="kw">print</span>(<span class="st">&quot;/////////////////////////////////////&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;/////////////////////////////////////&quot;</code></pre>
-<div class="sourceCode" id="cb1011"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1011-1" title="1"><span class="kw">print</span>(<span class="st">&quot;/////////////////////////////////////&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1016"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1016-1" title="1"><span class="kw">print</span>(<span class="st">&quot;/////////////////////////////////////&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] &quot;/////////////////////////////////////&quot;</code></pre>
-<div class="sourceCode" id="cb1013"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1013-1" title="1"><span class="kw">summary</span>(modelHis.cox)</a></code></pre></div>
+<div class="sourceCode" id="cb1018"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1018-1" title="1"><span class="kw">summary</span>(modelHis.cox)</a></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = Surv(time, event) ~ histology, data = glioma)
 ## 
@@ -1379,19 +1373,21 @@ In the simple case where the predictor variable <span class="math inline">\(X\)<
 <p>From the output above, printing the regression model alone is comprehensive except for confidence intervals. Passing the model into the <code>summary</code> function pulls out this and some additional detail</p>
 <div id="log-hazard-ratiorelative-risk" class="section level4">
 <h4><span class="header-section-number">45.6.2.1</span> Log hazard ratio/relative risk</h4>
-<p>The <code>coef</code> value corresponds to <span class="math inline">\(\beta\)</span> from the hazard equation above, which equals <span class="math inline">\(log(\frac{\lambda(t)}{\lambda_0(t)})\)</span>. Thus we can say the log hazard ratio is -1.6401.</p>
-<p>But what does that actually mean?</p>
-<p>Remember that <span class="math inline">\(\lambda\)</span> symbolizes survival rates. And there are two survival rates of interest in this case: one for GBM and another for Grade3. Furthermore, we can bloody obvious tell from the plot above that the survival rate for Grade3 is larger than that for GBM. Think about that carefully for a moment.</p>
-<p>Log fractions can confuse. By algebra <span class="math inline">\(log(\lambda(t))-log(\lambda_0(t))=-1.6401\)</span>. The negative value of this difference means that <span class="math inline">\(\lambda_0(t)\)</span> must be greater than than <span class="math inline">\(\lambda(t)\)</span>. Therefore we can deduce that this R function has coerced Grade3 as baseline, or <span class="math display">\[coef=log \ hazard \ ratio=log(\frac{\lambda_{GBM}(t)}{\lambda _{Grade3}(t)})=-1.6401\]</span></p>
-<p>The z statistic and p-value for <code>coef</code> correspond to a Wald test (a ratio of the coefficient value to its SE). This tests the null hypothesis that <code>coef</code>= 0. If the null is true it would indicate there is no evidence that factor associated with that coefficient affects the log hazard ratio.</p>
+<p>The <code>coef</code> value corresponds to <span class="math inline">\(\beta\)</span> from the hazard equation above, which in general terms equals <span class="math inline">\(log(\frac{\lambda(t)}{\lambda_0(t)})\)</span>. Thus we can say the log hazard ratio is -1.6401.</p>
+<p>But what does that actually mean, and who is what in this case?</p>
+<p>First, recall R’s quirk in regression. R does not know if we want GBM or Grade3 to be the intercept. When we don’t tell it, that means that it will go choose the first alphanumerical as the intercept. In this case, that is GBM.</p>
+<p>Remember that <span class="math inline">\(\lambda\)</span> symbolizes survival rates. And there are two survival rates of interest in this case: one for GBM and another for Grade3. Furthermore, we can bloody obvious tell from the plot above that the survival rate for Grade3 is larger than that for GBM. Think about that carefully for a moment before reading on.</p>
+<p>Log fractions can confuse. Here we know that <span class="math inline">\(log(\lambda(t))-log(\lambda_0(t))=-1.6401\)</span>. The negative value of this difference means that <span class="math inline">\(\lambda_0(t)\)</span> must be greater than than <span class="math inline">\(\lambda(t)\)</span>. Therefore we can deduce that this R function has coerced Grade3 as the denominator, or <span class="math display">\[coef=log \ hazard \ ratio=log(\frac{\lambda_{GBM}(t)}{\lambda _{Grade3}(t)})=-1.6401\]</span></p>
+<p>The z statistic and p-value for <code>coef</code> correspond to a Wald test (a ratio of the coefficient value to its SE). This tests the null hypothesis that <code>coef</code>= 0 (if two survival rates are the same, their ratio is 1, null coef=log(1)=0). If the null is true it would indicate there is no evidence that factor associated with that coefficient affects the log hazard ratio.</p>
 </div>
 <div id="hazard-ratiorelative-risk" class="section level4">
 <h4><span class="header-section-number">45.6.2.2</span> Hazard ratio/relative risk</h4>
-<p>Now for the <code>exp(coef)</code>. This is the <strong>hazard ratio</strong>, otherwise known as the <strong>relative risk</strong>. Either of these two terms are used commonly and interchangeably. They also have greater descriptive efficacy than the log hazard ratio because logs tend to confuse people.</p>
-<p>It is worth repeating is that the hazard ratio nothing more complicated than a ratio of survival rates.
+<p>Now for the <code>exp(coef)</code>. This is the <strong>hazard ratio</strong>, otherwise known as the <strong>relative risk</strong>. Either of these two terms are used commonly and interchangeably. They also have greater descriptive efficacy than the log hazard ratio simply because logs tend to confuse people.</p>
+<p><strong>Hazard == survival rate</strong>. It is worth repeating that the hazard ratio nothing more complicated than a ratio of survival rates….and no logs are involved.
 <span class="math display">\[\frac{\lambda(t)}{\lambda_0(t)}=e^{\beta}=\frac{\lambda_{GBM}(t)}{\lambda _{Grade3}(t)}=0.1940\]</span></p>
 <p>Since the value of the hazard ratio is below 1, and <span class="math inline">\(\lambda\)</span> symbolizes survival rates, this result shows that the survival rate with GBM is lower than the survival with Grade3 tumors. That is bloody obvious from inspection of the plot above.</p>
 <p>In fact, the GBM survival rate is 19.4% the survival rate for Grade3. Or we can say the relative risk of death due to Grade3 tumors is 19.4% of GBM tumors. or we can say hazard associated with Grade3 tumors is 19.4% of that for GBM.</p>
+<p>Or we would just report the hazard ratio as a descriptive: Grade3 to GBM HR = 0.194.</p>
 <p>Now please note the <code>exp(-coef)</code> column. This is merely the reciprocal of the hazard ratio. A personal preference might be to use this. Is so, one would say that the hazard rate of GBM is 5.156 times greater than that for Grade3. Alternately the relative risk of GBM to Grade3 glioma is 5.156.</p>
 </div>
 <div id="confidence-interval" class="section level4">
@@ -1402,12 +1398,13 @@ In the simple case where the predictor variable <span class="math inline">\(X\)<
 <div id="statistical-tests" class="section level4">
 <h4><span class="header-section-number">45.6.2.4</span> Statistical tests</h4>
 <p>Finally on to the statistical tests.</p>
-<p>This function by default generates 3 inferential tests. In well-powered experiments all three should converge to a similar conclusion but won’t have the exact same values. It is up to the researcher to decide in advance of testing which one to use.</p>
+<p>This function by default generates 3 inferential tests and the researcher chooses one of these via preference. In well-powered experiments all three should converge to a similar conclusion but won’t have the exact same values. On close calls, when the researcher decides in advance of testing which one to use the temptation to p-hack is averted.</p>
 <p>The log rank test is handled in the section above. The Wald test won’t be discussed here in detail. It is an extension of the Wald test used above for the single coefficient value. The main difference is that the Wald test for the overall regression handles many coefficients simultaneously. That’s not an issue in this simple case, but it would be if other predictor variables were added to the regression model.</p>
 <p>Likelihood ratio tests are most commonly used. They always compare the fits of two different models, usually nested, to a common data set.</p>
-<p>The likelihood function first calculates parameter values for each model that are most likely to fit the data the best. The test statistic is then the ratio of these two likelihoods: <span class="math display">\[LR=-2log\frac{L(resricted \ model)}{L(full \ model)}=2(loglike(full \ model)-loglike(restricted \ model)\]</span>
+<p>The likelihood function first calculates parameter values for each model that are most likely to fit the data the best. The test statistic is then the ratio of these two likelihoods, generally: <span class="math display">\[LR=-2log\frac{L(resricted \ model)}{L(full \ model)}=2(loglike(full \ model)-loglike(restricted \ model)\]</span>
 LR is distributed approximately <span class="math inline">\(\chi^2\)</span> with degrees of freedom equal to the number of restricted parameters.</p>
-<p>In this case the full model is that which includes the histology variable and corresponding <span class="math inline">\(\beta\)</span> coefficient as a parameter. The restricted model lacks any predictor variable altogether.</p>
+<p>In this case the full model is that which includes the histology variable and corresponding <span class="math inline">\(\beta\)</span> coefficient as a parameter. The restricted model lacks any predictor variable altogether. The restrictive model is the overall survival of glioma, irrespective of tumore type. Therefore, it helps answer the question: Does the histology variable influence survival at all, relative to the overall survival.</p>
+<p>Clearly, the answer is yes.</p>
 </div>
 </div>
 <div id="write-up-18" class="section level3">
