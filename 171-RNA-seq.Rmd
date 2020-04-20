@@ -1,0 +1,338 @@
+# RNA-seq with R {#rnaseq}
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(edgeR)
+library(limma)
+library(gplots)
+library(viridis)
+```
+
+This example is adopted extensively from [RNA-seq analysis in R](https://combine-australia.github.io/RNAseq-R/06-rnaseq-day1.html) by Belinda Phips and colleagues. The data are available [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450) and [here](https://figshare.com/s/1d788fd384d33e913a2a).
+
+These are part of a [broader workship presented by the group](https://combine-australia.github.io/RNAseq-R/) with very easy to follow protocols for RNA-seq analysis with R.
+
+The data below are from a study of mammary gland development showing the pro-survival gene Mcl1 as a master regulator gland development. They represent duplicate RNA-seq measurements from each of 6 groups: basal and luminal cells from virgin, pregnant and lactating mice.
+
+The purpose of having this in JABSTB at this stage is to offer a gentle introduction to RNA-seq data and analysis. The focus here is on the classification methods within this example.
+
+## Install Bioconductor
+
+This chapter uses functions in [Bioconductor](http://www.bioconductor.org/). 
+
+Bioconductor is a universe of packages and functions geared for bio/omics data analysis. It is managed separately from the broader CRAN universe.
+
+As for the CRAN universe, we don't automagically have the full universe of Bioconductor packages by default. We just get a working base suite. If we want more, we have to find it and install it.
+
+The most important difference is to use the Bioconductor package manager to install packages. 
+
+When we want to install additional Bioconductor packages we would do so this way, `BiocManager::install("newthing")`, not this way, `install.packages("newthing")`
+
+Go to that link and read more about Bioconductor. Then install Bioconductor by running the script below in your console. 
+
+There is much to install. This will take a while. 
+
+**Do NOT compile anything**
+
+If you see the prompt below, always choose no:
+
+`Do you want to install from sources the package which needs compilation (yes/no/cancel)?`
+
+```{r eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.10")
+```
+
+## Import raw count data
+
+By this point, there has already been considerable processing of the sequence data. Sequences have been matched to their genes and to each other. The values in this table are counts of the number of transcript reads per gene, in each of the 12 samples. 
+
+Read them into an object.
+
+```{r}
+seqdata <- read.delim("datasets/GSE60450_Lactation-GenewiseCounts.txt")
+head(seqdata)
+```
+
+To see the data set's dimensions.
+
+```{r}
+dim(seqdata)
+```
+There are 14 columns and over 27000 rows.
+
+The information about the sample will be used later. Read it into the environment now.
+
+```{r}
+sampleinfo <- read.delim("datasets/SampleInfo_Corrected.txt")
+sampleinfo
+```
+
+## Munge to simpler table
+
+Create a table that has only count data so that we can do several manipulations of the gene expression data. 
+```{r}
+countdata <- select(seqdata, -EntrezGeneID, -Length)
+countdata <- as.data.frame(countdata)
+```
+
+Note below how the EntrezGeneID is placed back in as row names. The row names are not a variable. 
+
+```{r}
+rownames(countdata) <- seqdata[,1]
+```
+
+This is a data frame now with row and column names. Each column corresponds to a biological replicate, each row a gene id. Every cell in a row is the raw transcript counts for that gene under that replicate condition.
+
+Shorten the column names. They start with 7 non-identical characters which are good identifiers.
+
+```{r}
+colnames(countdata) <- substring(colnames(countdata), 1,7)
+head(countdata)
+
+```
+
+Now we're in pretty good shape in terms of having a simple view of the raw count data.
+
+## Filtering
+
+Next we need to filter out the genes for which there are no reads, or there are inconsistent reads across replicate samples, or there are low reads. 
+
+This is a multistep process.
+
+The first step is to choose a normalization technique. RPKM (reads per kilo base per million) and CPM (counts per million) are common options. We'll use the latter.
+
+*Our filtering rule is to keep transcripts that have CPM > 0.5 in at least two samples.* A CPM of 0.5 corresponds to roughly 10-15 counts per gene in this sized library. This threshold decision is a scientific judgement based upon one's experience regarding the sensitivity of the count measurement. Thresholds of 1 or 2 CPM are not uncommon.
+
+First, convert raw counts to CPM.
+
+```{r}
+myCPM <- edgeR::cpm(countdata)
+head(myCPM)
+```
+
+Next, impose the threshold. 
+
+First, this script is a simple logical that identifies genes and groups that satisfy the first part of the filtering rule.
+
+```{r}
+thresh <- myCPM > 0.5
+head(thresh)
+```
+
+Here's a summary of that result.
+
+```{r}
+table(rowSums(thresh))
+```
+
+There are 10857 genes that are $\le 0.5$ CPM in all twelve samples. There are 518 genes that have greater than 0.5 CPM in only 1 sample. 544 genes have greater than 0.5 CPM in only two samples, 307 genes with greater than 0.5 CPM in 3 samples, and so on. There are 11433 genes which have greater than 0.5 CPM in all twelve samples.
+
+Second, identify the genes for which the second condition above is satisfied. This is another logical. And it just creates a long logical vector, with a True or False corresponding to each row name.
+
+```{r}
+keep <- rowSums(thresh) >= 2
+summary(keep)
+
+```
+
+Thus, there are 15804 genes which have greater than 0.5 CPM in at least two samples.
+
+Here is an updated counts dataset containing only those genes that are filtered. This is the final filtered dataset which will be used for the statistical analysis.
+
+```{r}
+# Subset the rows of countdata to keep the more highly expressed genes
+counts.keep <- countdata[keep,]
+head(counts.keep)
+```
+woot!
+
+## DGEList
+
+The `counts.keep` dataframe is converted into a list object for ease of analysis moving forward. It will be passed into other functions within the Bioconductor universe.
+
+```{r}
+y <- edgeR::DGEList(counts.keep)
+y
+```
+
+## Visualization
+
+A lot of the -omic visualizations use the plotting functions of R base. It is fairly easy to get something in the box with these plotting functions, but a bit more difficult to get them gussied up all nice and pretty.
+
+Comparing library sizes checks for any anomalies. There are none. Each sample library size is about the same.
+
+```{r fig.cap="Sizes of RNAseq libraries for each sample."}
+barplot(y$samples$lib.size,names=colnames(y),las=2)
+# Add a title to the plot
+title("Comparison of library sizes")
+```
+
+Here's a plot of the raw counts, in order to illustrate they are not normally-distributed, which is typical of discrete count data.
+
+```{r fig.cap="Distribution of counts across the 12 samples. Note they are not normally-distributed."}
+boxplot(y$counts, las=2)
+```
+
+Here's a plot of the CPM, which is also not normally distributed. This illustrates that CPM is just a simple linear transform of count data.
+
+```{r fig.cap="Distribution of CPM-transformed counts, still not normally-distributed."}
+boxplot(cpm(y$counts), las=2)
+```
+
+Here's a plot of a log transformation of CPM data. This transformation yields an approximately Gaussian distribution of the count values within each sample, though there are clearly outliers. 
+
+The log transformed CPM data will be used in a lot of the statistical analysis because of this Gaussian property. So we'll go ahead and make an object for that.
+
+```{r}
+# Get log2 counts per million
+logcounts <- cpm(y,log=TRUE)
+```
+
+Now look at the `logcount` date by plotting box plots.
+
+```{r fig.cap="Natural log transformed CPM counts, normally-distributed but some outliers."}
+# Check distributions of samples using boxplots
+boxplot(logcounts, xlab="", ylab="Log2 counts per million",las=2)
+# Let's add a blue horizontal line that corresponds to the median logCPM
+abline(h=median(logcounts),col="blue")
+title("Boxplots of logCPMs (unnormalised)")
+```
+
+## Classification
+
+Multidimensional scaling is a cousin of principal component analysis. It provides a simple way to see if sample groups separate along their first and second dimensions. This is based upon a [leading fold-change metric](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934518/). This examines the subset of genes that exhibit the largest fold-differences between samples.
+
+The graph below shows separation and clustering of the 12 samples, but it is a bit hard to see what is what unless you've remembered what each sample represents.
+
+```{r fig.cap="Multi-dimensional scaling, a form of PCA."}
+limma::plotMDS(y)
+```
+
+We'll munge out some better plots below, focusing on the the classification of the predictor variables. Recall there are 12 samples, duplicates of gene expression in basal and luminal cells, for each of the following three conditions: the cells were derived from mice that were virgin, pregnant, or lactating.
+
+First we'll color by the feature that involves basal and luminal.
+```{r}
+# Let's set up colour schemes for CellType
+# How many cell types and in what order are they stored?
+levels(sampleinfo$CellType)
+
+```
+
+
+```{r}
+col.cell <- c("#012169","#b58500")[sampleinfo$CellType]
+data.frame(sampleinfo$CellType,col.cell)
+```
+
+The plot below clearly illustrates that the basal/luminal feature represents the first dimension of separation between the samples. In other words, the differences between basal and luminal cell gene expression accounts for most of the variation in the set.
+
+```{r fig.cap="MDS shows variation due to cell type explains the first dimension of the data."}
+# Redo the MDS with cell type colouring
+plotMDS(y,col=col.cell)
+# Let's add a legend to the plot so we know which colours correspond to which cell type
+legend("topleft",
+       fill=c("#012169","#b58500"),legend=levels(sampleinfo$CellType))
+# Add a title
+title("Cell type")
+```
+We'll do the same coloring trick for status.
+
+```{r}
+col.status <- c("red","blue","green")[sampleinfo$Status]
+col.status
+```
+
+The plot below colors each sample on the basis of whether it is from a virgin, pregnant, or lactating mouse. There is some separation of them along the 2nd dimension. Note how the duplicates of the same condition are very similar (the MCL1.DL lactating sample is missing for some reason?)
+
+```{r fig.cap="Variation due to status represents the 2nd dimension of the data set."}
+plotMDS(y,col=col.status)
+legend("topleft",fill=c("red","blue","green"),
+       legend=levels(sampleinfo$Status),cex=0.8)
+title("Status")
+```
+
+Thus, although these dimensions are latent, it is often possible to explain what variables are most responsible for the observed variation, and thus explain the first two principal components.
+
+The Bioconductor package `PCAtools`is a veritable smorgasbord of PCA functions and visualizations. Learning this package is strongly recommended. For more on it, [see this vignette](https://bioconductor.org/packages/release/bioc/vignettes/PCAtools/inst/doc/PCAtools.html)
+
+## Hierarchical clustering
+
+Hierarchical clustering is a way to cluster while visualizing relationships to other clusters. Before illustrating this technique some processing is in order.
+
+We're interested in seeing the genes driving the dimensional pattern seen above. What genes differ between the two cell types?  What genes differ between the 3 status conditions? Is there an interaction between cell type and status? 
+
+We can assume the most useful approach to answer this would be to focus on the genes that have the highest expression variance across the 12 samples.
+
+Rather than cluster all 15000+ genes, we'll cluster the 500 that are most variable. This is an arbitrary cutoff. 
+
+This script creates a vector of variances with associated with each GeneID. Just like in ANOVA, when row variances are high, differences in grouping factors will be greatest.
+
+```{r}
+var_genes <- apply(logcounts, 1, var)
+head(var_genes)
+```
+
+Now produce a vector with the GeneID names for those that have the greatest to lower variances, up to the 500th.
+
+```{r}
+# Get the gene names for the top 500 most variable genes
+select_var <- names(sort(var_genes, decreasing=TRUE))[1:500]
+head(select_var)
+```
+
+For your information, here is the expression pattern for the GeneID "22373" with the greatest variance. It encodes [Wap](https://www.ncbi.nlm.nih.gov/gene?Db=gene&Cmd=DetailsSearch&Term=22373), a known regulator of mammary epithelium. There is much lower expression in virgin basal cells compared to the others.
+
+```{r}
+logcounts["22373",]
+```
+
+From `logcounts` we select the rows corresponding to these 500 most variable genes.
+
+```{r}
+# Subset logcounts matrix
+highly_variable_lcpm <- logcounts[select_var,]
+dim(highly_variable_lcpm)
+
+```
+
+```{r}
+head(highly_variable_lcpm)
+```
+Now we simply pass this select group of the 500 most variable genes into the `heatmap.2` function. 
+
+The values represented here are logCPM values. 
+
+```{r}
+# Set up colour vector for celltype variable
+col.cell <- c("#012169","#b58500")[sampleinfo$CellType]
+
+# Plot the heatmap
+heatmap.2(highly_variable_lcpm,
+          col=viridis,
+          trace="none", 
+          main="Top 500 most variable genes across samples",
+          ColSideColors=col.cell,
+          scale="row")
+```
+Expression varies from low (dark) to high (light).
+
+Inspection of the horizontal clustering illustrates how it picks up the the experimental design very well. There are two main groups (corresponding to the luminal (Emory gold) and basal (Emory blue) cell types). There are also 3 groups within each of these, corresponding to the status.
+
+The duplicates line up very well together. This is tight data.
+
+The vertical clustering is very interesting. Over 3 quarters of the genes define the cell type differentiation, while the rest differentiate the status (virgin, pregnant, lactating). There is a clear interaction between cell type and status, as well. 
+
+## Summary
+
+This chapter is derived from [an excellent workshop on using R to work with RNA-seq data](https://combine-australia.github.io/RNAseq-R/). The workshop material is an excellent starting point for learning how to work with this data. 
+
+I've only made very modest changes to a portion of this material, with the goal of making a gentle introduction and keeping a focus on classification (MDS and hierarchical clustering).
+
+Install Bioconductor to use this material. Before doing so, it is important to recognize how Bioconductor relates to R and to CRAN. **I strongly recommend installing additional Bioconductor packages using the BiocManager**.  This workflow becomes more important when the time comes to updating, whether R or Bioconductor.
+
+The fundamental currency of RNA-seq data are transcript counts. To work with them requires transformation via normalization (such as CPM or RPKM). Counts are not normally distributed. For many statistical treatments the CPM need conversion to a Gaussian distribution. Natural log transformation usually gets this done. 
+
+Scientific judgements are necessary to limit the scope of the datasets. Working with RNA-seq data demands R skills related to creating and working with a variety of on-the-fly data objects, all while keeping one's rows and columns copacetic.
+
