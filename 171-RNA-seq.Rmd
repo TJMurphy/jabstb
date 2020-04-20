@@ -38,10 +38,10 @@ If you see the prompt below, always choose no:
 
 `Do you want to install from sources the package which needs compilation (yes/no/cancel)?`
 
-```{r eval=FALSE}
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install(version = "3.10")
+```{r}
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# BiocManager::install(version = "3.10")
 ```
 
 ## Import raw count data
@@ -72,9 +72,9 @@ sampleinfo
 ## Munge to simpler table
 
 Create a table that has only count data so that we can do several manipulations of the gene expression data. 
+
 ```{r}
-countdata <- select(seqdata, -EntrezGeneID, -Length)
-countdata <- as.data.frame(countdata)
+countdata <- seqdata[, 3:14]
 ```
 
 Note below how the EntrezGeneID is placed back in as row names. The row names are not a variable. 
