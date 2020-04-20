@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 10 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <title>Chapter 46 Classification | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 10 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:title" content="Chapter 46 Classification | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 10 Framing statistical hypotheses | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta name="twitter:title" content="Chapter 46 Classification | JABSTB: Statistical Design and Analysis of Experiments with R" />
   
   <meta name="twitter:description" content="Experimental biostatistics using R." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="dispersion.html"/>
-<link rel="next" href="error.html"/>
+<link rel="prev" href="surv.html"/>
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -837,103 +837,298 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="hypotheses" class="section level1">
-<h1><span class="header-section-number">Chapter 10</span> Framing statistical hypotheses</h1>
-<p><em>“There is no more to science than its method, and there is no more to its method than Popper has said.”-Hermann Bondi</em></p>
-<p>Hypothesis-driven research tests predictions about the nature of the world.</p>
-<p>Testing hypotheses statistically provides a pragmatic framework for making decisions about the validity of those predictions.</p>
-<p>When planning an experiment the primary goal should be to bring hyper-focused clarity to the hypothesis. This is the time to distill your thinking down to the exact question you want answered. What are you studying? What is not known? What is your prediction? How will you measure it? What are your variables? Are they discrete or continuous? How will you test it? How will you decide whether what you predicted happened or not? Will this actually answer the question you’re asking?</p>
-<p>The statistics taught in this course are for assessing the validity of experimental outcomes in a somewhat odd way: Formally, we test the null hypothesis.</p>
-<p>The expectation is to generate observations of such extreme magnitude that we can reject the null, the hypothesis that nothing happened. At first blush that might come off as absurd. Like a Seinfeld episode, where nothing is what is most important.</p>
-<p>Hopefully this won’t seem so odd after I describe what this accomplishes and explain why it is done this way.</p>
-<div id="the-decision-process" class="section level2">
-<h2><span class="header-section-number">10.1</span> The decision process</h2>
-<p>Everybody knows something about the p-value. When it’s low enough, the experiment “worked”. Before diving into the nitty gritty of p-values, let’s jump into a wider angle format to flesh out how they are used.</p>
-<p>The framework can be broken down into 5 key steps:</p>
-<ol style="list-style-type: lower-roman">
-<li>We begin with a null hypothesis–yes, the boring one about nothing.</li>
-<li>Experiments generate data.</li>
-<li>The data are transformed into test statistics.</li>
-<li>P-values are calculated from the experiment’s test statistic value.</li>
-<li>Based upon <em>a priori</em> thresholds, a decision is made to reject a null hypothesis, or not, depending upon the extremeness of the result.</li>
-</ol>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-62"></span>
-<img src="images/hypothesis.jpg" alt="Statistical hypotheses test the null in a multistep process" width="192" />
+<div id="classification" class="section level1">
+<h1><span class="header-section-number">Chapter 46</span> Classification</h1>
+<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1020-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1020-2" title="2"><span class="kw">library</span>(factoextra)</a>
+<a class="sourceLine" id="cb1020-3" title="3"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb1020-4" title="4"><span class="kw">library</span>(cluster)</a>
+<a class="sourceLine" id="cb1020-5" title="5"><span class="kw">library</span>(clustertend)</a></code></pre></div>
+<p>Data classification is an important first step in exploratory data analysis. The various statistical classification methods share in common an ability to build explanatory groups data sets that have many measurements. The motivations to do this are many-fold: segmentation analysis, identifying underlying structure, reducing complexity to fewer explanatory dimensions.</p>
+<p>These classification techniques replace impulses to draw groupings arbitraily. As such they are referred to by the jargon term “unsupervised”. The researcher supervises the algorithm and setting up the data, but thereafter the algorithm operates unsupervised, drawing the groupings where the groupings best fit.</p>
+<p>Recently, it has become common to refer to cluster analysis as unsupervised machine learning.</p>
+<div id="distances" class="section level2">
+<h2><span class="header-section-number">46.1</span> Distances</h2>
+<p>Cluster analysis is based upon minimizing distances between coordinates of centroids (imaginary points representing the centers of a cluster) and the coordinate pairs for every point within a cluster. These distances are no different than the variates or deviates or residuals that we’ve encountered already in the course.</p>
+<p>There are several options for calculating these distances. Like many things in statistics, these just represent different ways to solve the same problem.</p>
+<p>The code below illustrates how distance calculations are made using Euclidian, Manhattan and Pearson methods. The Pearson method, of course, is also known as correlation, and has been covered previously. If optional for a given function, iterating through these or other distance calculations can sometimes help drive a solution for balky datasets.</p>
+<div class="sourceCode" id="cb1021"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1021-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
+<a class="sourceLine" id="cb1021-2" title="2">x &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">11</span><span class="op">:</span><span class="dv">20</span>, <span class="dt">replace=</span>F)</a>
+<a class="sourceLine" id="cb1021-3" title="3">y &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">replace=</span>F)</a>
+<a class="sourceLine" id="cb1021-4" title="4"><span class="kw">paste</span>(<span class="st">&quot;Euclidian:&quot;</span>, <span class="kw">sqrt</span>(<span class="kw">sum</span>((x<span class="op">-</span>y)<span class="op">^</span><span class="dv">2</span>)))</a></code></pre></div>
+<pre><code>## [1] &quot;Euclidian: 33.6452076825214&quot;</code></pre>
+<div class="sourceCode" id="cb1023"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1023-1" title="1"><span class="kw">paste</span>(<span class="st">&quot;Manhattan:&quot;</span>, <span class="kw">sum</span>(<span class="kw">abs</span>(x<span class="op">-</span>y)))</a></code></pre></div>
+<pre><code>## [1] &quot;Manhattan: 100&quot;</code></pre>
+<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1025-1" title="1"><span class="kw">paste</span>(<span class="st">&quot;Pearson:&quot;</span>, <span class="dv">1</span><span class="op">-</span>(<span class="kw">sum</span>((x<span class="op">-</span><span class="kw">mean</span>(x))<span class="op">*</span>(y<span class="op">-</span><span class="kw">mean</span>(y))))<span class="op">/</span>(<span class="kw">sqrt</span>(<span class="kw">sum</span>((x<span class="op">-</span><span class="kw">mean</span>(x))<span class="op">^</span><span class="dv">2</span><span class="op">*</span><span class="kw">sum</span>((y<span class="op">-</span><span class="kw">mean</span>(y))<span class="op">^</span><span class="dv">2</span>)))))</a></code></pre></div>
+<pre><code>## [1] &quot;Pearson: 0.8&quot;</code></pre>
+</div>
+<div id="clustering-methods" class="section level2">
+<h2><span class="header-section-number">46.2</span> Clustering methods</h2>
+<p>Cluster analysis is the most common classification technique. Clustering’s goal is to separate data groups in a way that minimizes intragroup variation while maximizing intergroup variation.</p>
+<p>Cluster analysis techniques themselves can be clustered! Partition clustering includes k-means, partition around medioids (PAM) and clustering large applications (CLARA). Heirarchical clustering can be either agglomerative or divisive.</p>
+<p>In clustering, although the researcher is not involved in deciding which data points belong in which clusters or dendroids, it is sometimes necessary to make a decision on how many clusters to include in the model.</p>
+</div>
+<div id="principal-component-analysis" class="section level2">
+<h2><span class="header-section-number">46.3</span> Principal component analysis</h2>
+<p>Principal component analysis (PCA) is a method used in identifying the number of clusters to model. The method works to reduce the dimensional complexity of a matrix of measurements. A simple experiment with 4 explanatory groups each generating many measurements (for example, measuring the expression of many genes simultaneously), <span class="math inline">\(p\)</span>, has <span class="math inline">\(p(p-1)/2 = 6\)</span> dimensions. These could be viewed, for example, by drawing all 6 possible correlations between the 4 groups.</p>
+<p>If you’ve ever looked at a large correlation matrix you probably got lost pretty quickly.</p>
+<p>PCA offers the ability to reduce the complexity to a fewer number of principal explanatory dimensions. We can think of these as latent grouping variables. The more groups in the experiment, the more necessary it becomes to be less concerned about dimensions of the data that don’t allow for much explanatory insight. <a href="https://ncss-wpengine.netdna-ssl.com/wp-content/themes/ncss/pdf/Procedures/NCSS/Principal_Components_Analysis.pdf">NCSS has a very thorough mathematical and practical treatment of principal components if you are interested in learning more.</a></p>
+</div>
+<div id="synthesize-some-data" class="section level2">
+<h2><span class="header-section-number">46.4</span> Synthesize some data</h2>
+<p>Simulated data are used here to illustrate how to run cluster analysis using R. We’ll see how well the technique works to identify the four groups that are built into the dataset.</p>
+<p>The data below are 1000 simulated random normal measurements (rows) for each of 4 groups (columns). Each group is built to have a unique combination of measurements from a continuous scale. The four groups correspond to four variables called “foo”, “fu”, “foei”, and “fuz”.</p>
+<p>You can imagine what df might be. For example, every row might represent a unique mRNA id. Every column might represent a different cell type or tissue. Every value is an expression level in some kind of units. Obviously, from the code, we can see they each are sampled from N(mu, sigma).</p>
+<p>Note, df is a matrix object, not a dataframe.</p>
+<div class="sourceCode" id="cb1027"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1027-1" title="1"><span class="co">#create a matrix</span></a>
+<a class="sourceLine" id="cb1027-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
+<a class="sourceLine" id="cb1027-3" title="3">df &lt;-<span class="st">  </span><span class="kw">rbind</span>(</a>
+<a class="sourceLine" id="cb1027-4" title="4"><span class="kw">cbind</span>(<span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">1</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-5" title="5">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">3</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-6" title="6">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">10</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-7" title="7">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">30</span>, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb1027-8" title="8">      ),</a>
+<a class="sourceLine" id="cb1027-9" title="9"><span class="kw">cbind</span>(<span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">30</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-10" title="10">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">10</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-11" title="11">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">3</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-12" title="12">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">1</span>, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb1027-13" title="13">      ),</a>
+<a class="sourceLine" id="cb1027-14" title="14"><span class="kw">cbind</span>(<span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">1</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-15" title="15">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">30</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-16" title="16">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">3</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-17" title="17">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">100</span>, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb1027-18" title="18">      ),</a>
+<a class="sourceLine" id="cb1027-19" title="19"><span class="kw">cbind</span>(<span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">3</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-20" title="20">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">10</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-21" title="21">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">30</span>, <span class="dv">10</span>), </a>
+<a class="sourceLine" id="cb1027-22" title="22">      <span class="kw">rnorm</span>(<span class="dv">250</span>, <span class="dv">100</span>, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb1027-23" title="23">      )</a>
+<a class="sourceLine" id="cb1027-24" title="24">)</a></code></pre></div>
+<p>Some housekeeping: Add column names. Randomize the row to order in the data set just to mix things up. Add row names after randomizing the cases. Note that the final product is a matrix, not a data frame. Because we need to feed a matrix into the cluster analysis functions.</p>
+<div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1028-1" title="1"><span class="co">#add column names</span></a>
+<a class="sourceLine" id="cb1028-2" title="2"><span class="kw">colnames</span>(df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;foo&quot;</span>, <span class="st">&quot;fu&quot;</span>, <span class="st">&quot;foei&quot;</span>, <span class="st">&quot;fuz&quot;</span>)</a>
+<a class="sourceLine" id="cb1028-3" title="3"></a>
+<a class="sourceLine" id="cb1028-4" title="4"><span class="co">#randomize cases by row</span></a>
+<a class="sourceLine" id="cb1028-5" title="5"></a>
+<a class="sourceLine" id="cb1028-6" title="6">df &lt;-<span class="st"> </span>df[<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(df)), ]</a>
+<a class="sourceLine" id="cb1028-7" title="7"></a>
+<a class="sourceLine" id="cb1028-8" title="8"><span class="co">#add case id&#39;s to each row. note how this keeps the overall dataset matrix.</span></a>
+<a class="sourceLine" id="cb1028-9" title="9"></a>
+<a class="sourceLine" id="cb1028-10" title="10"><span class="kw">row.names</span>(df) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;S&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(df), <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
+</div>
+<div id="visualize-the-data-set" class="section level2">
+<h2><span class="header-section-number">46.5</span> Visualize the data set</h2>
+<p>First some housekeeping: Create a data frame because ggplot needs one, which includes creating an id variable for the x-axis. Make it long.</p>
+<div class="sourceCode" id="cb1029"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1029-1" title="1">id &lt;-<span class="st"> </span><span class="kw">row.names</span>(df) </a>
+<a class="sourceLine" id="cb1029-2" title="2"></a>
+<a class="sourceLine" id="cb1029-3" title="3">df1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(id,df) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="op">-</span>id, <span class="dt">names_to=</span><span class="st">&quot;variable&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;value&quot;</span>)</a></code></pre></div>
+<p>This is just a plot of some randomly selected rows. To some extent, they just look like random crappy data. The point is, looking at this you wouldn’t probably imagine these datapoints come from a dataset with an underlying clustered structure.</p>
+<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1030-1" title="1"><span class="kw">ggplot</span>(df1, <span class="kw">aes</span>(id, value, <span class="dt">color=</span>variable))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1030-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">shape=</span><span class="dv">1</span>,<span class="dt">size=</span><span class="dv">4</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1030-3" title="3"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb1030-4" title="4"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">limits=</span><span class="kw">c</span>(<span class="st">&quot;S3&quot;</span>, <span class="st">&quot;S232&quot;</span>, <span class="st">&quot;S236&quot;</span>, <span class="st">&quot;S582&quot;</span>, <span class="st">&quot;S704&quot;</span>, <span class="st">&quot;S757&quot;</span> ))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1030-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;value of variable&quot;</span>, <span class="dt">x=</span><span class="st">&quot;case id&quot;</span>, <span class="dt">title=</span><span class="st">&quot;4 variables (by color) measured in each of 6 cases (for examples)&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1030-6" title="6"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-537"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-537-1.png" alt="Representative row samples drawn from data set. " width="672" />
 <p class="caption">
-Figure 10.1: Statistical hypotheses test the null in a multistep process
+Figure 46.1: Representative row samples drawn from data set.
 </p>
 </div>
-<p>Low p-values are associated with extreme values of a test statistic. Extreme values of test statistics happen when the effect sizes of the results are high. Rejecting a null on the basis of a p-value means our test statistic value is too extreme to belong in the distribution of null test statistic values.</p>
-<p>Thus, a low p-value means the effect size is improbably high if the treatment is, in fact, not truly effective.</p>
-<p>If you learn nothing more in this course, learn that the statistics discussed here are tests of the null hypothesis. Learn that every p-value you see in R output is coupled to a test statistic value. These p-values represent a cumulative probability of a null test statistic distribution.</p>
+<p>Now here is a plot of all the data. It is a bit more evident of some structure. Many, but not all, of the fuz variable is much higher than the others. But with the others it is hard to see any structure.</p>
+<div class="sourceCode" id="cb1031"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1031-1" title="1"><span class="kw">ggplot</span>(df1, <span class="kw">aes</span>(id, value, <span class="dt">color=</span>variable))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1031-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">shape=</span><span class="dv">1</span>, <span class="dt">size=</span><span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1031-3" title="3"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb1031-4" title="4"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">breaks=</span><span class="ot">NULL</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1031-5" title="5"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;value of variable&quot;</span>, <span class="dt">x=</span><span class="st">&quot;case id&quot;</span>, <span class="dt">title=</span><span class="st">&quot;4 dependent variables (by color) measured in each of 1000 cases&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1031-6" title="6"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-538"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-538-1.png" alt="All of the data values plotted." width="672" />
+<p class="caption">
+Figure 46.2: All of the data values plotted.
+</p>
 </div>
-<div id="popper-and-falsification" class="section level2">
-<h2><span class="header-section-number">10.2</span> Popper and falsification</h2>
-<p>Using data to falsify an hypothesis, even if that hypothesis is the null, is a decision framework that plays well with philosopher Karl Popper’s assertion that <a href="https://plato.stanford.edu/entries/popper/#ProbDema">scientific theories are probative</a> and that unscientific theories are not.</p>
-<p>To Popper, the grandest scientific theories are those that can be falsified. In Popperian logic, the truth of nature is unknowable and unproveable….even though it is testable. Thus, the scientific method advocated by Popper doesn’t allow for proving an hypothesis, but at the same time it doesn’t forbid us from rejecting hypotheses that are inconsistent with observations.</p>
-<p>Thus enters the null hypothesis, which predicts, of course, that nothing happens. The null is an incredibly handy device because if we make observations that are extremely inconsistent with the null, meaning we have observed that something happens, we are obligated to reject the null. Thus, the null is falsifiable when we have positive results!</p>
-<p>Imagine an experiment to test whether a drug lowers blood glucose in people who have diabetes. When the glucose-lowering effect size for the drug in the sample is large enough, we can reject the hypothesis that the drug didn’t have any effect.</p>
-<p>In other words, we will accept an observation as evidence for a positive result by formally concluding that same evidence is inconsistent with a negative result.</p>
-<p>Some argue that this logic forces the researcher to test the “wrong” hypothesis and to also accept an alternate hypothesis that itself may not be true. For example, although blood glucose may be lower in the drug treatment arm of the sample, that may have occured by random chance. Or an unknown confounder variable that wasn’t controlled for could be responsible for the observation that drug-treatment is associated with lower blood glucose.</p>
-<p><strong>In that case we would make an error by rejecting the null when it is actually true.</strong></p>
-<p>Of course, rejecting the null is provisional. All gained knowledge is provisional. Drawing a conclusion from one experiment doesn’t preclude testing the experiment some other way. If the problem is important enough (and “real”), it will be tested from multiple angles. It will need to survive the preponderance of the evidence.</p>
-<p>I’m personally convinced the alternative approach, which is to seek out evidence that affirms an hypothesis, is not better. This lies at the heart of what Popper stood against. There is an inherent confirmation bias in seeking out affirmation of ideas. In the proper light, any evidence can be made to look attractive. Furthermore, what if, in seeking affirmation, nothing happens? Negative results are very difficult to interpret because the absence of evidence cannot be interpreted as the evidence of absence.</p>
-<p>So I’d hope the researcher who gives this some thought will find null falsification at least pragmatic, if not ingenious. It allows us to move forward on the basis of positive evidence (granted, which may be wrong and we don’t know it), while at the same time practicing a more sound, more unbiased scientific methodology (hypothesis falsification rather than affirmation).</p>
-<p>Meanwhile, this statistical framework does allow for the possibility of designing experimental conditions to minimize false positive (type1) and false negative (type2) errors. We can operationalize our tolerance for those kinds of mistakes in meaningful ways such that we are less likely to become victims of bad luck.</p>
-<p>Finally, the decision to reject a null hypothesis can stand alone. It need not be the same as a decision to accept the alternate. Rejecting the null only asserts that the experimental evidence is inconsistent with the null. In no way does that “prove”" the alternative hypothesis.</p>
-<p>For most, some of these concerns should become even less of a problem when the null and alternate hypotheses are explicitly framed in terms of population parameters and their <strong>mutually exclusive and collectively exhaustive</strong> outcomes. This approach doesn’t leave much room for ambiguity about what is being declared at the decision step.</p>
-<p>For example, the null hypothesis for the diabetes case is very explicit: <span class="math inline">\(null, H_0: \mu_{placebo} = \mu_{drug}\)</span>, Here <span class="math inline">\(\mu\)</span>, since it is greek notation, represents the mean blood glucose in concentration units in the population from which the sample was drawn.</p>
-<p>Now that we have a bona fide null hypothesis, we can state the alternate hypothesis as everything the null can’t be: <span class="math inline">\(alternate, H_1: \mu_{placebo}\ \ne \mu_{drug}\)</span></p>
-<p>In other words, the inference operates on the basis of straightforward mathematical principles. Two parameters that are compared either meet our prescribed expectations, or they do not. In this case, if we reject the hypothesis that the means of the two groups are equal, then they can only be not equal.</p>
-<p>Are they truly not equal? We can never know for sure, but we are operating within a framework of known error tolerances.</p>
 </div>
-<div id="statistical-hypothesis-rubric" class="section level2">
-<h2><span class="header-section-number">10.3</span> Statistical hypothesis rubric</h2>
-<p>Researchers have to grapple with two types of hypotheses. One type is the grand, paradigm-driving assertion of some key insight, which is designed to express the big picture in forward thinking terms. It is also designed to wow study sections and seminar audiences.</p>
-<p>The other type is the null hypothesis, which is designed to be tested statistically. The null predicts nothing will happen. The null is as boring as it gets. You’d never propose the null in a specific aims page, but you should get in the habit of thinking in terms of testing the null with your statistics.</p>
-<p>Only the null hypothesis has any statistical utility, whereas the grand hypothesis has no statistical utility. This is a conceptual hurdle that most students struggle with. The grand hypothesis is for marketing, the null hypothesis is for mattering.</p>
-<p>For that reason I’ve created a rubric for forming a statistically testable hypothesis. The rubric begins with a conceptual overview of a problem, and it ends with how the results will be interpreted. At some point during the semester you’ll have a major assignment that asks you to go through this rubric for a problem of your own choosing. That assignment is a major test for whether you “get” statistical design of experiments.</p>
-<p><strong>Step 1: Lay out the big picture of the problem in a way that leads to a “What is not yet known” assertion.</strong></p>
-<p><em>Type 2 diabetes is associated with high blood glucose levels and obesity, which each have long term effects associated with high morbidity. Exenatide is GLP-1 receptor agonist that can control blood glucose levels. When delivered as an osmotic minipump exenatide lowers blood glucose. A standard of care for type2 diabetics is to put them on a weight loss program while giving them drugs that manage blood glucose. It is not known if continuous administration via osmotic minipump can lead to greater weight loss while on this standard of care.</em></p>
-<p><strong>Step 2: Transform the “What is not known” statement into a bold and simple scientific prediction, as if “what is not known” were answered:</strong></p>
-<p><em>Long-term administration of exenatide via osmotic minipump to type-2 diabetics will cause weight loss.</em></p>
-<p><strong>Step 3: Now frame the experimental plan in terms of the independent and dependent variables, written as an if/then statement. In narrative format, if you manipulate what predictor variables, then what outcome do you expect to observe?</strong></p>
-<p><em>If an exenatide osmotic minipump is implanted into type-2 diabetics, then their weight loss will differ compared to placebo.</em></p>
-<p><strong>Step 4: Define the dependent and the independent variables of the experiment. What type of variables are these? What are the experimental units? Are the measurements intrinsically-linked, or not?</strong></p>
-<p><em>The dependent variable will be weight loss, calculated as the weight difference between pre-study to post-study for each human subject. Each subject is the experimental unit. The independent variable is treatment. Treatment is a discrete, factoral variable that will be at two levels, placebo and exenatide. Although pre- and post-study weights will be measured for each subject and are themselves intrinsically-linked, they are used to derive the dependent variable (weight loss), which are not instrinsically-linked.</em></p>
-<p><strong>Step 5: Write the null and alternate hypothesis on the basis of the statistical parameters to be tested. Note here that greek notation is used to symbolize that the hypothesis is about the sampled population parameters, rather than the sample.</strong></p>
-<p><em>Where</em> <span class="math inline">\(\mu\)</span> <em>represents the mean weight loss of the populations corresponding to the sampled groups, the null and alternate hypotheses are</em> <span class="math display">\[H_0:\mu_{exenatide}=\mu_{placebo}\]</span> <em>and</em> <span class="math display">\[H_1: \mu_{exenatide}\ne\mu_{placebo}\]</span></p>
-<p><strong>Step 6: What statistical test will be used to test the null hypothesis? What are the decision rules?</strong></p>
-<p><em>A two-sided, unpaired t-test for comparing group means. The sample size will be based upon a power of 90%, which means that the tolerance level for type2 error will be 10%. The decision threshold for type1 error will be 5%. Thus, the null hypothesis will be rejected at a p-value of less than 0.05.</em></p>
-<div id="two-sided-vs-one-sided-hypothesis" class="section level4">
-<h4><span class="header-section-number">10.3.0.1</span> Two-sided vs one-sided hypothesis</h4>
-<p>The above is an example for a two-sided hypothesis. In a two-sided hypothesis <span class="math inline">\(\ne\)</span> is mutually exclusive and collectively exhaustive of <span class="math inline">\(=\)</span>. By rejecting the null that two things are equal, we implicitly (and provisionally) accept the alternative hypothesis that they are not equal.</p>
-<p>Notice how this hypothesis doesn’t predict the direction of an effect. It only predicts there will be a difference between the two groups.</p>
-<p>If you’re willing to predict the direction of an effect, you would choose to make a one-sided hypothesis.</p>
-<p>One-sided hypotheses can happen in either of two ways. In one case we can predict one mean will be greater (<span class="math inline">\(&gt;\)</span>)than another mean. In the other case, we can predict one mean will be less than (<span class="math inline">\(&lt;\)</span>) another mean. The mutually exclusive and collectively exhaustive alternatives to these one sided hypotheses are therefore <span class="math inline">\(\ge\)</span> and <span class="math inline">\(\le\)</span>, respectively. In other words, if one mean is not greater than another mean, then the only alternative possibilities are that it is less than or equal to it.</p>
-<p>The decision to test a one- or two-sided hypothesis should be based upon scientific reasoning.</p>
-<p>In the example above, I’m unwilling to test a one-sided hypothesis that exenatide will cause a greater weight loss than placebo, even though that is the expectation (and hope!). Were I willing to test the direction of the effect, and predict that the mean weight would be lower with exentatide, the one-sided hypothesis test would be written like this:</p>
-<p><span class="math display">\[H_0:\mu_{exenatide} \ge \mu_{placebo}\]</span> <em>and</em> <span class="math display">\[H_1: \mu_{exenatide}&lt;\mu_{placebo}\]</span></p>
-<p>If the data show that mean weight loss is greater in the exenatide group, as expected, that null hypothesis can be rejected.</p>
-<p>But what if, unexpectedly, weight loss is greater in the placebo group? It would generate a high p-value. According to the pre-planned hypothesis, the null could not be rejected.</p>
-<p>Worse, given they are already enrolled in a standard of care weight loss program, to know the drug actually impairs weight loss would be an important finding. But in choosing the incorrect one-sided hypothesis, there is nothing to do with the result. It is a negative result. I can’t flip the tail to the other direction to get a significant result that I wasn’t planning upon. That would be extremely biased!</p>
-<p>In practice, some researchers caught in this conundrum create a whole new can of worms by simply changing the pre-planned hypothesis after the fact. It’s done flippantly but is actually a fairly serious violation of scientific integrity. Changing the hypothesis so that it is consistent with the results is not what anybody would consider sound scientific method.</p>
+<div id="rescaling-data" class="section level2">
+<h2><span class="header-section-number">46.6</span> Rescaling data</h2>
+<p>Each dependent variable needs to be on the same scale as all others. That’s accomplished by rescaling the data. One way is z-standardization. This z-transforms each column of df. Note how this is a matrix. We’ll be passing this matrix into the clustering functions.</p>
+<div class="sourceCode" id="cb1032"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1032-1" title="1">df2 &lt;-<span class="st"> </span><span class="kw">scale</span>(df)</a></code></pre></div>
+<p>But first, let’s look at the standardized data. we have to first make a dataframe out of the df2 matrix. Still a hint of some structure due to fuz, otherwise, not so much.</p>
+<div class="sourceCode" id="cb1033"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1033-1" title="1">df3 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(id, df2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="op">-</span>id, <span class="dt">names_to=</span><span class="st">&quot;variable&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;value&quot;</span>)</a>
+<a class="sourceLine" id="cb1033-2" title="2"></a>
+<a class="sourceLine" id="cb1033-3" title="3"><span class="kw">ggplot</span>(df3, <span class="kw">aes</span>(id, value, <span class="dt">color=</span>variable))<span class="op">+</span></a>
+<a class="sourceLine" id="cb1033-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">shape=</span><span class="dv">1</span>, <span class="dt">size=</span><span class="dv">2</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1033-5" title="5"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb1033-6" title="6"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">breaks=</span><span class="ot">NULL</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1033-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y=</span><span class="st">&quot;z-score variable&quot;</span>, <span class="dt">x=</span><span class="st">&quot;1000 cases&quot;</span>, <span class="dt">title=</span><span class="st">&quot;4 STANDARDIZED variables (by color) in each of 1000 cases&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb1033-8" title="8"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-540"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-540-1.png" alt="Log transformed data set." width="672" />
+<p class="caption">
+Figure 46.3: Log transformed data set.
+</p>
 </div>
-<div id="stick-to-two-sided-hypotheses" class="section level4">
-<h4><span class="header-section-number">10.3.0.2</span> Stick to two-sided hypotheses</h4>
-<p>Unlike the case above, when being wrong about the direction of an effect is not a big deal, then one-sided tests are not a bad option.</p>
-<p>The example above serves to illustrate how a two-sided hypothesis would have been a better choice than a one-sided hypothesis. There are a few other reasons why it is probably better to get in the habit of always testing two-sided nulls: the two-sided test is more conservative because the p-value threshold is a bit lower. Furthermore, multiple tests and confidence intervals easier perform and to interpret, respectively.</p>
+</div>
+<div id="are-there-clusters" class="section level2">
+<h2><span class="header-section-number">46.7</span> Are there clusters?</h2>
+<p>Principal component analysis identifies the principal components, which will be used to decide how many clusters to model.</p>
+<div class="sourceCode" id="cb1034"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1034-1" title="1"><span class="kw">prcomp</span>(df2, <span class="dt">scale. =</span> F, <span class="dt">center =</span> T)</a></code></pre></div>
+<pre><code>## Standard deviations (1, .., p=4):
+## [1] 1.3588598 1.0926165 0.8307504 0.5191753
+## 
+## Rotation (n x k) = (4 x 4):
+##             PC1         PC2       PC3        PC4
+## foo   0.5534303 -0.11290119 0.7485530  0.3473279
+## fu   -0.3168913 -0.75306737 0.3375968 -0.4674375
+## foei -0.3761199  0.64094934 0.5509381 -0.3797170
+## fuz  -0.6721820 -0.09657536 0.1488758  0.7188050</code></pre>
+<p>Here’s a way to visualize all of the data on the basis of it’s first two principal components: Dim1 and Dim2. We’ll always see the greatest separation by running a correlation plot between the first two dimensions.</p>
+<div class="sourceCode" id="cb1036"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1036-1" title="1"><span class="kw">fviz_pca_ind</span>(<span class="kw">prcomp</span>(df2),</a>
+<a class="sourceLine" id="cb1036-2" title="2">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-542-1.png" width="672" />
+Here’s correlation plot between the first two principal components for a uniform distribution of objects, for comparison. It would take an active imagination to draw out clusters from this. It’s pretty uniform.</p>
+<div class="sourceCode" id="cb1037"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1037-1" title="1"><span class="kw">set.seed</span>(<span class="dv">12345</span>)</a>
+<a class="sourceLine" id="cb1037-2" title="2">sn &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>,<span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>, <span class="dv">1</span>)), <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">500</span>)</a>
+<a class="sourceLine" id="cb1037-3" title="3"><span class="kw">prcomp</span>(sn, <span class="dt">scale. =</span> F, <span class="dt">center =</span> F)</a></code></pre></div>
+<pre><code>## Standard deviations (1, .., p=2):
+## [1] 1.0073077 0.9932779
+## 
+## Rotation (n x k) = (2 x 2):
+##             PC1       PC2
+## [1,] -0.1470789 0.9891248
+## [2,]  0.9891248 0.1470789</code></pre>
+<div class="sourceCode" id="cb1039"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1039-1" title="1"><span class="kw">fviz_pca_ind</span>(<span class="kw">prcomp</span>(sn),</a>
+<a class="sourceLine" id="cb1039-2" title="2">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-543-1.png" width="672" /></p>
+</div>
+<div id="how-many-clusters" class="section level2">
+<h2><span class="header-section-number">46.8</span> How many clusters?</h2>
+<div class="sourceCode" id="cb1040"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1040-1" title="1"><span class="kw">fviz_nbclust</span>(df2, kmeans, <span class="dt">method=</span><span class="st">&quot;wss&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-544-1.png" width="672" /></p>
+<p>This is known as a “scree” plot. It’s useful as a tool to make decisions about how many clusters to model. It shows the amount of variation each dimension can explain.</p>
+<p>The critical question in clustering is how many dimensions should be modeled? If we model them all we can explain all of the variation by a large number of clusters. But that’s over-fitting. Statistical models with too many parameters are always harder to interpret and to explain.</p>
+<p>Let’s move through the points from the top left on down the curve. The segment between points 1 and 2 explain a LOT of variation; more than a quarter and less than one-half of the total variation. We can think of this segment as the first principal component or the first dimension of the data set.</p>
+<p>The segment between points 2 and 3 explains a lot more variation, but less variation than explained by the first. Perhaps not quite 1/4th of the overall variation is explained by this second principal component, or 2nd dimension.</p>
+<p>So does the segment between points 3 and 4 seems to explain about 1/8th of the overal variation. It is the 3rd principal component, or 3rd dimension.</p>
+<p>The segment between points 4 and 5 accounts for a lot less variation, as do the segments through each of the succeeding points.</p>
+<p>At the “elbow” the additional segments are not explaining that much more variation. In other words, to model more clusters becomes something of an over-fit. It’s arguable to say the segment between 4 and 5 is really explaining a good amount of variation.</p>
+<p>The take away from this scree plot is that the data are explained probably by 3 clusters, maybe by 4 clusters. The bloody obvious test will be used to decide.</p>
+<p>The silhouette method is another way to decide on the number of clusters. The idea is to the peak average silhouette width == the number of clusters to model. YMMV. If not, the number just below the peak.</p>
+<div class="sourceCode" id="cb1041"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1041-1" title="1"><span class="kw">fviz_nbclust</span>(df2, kmeans, <span class="dt">method=</span><span class="st">&quot;silhouette&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-545-1.png" width="672" /></p>
+</div>
+<div id="clustering" class="section level2">
+<h2><span class="header-section-number">46.9</span> Clustering</h2>
+<p>The function <code>kmeans</code> does the clustering given a number of clusters to model. Here it is instructed fit a 3 cluster model to the data. It assigns every row to one of these 3 model clusters.</p>
+<p>Explore the object <code>kmdf2</code>, because it is packed with information. Note how it assigns every row to a cluster.</p>
+<div class="sourceCode" id="cb1042"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1042-1" title="1">km.df2 &lt;-<span class="st"> </span><span class="kw">kmeans</span>(df2, <span class="dt">centers=</span><span class="dv">3</span>, <span class="dt">nstart=</span><span class="dv">100</span>)</a></code></pre></div>
+<p>Aggregate is a good way to subset the clusters by the grouping variables. Aggregate says, "Given the three clusters, here are their values for each of the grouping variables. If you prefer, you could add the cluster ID to a dataframe along with df2, and then use <code>group_by</code> and <code>summarize</code> to do the same thing.</p>
+<div class="sourceCode" id="cb1043"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1043-1" title="1"><span class="kw">aggregate</span>(df, <span class="dt">by=</span><span class="kw">list</span>(<span class="dt">cluster=</span>km.df2<span class="op">$</span>cluster), mean)</a></code></pre></div>
+<pre><code>##   cluster        foo        fu      foei      fuz
+## 1       1  1.5462796  9.145715 27.293735 86.44426
+## 2       2  0.8173983 30.669165  2.263343 97.62785
+## 3       3 19.1839140  6.814412  3.746465 12.90336</code></pre>
+<p>For example, the average values of the foo variable in each of the 3 clusters are 1.5, 0.8 and 19.2.</p>
+<p>And we can visualize the clusters. Note, we’re passing in the kmeans model of 3 clusters into this. Toggle the <code>ellipse</code> argument</p>
+<div class="sourceCode" id="cb1045"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1045-1" title="1"><span class="kw">fviz_cluster</span>(km.df2, <span class="dt">data=</span>df,</a>
+<a class="sourceLine" id="cb1045-2" title="2">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
+<a class="sourceLine" id="cb1045-3" title="3">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
+<a class="sourceLine" id="cb1045-4" title="4">             <span class="dt">ellipse=</span>F,</a>
+<a class="sourceLine" id="cb1045-5" title="5">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1045-6" title="6">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1045-7" title="7">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-548-1.png" width="672" /></p>
+<p>Now let’s model this with 4 clusters. We recreate the km.df2 object, check the aggregate. Toggle the ellipse on and off. What do you think? Is this a better fit than 3 clusters?</p>
+<div class="sourceCode" id="cb1046"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1046-1" title="1">km.df2 &lt;-<span class="st"> </span><span class="kw">kmeans</span>(df2, <span class="dv">4</span>, <span class="dt">nstart=</span><span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb1046-2" title="2"></a>
+<a class="sourceLine" id="cb1046-3" title="3"><span class="kw">aggregate</span>(df, <span class="dt">by=</span><span class="kw">list</span>(<span class="dt">cluster=</span>km.df2<span class="op">$</span>cluster), mean)</a></code></pre></div>
+<pre><code>##   cluster        foo        fu      foei       fuz
+## 1       1  3.5135916 10.512234 29.754152 98.821411
+## 2       2  1.1075641 31.329134  2.434274 99.879498
+## 3       3 30.0729920 10.759380  2.105854  4.179751
+## 4       4 -0.2360265  2.161194  8.770106 29.889766</code></pre>
+<div class="sourceCode" id="cb1048"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1048-1" title="1"><span class="kw">fviz_cluster</span>(km.df2, <span class="dt">data=</span>df,</a>
+<a class="sourceLine" id="cb1048-2" title="2">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
+<a class="sourceLine" id="cb1048-3" title="3">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
+<a class="sourceLine" id="cb1048-4" title="4">             <span class="dt">ellipse=</span>F,</a>
+<a class="sourceLine" id="cb1048-5" title="5">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1048-6" title="6">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1048-7" title="7">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-549-1.png" width="672" /></p>
+</div>
+<div id="pam-and-clara" class="section level2">
+<h2><span class="header-section-number">46.10</span> PAM and CLARA</h2>
+<p>PAM and CLARA are alternative algorithms to kmeans. All three are likely to correlate pretty well but note how PAM and kmeans differ quite markedly in the 3 cluster model, yet arrive at about the same clustering for the 4 cluster model.</p>
+<div class="sourceCode" id="cb1049"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1049-1" title="1">pam.df2 &lt;-<span class="st"> </span><span class="kw">pam</span>(df2, <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb1049-2" title="2"></a>
+<a class="sourceLine" id="cb1049-3" title="3"><span class="kw">fviz_cluster</span>(pam.df2,</a>
+<a class="sourceLine" id="cb1049-4" title="4">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
+<a class="sourceLine" id="cb1049-5" title="5">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
+<a class="sourceLine" id="cb1049-6" title="6">             <span class="dt">ellipse=</span>F,</a>
+<a class="sourceLine" id="cb1049-7" title="7">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1049-8" title="8">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1049-9" title="9">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-550-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1050"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1050-1" title="1">pam.df2 &lt;-<span class="st"> </span><span class="kw">pam</span>(df2, <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb1050-2" title="2"></a>
+<a class="sourceLine" id="cb1050-3" title="3"><span class="kw">fviz_cluster</span>(pam.df2,</a>
+<a class="sourceLine" id="cb1050-4" title="4">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
+<a class="sourceLine" id="cb1050-5" title="5">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
+<a class="sourceLine" id="cb1050-6" title="6">             <span class="dt">ellipse=</span>F,</a>
+<a class="sourceLine" id="cb1050-7" title="7">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1050-8" title="8">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1050-9" title="9">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-551-1.png" width="672" /></p>
+</div>
+<div id="hierarchical-clustering" class="section level2">
+<h2><span class="header-section-number">46.11</span> Hierarchical clustering</h2>
+<p>Hierarchical clustering is a step more informative than kmeans clustering because it provides information about how related clusters are to each other.</p>
+<p>We start with the data set matrix, <code>df</code>from above. Agglomerative hierarchical clustering is performed using the <code>agnes</code> function. Agglomerative operates by using each measurement as a seed, to which the most similar other measurements are merged. This turns out to be fairly intensive, computationally, compared to the previous techniques. Exect delays.</p>
+<p>As in kmeans, we define the number of clusters the algorithm should model.</p>
+<div class="sourceCode" id="cb1051"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1051-1" title="1">rag &lt;-<span class="st"> </span><span class="kw">agnes</span>(<span class="dt">x=</span>df, <span class="dt">stand=</span>T, <span class="dt">metric=</span><span class="st">&quot;euclidian&quot;</span>, <span class="dt">method=</span><span class="st">&quot;ward&quot;</span>)</a>
+<a class="sourceLine" id="cb1051-2" title="2"><span class="kw">fviz_dend</span>(rag, <span class="dt">cex=</span><span class="fl">0.01</span>, <span class="dt">k=</span><span class="dv">4</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-552-1.png" width="672" /></p>
+<p>The interpretation of these output is fairly straight forward. Any two closely linked elements have less distance between them than to elements to which they are less closely linked.</p>
+<p>For example, in the figure above the orange and green clusters are more related to each other than they are to the blue, and all three are more related than any one is to the purple.</p>
+<p>Divisive hierarchical clustering is performed using the <code>diana</code> function. This operates opposite of agglomerative clustering. All measurements begin in a single cluster and then are successively divided into heterogenous clusters.</p>
+<div class="sourceCode" id="cb1052"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1052-1" title="1">rdi &lt;-<span class="st"> </span><span class="kw">diana</span>(<span class="dt">x=</span>df, <span class="dt">stand=</span>T, <span class="dt">metric=</span><span class="st">&quot;euclidian&quot;</span>)</a>
+<a class="sourceLine" id="cb1052-2" title="2"><span class="kw">fviz_dend</span>(rdi, <span class="dt">cex=</span><span class="fl">0.01</span>, <span class="dt">k=</span><span class="dv">4</span>, <span class="dt">method=</span><span class="st">&quot;ward&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-553-1.png" width="672" /></p>
+<p>The output differences between the two hierarchical techniques are subtle but clearly evident. They are different algorithms and therefore they provide different results. Neither is more wrong than the other.</p>
+<p>There are several additional hierarchical vizualizations that are possible, phylogenic trees, circular dendrograms, and more.</p>
+</div>
+<div id="heatmaps" class="section level2">
+<h2><span class="header-section-number">46.12</span> Heatmaps</h2>
+<p>Heatmaps are just a visual descriptive technique to pair the magnitude of measurements with hierarchical clusters. This particular function is also performing some clustering. This viz pretty much makes the case for four clusters. But the function’s arguments could be modified to see how well that holds.</p>
+<div class="sourceCode" id="cb1053"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1053-1" title="1"><span class="kw">heatmap</span>(df2, <span class="dt">scale=</span><span class="st">&quot;column&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-554-1.png" width="672" /></p>
+</div>
+<div id="summary-13" class="section level2">
+<h2><span class="header-section-number">46.13</span> Summary</h2>
+<p>Classification techniques using R are probably the main gateway to exploratory data analysis. Once cluster grouping has been determined, the sky is the limit for how that information can be explored further.</p>
+<p>We haven’t talked about inferential methods. It is possible to make inferential decisions about the value of some outcome, particularly in consideration of alternatives.</p>
 
 </div>
 </div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="dispersion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="error.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="surv.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
