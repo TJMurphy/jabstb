@@ -160,8 +160,23 @@ ggplot(df3, aes(id, value, color=variable))+
 Principal component analysis identifies the principal components, which will be used to decide how many clusters to model.
 
 ```{r}
-prcomp(df2, scale. = F, center = T)
+pr <- prcomp(df2, scale. = F, center = T)
+summary(pr)
 ```
+
+From the summary output we see that the first principal component explains 46.16% of the variance, PC2 explains 29.84% of the variance, while PC3 and PC4 explain successively less variance.
+
+The default output of the `prcomp` is the "rotation" table. The values are the eigenvalues of the covariance matrix. They are best thought of as the coefficients (linear predictors) for each of the eigenvectors.
+
+```{r}
+pr
+```
+The $x$ table is perhaps the most useful. It provides the $x,y$ coordinates for plotting clusters for all of the replicates.
+
+```{r}
+head(pr$x)
+```
+
 
 Here's a way to visualize all of the data on the basis of it's first two principal components: Dim1 and Dim2. We'll always see the greatest separation by running a correlation plot between the first two dimensions.
 
@@ -177,7 +192,6 @@ sn <- matrix(c(rnorm(1000, 0,1), rnorm(1000, 0, 1)), ncol=2, nrow=500)
 prcomp(sn, scale. = F, center = F)
 fviz_pca_ind(prcomp(sn),
              geom="point")
-
 ```
 
 ## How many clusters?
@@ -286,7 +300,7 @@ fviz_cluster(pam.df2,
 
 ## Hierarchical clustering
 
-Hierarchical clustering is a step more informative than kmeans clustering because it provides information about how related clusters are to each other.
+Hierarchical clustering is a step more informative than kmeans clustering because it provides information about relationships between clusters.
 
 We start with the data set matrix, `df`from above. Agglomerative hierarchical clustering is performed using the `agnes` function. Agglomerative operates by using each measurement as a seed, to which the most similar other measurements are merged. This turns out to be fairly intensive, computationally, compared to the previous techniques. Exect delays.
 

@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 47 RNA-seq with R | JABSTB: Statistical Design and Analysis of Experiments with R</title>
+  <meta name="description" content="Experimental biostatistics using R." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 47 RNA-seq with R | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Experimental biostatistics using R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 47 RNA-seq with R | JABSTB: Statistical Design and Analysis of Experiments with R" />
+  
+  <meta name="twitter:description" content="Experimental biostatistics using R." />
+  
+
+<meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
+
+
+<meta name="date" content="2020-04-20" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="classification.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">JABSTB</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author and book</a></li>
+<li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
+<li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a><ul>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#spring-2020-term-versions"><i class="fa fa-check"></i><b>3.1</b> Spring 2020 term versions</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.1.1</b> What are these?</a></li>
+<li class="chapter" data-level="3.1.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.1.2</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.1.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.1.3</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.1.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.1.4</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.1.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-software-for-your-machine"><i class="fa fa-check"></i><b>3.1.5</b> Rule 4: Install the right software for your machine</a></li>
+<li class="chapter" data-level="3.1.6" data-path="software.html"><a href="software.html#rule-5-use-this-installation-guide"><i class="fa fa-check"></i><b>3.1.6</b> Rule 5: Use this installation guide</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.2</b> After installation</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.2.1</b> What is R?</a></li>
+<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#r-packages"><i class="fa fa-check"></i><b>3.2.2</b> R packages</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#important-avoid-compiling"><i class="fa fa-check"></i><b>3.3</b> Important: Avoid compiling</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.3.1</b> Reasons not to compile</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a><ul>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a><ul>
+<li class="chapter" data-level="6.1" data-path="bigpic.html"><a href="bigpic.html#what-are-experimental-statistics"><i class="fa fa-check"></i><b>6.1</b> What are experimental statistics?</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="bigpic.html"><a href="bigpic.html#descriptive-modeling"><i class="fa fa-check"></i><b>6.1.1</b> Descriptive modeling</a></li>
+<li class="chapter" data-level="6.1.2" data-path="bigpic.html"><a href="bigpic.html#statistical-inference"><i class="fa fa-check"></i><b>6.1.2</b> Statistical inference</a></li>
+<li class="chapter" data-level="6.1.3" data-path="bigpic.html"><a href="bigpic.html#experimental-design"><i class="fa fa-check"></i><b>6.1.3</b> Experimental design</a></li>
+<li class="chapter" data-level="6.1.4" data-path="bigpic.html"><a href="bigpic.html#statistics-as-an-anti-bias-framework"><i class="fa fa-check"></i><b>6.1.4</b> Statistics as an anti-bias framework</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sampling.html"><a href="sampling.html"><i class="fa fa-check"></i><b>7</b> Statistical Sampling</a><ul>
+<li class="chapter" data-level="7.1" data-path="sampling.html"><a href="sampling.html#experimental-units"><i class="fa fa-check"></i><b>7.1</b> Experimental units</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-to-define-the-experimental-unit"><i class="fa fa-check"></i><b>7.1.1</b> A simple test to define the experimental unit</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="sampling.html"><a href="sampling.html#independent-replicates"><i class="fa fa-check"></i><b>7.2</b> Independent Replicates</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="sampling.html"><a href="sampling.html#a-simple-test-for-independence"><i class="fa fa-check"></i><b>7.2.1</b> A simple test for independence</a></li>
+<li class="chapter" data-level="7.2.2" data-path="sampling.html"><a href="sampling.html#some-replication-examples"><i class="fa fa-check"></i><b>7.2.2</b> Some replication examples</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="sampling.html"><a href="sampling.html#random-process"><i class="fa fa-check"></i><b>7.3</b> Random process</a></li>
+<li class="chapter" data-level="7.4" data-path="sampling.html"><a href="sampling.html#statistically-valid-samples"><i class="fa fa-check"></i><b>7.4</b> Statistically valid samples</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="sampling.html"><a href="sampling.html#select-random-subjects"><i class="fa fa-check"></i><b>7.4.1</b> Select random subjects</a></li>
+<li class="chapter" data-level="7.4.2" data-path="sampling.html"><a href="sampling.html#randomize-to-sequence"><i class="fa fa-check"></i><b>7.4.2</b> Randomize to sequence</a></li>
+<li class="chapter" data-level="7.4.3" data-path="sampling.html"><a href="sampling.html#randomize-to-location"><i class="fa fa-check"></i><b>7.4.3</b> Randomize to location</a></li>
+<li class="chapter" data-level="7.4.4" data-path="sampling.html"><a href="sampling.html#randomize-to-block"><i class="fa fa-check"></i><b>7.4.4</b> Randomize to block</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="sampling.html"><a href="sampling.html#independence-of-replicates"><i class="fa fa-check"></i><b>7.5</b> Independence of replicates</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>8</b> Data Classification</a><ul>
+<li class="chapter" data-level="8.1" data-path="data.html"><a href="data.html#dependent-and-independent-variables"><i class="fa fa-check"></i><b>8.1</b> Dependent and independent variables</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="data.html"><a href="data.html#statistical-notation"><i class="fa fa-check"></i><b>8.1.1</b> Statistical notation</a></li>
+<li class="chapter" data-level="8.1.2" data-path="data.html"><a href="data.html#when-there-is-no-independent-variable"><i class="fa fa-check"></i><b>8.1.2</b> When there is no independent variable</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="data.html"><a href="data.html#discrete-or-continuous-variables"><i class="fa fa-check"></i><b>8.2</b> Discrete or continuous variables</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="data.html"><a href="data.html#measured-variables"><i class="fa fa-check"></i><b>8.2.1</b> Measured variables</a></li>
+<li class="chapter" data-level="8.2.2" data-path="data.html"><a href="data.html#discrete-categorical-and-ordinal-variables"><i class="fa fa-check"></i><b>8.2.2</b> Discrete categorical and ordinal variables</a></li>
+<li class="chapter" data-level="8.2.3" data-path="data.html"><a href="data.html#rescaling-variables"><i class="fa fa-check"></i><b>8.2.3</b> Rescaling variables</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="data.html"><a href="data.html#working-with-data"><i class="fa fa-check"></i><b>8.3</b> Working with data</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="data.html"><a href="data.html#entering-data"><i class="fa fa-check"></i><b>8.3.1</b> Entering data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>9</b> Variability, Accuracy and Precision</a><ul>
+<li class="chapter" data-level="9.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>9.0.1</b> Data are messy</a></li>
+<li class="chapter" data-level="9.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>9.1</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="9.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>9.2</b> Variance: Quantifying variation by least squares</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>9.2.1</b> Definition of variance</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>9.3</b> Standard deviation</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>9.3.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="9.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>9.3.2</b> Ways of describing sample variability</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>9.4</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="9.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>9.5</b> Standard error</a><ul>
+<li class="chapter" data-level="9.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>9.5.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="9.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>9.5.2</b> “Should I use SD or SEM?”</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>9.6</b> Confidence intervals</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>9.6.1</b> CI Definition</a></li>
+<li class="chapter" data-level="9.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>9.6.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="9.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>9.6.3</b> CI Simulation tools</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>9.7</b> Key take aways</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>10</b> Framing statistical hypotheses</a><ul>
+<li class="chapter" data-level="10.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>10.1</b> The decision process</a></li>
+<li class="chapter" data-level="10.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>10.2</b> Popper and falsification</a></li>
+<li class="chapter" data-level="10.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>10.3</b> Statistical hypothesis rubric</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>11</b> Error</a><ul>
+<li class="chapter" data-level="11.1" data-path="error.html"><a href="error.html#setting-type-1-and-type-2-error-thresholds"><i class="fa fa-check"></i><b>11.1</b> Setting type 1 and type 2 error thresholds</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="error.html"><a href="error.html#setting-alpha-the-type-1-error"><i class="fa fa-check"></i><b>11.1.1</b> Setting alpha-the type 1 error</a></li>
+<li class="chapter" data-level="11.1.2" data-path="error.html"><a href="error.html#power-setting-beta-the-type-2-error"><i class="fa fa-check"></i><b>11.1.2</b> Power: Setting beta-the type 2 error</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="error.html"><a href="error.html#striking-the-right-balance"><i class="fa fa-check"></i><b>11.2</b> Striking the right balance</a></li>
+<li class="chapter" data-level="11.3" data-path="error.html"><a href="error.html#false-discovery-rate"><i class="fa fa-check"></i><b>11.3</b> False discovery rate</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>12</b> P Values</a><ul>
+<li class="chapter" data-level="12.1" data-path="pvalues.html"><a href="pvalues.html#definition"><i class="fa fa-check"></i><b>12.1</b> Definition</a></li>
+<li class="chapter" data-level="12.2" data-path="pvalues.html"><a href="pvalues.html#test-statistics-come-from-null-distributions"><i class="fa fa-check"></i><b>12.2</b> Test statistics come from null distributions</a><ul>
+<li class="chapter" data-level="12.2.1" data-path="pvalues.html"><a href="pvalues.html#p-value-behavior"><i class="fa fa-check"></i><b>12.2.1</b> P-value behavior</a></li>
+<li class="chapter" data-level="12.2.2" data-path="pvalues.html"><a href="pvalues.html#p-values-and-the-decision-process"><i class="fa fa-check"></i><b>12.2.2</b> P-values and the decision process</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="pvalues.html"><a href="pvalues.html#a-blood-glucose-p-value"><i class="fa fa-check"></i><b>12.3</b> A blood glucose p-value</a></li>
+<li class="chapter" data-level="12.4" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>12.4</b> How p-values should be interpreted</a></li>
+<li class="chapter" data-level="12.5" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>12.5</b> Interpretation</a></li>
+<li class="chapter" data-level="12.6" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>12.6</b> Criticisms of p-values</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>13</b> Reproducible Data Munging in R</a><ul>
+<li class="chapter" data-level="13.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-data"><i class="fa fa-check"></i><b>13.1</b> Jaxwest7 data</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="jaxwest7.html"><a href="jaxwest7.html#inspect-the-source-data"><i class="fa fa-check"></i><b>13.1.1</b> Inspect the source data</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-data-into-r"><i class="fa fa-check"></i><b>13.2</b> Munge the glucose data into R</a></li>
+<li class="chapter" data-level="13.3" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-bodyweight-data"><i class="fa fa-check"></i><b>13.3</b> Munge the bodyweight data</a></li>
+<li class="chapter" data-level="13.4" data-path="jaxwest7.html"><a href="jaxwest7.html#merge-and-explore-the-glucose-and-bw-data"><i class="fa fa-check"></i><b>13.4</b> Merge and explore the glucose and bw data</a></li>
+<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-1"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>14</b> The Binomial Distribution</a><ul>
+<li class="chapter" data-level="14.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>14.1</b> dbinom</a></li>
+<li class="chapter" data-level="14.2" data-path="binomial.html"><a href="binomial.html#pbinom"><i class="fa fa-check"></i><b>14.2</b> pbinom</a></li>
+<li class="chapter" data-level="14.3" data-path="binomial.html"><a href="binomial.html#qbinom"><i class="fa fa-check"></i><b>14.3</b> qbinom</a></li>
+<li class="chapter" data-level="14.4" data-path="binomial.html"><a href="binomial.html#rbinom"><i class="fa fa-check"></i><b>14.4</b> rbinom</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="poisson.html"><a href="poisson.html"><i class="fa fa-check"></i><b>15</b> The Poisson Distribution</a><ul>
+<li class="chapter" data-level="15.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>15.1</b> Poisson Events</a></li>
+<li class="chapter" data-level="15.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>15.2</b> dpois</a></li>
+<li class="chapter" data-level="15.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>15.3</b> ppois</a></li>
+<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.4</b> rpois</a></li>
+<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.5</b> Overdispersion</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>16</b> The Normal Distribution</a><ul>
+<li class="chapter" data-level="16.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>16.0.1</b> The Standard Normal</a></li>
+<li class="chapter" data-level="16.1" data-path="normal.html"><a href="normal.html#dnorm"><i class="fa fa-check"></i><b>16.1</b> dnorm</a></li>
+<li class="chapter" data-level="16.2" data-path="normal.html"><a href="normal.html#pnorm"><i class="fa fa-check"></i><b>16.2</b> pnorm</a><ul>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-p-values-using-pnorm"><i class="fa fa-check"></i>Calculating “p-values”" using pnorm</a></li>
+<li class="chapter" data-level="" data-path="normal.html"><a href="normal.html#calculating-percentiles-using-pnorm"><i class="fa fa-check"></i>Calculating percentiles using pnorm</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="normal.html"><a href="normal.html#qnorm"><i class="fa fa-check"></i><b>16.3</b> qnorm</a></li>
+<li class="chapter" data-level="16.4" data-path="normal.html"><a href="normal.html#rnorm"><i class="fa fa-check"></i><b>16.4</b> rnorm</a><ul>
+<li class="chapter" data-level="16.4.1" data-path="normal.html"><a href="normal.html#plotting-histograms-of-some-rnorm-samples"><i class="fa fa-check"></i><b>16.4.1</b> Plotting histograms of some rnorm samples</a></li>
+<li class="chapter" data-level="16.4.2" data-path="normal.html"><a href="normal.html#bins-and-binwidth"><i class="fa fa-check"></i><b>16.4.2</b> Bins and Binwidth</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="categorical.html"><a href="categorical.html"><i class="fa fa-check"></i><b>17</b> Statistics for Categorical Data</a><ul>
+<li class="chapter" data-level="17.1" data-path="categorical.html"><a href="categorical.html#types-of-categorical-data"><i class="fa fa-check"></i><b>17.1</b> Types of categorical data</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="categorical.html"><a href="categorical.html#proportions"><i class="fa fa-check"></i><b>17.1.1</b> Proportions</a></li>
+<li class="chapter" data-level="17.1.2" data-path="categorical.html"><a href="categorical.html#frequencies"><i class="fa fa-check"></i><b>17.1.2</b> Frequencies</a></li>
+<li class="chapter" data-level="17.1.3" data-path="categorical.html"><a href="categorical.html#associations"><i class="fa fa-check"></i><b>17.1.3</b> Associations</a></li>
+<li class="chapter" data-level="17.1.4" data-path="categorical.html"><a href="categorical.html#statistics-covered-here"><i class="fa fa-check"></i><b>17.1.4</b> Statistics Covered Here</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="categorical.html"><a href="categorical.html#exact-v-asymptotic-calculations-of-p-values"><i class="fa fa-check"></i><b>17.2</b> Exact v Asymptotic Calculations of p-values</a><ul>
+<li class="chapter" data-level="17.2.1" data-path="categorical.html"><a href="categorical.html#choosing-exact-or-asymptotic"><i class="fa fa-check"></i><b>17.2.1</b> Choosing exact or asymptotic</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="categorical.html"><a href="categorical.html#overview-of-the-types-of-hypothesis-testing"><i class="fa fa-check"></i><b>17.3</b> Overview of the types of hypothesis testing</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="categorical.html"><a href="categorical.html#proportion-analysis"><i class="fa fa-check"></i><b>17.3.1</b> Proportion analysis</a></li>
+<li class="chapter" data-level="17.3.2" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-testing"><i class="fa fa-check"></i><b>17.3.2</b> Goodness of fit testing</a></li>
+<li class="chapter" data-level="17.3.3" data-path="categorical.html"><a href="categorical.html#contingency-analysis"><i class="fa fa-check"></i><b>17.3.3</b> Contingency Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="categorical.html"><a href="categorical.html#comparing-proportions"><i class="fa fa-check"></i><b>17.4</b> Comparing proportions</a><ul>
+<li class="chapter" data-level="17.4.1" data-path="categorical.html"><a href="categorical.html#a-mouse-t-cell-pilot-experiment-the-cytokine-inducible-antigen-gradstudin"><i class="fa fa-check"></i><b>17.4.1</b> A Mouse T Cell Pilot Experiment: The Cytokine-inducible antigen gradstudin</a></li>
+<li class="chapter" data-level="17.4.2" data-path="categorical.html"><a href="categorical.html#calculating-proportions"><i class="fa fa-check"></i><b>17.4.2</b> Calculating Proportions</a></li>
+<li class="chapter" data-level="17.4.3" data-path="categorical.html"><a href="categorical.html#what-a-proportion-estimates"><i class="fa fa-check"></i><b>17.4.3</b> What A Proportion Estimates</a></li>
+<li class="chapter" data-level="17.4.4" data-path="categorical.html"><a href="categorical.html#confidence-intervals-of-proportions"><i class="fa fa-check"></i><b>17.4.4</b> Confidence Intervals of Proportions</a></li>
+<li class="chapter" data-level="17.4.5" data-path="categorical.html"><a href="categorical.html#a-one-sample-proportion-test"><i class="fa fa-check"></i><b>17.4.5</b> A One-Sample Proportion Test</a></li>
+<li class="chapter" data-level="17.4.6" data-path="categorical.html"><a href="categorical.html#an-exact-test-for-one-proportion"><i class="fa fa-check"></i><b>17.4.6</b> An exact test for one proportion</a></li>
+<li class="chapter" data-level="17.4.7" data-path="categorical.html"><a href="categorical.html#comparing-two-proportions"><i class="fa fa-check"></i><b>17.4.7</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="categorical.html"><a href="categorical.html#exact-tests-for-two-proportions"><i class="fa fa-check"></i><b>17.5</b> Exact tests for two proportions</a></li>
+<li class="chapter" data-level="17.6" data-path="categorical.html"><a href="categorical.html#goodness-of-fit-tests"><i class="fa fa-check"></i><b>17.6</b> Goodness of fit Tests</a><ul>
+<li class="chapter" data-level="17.6.1" data-path="categorical.html"><a href="categorical.html#an-exact-goodness-of-fit-test"><i class="fa fa-check"></i><b>17.6.1</b> An Exact Goodness of Fit test</a></li>
+<li class="chapter" data-level="17.6.2" data-path="categorical.html"><a href="categorical.html#an-approximate-goodness-of-fit-test"><i class="fa fa-check"></i><b>17.6.2</b> An Approximate Goodness of Fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="17.7" data-path="categorical.html"><a href="categorical.html#contingency-testing"><i class="fa fa-check"></i><b>17.7</b> Contingency Testing</a><ul>
+<li class="chapter" data-level="17.7.1" data-path="categorical.html"><a href="categorical.html#interpretation-of-contingency-results"><i class="fa fa-check"></i><b>17.7.1</b> Interpretation of Contingency Results</a></li>
+<li class="chapter" data-level="17.7.2" data-path="categorical.html"><a href="categorical.html#write-up-4"><i class="fa fa-check"></i><b>17.7.2</b> Write Up</a></li>
+<li class="chapter" data-level="17.7.3" data-path="categorical.html"><a href="categorical.html#interpretation-of-chi-square-output"><i class="fa fa-check"></i><b>17.7.3</b> Interpretation of chi-square output</a></li>
+<li class="chapter" data-level="17.7.4" data-path="categorical.html"><a href="categorical.html#write-up-5"><i class="fa fa-check"></i><b>17.7.4</b> Write Up</a></li>
+<li class="chapter" data-level="17.7.5" data-path="categorical.html"><a href="categorical.html#which-contingency-test-is-best"><i class="fa fa-check"></i><b>17.7.5</b> Which contingency test is best?</a></li>
+<li class="chapter" data-level="17.7.6" data-path="categorical.html"><a href="categorical.html#higher-dimension-contingency-analysis"><i class="fa fa-check"></i><b>17.7.6</b> Higher dimension contingency analysis</a></li>
+<li class="chapter" data-level="17.7.7" data-path="categorical.html"><a href="categorical.html#other-experimental-designs-involving-categorical-data"><i class="fa fa-check"></i><b>17.7.7</b> Other experimental designs involving categorical data</a></li>
+</ul></li>
+<li class="chapter" data-level="17.8" data-path="categorical.html"><a href="categorical.html#power-analysis-for-proportion-tests"><i class="fa fa-check"></i><b>17.8</b> Power analysis for proportion tests</a></li>
+<li class="chapter" data-level="17.9" data-path="categorical.html"><a href="categorical.html#power-analysis-functions-for-proportion-tests"><i class="fa fa-check"></i><b>17.9</b> Power analysis functions for proportion tests</a></li>
+<li class="chapter" data-level="17.10" data-path="categorical.html"><a href="categorical.html#graphing-proportions"><i class="fa fa-check"></i><b>17.10</b> Graphing Proportions</a></li>
+<li class="chapter" data-level="17.11" data-path="categorical.html"><a href="categorical.html#key-takeaways"><i class="fa fa-check"></i><b>17.11</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="chisquare.html"><a href="chisquare.html"><i class="fa fa-check"></i><b>18</b> The Chi-square Distribution</a><ul>
+<li class="chapter" data-level="18.1" data-path="chisquare.html"><a href="chisquare.html#background"><i class="fa fa-check"></i><b>18.1</b> Background</a></li>
+<li class="chapter" data-level="18.2" data-path="chisquare.html"><a href="chisquare.html#dchisq"><i class="fa fa-check"></i><b>18.2</b> dchisq</a></li>
+<li class="chapter" data-level="18.3" data-path="chisquare.html"><a href="chisquare.html#pchisq"><i class="fa fa-check"></i><b>18.3</b> pchisq</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="chisquare.html"><a href="chisquare.html#calculating-p-values-from-pchisq"><i class="fa fa-check"></i><b>18.3.1</b> Calculating p-values from pchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="chisquare.html"><a href="chisquare.html#qchisq"><i class="fa fa-check"></i><b>18.4</b> qchisq</a></li>
+<li class="chapter" data-level="18.5" data-path="chisquare.html"><a href="chisquare.html#rchisq"><i class="fa fa-check"></i><b>18.5</b> rchisq</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="nonparametrics.html"><a href="nonparametrics.html"><i class="fa fa-check"></i><b>19</b> Nonparametric Statistical Tests</a><ul>
+<li class="chapter" data-level="19.1" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-sampling-distributions"><i class="fa fa-check"></i><b>19.1</b> Nonparametric sampling distributions</a></li>
+<li class="chapter" data-level="19.2" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-discrete-data"><i class="fa fa-check"></i><b>19.2</b> Experiments involving discrete data</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="nonparametrics.html"><a href="nonparametrics.html#ordered-data-1"><i class="fa fa-check"></i><b>19.2.1</b> Ordered data</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-deviant-data"><i class="fa fa-check"></i><b>19.3</b> Experiments involving deviant Data</a></li>
+<li class="chapter" data-level="19.4" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>19.4</b> Sign Test</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>19.4.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>19.4.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="19.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>19.5</b> Wilcoxon Sign Rank Test for One Group</a><ul>
+<li class="chapter" data-level="19.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>19.5.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>19.5.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.5.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>19.5.3</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="19.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>19.6</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
+<li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>19.6.2</b> Write Up</a></li>
+<li class="chapter" data-level="19.6.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot"><i class="fa fa-check"></i><b>19.6.3</b> Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="19.7" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>19.7</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
+<li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.7.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>19.7.2</b> Write up</a></li>
+<li class="chapter" data-level="19.7.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot-1"><i class="fa fa-check"></i><b>19.7.3</b> Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="19.8" data-path="nonparametrics.html"><a href="nonparametrics.html#kruskal-wallis"><i class="fa fa-check"></i><b>19.8</b> Kruskal-Wallis</a><ul>
+<li class="chapter" data-level="19.8.1" data-path="nonparametrics.html"><a href="nonparametrics.html#the-experimental-design"><i class="fa fa-check"></i><b>19.8.1</b> The experimental design</a></li>
+<li class="chapter" data-level="19.8.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-10"><i class="fa fa-check"></i><b>19.8.2</b> Write Up</a></li>
+</ul></li>
+<li class="chapter" data-level="19.9" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>19.9</b> Friedman test</a><ul>
+<li class="chapter" data-level="19.9.1" data-path="nonparametrics.html"><a href="nonparametrics.html#blocked-experimental-design"><i class="fa fa-check"></i><b>19.9.1</b> Blocked experimental design</a></li>
+<li class="chapter" data-level="19.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-5"><i class="fa fa-check"></i><b>19.9.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.9.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-11"><i class="fa fa-check"></i><b>19.9.3</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="19.10" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-power-calculations"><i class="fa fa-check"></i><b>19.10</b> Nonparametric power calculations</a><ul>
+<li class="chapter" data-level="19.10.1" data-path="nonparametrics.html"><a href="nonparametrics.html#how-it-works"><i class="fa fa-check"></i><b>19.10.1</b> How it works</a></li>
+<li class="chapter" data-level="19.10.2" data-path="nonparametrics.html"><a href="nonparametrics.html#simulating-response-data"><i class="fa fa-check"></i><b>19.10.2</b> Simulating response data</a></li>
+<li class="chapter" data-level="19.10.3" data-path="nonparametrics.html"><a href="nonparametrics.html#an-example"><i class="fa fa-check"></i><b>19.10.3</b> An example</a></li>
+<li class="chapter" data-level="19.10.4" data-path="nonparametrics.html"><a href="nonparametrics.html#nonpara.pwr"><i class="fa fa-check"></i><b>19.10.4</b> nonpara.pwr</a></li>
+</ul></li>
+<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-2"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>20</b> Signed Rank Distribution</a><ul>
+<li class="chapter" data-level="20.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>20.1</b> Transformation of data into sign ranks</a><ul>
+<li class="chapter" data-level="20.1.1" data-path="signrank.html"><a href="signrank.html#for-a-one-group-sample"><i class="fa fa-check"></i><b>20.1.1</b> For a one group sample</a></li>
+<li class="chapter" data-level="20.1.2" data-path="signrank.html"><a href="signrank.html#for-a-paired-sample"><i class="fa fa-check"></i><b>20.1.2</b> For a paired sample</a></li>
+<li class="chapter" data-level="20.1.3" data-path="signrank.html"><a href="signrank.html#the-sign-rank-test-statistic-in-r"><i class="fa fa-check"></i><b>20.1.3</b> The sign rank test statistic in R</a></li>
+</ul></li>
+<li class="chapter" data-level="20.2" data-path="signrank.html"><a href="signrank.html#rs-four-sign-rank-distribution-functions"><i class="fa fa-check"></i><b>20.2</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="20.2.1" data-path="signrank.html"><a href="signrank.html#dsignrank"><i class="fa fa-check"></i><b>20.2.1</b> dsignrank</a></li>
+<li class="chapter" data-level="20.2.2" data-path="signrank.html"><a href="signrank.html#psignrank"><i class="fa fa-check"></i><b>20.2.2</b> psignrank</a></li>
+<li class="chapter" data-level="20.2.3" data-path="signrank.html"><a href="signrank.html#qsignrank"><i class="fa fa-check"></i><b>20.2.3</b> qsignrank</a></li>
+<li class="chapter" data-level="20.2.4" data-path="signrank.html"><a href="signrank.html#rsignrank"><i class="fa fa-check"></i><b>20.2.4</b> rsignrank</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="ranksum.html"><a href="ranksum.html"><i class="fa fa-check"></i><b>21</b> Rank Sum Distribution</a><ul>
+<li class="chapter" data-level="21.0.1" data-path="ranksum.html"><a href="ranksum.html#transformation-of-data-into-rank-summs"><i class="fa fa-check"></i><b>21.0.1</b> Transformation of data into rank summs</a></li>
+<li class="chapter" data-level="21.0.2" data-path="ranksum.html"><a href="ranksum.html#the-sign-rank-test-statistic-in-r-1"><i class="fa fa-check"></i><b>21.0.2</b> The sign rank test statistic in R</a></li>
+<li class="chapter" data-level="21.1" data-path="ranksum.html"><a href="ranksum.html#rs-four-sign-rank-distribution-functions-1"><i class="fa fa-check"></i><b>21.1</b> R’s Four Sign Rank Distribution Functions</a><ul>
+<li class="chapter" data-level="21.1.1" data-path="ranksum.html"><a href="ranksum.html#dwilcox"><i class="fa fa-check"></i><b>21.1.1</b> dwilcox</a></li>
+<li class="chapter" data-level="21.1.2" data-path="ranksum.html"><a href="ranksum.html#pwilcox"><i class="fa fa-check"></i><b>21.1.2</b> pwilcox</a></li>
+<li class="chapter" data-level="21.1.3" data-path="ranksum.html"><a href="ranksum.html#qwilcox"><i class="fa fa-check"></i><b>21.1.3</b> qwilcox</a></li>
+<li class="chapter" data-level="21.1.4" data-path="ranksum.html"><a href="ranksum.html#rwilcox"><i class="fa fa-check"></i><b>21.1.4</b> rwilcox</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>22</b> The t-tests</a><ul>
+<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Data assumptions for t-tests</a></li>
+<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a><ul>
+<li class="chapter" data-level="22.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.2.1</b> One sample t tests</a></li>
+<li class="chapter" data-level="22.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.2.2</b> Unpaired t tests</a></li>
+<li class="chapter" data-level="22.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.2.3</b> Paired t tests</a></li>
+</ul></li>
+<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.3</b> t Test Hypotheses</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.3.1</b> One-sided or two-sided??</a></li>
+<li class="chapter" data-level="22.3.2" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.3.2</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="22.3.3" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.3.3</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="22.3.4" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.3.4</b> Paired hypotheses</a></li>
+</ul></li>
+<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>22.4</b> Confidence Intervals of Means</a></li>
+<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#parameters-small-samples-and-reliability"><i class="fa fa-check"></i><b>22.5</b> Parameters, small samples, and reliability</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.5.1</b> Reporting SD or SEM?</a></li>
+</ul></li>
+<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>22.6</b> t Tests: Running the analysis</a><ul>
+<li class="chapter" data-level="22.6.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.6.1</b> One sample t test</a></li>
+<li class="chapter" data-level="22.6.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.6.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
+<li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
+<li class="chapter" data-level="22.8.2" data-path="ttests.html"><a href="ttests.html#interpretation-9"><i class="fa fa-check"></i><b>22.8.2</b> Interpretation</a></li>
+<li class="chapter" data-level="22.8.3" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.8.3</b> t-pwr: A Monte Carlo method</a></li>
+</ul></li>
+<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#summary-3"><i class="fa fa-check"></i><b>22.9</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>23</b> Statistical design of t-tests</a><ul>
+<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a><ul>
+<li class="chapter" data-level="23.1.1" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.1.1</b> Overview of the Monte Carlo</a></li>
+<li class="chapter" data-level="23.1.2" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-data-simulation"><i class="fa fa-check"></i><b>23.1.2</b> tl;dr on data simulation</a></li>
+<li class="chapter" data-level="23.1.3" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-the-test"><i class="fa fa-check"></i><b>23.1.3</b> tl;dr on the test</a></li>
+<li class="chapter" data-level="23.1.4" data-path="ttestmc.html"><a href="ttestmc.html#changing-n"><i class="fa fa-check"></i><b>23.1.4</b> Changing n</a></li>
+<li class="chapter" data-level="23.1.5" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.1.5</b> Diabetes drug scenario</a></li>
+<li class="chapter" data-level="23.1.6" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.1.6</b> What would be a scientifically meaningful response?</a></li>
+</ul></li>
+<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> One sample t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.2.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.2.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.2.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.2.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.2.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.2.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.2.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.2.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.2.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.2.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.2.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.2.7</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.3</b> Unpaired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.3.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.3.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.3.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.3.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.3.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.3.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.3.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.3.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.3.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.3.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.3.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.3.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.3.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.3.7</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.4</b> Paired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.4.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.4.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.4.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.4.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.4.3</b> Step 3</a></li>
+</ul></li>
+<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.5</b> Step 4</a><ul>
+<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.5.1</b> Step 5</a></li>
+<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.5.2</b> Step 6</a></li>
+<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.5.3</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.6</b> Comparison to pwr tests</a></li>
+<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.7</b> dt</a></li>
+<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.8</b> pt</a></li>
+<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.9</b> qt</a></li>
+<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.10</b> rt</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="simcorrelation.html"><a href="simcorrelation.html"><i class="fa fa-check"></i><b>24</b> Simulating correlated variables</a><ul>
+<li class="chapter" data-level="24.1" data-path="simcorrelation.html"><a href="simcorrelation.html#estimating-correlation-between-two-variables"><i class="fa fa-check"></i><b>24.1</b> Estimating correlation between two variables</a></li>
+<li class="chapter" data-level="24.2" data-path="simcorrelation.html"><a href="simcorrelation.html#simulating-correlated-variables"><i class="fa fa-check"></i><b>24.2</b> Simulating correlated variables</a></li>
+<li class="chapter" data-level="24.3" data-path="simcorrelation.html"><a href="simcorrelation.html#monte-carlo-simulation"><i class="fa fa-check"></i><b>24.3</b> Monte Carlo simulation</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="introanova.html"><a href="introanova.html"><i class="fa fa-check"></i><b>25</b> Introduction to ANOVA</a><ul>
+<li class="chapter" data-level="25.1" data-path="introanova.html"><a href="introanova.html#assumptions"><i class="fa fa-check"></i><b>25.1</b> Assumptions</a></li>
+<li class="chapter" data-level="25.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>25.2</b> Types of designs</a></li>
+<li class="chapter" data-level="25.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>25.3</b> Jargon: Factors and levels</a><ul>
+<li class="chapter" data-level="25.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>25.3.1</b> Woring with factors in R</a></li>
+</ul></li>
+<li class="chapter" data-level="25.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>25.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
+<li class="chapter" data-level="25.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>25.5</b> Inference</a><ul>
+<li class="chapter" data-level="25.5.1" data-path="introanova.html"><a href="introanova.html#a-quick-peek-at-posthoc-testing"><i class="fa fa-check"></i><b>25.5.1</b> A quick peek at posthoc testing</a></li>
+</ul></li>
+<li class="chapter" data-level="25.6" data-path="introanova.html"><a href="introanova.html#anova-calculations"><i class="fa fa-check"></i><b>25.6</b> ANOVA calculations</a><ul>
+<li class="chapter" data-level="25.6.1" data-path="introanova.html"><a href="introanova.html#sums-of-squares-partitioning"><i class="fa fa-check"></i><b>25.6.1</b> Sums of Squares partitioning</a></li>
+<li class="chapter" data-level="25.6.2" data-path="introanova.html"><a href="introanova.html#the-anova-table"><i class="fa fa-check"></i><b>25.6.2</b> The ANOVA table</a></li>
+<li class="chapter" data-level="25.6.3" data-path="introanova.html"><a href="introanova.html#post-hoc-group-comparisons"><i class="fa fa-check"></i><b>25.6.3</b> Post-hoc group comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="25.7" data-path="introanova.html"><a href="introanova.html#completely-randomized-or-related-measures"><i class="fa fa-check"></i><b>25.7</b> Completely randomized or related measures</a><ul>
+<li class="chapter" data-level="25.7.1" data-path="introanova.html"><a href="introanova.html#the-problem-of-lost-data-in-related-measures-designs"><i class="fa fa-check"></i><b>25.7.1</b> The problem of lost data in related measures designs</a></li>
+</ul></li>
+<li class="chapter" data-level="25.8" data-path="introanova.html"><a href="introanova.html#two-way-anova"><i class="fa fa-check"></i><b>25.8</b> Two-way ANOVA</a></li>
+<li class="chapter" data-level="25.9" data-path="introanova.html"><a href="introanova.html#other-anova-models"><i class="fa fa-check"></i><b>25.9</b> Other ANOVA models</a><ul>
+<li class="chapter" data-level="25.9.1" data-path="introanova.html"><a href="introanova.html#r-and-anova"><i class="fa fa-check"></i><b>25.9.1</b> R and ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="25.10" data-path="introanova.html"><a href="introanova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>25.10</b> Alternatives to ANOVA</a><ul>
+<li class="chapter" data-level="25.10.1" data-path="introanova.html"><a href="introanova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>25.10.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
+</ul></li>
+<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-4"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="26" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>26</b> The F distribution</a><ul>
+<li class="chapter" data-level="26.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>26.1</b> Background</a><ul>
+<li class="chapter" data-level="26.1.1" data-path="fdistr.html"><a href="fdistr.html#sample-variance-and-fs-pdf"><i class="fa fa-check"></i><b>26.1.1</b> Sample Variance and F’s PDF</a></li>
+</ul></li>
+<li class="chapter" data-level="26.2" data-path="fdistr.html"><a href="fdistr.html#df"><i class="fa fa-check"></i><b>26.2</b> df</a></li>
+<li class="chapter" data-level="26.3" data-path="fdistr.html"><a href="fdistr.html#pf"><i class="fa fa-check"></i><b>26.3</b> pf</a></li>
+<li class="chapter" data-level="26.4" data-path="fdistr.html"><a href="fdistr.html#qf"><i class="fa fa-check"></i><b>26.4</b> qf</a></li>
+<li class="chapter" data-level="26.5" data-path="fdistr.html"><a href="fdistr.html#rf"><i class="fa fa-check"></i><b>26.5</b> rf</a></li>
+</ul></li>
+<li class="chapter" data-level="27" data-path="onewayanova.html"><a href="onewayanova.html"><i class="fa fa-check"></i><b>27</b> One-way ANOVA Completely Randomized</a><ul>
+<li class="chapter" data-level="27.1" data-path="onewayanova.html"><a href="onewayanova.html#using-ezanova"><i class="fa fa-check"></i><b>27.1</b> Using <code>ezANOVA</code></a></li>
+<li class="chapter" data-level="27.2" data-path="onewayanova.html"><a href="onewayanova.html#the-chickwt-data-set"><i class="fa fa-check"></i><b>27.2</b> The chickwt data set</a><ul>
+<li class="chapter" data-level="27.2.1" data-path="onewayanova.html"><a href="onewayanova.html#inspect-the-data"><i class="fa fa-check"></i><b>27.2.1</b> Inspect the data</a></li>
+</ul></li>
+<li class="chapter" data-level="27.3" data-path="onewayanova.html"><a href="onewayanova.html#run-the-anova"><i class="fa fa-check"></i><b>27.3</b> Run the ANOVA</a><ul>
+<li class="chapter" data-level="27.3.1" data-path="onewayanova.html"><a href="onewayanova.html#run-the-chickwts-one-way-anova"><i class="fa fa-check"></i><b>27.3.1</b> Run the chickwts One Way ANOVA</a></li>
+<li class="chapter" data-level="27.3.2" data-path="onewayanova.html"><a href="onewayanova.html#interpreting-the-one-way-cr-anova-output"><i class="fa fa-check"></i><b>27.3.2</b> Interpreting the One-Way CR ANOVA Output</a></li>
+</ul></li>
+<li class="chapter" data-level="27.4" data-path="onewayanova.html"><a href="onewayanova.html#post-hoc-pairwise-comparisons"><i class="fa fa-check"></i><b>27.4</b> Post hoc pairwise comparisons</a><ul>
+<li class="chapter" data-level="27.4.1" data-path="onewayanova.html"><a href="onewayanova.html#range-tests"><i class="fa fa-check"></i><b>27.4.1</b> Range tests</a></li>
+</ul></li>
+<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-5"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="28" data-path="onewayRM.html"><a href="onewayRM.html"><i class="fa fa-check"></i><b>28</b> One-way ANOVA Related Measures</a><ul>
+<li class="chapter" data-level="28.1" data-path="onewayRM.html"><a href="onewayRM.html#data-prep"><i class="fa fa-check"></i><b>28.1</b> Data prep</a></li>
+<li class="chapter" data-level="28.2" data-path="onewayRM.html"><a href="onewayRM.html#data-visualization"><i class="fa fa-check"></i><b>28.2</b> Data visualization</a><ul>
+<li class="chapter" data-level="28.2.1" data-path="onewayRM.html"><a href="onewayRM.html#visualize-the-statistical-design"><i class="fa fa-check"></i><b>28.2.1</b> Visualize the statistical design</a></li>
+</ul></li>
+<li class="chapter" data-level="28.3" data-path="onewayRM.html"><a href="onewayRM.html#the-anova"><i class="fa fa-check"></i><b>28.3</b> The ANOVA</a><ul>
+<li class="chapter" data-level="28.3.1" data-path="onewayRM.html"><a href="onewayRM.html#running-ezanova"><i class="fa fa-check"></i><b>28.3.1</b> Running ezANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-10"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
+<li class="chapter" data-level="28.5" data-path="onewayRM.html"><a href="onewayRM.html#post-hoc-analysis"><i class="fa fa-check"></i><b>28.5</b> Post-hoc analysis</a></li>
+<li class="chapter" data-level="28.6" data-path="onewayRM.html"><a href="onewayRM.html#write-up-12"><i class="fa fa-check"></i><b>28.6</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="29" data-path="twowayCR.html"><a href="twowayCR.html"><i class="fa fa-check"></i><b>29</b> Two-way ANOVA Completely Randomized</a><ul>
+<li class="chapter" data-level="29.1" data-path="twowayCR.html"><a href="twowayCR.html#effect-of-strain-and-diet-on-liver"><i class="fa fa-check"></i><b>29.1</b> Effect of Strain and Diet on Liver</a></li>
+<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
+<li class="chapter" data-level="29.3" data-path="twowayCR.html"><a href="twowayCR.html#interpretation-of-2-way-cr-anova-output"><i class="fa fa-check"></i><b>29.3</b> Interpretation of 2 Way CR ANOVA Output</a><ul>
+<li class="chapter" data-level="29.3.1" data-path="twowayCR.html"><a href="twowayCR.html#levenes"><i class="fa fa-check"></i><b>29.3.1</b> Levene’s</a></li>
+<li class="chapter" data-level="29.3.2" data-path="twowayCR.html"><a href="twowayCR.html#anova-table"><i class="fa fa-check"></i><b>29.3.2</b> ANOVA Table</a></li>
+</ul></li>
+<li class="chapter" data-level="29.4" data-path="twowayCR.html"><a href="twowayCR.html#post-hoc-multiple-comparisons"><i class="fa fa-check"></i><b>29.4</b> Post Hoc Multiple Comparisons</a><ul>
+<li class="chapter" data-level="29.4.1" data-path="twowayCR.html"><a href="twowayCR.html#pairwise.t.tests"><i class="fa fa-check"></i><b>29.4.1</b> Pairwise.t.tests</a></li>
+<li class="chapter" data-level="29.4.2" data-path="twowayCR.html"><a href="twowayCR.html#write-up-13"><i class="fa fa-check"></i><b>29.4.2</b> Write Up</a></li>
+<li class="chapter" data-level="29.4.3" data-path="twowayCR.html"><a href="twowayCR.html#range-tests-1"><i class="fa fa-check"></i><b>29.4.3</b> Range tests</a></li>
+</ul></li>
+<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-6"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="30" data-path="twowayRM.html"><a href="twowayRM.html"><i class="fa fa-check"></i><b>30</b> Two-way ANOVA Related Measures</a><ul>
+<li class="chapter" data-level="30.1" data-path="twowayRM.html"><a href="twowayRM.html#cell-culture"><i class="fa fa-check"></i><b>30.1</b> Cell culture</a></li>
+<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-1"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
+<li class="chapter" data-level="30.3" data-path="twowayRM.html"><a href="twowayRM.html#interpretation-of-the-output"><i class="fa fa-check"></i><b>30.3</b> Interpretation of the output</a><ul>
+<li class="chapter" data-level="30.3.1" data-path="twowayRM.html"><a href="twowayRM.html#anova-table-1"><i class="fa fa-check"></i><b>30.3.1</b> ANOVA Table</a></li>
+<li class="chapter" data-level="30.3.2" data-path="twowayRM.html"><a href="twowayRM.html#mauchlys-sphericity-test"><i class="fa fa-check"></i><b>30.3.2</b> Mauchly’s Sphericity Test</a></li>
+</ul></li>
+<li class="chapter" data-level="30.4" data-path="twowayRM.html"><a href="twowayRM.html#post-hoc-multiple-comparisons-1"><i class="fa fa-check"></i><b>30.4</b> Post Hoc multiple comparisons</a></li>
+<li class="chapter" data-level="30.5" data-path="twowayRM.html"><a href="twowayRM.html#write-up-14"><i class="fa fa-check"></i><b>30.5</b> Write Up</a></li>
+<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-7"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="31" data-path="twowaymixed.html"><a href="twowaymixed.html"><i class="fa fa-check"></i><b>31</b> Two-way ANOVA RM/CR</a><ul>
+<li class="chapter" data-level="31.1" data-path="twowaymixed.html"><a href="twowaymixed.html#chickweight-data-set"><i class="fa fa-check"></i><b>31.1</b> ChickWeight Data set</a></li>
+<li class="chapter" data-level="31.2" data-path="twowaymixed.html"><a href="twowaymixed.html#munge-chickweight-data"><i class="fa fa-check"></i><b>31.2</b> Munge ChickWeight data</a></li>
+<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-2"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
+<li class="chapter" data-level="31.4" data-path="twowaymixed.html"><a href="twowaymixed.html#interpreting-the-anova-output"><i class="fa fa-check"></i><b>31.4</b> Interpreting the ANOVA output</a><ul>
+<li class="chapter" data-level="31.4.1" data-path="twowaymixed.html"><a href="twowaymixed.html#anova-the-anova-table-1"><i class="fa fa-check"></i><b>31.4.1</b> $ANOVA: The ANOVA table</a></li>
+<li class="chapter" data-level="31.4.2" data-path="twowaymixed.html"><a href="twowaymixed.html#mauchlys-test-and-corrections"><i class="fa fa-check"></i><b>31.4.2</b> Mauchly’s Test and Corrections</a></li>
+</ul></li>
+<li class="chapter" data-level="31.5" data-path="twowaymixed.html"><a href="twowaymixed.html#post-hoc"><i class="fa fa-check"></i><b>31.5</b> Post hoc</a><ul>
+<li class="chapter" data-level="31.5.1" data-path="twowaymixed.html"><a href="twowaymixed.html#pairwise.t.tests-1"><i class="fa fa-check"></i><b>31.5.1</b> Pairwise.t.tests</a></li>
+<li class="chapter" data-level="31.5.2" data-path="twowaymixed.html"><a href="twowaymixed.html#tukey-test-a-range-test"><i class="fa fa-check"></i><b>31.5.2</b> Tukey test: A range test</a></li>
+<li class="chapter" data-level="31.5.3" data-path="twowaymixed.html"><a href="twowaymixed.html#heres-whats-been-discovered-by-the-tukeyhsd-test"><i class="fa fa-check"></i><b>31.5.3</b> Here’s what’s been discovered by the TukeyHSD test</a></li>
+<li class="chapter" data-level="31.5.4" data-path="twowaymixed.html"><a href="twowaymixed.html#why-is-the-tukeyhsd-result-so-different-than-the-pairwise.t.test"><i class="fa fa-check"></i><b>31.5.4</b> Why is the TukeyHSD result so different than the pairwise.t.test??</a></li>
+</ul></li>
+<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-8"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="32" data-path="posthoc.html"><a href="posthoc.html"><i class="fa fa-check"></i><b>32</b> ANOVA Posthoc Comparisons</a><ul>
+<li class="chapter" data-level="32.1" data-path="posthoc.html"><a href="posthoc.html#overview-of-options"><i class="fa fa-check"></i><b>32.1</b> Overview of options</a><ul>
+<li class="chapter" data-level="32.1.1" data-path="posthoc.html"><a href="posthoc.html#pairwise.t.test-with-p-value-adjustments"><i class="fa fa-check"></i><b>32.1.1</b> Pairwise.t.test with p-value adjustments</a></li>
+<li class="chapter" data-level="32.1.2" data-path="posthoc.html"><a href="posthoc.html#range-tests-2"><i class="fa fa-check"></i><b>32.1.2</b> Range tests</a></li>
+</ul></li>
+<li class="chapter" data-level="32.2" data-path="posthoc.html"><a href="posthoc.html#reporting-the-result-1"><i class="fa fa-check"></i><b>32.2</b> Reporting the result</a></li>
+<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-9"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="jaxwest2.html"><a href="jaxwest2.html"><i class="fa fa-check"></i><b>33</b> Reproducible Data Munging Mostly with Tidyverse</a><ul>
+<li class="chapter" data-level="33.1" data-path="jaxwest2.html"><a href="jaxwest2.html#look-at-the-original-data-carefully"><i class="fa fa-check"></i><b>33.1</b> Look at the original data carefully</a></li>
+<li class="chapter" data-level="33.2" data-path="jaxwest2.html"><a href="jaxwest2.html#our-goal"><i class="fa fa-check"></i><b>33.2</b> Our goal</a></li>
+<li class="chapter" data-level="33.3" data-path="jaxwest2.html"><a href="jaxwest2.html#step-1-read-the-data-into-r"><i class="fa fa-check"></i><b>33.3</b> Step 1: Read the data into R</a></li>
+<li class="chapter" data-level="33.4" data-path="jaxwest2.html"><a href="jaxwest2.html#step-2-select-the-variables"><i class="fa fa-check"></i><b>33.4</b> Step 2: Select the variables</a></li>
+<li class="chapter" data-level="33.5" data-path="jaxwest2.html"><a href="jaxwest2.html#step-3-trim-the-cases"><i class="fa fa-check"></i><b>33.5</b> Step 3: Trim the cases</a></li>
+<li class="chapter" data-level="33.6" data-path="jaxwest2.html"><a href="jaxwest2.html#step-4-we-have-a-variable-problem-to-fix"><i class="fa fa-check"></i><b>33.6</b> Step 4: We have a variable problem to fix</a></li>
+<li class="chapter" data-level="33.7" data-path="jaxwest2.html"><a href="jaxwest2.html#step-5-impute-or-delete"><i class="fa fa-check"></i><b>33.7</b> Step 5: Impute or Delete</a></li>
+<li class="chapter" data-level="33.8" data-path="jaxwest2.html"><a href="jaxwest2.html#step-6-go-long"><i class="fa fa-check"></i><b>33.8</b> Step 6: Go long</a></li>
+<li class="chapter" data-level="33.9" data-path="jaxwest2.html"><a href="jaxwest2.html#step-7-convert-other-variables-to-factor"><i class="fa fa-check"></i><b>33.9</b> Step 7: Convert other variables to factor</a></li>
+<li class="chapter" data-level="33.10" data-path="jaxwest2.html"><a href="jaxwest2.html#step-8-plot"><i class="fa fa-check"></i><b>33.10</b> Step 8: Plot</a></li>
+<li class="chapter" data-level="33.11" data-path="jaxwest2.html"><a href="jaxwest2.html#step-9-run-the-anova"><i class="fa fa-check"></i><b>33.11</b> Step 9: Run the ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="34" data-path="anovamc.html"><a href="anovamc.html"><i class="fa fa-check"></i><b>34</b> ANOVA power using Monte Carlo</a><ul>
+<li class="chapter" data-level="34.1" data-path="anovamc.html"><a href="anovamc.html#alternatives-to-monte-carlo"><i class="fa fa-check"></i><b>34.1</b> Alternatives to Monte Carlo</a></li>
+<li class="chapter" data-level="34.2" data-path="anovamc.html"><a href="anovamc.html#what-is-monte-carlo"><i class="fa fa-check"></i><b>34.2</b> What is Monte Carlo</a></li>
+<li class="chapter" data-level="34.3" data-path="anovamc.html"><a href="anovamc.html#one-way-completely-randomized-anova-monte-carlo"><i class="fa fa-check"></i><b>34.3</b> One-way completely randomized ANOVA Monte Carlo</a><ul>
+<li class="chapter" data-level="34.3.1" data-path="anovamc.html"><a href="anovamc.html#directions"><i class="fa fa-check"></i><b>34.3.1</b> Directions</a></li>
+<li class="chapter" data-level="34.3.2" data-path="anovamc.html"><a href="anovamc.html#step-1-create-initial-values"><i class="fa fa-check"></i><b>34.3.2</b> Step 1: Create initial values</a></li>
+<li class="chapter" data-level="34.3.3" data-path="anovamc.html"><a href="anovamc.html#step-2-visualize-one-random-sample"><i class="fa fa-check"></i><b>34.3.3</b> Step 2: Visualize one random sample</a></li>
+<li class="chapter" data-level="34.3.4" data-path="anovamc.html"><a href="anovamc.html#step-3-run-the-power-simulator"><i class="fa fa-check"></i><b>34.3.4</b> Step 3: Run The Power Simulator</a></li>
+<li class="chapter" data-level="34.3.5" data-path="anovamc.html"><a href="anovamc.html#step-4-optimize-for-suitable-power"><i class="fa fa-check"></i><b>34.3.5</b> Step 4: Optimize for suitable power</a></li>
+<li class="chapter" data-level="34.3.6" data-path="anovamc.html"><a href="anovamc.html#notes-and-considerations"><i class="fa fa-check"></i><b>34.3.6</b> Notes And Considerations</a></li>
+</ul></li>
+<li class="chapter" data-level="34.4" data-path="anovamc.html"><a href="anovamc.html#one-way-related-measures-anova-monte-carlo"><i class="fa fa-check"></i><b>34.4</b> One-way related measures ANOVA Monte Carlo</a></li>
+<li class="chapter" data-level="34.5" data-path="anovamc.html"><a href="anovamc.html#directions-1"><i class="fa fa-check"></i><b>34.5</b> Directions</a><ul>
+<li class="chapter" data-level="34.5.1" data-path="anovamc.html"><a href="anovamc.html#step-1-initial-values"><i class="fa fa-check"></i><b>34.5.1</b> Step 1: Initial values</a></li>
+<li class="chapter" data-level="34.5.2" data-path="anovamc.html"><a href="anovamc.html#step-2-visualize-one-sample"><i class="fa fa-check"></i><b>34.5.2</b> Step 2: Visualize one sample</a></li>
+<li class="chapter" data-level="34.5.3" data-path="anovamc.html"><a href="anovamc.html#step-3-run-the-power-simulator-1"><i class="fa fa-check"></i><b>34.5.3</b> Step 3: Run the power simulator</a></li>
+<li class="chapter" data-level="34.5.4" data-path="anovamc.html"><a href="anovamc.html#step-4-should-anything-be-changed"><i class="fa fa-check"></i><b>34.5.4</b> Step 4: Should anything be changed?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="manova.html"><a href="manova.html"><i class="fa fa-check"></i><b>35</b> Multivariate Analysis of Variance (MANOVA)</a><ul>
+<li class="chapter" data-level="35.1" data-path="manova.html"><a href="manova.html#what-does-manova-test"><i class="fa fa-check"></i><b>35.1</b> What does MANOVA test?</a></li>
+<li class="chapter" data-level="35.2" data-path="manova.html"><a href="manova.html#types-of-experiments"><i class="fa fa-check"></i><b>35.2</b> Types of experiments</a></li>
+<li class="chapter" data-level="35.3" data-path="manova.html"><a href="manova.html#manova-is-not-many-anovas"><i class="fa fa-check"></i><b>35.3</b> MANOVA is not many ANOVAs</a><ul>
+<li class="chapter" data-level="35.3.1" data-path="manova.html"><a href="manova.html#why-manova"><i class="fa fa-check"></i><b>35.3.1</b> Why MANOVA?</a></li>
+</ul></li>
+<li class="chapter" data-level="35.4" data-path="manova.html"><a href="manova.html#assumptions-1"><i class="fa fa-check"></i><b>35.4</b> Assumptions</a><ul>
+<li class="chapter" data-level="35.4.1" data-path="manova.html"><a href="manova.html#multicolinearity"><i class="fa fa-check"></i><b>35.4.1</b> Multicolinearity</a></li>
+</ul></li>
+<li class="chapter" data-level="35.5" data-path="manova.html"><a href="manova.html#calculating-variation"><i class="fa fa-check"></i><b>35.5</b> Calculating variation</a><ul>
+<li class="chapter" data-level="35.5.1" data-path="manova.html"><a href="manova.html#eigenvectors-and-eigenvalues"><i class="fa fa-check"></i><b>35.5.1</b> Eigenvectors and eigenvalues</a></li>
+<li class="chapter" data-level="35.5.2" data-path="manova.html"><a href="manova.html#manova-test-statistics"><i class="fa fa-check"></i><b>35.5.2</b> MANOVA test statistics</a></li>
+<li class="chapter" data-level="35.5.3" data-path="manova.html"><a href="manova.html#which-manova-test-statistic-is-best"><i class="fa fa-check"></i><b>35.5.3</b> Which MANOVA test statistic is best?</a></li>
+</ul></li>
+<li class="chapter" data-level="35.6" data-path="manova.html"><a href="manova.html#drug-clearance-example"><i class="fa fa-check"></i><b>35.6</b> Drug clearance example</a><ul>
+<li class="chapter" data-level="35.6.1" data-path="manova.html"><a href="manova.html#rationale-for-manova"><i class="fa fa-check"></i><b>35.6.1</b> Rationale for MANOVA</a></li>
+<li class="chapter" data-level="35.6.2" data-path="manova.html"><a href="manova.html#data-structure"><i class="fa fa-check"></i><b>35.6.2</b> Data structure</a></li>
+<li class="chapter" data-level="35.6.3" data-path="manova.html"><a href="manova.html#manova-procedure"><i class="fa fa-check"></i><b>35.6.3</b> MANOVA procedure</a></li>
+</ul></li>
+<li class="chapter" data-level="35.7" data-path="manova.html"><a href="manova.html#planning-manova-experiments"><i class="fa fa-check"></i><b>35.7</b> Planning MANOVA experiments</a><ul>
+<li class="chapter" data-level="35.7.1" data-path="manova.html"><a href="manova.html#manova-monte-carlo-power-analysis"><i class="fa fa-check"></i><b>35.7.1</b> MANOVA Monte Carlo Power Analysis</a></li>
+<li class="chapter" data-level="35.7.2" data-path="manova.html"><a href="manova.html#an-manova-monte-carlo-power-function"><i class="fa fa-check"></i><b>35.7.2</b> An MANOVA Monte Carlo Power function</a></li>
+</ul></li>
+<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-10"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="correl.html"><a href="correl.html"><i class="fa fa-check"></i><b>36</b> Correlation</a><ul>
+<li class="chapter" data-level="36.1" data-path="correl.html"><a href="correl.html#correlation-causation"><i class="fa fa-check"></i><b>36.1</b> Correlation != Causation</a></li>
+<li class="chapter" data-level="36.2" data-path="correl.html"><a href="correl.html#correlation-in-multivariate-outcomes-and-paired-designs"><i class="fa fa-check"></i><b>36.2</b> Correlation in Multivariate Outcomes and Paired Designs</a></li>
+<li class="chapter" data-level="36.3" data-path="correl.html"><a href="correl.html#correlation-coefficients"><i class="fa fa-check"></i><b>36.3</b> Correlation coefficients</a><ul>
+<li class="chapter" data-level="36.3.1" data-path="correl.html"><a href="correl.html#pearsons-correlation-coefficient"><i class="fa fa-check"></i><b>36.3.1</b> Pearson’s correlation coefficient</a></li>
+<li class="chapter" data-level="36.3.2" data-path="correl.html"><a href="correl.html#spearmans-rank-correlation"><i class="fa fa-check"></i><b>36.3.2</b> Spearman’s rank correlation</a></li>
+<li class="chapter" data-level="36.3.3" data-path="correl.html"><a href="correl.html#kendalls-tau"><i class="fa fa-check"></i><b>36.3.3</b> Kendall’s tau</a></li>
+<li class="chapter" data-level="36.3.4" data-path="correl.html"><a href="correl.html#which-correlation-method-to-use"><i class="fa fa-check"></i><b>36.3.4</b> Which correlation method to use?</a></li>
+<li class="chapter" data-level="36.3.5" data-path="correl.html"><a href="correl.html#r-correlation-analysis-functions"><i class="fa fa-check"></i><b>36.3.5</b> R correlation analysis functions</a></li>
+<li class="chapter" data-level="36.3.6" data-path="correl.html"><a href="correl.html#plot-the-correlations"><i class="fa fa-check"></i><b>36.3.6</b> Plot the correlations</a></li>
+<li class="chapter" data-level="36.3.7" data-path="correl.html"><a href="correl.html#calculate-a-correlation-coefficient-and-posthoc-test"><i class="fa fa-check"></i><b>36.3.7</b> Calculate a correlation coefficient and posthoc test</a></li>
+<li class="chapter" data-level="36.3.8" data-path="correl.html"><a href="correl.html#interpretation-of-correlation-output"><i class="fa fa-check"></i><b>36.3.8</b> Interpretation of correlation output</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="regress.html"><a href="regress.html"><i class="fa fa-check"></i><b>37</b> Linear Regression</a><ul>
+<li class="chapter" data-level="37.1" data-path="regress.html"><a href="regress.html#the-linear-regression-model"><i class="fa fa-check"></i><b>37.1</b> The linear regression model</a></li>
+<li class="chapter" data-level="37.2" data-path="regress.html"><a href="regress.html#least-squares-fitting"><i class="fa fa-check"></i><b>37.2</b> Least squares fitting</a></li>
+<li class="chapter" data-level="37.3" data-path="regress.html"><a href="regress.html#the-practical-importance-of-linear-model-parameters"><i class="fa fa-check"></i><b>37.3</b> The practical importance of linear model parameters</a></li>
+<li class="chapter" data-level="37.4" data-path="regress.html"><a href="regress.html#linear-model-standard-errors"><i class="fa fa-check"></i><b>37.4</b> Linear model standard errors</a></li>
+<li class="chapter" data-level="37.5" data-path="regress.html"><a href="regress.html#linear-regression-in-r"><i class="fa fa-check"></i><b>37.5</b> Linear regression in R</a></li>
+<li class="chapter" data-level="37.6" data-path="regress.html"><a href="regress.html#intepretation"><i class="fa fa-check"></i><b>37.6</b> Intepretation</a><ul>
+<li class="chapter" data-level="37.6.1" data-path="regress.html"><a href="regress.html#residuals"><i class="fa fa-check"></i><b>37.6.1</b> Residuals</a></li>
+<li class="chapter" data-level="37.6.2" data-path="regress.html"><a href="regress.html#coefficients"><i class="fa fa-check"></i><b>37.6.2</b> Coefficients</a></li>
+<li class="chapter" data-level="37.6.3" data-path="regress.html"><a href="regress.html#degrees-of-freedom-1"><i class="fa fa-check"></i><b>37.6.3</b> Degrees of freedom</a></li>
+<li class="chapter" data-level="37.6.4" data-path="regress.html"><a href="regress.html#r-squared"><i class="fa fa-check"></i><b>37.6.4</b> R-squared</a></li>
+<li class="chapter" data-level="37.6.5" data-path="regress.html"><a href="regress.html#f-statistic"><i class="fa fa-check"></i><b>37.6.5</b> F-statistic</a></li>
+<li class="chapter" data-level="37.6.6" data-path="regress.html"><a href="regress.html#plotting-regression-results"><i class="fa fa-check"></i><b>37.6.6</b> Plotting regression results</a></li>
+<li class="chapter" data-level="37.6.7" data-path="regress.html"><a href="regress.html#visualizing-residuals"><i class="fa fa-check"></i><b>37.6.7</b> Visualizing residuals</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="38" data-path="nonlinearintro.html"><a href="nonlinearintro.html"><i class="fa fa-check"></i><b>38</b> Non-linear regression introduction</a><ul>
+<li class="chapter" data-level="38.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#uses-for-nonlinear-regression"><i class="fa fa-check"></i><b>38.1</b> Uses for nonlinear regression</a></li>
+<li class="chapter" data-level="38.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#example-of-the-process"><i class="fa fa-check"></i><b>38.2</b> Example of the process</a><ul>
+<li class="chapter" data-level="38.2.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#it-starts-with-nonlinear-data"><i class="fa fa-check"></i><b>38.2.1</b> It starts with nonlinear data</a></li>
+<li class="chapter" data-level="38.2.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#what-nonlinear-model-describes-that-data"><i class="fa fa-check"></i><b>38.2.2</b> What nonlinear model describes that data?</a></li>
+<li class="chapter" data-level="38.2.3" data-path="nonlinearintro.html"><a href="nonlinearintro.html#fitting-a-model-to-data"><i class="fa fa-check"></i><b>38.2.3</b> Fitting a model to data</a></li>
+<li class="chapter" data-level="38.2.4" data-path="nonlinearintro.html"><a href="nonlinearintro.html#interpreting-regression-model-output"><i class="fa fa-check"></i><b>38.2.4</b> Interpreting regression model output</a></li>
+<li class="chapter" data-level="38.2.5" data-path="nonlinearintro.html"><a href="nonlinearintro.html#check-the-fit-graphically"><i class="fa fa-check"></i><b>38.2.5</b> Check the fit graphically</a></li>
+<li class="chapter" data-level="38.2.6" data-path="nonlinearintro.html"><a href="nonlinearintro.html#convergence"><i class="fa fa-check"></i><b>38.2.6</b> Convergence?</a></li>
+<li class="chapter" data-level="38.2.7" data-path="nonlinearintro.html"><a href="nonlinearintro.html#convergence-is-not-idiot-proof"><i class="fa fa-check"></i><b>38.2.7</b> Convergence is not idiot proof</a></li>
+</ul></li>
+<li class="chapter" data-level="38.3" data-path="nonlinearintro.html"><a href="nonlinearintro.html#nonlinear-models-in-general"><i class="fa fa-check"></i><b>38.3</b> Nonlinear models in general</a></li>
+<li class="chapter" data-level="38.4" data-path="nonlinearintro.html"><a href="nonlinearintro.html#nlfitr"><i class="fa fa-check"></i><b>38.4</b> nlfitr</a></li>
+<li class="chapter" data-level="38.5" data-path="nonlinearintro.html"><a href="nonlinearintro.html#nonlinear-regression-functions-in-r"><i class="fa fa-check"></i><b>38.5</b> Nonlinear regression functions in R</a><ul>
+<li class="chapter" data-level="38.5.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#the-fitting-algorithms"><i class="fa fa-check"></i><b>38.5.1</b> The fitting algorithms</a></li>
+<li class="chapter" data-level="38.5.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#formula"><i class="fa fa-check"></i><b>38.5.2</b> formula</a></li>
+<li class="chapter" data-level="38.5.3" data-path="nonlinearintro.html"><a href="nonlinearintro.html#data-1"><i class="fa fa-check"></i><b>38.5.3</b> data</a></li>
+<li class="chapter" data-level="38.5.4" data-path="nonlinearintro.html"><a href="nonlinearintro.html#start"><i class="fa fa-check"></i><b>38.5.4</b> start</a></li>
+<li class="chapter" data-level="38.5.5" data-path="nonlinearintro.html"><a href="nonlinearintro.html#weighting"><i class="fa fa-check"></i><b>38.5.5</b> weighting</a></li>
+</ul></li>
+<li class="chapter" data-level="38.6" data-path="nonlinearintro.html"><a href="nonlinearintro.html#nonlinear-models-and-parameters"><i class="fa fa-check"></i><b>38.6</b> Nonlinear models and parameters</a><ul>
+<li class="chapter" data-level="38.6.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#hyperbolic-stimulus-response-functions"><i class="fa fa-check"></i><b>38.6.1</b> Hyperbolic stimulus response functions</a></li>
+<li class="chapter" data-level="38.6.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#visualizing-nonlinear-data-and-log-scaling"><i class="fa fa-check"></i><b>38.6.2</b> Visualizing nonlinear data and log scaling</a></li>
+<li class="chapter" data-level="38.6.3" data-path="nonlinearintro.html"><a href="nonlinearintro.html#selecting-the-right-model"><i class="fa fa-check"></i><b>38.6.3</b> Selecting the right model</a></li>
+<li class="chapter" data-level="38.6.4" data-path="nonlinearintro.html"><a href="nonlinearintro.html#from-models-to-formulas"><i class="fa fa-check"></i><b>38.6.4</b> From models to formulas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="nestedregress.html"><a href="nestedregress.html"><i class="fa fa-check"></i><b>39</b> Nested-model nonlinear regression</a><ul>
+<li class="chapter" data-level="39.1" data-path="nestedregress.html"><a href="nestedregress.html#read-and-plot-the-data"><i class="fa fa-check"></i><b>39.1</b> Read and plot the data</a></li>
+<li class="chapter" data-level="39.2" data-path="nestedregress.html"><a href="nestedregress.html#which-model-is-a-better-fit"><i class="fa fa-check"></i><b>39.2</b> Which model is a better fit?</a><ul>
+<li class="chapter" data-level="39.2.1" data-path="nestedregress.html"><a href="nestedregress.html#nonlinear-models"><i class="fa fa-check"></i><b>39.2.1</b> Nonlinear models</a></li>
+<li class="chapter" data-level="39.2.2" data-path="nestedregress.html"><a href="nestedregress.html#the-nlfitr-alternative"><i class="fa fa-check"></i><b>39.2.2</b> The nlfitr alternative</a></li>
+<li class="chapter" data-level="39.2.3" data-path="nestedregress.html"><a href="nestedregress.html#troubleshooting-the-regression"><i class="fa fa-check"></i><b>39.2.3</b> Troubleshooting the regression</a></li>
+<li class="chapter" data-level="39.2.4" data-path="nestedregress.html"><a href="nestedregress.html#interpreting-the-parameters"><i class="fa fa-check"></i><b>39.2.4</b> Interpreting the parameters</a></li>
+<li class="chapter" data-level="39.2.5" data-path="nestedregress.html"><a href="nestedregress.html#residual-plots-to-compare-fits"><i class="fa fa-check"></i><b>39.2.5</b> Residual plots to compare fits</a></li>
+<li class="chapter" data-level="39.2.6" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>39.2.6</b> Compare AIC</a></li>
+<li class="chapter" data-level="39.2.7" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>39.2.7</b> Other ways to compare models</a></li>
+<li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.8</b> Interpretation of this one replicate</a></li>
+<li class="chapter" data-level="39.2.9" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.9</b> Alternate analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-11"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html"><i class="fa fa-check"></i><b>40</b> Nonlinear regression of independent replicates</a><ul>
+<li class="chapter" data-level="40.1" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#the-problem"><i class="fa fa-check"></i><b>40.1</b> The problem</a></li>
+<li class="chapter" data-level="40.2" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#the-dataset"><i class="fa fa-check"></i><b>40.2</b> The dataset</a></li>
+<li class="chapter" data-level="40.3" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#munging-for-regression-analysis"><i class="fa fa-check"></i><b>40.3</b> Munging for regression analysis</a><ul>
+<li class="chapter" data-level="40.3.1" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#average-the-technical-replicates"><i class="fa fa-check"></i><b>40.3.1</b> Average the technical replicates</a></li>
+<li class="chapter" data-level="40.3.2" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#create-one-table"><i class="fa fa-check"></i><b>40.3.2</b> Create one table</a></li>
+<li class="chapter" data-level="40.3.3" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#plot-the-data"><i class="fa fa-check"></i><b>40.3.3</b> Plot the data</a></li>
+<li class="chapter" data-level="40.3.4" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#run-the-regressions"><i class="fa fa-check"></i><b>40.3.4</b> Run the regressions</a></li>
+<li class="chapter" data-level="40.3.5" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#clean-up-regression-results"><i class="fa fa-check"></i><b>40.3.5</b> Clean up regression results</a></li>
+</ul></li>
+<li class="chapter" data-level="40.4" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#t-test-on-half-lives"><i class="fa fa-check"></i><b>40.4</b> T-test on half-lives</a></li>
+<li class="chapter" data-level="40.5" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#conclusion"><i class="fa fa-check"></i><b>40.5</b> Conclusion</a></li>
+<li class="chapter" data-level="40.6" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#summary-figure"><i class="fa fa-check"></i><b>40.6</b> Summary figure</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="multregress.html"><a href="multregress.html"><i class="fa fa-check"></i><b>41</b> Multiple regression</a><ul>
+<li class="chapter" data-level="41.1" data-path="multregress.html"><a href="multregress.html#the-linear-regression-model-1"><i class="fa fa-check"></i><b>41.1</b> The linear regression model</a></li>
+<li class="chapter" data-level="41.2" data-path="multregress.html"><a href="multregress.html#multiple-regression-models"><i class="fa fa-check"></i><b>41.2</b> Multiple regression models</a></li>
+<li class="chapter" data-level="41.3" data-path="multregress.html"><a href="multregress.html#experimental-multiple-regression"><i class="fa fa-check"></i><b>41.3</b> Experimental multiple regression</a><ul>
+<li class="chapter" data-level="41.3.1" data-path="multregress.html"><a href="multregress.html#a-one-factor-experiment-with-3-groups"><i class="fa fa-check"></i><b>41.3.1</b> A one factor experiment with 3 groups</a></li>
+<li class="chapter" data-level="41.3.2" data-path="multregress.html"><a href="multregress.html#a-two-factor-experiment-with-6-groups"><i class="fa fa-check"></i><b>41.3.2</b> A two factor experiment with 6 groups</a></li>
+</ul></li>
+<li class="chapter" data-level="41.4" data-path="multregress.html"><a href="multregress.html#multiple-linear-mixed-models"><i class="fa fa-check"></i><b>41.4</b> Multiple linear mixed models</a></li>
+<li class="chapter" data-level="41.5" data-path="multregress.html"><a href="multregress.html#multiple-regression-of-observational-data"><i class="fa fa-check"></i><b>41.5</b> Multiple regression of observational data</a></li>
+</ul></li>
+<li class="chapter" data-level="42" data-path="logregress.html"><a href="logregress.html"><i class="fa fa-check"></i><b>42</b> Logistic regression</a><ul>
+<li class="chapter" data-level="42.1" data-path="logregress.html"><a href="logregress.html#uses-of-logistic-regression"><i class="fa fa-check"></i><b>42.1</b> Uses of logistic regression</a><ul>
+<li class="chapter" data-level="42.1.1" data-path="logregress.html"><a href="logregress.html#sidebar-doing-logistic-regression-is-machine-learning"><i class="fa fa-check"></i><b>42.1.1</b> Sidebar: Doing logistic regression is machine learning</a></li>
+</ul></li>
+<li class="chapter" data-level="42.2" data-path="logregress.html"><a href="logregress.html#derivation-of-the-logistic-regression-model"><i class="fa fa-check"></i><b>42.2</b> Derivation of the logistic regression model</a><ul>
+<li class="chapter" data-level="42.2.1" data-path="logregress.html"><a href="logregress.html#relationship-of-logit-to-odds-to-the-model-coefficients-and-probability"><i class="fa fa-check"></i><b>42.2.1</b> Relationship of logit to odds to the model coefficients and probability</a></li>
+<li class="chapter" data-level="42.2.2" data-path="logregress.html"><a href="logregress.html#additional-types-of-logistic-regression-models"><i class="fa fa-check"></i><b>42.2.2</b> Additional types of logistic regression models</a></li>
+</ul></li>
+<li class="chapter" data-level="42.3" data-path="logregress.html"><a href="logregress.html#stress-and-survival"><i class="fa fa-check"></i><b>42.3</b> Stress and survival</a><ul>
+<li class="chapter" data-level="42.3.1" data-path="logregress.html"><a href="logregress.html#interpretation-of-output"><i class="fa fa-check"></i><b>42.3.1</b> Interpretation of output</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="43" data-path="mixedlogistic.html"><a href="mixedlogistic.html"><i class="fa fa-check"></i><b>43</b> Mixed model logistic regression</a><ul>
+<li class="chapter" data-level="43.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#mixed-models-fixed-and-random-effects"><i class="fa fa-check"></i><b>43.1</b> Mixed models, fixed and random effects</a><ul>
+<li class="chapter" data-level="43.1.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#nfat-localization-within-smooth-muscle-cells"><i class="fa fa-check"></i><b>43.1.1</b> NFAT localization within smooth muscle cells</a></li>
+</ul></li>
+<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a><ul>
+<li class="chapter" data-level="43.2.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.2.1</b> Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.3</b> Alternative analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="44" data-path="poissonreg.html"><a href="poissonreg.html"><i class="fa fa-check"></i><b>44</b> Poisson regression</a><ul>
+<li class="chapter" data-level="44.1" data-path="poissonreg.html"><a href="poissonreg.html#why-not-anova"><i class="fa fa-check"></i><b>44.1</b> Why not ANOVA?</a><ul>
+<li class="chapter" data-level="44.1.1" data-path="poissonreg.html"><a href="poissonreg.html#counting-markers"><i class="fa fa-check"></i><b>44.1.1</b> Counting markers</a></li>
+<li class="chapter" data-level="44.1.2" data-path="poissonreg.html"><a href="poissonreg.html#counting-depolarizations"><i class="fa fa-check"></i><b>44.1.2</b> Counting depolarizations</a></li>
+<li class="chapter" data-level="44.1.3" data-path="poissonreg.html"><a href="poissonreg.html#lever-presses"><i class="fa fa-check"></i><b>44.1.3</b> Lever presses</a></li>
+</ul></li>
+<li class="chapter" data-level="44.2" data-path="poissonreg.html"><a href="poissonreg.html#the-poisson-generalized-linear-model"><i class="fa fa-check"></i><b>44.2</b> The Poisson generalized linear model</a></li>
+<li class="chapter" data-level="44.3" data-path="poissonreg.html"><a href="poissonreg.html#length-of-hospital-stay"><i class="fa fa-check"></i><b>44.3</b> Length of hospital stay</a></li>
+<li class="chapter" data-level="44.4" data-path="poissonreg.html"><a href="poissonreg.html#output-interpretation"><i class="fa fa-check"></i><b>44.4</b> Output interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="45" data-path="surv.html"><a href="surv.html"><i class="fa fa-check"></i><b>45</b> Survival Analysis</a><ul>
+<li class="chapter" data-level="45.1" data-path="surv.html"><a href="surv.html#data-records"><i class="fa fa-check"></i><b>45.1</b> Data records</a><ul>
+<li class="chapter" data-level="45.1.1" data-path="surv.html"><a href="surv.html#deriving-times-from-recorded-dates"><i class="fa fa-check"></i><b>45.1.1</b> Deriving times from recorded dates</a></li>
+<li class="chapter" data-level="45.1.2" data-path="surv.html"><a href="surv.html#censor"><i class="fa fa-check"></i><b>45.1.2</b> Censor</a></li>
+</ul></li>
+<li class="chapter" data-level="45.2" data-path="surv.html"><a href="surv.html#kaplan-meier-estimator"><i class="fa fa-check"></i><b>45.2</b> Kaplan-Meier estimator</a></li>
+<li class="chapter" data-level="45.3" data-path="surv.html"><a href="surv.html#glioma-data"><i class="fa fa-check"></i><b>45.3</b> Glioma data</a></li>
+<li class="chapter" data-level="45.4" data-path="surv.html"><a href="surv.html#kaplan-meier-plots"><i class="fa fa-check"></i><b>45.4</b> Kaplan-Meier plots</a></li>
+<li class="chapter" data-level="45.5" data-path="surv.html"><a href="surv.html#log-rank-tests"><i class="fa fa-check"></i><b>45.5</b> Log rank tests</a><ul>
+<li class="chapter" data-level="45.5.1" data-path="surv.html"><a href="surv.html#write-up-of-log-rank-test"><i class="fa fa-check"></i><b>45.5.1</b> Write up of log rank test</a></li>
+<li class="chapter" data-level="45.5.2" data-path="surv.html"><a href="surv.html#comparing-more-than-two-survival-curves"><i class="fa fa-check"></i><b>45.5.2</b> Comparing more than two survival curves</a></li>
+</ul></li>
+<li class="chapter" data-level="45.6" data-path="surv.html"><a href="surv.html#cox-proportional-hazards-analysis"><i class="fa fa-check"></i><b>45.6</b> Cox proportional hazards analysis</a><ul>
+<li class="chapter" data-level="45.6.1" data-path="surv.html"><a href="surv.html#cox-proportional-hazards-regression-of-glioma"><i class="fa fa-check"></i><b>45.6.1</b> Cox proportional hazards regression of glioma</a></li>
+<li class="chapter" data-level="45.6.2" data-path="surv.html"><a href="surv.html#interpretation-of-cox-regression-output"><i class="fa fa-check"></i><b>45.6.2</b> Interpretation of Cox regression output</a></li>
+<li class="chapter" data-level="45.6.3" data-path="surv.html"><a href="surv.html#write-up-18"><i class="fa fa-check"></i><b>45.6.3</b> Write up</a></li>
+</ul></li>
+<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-12"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="46" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>46</b> Classification</a><ul>
+<li class="chapter" data-level="46.1" data-path="classification.html"><a href="classification.html#distances"><i class="fa fa-check"></i><b>46.1</b> Distances</a></li>
+<li class="chapter" data-level="46.2" data-path="classification.html"><a href="classification.html#clustering-methods"><i class="fa fa-check"></i><b>46.2</b> Clustering methods</a></li>
+<li class="chapter" data-level="46.3" data-path="classification.html"><a href="classification.html#principal-component-analysis"><i class="fa fa-check"></i><b>46.3</b> Principal component analysis</a></li>
+<li class="chapter" data-level="46.4" data-path="classification.html"><a href="classification.html#synthesize-some-data"><i class="fa fa-check"></i><b>46.4</b> Synthesize some data</a></li>
+<li class="chapter" data-level="46.5" data-path="classification.html"><a href="classification.html#visualize-the-data-set"><i class="fa fa-check"></i><b>46.5</b> Visualize the data set</a></li>
+<li class="chapter" data-level="46.6" data-path="classification.html"><a href="classification.html#rescaling-data"><i class="fa fa-check"></i><b>46.6</b> Rescaling data</a></li>
+<li class="chapter" data-level="46.7" data-path="classification.html"><a href="classification.html#are-there-clusters"><i class="fa fa-check"></i><b>46.7</b> Are there clusters?</a></li>
+<li class="chapter" data-level="46.8" data-path="classification.html"><a href="classification.html#how-many-clusters"><i class="fa fa-check"></i><b>46.8</b> How many clusters?</a></li>
+<li class="chapter" data-level="46.9" data-path="classification.html"><a href="classification.html#clustering"><i class="fa fa-check"></i><b>46.9</b> Clustering</a></li>
+<li class="chapter" data-level="46.10" data-path="classification.html"><a href="classification.html#pam-and-clara"><i class="fa fa-check"></i><b>46.10</b> PAM and CLARA</a></li>
+<li class="chapter" data-level="46.11" data-path="classification.html"><a href="classification.html#hierarchical-clustering"><i class="fa fa-check"></i><b>46.11</b> Hierarchical clustering</a></li>
+<li class="chapter" data-level="46.12" data-path="classification.html"><a href="classification.html#heatmaps"><i class="fa fa-check"></i><b>46.12</b> Heatmaps</a></li>
+<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-13"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="47" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>47</b> RNA-seq with R</a><ul>
+<li class="chapter" data-level="47.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>47.1</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="47.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>47.2</b> Import raw count data</a></li>
+<li class="chapter" data-level="47.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>47.3</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="47.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>47.4</b> Filtering</a></li>
+<li class="chapter" data-level="47.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>47.5</b> DGEList</a></li>
+<li class="chapter" data-level="47.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>47.6</b> Visualization</a></li>
+<li class="chapter" data-level="47.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>47.7</b> Classification</a></li>
+<li class="chapter" data-level="47.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>47.8</b> Hierarchical clustering</a></li>
+<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-14"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">JABSTB: Statistical Design and Analysis of Experiments with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="rnaseq" class="section level1">
+<h1><span class="header-section-number">Chapter 47</span> RNA-seq with R</h1>
+<div class="sourceCode" id="cb1058"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1058-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1058-2" title="2"><span class="kw">library</span>(edgeR)</a>
+<a class="sourceLine" id="cb1058-3" title="3"><span class="kw">library</span>(limma)</a>
+<a class="sourceLine" id="cb1058-4" title="4"><span class="kw">library</span>(gplots)</a>
+<a class="sourceLine" id="cb1058-5" title="5"><span class="kw">library</span>(viridis)</a></code></pre></div>
+<p>This example is adopted extensively from <a href="https://combine-australia.github.io/RNAseq-R/06-rnaseq-day1.html">RNA-seq analysis in R</a> by Belinda Phips and colleagues. The data are available <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450">here</a> and <a href="https://figshare.com/s/1d788fd384d33e913a2a">here</a>.</p>
+<p>These are part of a <a href="https://combine-australia.github.io/RNAseq-R/">broader workship presented by the group</a> with very easy to follow protocols for RNA-seq analysis with R.</p>
+<p>The data below are from a study of mammary gland development showing the pro-survival gene Mcl1 as a master regulator gland development. They represent duplicate RNA-seq measurements from each of 6 groups: basal and luminal cells from virgin, pregnant and lactating mice.</p>
+<p>The purpose of having this in JABSTB at this stage is to offer a gentle introduction to RNA-seq data and analysis. The focus here is on the classification methods within this example.</p>
+<div id="install-bioconductor" class="section level2">
+<h2><span class="header-section-number">47.1</span> Install Bioconductor</h2>
+<p>This chapter uses functions in <a href="http://www.bioconductor.org/">Bioconductor</a>.</p>
+<p>Bioconductor is a universe of packages and functions geared for bio/omics data analysis. It is managed separately from the broader CRAN universe.</p>
+<p>As for the CRAN universe, we don’t automagically have the full universe of Bioconductor packages by default. We just get a working base suite. If we want more, we have to find it and install it.</p>
+<p>The most important difference is to use the Bioconductor package manager to install packages.</p>
+<p>When we want to install additional Bioconductor packages we would do so this way, <code>BiocManager::install("newthing")</code>, not this way, <code>install.packages("newthing")</code></p>
+<p>Go to that link and read more about Bioconductor. Then install Bioconductor by running the script below in your console.</p>
+<p>There is much to install. This will take a while.</p>
+<p><strong>Do NOT compile anything</strong></p>
+<p>If you see the prompt below, always choose no:</p>
+<p><code>Do you want to install from sources the package which needs compilation (yes/no/cancel)?</code></p>
+<div class="sourceCode" id="cb1059"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1059-1" title="1"><span class="co"># if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE))</span></a>
+<a class="sourceLine" id="cb1059-2" title="2"><span class="co">#     install.packages(&quot;BiocManager&quot;)</span></a>
+<a class="sourceLine" id="cb1059-3" title="3"><span class="co"># BiocManager::install(version = &quot;3.10&quot;)</span></a></code></pre></div>
+</div>
+<div id="import-raw-count-data" class="section level2">
+<h2><span class="header-section-number">47.2</span> Import raw count data</h2>
+<p>By this point, there has already been considerable processing of the sequence data. Sequences have been matched to their genes and to each other. The values in this table are counts of the number of transcript reads per gene, in each of the 12 samples.</p>
+<p>Read them into an object.</p>
+<div class="sourceCode" id="cb1060"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1060-1" title="1">seqdata &lt;-<span class="st"> </span><span class="kw">read.delim</span>(<span class="st">&quot;datasets/GSE60450_Lactation-GenewiseCounts.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb1060-2" title="2"><span class="kw">head</span>(seqdata)</a></code></pre></div>
+<pre><code>##   EntrezGeneID Length MCL1.DG_BC2CTUACXX_ACTTGA_L002_R1
+## 1       497097   3634                               438
+## 2    100503874   3259                                 1
+## 3    100038431   1634                                 0
+## 4        19888   9747                                 1
+## 5        20671   3130                               106
+## 6        27395   4203                               309
+##   MCL1.DH_BC2CTUACXX_CAGATC_L002_R1 MCL1.DI_BC2CTUACXX_ACAGTG_L002_R1
+## 1                               300                                65
+## 2                                 0                                 1
+## 3                                 0                                 0
+## 4                                 1                                 0
+## 5                               182                                82
+## 6                               234                               337
+##   MCL1.DJ_BC2CTUACXX_CGATGT_L002_R1 MCL1.DK_BC2CTUACXX_TTAGGC_L002_R1
+## 1                               237                               354
+## 2                                 1                                 0
+## 3                                 0                                 0
+## 4                                 0                                 0
+## 5                               105                                43
+## 6                               300                               290
+##   MCL1.DL_BC2CTUACXX_ATCACG_L002_R1 MCL1.LA_BC2CTUACXX_GATCAG_L001_R1
+## 1                               287                                 0
+## 2                                 4                                 0
+## 3                                 0                                 0
+## 4                                 0                                10
+## 5                                82                                16
+## 6                               270                               560
+##   MCL1.LB_BC2CTUACXX_TGACCA_L001_R1 MCL1.LC_BC2CTUACXX_GCCAAT_L001_R1
+## 1                                 0                                 0
+## 2                                 0                                 0
+## 3                                 0                                 0
+## 4                                 3                                10
+## 5                                25                                18
+## 6                               464                               489
+##   MCL1.LD_BC2CTUACXX_GGCTAC_L001_R1 MCL1.LE_BC2CTUACXX_TAGCTT_L001_R1
+## 1                                 0                                 0
+## 2                                 0                                 0
+## 3                                 0                                 0
+## 4                                 2                                 0
+## 5                                 8                                 3
+## 6                               328                               307
+##   MCL1.LF_BC2CTUACXX_CTTGTA_L001_R1
+## 1                                 0
+## 2                                 0
+## 3                                 0
+## 4                                 0
+## 5                                10
+## 6                               342</code></pre>
+<p>To see the data set’s dimensions.</p>
+<div class="sourceCode" id="cb1062"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1062-1" title="1"><span class="kw">dim</span>(seqdata)</a></code></pre></div>
+<pre><code>## [1] 27179    14</code></pre>
+<p>There are 14 columns and over 27000 rows.</p>
+<p>The information about the sample will be used later. Read it into the environment now.</p>
+<div class="sourceCode" id="cb1064"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1064-1" title="1">sampleinfo &lt;-<span class="st"> </span><span class="kw">read.delim</span>(<span class="st">&quot;datasets/SampleInfo_Corrected.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb1064-2" title="2">sampleinfo</a></code></pre></div>
+<pre><code>##                             FileName SampleName CellType   Status
+## 1  MCL1.DG_BC2CTUACXX_ACTTGA_L002_R1    MCL1.DG    basal   virgin
+## 2  MCL1.DH_BC2CTUACXX_CAGATC_L002_R1    MCL1.DH    basal   virgin
+## 3  MCL1.DI_BC2CTUACXX_ACAGTG_L002_R1    MCL1.DI    basal pregnant
+## 4  MCL1.DJ_BC2CTUACXX_CGATGT_L002_R1    MCL1.DJ    basal pregnant
+## 5  MCL1.DK_BC2CTUACXX_TTAGGC_L002_R1    MCL1.DK    basal  lactate
+## 6  MCL1.DL_BC2CTUACXX_ATCACG_L002_R1    MCL1.DL    basal  lactate
+## 7  MCL1.LA_BC2CTUACXX_GATCAG_L001_R1    MCL1.LA  luminal   virgin
+## 8  MCL1.LB_BC2CTUACXX_TGACCA_L001_R1    MCL1.LB  luminal   virgin
+## 9  MCL1.LC_BC2CTUACXX_GCCAAT_L001_R1    MCL1.LC  luminal pregnant
+## 10 MCL1.LD_BC2CTUACXX_GGCTAC_L001_R1    MCL1.LD  luminal pregnant
+## 11 MCL1.LE_BC2CTUACXX_TAGCTT_L001_R1    MCL1.LE  luminal  lactate
+## 12 MCL1.LF_BC2CTUACXX_CTTGTA_L001_R1    MCL1.LF  luminal  lactate</code></pre>
+</div>
+<div id="munge-to-simpler-table" class="section level2">
+<h2><span class="header-section-number">47.3</span> Munge to simpler table</h2>
+<p>Create a table that has only count data so that we can do several manipulations of the gene expression data.</p>
+<div class="sourceCode" id="cb1066"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1066-1" title="1">countdata &lt;-<span class="st"> </span>seqdata[, <span class="dv">3</span><span class="op">:</span><span class="dv">14</span>]</a></code></pre></div>
+<p>Note below how the EntrezGeneID is placed back in as row names. The row names are not a variable.</p>
+<div class="sourceCode" id="cb1067"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1067-1" title="1"><span class="kw">rownames</span>(countdata) &lt;-<span class="st"> </span>seqdata[,<span class="dv">1</span>]</a></code></pre></div>
+<p>This is a data frame now with row and column names. Each column corresponds to a biological replicate, each row a gene id. Every cell in a row is the raw transcript counts for that gene under that replicate condition.</p>
+<p>Shorten the column names. They start with 7 non-identical characters which are good identifiers.</p>
+<div class="sourceCode" id="cb1068"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1068-1" title="1"><span class="kw">colnames</span>(countdata) &lt;-<span class="st"> </span><span class="kw">substring</span>(<span class="kw">colnames</span>(countdata), <span class="dv">1</span>,<span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb1068-2" title="2"><span class="kw">head</span>(countdata)</a></code></pre></div>
+<pre><code>##           MCL1.DG MCL1.DH MCL1.DI MCL1.DJ MCL1.DK MCL1.DL MCL1.LA MCL1.LB
+## 497097        438     300      65     237     354     287       0       0
+## 100503874       1       0       1       1       0       4       0       0
+## 100038431       0       0       0       0       0       0       0       0
+## 19888           1       1       0       0       0       0      10       3
+## 20671         106     182      82     105      43      82      16      25
+## 27395         309     234     337     300     290     270     560     464
+##           MCL1.LC MCL1.LD MCL1.LE MCL1.LF
+## 497097          0       0       0       0
+## 100503874       0       0       0       0
+## 100038431       0       0       0       0
+## 19888          10       2       0       0
+## 20671          18       8       3      10
+## 27395         489     328     307     342</code></pre>
+<p>Now we’re in pretty good shape in terms of having a simple view of the raw count data.</p>
+</div>
+<div id="filtering" class="section level2">
+<h2><span class="header-section-number">47.4</span> Filtering</h2>
+<p>Next we need to filter out the genes for which there are no reads, or there are inconsistent reads across replicate samples, or there are low reads.</p>
+<p>This is a multistep process.</p>
+<p>The first step is to choose a normalization technique. RPKM (reads per kilo base per million) and CPM (counts per million) are common options. We’ll use the latter.</p>
+<p><em>Our filtering rule is to keep transcripts that have CPM &gt; 0.5 in at least two samples.</em> A CPM of 0.5 corresponds to roughly 10-15 counts per gene in this sized library. This threshold decision is a scientific judgement based upon one’s experience regarding the sensitivity of the count measurement. Thresholds of 1 or 2 CPM are not uncommon.</p>
+<p>First, convert raw counts to CPM.</p>
+<div class="sourceCode" id="cb1070"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1070-1" title="1">myCPM &lt;-<span class="st"> </span>edgeR<span class="op">::</span><span class="kw">cpm</span>(countdata)</a>
+<a class="sourceLine" id="cb1070-2" title="2"><span class="kw">head</span>(myCPM)</a></code></pre></div>
+<pre><code>##               MCL1.DG     MCL1.DH     MCL1.DI     MCL1.DJ   MCL1.DK    MCL1.DL
+## 497097    18.85684388 13.77543859  2.69700983 10.45648006 16.442685 14.3389690
+## 100503874  0.04305215  0.00000000  0.04149246  0.04412017  0.000000  0.1998463
+## 100038431  0.00000000  0.00000000  0.00000000  0.00000000  0.000000  0.0000000
+## 19888      0.04305215  0.04591813  0.00000000  0.00000000  0.000000  0.0000000
+## 20671      4.56352843  8.35709941  3.40238163  4.63261775  1.997275  4.0968483
+## 27395     13.30311589 10.74484210 13.98295863 13.23605071 13.469996 13.4896224
+##              MCL1.LA    MCL1.LB    MCL1.LC     MCL1.LD    MCL1.LE    MCL1.LF
+## 497097     0.0000000  0.0000000  0.0000000  0.00000000  0.0000000  0.0000000
+## 100503874  0.0000000  0.0000000  0.0000000  0.00000000  0.0000000  0.0000000
+## 100038431  0.0000000  0.0000000  0.0000000  0.00000000  0.0000000  0.0000000
+## 19888      0.4903857  0.1381969  0.4496078  0.09095771  0.0000000  0.0000000
+## 20671      0.7846171  1.1516411  0.8092940  0.36383085  0.1213404  0.4055595
+## 27395     27.4615975 21.3744588 21.9858214 14.91706476 12.4171715 13.8701357</code></pre>
+<p>Next, impose the threshold.</p>
+<p>First, this script is a simple logical that identifies genes and groups that satisfy the first part of the filtering rule.</p>
+<div class="sourceCode" id="cb1072"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1072-1" title="1">thresh &lt;-<span class="st"> </span>myCPM <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb1072-2" title="2"><span class="kw">head</span>(thresh)</a></code></pre></div>
+<pre><code>##           MCL1.DG MCL1.DH MCL1.DI MCL1.DJ MCL1.DK MCL1.DL MCL1.LA MCL1.LB
+## 497097       TRUE    TRUE    TRUE    TRUE    TRUE    TRUE   FALSE   FALSE
+## 100503874   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE
+## 100038431   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE
+## 19888       FALSE   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE
+## 20671        TRUE    TRUE    TRUE    TRUE    TRUE    TRUE    TRUE    TRUE
+## 27395        TRUE    TRUE    TRUE    TRUE    TRUE    TRUE    TRUE    TRUE
+##           MCL1.LC MCL1.LD MCL1.LE MCL1.LF
+## 497097      FALSE   FALSE   FALSE   FALSE
+## 100503874   FALSE   FALSE   FALSE   FALSE
+## 100038431   FALSE   FALSE   FALSE   FALSE
+## 19888       FALSE   FALSE   FALSE   FALSE
+## 20671        TRUE   FALSE   FALSE   FALSE
+## 27395        TRUE    TRUE    TRUE    TRUE</code></pre>
+<p>Here’s a summary of that result.</p>
+<div class="sourceCode" id="cb1074"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1074-1" title="1"><span class="kw">table</span>(<span class="kw">rowSums</span>(thresh))</a></code></pre></div>
+<pre><code>## 
+##     0     1     2     3     4     5     6     7     8     9    10    11    12 
+## 10857   518   544   307   346   307   652   323   547   343   579   423 11433</code></pre>
+<p>There are 10857 genes that are <span class="math inline">\(\le 0.5\)</span> CPM in all twelve samples. There are 518 genes that have greater than 0.5 CPM in only 1 sample. 544 genes have greater than 0.5 CPM in only two samples, 307 genes with greater than 0.5 CPM in 3 samples, and so on. There are 11433 genes which have greater than 0.5 CPM in all twelve samples.</p>
+<p>Second, identify the genes for which the second condition above is satisfied. This is another logical. And it just creates a long logical vector, with a True or False corresponding to each row name.</p>
+<div class="sourceCode" id="cb1076"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1076-1" title="1">keep &lt;-<span class="st"> </span><span class="kw">rowSums</span>(thresh) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb1076-2" title="2"><span class="kw">summary</span>(keep)</a></code></pre></div>
+<pre><code>##    Mode   FALSE    TRUE 
+## logical   11375   15804</code></pre>
+<p>Thus, there are 15804 genes which have greater than 0.5 CPM in at least two samples.</p>
+<p>Here is an updated counts dataset containing only those genes that are filtered. This is the final filtered dataset which will be used for the statistical analysis.</p>
+<div class="sourceCode" id="cb1078"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1078-1" title="1"><span class="co"># Subset the rows of countdata to keep the more highly expressed genes</span></a>
+<a class="sourceLine" id="cb1078-2" title="2">counts.keep &lt;-<span class="st"> </span>countdata[keep,]</a>
+<a class="sourceLine" id="cb1078-3" title="3"><span class="kw">head</span>(counts.keep)</a></code></pre></div>
+<pre><code>##        MCL1.DG MCL1.DH MCL1.DI MCL1.DJ MCL1.DK MCL1.DL MCL1.LA MCL1.LB MCL1.LC
+## 497097     438     300      65     237     354     287       0       0       0
+## 20671      106     182      82     105      43      82      16      25      18
+## 27395      309     234     337     300     290     270     560     464     489
+## 18777      652     515     948     935     928     791     826     862     668
+## 21399     1604    1495    1721    1317    1159    1066    1334    1258    1068
+## 58175        4       2      14       4       2       2     170     165     138
+##        MCL1.LD MCL1.LE MCL1.LF
+## 497097       0       0       0
+## 20671        8       3      10
+## 27395      328     307     342
+## 18777      646     544     581
+## 21399      926     508     500
+## 58175       60      27      15</code></pre>
+<p>woot!</p>
+</div>
+<div id="dgelist" class="section level2">
+<h2><span class="header-section-number">47.5</span> DGEList</h2>
+<p>The <code>counts.keep</code> dataframe is converted into a list object for ease of analysis moving forward. It will be passed into other functions within the Bioconductor universe.</p>
+<div class="sourceCode" id="cb1080"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1080-1" title="1">y &lt;-<span class="st"> </span>edgeR<span class="op">::</span><span class="kw">DGEList</span>(counts.keep)</a>
+<a class="sourceLine" id="cb1080-2" title="2">y</a></code></pre></div>
+<pre><code>## An object of class &quot;DGEList&quot;
+## $counts
+##        MCL1.DG MCL1.DH MCL1.DI MCL1.DJ MCL1.DK MCL1.DL MCL1.LA MCL1.LB MCL1.LC
+## 497097     438     300      65     237     354     287       0       0       0
+## 20671      106     182      82     105      43      82      16      25      18
+## 27395      309     234     337     300     290     270     560     464     489
+## 18777      652     515     948     935     928     791     826     862     668
+## 21399     1604    1495    1721    1317    1159    1066    1334    1258    1068
+##        MCL1.LD MCL1.LE MCL1.LF
+## 497097       0       0       0
+## 20671        8       3      10
+## 27395      328     307     342
+## 18777      646     544     581
+## 21399      926     508     500
+## 15799 more rows ...
+## 
+## $samples
+##         group lib.size norm.factors
+## MCL1.DG     1 23218026            1
+## MCL1.DH     1 21768136            1
+## MCL1.DI     1 24091588            1
+## MCL1.DJ     1 22656713            1
+## MCL1.DK     1 21522033            1
+## 7 more rows ...</code></pre>
+</div>
+<div id="visualization" class="section level2">
+<h2><span class="header-section-number">47.6</span> Visualization</h2>
+<p>A lot of the -omic visualizations use the plotting functions of R base. It is fairly easy to get something in the box with these plotting functions, but a bit more difficult to get them gussied up all nice and pretty.</p>
+<p>Comparing library sizes checks for any anomalies. There are none. Each sample library size is about the same.</p>
+<div class="sourceCode" id="cb1082"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1082-1" title="1"><span class="kw">barplot</span>(y<span class="op">$</span>samples<span class="op">$</span>lib.size,<span class="dt">names=</span><span class="kw">colnames</span>(y),<span class="dt">las=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb1082-2" title="2"><span class="co"># Add a title to the plot</span></a>
+<a class="sourceLine" id="cb1082-3" title="3"><span class="kw">title</span>(<span class="st">&quot;Comparison of library sizes&quot;</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-571"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-571-1.png" alt="Sizes of RNAseq libraries for each sample." width="672" />
+<p class="caption">
+Figure 47.1: Sizes of RNAseq libraries for each sample.
+</p>
+</div>
+<p>Here’s a plot of the raw counts, in order to illustrate they are not normally-distributed, which is typical of discrete count data.</p>
+<div class="sourceCode" id="cb1083"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1083-1" title="1"><span class="kw">boxplot</span>(y<span class="op">$</span>counts, <span class="dt">las=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-572"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-572-1.png" alt="Distribution of counts across the 12 samples. Note they are not normally-distributed." width="672" />
+<p class="caption">
+Figure 47.2: Distribution of counts across the 12 samples. Note they are not normally-distributed.
+</p>
+</div>
+<p>Here’s a plot of the CPM, which is also not normally distributed. This illustrates that CPM is just a simple linear transform of count data.</p>
+<div class="sourceCode" id="cb1084"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1084-1" title="1"><span class="kw">boxplot</span>(<span class="kw">cpm</span>(y<span class="op">$</span>counts), <span class="dt">las=</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-573"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-573-1.png" alt="Distribution of CPM-transformed counts, still not normally-distributed." width="672" />
+<p class="caption">
+Figure 47.3: Distribution of CPM-transformed counts, still not normally-distributed.
+</p>
+</div>
+<p>Here’s a plot of a log transformation of CPM data. This transformation yields an approximately Gaussian distribution of the count values within each sample, though there are clearly outliers.</p>
+<p>The log transformed CPM data will be used in a lot of the statistical analysis because of this Gaussian property. So we’ll go ahead and make an object for that.</p>
+<div class="sourceCode" id="cb1085"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1085-1" title="1"><span class="co"># Get log2 counts per million</span></a>
+<a class="sourceLine" id="cb1085-2" title="2">logcounts &lt;-<span class="st"> </span><span class="kw">cpm</span>(y,<span class="dt">log=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Now look at the <code>logcount</code> date by plotting box plots.</p>
+<div class="sourceCode" id="cb1086"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1086-1" title="1"><span class="co"># Check distributions of samples using boxplots</span></a>
+<a class="sourceLine" id="cb1086-2" title="2"><span class="kw">boxplot</span>(logcounts, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Log2 counts per million&quot;</span>,<span class="dt">las=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb1086-3" title="3"><span class="co"># Let&#39;s add a blue horizontal line that corresponds to the median logCPM</span></a>
+<a class="sourceLine" id="cb1086-4" title="4"><span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">median</span>(logcounts),<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb1086-5" title="5"><span class="kw">title</span>(<span class="st">&quot;Boxplots of logCPMs (unnormalised)&quot;</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-575"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-575-1.png" alt="Natural log transformed CPM counts, normally-distributed but some outliers." width="672" />
+<p class="caption">
+Figure 47.4: Natural log transformed CPM counts, normally-distributed but some outliers.
+</p>
+</div>
+</div>
+<div id="classification-1" class="section level2">
+<h2><span class="header-section-number">47.7</span> Classification</h2>
+<p>Multidimensional scaling is a cousin of principal component analysis. It provides a simple way to see if sample groups separate along their first and second dimensions. This is based upon a <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934518/">leading fold-change metric</a>. This examines the subset of genes that exhibit the largest fold-differences between samples.</p>
+<p>The graph below shows separation and clustering of the 12 samples, but it is a bit hard to see what is what unless you’ve remembered what each sample represents.</p>
+<div class="sourceCode" id="cb1087"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1087-1" title="1">limma<span class="op">::</span><span class="kw">plotMDS</span>(y)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-576"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-576-1.png" alt="Multi-dimensional scaling, a form of PCA." width="672" />
+<p class="caption">
+Figure 47.5: Multi-dimensional scaling, a form of PCA.
+</p>
+</div>
+<p>We’ll munge out some better plots below, focusing on the the classification of the predictor variables. Recall there are 12 samples, duplicates of gene expression in basal and luminal cells, for each of the following three conditions: the cells were derived from mice that were virgin, pregnant, or lactating.</p>
+<p>First we’ll color by the feature that involves basal and luminal.</p>
+<div class="sourceCode" id="cb1088"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1088-1" title="1"><span class="co"># Let&#39;s set up colour schemes for CellType</span></a>
+<a class="sourceLine" id="cb1088-2" title="2"><span class="co"># How many cell types and in what order are they stored?</span></a>
+<a class="sourceLine" id="cb1088-3" title="3"><span class="kw">levels</span>(sampleinfo<span class="op">$</span>CellType)</a></code></pre></div>
+<pre><code>## [1] &quot;basal&quot;   &quot;luminal&quot;</code></pre>
+<div class="sourceCode" id="cb1090"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1090-1" title="1">col.cell &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>)[sampleinfo<span class="op">$</span>CellType]</a>
+<a class="sourceLine" id="cb1090-2" title="2"><span class="kw">data.frame</span>(sampleinfo<span class="op">$</span>CellType,col.cell)</a></code></pre></div>
+<pre><code>##    sampleinfo.CellType col.cell
+## 1                basal  #012169
+## 2                basal  #012169
+## 3                basal  #012169
+## 4                basal  #012169
+## 5                basal  #012169
+## 6                basal  #012169
+## 7              luminal  #b58500
+## 8              luminal  #b58500
+## 9              luminal  #b58500
+## 10             luminal  #b58500
+## 11             luminal  #b58500
+## 12             luminal  #b58500</code></pre>
+<p>The plot below clearly illustrates that the basal/luminal feature represents the first dimension of separation between the samples. In other words, the differences between basal and luminal cell gene expression accounts for most of the variation in the set.</p>
+<div class="sourceCode" id="cb1092"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1092-1" title="1"><span class="co"># Redo the MDS with cell type colouring</span></a>
+<a class="sourceLine" id="cb1092-2" title="2"><span class="kw">plotMDS</span>(y,<span class="dt">col=</span>col.cell)</a>
+<a class="sourceLine" id="cb1092-3" title="3"><span class="co"># Let&#39;s add a legend to the plot so we know which colours correspond to which cell type</span></a>
+<a class="sourceLine" id="cb1092-4" title="4"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,</a>
+<a class="sourceLine" id="cb1092-5" title="5">       <span class="dt">fill=</span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>),<span class="dt">legend=</span><span class="kw">levels</span>(sampleinfo<span class="op">$</span>CellType))</a>
+<a class="sourceLine" id="cb1092-6" title="6"><span class="co"># Add a title</span></a>
+<a class="sourceLine" id="cb1092-7" title="7"><span class="kw">title</span>(<span class="st">&quot;Cell type&quot;</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-579"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-579-1.png" alt="MDS shows variation due to cell type explains the first dimension of the data." width="672" />
+<p class="caption">
+Figure 47.6: MDS shows variation due to cell type explains the first dimension of the data.
+</p>
+</div>
+<p>We’ll do the same coloring trick for status.</p>
+<div class="sourceCode" id="cb1093"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1093-1" title="1">col.status &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;green&quot;</span>)[sampleinfo<span class="op">$</span>Status]</a>
+<a class="sourceLine" id="cb1093-2" title="2">col.status</a></code></pre></div>
+<pre><code>##  [1] &quot;green&quot; &quot;green&quot; &quot;blue&quot;  &quot;blue&quot;  &quot;red&quot;   &quot;red&quot;   &quot;green&quot; &quot;green&quot; &quot;blue&quot; 
+## [10] &quot;blue&quot;  &quot;red&quot;   &quot;red&quot;</code></pre>
+<p>The plot below colors each sample on the basis of whether it is from a virgin, pregnant, or lactating mouse. There is some separation of them along the 2nd dimension. Note how the duplicates of the same condition are very similar (the MCL1.DL lactating sample is missing for some reason?)</p>
+<div class="sourceCode" id="cb1095"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1095-1" title="1"><span class="kw">plotMDS</span>(y,<span class="dt">col=</span>col.status)</a>
+<a class="sourceLine" id="cb1095-2" title="2"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,<span class="dt">fill=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;green&quot;</span>),</a>
+<a class="sourceLine" id="cb1095-3" title="3">       <span class="dt">legend=</span><span class="kw">levels</span>(sampleinfo<span class="op">$</span>Status),<span class="dt">cex=</span><span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb1095-4" title="4"><span class="kw">title</span>(<span class="st">&quot;Status&quot;</span>)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-581"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-581-1.png" alt="Variation due to status represents the 2nd dimension of the data set." width="672" />
+<p class="caption">
+Figure 47.7: Variation due to status represents the 2nd dimension of the data set.
+</p>
+</div>
+<p>Thus, although these dimensions are latent, it is often possible to explain what variables are most responsible for the observed variation, and thus explain the first two principal components.</p>
+<p>The Bioconductor package <code>PCAtools</code>is a veritable smorgasbord of PCA functions and visualizations. Learning this package is strongly recommended. For more on it, <a href="https://bioconductor.org/packages/release/bioc/vignettes/PCAtools/inst/doc/PCAtools.html">see this vignette</a></p>
+</div>
+<div id="hierarchical-clustering-1" class="section level2">
+<h2><span class="header-section-number">47.8</span> Hierarchical clustering</h2>
+<p>Hierarchical clustering is a way to cluster while visualizing relationships to other clusters. Before illustrating this technique some processing is in order.</p>
+<p>We’re interested in seeing the genes driving the dimensional pattern seen above. What genes differ between the two cell types? What genes differ between the 3 status conditions? Is there an interaction between cell type and status?</p>
+<p>We can assume the most useful approach to answer this would be to focus on the genes that have the highest expression variance across the 12 samples.</p>
+<p>Rather than cluster all 15000+ genes, we’ll cluster the 500 that are most variable. This is an arbitrary cutoff.</p>
+<p>This script creates a vector of variances with associated with each GeneID. Just like in ANOVA, when row variances are high, differences in grouping factors will be greatest.</p>
+<div class="sourceCode" id="cb1096"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1096-1" title="1">var_genes &lt;-<span class="st"> </span><span class="kw">apply</span>(logcounts, <span class="dv">1</span>, var)</a>
+<a class="sourceLine" id="cb1096-2" title="2"><span class="kw">head</span>(var_genes)</a></code></pre></div>
+<pre><code>##     497097      20671      27395      18777      21399      58175 
+## 13.6624115  2.7493077  0.1581944  0.1306781  0.3929526  4.8232522</code></pre>
+<p>Now produce a vector with the GeneID names for those that have the greatest to lower variances, up to the 500th.</p>
+<div class="sourceCode" id="cb1098"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1098-1" title="1"><span class="co"># Get the gene names for the top 500 most variable genes</span></a>
+<a class="sourceLine" id="cb1098-2" title="2">select_var &lt;-<span class="st"> </span><span class="kw">names</span>(<span class="kw">sort</span>(var_genes, <span class="dt">decreasing=</span><span class="ot">TRUE</span>))[<span class="dv">1</span><span class="op">:</span><span class="dv">500</span>]</a>
+<a class="sourceLine" id="cb1098-3" title="3"><span class="kw">head</span>(select_var)</a></code></pre></div>
+<pre><code>## [1] &quot;22373&quot; &quot;12797&quot; &quot;11475&quot; &quot;11468&quot; &quot;14663&quot; &quot;24117&quot;</code></pre>
+<p>For your information, here is the expression pattern for the GeneID “22373” with the greatest variance. It encodes <a href="https://www.ncbi.nlm.nih.gov/gene?Db=gene&amp;Cmd=DetailsSearch&amp;Term=22373">Wap</a>, a known regulator of mammary epithelium. There is much lower expression in virgin basal cells compared to the others.</p>
+<div class="sourceCode" id="cb1100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1100-1" title="1">logcounts[<span class="st">&quot;22373&quot;</span>,]</a></code></pre></div>
+<pre><code>##    MCL1.DG    MCL1.DH    MCL1.DI    MCL1.DJ    MCL1.DK    MCL1.DL    MCL1.LA 
+##  0.4660671  0.9113837  7.4350797  7.8078998  9.2883180  9.3184826  6.6277452 
+##    MCL1.LB    MCL1.LC    MCL1.LD    MCL1.LE    MCL1.LF 
+##  6.6884102 12.1273320 13.1502579 15.6481000 15.5696858</code></pre>
+<p>From <code>logcounts</code> we select the rows corresponding to these 500 most variable genes.</p>
+<div class="sourceCode" id="cb1102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1102-1" title="1"><span class="co"># Subset logcounts matrix</span></a>
+<a class="sourceLine" id="cb1102-2" title="2">highly_variable_lcpm &lt;-<span class="st"> </span>logcounts[select_var,]</a>
+<a class="sourceLine" id="cb1102-3" title="3"><span class="kw">dim</span>(highly_variable_lcpm)</a></code></pre></div>
+<pre><code>## [1] 500  12</code></pre>
+<div class="sourceCode" id="cb1104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1104-1" title="1"><span class="kw">head</span>(highly_variable_lcpm)</a></code></pre></div>
+<pre><code>##          MCL1.DG    MCL1.DH   MCL1.DI   MCL1.DJ   MCL1.DK   MCL1.DL    MCL1.LA
+## 22373  0.4660671  0.9113837  7.435080  7.807900  9.288318  9.318483  6.6277452
+## 12797 10.0429713  9.6977966 11.046567 11.358857 11.605894 11.491773  0.8529774
+## 11475 12.3849005 12.3247093 13.989573 14.180048 14.285489 14.032486  3.4823396
+## 11468  7.1537287  6.8917703  9.325436  9.661942  9.491765  9.424803 -1.8086076
+## 14663  1.9717614  1.9471846  9.091895  8.756261  9.539747  9.504098  6.1710357
+## 24117  7.8378853  7.8995788  8.634622  8.582447  6.704706  6.777335 -1.3824015
+##          MCL1.LB    MCL1.LC    MCL1.LD    MCL1.LE   MCL1.LF
+## 22373  6.6884102 12.1273320 13.1502579 15.6481000 15.569686
+## 12797  1.6034598  2.3323371  2.4601069  0.8055694  1.288003
+## 11475  4.3708241  5.2116574  5.0788442  3.6997655  3.965775
+## 11468 -0.6387584  0.5244769  0.6694047 -0.4412496 -1.014878
+## 14663  6.2328260 13.7571928 14.2506761 16.0020840 15.885390
+## 24117 -0.5387838 -0.2280797  0.1243601 -2.9468278 -2.945610</code></pre>
+<p>Now we simply pass this select group of the 500 most variable genes into the <code>heatmap.2</code> function.</p>
+<p>The values represented here are logCPM values.</p>
+<div class="sourceCode" id="cb1106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1106-1" title="1"><span class="co"># Set up colour vector for celltype variable</span></a>
+<a class="sourceLine" id="cb1106-2" title="2">col.cell &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>)[sampleinfo<span class="op">$</span>CellType]</a>
+<a class="sourceLine" id="cb1106-3" title="3"></a>
+<a class="sourceLine" id="cb1106-4" title="4"><span class="co"># Plot the heatmap</span></a>
+<a class="sourceLine" id="cb1106-5" title="5"><span class="kw">heatmap.2</span>(highly_variable_lcpm,</a>
+<a class="sourceLine" id="cb1106-6" title="6">          <span class="dt">col=</span>viridis,</a>
+<a class="sourceLine" id="cb1106-7" title="7">          <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, </a>
+<a class="sourceLine" id="cb1106-8" title="8">          <span class="dt">main=</span><span class="st">&quot;Top 500 most variable genes across samples&quot;</span>,</a>
+<a class="sourceLine" id="cb1106-9" title="9">          <span class="dt">ColSideColors=</span>col.cell,</a>
+<a class="sourceLine" id="cb1106-10" title="10">          <span class="dt">scale=</span><span class="st">&quot;row&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-587-1.png" width="672" />
+Expression varies from low (dark) to high (light).</p>
+<p>Inspection of the horizontal clustering illustrates how it picks up the the experimental design very well. There are two main groups (corresponding to the luminal (Emory gold) and basal (Emory blue) cell types). There are also 3 groups within each of these, corresponding to the status.</p>
+<p>The duplicates line up very well together. This is tight data.</p>
+<p>The vertical clustering is very interesting. Over 3 quarters of the genes define the cell type differentiation, while the rest differentiate the status (virgin, pregnant, lactating). There is a clear interaction between cell type and status, as well.</p>
+</div>
+<div id="summary-14" class="section level2">
+<h2><span class="header-section-number">47.9</span> Summary</h2>
+<p>This chapter is derived from <a href="https://combine-australia.github.io/RNAseq-R/">an excellent workshop on using R to work with RNA-seq data</a>. The workshop material is an excellent starting point for learning how to work with this data.</p>
+<p>I’ve only covered a small portion of that material and made just a few very modest changes. My goal is making a gentle introduction to working with the data, keeping a focus on classification (MDS and hierarchical clustering).</p>
+<p>Install Bioconductor to use this material. Before doing so, it is important to recognize how Bioconductor relates to R and to CRAN. <strong>I strongly recommend installing additional Bioconductor packages using the BiocManager</strong>. This workflow becomes more important when the time comes to updating, whether R or Bioconductor.</p>
+<p>The fundamental currency of RNA-seq data are transcript counts. To work with them requires transformation via normalization (such as CPM or RPKM). Counts are not normally distributed. For many statistical treatments the CPM need conversion to a Gaussian distribution. Natural log transformation usually gets this done.</p>
+<p>Scientific judgements are necessary to limit the scope of the datasets. Working with RNA-seq data demands R skills related to creating and working with a variety of on-the-fly data objects, all while keeping one’s rows and columns copacetic.</p>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="classification.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["jabstb.pdf", "jabstb.epub"],
+"toc": {
+"collapse": "subsection"
+},
+"search": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-04-19" />
+<meta name="date" content="2020-04-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="surv.html"/>
-
+<link rel="next" href="rnaseq.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -817,6 +817,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="46.12" data-path="classification.html"><a href="classification.html#heatmaps"><i class="fa fa-check"></i><b>46.12</b> Heatmaps</a></li>
 <li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-13"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
 </ul></li>
+<li class="chapter" data-level="47" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>47</b> RNA-seq with R</a><ul>
+<li class="chapter" data-level="47.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>47.1</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="47.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>47.2</b> Import raw count data</a></li>
+<li class="chapter" data-level="47.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>47.3</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="47.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>47.4</b> Filtering</a></li>
+<li class="chapter" data-level="47.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>47.5</b> DGEList</a></li>
+<li class="chapter" data-level="47.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>47.6</b> Visualization</a></li>
+<li class="chapter" data-level="47.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>47.7</b> Classification</a></li>
+<li class="chapter" data-level="47.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>47.8</b> Hierarchical clustering</a></li>
+<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-14"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -972,7 +983,16 @@ Figure 46.3: Log transformed data set.
 <div id="are-there-clusters" class="section level2">
 <h2><span class="header-section-number">46.7</span> Are there clusters?</h2>
 <p>Principal component analysis identifies the principal components, which will be used to decide how many clusters to model.</p>
-<div class="sourceCode" id="cb1034"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1034-1" title="1"><span class="kw">prcomp</span>(df2, <span class="dt">scale. =</span> F, <span class="dt">center =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb1034"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1034-1" title="1">pr &lt;-<span class="st"> </span><span class="kw">prcomp</span>(df2, <span class="dt">scale. =</span> F, <span class="dt">center =</span> T)</a>
+<a class="sourceLine" id="cb1034-2" title="2"><span class="kw">summary</span>(pr)</a></code></pre></div>
+<pre><code>## Importance of components:
+##                           PC1    PC2    PC3     PC4
+## Standard deviation     1.3589 1.0926 0.8308 0.51918
+## Proportion of Variance 0.4616 0.2984 0.1725 0.06739
+## Cumulative Proportion  0.4616 0.7601 0.9326 1.00000</code></pre>
+<p>From the summary output we see that the first principal component explains 46.16% of the variance, PC2 explains 29.84% of the variance, while PC3 and PC4 explain successively less variance.</p>
+<p>The default output of the <code>prcomp</code> is the “rotation” table. The values are the eigenvalues of the covariance matrix. They are best thought of as the coefficients (linear predictors) for each of the eigenvectors.</p>
+<div class="sourceCode" id="cb1036"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1036-1" title="1">pr</a></code></pre></div>
 <pre><code>## Standard deviations (1, .., p=4):
 ## [1] 1.3588598 1.0926165 0.8307504 0.5191753
 ## 
@@ -982,14 +1002,23 @@ Figure 46.3: Log transformed data set.
 ## fu   -0.3168913 -0.75306737 0.3375968 -0.4674375
 ## foei -0.3761199  0.64094934 0.5509381 -0.3797170
 ## fuz  -0.6721820 -0.09657536 0.1488758  0.7188050</code></pre>
+<p>The <span class="math inline">\(x\)</span> table is perhaps the most useful. It provides the <span class="math inline">\(x,y\)</span> coordinates for plotting clusters for all of the replicates.</p>
+<div class="sourceCode" id="cb1038"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1038-1" title="1"><span class="kw">head</span>(pr<span class="op">$</span>x)</a></code></pre></div>
+<pre><code>##           PC1        PC2        PC3         PC4
+## S1 -1.1622449  0.2816213  0.5727601  0.54040594
+## S2 -0.8416250 -1.0717251  0.7222730  0.31134103
+## S3  1.7636397 -0.5469457 -0.1629918 -0.38662164
+## S4  1.3288899  0.8011392 -0.8603810  0.58532180
+## S5  0.2555881  0.4411967 -1.6372609 -0.23746506
+## S6  2.1632402 -1.6895115 -0.1008753 -0.09591345</code></pre>
 <p>Here’s a way to visualize all of the data on the basis of it’s first two principal components: Dim1 and Dim2. We’ll always see the greatest separation by running a correlation plot between the first two dimensions.</p>
-<div class="sourceCode" id="cb1036"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1036-1" title="1"><span class="kw">fviz_pca_ind</span>(<span class="kw">prcomp</span>(df2),</a>
-<a class="sourceLine" id="cb1036-2" title="2">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-542-1.png" width="672" />
+<div class="sourceCode" id="cb1040"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1040-1" title="1"><span class="kw">fviz_pca_ind</span>(<span class="kw">prcomp</span>(df2),</a>
+<a class="sourceLine" id="cb1040-2" title="2">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-544-1.png" width="672" />
 Here’s correlation plot between the first two principal components for a uniform distribution of objects, for comparison. It would take an active imagination to draw out clusters from this. It’s pretty uniform.</p>
-<div class="sourceCode" id="cb1037"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1037-1" title="1"><span class="kw">set.seed</span>(<span class="dv">12345</span>)</a>
-<a class="sourceLine" id="cb1037-2" title="2">sn &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>,<span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>, <span class="dv">1</span>)), <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">500</span>)</a>
-<a class="sourceLine" id="cb1037-3" title="3"><span class="kw">prcomp</span>(sn, <span class="dt">scale. =</span> F, <span class="dt">center =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb1041"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1041-1" title="1"><span class="kw">set.seed</span>(<span class="dv">12345</span>)</a>
+<a class="sourceLine" id="cb1041-2" title="2">sn &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>,<span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>, <span class="dv">1</span>)), <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">500</span>)</a>
+<a class="sourceLine" id="cb1041-3" title="3"><span class="kw">prcomp</span>(sn, <span class="dt">scale. =</span> F, <span class="dt">center =</span> F)</a></code></pre></div>
 <pre><code>## Standard deviations (1, .., p=2):
 ## [1] 1.0073077 0.9932779
 ## 
@@ -997,14 +1026,14 @@ Here’s correlation plot between the first two principal components for a unifo
 ##             PC1       PC2
 ## [1,] -0.1470789 0.9891248
 ## [2,]  0.9891248 0.1470789</code></pre>
-<div class="sourceCode" id="cb1039"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1039-1" title="1"><span class="kw">fviz_pca_ind</span>(<span class="kw">prcomp</span>(sn),</a>
-<a class="sourceLine" id="cb1039-2" title="2">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-543-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1043"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1043-1" title="1"><span class="kw">fviz_pca_ind</span>(<span class="kw">prcomp</span>(sn),</a>
+<a class="sourceLine" id="cb1043-2" title="2">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-545-1.png" width="672" /></p>
 </div>
 <div id="how-many-clusters" class="section level2">
 <h2><span class="header-section-number">46.8</span> How many clusters?</h2>
-<div class="sourceCode" id="cb1040"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1040-1" title="1"><span class="kw">fviz_nbclust</span>(df2, kmeans, <span class="dt">method=</span><span class="st">&quot;wss&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-544-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1044"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1044-1" title="1"><span class="kw">fviz_nbclust</span>(df2, kmeans, <span class="dt">method=</span><span class="st">&quot;wss&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-546-1.png" width="672" /></p>
 <p>This is known as a “scree” plot. It’s useful as a tool to make decisions about how many clusters to model. It shows the amount of variation each dimension can explain.</p>
 <p>The critical question in clustering is how many dimensions should be modeled? If we model them all we can explain all of the variation by a large number of clusters. But that’s over-fitting. Statistical models with too many parameters are always harder to interpret and to explain.</p>
 <p>Let’s move through the points from the top left on down the curve. The segment between points 1 and 2 explain a LOT of variation; more than a quarter and less than one-half of the total variation. We can think of this segment as the first principal component or the first dimension of the data set.</p>
@@ -1014,94 +1043,94 @@ Here’s correlation plot between the first two principal components for a unifo
 <p>At the “elbow” the additional segments are not explaining that much more variation. In other words, to model more clusters becomes something of an over-fit. It’s arguable to say the segment between 4 and 5 is really explaining a good amount of variation.</p>
 <p>The take away from this scree plot is that the data are explained probably by 3 clusters, maybe by 4 clusters. The bloody obvious test will be used to decide.</p>
 <p>The silhouette method is another way to decide on the number of clusters. The idea is to the peak average silhouette width == the number of clusters to model. YMMV. If not, the number just below the peak.</p>
-<div class="sourceCode" id="cb1041"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1041-1" title="1"><span class="kw">fviz_nbclust</span>(df2, kmeans, <span class="dt">method=</span><span class="st">&quot;silhouette&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-545-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1045"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1045-1" title="1"><span class="kw">fviz_nbclust</span>(df2, kmeans, <span class="dt">method=</span><span class="st">&quot;silhouette&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-547-1.png" width="672" /></p>
 </div>
 <div id="clustering" class="section level2">
 <h2><span class="header-section-number">46.9</span> Clustering</h2>
 <p>The function <code>kmeans</code> does the clustering given a number of clusters to model. Here it is instructed fit a 3 cluster model to the data. It assigns every row to one of these 3 model clusters.</p>
 <p>Explore the object <code>kmdf2</code>, because it is packed with information. Note how it assigns every row to a cluster.</p>
-<div class="sourceCode" id="cb1042"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1042-1" title="1">km.df2 &lt;-<span class="st"> </span><span class="kw">kmeans</span>(df2, <span class="dt">centers=</span><span class="dv">3</span>, <span class="dt">nstart=</span><span class="dv">100</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1046"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1046-1" title="1">km.df2 &lt;-<span class="st"> </span><span class="kw">kmeans</span>(df2, <span class="dt">centers=</span><span class="dv">3</span>, <span class="dt">nstart=</span><span class="dv">100</span>)</a></code></pre></div>
 <p>Aggregate is a good way to subset the clusters by the grouping variables. Aggregate says, "Given the three clusters, here are their values for each of the grouping variables. If you prefer, you could add the cluster ID to a dataframe along with df2, and then use <code>group_by</code> and <code>summarize</code> to do the same thing.</p>
-<div class="sourceCode" id="cb1043"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1043-1" title="1"><span class="kw">aggregate</span>(df, <span class="dt">by=</span><span class="kw">list</span>(<span class="dt">cluster=</span>km.df2<span class="op">$</span>cluster), mean)</a></code></pre></div>
+<div class="sourceCode" id="cb1047"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1047-1" title="1"><span class="kw">aggregate</span>(df, <span class="dt">by=</span><span class="kw">list</span>(<span class="dt">cluster=</span>km.df2<span class="op">$</span>cluster), mean)</a></code></pre></div>
 <pre><code>##   cluster        foo        fu      foei      fuz
 ## 1       1  1.5462796  9.145715 27.293735 86.44426
 ## 2       2  0.8173983 30.669165  2.263343 97.62785
 ## 3       3 19.1839140  6.814412  3.746465 12.90336</code></pre>
 <p>For example, the average values of the foo variable in each of the 3 clusters are 1.5, 0.8 and 19.2.</p>
 <p>And we can visualize the clusters. Note, we’re passing in the kmeans model of 3 clusters into this. Toggle the <code>ellipse</code> argument</p>
-<div class="sourceCode" id="cb1045"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1045-1" title="1"><span class="kw">fviz_cluster</span>(km.df2, <span class="dt">data=</span>df,</a>
-<a class="sourceLine" id="cb1045-2" title="2">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
-<a class="sourceLine" id="cb1045-3" title="3">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
-<a class="sourceLine" id="cb1045-4" title="4">             <span class="dt">ellipse=</span>F,</a>
-<a class="sourceLine" id="cb1045-5" title="5">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb1045-6" title="6">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb1045-7" title="7">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-548-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1049"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1049-1" title="1"><span class="kw">fviz_cluster</span>(km.df2, <span class="dt">data=</span>df,</a>
+<a class="sourceLine" id="cb1049-2" title="2">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
+<a class="sourceLine" id="cb1049-3" title="3">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
+<a class="sourceLine" id="cb1049-4" title="4">             <span class="dt">ellipse=</span>F,</a>
+<a class="sourceLine" id="cb1049-5" title="5">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1049-6" title="6">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1049-7" title="7">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-550-1.png" width="672" /></p>
 <p>Now let’s model this with 4 clusters. We recreate the km.df2 object, check the aggregate. Toggle the ellipse on and off. What do you think? Is this a better fit than 3 clusters?</p>
-<div class="sourceCode" id="cb1046"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1046-1" title="1">km.df2 &lt;-<span class="st"> </span><span class="kw">kmeans</span>(df2, <span class="dv">4</span>, <span class="dt">nstart=</span><span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb1046-2" title="2"></a>
-<a class="sourceLine" id="cb1046-3" title="3"><span class="kw">aggregate</span>(df, <span class="dt">by=</span><span class="kw">list</span>(<span class="dt">cluster=</span>km.df2<span class="op">$</span>cluster), mean)</a></code></pre></div>
+<div class="sourceCode" id="cb1050"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1050-1" title="1">km.df2 &lt;-<span class="st"> </span><span class="kw">kmeans</span>(df2, <span class="dv">4</span>, <span class="dt">nstart=</span><span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb1050-2" title="2"></a>
+<a class="sourceLine" id="cb1050-3" title="3"><span class="kw">aggregate</span>(df, <span class="dt">by=</span><span class="kw">list</span>(<span class="dt">cluster=</span>km.df2<span class="op">$</span>cluster), mean)</a></code></pre></div>
 <pre><code>##   cluster        foo        fu      foei       fuz
 ## 1       1  3.5135916 10.512234 29.754152 98.821411
 ## 2       2  1.1075641 31.329134  2.434274 99.879498
 ## 3       3 30.0729920 10.759380  2.105854  4.179751
 ## 4       4 -0.2360265  2.161194  8.770106 29.889766</code></pre>
-<div class="sourceCode" id="cb1048"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1048-1" title="1"><span class="kw">fviz_cluster</span>(km.df2, <span class="dt">data=</span>df,</a>
-<a class="sourceLine" id="cb1048-2" title="2">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
-<a class="sourceLine" id="cb1048-3" title="3">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
-<a class="sourceLine" id="cb1048-4" title="4">             <span class="dt">ellipse=</span>F,</a>
-<a class="sourceLine" id="cb1048-5" title="5">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb1048-6" title="6">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb1048-7" title="7">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-549-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1052"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1052-1" title="1"><span class="kw">fviz_cluster</span>(km.df2, <span class="dt">data=</span>df,</a>
+<a class="sourceLine" id="cb1052-2" title="2">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
+<a class="sourceLine" id="cb1052-3" title="3">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
+<a class="sourceLine" id="cb1052-4" title="4">             <span class="dt">ellipse=</span>F,</a>
+<a class="sourceLine" id="cb1052-5" title="5">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1052-6" title="6">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1052-7" title="7">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-551-1.png" width="672" /></p>
 </div>
 <div id="pam-and-clara" class="section level2">
 <h2><span class="header-section-number">46.10</span> PAM and CLARA</h2>
 <p>PAM and CLARA are alternative algorithms to kmeans. All three are likely to correlate pretty well but note how PAM and kmeans differ quite markedly in the 3 cluster model, yet arrive at about the same clustering for the 4 cluster model.</p>
-<div class="sourceCode" id="cb1049"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1049-1" title="1">pam.df2 &lt;-<span class="st"> </span><span class="kw">pam</span>(df2, <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb1049-2" title="2"></a>
-<a class="sourceLine" id="cb1049-3" title="3"><span class="kw">fviz_cluster</span>(pam.df2,</a>
-<a class="sourceLine" id="cb1049-4" title="4">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
-<a class="sourceLine" id="cb1049-5" title="5">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
-<a class="sourceLine" id="cb1049-6" title="6">             <span class="dt">ellipse=</span>F,</a>
-<a class="sourceLine" id="cb1049-7" title="7">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb1049-8" title="8">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb1049-9" title="9">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-550-1.png" width="672" /></p>
-<div class="sourceCode" id="cb1050"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1050-1" title="1">pam.df2 &lt;-<span class="st"> </span><span class="kw">pam</span>(df2, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb1050-2" title="2"></a>
-<a class="sourceLine" id="cb1050-3" title="3"><span class="kw">fviz_cluster</span>(pam.df2,</a>
-<a class="sourceLine" id="cb1050-4" title="4">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
-<a class="sourceLine" id="cb1050-5" title="5">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
-<a class="sourceLine" id="cb1050-6" title="6">             <span class="dt">ellipse=</span>F,</a>
-<a class="sourceLine" id="cb1050-7" title="7">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb1050-8" title="8">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb1050-9" title="9">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-551-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1053"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1053-1" title="1">pam.df2 &lt;-<span class="st"> </span><span class="kw">pam</span>(df2, <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb1053-2" title="2"></a>
+<a class="sourceLine" id="cb1053-3" title="3"><span class="kw">fviz_cluster</span>(pam.df2,</a>
+<a class="sourceLine" id="cb1053-4" title="4">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
+<a class="sourceLine" id="cb1053-5" title="5">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
+<a class="sourceLine" id="cb1053-6" title="6">             <span class="dt">ellipse=</span>F,</a>
+<a class="sourceLine" id="cb1053-7" title="7">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1053-8" title="8">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1053-9" title="9">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-552-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1054"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1054-1" title="1">pam.df2 &lt;-<span class="st"> </span><span class="kw">pam</span>(df2, <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb1054-2" title="2"></a>
+<a class="sourceLine" id="cb1054-3" title="3"><span class="kw">fviz_cluster</span>(pam.df2,</a>
+<a class="sourceLine" id="cb1054-4" title="4">             <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&quot;#440154FF&quot;</span>, <span class="st">&quot;#39568CFF&quot;</span>, <span class="st">&quot;#1F968BFF&quot;</span>, <span class="st">&quot;#73D055FF&quot;</span>),</a>
+<a class="sourceLine" id="cb1054-5" title="5">             <span class="dt">geom=</span><span class="st">&quot;point&quot;</span>,</a>
+<a class="sourceLine" id="cb1054-6" title="6">             <span class="dt">ellipse=</span>F,</a>
+<a class="sourceLine" id="cb1054-7" title="7">             <span class="dt">shape=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb1054-8" title="8">             <span class="dt">pointsize=</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb1054-9" title="9">             <span class="dt">ggtheme=</span><span class="kw">theme_bw</span>())</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-553-1.png" width="672" /></p>
 </div>
 <div id="hierarchical-clustering" class="section level2">
 <h2><span class="header-section-number">46.11</span> Hierarchical clustering</h2>
-<p>Hierarchical clustering is a step more informative than kmeans clustering because it provides information about how related clusters are to each other.</p>
+<p>Hierarchical clustering is a step more informative than kmeans clustering because it provides information about relationships between clusters.</p>
 <p>We start with the data set matrix, <code>df</code>from above. Agglomerative hierarchical clustering is performed using the <code>agnes</code> function. Agglomerative operates by using each measurement as a seed, to which the most similar other measurements are merged. This turns out to be fairly intensive, computationally, compared to the previous techniques. Exect delays.</p>
 <p>As in kmeans, we define the number of clusters the algorithm should model.</p>
-<div class="sourceCode" id="cb1051"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1051-1" title="1">rag &lt;-<span class="st"> </span><span class="kw">agnes</span>(<span class="dt">x=</span>df, <span class="dt">stand=</span>T, <span class="dt">metric=</span><span class="st">&quot;euclidian&quot;</span>, <span class="dt">method=</span><span class="st">&quot;ward&quot;</span>)</a>
-<a class="sourceLine" id="cb1051-2" title="2"><span class="kw">fviz_dend</span>(rag, <span class="dt">cex=</span><span class="fl">0.01</span>, <span class="dt">k=</span><span class="dv">4</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-552-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1055"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1055-1" title="1">rag &lt;-<span class="st"> </span><span class="kw">agnes</span>(<span class="dt">x=</span>df, <span class="dt">stand=</span>T, <span class="dt">metric=</span><span class="st">&quot;euclidian&quot;</span>, <span class="dt">method=</span><span class="st">&quot;ward&quot;</span>)</a>
+<a class="sourceLine" id="cb1055-2" title="2"><span class="kw">fviz_dend</span>(rag, <span class="dt">cex=</span><span class="fl">0.01</span>, <span class="dt">k=</span><span class="dv">4</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-554-1.png" width="672" /></p>
 <p>The interpretation of these output is fairly straight forward. Any two closely linked elements have less distance between them than to elements to which they are less closely linked.</p>
 <p>For example, in the figure above the orange and green clusters are more related to each other than they are to the blue, and all three are more related than any one is to the purple.</p>
 <p>Divisive hierarchical clustering is performed using the <code>diana</code> function. This operates opposite of agglomerative clustering. All measurements begin in a single cluster and then are successively divided into heterogenous clusters.</p>
-<div class="sourceCode" id="cb1052"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1052-1" title="1">rdi &lt;-<span class="st"> </span><span class="kw">diana</span>(<span class="dt">x=</span>df, <span class="dt">stand=</span>T, <span class="dt">metric=</span><span class="st">&quot;euclidian&quot;</span>)</a>
-<a class="sourceLine" id="cb1052-2" title="2"><span class="kw">fviz_dend</span>(rdi, <span class="dt">cex=</span><span class="fl">0.01</span>, <span class="dt">k=</span><span class="dv">4</span>, <span class="dt">method=</span><span class="st">&quot;ward&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-553-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1056"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1056-1" title="1">rdi &lt;-<span class="st"> </span><span class="kw">diana</span>(<span class="dt">x=</span>df, <span class="dt">stand=</span>T, <span class="dt">metric=</span><span class="st">&quot;euclidian&quot;</span>)</a>
+<a class="sourceLine" id="cb1056-2" title="2"><span class="kw">fviz_dend</span>(rdi, <span class="dt">cex=</span><span class="fl">0.01</span>, <span class="dt">k=</span><span class="dv">4</span>, <span class="dt">method=</span><span class="st">&quot;ward&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-555-1.png" width="672" /></p>
 <p>The output differences between the two hierarchical techniques are subtle but clearly evident. They are different algorithms and therefore they provide different results. Neither is more wrong than the other.</p>
 <p>There are several additional hierarchical vizualizations that are possible, phylogenic trees, circular dendrograms, and more.</p>
 </div>
 <div id="heatmaps" class="section level2">
 <h2><span class="header-section-number">46.12</span> Heatmaps</h2>
 <p>Heatmaps are just a visual descriptive technique to pair the magnitude of measurements with hierarchical clusters. This particular function is also performing some clustering. This viz pretty much makes the case for four clusters. But the function’s arguments could be modified to see how well that holds.</p>
-<div class="sourceCode" id="cb1053"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1053-1" title="1"><span class="kw">heatmap</span>(df2, <span class="dt">scale=</span><span class="st">&quot;column&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-554-1.png" width="672" /></p>
+<div class="sourceCode" id="cb1057"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1057-1" title="1"><span class="kw">heatmap</span>(df2, <span class="dt">scale=</span><span class="st">&quot;column&quot;</span>)</a></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-556-1.png" width="672" /></p>
 </div>
 <div id="summary-13" class="section level2">
 <h2><span class="header-section-number">46.13</span> Summary</h2>
@@ -1110,25 +1139,13 @@ Here’s correlation plot between the first two principal components for a unifo
 
 </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="surv.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="surv.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rnaseq.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
