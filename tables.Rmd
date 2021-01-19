@@ -79,7 +79,7 @@ While using this `inline_text()` function may initially seem clunky, it actually
 
 As biomedical scientists, an example use case for this package would be a demographics table for a study involving human participants. For these types of studies, it's important to display variables like age or sex for the participants in each experimental group. It is also important to know if any of those variables significantly differ between groups.
 
-For this example, I will be using metadata collected from Supplementary Table S1 of [Cherry et al., 2018. *J Neuropathol Exp Neurol*](https://academic.oup.com/jnen/article/77/1/40/4627984). In this study, the authors performed quantitative proteomics on post-mortem human brain samples from control subjects and subjects with Alzheimer's disease (AD) and Chronic Traumatic Encephalopathy (CTE). I will create a summary sample to highlight important traits for samples that were used in the proteomic experiments. 
+For this example, I will be using metadata collected from Supplementary Table S1 of [Cherry et al., 2018. *J Neuropathol Exp Neurol*](https://academic.oup.com/jnen/article/77/1/40/4627984). In this study, the authors performed quantitative proteomics on post-mortem human brain samples from control subjects and subjects with Alzheimer's disease (AD) and Chronic Traumatic Encephalopathy (CTE). I will create a summary table. to highlight important traits for samples that were used in the proteomic experiments. 
 
 Here is the raw data: 
 
@@ -89,7 +89,7 @@ cherry2018raw <- read_csv("datasets/cherry2018JNEN.csv", col_names = FALSE)
 head(cherry2018raw, n = 30)
 ```
 
-If you were to open this file in Excel, you would see that it is not in optimal form for us to easily make a table. (This is also evident by the output of the `head()` command above.) So, here, I will do some cleaning in the below chunk. As the purpose of this tutorial is for how to make tables, I will not walk you through each step but hopefully the code and comments will make it clear what I am doing. 
+If you were to open this file in Excel, you would see that it is not in an optimal form for us to easily make a table. (This is also evident by the output of the `head()` command above.) So, here, I will do some cleaning in the below chunk. As the purpose of this tutorial is for how to make tables, I will not walk you through each step but hopefully the code and comments will make it clear what I am doing. 
 
 ```{r}
 # isolating control and AD data
@@ -142,7 +142,7 @@ cherry2018clean <- bind_rows(cherry2018ctrlAD, cherry2018CTE) %>%
 
 ```
 
-After all that cleaning, he have nice little dataframe that we can use to create a summary table. First, let's look and see what variables we have and decide what variables we want to display in our summary table: 
+After all that cleaning, he have a nice little dataframe that we can use to create a summary table. First, let's look and see what variables we have and decide what variables we want to display in our summary table: 
 
 ```{r}
 glimpse(cherry2018clean)
@@ -175,7 +175,7 @@ cherry2018clean %>%
   add_p(test = list("Age" ~ "aov"))
 ```
 
-This is a great start to a table but there's a couple of things I'm noticing that I would like to change before I deem the table 'publication quality'. First, I don't really like the order in which some of the variables are displayed. For instance, I would like the disease groups to displayed in the following order: Control, AD, and CTE. I can fix this by converting the columns from character vectors to factor variables and using the `levels = ` argument to specify what order I want the variables to be displayed in. .
+This is a great start to a table but there's a couple of things I'm noticing that I would like to change before I deem the table 'publication quality'. First, I don't really like the order in which some of the variables are displayed. For instance, I would like the disease groups to displayed in the following order: Control, AD, and CTE. I can fix this by converting the columns from character variables to factor variables and using the `levels = ` argument to specify what order I want the variables to be displayed in.
 
 ```{r}
 cherry2018table <- cherry2018clean %>%
@@ -210,16 +210,37 @@ cherry2018table %>%
   gtsummary::as_flex_table() %>% # converts gtsummary table to flextable
   theme_vanilla() # built-in flextable theme
 ```
-There are numerous ways you can modify your table with the `{flextable}` package. I recommend perusing the [package website](https://davidgohel.github.io/flextable/index.html) and trying out the different built in functions. To spruce up the table, I will add a footer, bold some of the variables in the "Characteristics" Column, and adjust the dimensions to make the table a little smaller. However, this change in table size will only be noticeable when I save the table as a PNG. 
+There are numerous ways you can modify your table with the `{flextable}` package. I recommend perusing the [package website](https://davidgohel.github.io/flextable/index.html) and trying out the different built in functions. To spruce up the table, I will add a footer and bold some of the variables in the "Characteristics" column. 
 
 ```{r}
-cherry2018table_final <- cherry2018table %>% 
+cherry2018table %>% 
   gtsummary::as_flex_table() %>% 
   theme_vanilla() %>% 
-  add_footer_lines(values = "NA indicates data not available.") %>% 
-  bold(i = c(1, 2, 5, 13, 17), j = 1, bold = TRUE, part = "body")
+  add_footer_lines(values = "NA indicates data not available.") %>% # adds footer
+  bold(i = c(1, 2, 5, 13, 17), j = 1, bold = TRUE, part = "body") # bolds specified rows and columns 
+```
+
+Another cool feature of `{flextable}` is the option to use conditional formatting. To demonstrate, I will highlight rows in which the p-value is less than .05. To do this I have to use the `bg()` function. Within that function, the `i=` argument can be used to specify rows that you want to highlight while the `j=` function can be used to specify columns that you wish to highlight. Below, I use the `i=` argument along with the formula `~ p.value <.05` to specify that I wish to highlight rows in which the p-value is less than .05.     
+
+You might notice that `p.value` is not the same as "p-value" which we see at the top of our table. Since we converted our gtsummary table to a flextable, I had to figure out what the column names were for the table to use in the `i=` argument. To do this, I ran `cherry2018table$table_header` which told me that the column name for the p-value column was in fact `p.value`. 
+
+```{r}
+cherry2018table_final <- cherry2018table %>%
+  gtsummary::as_flex_table() %>%
+  theme_vanilla() %>%
+  add_footer_lines(values = "NA indicates data not available.") %>%
+  bold(
+    i = c(1, 2, 5, 13, 17),
+    j = 1,
+    bold = TRUE,
+    part = "body"
+  ) %>%
+  bg(i = ~ p.value < .05,
+     bg = "powderblue",
+     part = "body") # specifying which rows to color
 
 cherry2018table_final
+
 ```
 
 Finally, if I wanted to save this table as an image, all I would have to do is run the following code: `flextable::save_as_image(cherry2018table_final, path = "cherry2018table_final.png")`. For this code to work, the package `{webshot2}` must be available. 
@@ -257,15 +278,15 @@ mtcars %>%
   kable()
 ```
 
-For the record, there is a package called [`{kablextra}`](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) which is built off of the `kable()` function that is also great for making tables in RMarkdown and knitting to HTML.
+There is a package called [`{kablextra}`](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) which is built off of the `kable()` function that is also great for making tables in RMarkdown and knitting to HTML.
 
 ### [gt](https://gt.rstudio.com/)
 
-`{gt}` is a fairly new package but it is quickly rising in popularity. The package contains many intuitive functions for customizing each part of the table and all of the example tables looks super clean and readable. However, at this time, the package only supports output to HTML.
+`{gt}` is a fairly new package but it is quickly rising in popularity. The package contains many intuitive functions for customizing each part of the table and all of the example tables look super clean and readable. However, at this time, the package only supports output to HTML.
 
 ### [reactable](https://glin.github.io/reactable/)
 
-`{reactable}` tables work well with R Markdown documents and Shiny applications and is optimized for presentation via HTML. Additionally, the package offers expandable rows and nested tables and just has a general emphasis on interactivity. 
+`{reactable}` tables work well with R Markdown documents and Shiny applications and is optimized for presentation via HTML. Additionally, the package offers expandable rows and nested tables and has a general emphasis on interactivity. 
 
 ### Other resources for creating tables in R
 
