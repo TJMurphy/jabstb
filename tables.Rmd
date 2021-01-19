@@ -1,0 +1,286 @@
+# Making Publication Quality Tables in R
+_Ashlyn Johnson, last edited: January 2021_
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+library(gtsummary)
+library(flextable)
+```
+
+Tables are extremely useful because they can efficiently display immense amounts of data at once. Fortunately, we can leverage R and it's statistical prowess to calculate and beautifully display summary statistics in publication quality tables with just a few lines of code. No more tedious formatting in Microsoft Word! Plus, making your tables in R is reproducible. This means that you can go from your raw data to a high quality table in one R script or markdown document and someone else can clearly see how you arrived at your final product. 
+
+This tutorial will primarily make use of the packages [`{gtsummary}`](http://www.danieldsjoberg.com/gtsummary/index.html) and [`{flextable}`](https://davidgohel.github.io/flextable/articles/overview.html). Each package has its caveats and each package differs in its ability to knit to different formats from RMarkdown (i.e. HTML, Word, PowerPoint, PDF). I've found it most useful to save my table as an image which I can then insert into any document that I need to, including back into my RMarkdown file. I will also very briefly highlight other packages that can be used for tables and I encourage you to explore their webpages to understand their different features and uses. 
+
+
+## [gtsummary](http://www.danieldsjoberg.com/gtsummary/index.html)
+
+The `{gtsummary}` package has a lot of really great features for automatically summarizing dataframes and even calculating statistics with a few lines of code.  
+
+### Example 1: chickwts 
+
+To start of with a simple example, let's take a look at the `chickwts` dataset that's built into R. Newly hatched chicks were randomly assigned to one of 6 different types of feed supplement. After 6 weeks, their weights (grams) were recorded. This dataset has two columns: `weight` and `feed`. If we use the `tbl_summary()` function and specify `feed` as the variable by which we want to group the data, we can very easily view the median weight and interquartile range (IQR) of the weights in of the chicks in each group. We can also easily see how many chicks were in each group, as noted by `N =`. 
+
+```{r}
+data("chickwts")
+
+chickwts %>% 
+  tbl_summary(by = "feed")
+```
+
+What if we want to quickly test if there is a difference in weight between chicks that were fed different types of feed supplements? We can use the `add_p()` function. 
+
+```{r}
+chickwts %>% 
+  tbl_summary(by = "feed") %>% 
+  add_p()
+```
+
+Of course, there are many ways to modify this output, including specifying which summary statistics are presented. For example, if we wanted to display the mean and standard deviation of the weights of the chicks in each group instead of the median and IQR, we could modify the `statistic` argument in the `tbl_summary()` function. 
+
+```{r}
+chickwts %>% 
+  tbl_summary(by = "feed", 
+              statistic = list(all_continuous() ~ "{mean} ({sd})")) %>% 
+  add_p()
+```
+
+Furthermore, while the default statistical test for continuous variables is the Kruskal-Wallis Test, we can change the statistical test using the `test` argument in the `add_p()` function. 
+
+```{r}
+chickwts %>% 
+  tbl_summary(by = "feed", 
+              statistic = list(all_continuous() ~ "{mean} ({sd})")) %>% 
+  add_p(test = list(weight ~ "aov"))
+```
+
+Finally, while a table is nice for displaying data, we usually have to write up the results of our statistical tests in the results section of a manuscript. The `{gtsummary}` package even has a function to make that easier called the `inline_text()` function. You can actually use this command inside of the text of your RMarkdown report if you've assigned your table to a variable or object name. 
+
+```{r}
+chick_table <- chickwts %>% 
+  tbl_summary(by = "feed", 
+              statistic = list(all_continuous() ~ "{mean} ({sd})")) %>% 
+  add_p(test = list(weight ~ "aov"))
+```
+
+Writing this text in RMarkdown (but not in a code chunk!)...
+
+> The mean (sd) weight (g) of chicks fed casein is  `` `r "\u0060r inline_text(chick_table, variable = weight, column = casein)\u0060r"` ``, while the mean (sd) weight of chicks fed linseed is `` `r "\u0060r inline_text(chick_table, variable = weight, column = linseed)\u0060r"` ``. 
+
+will yield this result: 
+
+> The mean (sd) weight (g) of chicks fed casein is `r inline_text(chick_table, variable = weight, column = casein)`, while the mean (sd) weight of chicks fed linseed is `r inline_text(chick_table, variable = weight, column = linseed)`. 
+
+While using this `inline_text()` function may initially seem clunky, it actually allows you to write your reports in reproducible way and prevents errors that could arise from transcribing your results from R to another document. 
+
+## Using [`{gtsummary}`](http://www.danieldsjoberg.com/gtsummary/index.html) and [`{flextable}`](https://davidgohel.github.io/flextable/articles/overview.html) together
+
+### Example 2: Metadata for Post-mortem Human Brain Samples
+
+As biomedical scientists, an example use case for this package would be a demographics table for a study involving human participants. For these types of studies, it's important to display variables like age or sex for the participants in each experimental group. It is also important to know if any of those variables significantly differ between groups.
+
+For this example, I will be using metadata collected from Supplementary Table S1 of [Cherry et al., 2018. *J Neuropathol Exp Neurol*](https://academic.oup.com/jnen/article/77/1/40/4627984). In this study, the authors performed quantitative proteomics on post-mortem human brain samples from control subjects and subjects with Alzheimer's disease (AD) and Chronic Traumatic Encephalopathy (CTE). I will create a summary sample to highlight important traits for samples that were used in the proteomic experiments. 
+
+Here is the raw data: 
+
+```{r}
+cherry2018raw <- read_csv("datasets/cherry2018JNEN.csv", col_names = FALSE)
+
+head(cherry2018raw, n = 30)
+```
+
+If you were to open this file in Excel, you would see that it is not in optimal form for us to easily make a table. (This is also evident by the output of the `head()` command above.) So, here, I will do some cleaning in the below chunk. As the purpose of this tutorial is for how to make tables, I will not walk you through each step but hopefully the code and comments will make it clear what I am doing. 
+
+```{r}
+# isolating control and AD data
+cherry2018ctrlAD <- cherry2018raw %>%
+  select(1:11) %>%
+  slice(c(-1:-3,-5,-21:-24)) %>% # removing empty/unnecessary rows
+  slice(1:39) %>% # grabbing only the rows we want
+  setNames(slice(., 1)) %>% # generating column names from the first row
+  slice(-1) %>% # removing the row with column names as it is now not needed
+  filter(Proteomics == "x") %>% # only want to look at samples used for proteomics
+  mutate("ID" = str_replace_all(Case, " ", "_"),
+         "Case" = str_remove_all(Case, "\\d")) %>%
+  rename("Disease" = "Case",
+         "Head Trauma" = "Head trauma?") %>%
+  relocate("ID", .after = "Disease") %>%
+  select(-c("Proteomics", "Histology")) %>%
+  map(~ str_replace_all(
+    string = .x,
+    pattern = "n/a",
+    replacement = "NA"
+  )) %>% # replacing "n/a" with "Not Available"
+  as_tibble()
+
+
+# isolating CTE data
+cherry2018CTE <- cherry2018raw %>%
+  select(13:22) %>% # selecting only columns with CTE data
+  slice(c(-1:-3,-5)) %>% # removing unnecessary rows
+  setNames(slice(., 1)) %>% # generating column names from the first row
+  slice(-1) %>%
+  filter(Proteomics == "x") %>% # only want to look at samples used for proteomics
+  mutate(
+    "ID" = str_replace_all(Case, " ", "_"),
+    "Case" = str_remove_all(Case, "\\d"),
+    "Head Trauma" = rep("TBI", length(Proteomics))
+  ) %>%
+  rename("Disease" = "Case") %>%
+  relocate("ID", .after = "Disease") %>%
+  relocate("Head Trauma", .before = "Source of Head Trauma") %>%
+  select(-c("Proteomics", "Histology"))
+
+
+# combining data frames and a little extra cleaning
+cherry2018clean <- bind_rows(cherry2018ctrlAD, cherry2018CTE) %>%
+  replace_na(., list("Source of Head Trauma" = "NA",
+                     "Braak" = "NA")) %>%
+  mutate("Age" = as.integer(Age),
+         "Disease" = str_remove_all(`Disease`, " ")) # removing extra space at the end of the text
+
+
+```
+
+After all that cleaning, he have nice little dataframe that we can use to create a summary table. First, let's look and see what variables we have and decide what variables we want to display in our summary table: 
+
+```{r}
+glimpse(cherry2018clean)
+```
+
+For the purpose of this table, we will display the following variables:     
+  * Disease    
+  * Age    
+  * Gender    
+  * Pathologic Diagnosis    
+  * Head Trauma    
+  * Source of Head Trauma    
+
+To start, we will construct the table in a very similar fashion as to the table that we made with the `chickwts` dataset. We will group by `"Disease"`. 
+
+```{r}
+cherry2018clean %>%
+  select( # selecting our variables
+    c(
+      "Disease",
+      "Age",
+      "Gender",
+      "Pathologic Diagnosis",
+      "Head Trauma",
+      "Source of Head Trauma"
+    )
+  ) %>% 
+  tbl_summary(by = "Disease",  # grouping by the Disease variable
+              statistic = list(all_continuous() ~ "{mean} ({sd})")) %>%
+  add_p(test = list("Age" ~ "aov"))
+```
+
+This is a great start to a table but there's a couple of things I'm noticing that I would like to change before I deem the table 'publication quality'. First, I don't really like the order in which some of the variables are displayed. For instance, I would like the disease groups to displayed in the following order: Control, AD, and CTE. I can fix this by converting the columns from character vectors to factor variables and using the `levels = ` argument to specify what order I want the variables to be displayed in. .
+
+```{r}
+cherry2018table <- cherry2018clean %>%
+  select(
+    c(
+      "Disease",
+      "Age",
+      "Gender",
+      "Pathologic Diagnosis",
+      "Head Trauma",
+      "Source of Head Trauma"
+    )
+  ) %>%
+  mutate(# changing all of these variables to factors
+    "Disease" = factor(`Disease`, levels = c("Control", "AD", "CTE")),
+    "Pathologic Diagnosis" = factor(`Pathologic Diagnosis`, levels = c("None", "AD", "CTE I", "CTE II", "CTE II-III", "CTE III", "CTE IV")),
+    "Head Trauma" = factor(`Head Trauma`, levels = c("No", "TBI", "NA")),
+    "Source of Head Trauma" = factor(`Source of Head Trauma`, levels = c("Football", "Soccer", "Veteran", "NA"))
+  ) %>%
+  tbl_summary(by = "Disease", # grouping by the Disease variable
+              statistic = list(all_continuous() ~ "{mean} ({sd})")) %>%
+  add_p(test = list("Age" ~ "aov"))
+
+cherry2018table
+
+```
+
+Great! So now all of the data is in the correct order. The last part of the process for this table will be to convert it into a `flextable` object. In this format, we can make additional edits to the format of the table as well as save it as a PNG for use in powerpoints, manuscripts, etc. `{flextable}` has a number of built-in themes that are worth taking a look at. However, `theme_vanilla()` works pretty well for a simple, easy to read, yet compact table. 
+
+```{r}
+cherry2018table %>% 
+  gtsummary::as_flex_table() %>% # converts gtsummary table to flextable
+  theme_vanilla() # built-in flextable theme
+```
+There are numerous ways you can modify your table with the `{flextable}` package. I recommend perusing the [package website](https://davidgohel.github.io/flextable/index.html) and trying out the different built in functions. To spruce up the table, I will add a footer, bold some of the variables in the "Characteristics" Column, and adjust the dimensions to make the table a little smaller. However, this change in table size will only be noticeable when I save the table as a PNG. 
+
+```{r}
+cherry2018table_final <- cherry2018table %>% 
+  gtsummary::as_flex_table() %>% 
+  theme_vanilla() %>% 
+  add_footer_lines(values = "NA indicates data not available.") %>% 
+  bold(i = c(1, 2, 5, 13, 17), j = 1, bold = TRUE, part = "body")
+
+cherry2018table_final
+```
+
+Finally, if I wanted to save this table as an image, all I would have to do is run the following code: `flextable::save_as_image(cherry2018table_final, path = "cherry2018table_final.png")`. For this code to work, the package `{webshot2}` must be available. 
+
+This is what the table looks like as a PNG inserted into the markdown document:
+![Cherry et al., 2018. *JNEN*](images/cherry2018table_final.png){width=75%}
+
+## Other useful packages for creating tables in R that you should be aware of. 
+
+### [kable](https://bookdown.org/yihui/rmarkdown-cookbook/kable.html)
+
+If you are working in RMarkdown and are generating some tables on the fly and want to tidy them up so that they will be more visually pleasing after knitting to HTML, consider using `kable()`, which is part of the `{knitr}` package. 
+
+For example, below is the output of the `summarize()` function on a dataframe with data about cars. 
+
+```{r}
+data("mtcars")
+
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarize(mean = mean(mpg), 
+            median = median(mpg), 
+            range = range(mpg))
+  
+```
+
+However, the table is easier to read after piping the results of the `summarize()` funciton into `kable()`.
+
+```{r, message = FALSE}
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarize(mean = mean(mpg), 
+            median = median(mpg), 
+            range = range(mpg)) %>% 
+  kable()
+```
+
+For the record, there is a package called [`{kablextra}`](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) which is built off of the `kable()` function that is also great for making tables in RMarkdown and knitting to HTML.
+
+### [gt](https://gt.rstudio.com/)
+
+`{gt}` is a fairly new package but it is quickly rising in popularity. The package contains many intuitive functions for customizing each part of the table and all of the example tables looks super clean and readable. However, at this time, the package only supports output to HTML.
+
+### [reactable](https://glin.github.io/reactable/)
+
+`{reactable}` tables work well with R Markdown documents and Shiny applications and is optimized for presentation via HTML. Additionally, the package offers expandable rows and nested tables and just has a general emphasis on interactivity. 
+
+### Other resources for creating tables in R
+
+[How to Make Beautiful Tables in R](https://rfortherestofus.com/2019/11/how-to-make-beautiful-tables-in-r/)     
+Great article summarizing different R packages that can be used for creating tables. 
+
+[The Mockup Blog](https://themockup.blog/#category:tables)     
+Thomas Mock, PhD is part of the Customer Success team at RStudio. He has an excellent blog with many posts demonstrating how to create tables with R. He's also very active on twitter and heavily involved with the weekly #TidyTuesday data visualization events on Twitter. 
+
+[2020 RStudio Table Contest](https://blog.rstudio.com/2020/12/23/winners-of-the-2020-rstudio-table-contest/)    
+RStudio ran a table making contest in December 2020. Read their blog post about the winning tables to see some fantastic tables with accompanying code.
+
+
+
+
+
+
+
