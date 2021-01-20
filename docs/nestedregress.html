@@ -53,6 +53,8 @@
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -280,9 +282,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="15.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>15.1</b> Poisson Events</a></li>
 <li class="chapter" data-level="15.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>15.2</b> dpois</a></li>
 <li class="chapter" data-level="15.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>15.3</b> ppois</a></li>
-<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>15.4</b> qpois</a></li>
-<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.5</b> rpois</a></li>
-<li class="chapter" data-level="15.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.6</b> Overdispersion</a></li>
+<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.4</b> rpois</a></li>
+<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.5</b> Overdispersion</a></li>
 </ul></li>
 <li class="chapter" data-level="16" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>16</b> The Normal Distribution</a><ul>
 <li class="chapter" data-level="16.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>16.0.1</b> The Standard Normal</a></li>
@@ -788,11 +789,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="43.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#mixed-models-fixed-and-random-effects"><i class="fa fa-check"></i><b>43.1</b> Mixed models, fixed and random effects</a><ul>
 <li class="chapter" data-level="43.1.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#nfat-localization-within-smooth-muscle-cells"><i class="fa fa-check"></i><b>43.1.1</b> NFAT localization within smooth muscle cells</a></li>
 </ul></li>
-<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a></li>
-<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#linear-model"><i class="fa fa-check"></i><b>43.3</b> Linear model</a><ul>
-<li class="chapter" data-level="43.3.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.3.1</b> Inference</a></li>
+<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a><ul>
+<li class="chapter" data-level="43.2.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.2.1</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="43.4" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.4</b> Alternative analysis</a></li>
+<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.3</b> Alternative analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="44" data-path="poissonreg.html"><a href="poissonreg.html"><i class="fa fa-check"></i><b>44</b> Poisson regression</a><ul>
 <li class="chapter" data-level="44.1" data-path="poissonreg.html"><a href="poissonreg.html#why-not-anova"><i class="fa fa-check"></i><b>44.1</b> Why not ANOVA?</a><ul>
@@ -872,12 +872,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="nestedregress" class="section level1">
 <h1><span class="header-section-number">Chapter 39</span> Nested-model nonlinear regression</h1>
 <p><em>It’s like the difference between a glove that has five fingers instead of three. When you have five fingers, you’d expect a five finger glove to fit better. If you were missing two fingers, a three finger glove would be a better fit.</em></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="nestedregress.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="nestedregress.html#cb1-2"></a><span class="kw">library</span>(broom)</span>
-<span id="cb1-3"><a href="nestedregress.html#cb1-3"></a><span class="kw">library</span>(minpack.lm)</span>
-<span id="cb1-4"><a href="nestedregress.html#cb1-4"></a><span class="kw">library</span>(viridis)</span>
-<span id="cb1-5"><a href="nestedregress.html#cb1-5"></a><span class="kw">library</span>(knitr)</span>
-<span id="cb1-6"><a href="nestedregress.html#cb1-6"></a><span class="kw">library</span>(nlfitr)</span></code></pre></div>
+<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb849-1"><a href="nestedregress.html#cb849-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb849-2"><a href="nestedregress.html#cb849-2"></a><span class="kw">library</span>(broom)</span>
+<span id="cb849-3"><a href="nestedregress.html#cb849-3"></a><span class="kw">library</span>(minpack.lm)</span>
+<span id="cb849-4"><a href="nestedregress.html#cb849-4"></a><span class="kw">library</span>(viridis)</span>
+<span id="cb849-5"><a href="nestedregress.html#cb849-5"></a><span class="kw">library</span>(knitr)</span>
+<span id="cb849-6"><a href="nestedregress.html#cb849-6"></a><span class="kw">library</span>(nlfitr)</span></code></pre></div>
 <p>The most common approach to estimating nonlinear model parameter values is to perform a regression on each independent replicate of an experiment.</p>
 <p>After several of these we have a list of replicate values for the parameter of interest. A regression parameter is the dependent variable of the experiment.</p>
 <p>In this chapter I’ll go over a nonlinear regression analysis of data from a drug metabolism assay in rat microsomes. The purpose of the assay is to estimate the rate constant for degradation of a drug. The rate constant is the dependent variable for experiments that test hypotheses on factors that might influence metabolism of the drug.</p>
@@ -896,8 +896,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 * id is a value assigned to identify the duplicate values, r1 or r2
 * theo is theophylline concentration levels, in ng/ml</p>
 <p>The data represent one independent replicate with duplicate measurements per time point.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="nestedregress.html#cb2-1"></a>theopOne &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/theopOneRep.csv&quot;</span>)</span>
-<span id="cb2-2"><a href="nestedregress.html#cb2-2"></a><span class="kw">str</span>(theopOne)</span></code></pre></div>
+<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb850-1"><a href="nestedregress.html#cb850-1"></a>theopOne &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;datasets/theopOneRep.csv&quot;</span>)</span>
+<span id="cb850-2"><a href="nestedregress.html#cb850-2"></a><span class="kw">str</span>(theopOne)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    152 obs. of  5 variables:
 ##  $ X    : int  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ min  : int  0 2 4 6 8 10 12 14 16 18 ...
@@ -905,24 +905,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  $ id   : chr  &quot;r1&quot; &quot;r1&quot; &quot;r1&quot; &quot;r1&quot; ...
 ##  $ theo : num  94.2 80.8 88.5 70.9 63.8 57.1 55.9 65.3 56.9 53.2 ...</code></pre>
 <p>Here’s a plot of all the data. Notice how the duplicate values from the assay are shown. The curves are on-the-fly nonlinear regression fits that are run within the <code>ggplot</code> function. Below, we’ll run these again to generate results.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="nestedregress.html#cb4-1"></a><span class="kw">ggplot</span>(theopOne, <span class="kw">aes</span>(<span class="dt">x=</span>min, <span class="dt">y=</span>theo))<span class="op">+</span></span>
-<span id="cb4-2"><a href="nestedregress.html#cb4-2"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
-<span id="cb4-3"><a href="nestedregress.html#cb4-3"></a><span class="st">  </span><span class="co">#one-phase decay model</span></span>
-<span id="cb4-4"><a href="nestedregress.html#cb4-4"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;nlsLM&quot;</span>,</span>
-<span id="cb4-5"><a href="nestedregress.html#cb4-5"></a>              <span class="dt">method.args=</span><span class="kw">list</span>(</span>
-<span id="cb4-6"><a href="nestedregress.html#cb4-6"></a>                <span class="dt">start=</span><span class="kw">c</span>(<span class="dt">yhi=</span><span class="dv">100</span>, <span class="dt">ylo=</span><span class="dv">10</span>, <span class="dt">k=</span><span class="fl">0.03</span>)),</span>
-<span id="cb4-7"><a href="nestedregress.html#cb4-7"></a>              <span class="dt">formula=</span><span class="st">&quot;y~ylo+((yhi-ylo)*exp(-k*x))&quot;</span>,</span>
-<span id="cb4-8"><a href="nestedregress.html#cb4-8"></a>              <span class="dt">se=</span>F <span class="co">#you need this argument to generate nls smooths!!</span></span>
-<span id="cb4-9"><a href="nestedregress.html#cb4-9"></a>              )<span class="op">+</span></span>
-<span id="cb4-10"><a href="nestedregress.html#cb4-10"></a><span class="st">  </span><span class="co">#two-phase decay model</span></span>
-<span id="cb4-11"><a href="nestedregress.html#cb4-11"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;nlsLM&quot;</span>,</span>
-<span id="cb4-12"><a href="nestedregress.html#cb4-12"></a>              <span class="dt">method.args=</span><span class="kw">list</span>(</span>
-<span id="cb4-13"><a href="nestedregress.html#cb4-13"></a>                <span class="dt">start=</span><span class="kw">c</span>(<span class="dt">yhi=</span><span class="dv">100</span>, <span class="dt">ylo=</span><span class="dv">10</span>, <span class="dt">kf=</span><span class="fl">0.05</span>, <span class="dt">ks=</span><span class="fl">0.005</span>, <span class="dt">pf=</span><span class="fl">0.5</span>)),</span>
-<span id="cb4-14"><a href="nestedregress.html#cb4-14"></a>              <span class="dt">formula=</span><span class="st">&quot;y~ylo + (pf*(yhi-ylo)*(exp(-kf*x))) + ((1-pf)*(yhi-ylo)*(exp(-ks*x)))&quot;</span>,</span>
-<span id="cb4-15"><a href="nestedregress.html#cb4-15"></a>              <span class="dt">se=</span>F, </span>
-<span id="cb4-16"><a href="nestedregress.html#cb4-16"></a>              <span class="dt">color=</span><span class="st">&quot;red&quot;</span></span>
-<span id="cb4-17"><a href="nestedregress.html#cb4-17"></a>              )</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb852-1"><a href="nestedregress.html#cb852-1"></a><span class="kw">ggplot</span>(theopOne, <span class="kw">aes</span>(<span class="dt">x=</span>min, <span class="dt">y=</span>theo))<span class="op">+</span></span>
+<span id="cb852-2"><a href="nestedregress.html#cb852-2"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
+<span id="cb852-3"><a href="nestedregress.html#cb852-3"></a><span class="st">  </span><span class="co">#one-phase decay model</span></span>
+<span id="cb852-4"><a href="nestedregress.html#cb852-4"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;nlsLM&quot;</span>,</span>
+<span id="cb852-5"><a href="nestedregress.html#cb852-5"></a>              <span class="dt">method.args=</span><span class="kw">list</span>(</span>
+<span id="cb852-6"><a href="nestedregress.html#cb852-6"></a>                <span class="dt">start=</span><span class="kw">c</span>(<span class="dt">yhi=</span><span class="dv">100</span>, <span class="dt">ylo=</span><span class="dv">10</span>, <span class="dt">k=</span><span class="fl">0.03</span>)),</span>
+<span id="cb852-7"><a href="nestedregress.html#cb852-7"></a>              <span class="dt">formula=</span><span class="st">&quot;y~ylo+((yhi-ylo)*exp(-k*x))&quot;</span>,</span>
+<span id="cb852-8"><a href="nestedregress.html#cb852-8"></a>              <span class="dt">se=</span>F <span class="co">#you need this argument to generate nls smooths!!</span></span>
+<span id="cb852-9"><a href="nestedregress.html#cb852-9"></a>              )<span class="op">+</span></span>
+<span id="cb852-10"><a href="nestedregress.html#cb852-10"></a><span class="st">  </span><span class="co">#two-phase decay model</span></span>
+<span id="cb852-11"><a href="nestedregress.html#cb852-11"></a><span class="st">  </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;nlsLM&quot;</span>,</span>
+<span id="cb852-12"><a href="nestedregress.html#cb852-12"></a>              <span class="dt">method.args=</span><span class="kw">list</span>(</span>
+<span id="cb852-13"><a href="nestedregress.html#cb852-13"></a>                <span class="dt">start=</span><span class="kw">c</span>(<span class="dt">yhi=</span><span class="dv">100</span>, <span class="dt">ylo=</span><span class="dv">10</span>, <span class="dt">kf=</span><span class="fl">0.05</span>, <span class="dt">ks=</span><span class="fl">0.005</span>, <span class="dt">pf=</span><span class="fl">0.5</span>)),</span>
+<span id="cb852-14"><a href="nestedregress.html#cb852-14"></a>              <span class="dt">formula=</span><span class="st">&quot;y~ylo + (pf*(yhi-ylo)*(exp(-kf*x))) + ((1-pf)*(yhi-ylo)*(exp(-ks*x)))&quot;</span>,</span>
+<span id="cb852-15"><a href="nestedregress.html#cb852-15"></a>              <span class="dt">se=</span>F, </span>
+<span id="cb852-16"><a href="nestedregress.html#cb852-16"></a>              <span class="dt">color=</span><span class="st">&quot;red&quot;</span></span>
+<span id="cb852-17"><a href="nestedregress.html#cb852-17"></a>              )</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-433-1.png" width="672" /></p>
 <p>The formulas for the nonlinear models are for both a one-phase first order decay process (blue) and a two-phase process (red). By the bloody obvious test the two seem equivalent fits. But we’ll be able to test, statistically, whether a two-phase first order decay model provides a better fit.</p>
 <p>Plotting and running the regression itself are hand-in-glove work tasks. It is hard to overstate the importance of creating these preliminary graphs with regression curves <em>before</em> conducting the regression analysis. Seeing how well your model formula fits the data helps ensure you’ve written the formula correctly. This process will help you interpret the regression output.</p>
 <p>A forewarning: Getting these models to regress onto data properly for these plots takes some patience.</p>
@@ -946,11 +946,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="nonlinear-models" class="section level3">
 <h3><span class="header-section-number">39.2.1</span> Nonlinear models</h3>
 <p>Here’s a one-phase model fit. The nls object contains a lot of information. See the <code>broom</code> package to understand the some reporting functions. They’re useful. For example, we could take the <code>augment</code> output directly into <code>ggplot</code> to create a residual plot for the fitted model.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="nestedregress.html#cb5-1"></a>fit1 &lt;-<span class="st"> </span><span class="kw">nlsLM</span>(<span class="dt">formula=</span>theo<span class="op">~</span>(((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>min))<span class="op">+</span>ylo), </span>
-<span id="cb5-2"><a href="nestedregress.html#cb5-2"></a>            <span class="dt">data=</span>theopOne, </span>
-<span id="cb5-3"><a href="nestedregress.html#cb5-3"></a>            <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">yhi=</span><span class="dv">100</span>, <span class="dt">ylo=</span><span class="dv">15</span>, <span class="dt">k=</span><span class="fl">0.693</span><span class="op">/</span><span class="dv">20</span>)</span>
-<span id="cb5-4"><a href="nestedregress.html#cb5-4"></a>)</span>
-<span id="cb5-5"><a href="nestedregress.html#cb5-5"></a>fit1</span></code></pre></div>
+<div class="sourceCode" id="cb853"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb853-1"><a href="nestedregress.html#cb853-1"></a>fit1 &lt;-<span class="st"> </span><span class="kw">nlsLM</span>(<span class="dt">formula=</span>theo<span class="op">~</span>(((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>min))<span class="op">+</span>ylo), </span>
+<span id="cb853-2"><a href="nestedregress.html#cb853-2"></a>            <span class="dt">data=</span>theopOne, </span>
+<span id="cb853-3"><a href="nestedregress.html#cb853-3"></a>            <span class="dt">start=</span><span class="kw">list</span>(<span class="dt">yhi=</span><span class="dv">100</span>, <span class="dt">ylo=</span><span class="dv">15</span>, <span class="dt">k=</span><span class="fl">0.693</span><span class="op">/</span><span class="dv">20</span>)</span>
+<span id="cb853-4"><a href="nestedregress.html#cb853-4"></a>)</span>
+<span id="cb853-5"><a href="nestedregress.html#cb853-5"></a>fit1</span></code></pre></div>
 <pre><code>## Nonlinear regression model
 ##   model: theo ~ (((yhi - ylo) * exp(-k * min)) + ylo)
 ##    data: theopOne
@@ -961,19 +961,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Number of iterations to convergence: 5 
 ## Achieved convergence tolerance: 1.49e-08</code></pre>
 <p>Here’s a two-phase model fit.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="nestedregress.html#cb7-1"></a>fit2 &lt;-<span class="st"> </span><span class="kw">nlsLM</span>(</span>
-<span id="cb7-2"><a href="nestedregress.html#cb7-2"></a>  theo<span class="op">~</span>((pf<span class="op">*</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>kf<span class="op">*</span>min)))<span class="op">+</span></span>
-<span id="cb7-3"><a href="nestedregress.html#cb7-3"></a><span class="st">          </span>((<span class="dv">1</span><span class="op">-</span>pf)<span class="op">*</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>ks<span class="op">*</span>min)))<span class="op">+</span></span>
-<span id="cb7-4"><a href="nestedregress.html#cb7-4"></a><span class="st">          </span>ylo), </span>
-<span id="cb7-5"><a href="nestedregress.html#cb7-5"></a>            <span class="dt">data=</span>theopOne, </span>
-<span id="cb7-6"><a href="nestedregress.html#cb7-6"></a>            <span class="dt">start=</span><span class="kw">list</span>(</span>
-<span id="cb7-7"><a href="nestedregress.html#cb7-7"></a>              <span class="dt">yhi=</span><span class="dv">115</span>,</span>
-<span id="cb7-8"><a href="nestedregress.html#cb7-8"></a>              <span class="dt">ylo=</span><span class="dv">15</span>,</span>
-<span id="cb7-9"><a href="nestedregress.html#cb7-9"></a>              <span class="dt">pf=</span><span class="fl">0.4</span>,</span>
-<span id="cb7-10"><a href="nestedregress.html#cb7-10"></a>              <span class="dt">kf=</span><span class="fl">0.06</span>,</span>
-<span id="cb7-11"><a href="nestedregress.html#cb7-11"></a>              <span class="dt">ks=</span><span class="fl">0.02</span>)</span>
-<span id="cb7-12"><a href="nestedregress.html#cb7-12"></a>)</span>
-<span id="cb7-13"><a href="nestedregress.html#cb7-13"></a>fit2</span></code></pre></div>
+<div class="sourceCode" id="cb855"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb855-1"><a href="nestedregress.html#cb855-1"></a>fit2 &lt;-<span class="st"> </span><span class="kw">nlsLM</span>(</span>
+<span id="cb855-2"><a href="nestedregress.html#cb855-2"></a>  theo<span class="op">~</span>((pf<span class="op">*</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>kf<span class="op">*</span>min)))<span class="op">+</span></span>
+<span id="cb855-3"><a href="nestedregress.html#cb855-3"></a><span class="st">          </span>((<span class="dv">1</span><span class="op">-</span>pf)<span class="op">*</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>ks<span class="op">*</span>min)))<span class="op">+</span></span>
+<span id="cb855-4"><a href="nestedregress.html#cb855-4"></a><span class="st">          </span>ylo), </span>
+<span id="cb855-5"><a href="nestedregress.html#cb855-5"></a>            <span class="dt">data=</span>theopOne, </span>
+<span id="cb855-6"><a href="nestedregress.html#cb855-6"></a>            <span class="dt">start=</span><span class="kw">list</span>(</span>
+<span id="cb855-7"><a href="nestedregress.html#cb855-7"></a>              <span class="dt">yhi=</span><span class="dv">115</span>,</span>
+<span id="cb855-8"><a href="nestedregress.html#cb855-8"></a>              <span class="dt">ylo=</span><span class="dv">15</span>,</span>
+<span id="cb855-9"><a href="nestedregress.html#cb855-9"></a>              <span class="dt">pf=</span><span class="fl">0.4</span>,</span>
+<span id="cb855-10"><a href="nestedregress.html#cb855-10"></a>              <span class="dt">kf=</span><span class="fl">0.06</span>,</span>
+<span id="cb855-11"><a href="nestedregress.html#cb855-11"></a>              <span class="dt">ks=</span><span class="fl">0.02</span>)</span>
+<span id="cb855-12"><a href="nestedregress.html#cb855-12"></a>)</span>
+<span id="cb855-13"><a href="nestedregress.html#cb855-13"></a>fit2</span></code></pre></div>
 <pre><code>## Nonlinear regression model
 ##   model: theo ~ ((pf * ((yhi - ylo) * exp(-kf * min))) + ((1 - pf) * ((yhi -     ylo) * exp(-ks * min))) + ylo)
 ##    data: theopOne
@@ -987,10 +987,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="the-nlfitr-alternative" class="section level3">
 <h3><span class="header-section-number">39.2.2</span> The nlfitr alternative</h3>
 <p>The main advantage of using nlfitr is it saves from painstaking formula entry. Otherwise the output is the same. Because it is the same function as above.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="nestedregress.html#cb9-1"></a>nlfit1 &lt;-<span class="st"> </span><span class="kw">fitdecay1</span>(min, theo, theopOne, </span>
-<span id="cb9-2"><a href="nestedregress.html#cb9-2"></a>                    <span class="dt">k=</span><span class="fl">0.693</span><span class="op">/</span><span class="dv">20</span>, <span class="dt">ylo=</span><span class="dv">15</span>, <span class="dt">yhi=</span><span class="dv">100</span>, </span>
-<span id="cb9-3"><a href="nestedregress.html#cb9-3"></a>                    <span class="dt">weigh=</span>F)</span>
-<span id="cb9-4"><a href="nestedregress.html#cb9-4"></a>nlfit1</span></code></pre></div>
+<div class="sourceCode" id="cb857"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb857-1"><a href="nestedregress.html#cb857-1"></a>nlfit1 &lt;-<span class="st"> </span><span class="kw">fitdecay1</span>(min, theo, theopOne, </span>
+<span id="cb857-2"><a href="nestedregress.html#cb857-2"></a>                    <span class="dt">k=</span><span class="fl">0.693</span><span class="op">/</span><span class="dv">20</span>, <span class="dt">ylo=</span><span class="dv">15</span>, <span class="dt">yhi=</span><span class="dv">100</span>, </span>
+<span id="cb857-3"><a href="nestedregress.html#cb857-3"></a>                    <span class="dt">weigh=</span>F)</span>
+<span id="cb857-4"><a href="nestedregress.html#cb857-4"></a>nlfit1</span></code></pre></div>
 <pre><code>## Nonlinear regression model
 ##   model: theo ~ (yhi - ylo) * exp(-1 * k * min) + ylo
 ##    data: data
@@ -1000,13 +1000,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Number of iterations to convergence: 5 
 ## Achieved convergence tolerance: 1.49e-08</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="nestedregress.html#cb11-1"></a><span class="kw">print</span>(<span class="st">&quot;###############break##################&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb859"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb859-1"><a href="nestedregress.html#cb859-1"></a><span class="kw">print</span>(<span class="st">&quot;###############break##################&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;###############break##################&quot;</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="nestedregress.html#cb13-1"></a>nlfit2 &lt;-<span class="st"> </span><span class="kw">fitdecay2</span>(min, theo, theopOne, </span>
-<span id="cb13-2"><a href="nestedregress.html#cb13-2"></a>                    <span class="dt">k1=</span><span class="fl">0.06</span>, <span class="dt">k2=</span><span class="fl">0.0001</span>, </span>
-<span id="cb13-3"><a href="nestedregress.html#cb13-3"></a>                    <span class="dt">range1=</span><span class="dv">10</span>, <span class="dt">range2=</span><span class="dv">65</span>, </span>
-<span id="cb13-4"><a href="nestedregress.html#cb13-4"></a>                    <span class="dt">ylo=</span><span class="dv">15</span>, <span class="dt">weigh=</span>F)</span>
-<span id="cb13-5"><a href="nestedregress.html#cb13-5"></a>nlfit2</span></code></pre></div>
+<div class="sourceCode" id="cb861"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb861-1"><a href="nestedregress.html#cb861-1"></a>nlfit2 &lt;-<span class="st"> </span><span class="kw">fitdecay2</span>(min, theo, theopOne, </span>
+<span id="cb861-2"><a href="nestedregress.html#cb861-2"></a>                    <span class="dt">k1=</span><span class="fl">0.06</span>, <span class="dt">k2=</span><span class="fl">0.0001</span>, </span>
+<span id="cb861-3"><a href="nestedregress.html#cb861-3"></a>                    <span class="dt">range1=</span><span class="dv">10</span>, <span class="dt">range2=</span><span class="dv">65</span>, </span>
+<span id="cb861-4"><a href="nestedregress.html#cb861-4"></a>                    <span class="dt">ylo=</span><span class="dv">15</span>, <span class="dt">weigh=</span>F)</span>
+<span id="cb861-5"><a href="nestedregress.html#cb861-5"></a>nlfit2</span></code></pre></div>
 <pre><code>## Nonlinear regression model
 ##   model: theo ~ range1 * exp(-1 * k1 * min) + range2 * exp(-1 * k2 * min) +     ylo
 ##    data: data
@@ -1035,7 +1035,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Whether the t-tests in the parameter table have any utility depends upon the experimental design. Recall, they only test whether the value of the parameter differs from zero.</p>
 <p>If every data point were independent of every other data point they would have some inferential utility. In this case, where all data points are intrinsically-linked, the t-tests only offer technical utility.</p>
 <p>When the value is not different from zero, then that parameter has no predictive effect on values of the response variable. Plug a value of zero into the equation for that parameter to see what it does. This result is our first hint that the two-phase fit is not good.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="nestedregress.html#cb15-1"></a><span class="kw">summary</span>(nlfit2)</span></code></pre></div>
+<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb863-1"><a href="nestedregress.html#cb863-1"></a><span class="kw">summary</span>(nlfit2)</span></code></pre></div>
 <pre><code>## 
 ## Formula: theo ~ range1 * exp(-1 * k1 * min) + range2 * exp(-1 * k2 * min) + 
 ##     ylo
@@ -1055,7 +1055,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Number of iterations to convergence: 31 
 ## Achieved convergence tolerance: 1.49e-08</code></pre>
 <p>In contrast, the parameter values for the one-phase fit are different than zero.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="nestedregress.html#cb17-1"></a><span class="kw">summary</span>(nlfit1)</span></code></pre></div>
+<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb865-1"><a href="nestedregress.html#cb865-1"></a><span class="kw">summary</span>(nlfit1)</span></code></pre></div>
 <pre><code>## 
 ## Formula: theo ~ (yhi - ylo) * exp(-1 * k * min) + ylo
 ## 
@@ -1081,19 +1081,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Residual plots are useful to compare fits. Here, the horizontal line at zero represents either model. The residuals for either model are also plotted. These represent the differences between the values of the data and the predicted values for the model at the same levels of <span class="math inline">\(X\)</span>.</p>
 <p>The red points are the residuals for the one-phase model. The blue points are the residuals for the two phase model.</p>
 <p>We don’t see any remarkable residual differences from their models. Visually, as for the curves, it’s difficult to conclude one model fits better than the other.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="nestedregress.html#cb19-1"></a><span class="co">#for plotting, create one dataframe with residuals for both models</span></span>
-<span id="cb19-2"><a href="nestedregress.html#cb19-2"></a>fits &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(<span class="kw">augment</span>(nlfit1), </span>
-<span id="cb19-3"><a href="nestedregress.html#cb19-3"></a>                  <span class="kw">augment</span>(nlfit2)[,<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>]) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb19-4"><a href="nestedregress.html#cb19-4"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">fit1=</span>.fitted...<span class="dv">3</span>,</span>
-<span id="cb19-5"><a href="nestedregress.html#cb19-5"></a>         <span class="dt">resid1=</span>.resid...<span class="dv">4</span>, </span>
-<span id="cb19-6"><a href="nestedregress.html#cb19-6"></a>         <span class="dt">fit2=</span>.fitted...<span class="dv">5</span>, </span>
-<span id="cb19-7"><a href="nestedregress.html#cb19-7"></a>         <span class="dt">resid2=</span>.resid...<span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb867"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb867-1"><a href="nestedregress.html#cb867-1"></a><span class="co">#for plotting, create one dataframe with residuals for both models</span></span>
+<span id="cb867-2"><a href="nestedregress.html#cb867-2"></a>fits &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(<span class="kw">augment</span>(nlfit1), </span>
+<span id="cb867-3"><a href="nestedregress.html#cb867-3"></a>                  <span class="kw">augment</span>(nlfit2)[,<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>]) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb867-4"><a href="nestedregress.html#cb867-4"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">fit1=</span>.fitted...<span class="dv">3</span>,</span>
+<span id="cb867-5"><a href="nestedregress.html#cb867-5"></a>         <span class="dt">resid1=</span>.resid...<span class="dv">4</span>, </span>
+<span id="cb867-6"><a href="nestedregress.html#cb867-6"></a>         <span class="dt">fit2=</span>.fitted...<span class="dv">5</span>, </span>
+<span id="cb867-7"><a href="nestedregress.html#cb867-7"></a>         <span class="dt">resid2=</span>.resid...<span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## New names:
 ## * .fitted -&gt; .fitted...3
 ## * .resid -&gt; .resid...4
 ## * .fitted -&gt; .fitted...5
 ## * .resid -&gt; .resid...6</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="nestedregress.html#cb21-1"></a>fits</span></code></pre></div>
+<div class="sourceCode" id="cb869"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb869-1"><a href="nestedregress.html#cb869-1"></a>fits</span></code></pre></div>
 <pre><code>## # A tibble: 152 x 6
 ##     theo   min  fit1 resid1  fit2 resid2
 ##    &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
@@ -1108,11 +1108,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  9  56.9    16  53.3   3.57  52.1  4.76 
 ## 10  53.2    18  50.0   3.17  48.9  4.33 
 ## # ... with 142 more rows</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="nestedregress.html#cb23-1"></a><span class="kw">ggplot</span>(fits, <span class="kw">aes</span>(min,resid1))<span class="op">+</span></span>
-<span id="cb23-2"><a href="nestedregress.html#cb23-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></span>
-<span id="cb23-3"><a href="nestedregress.html#cb23-3"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(min, resid2), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></span>
-<span id="cb23-4"><a href="nestedregress.html#cb23-4"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<div class="sourceCode" id="cb871"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb871-1"><a href="nestedregress.html#cb871-1"></a><span class="kw">ggplot</span>(fits, <span class="kw">aes</span>(min,resid1))<span class="op">+</span></span>
+<span id="cb871-2"><a href="nestedregress.html#cb871-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></span>
+<span id="cb871-3"><a href="nestedregress.html#cb871-3"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(min, resid2), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span></span>
+<span id="cb871-4"><a href="nestedregress.html#cb871-4"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-440-1.png" width="672" />
 ### F test for model comparison</p>
 <p>There are a few ways to choose whether one regression model fits the data better than another. Only one of these methods should be used, and typically, that choice is made in advance of performing an analysis in order to limit bias.</p>
 <p>One way to decide which model provides a better fit to the data is using the extra sum of squares F-test.</p>
@@ -1124,7 +1124,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This F ratio tests whether the variance of the difference between two models (the numerator) is greater than the variance of the model having more parameters (the denominator).</p>
 <p>Or you can think about it like this: The more the fits of the two models differ, the greater the ratio of the variance of the differences to the variance of the model having more parameters.</p>
 <p>This test is run by passing the model fits into the <code>anova</code> function as follows:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="nestedregress.html#cb24-1"></a><span class="kw">anova</span>(nlfit1, nlfit2)</span></code></pre></div>
+<div class="sourceCode" id="cb872"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb872-1"><a href="nestedregress.html#cb872-1"></a><span class="kw">anova</span>(nlfit1, nlfit2)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: theo ~ (yhi - ylo) * exp(-1 * k * min) + ylo
@@ -1144,60 +1144,120 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The AIC statistic attempts to quantify the quality of the fit for a model by simultaneously accounting for its maximum likelihood and the number of model parameters.</p>
 <p>AIC is not standardized, so the value of any one AIC calculation alone is not readily interpreted. However, a comparison to another AIC for a related model can be interpreted. Furthermore, there is no p-value associated with AIC comparison. Instead a sliding scale is used for inference rather than a single threshold.</p>
 <p>The AIC is calculated using <span class="math inline">\(n_{par}\)</span>, the degrees of freedom for the log-likelihood estimate which can be derived from the output of running a <code>logLik</code> test on the model fit; <span class="math inline">\(k\)</span>, a per parameter penalty, which is usually set at 2; and the log-likelihood value of a fit, <span class="math inline">\(logLik\)</span>: <span class="math display">\[AIC=kn_{par}-2logLik\]</span></p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="nestedregress.html#cb26-1"></a><span class="kw">kable</span>(</span>
-<span id="cb26-2"><a href="nestedregress.html#cb26-2"></a>fits<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(</span>
-<span id="cb26-3"><a href="nestedregress.html#cb26-3"></a>  <span class="kw">glance</span>(nlfit1), </span>
-<span id="cb26-4"><a href="nestedregress.html#cb26-4"></a>  <span class="kw">glance</span>(nlfit2)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb26-5"><a href="nestedregress.html#cb26-5"></a><span class="st">  </span></span>
-<span id="cb26-6"><a href="nestedregress.html#cb26-6"></a><span class="st">  </span><span class="kw">add_column</span>(</span>
-<span id="cb26-7"><a href="nestedregress.html#cb26-7"></a>    <span class="dt">fit=</span><span class="kw">c</span>(<span class="st">&quot;fit1&quot;</span>, <span class="st">&quot;fit2&quot;</span>), </span>
-<span id="cb26-8"><a href="nestedregress.html#cb26-8"></a>    <span class="dt">.before=</span>T)</span>
-<span id="cb26-9"><a href="nestedregress.html#cb26-9"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb874"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb874-1"><a href="nestedregress.html#cb874-1"></a><span class="kw">kable</span>(</span>
+<span id="cb874-2"><a href="nestedregress.html#cb874-2"></a>fits<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(</span>
+<span id="cb874-3"><a href="nestedregress.html#cb874-3"></a>  <span class="kw">glance</span>(nlfit1), </span>
+<span id="cb874-4"><a href="nestedregress.html#cb874-4"></a>  <span class="kw">glance</span>(nlfit2)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb874-5"><a href="nestedregress.html#cb874-5"></a><span class="st">  </span></span>
+<span id="cb874-6"><a href="nestedregress.html#cb874-6"></a><span class="st">  </span><span class="kw">add_column</span>(</span>
+<span id="cb874-7"><a href="nestedregress.html#cb874-7"></a>    <span class="dt">fit=</span><span class="kw">c</span>(<span class="st">&quot;fit1&quot;</span>, <span class="st">&quot;fit2&quot;</span>), </span>
+<span id="cb874-8"><a href="nestedregress.html#cb874-8"></a>    <span class="dt">.before=</span>T)</span>
+<span id="cb874-9"><a href="nestedregress.html#cb874-9"></a>)</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th align="left">fit</th>
-<th align="right">sigma</th>
-<th align="left">isConv</th>
-<th align="right">finTol</th>
-<th align="right">logLik</th>
-<th align="right">AIC</th>
-<th align="right">BIC</th>
-<th align="right">deviance</th>
-<th align="right">df.residual</th>
-<th align="right">nobs</th>
+<tr>
+<th style="text-align:left;">
+fit
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:left;">
+isConv
+</th>
+<th style="text-align:right;">
+finTol
+</th>
+<th style="text-align:right;">
+logLik
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+deviance
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+<th style="text-align:right;">
+nobs
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">fit1</td>
-<td align="right">5.553593</td>
-<td align="left">TRUE</td>
-<td align="right">0</td>
-<td align="right">-474.7593</td>
-<td align="right">957.5187</td>
-<td align="right">969.6142</td>
-<td align="right">4595.518</td>
-<td align="right">149</td>
-<td align="right">152</td>
+<tr>
+<td style="text-align:left;">
+fit1
+</td>
+<td style="text-align:right;">
+5.553593
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+-474.7593
+</td>
+<td style="text-align:right;">
+957.5187
+</td>
+<td style="text-align:right;">
+969.6142
+</td>
+<td style="text-align:right;">
+4595.518
+</td>
+<td style="text-align:right;">
+149
+</td>
+<td style="text-align:right;">
+152
+</td>
 </tr>
-<tr class="even">
-<td align="left">fit2</td>
-<td align="right">5.535670</td>
-<td align="left">TRUE</td>
-<td align="right">0</td>
-<td align="right">-473.2409</td>
-<td align="right">958.4819</td>
-<td align="right">976.6252</td>
-<td align="right">4504.616</td>
-<td align="right">147</td>
-<td align="right">152</td>
+<tr>
+<td style="text-align:left;">
+fit2
+</td>
+<td style="text-align:right;">
+5.535670
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+-473.2409
+</td>
+<td style="text-align:right;">
+958.4819
+</td>
+<td style="text-align:right;">
+976.6252
+</td>
+<td style="text-align:right;">
+4504.616
+</td>
+<td style="text-align:right;">
+147
+</td>
+<td style="text-align:right;">
+152
+</td>
 </tr>
 </tbody>
 </table>
 <p>The difference between two AIC values compares two fits, always subtracting the fit with the minimal AIC value from the other.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="nestedregress.html#cb27-1"></a>deltaAIC &lt;-<span class="st"> </span>fits<span class="fl">.2</span>[<span class="dv">2</span>,<span class="dv">6</span>]<span class="op">-</span>fits<span class="fl">.2</span>[<span class="dv">1</span>,<span class="dv">6</span>]</span>
-<span id="cb27-2"><a href="nestedregress.html#cb27-2"></a>deltaAIC</span></code></pre></div>
+<div class="sourceCode" id="cb875"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb875-1"><a href="nestedregress.html#cb875-1"></a>deltaAIC &lt;-<span class="st"> </span>fits<span class="fl">.2</span>[<span class="dv">2</span>,<span class="dv">6</span>]<span class="op">-</span>fits<span class="fl">.2</span>[<span class="dv">1</span>,<span class="dv">6</span>]</span>
+<span id="cb875-2"><a href="nestedregress.html#cb875-2"></a>deltaAIC</span></code></pre></div>
 <pre><code>##         AIC
 ## 1 0.9632172</code></pre>
 <p>A loose scale to interpret the difference between two AIC values has been developed based upon an information theory method for <a href="http://faculty.washington.edu/skalski/classes/QERM597/papers_xtra/Burnham%20and%20Anderson.pdf">comparing distributions called the KL divergence</a>.</p>
@@ -1231,38 +1291,78 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The results of the anova <code>F test</code> comparing the two fits guide the decision. That results indicates that the difference in residual variation between the one and two phase models is not greater than would be expected if the two models fit the data differently.</p>
 <p>Therefore, we accept the most parsimonious model as the appropriate fit for the data, which is the one-phase model.</p>
 <p>Let’s call the regression coefficients up from that one-phase model fit to have another look:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="nestedregress.html#cb29-1"></a><span class="kw">kable</span>(<span class="kw">tidy</span>(nlfit1))</span></code></pre></div>
+<div class="sourceCode" id="cb877"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb877-1"><a href="nestedregress.html#cb877-1"></a><span class="kw">kable</span>(<span class="kw">tidy</span>(nlfit1))</span></code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">k</td>
-<td align="right">0.0419568</td>
-<td align="right">0.0021520</td>
-<td align="right">19.49628</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+k
+</td>
+<td style="text-align:right;">
+0.0419568
+</td>
+<td style="text-align:right;">
+0.0021520
+</td>
+<td style="text-align:right;">
+19.49628
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">ylo</td>
-<td align="right">12.3232038</td>
-<td align="right">0.7233171</td>
-<td align="right">17.03707</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+ylo
+</td>
+<td style="text-align:right;">
+12.3232038
+</td>
+<td style="text-align:right;">
+0.7233171
+</td>
+<td style="text-align:right;">
+17.03707
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">yhi</td>
-<td align="right">92.5573834</td>
-<td align="right">2.1770713</td>
-<td align="right">42.51463</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+yhi
+</td>
+<td style="text-align:right;">
+92.5573834
+</td>
+<td style="text-align:right;">
+2.1770713
+</td>
+<td style="text-align:right;">
+42.51463
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 </tbody>
 </table>
@@ -1277,178 +1377,358 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">39.2.9</span> Alternate analysis</h3>
 <p>In the example above we did the regression on the average of the technical replicates. That’s not a bad idea sometimes, particularly when the degrees of freedom are fairly low (which is not the case here).</p>
 <p>First, average the technical reps for each time point:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="nestedregress.html#cb30-1"></a><span class="co">#first, average the duplicates</span></span>
-<span id="cb30-2"><a href="nestedregress.html#cb30-2"></a>theopOne.avg &lt;-<span class="st"> </span>theopOne <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-3"><a href="nestedregress.html#cb30-3"></a><span class="st">  </span><span class="kw">group_by</span>(min) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-4"><a href="nestedregress.html#cb30-4"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">theo=</span><span class="kw">mean</span>(theo)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-5"><a href="nestedregress.html#cb30-5"></a><span class="st">  </span><span class="kw">add_column</span>(<span class="dt">id=</span><span class="st">&quot;R&quot;</span>, <span class="dt">.before=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb878"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb878-1"><a href="nestedregress.html#cb878-1"></a><span class="co">#first, average the duplicates</span></span>
+<span id="cb878-2"><a href="nestedregress.html#cb878-2"></a>theopOne.avg &lt;-<span class="st"> </span>theopOne <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb878-3"><a href="nestedregress.html#cb878-3"></a><span class="st">  </span><span class="kw">group_by</span>(min) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb878-4"><a href="nestedregress.html#cb878-4"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">theo=</span><span class="kw">mean</span>(theo)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb878-5"><a href="nestedregress.html#cb878-5"></a><span class="st">  </span><span class="kw">add_column</span>(<span class="dt">id=</span><span class="st">&quot;R&quot;</span>, <span class="dt">.before=</span>T)</span></code></pre></div>
 <pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <p>Next, run a one-phase first order decay nonlinear regression on the technical replicates. What you’ll see is that the parameter estimates are identical to their values when the duplicates were regressed. :</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="nestedregress.html#cb32-1"></a>fit1a &lt;-<span class="st"> </span><span class="kw">nlsLM</span>(</span>
-<span id="cb32-2"><a href="nestedregress.html#cb32-2"></a>  theo<span class="op">~</span>(((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>min))<span class="op">+</span>ylo), </span>
-<span id="cb32-3"><a href="nestedregress.html#cb32-3"></a>  <span class="dt">data=</span>theopOne.avg, </span>
-<span id="cb32-4"><a href="nestedregress.html#cb32-4"></a>  <span class="dt">start=</span><span class="kw">list</span>(</span>
-<span id="cb32-5"><a href="nestedregress.html#cb32-5"></a>    <span class="dt">yhi=</span><span class="dv">100</span>, </span>
-<span id="cb32-6"><a href="nestedregress.html#cb32-6"></a>    <span class="dt">ylo=</span><span class="dv">15</span>, </span>
-<span id="cb32-7"><a href="nestedregress.html#cb32-7"></a>    <span class="dt">k=</span><span class="fl">0.693</span><span class="op">/</span><span class="dv">20</span>)</span>
-<span id="cb32-8"><a href="nestedregress.html#cb32-8"></a>  )</span>
-<span id="cb32-9"><a href="nestedregress.html#cb32-9"></a></span>
-<span id="cb32-10"><a href="nestedregress.html#cb32-10"></a><span class="kw">kable</span>(<span class="kw">tidy</span>(fit1a), <span class="dt">caption=</span><span class="st">&quot;One-phase Fit on Average of Duplicates&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb880"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb880-1"><a href="nestedregress.html#cb880-1"></a>fit1a &lt;-<span class="st"> </span><span class="kw">nlsLM</span>(</span>
+<span id="cb880-2"><a href="nestedregress.html#cb880-2"></a>  theo<span class="op">~</span>(((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>k<span class="op">*</span>min))<span class="op">+</span>ylo), </span>
+<span id="cb880-3"><a href="nestedregress.html#cb880-3"></a>  <span class="dt">data=</span>theopOne.avg, </span>
+<span id="cb880-4"><a href="nestedregress.html#cb880-4"></a>  <span class="dt">start=</span><span class="kw">list</span>(</span>
+<span id="cb880-5"><a href="nestedregress.html#cb880-5"></a>    <span class="dt">yhi=</span><span class="dv">100</span>, </span>
+<span id="cb880-6"><a href="nestedregress.html#cb880-6"></a>    <span class="dt">ylo=</span><span class="dv">15</span>, </span>
+<span id="cb880-7"><a href="nestedregress.html#cb880-7"></a>    <span class="dt">k=</span><span class="fl">0.693</span><span class="op">/</span><span class="dv">20</span>)</span>
+<span id="cb880-8"><a href="nestedregress.html#cb880-8"></a>  )</span>
+<span id="cb880-9"><a href="nestedregress.html#cb880-9"></a></span>
+<span id="cb880-10"><a href="nestedregress.html#cb880-10"></a><span class="kw">kable</span>(<span class="kw">tidy</span>(fit1a), <span class="dt">caption=</span><span class="st">&quot;One-phase Fit on Average of Duplicates&quot;</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-16">Table 39.1: </span>One-phase Fit on Average of Duplicates</caption>
+<caption>
+<span id="tab:unnamed-chunk-446">Table 39.1: </span>One-phase Fit on Average of Duplicates
+</caption>
 <thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">yhi</td>
-<td align="right">92.5573833</td>
-<td align="right">1.6364812</td>
-<td align="right">56.55878</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+yhi
+</td>
+<td style="text-align:right;">
+92.5573833
+</td>
+<td style="text-align:right;">
+1.6364812
+</td>
+<td style="text-align:right;">
+56.55878
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="even">
-<td align="left">ylo</td>
-<td align="right">12.3232038</td>
-<td align="right">0.5437097</td>
-<td align="right">22.66504</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+ylo
+</td>
+<td style="text-align:right;">
+12.3232038
+</td>
+<td style="text-align:right;">
+0.5437097
+</td>
+<td style="text-align:right;">
+22.66504
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
-<tr class="odd">
-<td align="left">k</td>
-<td align="right">0.0419568</td>
-<td align="right">0.0016177</td>
-<td align="right">25.93663</td>
-<td align="right">0</td>
+<tr>
+<td style="text-align:left;">
+k
+</td>
+<td style="text-align:right;">
+0.0419568
+</td>
+<td style="text-align:right;">
+0.0016177
+</td>
+<td style="text-align:right;">
+25.93663
+</td>
+<td style="text-align:right;">
+0
+</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="nestedregress.html#cb33-1"></a><span class="kw">kable</span>(<span class="kw">glance</span>(fit1a), <span class="dt">caption=</span><span class="st">&quot;One-phase Fit on Average of Duplicates&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb881"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb881-1"><a href="nestedregress.html#cb881-1"></a><span class="kw">kable</span>(<span class="kw">glance</span>(fit1a), <span class="dt">caption=</span><span class="st">&quot;One-phase Fit on Average of Duplicates&quot;</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-16">Table 39.1: </span>One-phase Fit on Average of Duplicates</caption>
+<caption>
+<span id="tab:unnamed-chunk-446">Table 39.1: </span>One-phase Fit on Average of Duplicates
+</caption>
 <thead>
-<tr class="header">
-<th align="right">sigma</th>
-<th align="left">isConv</th>
-<th align="right">finTol</th>
-<th align="right">logLik</th>
-<th align="right">AIC</th>
-<th align="right">BIC</th>
-<th align="right">deviance</th>
-<th align="right">df.residual</th>
-<th align="right">nobs</th>
+<tr>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:left;">
+isConv
+</th>
+<th style="text-align:right;">
+finTol
+</th>
+<th style="text-align:right;">
+logLik
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+deviance
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+<th style="text-align:right;">
+nobs
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">2.951872</td>
-<td align="left">TRUE</td>
-<td align="right">0</td>
-<td align="right">-188.5743</td>
-<td align="right">385.1486</td>
-<td align="right">394.4716</td>
-<td align="right">636.0889</td>
-<td align="right">73</td>
-<td align="right">76</td>
+<tr>
+<td style="text-align:right;">
+2.951872
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+-188.5743
+</td>
+<td style="text-align:right;">
+385.1486
+</td>
+<td style="text-align:right;">
+394.4716
+</td>
+<td style="text-align:right;">
+636.0889
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+76
+</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="nestedregress.html#cb34-1"></a>fit2a &lt;-<span class="st"> </span><span class="kw">nls</span>(</span>
-<span id="cb34-2"><a href="nestedregress.html#cb34-2"></a>  theo<span class="op">~</span>((pf<span class="op">*</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>kf<span class="op">*</span>min)))<span class="op">+</span></span>
-<span id="cb34-3"><a href="nestedregress.html#cb34-3"></a><span class="st">          </span>((<span class="dv">1</span><span class="op">-</span>pf)<span class="op">*</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>ks<span class="op">*</span>min)))<span class="op">+</span></span>
-<span id="cb34-4"><a href="nestedregress.html#cb34-4"></a><span class="st">          </span>ylo), </span>
-<span id="cb34-5"><a href="nestedregress.html#cb34-5"></a>            <span class="dt">data=</span>theopOne.avg, </span>
-<span id="cb34-6"><a href="nestedregress.html#cb34-6"></a>            <span class="dt">start=</span><span class="kw">list</span>(</span>
-<span id="cb34-7"><a href="nestedregress.html#cb34-7"></a>              <span class="dt">yhi=</span><span class="dv">115</span>,</span>
-<span id="cb34-8"><a href="nestedregress.html#cb34-8"></a>              <span class="dt">ylo=</span><span class="dv">15</span>,</span>
-<span id="cb34-9"><a href="nestedregress.html#cb34-9"></a>              <span class="dt">pf=</span><span class="fl">0.4</span>,</span>
-<span id="cb34-10"><a href="nestedregress.html#cb34-10"></a>              <span class="dt">kf=</span><span class="fl">0.06</span>,</span>
-<span id="cb34-11"><a href="nestedregress.html#cb34-11"></a>              <span class="dt">ks=</span><span class="fl">0.02</span>)</span>
-<span id="cb34-12"><a href="nestedregress.html#cb34-12"></a>)</span>
-<span id="cb34-13"><a href="nestedregress.html#cb34-13"></a></span>
-<span id="cb34-14"><a href="nestedregress.html#cb34-14"></a><span class="kw">kable</span>(<span class="kw">tidy</span>(fit2a), <span class="dt">caption=</span><span class="st">&quot;Two-phase Fit on Average of Duplicates&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb882"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb882-1"><a href="nestedregress.html#cb882-1"></a>fit2a &lt;-<span class="st"> </span><span class="kw">nls</span>(</span>
+<span id="cb882-2"><a href="nestedregress.html#cb882-2"></a>  theo<span class="op">~</span>((pf<span class="op">*</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>kf<span class="op">*</span>min)))<span class="op">+</span></span>
+<span id="cb882-3"><a href="nestedregress.html#cb882-3"></a><span class="st">          </span>((<span class="dv">1</span><span class="op">-</span>pf)<span class="op">*</span>((yhi<span class="op">-</span>ylo)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>ks<span class="op">*</span>min)))<span class="op">+</span></span>
+<span id="cb882-4"><a href="nestedregress.html#cb882-4"></a><span class="st">          </span>ylo), </span>
+<span id="cb882-5"><a href="nestedregress.html#cb882-5"></a>            <span class="dt">data=</span>theopOne.avg, </span>
+<span id="cb882-6"><a href="nestedregress.html#cb882-6"></a>            <span class="dt">start=</span><span class="kw">list</span>(</span>
+<span id="cb882-7"><a href="nestedregress.html#cb882-7"></a>              <span class="dt">yhi=</span><span class="dv">115</span>,</span>
+<span id="cb882-8"><a href="nestedregress.html#cb882-8"></a>              <span class="dt">ylo=</span><span class="dv">15</span>,</span>
+<span id="cb882-9"><a href="nestedregress.html#cb882-9"></a>              <span class="dt">pf=</span><span class="fl">0.4</span>,</span>
+<span id="cb882-10"><a href="nestedregress.html#cb882-10"></a>              <span class="dt">kf=</span><span class="fl">0.06</span>,</span>
+<span id="cb882-11"><a href="nestedregress.html#cb882-11"></a>              <span class="dt">ks=</span><span class="fl">0.02</span>)</span>
+<span id="cb882-12"><a href="nestedregress.html#cb882-12"></a>)</span>
+<span id="cb882-13"><a href="nestedregress.html#cb882-13"></a></span>
+<span id="cb882-14"><a href="nestedregress.html#cb882-14"></a><span class="kw">kable</span>(<span class="kw">tidy</span>(fit2a), <span class="dt">caption=</span><span class="st">&quot;Two-phase Fit on Average of Duplicates&quot;</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-16">Table 39.1: </span>Two-phase Fit on Average of Duplicates</caption>
+<caption>
+<span id="tab:unnamed-chunk-446">Table 39.1: </span>Two-phase Fit on Average of Duplicates
+</caption>
 <thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">yhi</td>
-<td align="right">94.8670140</td>
-<td align="right">2.1294364</td>
-<td align="right">44.550292</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+yhi
+</td>
+<td style="text-align:right;">
+94.8670140
+</td>
+<td style="text-align:right;">
+2.1294364
+</td>
+<td style="text-align:right;">
+44.550292
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
 </tr>
-<tr class="even">
-<td align="left">ylo</td>
-<td align="right">10.2726207</td>
-<td align="right">2.9085073</td>
-<td align="right">3.531922</td>
-<td align="right">0.0007295</td>
+<tr>
+<td style="text-align:left;">
+ylo
+</td>
+<td style="text-align:right;">
+10.2726207
+</td>
+<td style="text-align:right;">
+2.9085073
+</td>
+<td style="text-align:right;">
+3.531922
+</td>
+<td style="text-align:right;">
+0.0007295
+</td>
 </tr>
-<tr class="odd">
-<td align="left">pf</td>
-<td align="right">0.6233894</td>
-<td align="right">0.5583784</td>
-<td align="right">1.116428</td>
-<td align="right">0.2680029</td>
+<tr>
+<td style="text-align:left;">
+pf
+</td>
+<td style="text-align:right;">
+0.6233894
+</td>
+<td style="text-align:right;">
+0.5583784
+</td>
+<td style="text-align:right;">
+1.116428
+</td>
+<td style="text-align:right;">
+0.2680029
+</td>
 </tr>
-<tr class="even">
-<td align="left">kf</td>
-<td align="right">0.0615519</td>
-<td align="right">0.0304242</td>
-<td align="right">2.023119</td>
-<td align="right">0.0468272</td>
+<tr>
+<td style="text-align:left;">
+kf
+</td>
+<td style="text-align:right;">
+0.0615519
+</td>
+<td style="text-align:right;">
+0.0304242
+</td>
+<td style="text-align:right;">
+2.023119
+</td>
+<td style="text-align:right;">
+0.0468272
+</td>
 </tr>
-<tr class="odd">
-<td align="left">ks</td>
-<td align="right">0.0226730</td>
-<td align="right">0.0225941</td>
-<td align="right">1.003492</td>
-<td align="right">0.3190314</td>
+<tr>
+<td style="text-align:left;">
+ks
+</td>
+<td style="text-align:right;">
+0.0226730
+</td>
+<td style="text-align:right;">
+0.0225941
+</td>
+<td style="text-align:right;">
+1.003492
+</td>
+<td style="text-align:right;">
+0.3190314
+</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="nestedregress.html#cb35-1"></a><span class="kw">kable</span>(<span class="kw">glance</span>(fit2a), <span class="dt">caption=</span><span class="st">&quot;Two-phase Fit on Average of Duplicates&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb883"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb883-1"><a href="nestedregress.html#cb883-1"></a><span class="kw">kable</span>(<span class="kw">glance</span>(fit2a), <span class="dt">caption=</span><span class="st">&quot;Two-phase Fit on Average of Duplicates&quot;</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-16">Table 39.1: </span>Two-phase Fit on Average of Duplicates</caption>
+<caption>
+<span id="tab:unnamed-chunk-446">Table 39.1: </span>Two-phase Fit on Average of Duplicates
+</caption>
 <thead>
-<tr class="header">
-<th align="right">sigma</th>
-<th align="left">isConv</th>
-<th align="right">finTol</th>
-<th align="right">logLik</th>
-<th align="right">AIC</th>
-<th align="right">BIC</th>
-<th align="right">deviance</th>
-<th align="right">df.residual</th>
-<th align="right">nobs</th>
+<tr>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:left;">
+isConv
+</th>
+<th style="text-align:right;">
+finTol
+</th>
+<th style="text-align:right;">
+logLik
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+deviance
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+<th style="text-align:right;">
+nobs
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">2.884241</td>
-<td align="left">TRUE</td>
-<td align="right">7e-06</td>
-<td align="right">-185.7572</td>
-<td align="right">383.5144</td>
-<td align="right">397.4988</td>
-<td align="right">590.6379</td>
-<td align="right">71</td>
-<td align="right">76</td>
+<tr>
+<td style="text-align:right;">
+2.884241
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:right;">
+7e-06
+</td>
+<td style="text-align:right;">
+-185.7572
+</td>
+<td style="text-align:right;">
+383.5144
+</td>
+<td style="text-align:right;">
+397.4988
+</td>
+<td style="text-align:right;">
+590.6379
+</td>
+<td style="text-align:right;">
+71
+</td>
+<td style="text-align:right;">
+76
+</td>
 </tr>
 </tbody>
 </table>

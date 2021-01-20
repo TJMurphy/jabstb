@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 13 Reproducible Data Munging in R | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 13 Reproducible Data Munging in R | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,13 +50,17 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -65,14 +69,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -81,9 +87,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -136,21 +142,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author and book</a></li>
 <li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a><ul>
-<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#spring-2020-term-versions"><i class="fa fa-check"></i><b>3.1</b> Spring 2020 term versions</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.1.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.1.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.1.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.1.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.1.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.1.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.1.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.1.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-software-for-your-machine"><i class="fa fa-check"></i><b>3.1.5</b> Rule 4: Install the right software for your machine</a></li>
-<li class="chapter" data-level="3.1.6" data-path="software.html"><a href="software.html#rule-5-use-this-installation-guide"><i class="fa fa-check"></i><b>3.1.6</b> Rule 5: Use this installation guide</a></li>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
+<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.2</b> After installation</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.2.1</b> What is R?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#r-packages"><i class="fa fa-check"></i><b>3.2.2</b> R packages</a></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-immportant-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super immportant: Always avoid compiling</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#important-avoid-compiling"><i class="fa fa-check"></i><b>3.3</b> Important: Avoid compiling</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.3.1</b> Reasons not to compile</a></li>
-</ul></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a><ul>
 <li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
@@ -206,7 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.3" data-path="data.html"><a href="data.html#working-with-data"><i class="fa fa-check"></i><b>8.3</b> Working with data</a><ul>
 <li class="chapter" data-level="8.3.1" data-path="data.html"><a href="data.html#entering-data"><i class="fa fa-check"></i><b>8.3.1</b> Entering data</a></li>
 </ul></li>
-<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
+<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary-1"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>9</b> Variability, Accuracy and Precision</a><ul>
 <li class="chapter" data-level="9.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>9.0.1</b> Data are messy</a></li>
@@ -245,14 +254,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>12</b> P Values</a><ul>
 <li class="chapter" data-level="12.1" data-path="pvalues.html"><a href="pvalues.html#definition"><i class="fa fa-check"></i><b>12.1</b> Definition</a></li>
-<li class="chapter" data-level="12.2" data-path="pvalues.html"><a href="pvalues.html#test-statistics-come-from-null-distributions"><i class="fa fa-check"></i><b>12.2</b> Test statistics come from null distributions</a><ul>
-<li class="chapter" data-level="12.2.1" data-path="pvalues.html"><a href="pvalues.html#p-value-behavior"><i class="fa fa-check"></i><b>12.2.1</b> P-value behavior</a></li>
-<li class="chapter" data-level="12.2.2" data-path="pvalues.html"><a href="pvalues.html#p-values-and-the-decision-process"><i class="fa fa-check"></i><b>12.2.2</b> P-values and the decision process</a></li>
-</ul></li>
-<li class="chapter" data-level="12.3" data-path="pvalues.html"><a href="pvalues.html#a-blood-glucose-p-value"><i class="fa fa-check"></i><b>12.3</b> A blood glucose p-value</a></li>
-<li class="chapter" data-level="12.4" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>12.4</b> How p-values should be interpreted</a></li>
-<li class="chapter" data-level="12.5" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>12.5</b> Interpretation</a></li>
-<li class="chapter" data-level="12.6" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>12.6</b> Criticisms of p-values</a></li>
+<li class="chapter" data-level="12.2" data-path="pvalues.html"><a href="pvalues.html#null-test-statistic-distributions"><i class="fa fa-check"></i><b>12.2</b> Null test statistic distributions</a></li>
+<li class="chapter" data-level="12.3" data-path="pvalues.html"><a href="pvalues.html#computing-p-values"><i class="fa fa-check"></i><b>12.3</b> Computing p-values</a></li>
+<li class="chapter" data-level="12.4" data-path="pvalues.html"><a href="pvalues.html#p-values-from-null-tests-are-uniform"><i class="fa fa-check"></i><b>12.4</b> P-values from null tests are uniform</a></li>
+<li class="chapter" data-level="12.5" data-path="pvalues.html"><a href="pvalues.html#how-p-values-become-error-probabilities"><i class="fa fa-check"></i><b>12.5</b> How P-values become error probabilities</a></li>
+<li class="chapter" data-level="12.6" data-path="pvalues.html"><a href="pvalues.html#p-values-as-dichotomous-switches"><i class="fa fa-check"></i><b>12.6</b> P-values as dichotomous switches</a></li>
+<li class="chapter" data-level="12.7" data-path="pvalues.html"><a href="pvalues.html#p-values-in-true-effects"><i class="fa fa-check"></i><b>12.7</b> P-values in true effects</a></li>
+<li class="chapter" data-level="12.8" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>12.8</b> Criticisms of p-values</a></li>
+<li class="chapter" data-level="12.9" data-path="pvalues.html"><a href="pvalues.html#summary-how-to-use-p-values"><i class="fa fa-check"></i><b>12.9</b> Summary: How to use p-values</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>13</b> Reproducible Data Munging in R</a><ul>
 <li class="chapter" data-level="13.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-data"><i class="fa fa-check"></i><b>13.1</b> Jaxwest7 data</a><ul>
@@ -261,7 +270,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-data-into-r"><i class="fa fa-check"></i><b>13.2</b> Munge the glucose data into R</a></li>
 <li class="chapter" data-level="13.3" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-bodyweight-data"><i class="fa fa-check"></i><b>13.3</b> Munge the bodyweight data</a></li>
 <li class="chapter" data-level="13.4" data-path="jaxwest7.html"><a href="jaxwest7.html#merge-and-explore-the-glucose-and-bw-data"><i class="fa fa-check"></i><b>13.4</b> Merge and explore the glucose and bw data</a></li>
-<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-1"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
+<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-2"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>14</b> The Binomial Distribution</a><ul>
 <li class="chapter" data-level="14.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>14.1</b> dbinom</a></li>
@@ -348,21 +357,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="19.3" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-deviant-data"><i class="fa fa-check"></i><b>19.3</b> Experiments involving deviant Data</a></li>
 <li class="chapter" data-level="19.4" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>19.4</b> Sign Test</a><ul>
-<li class="chapter" data-level="19.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>19.4.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation"><i class="fa fa-check"></i><b>19.4.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>19.4.2</b> Write Up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>19.5</b> Wilcoxon Sign Rank Test for One Group</a><ul>
 <li class="chapter" data-level="19.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>19.5.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
-<li class="chapter" data-level="19.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>19.5.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>19.5.2</b> Interpretation</a></li>
 <li class="chapter" data-level="19.5.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>19.5.3</b> Write Up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>19.6</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
-<li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>19.6.2</b> Write Up</a></li>
 <li class="chapter" data-level="19.6.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot"><i class="fa fa-check"></i><b>19.6.3</b> Plot</a></li>
 </ul></li>
 <li class="chapter" data-level="19.7" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>19.7</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
-<li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.7.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>19.7.2</b> Write up</a></li>
 <li class="chapter" data-level="19.7.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot-1"><i class="fa fa-check"></i><b>19.7.3</b> Plot</a></li>
 </ul></li>
@@ -372,7 +381,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="19.9" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>19.9</b> Friedman test</a><ul>
 <li class="chapter" data-level="19.9.1" data-path="nonparametrics.html"><a href="nonparametrics.html#blocked-experimental-design"><i class="fa fa-check"></i><b>19.9.1</b> Blocked experimental design</a></li>
-<li class="chapter" data-level="19.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-5"><i class="fa fa-check"></i><b>19.9.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.9.2</b> Interpretation</a></li>
 <li class="chapter" data-level="19.9.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-11"><i class="fa fa-check"></i><b>19.9.3</b> Write up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.10" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-power-calculations"><i class="fa fa-check"></i><b>19.10</b> Nonparametric power calculations</a><ul>
@@ -381,7 +390,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.10.3" data-path="nonparametrics.html"><a href="nonparametrics.html#an-example"><i class="fa fa-check"></i><b>19.10.3</b> An example</a></li>
 <li class="chapter" data-level="19.10.4" data-path="nonparametrics.html"><a href="nonparametrics.html#nonpara.pwr"><i class="fa fa-check"></i><b>19.10.4</b> nonpara.pwr</a></li>
 </ul></li>
-<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-2"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
+<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-3"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>20</b> Signed Rank Distribution</a><ul>
 <li class="chapter" data-level="20.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>20.1</b> Transformation of data into sign ranks</a><ul>
@@ -407,81 +416,93 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="22" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>22</b> The t-tests</a><ul>
-<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Data assumptions for t-tests</a></li>
-<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a><ul>
-<li class="chapter" data-level="22.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.2.1</b> One sample t tests</a></li>
-<li class="chapter" data-level="22.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.2.2</b> Unpaired t tests</a></li>
-<li class="chapter" data-level="22.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.2.3</b> Paired t tests</a></li>
+<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Assumptions for t-tests</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="ttests.html"><a href="ttests.html#strong-assumptions-t-tests-are-invalid-if-these-not-met"><i class="fa fa-check"></i><b>22.1.1</b> Strong assumptions, t-tests are invalid if these not met:</a></li>
+<li class="chapter" data-level="22.1.2" data-path="ttests.html"><a href="ttests.html#weak-assumptions-t-tests-are-less-robust-when-these-are-not-met"><i class="fa fa-check"></i><b>22.1.2</b> Weak assumptions: t-tests are less robust when these are not met:</a></li>
+<li class="chapter" data-level="22.1.3" data-path="ttests.html"><a href="ttests.html#on-random-residual-error"><i class="fa fa-check"></i><b>22.1.3</b> On random residual error</a></li>
+<li class="chapter" data-level="22.1.4" data-path="ttests.html"><a href="ttests.html#on-the-normality-assumption"><i class="fa fa-check"></i><b>22.1.4</b> On the normality assumption</a></li>
 </ul></li>
-<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.3</b> t Test Hypotheses</a><ul>
-<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.3.1</b> One-sided or two-sided??</a></li>
-<li class="chapter" data-level="22.3.2" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.3.2</b> One sample hypotheses</a></li>
-<li class="chapter" data-level="22.3.3" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.3.3</b> Unpaired hypotheses</a></li>
-<li class="chapter" data-level="22.3.4" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.3.4</b> Paired hypotheses</a></li>
+<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a></li>
+<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.3</b> One sample t tests</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#example"><i class="fa fa-check"></i><b>22.3.1</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>22.4</b> Confidence Intervals of Means</a></li>
-<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#parameters-small-samples-and-reliability"><i class="fa fa-check"></i><b>22.5</b> Parameters, small samples, and reliability</a><ul>
-<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.5.1</b> Reporting SD or SEM?</a></li>
+<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.4</b> Unpaired t tests</a><ul>
+<li class="chapter" data-level="22.4.1" data-path="ttests.html"><a href="ttests.html#students-t-test"><i class="fa fa-check"></i><b>22.4.1</b> Student’s t-test</a></li>
+<li class="chapter" data-level="22.4.2" data-path="ttests.html"><a href="ttests.html#welchs-t-test"><i class="fa fa-check"></i><b>22.4.2</b> Welch’s t-test</a></li>
+<li class="chapter" data-level="22.4.3" data-path="ttests.html"><a href="ttests.html#example-1"><i class="fa fa-check"></i><b>22.4.3</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>22.6</b> t Tests: Running the analysis</a><ul>
-<li class="chapter" data-level="22.6.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.6.1</b> One sample t test</a></li>
-<li class="chapter" data-level="22.6.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.6.2</b> Unpaired t test</a></li>
-<li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
+<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.5</b> Paired t tests</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#example-2"><i class="fa fa-check"></i><b>22.5.1</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
+<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.6</b> t Test Hypotheses</a></li>
+<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.7</b> One-sided or two-sided??</a><ul>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.7.1</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.7.3</b> Paired hypotheses</a></li>
 </ul></li>
-<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
-<li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
-<li class="chapter" data-level="22.8.2" data-path="ttests.html"><a href="ttests.html#interpretation-9"><i class="fa fa-check"></i><b>22.8.2</b> Interpretation</a></li>
-<li class="chapter" data-level="22.8.3" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.8.3</b> t-pwr: A Monte Carlo method</a></li>
+<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#confidence-intervals-1"><i class="fa fa-check"></i><b>22.8</b> Confidence Intervals</a></li>
+<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#reliability-of-small-samples"><i class="fa fa-check"></i><b>22.9</b> Reliability of small samples</a><ul>
+<li class="chapter" data-level="22.9.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.9.1</b> Reporting SD or SEM?</a></li>
 </ul></li>
-<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#summary-3"><i class="fa fa-check"></i><b>22.9</b> Summary</a></li>
+<li class="chapter" data-level="22.10" data-path="ttests.html"><a href="ttests.html#running-the-analysis-in-r"><i class="fa fa-check"></i><b>22.10</b> Running the analysis in R</a><ul>
+<li class="chapter" data-level="22.10.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.10.1</b> One sample t test</a></li>
+<li class="chapter" data-level="22.10.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.10.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="22.10.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.10.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="22.11" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.11</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="22.11.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.11.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.11.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.11.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.11.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.11.3</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="22.12" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.12</b> t Test Power</a><ul>
+<li class="chapter" data-level="22.12.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.12.1</b> pwr.t.test</a></li>
+<li class="chapter" data-level="22.12.2" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.12.2</b> t-pwr: A Monte Carlo method</a></li>
+</ul></li>
+<li class="chapter" data-level="22.13" data-path="ttests.html"><a href="ttests.html#summary-4"><i class="fa fa-check"></i><b>22.13</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="23" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>23</b> Statistical design of t-tests</a><ul>
-<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a><ul>
-<li class="chapter" data-level="23.1.1" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.1.1</b> Overview of the Monte Carlo</a></li>
-<li class="chapter" data-level="23.1.2" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-data-simulation"><i class="fa fa-check"></i><b>23.1.2</b> tl;dr on data simulation</a></li>
-<li class="chapter" data-level="23.1.3" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-the-test"><i class="fa fa-check"></i><b>23.1.3</b> tl;dr on the test</a></li>
-<li class="chapter" data-level="23.1.4" data-path="ttestmc.html"><a href="ttestmc.html#changing-n"><i class="fa fa-check"></i><b>23.1.4</b> Changing n</a></li>
-<li class="chapter" data-level="23.1.5" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.1.5</b> Diabetes drug scenario</a></li>
-<li class="chapter" data-level="23.1.6" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.1.6</b> What would be a scientifically meaningful response?</a></li>
+<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a></li>
+<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> Overview of the Monte Carlo</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#data-simulation"><i class="fa fa-check"></i><b>23.2.1</b> Data simulation</a></li>
+<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#the-test"><i class="fa fa-check"></i><b>23.2.2</b> The test</a></li>
 </ul></li>
-<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> One sample t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.2.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.2.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.2.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.2.3</b> Step 3</a></li>
-<li class="chapter" data-level="23.2.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.2.4</b> Step 4</a></li>
-<li class="chapter" data-level="23.2.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.2.5</b> Step 5</a></li>
-<li class="chapter" data-level="23.2.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.2.6</b> Step 6</a></li>
-<li class="chapter" data-level="23.2.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.2.7</b> Step 7</a></li>
+<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#changing-sample-size"><i class="fa fa-check"></i><b>23.3</b> Changing Sample Size</a></li>
+<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.4</b> Diabetes drug scenario</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.4.1</b> What would be a scientifically meaningful response?</a></li>
 </ul></li>
-<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.3</b> Unpaired t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.3.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.3.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.3.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.3.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.3.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.3.3</b> Step 3</a></li>
-<li class="chapter" data-level="23.3.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.3.4</b> Step 4</a></li>
-<li class="chapter" data-level="23.3.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.3.5</b> Step 5</a></li>
-<li class="chapter" data-level="23.3.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.3.6</b> Step 6</a></li>
-<li class="chapter" data-level="23.3.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.3.7</b> Step 7</a></li>
+<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.5</b> One sample t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.5.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.5.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.5.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.5.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.5.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.5.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.5.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.5.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.5.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.5.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.5.7</b> Step 7</a></li>
 </ul></li>
-<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.4</b> Paired t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.4.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.4.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.4.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.4.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.4.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.6</b> Unpaired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.6.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.6.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.6.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.6.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.6.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.6.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.6.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.6.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.6.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.6.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.6.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.6.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.6.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.6.7</b> Step 7</a></li>
 </ul></li>
-<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.5</b> Step 4</a><ul>
-<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.5.1</b> Step 5</a></li>
-<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.5.2</b> Step 6</a></li>
-<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.5.3</b> Step 7</a></li>
+<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.7</b> Paired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.7.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.7.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.7.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.7.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.7.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.7.3</b> Step 3</a></li>
 </ul></li>
-<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.6</b> Comparison to pwr tests</a></li>
-<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.7</b> dt</a></li>
-<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.8</b> pt</a></li>
-<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.9</b> qt</a></li>
-<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.10</b> rt</a></li>
+<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.8</b> Step 4</a><ul>
+<li class="chapter" data-level="23.8.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.8.1</b> Step 5</a></li>
+<li class="chapter" data-level="23.8.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.8.2</b> Step 6</a></li>
+<li class="chapter" data-level="23.8.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.8.3</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.9</b> Comparison to pwr tests</a></li>
+<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.10</b> dt</a></li>
+<li class="chapter" data-level="23.11" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.11</b> pt</a></li>
+<li class="chapter" data-level="23.12" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.12</b> qt</a></li>
+<li class="chapter" data-level="23.13" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.13</b> rt</a></li>
 </ul></li>
 <li class="chapter" data-level="24" data-path="simcorrelation.html"><a href="simcorrelation.html"><i class="fa fa-check"></i><b>24</b> Simulating correlated variables</a><ul>
 <li class="chapter" data-level="24.1" data-path="simcorrelation.html"><a href="simcorrelation.html#estimating-correlation-between-two-variables"><i class="fa fa-check"></i><b>24.1</b> Estimating correlation between two variables</a></li>
@@ -513,7 +534,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.10" data-path="introanova.html"><a href="introanova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>25.10</b> Alternatives to ANOVA</a><ul>
 <li class="chapter" data-level="25.10.1" data-path="introanova.html"><a href="introanova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>25.10.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
 </ul></li>
-<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-4"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
+<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-5"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="26" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>26</b> The F distribution</a><ul>
 <li class="chapter" data-level="26.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>26.1</b> Background</a><ul>
@@ -536,7 +557,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="27.4" data-path="onewayanova.html"><a href="onewayanova.html#post-hoc-pairwise-comparisons"><i class="fa fa-check"></i><b>27.4</b> Post hoc pairwise comparisons</a><ul>
 <li class="chapter" data-level="27.4.1" data-path="onewayanova.html"><a href="onewayanova.html#range-tests"><i class="fa fa-check"></i><b>27.4.1</b> Range tests</a></li>
 </ul></li>
-<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-5"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
+<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-6"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="28" data-path="onewayRM.html"><a href="onewayRM.html"><i class="fa fa-check"></i><b>28</b> One-way ANOVA Related Measures</a><ul>
 <li class="chapter" data-level="28.1" data-path="onewayRM.html"><a href="onewayRM.html#data-prep"><i class="fa fa-check"></i><b>28.1</b> Data prep</a></li>
@@ -546,13 +567,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.3" data-path="onewayRM.html"><a href="onewayRM.html#the-anova"><i class="fa fa-check"></i><b>28.3</b> The ANOVA</a><ul>
 <li class="chapter" data-level="28.3.1" data-path="onewayRM.html"><a href="onewayRM.html#running-ezanova"><i class="fa fa-check"></i><b>28.3.1</b> Running ezANOVA</a></li>
 </ul></li>
-<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-10"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
+<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-5"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
 <li class="chapter" data-level="28.5" data-path="onewayRM.html"><a href="onewayRM.html#post-hoc-analysis"><i class="fa fa-check"></i><b>28.5</b> Post-hoc analysis</a></li>
 <li class="chapter" data-level="28.6" data-path="onewayRM.html"><a href="onewayRM.html#write-up-12"><i class="fa fa-check"></i><b>28.6</b> Write up</a></li>
 </ul></li>
 <li class="chapter" data-level="29" data-path="twowayCR.html"><a href="twowayCR.html"><i class="fa fa-check"></i><b>29</b> Two-way ANOVA Completely Randomized</a><ul>
 <li class="chapter" data-level="29.1" data-path="twowayCR.html"><a href="twowayCR.html#effect-of-strain-and-diet-on-liver"><i class="fa fa-check"></i><b>29.1</b> Effect of Strain and Diet on Liver</a></li>
-<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
+<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test-1"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
 <li class="chapter" data-level="29.3" data-path="twowayCR.html"><a href="twowayCR.html#interpretation-of-2-way-cr-anova-output"><i class="fa fa-check"></i><b>29.3</b> Interpretation of 2 Way CR ANOVA Output</a><ul>
 <li class="chapter" data-level="29.3.1" data-path="twowayCR.html"><a href="twowayCR.html#levenes"><i class="fa fa-check"></i><b>29.3.1</b> Levene’s</a></li>
 <li class="chapter" data-level="29.3.2" data-path="twowayCR.html"><a href="twowayCR.html#anova-table"><i class="fa fa-check"></i><b>29.3.2</b> ANOVA Table</a></li>
@@ -562,23 +583,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="29.4.2" data-path="twowayCR.html"><a href="twowayCR.html#write-up-13"><i class="fa fa-check"></i><b>29.4.2</b> Write Up</a></li>
 <li class="chapter" data-level="29.4.3" data-path="twowayCR.html"><a href="twowayCR.html#range-tests-1"><i class="fa fa-check"></i><b>29.4.3</b> Range tests</a></li>
 </ul></li>
-<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-6"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
+<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-7"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="twowayRM.html"><a href="twowayRM.html"><i class="fa fa-check"></i><b>30</b> Two-way ANOVA Related Measures</a><ul>
 <li class="chapter" data-level="30.1" data-path="twowayRM.html"><a href="twowayRM.html#cell-culture"><i class="fa fa-check"></i><b>30.1</b> Cell culture</a></li>
-<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-1"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
+<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-2"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
 <li class="chapter" data-level="30.3" data-path="twowayRM.html"><a href="twowayRM.html#interpretation-of-the-output"><i class="fa fa-check"></i><b>30.3</b> Interpretation of the output</a><ul>
 <li class="chapter" data-level="30.3.1" data-path="twowayRM.html"><a href="twowayRM.html#anova-table-1"><i class="fa fa-check"></i><b>30.3.1</b> ANOVA Table</a></li>
 <li class="chapter" data-level="30.3.2" data-path="twowayRM.html"><a href="twowayRM.html#mauchlys-sphericity-test"><i class="fa fa-check"></i><b>30.3.2</b> Mauchly’s Sphericity Test</a></li>
 </ul></li>
 <li class="chapter" data-level="30.4" data-path="twowayRM.html"><a href="twowayRM.html#post-hoc-multiple-comparisons-1"><i class="fa fa-check"></i><b>30.4</b> Post Hoc multiple comparisons</a></li>
 <li class="chapter" data-level="30.5" data-path="twowayRM.html"><a href="twowayRM.html#write-up-14"><i class="fa fa-check"></i><b>30.5</b> Write Up</a></li>
-<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-7"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
+<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-8"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="31" data-path="twowaymixed.html"><a href="twowaymixed.html"><i class="fa fa-check"></i><b>31</b> Two-way ANOVA RM/CR</a><ul>
 <li class="chapter" data-level="31.1" data-path="twowaymixed.html"><a href="twowaymixed.html#chickweight-data-set"><i class="fa fa-check"></i><b>31.1</b> ChickWeight Data set</a></li>
 <li class="chapter" data-level="31.2" data-path="twowaymixed.html"><a href="twowaymixed.html#munge-chickweight-data"><i class="fa fa-check"></i><b>31.2</b> Munge ChickWeight data</a></li>
-<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-2"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
+<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-3"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
 <li class="chapter" data-level="31.4" data-path="twowaymixed.html"><a href="twowaymixed.html#interpreting-the-anova-output"><i class="fa fa-check"></i><b>31.4</b> Interpreting the ANOVA output</a><ul>
 <li class="chapter" data-level="31.4.1" data-path="twowaymixed.html"><a href="twowaymixed.html#anova-the-anova-table-1"><i class="fa fa-check"></i><b>31.4.1</b> $ANOVA: The ANOVA table</a></li>
 <li class="chapter" data-level="31.4.2" data-path="twowaymixed.html"><a href="twowaymixed.html#mauchlys-test-and-corrections"><i class="fa fa-check"></i><b>31.4.2</b> Mauchly’s Test and Corrections</a></li>
@@ -589,7 +610,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="31.5.3" data-path="twowaymixed.html"><a href="twowaymixed.html#heres-whats-been-discovered-by-the-tukeyhsd-test"><i class="fa fa-check"></i><b>31.5.3</b> Here’s what’s been discovered by the TukeyHSD test</a></li>
 <li class="chapter" data-level="31.5.4" data-path="twowaymixed.html"><a href="twowaymixed.html#why-is-the-tukeyhsd-result-so-different-than-the-pairwise.t.test"><i class="fa fa-check"></i><b>31.5.4</b> Why is the TukeyHSD result so different than the pairwise.t.test??</a></li>
 </ul></li>
-<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-8"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
+<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-9"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="posthoc.html"><a href="posthoc.html"><i class="fa fa-check"></i><b>32</b> ANOVA Posthoc Comparisons</a><ul>
 <li class="chapter" data-level="32.1" data-path="posthoc.html"><a href="posthoc.html#overview-of-options"><i class="fa fa-check"></i><b>32.1</b> Overview of options</a><ul>
@@ -597,7 +618,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="32.1.2" data-path="posthoc.html"><a href="posthoc.html#range-tests-2"><i class="fa fa-check"></i><b>32.1.2</b> Range tests</a></li>
 </ul></li>
 <li class="chapter" data-level="32.2" data-path="posthoc.html"><a href="posthoc.html#reporting-the-result-1"><i class="fa fa-check"></i><b>32.2</b> Reporting the result</a></li>
-<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-9"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
+<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-10"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="jaxwest2.html"><a href="jaxwest2.html"><i class="fa fa-check"></i><b>33</b> Reproducible Data Munging Mostly with Tidyverse</a><ul>
 <li class="chapter" data-level="33.1" data-path="jaxwest2.html"><a href="jaxwest2.html#look-at-the-original-data-carefully"><i class="fa fa-check"></i><b>33.1</b> Look at the original data carefully</a></li>
@@ -654,7 +675,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="35.7.1" data-path="manova.html"><a href="manova.html#manova-monte-carlo-power-analysis"><i class="fa fa-check"></i><b>35.7.1</b> MANOVA Monte Carlo Power Analysis</a></li>
 <li class="chapter" data-level="35.7.2" data-path="manova.html"><a href="manova.html#an-manova-monte-carlo-power-function"><i class="fa fa-check"></i><b>35.7.2</b> An MANOVA Monte Carlo Power function</a></li>
 </ul></li>
-<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-10"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
+<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-11"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="36" data-path="correl.html"><a href="correl.html"><i class="fa fa-check"></i><b>36</b> Correlation</a><ul>
 <li class="chapter" data-level="36.1" data-path="correl.html"><a href="correl.html#correlation-causation"><i class="fa fa-check"></i><b>36.1</b> Correlation != Causation</a></li>
@@ -690,7 +711,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="38.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#uses-for-nonlinear-regression"><i class="fa fa-check"></i><b>38.1</b> Uses for nonlinear regression</a></li>
 <li class="chapter" data-level="38.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#example-of-the-process"><i class="fa fa-check"></i><b>38.2</b> Example of the process</a><ul>
 <li class="chapter" data-level="38.2.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#it-starts-with-nonlinear-data"><i class="fa fa-check"></i><b>38.2.1</b> It starts with nonlinear data</a></li>
-<li class="chapter" data-level="38.2.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#what-nonlinear-model-describes-that-data"><i class="fa fa-check"></i><b>38.2.2</b> What nonlinear model describes that data?</a></li>
+<li class="chapter" data-level="38.2.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#which-nonlinear-model-describes-that-data"><i class="fa fa-check"></i><b>38.2.2</b> Which nonlinear model describes that data?</a></li>
 <li class="chapter" data-level="38.2.3" data-path="nonlinearintro.html"><a href="nonlinearintro.html#fitting-a-model-to-data"><i class="fa fa-check"></i><b>38.2.3</b> Fitting a model to data</a></li>
 <li class="chapter" data-level="38.2.4" data-path="nonlinearintro.html"><a href="nonlinearintro.html#interpreting-regression-model-output"><i class="fa fa-check"></i><b>38.2.4</b> Interpreting regression model output</a></li>
 <li class="chapter" data-level="38.2.5" data-path="nonlinearintro.html"><a href="nonlinearintro.html#check-the-fit-graphically"><i class="fa fa-check"></i><b>38.2.5</b> Check the fit graphically</a></li>
@@ -726,7 +747,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.8</b> Interpretation of this one replicate</a></li>
 <li class="chapter" data-level="39.2.9" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.9</b> Alternate analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-11"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
+<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-12"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="40" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html"><i class="fa fa-check"></i><b>40</b> Nonlinear regression of independent replicates</a><ul>
 <li class="chapter" data-level="40.1" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#the-problem"><i class="fa fa-check"></i><b>40.1</b> The problem</a></li>
@@ -800,7 +821,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="45.6.2" data-path="surv.html"><a href="surv.html#interpretation-of-cox-regression-output"><i class="fa fa-check"></i><b>45.6.2</b> Interpretation of Cox regression output</a></li>
 <li class="chapter" data-level="45.6.3" data-path="surv.html"><a href="surv.html#write-up-18"><i class="fa fa-check"></i><b>45.6.3</b> Write up</a></li>
 </ul></li>
-<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-12"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
+<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-13"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="46" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>46</b> Classification</a><ul>
 <li class="chapter" data-level="46.1" data-path="classification.html"><a href="classification.html#distances"><i class="fa fa-check"></i><b>46.1</b> Distances</a></li>
@@ -815,7 +836,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="46.10" data-path="classification.html"><a href="classification.html#pam-and-clara"><i class="fa fa-check"></i><b>46.10</b> PAM and CLARA</a></li>
 <li class="chapter" data-level="46.11" data-path="classification.html"><a href="classification.html#hierarchical-clustering"><i class="fa fa-check"></i><b>46.11</b> Hierarchical clustering</a></li>
 <li class="chapter" data-level="46.12" data-path="classification.html"><a href="classification.html#heatmaps"><i class="fa fa-check"></i><b>46.12</b> Heatmaps</a></li>
-<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-13"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
+<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-14"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="47" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>47</b> RNA-seq with R</a><ul>
 <li class="chapter" data-level="47.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>47.1</b> Install Bioconductor</a></li>
@@ -826,7 +847,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="47.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>47.6</b> Visualization</a></li>
 <li class="chapter" data-level="47.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>47.7</b> Classification</a></li>
 <li class="chapter" data-level="47.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>47.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-14"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
+<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-15"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -850,10 +871,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="jaxwest7" class="section level1">
 <h1><span class="header-section-number">Chapter 13</span> Reproducible Data Munging in R</h1>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" title="1"><span class="kw">library</span>(datapasta)</a>
-<a class="sourceLine" id="cb116-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb116-3" title="3"><span class="kw">library</span>(cowplot)</a>
-<a class="sourceLine" id="cb116-4" title="4"><span class="kw">library</span>(viridis)</a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="jaxwest7.html#cb111-1"></a><span class="kw">library</span>(datapasta)</span>
+<span id="cb111-2"><a href="jaxwest7.html#cb111-2"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb111-3"><a href="jaxwest7.html#cb111-3"></a><span class="kw">library</span>(cowplot)</span>
+<span id="cb111-4"><a href="jaxwest7.html#cb111-4"></a><span class="kw">library</span>(viridis)</span></code></pre></div>
 <p>Data munging is the process of taking data from one source(s) and working it into a condition where it can be analyzed. Every data set will differ and so every data munge will be custom.</p>
 <p>Data munging is a bit like organic chemistry. We know what we want to create. We know the starting materials that we have on hand. We work work with reactions and intermediates necessary to produce that final product.</p>
 <p>Here is one example of the munging process. The exercise converts an excel file data source into a format that can be used in R.</p>
@@ -901,9 +922,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Deal with cell F21. It’s value in the excel spreadsheet is “Hi”, a character value rather than a numeric. We have two options: Assign it an NA value, or impute.</p>
 <p>Since this is a related-measures time series with multiple other glucose measurements for that specific replicate, we’ll impute by using the average of all these other measurements.</p>
 <p>Calculate the value that will be imputed:</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1"><span class="co">#Use datapasta to paste in vector values. Calculate their mean. Then impute value for cell F21 in original data set by exchanging the value &quot;Hi&quot; with the mean produced here. </span></a>
-<a class="sourceLine" id="cb117-2" title="2">F21 &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">c</span>(449L, 525L, 419L, 437L, 476L, 525L, 499L, 516L, 485L, 472L, 535L, 500L, 497L)</a>
-<a class="sourceLine" id="cb117-3" title="3">); F21</a></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="jaxwest7.html#cb112-1"></a><span class="co">#Use datapasta to paste in vector values. Calculate their mean. Then impute value for cell F21 in original data set by exchanging the value &quot;Hi&quot; with the mean produced here. </span></span>
+<span id="cb112-2"><a href="jaxwest7.html#cb112-2"></a>F21 &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">c</span>(449L, 525L, 419L, 437L, 476L, 525L, 499L, 516L, 485L, 472L, 535L, 500L, 497L)</span>
+<span id="cb112-3"><a href="jaxwest7.html#cb112-3"></a>); F21</span></code></pre></div>
 <pre><code>## [1] 487.3077</code></pre>
 <p>Ideally, you’d import the data with the “Hi” value and fix it in R, to have a contiguous reproducible record for the imputation. In this case, I’m getting some anomalies using <code>read_excel</code> from <code>readr</code>, which seem related to the spreadsheet formatting. Leaving “Hi” in F21 causes some another issue with the <code>datapasta</code> importer that require additional not-fun munging. So it will be fixed in situ.</p>
 </div>
@@ -916,33 +937,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Copy the spreadsheet array F15:S41 to the clipboard. This is 14 columns and 15 rows of glucose data. All values are numeric and represent the same variable: blood glucose concentration.</p>
 <p>This omits the last replicate from the rosiglitazone glucose group. This is due to the fact that the body weight data only are for four rosiglitazone animals.</p>
 <p>Use the <code>datapasta</code> package Addin for this procedure. Create an object name, put the cursor next to it, and select <code>Paste as Tribble</code> from the <code>Addins</code> drop down menu. You’ll find the <code>Addins</code> drop down just below the RStudio main menu.</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1">jw7gluc &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">tribble</span>(</a>
-<a class="sourceLine" id="cb119-2" title="2">             <span class="op">~</span>V1, <span class="op">~</span>V2, <span class="op">~</span>V3, <span class="op">~</span>V4, <span class="op">~</span>V5, <span class="op">~</span>V6, <span class="op">~</span>V7, <span class="op">~</span>V8, <span class="op">~</span>V9, <span class="op">~</span>V10, <span class="op">~</span>V11, <span class="op">~</span>V12, <span class="op">~</span>V13, <span class="op">~</span>V14,</a>
-<a class="sourceLine" id="cb119-3" title="3">             <span class="dv">136</span>, <span class="dv">270</span>, <span class="dv">162</span>, <span class="dv">165</span>, <span class="dv">192</span>, <span class="dv">397</span>, <span class="dv">172</span>, <span class="dv">148</span>, <span class="dv">291</span>,  <span class="dv">239</span>,  <span class="dv">192</span>,  <span class="dv">172</span>,  <span class="dv">235</span>,  <span class="dv">153</span>,</a>
-<a class="sourceLine" id="cb119-4" title="4">             <span class="dv">345</span>, <span class="dv">518</span>, <span class="dv">429</span>, <span class="dv">413</span>, <span class="dv">456</span>, <span class="dv">487</span>, <span class="dv">468</span>, <span class="dv">419</span>, <span class="dv">507</span>,  <span class="dv">559</span>,  <span class="dv">420</span>,  <span class="dv">415</span>,  <span class="dv">511</span>,  <span class="dv">464</span>,</a>
-<a class="sourceLine" id="cb119-5" title="5">             <span class="dv">190</span>, <span class="dv">301</span>, <span class="dv">311</span>, <span class="dv">361</span>, <span class="dv">398</span>, <span class="dv">465</span>, <span class="dv">388</span>, <span class="dv">392</span>, <span class="dv">453</span>,  <span class="dv">421</span>,  <span class="dv">355</span>,  <span class="dv">381</span>,  <span class="dv">394</span>,  <span class="dv">444</span>,</a>
-<a class="sourceLine" id="cb119-6" title="6">             <span class="dv">434</span>, <span class="dv">504</span>, <span class="dv">453</span>, <span class="dv">392</span>, <span class="dv">350</span>, <span class="dv">400</span>, <span class="dv">458</span>, <span class="dv">387</span>, <span class="dv">342</span>,  <span class="dv">368</span>,  <span class="dv">355</span>,  <span class="dv">429</span>,  <span class="dv">373</span>,  <span class="dv">501</span>,</a>
-<a class="sourceLine" id="cb119-7" title="7">             <span class="dv">424</span>, <span class="dv">486</span>, <span class="dv">447</span>, <span class="dv">417</span>, <span class="dv">496</span>, <span class="dv">484</span>, <span class="dv">468</span>, <span class="dv">423</span>, <span class="dv">472</span>,  <span class="dv">507</span>,  <span class="dv">458</span>,  <span class="dv">456</span>,  <span class="dv">519</span>,  <span class="dv">570</span>,</a>
-<a class="sourceLine" id="cb119-8" title="8">             <span class="dv">170</span>, <span class="dv">208</span>, <span class="dv">134</span>, <span class="dv">129</span>, <span class="dv">147</span>, <span class="dv">141</span>, <span class="dv">241</span>, <span class="dv">128</span>, <span class="dv">162</span>,  <span class="dv">163</span>,  <span class="dv">222</span>,  <span class="dv">438</span>,  <span class="dv">307</span>,  <span class="dv">252</span>,</a>
-<a class="sourceLine" id="cb119-9" title="9">             <span class="dv">487</span>, <span class="dv">449</span>, <span class="dv">525</span>, <span class="dv">419</span>, <span class="dv">437</span>, <span class="dv">476</span>, <span class="dv">525</span>, <span class="dv">499</span>, <span class="dv">516</span>,  <span class="dv">485</span>,  <span class="dv">472</span>,  <span class="dv">535</span>,  <span class="dv">500</span>,  <span class="dv">497</span>,</a>
-<a class="sourceLine" id="cb119-10" title="10">             <span class="dv">218</span>, <span class="dv">273</span>, <span class="dv">254</span>, <span class="dv">265</span>, <span class="dv">338</span>, <span class="dv">386</span>, <span class="dv">287</span>, <span class="dv">236</span>, <span class="dv">347</span>,  <span class="dv">235</span>,  <span class="dv">432</span>,  <span class="dv">450</span>,  <span class="dv">509</span>,  <span class="dv">326</span>,</a>
-<a class="sourceLine" id="cb119-11" title="11">             <span class="dv">179</span>, <span class="dv">184</span>, <span class="dv">124</span>, <span class="dv">107</span>, <span class="dv">108</span>, <span class="dv">149</span>, <span class="dv">142</span>, <span class="dv">143</span>, <span class="dv">112</span>,  <span class="dv">233</span>,  <span class="dv">113</span>,  <span class="dv">137</span>,  <span class="dv">106</span>,  <span class="dv">150</span>,</a>
-<a class="sourceLine" id="cb119-12" title="12">             <span class="dv">260</span>, <span class="dv">381</span>, <span class="dv">174</span>, <span class="dv">140</span>, <span class="dv">132</span>, <span class="dv">138</span>, <span class="dv">164</span>, <span class="dv">137</span>, <span class="dv">122</span>,  <span class="dv">140</span>,  <span class="dv">102</span>,  <span class="dv">174</span>,  <span class="dv">120</span>,  <span class="dv">135</span>,</a>
-<a class="sourceLine" id="cb119-13" title="13">             <span class="dv">115</span>, <span class="dv">191</span>, <span class="dv">132</span>, <span class="dv">132</span>, <span class="dv">169</span>, <span class="dv">158</span>, <span class="dv">129</span>, <span class="dv">120</span>, <span class="dv">122</span>,  <span class="dv">157</span>,   <span class="dv">94</span>,  <span class="dv">141</span>,  <span class="dv">120</span>,  <span class="dv">166</span>,</a>
-<a class="sourceLine" id="cb119-14" title="14">             <span class="dv">526</span>, <span class="dv">517</span>, <span class="dv">465</span>, <span class="dv">394</span>, <span class="dv">310</span>, <span class="dv">269</span>, <span class="dv">213</span>, <span class="dv">185</span>, <span class="dv">145</span>,  <span class="dv">201</span>,  <span class="dv">131</span>,  <span class="dv">258</span>,  <span class="dv">114</span>,  <span class="dv">160</span>,</a>
-<a class="sourceLine" id="cb119-15" title="15">             <span class="dv">325</span>, <span class="dv">252</span>, <span class="dv">203</span>, <span class="dv">158</span>, <span class="dv">135</span>, <span class="dv">162</span>, <span class="dv">164</span>, <span class="dv">181</span>, <span class="dv">150</span>,  <span class="dv">177</span>,  <span class="dv">162</span>,  <span class="dv">192</span>,  <span class="dv">170</span>,  <span class="dv">162</span>,</a>
-<a class="sourceLine" id="cb119-16" title="16">             <span class="dv">329</span>, <span class="dv">296</span>, <span class="dv">212</span>, <span class="dv">159</span>, <span class="dv">156</span>, <span class="dv">200</span>, <span class="dv">139</span>, <span class="dv">143</span>, <span class="dv">164</span>,  <span class="dv">150</span>,  <span class="dv">119</span>,  <span class="dv">193</span>,  <span class="dv">148</span>,  <span class="dv">188</span>,</a>
-<a class="sourceLine" id="cb119-17" title="17">             <span class="dv">230</span>, <span class="dv">414</span>, <span class="dv">408</span>, <span class="dv">179</span>, <span class="dv">432</span>, <span class="dv">288</span>, <span class="dv">163</span>, <span class="dv">240</span>, <span class="dv">185</span>,  <span class="dv">208</span>,  <span class="dv">138</span>,  <span class="dv">208</span>,  <span class="dv">153</span>,  <span class="dv">140</span></a>
-<a class="sourceLine" id="cb119-18" title="18">             )</a></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="jaxwest7.html#cb114-1"></a>jw7gluc &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">tribble</span>(</span>
+<span id="cb114-2"><a href="jaxwest7.html#cb114-2"></a>             <span class="op">~</span>V1, <span class="op">~</span>V2, <span class="op">~</span>V3, <span class="op">~</span>V4, <span class="op">~</span>V5, <span class="op">~</span>V6, <span class="op">~</span>V7, <span class="op">~</span>V8, <span class="op">~</span>V9, <span class="op">~</span>V10, <span class="op">~</span>V11, <span class="op">~</span>V12, <span class="op">~</span>V13, <span class="op">~</span>V14,</span>
+<span id="cb114-3"><a href="jaxwest7.html#cb114-3"></a>             <span class="dv">136</span>, <span class="dv">270</span>, <span class="dv">162</span>, <span class="dv">165</span>, <span class="dv">192</span>, <span class="dv">397</span>, <span class="dv">172</span>, <span class="dv">148</span>, <span class="dv">291</span>,  <span class="dv">239</span>,  <span class="dv">192</span>,  <span class="dv">172</span>,  <span class="dv">235</span>,  <span class="dv">153</span>,</span>
+<span id="cb114-4"><a href="jaxwest7.html#cb114-4"></a>             <span class="dv">345</span>, <span class="dv">518</span>, <span class="dv">429</span>, <span class="dv">413</span>, <span class="dv">456</span>, <span class="dv">487</span>, <span class="dv">468</span>, <span class="dv">419</span>, <span class="dv">507</span>,  <span class="dv">559</span>,  <span class="dv">420</span>,  <span class="dv">415</span>,  <span class="dv">511</span>,  <span class="dv">464</span>,</span>
+<span id="cb114-5"><a href="jaxwest7.html#cb114-5"></a>             <span class="dv">190</span>, <span class="dv">301</span>, <span class="dv">311</span>, <span class="dv">361</span>, <span class="dv">398</span>, <span class="dv">465</span>, <span class="dv">388</span>, <span class="dv">392</span>, <span class="dv">453</span>,  <span class="dv">421</span>,  <span class="dv">355</span>,  <span class="dv">381</span>,  <span class="dv">394</span>,  <span class="dv">444</span>,</span>
+<span id="cb114-6"><a href="jaxwest7.html#cb114-6"></a>             <span class="dv">434</span>, <span class="dv">504</span>, <span class="dv">453</span>, <span class="dv">392</span>, <span class="dv">350</span>, <span class="dv">400</span>, <span class="dv">458</span>, <span class="dv">387</span>, <span class="dv">342</span>,  <span class="dv">368</span>,  <span class="dv">355</span>,  <span class="dv">429</span>,  <span class="dv">373</span>,  <span class="dv">501</span>,</span>
+<span id="cb114-7"><a href="jaxwest7.html#cb114-7"></a>             <span class="dv">424</span>, <span class="dv">486</span>, <span class="dv">447</span>, <span class="dv">417</span>, <span class="dv">496</span>, <span class="dv">484</span>, <span class="dv">468</span>, <span class="dv">423</span>, <span class="dv">472</span>,  <span class="dv">507</span>,  <span class="dv">458</span>,  <span class="dv">456</span>,  <span class="dv">519</span>,  <span class="dv">570</span>,</span>
+<span id="cb114-8"><a href="jaxwest7.html#cb114-8"></a>             <span class="dv">170</span>, <span class="dv">208</span>, <span class="dv">134</span>, <span class="dv">129</span>, <span class="dv">147</span>, <span class="dv">141</span>, <span class="dv">241</span>, <span class="dv">128</span>, <span class="dv">162</span>,  <span class="dv">163</span>,  <span class="dv">222</span>,  <span class="dv">438</span>,  <span class="dv">307</span>,  <span class="dv">252</span>,</span>
+<span id="cb114-9"><a href="jaxwest7.html#cb114-9"></a>             <span class="dv">487</span>, <span class="dv">449</span>, <span class="dv">525</span>, <span class="dv">419</span>, <span class="dv">437</span>, <span class="dv">476</span>, <span class="dv">525</span>, <span class="dv">499</span>, <span class="dv">516</span>,  <span class="dv">485</span>,  <span class="dv">472</span>,  <span class="dv">535</span>,  <span class="dv">500</span>,  <span class="dv">497</span>,</span>
+<span id="cb114-10"><a href="jaxwest7.html#cb114-10"></a>             <span class="dv">218</span>, <span class="dv">273</span>, <span class="dv">254</span>, <span class="dv">265</span>, <span class="dv">338</span>, <span class="dv">386</span>, <span class="dv">287</span>, <span class="dv">236</span>, <span class="dv">347</span>,  <span class="dv">235</span>,  <span class="dv">432</span>,  <span class="dv">450</span>,  <span class="dv">509</span>,  <span class="dv">326</span>,</span>
+<span id="cb114-11"><a href="jaxwest7.html#cb114-11"></a>             <span class="dv">179</span>, <span class="dv">184</span>, <span class="dv">124</span>, <span class="dv">107</span>, <span class="dv">108</span>, <span class="dv">149</span>, <span class="dv">142</span>, <span class="dv">143</span>, <span class="dv">112</span>,  <span class="dv">233</span>,  <span class="dv">113</span>,  <span class="dv">137</span>,  <span class="dv">106</span>,  <span class="dv">150</span>,</span>
+<span id="cb114-12"><a href="jaxwest7.html#cb114-12"></a>             <span class="dv">260</span>, <span class="dv">381</span>, <span class="dv">174</span>, <span class="dv">140</span>, <span class="dv">132</span>, <span class="dv">138</span>, <span class="dv">164</span>, <span class="dv">137</span>, <span class="dv">122</span>,  <span class="dv">140</span>,  <span class="dv">102</span>,  <span class="dv">174</span>,  <span class="dv">120</span>,  <span class="dv">135</span>,</span>
+<span id="cb114-13"><a href="jaxwest7.html#cb114-13"></a>             <span class="dv">115</span>, <span class="dv">191</span>, <span class="dv">132</span>, <span class="dv">132</span>, <span class="dv">169</span>, <span class="dv">158</span>, <span class="dv">129</span>, <span class="dv">120</span>, <span class="dv">122</span>,  <span class="dv">157</span>,   <span class="dv">94</span>,  <span class="dv">141</span>,  <span class="dv">120</span>,  <span class="dv">166</span>,</span>
+<span id="cb114-14"><a href="jaxwest7.html#cb114-14"></a>             <span class="dv">526</span>, <span class="dv">517</span>, <span class="dv">465</span>, <span class="dv">394</span>, <span class="dv">310</span>, <span class="dv">269</span>, <span class="dv">213</span>, <span class="dv">185</span>, <span class="dv">145</span>,  <span class="dv">201</span>,  <span class="dv">131</span>,  <span class="dv">258</span>,  <span class="dv">114</span>,  <span class="dv">160</span>,</span>
+<span id="cb114-15"><a href="jaxwest7.html#cb114-15"></a>             <span class="dv">325</span>, <span class="dv">252</span>, <span class="dv">203</span>, <span class="dv">158</span>, <span class="dv">135</span>, <span class="dv">162</span>, <span class="dv">164</span>, <span class="dv">181</span>, <span class="dv">150</span>,  <span class="dv">177</span>,  <span class="dv">162</span>,  <span class="dv">192</span>,  <span class="dv">170</span>,  <span class="dv">162</span>,</span>
+<span id="cb114-16"><a href="jaxwest7.html#cb114-16"></a>             <span class="dv">329</span>, <span class="dv">296</span>, <span class="dv">212</span>, <span class="dv">159</span>, <span class="dv">156</span>, <span class="dv">200</span>, <span class="dv">139</span>, <span class="dv">143</span>, <span class="dv">164</span>,  <span class="dv">150</span>,  <span class="dv">119</span>,  <span class="dv">193</span>,  <span class="dv">148</span>,  <span class="dv">188</span>,</span>
+<span id="cb114-17"><a href="jaxwest7.html#cb114-17"></a>             <span class="dv">230</span>, <span class="dv">414</span>, <span class="dv">408</span>, <span class="dv">179</span>, <span class="dv">432</span>, <span class="dv">288</span>, <span class="dv">163</span>, <span class="dv">240</span>, <span class="dv">185</span>,  <span class="dv">208</span>,  <span class="dv">138</span>,  <span class="dv">208</span>,  <span class="dv">153</span>,  <span class="dv">140</span></span>
+<span id="cb114-18"><a href="jaxwest7.html#cb114-18"></a>             )</span></code></pre></div>
 <p>Notice how R coerces unique variable names for each column. That’s fine, but we’ll need to fix them.</p>
 </div>
 <div id="step-4" class="section level4">
 <h4><span class="header-section-number">13.2.0.4</span> Step 4</h4>
 <p>Convert from a wide to a long format, and check.</p>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1">gluc &lt;-<span class="st"> </span>jw7gluc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span>V1<span class="op">:</span>V14,</a>
-<a class="sourceLine" id="cb120-2" title="2">                              <span class="dt">names_to =</span> <span class="st">&quot;V&quot;</span>,</a>
-<a class="sourceLine" id="cb120-3" title="3">                              <span class="dt">values_to=</span><span class="st">&quot;glucose&quot;</span>)</a>
-<a class="sourceLine" id="cb120-4" title="4">gluc</a></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="jaxwest7.html#cb115-1"></a>gluc &lt;-<span class="st"> </span>jw7gluc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span>V1<span class="op">:</span>V14,</span>
+<span id="cb115-2"><a href="jaxwest7.html#cb115-2"></a>                              <span class="dt">names_to =</span> <span class="st">&quot;V&quot;</span>,</span>
+<span id="cb115-3"><a href="jaxwest7.html#cb115-3"></a>                              <span class="dt">values_to=</span><span class="st">&quot;glucose&quot;</span>)</span>
+<span id="cb115-4"><a href="jaxwest7.html#cb115-4"></a>gluc</span></code></pre></div>
 <pre><code>## # A tibble: 210 x 2
 ##    V     glucose
 ##    &lt;chr&gt;   &lt;dbl&gt;
@@ -961,22 +982,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-5" class="section level4">
 <h4><span class="header-section-number">13.2.0.5</span> Step 5</h4>
 <p>Create variables for ID, day, blood draw and treatment.</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1">  id &lt;-<span class="st"> </span><span class="kw">rep</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>], <span class="dt">each=</span><span class="dv">14</span>)</a>
-<a class="sourceLine" id="cb122-2" title="2">  day &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">12</span>), <span class="dt">each=</span><span class="dv">2</span>), <span class="dv">15</span>)</a>
-<a class="sourceLine" id="cb122-3" title="3">  draw &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;early&quot;</span>, <span class="st">&quot;late&quot;</span>), <span class="dv">7</span>),<span class="dv">15</span>)</a>
-<a class="sourceLine" id="cb122-4" title="4">  treat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;placebo&quot;</span>, <span class="dv">8</span><span class="op">*</span><span class="dv">14</span> ), <span class="kw">rep</span>(<span class="st">&quot;rosiglitazone&quot;</span>, <span class="dv">7</span><span class="op">*</span><span class="dv">14</span>)) </a></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="jaxwest7.html#cb117-1"></a>  id &lt;-<span class="st"> </span><span class="kw">rep</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>], <span class="dt">each=</span><span class="dv">14</span>)</span>
+<span id="cb117-2"><a href="jaxwest7.html#cb117-2"></a>  day &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">12</span>), <span class="dt">each=</span><span class="dv">2</span>), <span class="dv">15</span>)</span>
+<span id="cb117-3"><a href="jaxwest7.html#cb117-3"></a>  draw &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;early&quot;</span>, <span class="st">&quot;late&quot;</span>), <span class="dv">7</span>),<span class="dv">15</span>)</span>
+<span id="cb117-4"><a href="jaxwest7.html#cb117-4"></a>  treat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;placebo&quot;</span>, <span class="dv">8</span><span class="op">*</span><span class="dv">14</span> ), <span class="kw">rep</span>(<span class="st">&quot;rosiglitazone&quot;</span>, <span class="dv">7</span><span class="op">*</span><span class="dv">14</span>)) </span></code></pre></div>
 </div>
 <div id="step-6" class="section level4">
 <h4><span class="header-section-number">13.2.0.6</span> Step 6</h4>
 <p>Add the variables to the long data frame while removing the irrelevant “V” variable.</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1">gluc &lt;-<span class="st"> </span><span class="kw">add_column</span>(gluc, </a>
-<a class="sourceLine" id="cb123-2" title="2">                   id, </a>
-<a class="sourceLine" id="cb123-3" title="3">                   day, </a>
-<a class="sourceLine" id="cb123-4" title="4">                   draw,</a>
-<a class="sourceLine" id="cb123-5" title="5">                   treat,</a>
-<a class="sourceLine" id="cb123-6" title="6">                   <span class="dt">.before=</span>T) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb123-7" title="7"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&quot;V&quot;</span>))</a>
-<a class="sourceLine" id="cb123-8" title="8">gluc</a></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="jaxwest7.html#cb118-1"></a>gluc &lt;-<span class="st"> </span><span class="kw">add_column</span>(gluc, </span>
+<span id="cb118-2"><a href="jaxwest7.html#cb118-2"></a>                   id, </span>
+<span id="cb118-3"><a href="jaxwest7.html#cb118-3"></a>                   day, </span>
+<span id="cb118-4"><a href="jaxwest7.html#cb118-4"></a>                   draw,</span>
+<span id="cb118-5"><a href="jaxwest7.html#cb118-5"></a>                   treat,</span>
+<span id="cb118-6"><a href="jaxwest7.html#cb118-6"></a>                   <span class="dt">.before=</span>T) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb118-7"><a href="jaxwest7.html#cb118-7"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&quot;V&quot;</span>))</span>
+<span id="cb118-8"><a href="jaxwest7.html#cb118-8"></a>gluc</span></code></pre></div>
 <pre><code>## # A tibble: 210 x 5
 ##    id      day draw  treat   glucose
 ##    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -995,9 +1016,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-7" class="section level4">
 <h4><span class="header-section-number">13.2.0.7</span> Step 7</h4>
 <p>Convert every variable except for glucose to a factor.</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1">  cols &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;day&quot;</span>, <span class="st">&quot;draw&quot;</span>, <span class="st">&quot;treat&quot;</span>)</a>
-<a class="sourceLine" id="cb125-2" title="2">gluc[cols] &lt;-<span class="st"> </span><span class="kw">lapply</span>(gluc[cols], factor)</a>
-<a class="sourceLine" id="cb125-3" title="3">gluc</a></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="jaxwest7.html#cb120-1"></a>  cols &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;day&quot;</span>, <span class="st">&quot;draw&quot;</span>, <span class="st">&quot;treat&quot;</span>)</span>
+<span id="cb120-2"><a href="jaxwest7.html#cb120-2"></a>gluc[cols] &lt;-<span class="st"> </span><span class="kw">lapply</span>(gluc[cols], factor)</span>
+<span id="cb120-3"><a href="jaxwest7.html#cb120-3"></a>gluc</span></code></pre></div>
 <pre><code>## # A tibble: 210 x 5
 ##    id    day   draw  treat   glucose
 ##    &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;     &lt;dbl&gt;
@@ -1016,10 +1037,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-8" class="section level4">
 <h4><span class="header-section-number">13.2.0.8</span> Step 8</h4>
 <p>Average the early and late blood draws, to get one glucose value per day.</p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1">gluc &lt;-<span class="st"> </span>gluc <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb127-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(id, day, treat) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb127-3" title="3"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">glucose=</span><span class="kw">mean</span>(glucose))</a>
-<a class="sourceLine" id="cb127-4" title="4">gluc</a></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="jaxwest7.html#cb122-1"></a>gluc &lt;-<span class="st"> </span>gluc <span class="op">%&gt;%</span></span>
+<span id="cb122-2"><a href="jaxwest7.html#cb122-2"></a><span class="st">  </span><span class="kw">group_by</span>(id, day, treat) <span class="op">%&gt;%</span></span>
+<span id="cb122-3"><a href="jaxwest7.html#cb122-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">glucose=</span><span class="kw">mean</span>(glucose))</span></code></pre></div>
+<pre><code>## `summarise()` regrouping output by &#39;id&#39;, &#39;day&#39; (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="jaxwest7.html#cb124-1"></a>gluc</span></code></pre></div>
 <pre><code>## # A tibble: 105 x 4
 ## # Groups:   id, day [105]
 ##    id    day   treat   glucose
@@ -1039,16 +1061,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-9" class="section level4">
 <h4><span class="header-section-number">13.2.0.9</span> Step 9</h4>
 <p>Now here’s a summary of all the replicate values in tabular form.</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1">gluc <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb129-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(day, treat) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb129-3" title="3"><span class="st">  </span><span class="kw">summarise</span>(</a>
-<a class="sourceLine" id="cb129-4" title="4">    <span class="dt">n=</span><span class="kw">length</span>(glucose),</a>
-<a class="sourceLine" id="cb129-5" title="5">    <span class="dt">mean=</span><span class="kw">round</span>(<span class="kw">mean</span>(glucose)),</a>
-<a class="sourceLine" id="cb129-6" title="6">    <span class="dt">sd=</span><span class="kw">round</span>(<span class="kw">sd</span>(glucose)),</a>
-<a class="sourceLine" id="cb129-7" title="7">    <span class="dt">sem=</span><span class="kw">round</span>(sd<span class="op">/</span><span class="kw">sqrt</span>(n)),</a>
-<a class="sourceLine" id="cb129-8" title="8">    <span class="dt">min=</span><span class="kw">round</span>(<span class="kw">min</span>(glucose)),</a>
-<a class="sourceLine" id="cb129-9" title="9">    <span class="dt">max=</span><span class="kw">round</span>(<span class="kw">max</span>(glucose))</a>
-<a class="sourceLine" id="cb129-10" title="10">  )</a></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="jaxwest7.html#cb126-1"></a>gluc <span class="op">%&gt;%</span></span>
+<span id="cb126-2"><a href="jaxwest7.html#cb126-2"></a><span class="st">  </span><span class="kw">group_by</span>(day, treat) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb126-3"><a href="jaxwest7.html#cb126-3"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb126-4"><a href="jaxwest7.html#cb126-4"></a>    <span class="dt">n=</span><span class="kw">length</span>(glucose),</span>
+<span id="cb126-5"><a href="jaxwest7.html#cb126-5"></a>    <span class="dt">mean=</span><span class="kw">round</span>(<span class="kw">mean</span>(glucose)),</span>
+<span id="cb126-6"><a href="jaxwest7.html#cb126-6"></a>    <span class="dt">sd=</span><span class="kw">round</span>(<span class="kw">sd</span>(glucose)),</span>
+<span id="cb126-7"><a href="jaxwest7.html#cb126-7"></a>    <span class="dt">sem=</span><span class="kw">round</span>(sd<span class="op">/</span><span class="kw">sqrt</span>(n)),</span>
+<span id="cb126-8"><a href="jaxwest7.html#cb126-8"></a>    <span class="dt">min=</span><span class="kw">round</span>(<span class="kw">min</span>(glucose)),</span>
+<span id="cb126-9"><a href="jaxwest7.html#cb126-9"></a>    <span class="dt">max=</span><span class="kw">round</span>(<span class="kw">max</span>(glucose))</span>
+<span id="cb126-10"><a href="jaxwest7.html#cb126-10"></a>  )</span></code></pre></div>
+<pre><code>## `summarise()` regrouping output by &#39;day&#39; (override with `.groups` argument)</code></pre>
 <pre><code>## # A tibble: 14 x 8
 ## # Groups:   day [7]
 ##    day   treat             n  mean    sd   sem   min   max
@@ -1077,31 +1100,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-1-1" class="section level4">
 <h4><span class="header-section-number">13.3.0.1</span> Step 1</h4>
 <p>From the BodyWeightsGroups sheet we copy cells F15:T45 to the clipboard. Name an object in the code junk. Then on the Addins drop down menu select <code>Paste as tribble</code></p>
-<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" title="1">jw7bw &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">tribble</span>(</a>
-<a class="sourceLine" id="cb131-2" title="2">  <span class="op">~</span>V1,  <span class="op">~</span>V2,  <span class="op">~</span>V3,  <span class="op">~</span>V4,  <span class="op">~</span>V5,  <span class="op">~</span>V6,  <span class="op">~</span>V7,  <span class="op">~</span>V8,  <span class="op">~</span>V9, <span class="op">~</span>V10, <span class="op">~</span>V11, <span class="op">~</span>V12, <span class="op">~</span>V13, <span class="op">~</span>V14, <span class="op">~</span>V15,</a>
-<a class="sourceLine" id="cb131-3" title="3">  <span class="fl">31.9</span>, <span class="fl">32.1</span>, <span class="fl">32.8</span>,   <span class="dv">33</span>, <span class="fl">33.3</span>, <span class="fl">33.2</span>, <span class="fl">33.2</span>, <span class="fl">32.8</span>, <span class="fl">33.5</span>,   <span class="dv">34</span>, <span class="fl">34.2</span>, <span class="fl">34.9</span>, <span class="fl">35.2</span>, <span class="fl">35.8</span>, <span class="fl">36.1</span>,</a>
-<a class="sourceLine" id="cb131-4" title="4">  <span class="fl">38.1</span>, <span class="fl">38.4</span>, <span class="fl">38.7</span>, <span class="fl">38.5</span>, <span class="fl">38.8</span>, <span class="fl">38.8</span>, <span class="fl">38.9</span>, <span class="fl">38.6</span>, <span class="fl">39.4</span>, <span class="fl">39.4</span>,   <span class="dv">39</span>, <span class="fl">39.4</span>, <span class="fl">39.7</span>, <span class="fl">39.3</span>, <span class="fl">39.1</span>,</a>
-<a class="sourceLine" id="cb131-5" title="5">  <span class="dv">31</span>, <span class="fl">31.7</span>, <span class="fl">31.9</span>,   <span class="dv">32</span>, <span class="fl">32.9</span>, <span class="fl">33.1</span>, <span class="fl">33.5</span>, <span class="fl">33.6</span>, <span class="fl">34.3</span>, <span class="fl">34.4</span>, <span class="fl">34.7</span>, <span class="fl">35.5</span>, <span class="fl">35.4</span>, <span class="fl">35.5</span>, <span class="fl">35.4</span>,</a>
-<a class="sourceLine" id="cb131-6" title="6">  <span class="fl">36.4</span>, <span class="fl">35.9</span>, <span class="fl">36.8</span>, <span class="fl">36.9</span>, <span class="fl">37.3</span>, <span class="fl">37.1</span>, <span class="fl">37.4</span>, <span class="fl">37.4</span>, <span class="fl">36.8</span>, <span class="fl">37.4</span>, <span class="fl">37.1</span>,   <span class="dv">38</span>, <span class="fl">37.4</span>,   <span class="dv">38</span>, <span class="fl">37.9</span>,</a>
-<a class="sourceLine" id="cb131-7" title="7">  <span class="fl">38.9</span>, <span class="fl">38.5</span>, <span class="fl">39.2</span>, <span class="fl">39.1</span>, <span class="fl">39.8</span>, <span class="fl">39.3</span>, <span class="fl">39.3</span>, <span class="fl">39.5</span>, <span class="fl">39.7</span>, <span class="fl">40.1</span>, <span class="fl">40.3</span>,   <span class="dv">41</span>, <span class="fl">40.9</span>, <span class="fl">41.4</span>, <span class="fl">41.4</span>,</a>
-<a class="sourceLine" id="cb131-8" title="8">  <span class="fl">33.8</span>, <span class="fl">34.2</span>, <span class="fl">34.2</span>, <span class="fl">33.9</span>, <span class="fl">34.7</span>,   <span class="dv">35</span>, <span class="fl">35.3</span>, <span class="fl">35.3</span>, <span class="fl">35.8</span>, <span class="fl">36.1</span>, <span class="fl">36.7</span>, <span class="fl">37.3</span>, <span class="fl">37.5</span>, <span class="fl">38.4</span>, <span class="fl">38.7</span>,</a>
-<a class="sourceLine" id="cb131-9" title="9">  <span class="fl">34.6</span>,   <span class="dv">35</span>,   <span class="dv">35</span>, <span class="fl">35.1</span>, <span class="fl">35.6</span>, <span class="fl">35.5</span>, <span class="fl">35.7</span>, <span class="fl">36.1</span>, <span class="fl">35.9</span>, <span class="fl">35.9</span>, <span class="fl">35.5</span>, <span class="fl">35.3</span>, <span class="fl">35.2</span>,   <span class="dv">35</span>, <span class="fl">34.6</span>,</a>
-<a class="sourceLine" id="cb131-10" title="10">  <span class="fl">33.4</span>, <span class="fl">33.6</span>, <span class="fl">34.2</span>, <span class="fl">33.8</span>, <span class="fl">34.3</span>, <span class="fl">34.6</span>, <span class="fl">34.7</span>, <span class="fl">34.9</span>, <span class="fl">34.9</span>, <span class="fl">35.4</span>, <span class="fl">35.6</span>, <span class="fl">35.8</span>, <span class="fl">36.1</span>, <span class="fl">35.9</span>, <span class="fl">35.8</span>,</a>
-<a class="sourceLine" id="cb131-11" title="11">  <span class="fl">31.9</span>, <span class="fl">31.9</span>, <span class="fl">32.6</span>, <span class="fl">33.2</span>, <span class="fl">34.3</span>, <span class="fl">34.7</span>, <span class="fl">35.3</span>, <span class="fl">35.1</span>, <span class="fl">35.4</span>, <span class="fl">35.6</span>,   <span class="dv">36</span>, <span class="fl">36.9</span>,   <span class="dv">37</span>, <span class="fl">38.7</span>, <span class="fl">38.8</span>,</a>
-<a class="sourceLine" id="cb131-12" title="12">  <span class="fl">33.4</span>, <span class="fl">34.1</span>, <span class="fl">35.2</span>, <span class="fl">35.8</span>, <span class="fl">36.7</span>, <span class="fl">37.4</span>, <span class="fl">38.2</span>, <span class="fl">38.7</span>, <span class="fl">39.5</span>, <span class="fl">40.1</span>, <span class="fl">40.2</span>, <span class="fl">40.6</span>,   <span class="dv">41</span>, <span class="fl">41.7</span>,   <span class="dv">42</span>,</a>
-<a class="sourceLine" id="cb131-13" title="13">  <span class="fl">32.8</span>, <span class="fl">33.7</span>, <span class="fl">34.5</span>, <span class="fl">34.9</span>, <span class="fl">35.5</span>,   <span class="dv">36</span>,   <span class="dv">36</span>, <span class="fl">36.2</span>,   <span class="dv">36</span>, <span class="fl">36.9</span>, <span class="fl">36.9</span>, <span class="fl">37.6</span>, <span class="fl">38.1</span>, <span class="fl">39.2</span>, <span class="fl">39.5</span>,</a>
-<a class="sourceLine" id="cb131-14" title="14">  <span class="fl">37.9</span>, <span class="fl">38.8</span>, <span class="fl">39.9</span>, <span class="fl">40.4</span>, <span class="fl">41.5</span>, <span class="fl">42.5</span>, <span class="fl">43.3</span>, <span class="fl">43.8</span>, <span class="fl">44.5</span>, <span class="fl">44.7</span>, <span class="fl">45.1</span>, <span class="fl">45.7</span>, <span class="fl">46.3</span>, <span class="fl">47.1</span>, <span class="fl">47.1</span>,</a>
-<a class="sourceLine" id="cb131-15" title="15">  <span class="fl">35.9</span>, <span class="fl">37.2</span>,   <span class="dv">38</span>, <span class="fl">38.6</span>, <span class="fl">39.4</span>,   <span class="dv">40</span>, <span class="fl">40.5</span>,   <span class="dv">41</span>, <span class="fl">41.2</span>, <span class="fl">42.3</span>, <span class="fl">43.2</span>, <span class="fl">43.9</span>, <span class="fl">44.2</span>, <span class="fl">44.3</span>, <span class="fl">44.9</span>,</a>
-<a class="sourceLine" id="cb131-16" title="16">  <span class="fl">35.2</span>, <span class="fl">36.5</span>, <span class="fl">37.4</span>,   <span class="dv">38</span>,   <span class="dv">39</span>, <span class="fl">39.5</span>, <span class="fl">40.4</span>, <span class="fl">40.7</span>, <span class="fl">40.9</span>, <span class="fl">41.9</span>, <span class="fl">42.5</span>, <span class="fl">43.5</span>,   <span class="dv">44</span>, <span class="fl">44.1</span>, <span class="fl">44.7</span>,</a>
-<a class="sourceLine" id="cb131-17" title="17">  <span class="fl">35.8</span>, <span class="fl">36.6</span>, <span class="fl">37.3</span>, <span class="fl">37.7</span>, <span class="fl">38.4</span>, <span class="fl">38.4</span>, <span class="fl">39.3</span>, <span class="fl">40.1</span>, <span class="fl">40.9</span>, <span class="fl">41.4</span>, <span class="fl">41.7</span>, <span class="fl">42.3</span>, <span class="fl">42.2</span>, <span class="fl">42.9</span>, <span class="fl">43.3</span></a>
-<a class="sourceLine" id="cb131-18" title="18">)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="jaxwest7.html#cb129-1"></a>jw7bw &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">tribble</span>(</span>
+<span id="cb129-2"><a href="jaxwest7.html#cb129-2"></a>  <span class="op">~</span>V1,  <span class="op">~</span>V2,  <span class="op">~</span>V3,  <span class="op">~</span>V4,  <span class="op">~</span>V5,  <span class="op">~</span>V6,  <span class="op">~</span>V7,  <span class="op">~</span>V8,  <span class="op">~</span>V9, <span class="op">~</span>V10, <span class="op">~</span>V11, <span class="op">~</span>V12, <span class="op">~</span>V13, <span class="op">~</span>V14, <span class="op">~</span>V15,</span>
+<span id="cb129-3"><a href="jaxwest7.html#cb129-3"></a>  <span class="fl">31.9</span>, <span class="fl">32.1</span>, <span class="fl">32.8</span>,   <span class="dv">33</span>, <span class="fl">33.3</span>, <span class="fl">33.2</span>, <span class="fl">33.2</span>, <span class="fl">32.8</span>, <span class="fl">33.5</span>,   <span class="dv">34</span>, <span class="fl">34.2</span>, <span class="fl">34.9</span>, <span class="fl">35.2</span>, <span class="fl">35.8</span>, <span class="fl">36.1</span>,</span>
+<span id="cb129-4"><a href="jaxwest7.html#cb129-4"></a>  <span class="fl">38.1</span>, <span class="fl">38.4</span>, <span class="fl">38.7</span>, <span class="fl">38.5</span>, <span class="fl">38.8</span>, <span class="fl">38.8</span>, <span class="fl">38.9</span>, <span class="fl">38.6</span>, <span class="fl">39.4</span>, <span class="fl">39.4</span>,   <span class="dv">39</span>, <span class="fl">39.4</span>, <span class="fl">39.7</span>, <span class="fl">39.3</span>, <span class="fl">39.1</span>,</span>
+<span id="cb129-5"><a href="jaxwest7.html#cb129-5"></a>  <span class="dv">31</span>, <span class="fl">31.7</span>, <span class="fl">31.9</span>,   <span class="dv">32</span>, <span class="fl">32.9</span>, <span class="fl">33.1</span>, <span class="fl">33.5</span>, <span class="fl">33.6</span>, <span class="fl">34.3</span>, <span class="fl">34.4</span>, <span class="fl">34.7</span>, <span class="fl">35.5</span>, <span class="fl">35.4</span>, <span class="fl">35.5</span>, <span class="fl">35.4</span>,</span>
+<span id="cb129-6"><a href="jaxwest7.html#cb129-6"></a>  <span class="fl">36.4</span>, <span class="fl">35.9</span>, <span class="fl">36.8</span>, <span class="fl">36.9</span>, <span class="fl">37.3</span>, <span class="fl">37.1</span>, <span class="fl">37.4</span>, <span class="fl">37.4</span>, <span class="fl">36.8</span>, <span class="fl">37.4</span>, <span class="fl">37.1</span>,   <span class="dv">38</span>, <span class="fl">37.4</span>,   <span class="dv">38</span>, <span class="fl">37.9</span>,</span>
+<span id="cb129-7"><a href="jaxwest7.html#cb129-7"></a>  <span class="fl">38.9</span>, <span class="fl">38.5</span>, <span class="fl">39.2</span>, <span class="fl">39.1</span>, <span class="fl">39.8</span>, <span class="fl">39.3</span>, <span class="fl">39.3</span>, <span class="fl">39.5</span>, <span class="fl">39.7</span>, <span class="fl">40.1</span>, <span class="fl">40.3</span>,   <span class="dv">41</span>, <span class="fl">40.9</span>, <span class="fl">41.4</span>, <span class="fl">41.4</span>,</span>
+<span id="cb129-8"><a href="jaxwest7.html#cb129-8"></a>  <span class="fl">33.8</span>, <span class="fl">34.2</span>, <span class="fl">34.2</span>, <span class="fl">33.9</span>, <span class="fl">34.7</span>,   <span class="dv">35</span>, <span class="fl">35.3</span>, <span class="fl">35.3</span>, <span class="fl">35.8</span>, <span class="fl">36.1</span>, <span class="fl">36.7</span>, <span class="fl">37.3</span>, <span class="fl">37.5</span>, <span class="fl">38.4</span>, <span class="fl">38.7</span>,</span>
+<span id="cb129-9"><a href="jaxwest7.html#cb129-9"></a>  <span class="fl">34.6</span>,   <span class="dv">35</span>,   <span class="dv">35</span>, <span class="fl">35.1</span>, <span class="fl">35.6</span>, <span class="fl">35.5</span>, <span class="fl">35.7</span>, <span class="fl">36.1</span>, <span class="fl">35.9</span>, <span class="fl">35.9</span>, <span class="fl">35.5</span>, <span class="fl">35.3</span>, <span class="fl">35.2</span>,   <span class="dv">35</span>, <span class="fl">34.6</span>,</span>
+<span id="cb129-10"><a href="jaxwest7.html#cb129-10"></a>  <span class="fl">33.4</span>, <span class="fl">33.6</span>, <span class="fl">34.2</span>, <span class="fl">33.8</span>, <span class="fl">34.3</span>, <span class="fl">34.6</span>, <span class="fl">34.7</span>, <span class="fl">34.9</span>, <span class="fl">34.9</span>, <span class="fl">35.4</span>, <span class="fl">35.6</span>, <span class="fl">35.8</span>, <span class="fl">36.1</span>, <span class="fl">35.9</span>, <span class="fl">35.8</span>,</span>
+<span id="cb129-11"><a href="jaxwest7.html#cb129-11"></a>  <span class="fl">31.9</span>, <span class="fl">31.9</span>, <span class="fl">32.6</span>, <span class="fl">33.2</span>, <span class="fl">34.3</span>, <span class="fl">34.7</span>, <span class="fl">35.3</span>, <span class="fl">35.1</span>, <span class="fl">35.4</span>, <span class="fl">35.6</span>,   <span class="dv">36</span>, <span class="fl">36.9</span>,   <span class="dv">37</span>, <span class="fl">38.7</span>, <span class="fl">38.8</span>,</span>
+<span id="cb129-12"><a href="jaxwest7.html#cb129-12"></a>  <span class="fl">33.4</span>, <span class="fl">34.1</span>, <span class="fl">35.2</span>, <span class="fl">35.8</span>, <span class="fl">36.7</span>, <span class="fl">37.4</span>, <span class="fl">38.2</span>, <span class="fl">38.7</span>, <span class="fl">39.5</span>, <span class="fl">40.1</span>, <span class="fl">40.2</span>, <span class="fl">40.6</span>,   <span class="dv">41</span>, <span class="fl">41.7</span>,   <span class="dv">42</span>,</span>
+<span id="cb129-13"><a href="jaxwest7.html#cb129-13"></a>  <span class="fl">32.8</span>, <span class="fl">33.7</span>, <span class="fl">34.5</span>, <span class="fl">34.9</span>, <span class="fl">35.5</span>,   <span class="dv">36</span>,   <span class="dv">36</span>, <span class="fl">36.2</span>,   <span class="dv">36</span>, <span class="fl">36.9</span>, <span class="fl">36.9</span>, <span class="fl">37.6</span>, <span class="fl">38.1</span>, <span class="fl">39.2</span>, <span class="fl">39.5</span>,</span>
+<span id="cb129-14"><a href="jaxwest7.html#cb129-14"></a>  <span class="fl">37.9</span>, <span class="fl">38.8</span>, <span class="fl">39.9</span>, <span class="fl">40.4</span>, <span class="fl">41.5</span>, <span class="fl">42.5</span>, <span class="fl">43.3</span>, <span class="fl">43.8</span>, <span class="fl">44.5</span>, <span class="fl">44.7</span>, <span class="fl">45.1</span>, <span class="fl">45.7</span>, <span class="fl">46.3</span>, <span class="fl">47.1</span>, <span class="fl">47.1</span>,</span>
+<span id="cb129-15"><a href="jaxwest7.html#cb129-15"></a>  <span class="fl">35.9</span>, <span class="fl">37.2</span>,   <span class="dv">38</span>, <span class="fl">38.6</span>, <span class="fl">39.4</span>,   <span class="dv">40</span>, <span class="fl">40.5</span>,   <span class="dv">41</span>, <span class="fl">41.2</span>, <span class="fl">42.3</span>, <span class="fl">43.2</span>, <span class="fl">43.9</span>, <span class="fl">44.2</span>, <span class="fl">44.3</span>, <span class="fl">44.9</span>,</span>
+<span id="cb129-16"><a href="jaxwest7.html#cb129-16"></a>  <span class="fl">35.2</span>, <span class="fl">36.5</span>, <span class="fl">37.4</span>,   <span class="dv">38</span>,   <span class="dv">39</span>, <span class="fl">39.5</span>, <span class="fl">40.4</span>, <span class="fl">40.7</span>, <span class="fl">40.9</span>, <span class="fl">41.9</span>, <span class="fl">42.5</span>, <span class="fl">43.5</span>,   <span class="dv">44</span>, <span class="fl">44.1</span>, <span class="fl">44.7</span>,</span>
+<span id="cb129-17"><a href="jaxwest7.html#cb129-17"></a>  <span class="fl">35.8</span>, <span class="fl">36.6</span>, <span class="fl">37.3</span>, <span class="fl">37.7</span>, <span class="fl">38.4</span>, <span class="fl">38.4</span>, <span class="fl">39.3</span>, <span class="fl">40.1</span>, <span class="fl">40.9</span>, <span class="fl">41.4</span>, <span class="fl">41.7</span>, <span class="fl">42.3</span>, <span class="fl">42.2</span>, <span class="fl">42.9</span>, <span class="fl">43.3</span></span>
+<span id="cb129-18"><a href="jaxwest7.html#cb129-18"></a>)</span></code></pre></div>
 </div>
 <div id="step-2-1" class="section level4">
 <h4><span class="header-section-number">13.3.0.2</span> Step 2</h4>
 <p>Select only the days that correspond to the glucose measurement days.</p>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" title="1">bw &lt;-<span class="st"> </span>jw7bw <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb132-2" title="2"><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(V1, V3, V5, V7, V9, V11, V12))</a>
-<a class="sourceLine" id="cb132-3" title="3">bw</a></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="jaxwest7.html#cb130-1"></a>bw &lt;-<span class="st"> </span>jw7bw <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb130-2"><a href="jaxwest7.html#cb130-2"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(V1, V3, V5, V7, V9, V11, V12))</span>
+<span id="cb130-3"><a href="jaxwest7.html#cb130-3"></a>bw</span></code></pre></div>
 <pre><code>## # A tibble: 15 x 7
 ##       V1    V3    V5    V7    V9   V11   V12
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1124,8 +1147,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-3-1" class="section level4">
 <h4><span class="header-section-number">13.3.0.3</span> Step 3</h4>
 <p>Change from wide to long format and check.</p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" title="1">bw &lt;-<span class="st"> </span>bw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span>V1<span class="op">:</span>V12, <span class="dt">names_to=</span><span class="st">&quot;V&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;weight&quot;</span>)</a>
-<a class="sourceLine" id="cb134-2" title="2">bw</a></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="jaxwest7.html#cb132-1"></a>bw &lt;-<span class="st"> </span>bw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="dt">cols=</span>V1<span class="op">:</span>V12, <span class="dt">names_to=</span><span class="st">&quot;V&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;weight&quot;</span>)</span>
+<span id="cb132-2"><a href="jaxwest7.html#cb132-2"></a>bw</span></code></pre></div>
 <pre><code>## # A tibble: 105 x 2
 ##    V     weight
 ##    &lt;chr&gt;  &lt;dbl&gt;
@@ -1144,14 +1167,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-4-1" class="section level4">
 <h4><span class="header-section-number">13.3.0.4</span> Step 4</h4>
 <p>Add variables for id, day and treatment.</p>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" title="1">id &lt;-<span class="st"> </span><span class="kw">rep</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>], <span class="dt">each=</span><span class="dv">7</span>)</a>
-<a class="sourceLine" id="cb136-2" title="2"></a>
-<a class="sourceLine" id="cb136-3" title="3">day &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">12</span>), <span class="dv">15</span>)</a>
-<a class="sourceLine" id="cb136-4" title="4"></a>
-<a class="sourceLine" id="cb136-5" title="5">treat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;placebo&quot;</span>, <span class="dv">8</span><span class="op">*</span><span class="dv">7</span>), <span class="kw">rep</span>(<span class="st">&quot;rosiglitazone&quot;</span>, <span class="dv">7</span><span class="op">*</span><span class="dv">7</span>))</a>
-<a class="sourceLine" id="cb136-6" title="6"></a>
-<a class="sourceLine" id="cb136-7" title="7">bw &lt;-<span class="st"> </span><span class="kw">add_column</span>(bw, id, day, treat, <span class="dt">.before=</span>T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&quot;V&quot;</span>))</a>
-<a class="sourceLine" id="cb136-8" title="8">bw</a></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="jaxwest7.html#cb134-1"></a>id &lt;-<span class="st"> </span><span class="kw">rep</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>], <span class="dt">each=</span><span class="dv">7</span>)</span>
+<span id="cb134-2"><a href="jaxwest7.html#cb134-2"></a></span>
+<span id="cb134-3"><a href="jaxwest7.html#cb134-3"></a>day &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">12</span>), <span class="dv">15</span>)</span>
+<span id="cb134-4"><a href="jaxwest7.html#cb134-4"></a></span>
+<span id="cb134-5"><a href="jaxwest7.html#cb134-5"></a>treat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;placebo&quot;</span>, <span class="dv">8</span><span class="op">*</span><span class="dv">7</span>), <span class="kw">rep</span>(<span class="st">&quot;rosiglitazone&quot;</span>, <span class="dv">7</span><span class="op">*</span><span class="dv">7</span>))</span>
+<span id="cb134-6"><a href="jaxwest7.html#cb134-6"></a></span>
+<span id="cb134-7"><a href="jaxwest7.html#cb134-7"></a>bw &lt;-<span class="st"> </span><span class="kw">add_column</span>(bw, id, day, treat, <span class="dt">.before=</span>T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">one_of</span>(<span class="st">&quot;V&quot;</span>))</span>
+<span id="cb134-8"><a href="jaxwest7.html#cb134-8"></a>bw</span></code></pre></div>
 <pre><code>## # A tibble: 105 x 4
 ##    id      day treat   weight
 ##    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
@@ -1170,10 +1193,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-5-1" class="section level4">
 <h4><span class="header-section-number">13.3.0.5</span> Step 5</h4>
 <p>Factorize each of the variables except for weight.</p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" title="1">cols &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;day&quot;</span>, <span class="st">&quot;treat&quot;</span>)</a>
-<a class="sourceLine" id="cb138-2" title="2"></a>
-<a class="sourceLine" id="cb138-3" title="3">bw[cols] &lt;-<span class="st"> </span><span class="kw">lapply</span>(bw[cols], factor)</a>
-<a class="sourceLine" id="cb138-4" title="4">bw</a></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="jaxwest7.html#cb136-1"></a>cols &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;day&quot;</span>, <span class="st">&quot;treat&quot;</span>)</span>
+<span id="cb136-2"><a href="jaxwest7.html#cb136-2"></a></span>
+<span id="cb136-3"><a href="jaxwest7.html#cb136-3"></a>bw[cols] &lt;-<span class="st"> </span><span class="kw">lapply</span>(bw[cols], factor)</span>
+<span id="cb136-4"><a href="jaxwest7.html#cb136-4"></a>bw</span></code></pre></div>
 <pre><code>## # A tibble: 105 x 4
 ##    id    day   treat   weight
 ##    &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;    &lt;dbl&gt;
@@ -1192,16 +1215,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="step-6-1" class="section level4">
 <h4><span class="header-section-number">13.3.0.6</span> Step 6</h4>
 <p>Calculate some descriptive statistics.</p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" title="1">bw <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb140-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(day, treat) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb140-3" title="3"><span class="st">  </span><span class="kw">summarise</span>(</a>
-<a class="sourceLine" id="cb140-4" title="4">    <span class="dt">n=</span><span class="kw">length</span>(weight),</a>
-<a class="sourceLine" id="cb140-5" title="5">    <span class="dt">mean=</span><span class="kw">mean</span>(weight),</a>
-<a class="sourceLine" id="cb140-6" title="6">    <span class="dt">sd=</span><span class="kw">sd</span>(weight),</a>
-<a class="sourceLine" id="cb140-7" title="7">    <span class="dt">sem=</span>sd<span class="op">/</span><span class="kw">sqrt</span>(n),</a>
-<a class="sourceLine" id="cb140-8" title="8">    <span class="dt">min=</span><span class="kw">min</span>(weight),</a>
-<a class="sourceLine" id="cb140-9" title="9">    <span class="dt">max=</span><span class="kw">max</span>(weight)</a>
-<a class="sourceLine" id="cb140-10" title="10">  )</a></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="jaxwest7.html#cb138-1"></a>bw <span class="op">%&gt;%</span></span>
+<span id="cb138-2"><a href="jaxwest7.html#cb138-2"></a><span class="st">  </span><span class="kw">group_by</span>(day, treat) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb138-3"><a href="jaxwest7.html#cb138-3"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb138-4"><a href="jaxwest7.html#cb138-4"></a>    <span class="dt">n=</span><span class="kw">length</span>(weight),</span>
+<span id="cb138-5"><a href="jaxwest7.html#cb138-5"></a>    <span class="dt">mean=</span><span class="kw">mean</span>(weight),</span>
+<span id="cb138-6"><a href="jaxwest7.html#cb138-6"></a>    <span class="dt">sd=</span><span class="kw">sd</span>(weight),</span>
+<span id="cb138-7"><a href="jaxwest7.html#cb138-7"></a>    <span class="dt">sem=</span>sd<span class="op">/</span><span class="kw">sqrt</span>(n),</span>
+<span id="cb138-8"><a href="jaxwest7.html#cb138-8"></a>    <span class="dt">min=</span><span class="kw">min</span>(weight),</span>
+<span id="cb138-9"><a href="jaxwest7.html#cb138-9"></a>    <span class="dt">max=</span><span class="kw">max</span>(weight)</span>
+<span id="cb138-10"><a href="jaxwest7.html#cb138-10"></a>  )</span></code></pre></div>
+<pre><code>## `summarise()` regrouping output by &#39;day&#39; (override with `.groups` argument)</code></pre>
 <pre><code>## # A tibble: 14 x 8
 ## # Groups:   day [7]
 ##    day   treat             n  mean    sd   sem   min   max
@@ -1225,9 +1249,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="merge-and-explore-the-glucose-and-bw-data" class="section level2">
 <h2><span class="header-section-number">13.4</span> Merge and explore the glucose and bw data</h2>
 <p>Joining the two data frames is so simple it is almost stupid easy.</p>
-<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb142-1" title="1">jw7 &lt;-<span class="st"> </span><span class="kw">left_join</span>(bw, gluc)</a></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="jaxwest7.html#cb141-1"></a>jw7 &lt;-<span class="st"> </span><span class="kw">left_join</span>(bw, gluc)</span></code></pre></div>
 <pre><code>## Joining, by = c(&quot;id&quot;, &quot;day&quot;, &quot;treat&quot;)</code></pre>
-<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb144-1" title="1">jw7</a></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="jaxwest7.html#cb143-1"></a>jw7</span></code></pre></div>
 <pre><code>## # A tibble: 105 x 5
 ##    id    day   treat   weight glucose
 ##    &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;
@@ -1243,76 +1267,77 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 B     5     placebo   38.8    472.
 ## # ... with 95 more rows</code></pre>
 <p>And now for the visualizations.</p>
-<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" title="1">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7, <span class="kw">aes</span>(day, glucose, <span class="dt">color=</span>treat, <span class="dt">group=</span>id))<span class="op">+</span></a>
-<a class="sourceLine" id="cb146-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb146-3" title="3"><span class="st">    </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb146-4" title="4"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb146-5" title="5"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb146-6" title="6">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7, <span class="kw">aes</span>(day, weight, <span class="dt">color=</span>treat, <span class="dt">group=</span>id))<span class="op">+</span></a>
-<a class="sourceLine" id="cb146-7" title="7"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb146-8" title="8"><span class="st">    </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb146-9" title="9"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb146-10" title="10"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb146-11" title="11"><span class="kw">plot_grid</span>(p1,p2)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-95"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-95-1.png" alt="Spaghetti plots of jaxwest7 data." width="672" />
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="jaxwest7.html#cb145-1"></a>p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7, <span class="kw">aes</span>(day, glucose, <span class="dt">color=</span>treat, <span class="dt">group=</span>id))<span class="op">+</span></span>
+<span id="cb145-2"><a href="jaxwest7.html#cb145-2"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></span>
+<span id="cb145-3"><a href="jaxwest7.html#cb145-3"></a><span class="st">    </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></span>
+<span id="cb145-4"><a href="jaxwest7.html#cb145-4"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
+<span id="cb145-5"><a href="jaxwest7.html#cb145-5"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</span>
+<span id="cb145-6"><a href="jaxwest7.html#cb145-6"></a>p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7, <span class="kw">aes</span>(day, weight, <span class="dt">color=</span>treat, <span class="dt">group=</span>id))<span class="op">+</span></span>
+<span id="cb145-7"><a href="jaxwest7.html#cb145-7"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_line</span>()<span class="op">+</span></span>
+<span id="cb145-8"><a href="jaxwest7.html#cb145-8"></a><span class="st">    </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></span>
+<span id="cb145-9"><a href="jaxwest7.html#cb145-9"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
+<span id="cb145-10"><a href="jaxwest7.html#cb145-10"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</span>
+<span id="cb145-11"><a href="jaxwest7.html#cb145-11"></a><span class="kw">plot_grid</span>(p1,p2)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-91"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-91-1.png" alt="Spaghetti plots of jaxwest7 data." width="672" />
 <p class="caption">
 Figure 13.1: Spaghetti plots of jaxwest7 data.
 </p>
 </div>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7)<span class="op">+</span></a>
-<a class="sourceLine" id="cb147-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(glucose, <span class="dt">fill=</span>treat))<span class="op">+</span></a>
-<a class="sourceLine" id="cb147-3" title="3"><span class="st">  </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb147-4" title="4"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb147-5" title="5"><span class="st">  </span><span class="kw">scale_fill_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb147-6" title="6">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7)<span class="op">+</span></a>
-<a class="sourceLine" id="cb147-7" title="7"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(weight, <span class="dt">fill=</span>treat))<span class="op">+</span></a>
-<a class="sourceLine" id="cb147-8" title="8"><span class="st">  </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb147-9" title="9"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb147-10" title="10"><span class="st">  </span><span class="kw">scale_fill_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb147-11" title="11"><span class="kw">plot_grid</span>(p3,p4)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-96"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-96-1.png" alt="Histograms of the jaxwest7 data." width="672" />
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="jaxwest7.html#cb146-1"></a>p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7)<span class="op">+</span></span>
+<span id="cb146-2"><a href="jaxwest7.html#cb146-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(glucose, <span class="dt">fill=</span>treat))<span class="op">+</span></span>
+<span id="cb146-3"><a href="jaxwest7.html#cb146-3"></a><span class="st">  </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></span>
+<span id="cb146-4"><a href="jaxwest7.html#cb146-4"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
+<span id="cb146-5"><a href="jaxwest7.html#cb146-5"></a><span class="st">  </span><span class="kw">scale_fill_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</span>
+<span id="cb146-6"><a href="jaxwest7.html#cb146-6"></a>p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7)<span class="op">+</span></span>
+<span id="cb146-7"><a href="jaxwest7.html#cb146-7"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(weight, <span class="dt">fill=</span>treat))<span class="op">+</span></span>
+<span id="cb146-8"><a href="jaxwest7.html#cb146-8"></a><span class="st">  </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></span>
+<span id="cb146-9"><a href="jaxwest7.html#cb146-9"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
+<span id="cb146-10"><a href="jaxwest7.html#cb146-10"></a><span class="st">  </span><span class="kw">scale_fill_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</span>
+<span id="cb146-11"><a href="jaxwest7.html#cb146-11"></a><span class="kw">plot_grid</span>(p3,p4)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-92"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-92-1.png" alt="Histograms of the jaxwest7 data." width="672" />
 <p class="caption">
 Figure 13.2: Histograms of the jaxwest7 data.
 </p>
 </div>
-<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" title="1">p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7, <span class="kw">aes</span>(day, glucose,<span class="dt">color=</span>treat)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb148-2" title="2"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_sdl&quot;</span>,</a>
-<a class="sourceLine" id="cb148-3" title="3">               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb148-4" title="4">               <span class="dt">geom =</span><span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb148-5" title="5"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, </a>
-<a class="sourceLine" id="cb148-6" title="6">               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, </a>
-<a class="sourceLine" id="cb148-7" title="7">               <span class="kw">aes</span>(<span class="dt">group=</span>treat)</a>
-<a class="sourceLine" id="cb148-8" title="8">               ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb148-9" title="9"><span class="st">    </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb148-10" title="10"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb148-11" title="11"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb148-12" title="12">p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7, <span class="kw">aes</span>(day, weight, <span class="dt">color=</span>treat)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb148-13" title="13"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_sdl&quot;</span>,</a>
-<a class="sourceLine" id="cb148-14" title="14">               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb148-15" title="15">               <span class="dt">geom =</span><span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb148-16" title="16"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, </a>
-<a class="sourceLine" id="cb148-17" title="17">               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, </a>
-<a class="sourceLine" id="cb148-18" title="18">               <span class="kw">aes</span>(<span class="dt">group=</span>treat)</a>
-<a class="sourceLine" id="cb148-19" title="19">               ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb148-20" title="20"><span class="st">    </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb148-21" title="21"><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb148-22" title="22"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb148-23" title="23"><span class="kw">plot_grid</span>(p5,p6)</a></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="jaxwest7.html#cb147-1"></a>p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7, <span class="kw">aes</span>(day, glucose,<span class="dt">color=</span>treat)) <span class="op">+</span></span>
+<span id="cb147-2"><a href="jaxwest7.html#cb147-2"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_sdl&quot;</span>,</span>
+<span id="cb147-3"><a href="jaxwest7.html#cb147-3"></a>               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult =</span> <span class="dv">1</span>),</span>
+<span id="cb147-4"><a href="jaxwest7.html#cb147-4"></a>               <span class="dt">geom =</span><span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span></span>
+<span id="cb147-5"><a href="jaxwest7.html#cb147-5"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, </span>
+<span id="cb147-6"><a href="jaxwest7.html#cb147-6"></a>               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, </span>
+<span id="cb147-7"><a href="jaxwest7.html#cb147-7"></a>               <span class="kw">aes</span>(<span class="dt">group=</span>treat)</span>
+<span id="cb147-8"><a href="jaxwest7.html#cb147-8"></a>               ) <span class="op">+</span></span>
+<span id="cb147-9"><a href="jaxwest7.html#cb147-9"></a><span class="st">    </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></span>
+<span id="cb147-10"><a href="jaxwest7.html#cb147-10"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
+<span id="cb147-11"><a href="jaxwest7.html#cb147-11"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</span></code></pre></div>
+<pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="jaxwest7.html#cb149-1"></a>p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(jw7, <span class="kw">aes</span>(day, weight, <span class="dt">color=</span>treat)) <span class="op">+</span></span>
+<span id="cb149-2"><a href="jaxwest7.html#cb149-2"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_sdl&quot;</span>,</span>
+<span id="cb149-3"><a href="jaxwest7.html#cb149-3"></a>               <span class="dt">fun.args =</span> <span class="kw">list</span>(<span class="dt">mult =</span> <span class="dv">1</span>),</span>
+<span id="cb149-4"><a href="jaxwest7.html#cb149-4"></a>               <span class="dt">geom =</span><span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span></span>
+<span id="cb149-5"><a href="jaxwest7.html#cb149-5"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, </span>
+<span id="cb149-6"><a href="jaxwest7.html#cb149-6"></a>               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, </span>
+<span id="cb149-7"><a href="jaxwest7.html#cb149-7"></a>               <span class="kw">aes</span>(<span class="dt">group=</span>treat)</span>
+<span id="cb149-8"><a href="jaxwest7.html#cb149-8"></a>               ) <span class="op">+</span></span>
+<span id="cb149-9"><a href="jaxwest7.html#cb149-9"></a><span class="st">    </span><span class="kw">theme_half_open</span>(<span class="dv">12</span>) <span class="op">+</span></span>
+<span id="cb149-10"><a href="jaxwest7.html#cb149-10"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">margin</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">0</span>), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
+<span id="cb149-11"><a href="jaxwest7.html#cb149-11"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span><span class="dv">0</span>, <span class="dt">end=</span><span class="fl">0.8</span>)</span></code></pre></div>
+<pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="jaxwest7.html#cb151-1"></a><span class="kw">plot_grid</span>(p5,p6)</span></code></pre></div>
 <pre><code>## Warning: Computation failed in `stat_summary()`:
-## &#39;what&#39; must be a function or character string
-
-## Warning: Computation failed in `stat_summary()`:
-## &#39;what&#39; must be a function or character string</code></pre>
-<div class="figure"><span id="fig:unnamed-chunk-97"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-97-1.png" alt="Group means and std devs of the jaxwest7 glucose and body weight data." width="672" />
+## Can&#39;t convert a double vector to function</code></pre>
+<pre><code>## Warning: Computation failed in `stat_summary()`:
+## Can&#39;t convert a double vector to function</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-93"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-93-1.png" alt="Group means and std devs of the jaxwest7 glucose and body weight data." width="672" />
 <p class="caption">
 Figure 13.3: Group means and std devs of the jaxwest7 glucose and body weight data.
 </p>
 </div>
 </div>
-<div id="summary-1" class="section level2">
+<div id="summary-2" class="section level2">
 <h2><span class="header-section-number">13.5</span> Summary</h2>
 <p>It is important to have a final product in mind before starting a munge. In this case, the goal was to create a dataframe for multivariate statistical analysis. These analyses need for each dependent variable to share a common set of independent variables. That product is the <code>jw7</code> object above.
 * Many data sets are like the Jaxwest7, with plenty of good information but unstructured.
