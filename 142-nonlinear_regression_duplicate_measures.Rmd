@@ -57,7 +57,6 @@ ggplot(theopOne, aes(x=min, y=theo))+
                 start=c(yhi=100, ylo=10, k=0.03)),
               formula="y~ylo+((yhi-ylo)*exp(-k*x))",
               se=F #you need this argument to generate nls smooths!!
-  
               )+
   #two-phase decay model
   stat_smooth(method="nlsLM",
@@ -197,10 +196,10 @@ We don't see any remarkable residual differences from their models. Visually, as
 #for plotting, create one dataframe with residuals for both models
 fits <- bind_cols(augment(nlfit1), 
                   augment(nlfit2)[,3:4]) %>% 
-  rename(fit1=.fitted,
-         resid1=.resid, 
-         fit2=.fitted1, 
-         resid2=.resid1)
+  rename(fit1=.fitted...3,
+         resid1=.resid...4, 
+         fit2=.fitted...5, 
+         resid2=.resid...6)
 fits
 
 ```

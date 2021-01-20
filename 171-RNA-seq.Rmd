@@ -10,7 +10,7 @@ library(viridis)
 
 This example is adopted extensively from [RNA-seq analysis in R](https://combine-australia.github.io/RNAseq-R/06-rnaseq-day1.html) by Belinda Phips and colleagues. The data are available [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450) and [here](https://figshare.com/s/1d788fd384d33e913a2a).
 
-These are part of a [broader workship presented by the group](https://combine-australia.github.io/RNAseq-R/) with very easy to follow protocols for RNA-seq analysis with R.
+These are part of a [broader workship presented by the group](https://combine-australia.github.io/RNAseq-R/) with very easy to follow protocols for RNA-seq analysis with R. There is [a publication, also](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934518/)
 
 The data below are from a study of mammary gland development showing the pro-survival gene Mcl1 as a master regulator gland development. They represent duplicate RNA-seq measurements from each of 6 groups: basal and luminal cells from virgin, pregnant and lactating mice.
 
@@ -90,7 +90,6 @@ Shorten the column names. They start with 7 non-identical characters which are g
 ```{r}
 colnames(countdata) <- substring(colnames(countdata), 1,7)
 head(countdata)
-
 ```
 
 Now we're in pretty good shape in terms of having a simple view of the raw count data.
@@ -216,13 +215,13 @@ First we'll color by the feature that involves basal and luminal.
 ```{r}
 # Let's set up colour schemes for CellType
 # How many cell types and in what order are they stored?
-levels(sampleinfo$CellType)
+levels(as.factor(sampleinfo$CellType))
 
 ```
 
 
 ```{r}
-col.cell <- c("#012169","#b58500")[sampleinfo$CellType]
+col.cell <- c("#012169","#b58500")[as.factor(sampleinfo$CellType)]
 data.frame(sampleinfo$CellType,col.cell)
 ```
 
@@ -233,14 +232,14 @@ The plot below clearly illustrates that the basal/luminal feature represents the
 plotMDS(y,col=col.cell)
 # Let's add a legend to the plot so we know which colours correspond to which cell type
 legend("topleft",
-       fill=c("#012169","#b58500"),legend=levels(sampleinfo$CellType))
+       fill=c("#012169","#b58500"),legend=levels(as.factor(sampleinfo$CellType)))
 # Add a title
 title("Cell type")
 ```
 We'll do the same coloring trick for status.
 
 ```{r}
-col.status <- c("red","blue","green")[sampleinfo$Status]
+col.status <- c("red","blue","green")[as.factor(sampleinfo$Status)]
 col.status
 ```
 
@@ -249,7 +248,7 @@ The plot below colors each sample on the basis of whether it is from a virgin, p
 ```{r fig.cap="Variation due to status represents the 2nd dimension of the data set."}
 plotMDS(y,col=col.status)
 legend("topleft",fill=c("red","blue","green"),
-       legend=levels(sampleinfo$Status),cex=0.8)
+       legend=levels(as.factor(sampleinfo$Status)),cex=0.8)
 title("Status")
 ```
 
@@ -307,7 +306,6 @@ The values represented here are logCPM values.
 ```{r}
 # Set up colour vector for celltype variable
 col.cell <- c("#012169","#b58500")[sampleinfo$CellType]
-
 # Plot the heatmap
 heatmap.2(highly_variable_lcpm,
           col=viridis,

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 Data Classification | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 Data Classification | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2021-01-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,13 +50,15 @@
 
 
 
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -65,14 +67,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -81,9 +85,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -136,21 +140,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author and book</a></li>
 <li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a><ul>
-<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#spring-2020-term-versions"><i class="fa fa-check"></i><b>3.1</b> Spring 2020 term versions</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.1.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.1.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.1.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.1.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.1.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.1.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.1.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.1.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-software-for-your-machine"><i class="fa fa-check"></i><b>3.1.5</b> Rule 4: Install the right software for your machine</a></li>
-<li class="chapter" data-level="3.1.6" data-path="software.html"><a href="software.html#rule-5-use-this-installation-guide"><i class="fa fa-check"></i><b>3.1.6</b> Rule 5: Use this installation guide</a></li>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
+<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#consult-this-installation-guide"><i class="fa fa-check"></i><b>3.2.6</b> Consult this installation guide</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.2</b> After installation</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.2.1</b> What is R?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#r-packages"><i class="fa fa-check"></i><b>3.2.2</b> R packages</a></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#system-and-user-packages"><i class="fa fa-check"></i><b>3.5</b> System and user packages</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-youll-need"><i class="fa fa-check"></i><b>3.7</b> Packages you’ll need</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-immportant-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super immportant: Always avoid compiling</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#important-avoid-compiling"><i class="fa fa-check"></i><b>3.3</b> Important: Avoid compiling</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.3.1</b> Reasons not to compile</a></li>
-</ul></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a><ul>
 <li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
@@ -206,7 +213,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.3" data-path="data.html"><a href="data.html#working-with-data"><i class="fa fa-check"></i><b>8.3</b> Working with data</a><ul>
 <li class="chapter" data-level="8.3.1" data-path="data.html"><a href="data.html#entering-data"><i class="fa fa-check"></i><b>8.3.1</b> Entering data</a></li>
 </ul></li>
-<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
+<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary-1"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>9</b> Variability, Accuracy and Precision</a><ul>
 <li class="chapter" data-level="9.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>9.0.1</b> Data are messy</a></li>
@@ -261,7 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-data-into-r"><i class="fa fa-check"></i><b>13.2</b> Munge the glucose data into R</a></li>
 <li class="chapter" data-level="13.3" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-bodyweight-data"><i class="fa fa-check"></i><b>13.3</b> Munge the bodyweight data</a></li>
 <li class="chapter" data-level="13.4" data-path="jaxwest7.html"><a href="jaxwest7.html#merge-and-explore-the-glucose-and-bw-data"><i class="fa fa-check"></i><b>13.4</b> Merge and explore the glucose and bw data</a></li>
-<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-1"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
+<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-2"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>14</b> The Binomial Distribution</a><ul>
 <li class="chapter" data-level="14.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>14.1</b> dbinom</a></li>
@@ -273,8 +280,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="15.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>15.1</b> Poisson Events</a></li>
 <li class="chapter" data-level="15.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>15.2</b> dpois</a></li>
 <li class="chapter" data-level="15.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>15.3</b> ppois</a></li>
-<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.4</b> rpois</a></li>
-<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.5</b> Overdispersion</a></li>
+<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>15.4</b> qpois</a></li>
+<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.5</b> rpois</a></li>
+<li class="chapter" data-level="15.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.6</b> Overdispersion</a></li>
 </ul></li>
 <li class="chapter" data-level="16" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>16</b> The Normal Distribution</a><ul>
 <li class="chapter" data-level="16.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>16.0.1</b> The Standard Normal</a></li>
@@ -381,7 +389,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.10.3" data-path="nonparametrics.html"><a href="nonparametrics.html#an-example"><i class="fa fa-check"></i><b>19.10.3</b> An example</a></li>
 <li class="chapter" data-level="19.10.4" data-path="nonparametrics.html"><a href="nonparametrics.html#nonpara.pwr"><i class="fa fa-check"></i><b>19.10.4</b> nonpara.pwr</a></li>
 </ul></li>
-<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-2"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
+<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-3"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>20</b> Signed Rank Distribution</a><ul>
 <li class="chapter" data-level="20.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>20.1</b> Transformation of data into sign ranks</a><ul>
@@ -407,81 +415,91 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="22" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>22</b> The t-tests</a><ul>
-<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Data assumptions for t-tests</a></li>
-<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a><ul>
-<li class="chapter" data-level="22.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.2.1</b> One sample t tests</a></li>
-<li class="chapter" data-level="22.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.2.2</b> Unpaired t tests</a></li>
-<li class="chapter" data-level="22.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.2.3</b> Paired t tests</a></li>
+<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Data assumptions for t-tests</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="ttests.html"><a href="ttests.html#on-random-residual-error"><i class="fa fa-check"></i><b>22.1.1</b> On random residual error</a></li>
+<li class="chapter" data-level="22.1.2" data-path="ttests.html"><a href="ttests.html#on-the-normality-assumption"><i class="fa fa-check"></i><b>22.1.2</b> On the normality assumption</a></li>
 </ul></li>
-<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.3</b> t Test Hypotheses</a><ul>
-<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.3.1</b> One-sided or two-sided??</a></li>
-<li class="chapter" data-level="22.3.2" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.3.2</b> One sample hypotheses</a></li>
-<li class="chapter" data-level="22.3.3" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.3.3</b> Unpaired hypotheses</a></li>
-<li class="chapter" data-level="22.3.4" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.3.4</b> Paired hypotheses</a></li>
+<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a></li>
+<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.3</b> One sample t tests</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#example"><i class="fa fa-check"></i><b>22.3.1</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>22.4</b> Confidence Intervals of Means</a></li>
-<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#parameters-small-samples-and-reliability"><i class="fa fa-check"></i><b>22.5</b> Parameters, small samples, and reliability</a><ul>
-<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.5.1</b> Reporting SD or SEM?</a></li>
+<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.4</b> Unpaired t tests</a><ul>
+<li class="chapter" data-level="22.4.1" data-path="ttests.html"><a href="ttests.html#students-t-test"><i class="fa fa-check"></i><b>22.4.1</b> Student’s t-test</a></li>
+<li class="chapter" data-level="22.4.2" data-path="ttests.html"><a href="ttests.html#welchs-t-test"><i class="fa fa-check"></i><b>22.4.2</b> Welch’s t-test</a></li>
+<li class="chapter" data-level="22.4.3" data-path="ttests.html"><a href="ttests.html#example-1"><i class="fa fa-check"></i><b>22.4.3</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>22.6</b> t Tests: Running the analysis</a><ul>
-<li class="chapter" data-level="22.6.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.6.1</b> One sample t test</a></li>
-<li class="chapter" data-level="22.6.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.6.2</b> Unpaired t test</a></li>
-<li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
+<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.5</b> Paired t tests</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#example-2"><i class="fa fa-check"></i><b>22.5.1</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
+<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.6</b> t Test Hypotheses</a></li>
+<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.7</b> One-sided or two-sided??</a><ul>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.7.1</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.7.3</b> Paired hypotheses</a></li>
 </ul></li>
-<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
-<li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
-<li class="chapter" data-level="22.8.2" data-path="ttests.html"><a href="ttests.html#interpretation-9"><i class="fa fa-check"></i><b>22.8.2</b> Interpretation</a></li>
-<li class="chapter" data-level="22.8.3" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.8.3</b> t-pwr: A Monte Carlo method</a></li>
+<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#confidence-intervals-1"><i class="fa fa-check"></i><b>22.8</b> Confidence Intervals</a></li>
+<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#parameters-small-samples-and-reliability"><i class="fa fa-check"></i><b>22.9</b> Parameters, small samples, and reliability</a><ul>
+<li class="chapter" data-level="22.9.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.9.1</b> Reporting SD or SEM?</a></li>
 </ul></li>
-<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#summary-3"><i class="fa fa-check"></i><b>22.9</b> Summary</a></li>
+<li class="chapter" data-level="22.10" data-path="ttests.html"><a href="ttests.html#running-the-analysis-in-r"><i class="fa fa-check"></i><b>22.10</b> Running the analysis in R</a><ul>
+<li class="chapter" data-level="22.10.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.10.1</b> One sample t test</a></li>
+<li class="chapter" data-level="22.10.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.10.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="22.10.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.10.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="22.11" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.11</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="22.11.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.11.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.11.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.11.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.11.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.11.3</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="22.12" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.12</b> t Test Power</a><ul>
+<li class="chapter" data-level="22.12.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.12.1</b> pwr.t.test</a></li>
+<li class="chapter" data-level="22.12.2" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.12.2</b> t-pwr: A Monte Carlo method</a></li>
+</ul></li>
+<li class="chapter" data-level="22.13" data-path="ttests.html"><a href="ttests.html#summary-4"><i class="fa fa-check"></i><b>22.13</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="23" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>23</b> Statistical design of t-tests</a><ul>
-<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a><ul>
-<li class="chapter" data-level="23.1.1" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.1.1</b> Overview of the Monte Carlo</a></li>
-<li class="chapter" data-level="23.1.2" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-data-simulation"><i class="fa fa-check"></i><b>23.1.2</b> tl;dr on data simulation</a></li>
-<li class="chapter" data-level="23.1.3" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-the-test"><i class="fa fa-check"></i><b>23.1.3</b> tl;dr on the test</a></li>
-<li class="chapter" data-level="23.1.4" data-path="ttestmc.html"><a href="ttestmc.html#changing-n"><i class="fa fa-check"></i><b>23.1.4</b> Changing n</a></li>
-<li class="chapter" data-level="23.1.5" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.1.5</b> Diabetes drug scenario</a></li>
-<li class="chapter" data-level="23.1.6" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.1.6</b> What would be a scientifically meaningful response?</a></li>
+<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a></li>
+<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> Overview of the Monte Carlo</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#data-simulation"><i class="fa fa-check"></i><b>23.2.1</b> Data simulation</a></li>
+<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#the-test"><i class="fa fa-check"></i><b>23.2.2</b> The test</a></li>
 </ul></li>
-<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> One sample t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.2.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.2.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.2.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.2.3</b> Step 3</a></li>
-<li class="chapter" data-level="23.2.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.2.4</b> Step 4</a></li>
-<li class="chapter" data-level="23.2.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.2.5</b> Step 5</a></li>
-<li class="chapter" data-level="23.2.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.2.6</b> Step 6</a></li>
-<li class="chapter" data-level="23.2.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.2.7</b> Step 7</a></li>
+<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#changing-sample-size"><i class="fa fa-check"></i><b>23.3</b> Changing Sample Size</a></li>
+<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.4</b> Diabetes drug scenario</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.4.1</b> What would be a scientifically meaningful response?</a></li>
 </ul></li>
-<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.3</b> Unpaired t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.3.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.3.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.3.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.3.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.3.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.3.3</b> Step 3</a></li>
-<li class="chapter" data-level="23.3.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.3.4</b> Step 4</a></li>
-<li class="chapter" data-level="23.3.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.3.5</b> Step 5</a></li>
-<li class="chapter" data-level="23.3.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.3.6</b> Step 6</a></li>
-<li class="chapter" data-level="23.3.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.3.7</b> Step 7</a></li>
+<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.5</b> One sample t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.5.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.5.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.5.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.5.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.5.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.5.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.5.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.5.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.5.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.5.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.5.7</b> Step 7</a></li>
 </ul></li>
-<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.4</b> Paired t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.4.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.4.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.4.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.4.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.4.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.6</b> Unpaired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.6.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.6.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.6.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.6.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.6.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.6.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.6.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.6.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.6.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.6.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.6.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.6.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.6.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.6.7</b> Step 7</a></li>
 </ul></li>
-<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.5</b> Step 4</a><ul>
-<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.5.1</b> Step 5</a></li>
-<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.5.2</b> Step 6</a></li>
-<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.5.3</b> Step 7</a></li>
+<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.7</b> Paired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.7.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.7.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.7.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.7.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.7.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.7.3</b> Step 3</a></li>
 </ul></li>
-<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.6</b> Comparison to pwr tests</a></li>
-<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.7</b> dt</a></li>
-<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.8</b> pt</a></li>
-<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.9</b> qt</a></li>
-<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.10</b> rt</a></li>
+<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.8</b> Step 4</a><ul>
+<li class="chapter" data-level="23.8.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.8.1</b> Step 5</a></li>
+<li class="chapter" data-level="23.8.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.8.2</b> Step 6</a></li>
+<li class="chapter" data-level="23.8.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.8.3</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.9</b> Comparison to pwr tests</a></li>
+<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.10</b> dt</a></li>
+<li class="chapter" data-level="23.11" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.11</b> pt</a></li>
+<li class="chapter" data-level="23.12" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.12</b> qt</a></li>
+<li class="chapter" data-level="23.13" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.13</b> rt</a></li>
 </ul></li>
 <li class="chapter" data-level="24" data-path="simcorrelation.html"><a href="simcorrelation.html"><i class="fa fa-check"></i><b>24</b> Simulating correlated variables</a><ul>
 <li class="chapter" data-level="24.1" data-path="simcorrelation.html"><a href="simcorrelation.html#estimating-correlation-between-two-variables"><i class="fa fa-check"></i><b>24.1</b> Estimating correlation between two variables</a></li>
@@ -513,7 +531,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.10" data-path="introanova.html"><a href="introanova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>25.10</b> Alternatives to ANOVA</a><ul>
 <li class="chapter" data-level="25.10.1" data-path="introanova.html"><a href="introanova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>25.10.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
 </ul></li>
-<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-4"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
+<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-5"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="26" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>26</b> The F distribution</a><ul>
 <li class="chapter" data-level="26.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>26.1</b> Background</a><ul>
@@ -536,7 +554,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="27.4" data-path="onewayanova.html"><a href="onewayanova.html#post-hoc-pairwise-comparisons"><i class="fa fa-check"></i><b>27.4</b> Post hoc pairwise comparisons</a><ul>
 <li class="chapter" data-level="27.4.1" data-path="onewayanova.html"><a href="onewayanova.html#range-tests"><i class="fa fa-check"></i><b>27.4.1</b> Range tests</a></li>
 </ul></li>
-<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-5"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
+<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-6"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="28" data-path="onewayRM.html"><a href="onewayRM.html"><i class="fa fa-check"></i><b>28</b> One-way ANOVA Related Measures</a><ul>
 <li class="chapter" data-level="28.1" data-path="onewayRM.html"><a href="onewayRM.html#data-prep"><i class="fa fa-check"></i><b>28.1</b> Data prep</a></li>
@@ -546,13 +564,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.3" data-path="onewayRM.html"><a href="onewayRM.html#the-anova"><i class="fa fa-check"></i><b>28.3</b> The ANOVA</a><ul>
 <li class="chapter" data-level="28.3.1" data-path="onewayRM.html"><a href="onewayRM.html#running-ezanova"><i class="fa fa-check"></i><b>28.3.1</b> Running ezANOVA</a></li>
 </ul></li>
-<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-10"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
+<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-6"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
 <li class="chapter" data-level="28.5" data-path="onewayRM.html"><a href="onewayRM.html#post-hoc-analysis"><i class="fa fa-check"></i><b>28.5</b> Post-hoc analysis</a></li>
 <li class="chapter" data-level="28.6" data-path="onewayRM.html"><a href="onewayRM.html#write-up-12"><i class="fa fa-check"></i><b>28.6</b> Write up</a></li>
 </ul></li>
 <li class="chapter" data-level="29" data-path="twowayCR.html"><a href="twowayCR.html"><i class="fa fa-check"></i><b>29</b> Two-way ANOVA Completely Randomized</a><ul>
 <li class="chapter" data-level="29.1" data-path="twowayCR.html"><a href="twowayCR.html#effect-of-strain-and-diet-on-liver"><i class="fa fa-check"></i><b>29.1</b> Effect of Strain and Diet on Liver</a></li>
-<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
+<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test-1"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
 <li class="chapter" data-level="29.3" data-path="twowayCR.html"><a href="twowayCR.html#interpretation-of-2-way-cr-anova-output"><i class="fa fa-check"></i><b>29.3</b> Interpretation of 2 Way CR ANOVA Output</a><ul>
 <li class="chapter" data-level="29.3.1" data-path="twowayCR.html"><a href="twowayCR.html#levenes"><i class="fa fa-check"></i><b>29.3.1</b> Levene’s</a></li>
 <li class="chapter" data-level="29.3.2" data-path="twowayCR.html"><a href="twowayCR.html#anova-table"><i class="fa fa-check"></i><b>29.3.2</b> ANOVA Table</a></li>
@@ -562,23 +580,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="29.4.2" data-path="twowayCR.html"><a href="twowayCR.html#write-up-13"><i class="fa fa-check"></i><b>29.4.2</b> Write Up</a></li>
 <li class="chapter" data-level="29.4.3" data-path="twowayCR.html"><a href="twowayCR.html#range-tests-1"><i class="fa fa-check"></i><b>29.4.3</b> Range tests</a></li>
 </ul></li>
-<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-6"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
+<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-7"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="twowayRM.html"><a href="twowayRM.html"><i class="fa fa-check"></i><b>30</b> Two-way ANOVA Related Measures</a><ul>
 <li class="chapter" data-level="30.1" data-path="twowayRM.html"><a href="twowayRM.html#cell-culture"><i class="fa fa-check"></i><b>30.1</b> Cell culture</a></li>
-<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-1"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
+<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-2"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
 <li class="chapter" data-level="30.3" data-path="twowayRM.html"><a href="twowayRM.html#interpretation-of-the-output"><i class="fa fa-check"></i><b>30.3</b> Interpretation of the output</a><ul>
 <li class="chapter" data-level="30.3.1" data-path="twowayRM.html"><a href="twowayRM.html#anova-table-1"><i class="fa fa-check"></i><b>30.3.1</b> ANOVA Table</a></li>
 <li class="chapter" data-level="30.3.2" data-path="twowayRM.html"><a href="twowayRM.html#mauchlys-sphericity-test"><i class="fa fa-check"></i><b>30.3.2</b> Mauchly’s Sphericity Test</a></li>
 </ul></li>
 <li class="chapter" data-level="30.4" data-path="twowayRM.html"><a href="twowayRM.html#post-hoc-multiple-comparisons-1"><i class="fa fa-check"></i><b>30.4</b> Post Hoc multiple comparisons</a></li>
 <li class="chapter" data-level="30.5" data-path="twowayRM.html"><a href="twowayRM.html#write-up-14"><i class="fa fa-check"></i><b>30.5</b> Write Up</a></li>
-<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-7"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
+<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-8"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="31" data-path="twowaymixed.html"><a href="twowaymixed.html"><i class="fa fa-check"></i><b>31</b> Two-way ANOVA RM/CR</a><ul>
 <li class="chapter" data-level="31.1" data-path="twowaymixed.html"><a href="twowaymixed.html#chickweight-data-set"><i class="fa fa-check"></i><b>31.1</b> ChickWeight Data set</a></li>
 <li class="chapter" data-level="31.2" data-path="twowaymixed.html"><a href="twowaymixed.html#munge-chickweight-data"><i class="fa fa-check"></i><b>31.2</b> Munge ChickWeight data</a></li>
-<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-2"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
+<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-3"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
 <li class="chapter" data-level="31.4" data-path="twowaymixed.html"><a href="twowaymixed.html#interpreting-the-anova-output"><i class="fa fa-check"></i><b>31.4</b> Interpreting the ANOVA output</a><ul>
 <li class="chapter" data-level="31.4.1" data-path="twowaymixed.html"><a href="twowaymixed.html#anova-the-anova-table-1"><i class="fa fa-check"></i><b>31.4.1</b> $ANOVA: The ANOVA table</a></li>
 <li class="chapter" data-level="31.4.2" data-path="twowaymixed.html"><a href="twowaymixed.html#mauchlys-test-and-corrections"><i class="fa fa-check"></i><b>31.4.2</b> Mauchly’s Test and Corrections</a></li>
@@ -589,7 +607,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="31.5.3" data-path="twowaymixed.html"><a href="twowaymixed.html#heres-whats-been-discovered-by-the-tukeyhsd-test"><i class="fa fa-check"></i><b>31.5.3</b> Here’s what’s been discovered by the TukeyHSD test</a></li>
 <li class="chapter" data-level="31.5.4" data-path="twowaymixed.html"><a href="twowaymixed.html#why-is-the-tukeyhsd-result-so-different-than-the-pairwise.t.test"><i class="fa fa-check"></i><b>31.5.4</b> Why is the TukeyHSD result so different than the pairwise.t.test??</a></li>
 </ul></li>
-<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-8"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
+<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-9"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="posthoc.html"><a href="posthoc.html"><i class="fa fa-check"></i><b>32</b> ANOVA Posthoc Comparisons</a><ul>
 <li class="chapter" data-level="32.1" data-path="posthoc.html"><a href="posthoc.html#overview-of-options"><i class="fa fa-check"></i><b>32.1</b> Overview of options</a><ul>
@@ -597,7 +615,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="32.1.2" data-path="posthoc.html"><a href="posthoc.html#range-tests-2"><i class="fa fa-check"></i><b>32.1.2</b> Range tests</a></li>
 </ul></li>
 <li class="chapter" data-level="32.2" data-path="posthoc.html"><a href="posthoc.html#reporting-the-result-1"><i class="fa fa-check"></i><b>32.2</b> Reporting the result</a></li>
-<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-9"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
+<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-10"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="jaxwest2.html"><a href="jaxwest2.html"><i class="fa fa-check"></i><b>33</b> Reproducible Data Munging Mostly with Tidyverse</a><ul>
 <li class="chapter" data-level="33.1" data-path="jaxwest2.html"><a href="jaxwest2.html#look-at-the-original-data-carefully"><i class="fa fa-check"></i><b>33.1</b> Look at the original data carefully</a></li>
@@ -654,7 +672,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="35.7.1" data-path="manova.html"><a href="manova.html#manova-monte-carlo-power-analysis"><i class="fa fa-check"></i><b>35.7.1</b> MANOVA Monte Carlo Power Analysis</a></li>
 <li class="chapter" data-level="35.7.2" data-path="manova.html"><a href="manova.html#an-manova-monte-carlo-power-function"><i class="fa fa-check"></i><b>35.7.2</b> An MANOVA Monte Carlo Power function</a></li>
 </ul></li>
-<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-10"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
+<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-11"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="36" data-path="correl.html"><a href="correl.html"><i class="fa fa-check"></i><b>36</b> Correlation</a><ul>
 <li class="chapter" data-level="36.1" data-path="correl.html"><a href="correl.html#correlation-causation"><i class="fa fa-check"></i><b>36.1</b> Correlation != Causation</a></li>
@@ -721,12 +739,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="39.2.3" data-path="nestedregress.html"><a href="nestedregress.html#troubleshooting-the-regression"><i class="fa fa-check"></i><b>39.2.3</b> Troubleshooting the regression</a></li>
 <li class="chapter" data-level="39.2.4" data-path="nestedregress.html"><a href="nestedregress.html#interpreting-the-parameters"><i class="fa fa-check"></i><b>39.2.4</b> Interpreting the parameters</a></li>
 <li class="chapter" data-level="39.2.5" data-path="nestedregress.html"><a href="nestedregress.html#residual-plots-to-compare-fits"><i class="fa fa-check"></i><b>39.2.5</b> Residual plots to compare fits</a></li>
-<li class="chapter" data-level="39.2.6" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>39.2.6</b> Compare AIC</a></li>
-<li class="chapter" data-level="39.2.7" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>39.2.7</b> Other ways to compare models</a></li>
-<li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.8</b> Interpretation of this one replicate</a></li>
-<li class="chapter" data-level="39.2.9" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.9</b> Alternate analysis</a></li>
+<li class="chapter" data-level="39.2.6" data-path="nestedregress.html"><a href="nestedregress.html#f-test-for-model-comparison"><i class="fa fa-check"></i><b>39.2.6</b> F test for model comparison</a></li>
+<li class="chapter" data-level="39.2.7" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>39.2.7</b> Compare AIC</a></li>
+<li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>39.2.8</b> Other ways to compare models</a></li>
+<li class="chapter" data-level="39.2.9" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.9</b> Interpretation of this one replicate</a></li>
+<li class="chapter" data-level="39.2.10" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.10</b> Alternate analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-11"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
+<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-12"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="40" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html"><i class="fa fa-check"></i><b>40</b> Nonlinear regression of independent replicates</a><ul>
 <li class="chapter" data-level="40.1" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#the-problem"><i class="fa fa-check"></i><b>40.1</b> The problem</a></li>
@@ -768,10 +787,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="43.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#mixed-models-fixed-and-random-effects"><i class="fa fa-check"></i><b>43.1</b> Mixed models, fixed and random effects</a><ul>
 <li class="chapter" data-level="43.1.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#nfat-localization-within-smooth-muscle-cells"><i class="fa fa-check"></i><b>43.1.1</b> NFAT localization within smooth muscle cells</a></li>
 </ul></li>
-<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a><ul>
-<li class="chapter" data-level="43.2.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.2.1</b> Inference</a></li>
+<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a></li>
+<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#linear-model"><i class="fa fa-check"></i><b>43.3</b> Linear model</a><ul>
+<li class="chapter" data-level="43.3.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.3.1</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.3</b> Alternative analysis</a></li>
+<li class="chapter" data-level="43.4" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.4</b> Alternative analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="44" data-path="poissonreg.html"><a href="poissonreg.html"><i class="fa fa-check"></i><b>44</b> Poisson regression</a><ul>
 <li class="chapter" data-level="44.1" data-path="poissonreg.html"><a href="poissonreg.html#why-not-anova"><i class="fa fa-check"></i><b>44.1</b> Why not ANOVA?</a><ul>
@@ -800,7 +820,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="45.6.2" data-path="surv.html"><a href="surv.html#interpretation-of-cox-regression-output"><i class="fa fa-check"></i><b>45.6.2</b> Interpretation of Cox regression output</a></li>
 <li class="chapter" data-level="45.6.3" data-path="surv.html"><a href="surv.html#write-up-18"><i class="fa fa-check"></i><b>45.6.3</b> Write up</a></li>
 </ul></li>
-<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-12"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
+<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-13"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="46" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>46</b> Classification</a><ul>
 <li class="chapter" data-level="46.1" data-path="classification.html"><a href="classification.html#distances"><i class="fa fa-check"></i><b>46.1</b> Distances</a></li>
@@ -815,7 +835,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="46.10" data-path="classification.html"><a href="classification.html#pam-and-clara"><i class="fa fa-check"></i><b>46.10</b> PAM and CLARA</a></li>
 <li class="chapter" data-level="46.11" data-path="classification.html"><a href="classification.html#hierarchical-clustering"><i class="fa fa-check"></i><b>46.11</b> Hierarchical clustering</a></li>
 <li class="chapter" data-level="46.12" data-path="classification.html"><a href="classification.html#heatmaps"><i class="fa fa-check"></i><b>46.12</b> Heatmaps</a></li>
-<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-13"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
+<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-14"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="47" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>47</b> RNA-seq with R</a><ul>
 <li class="chapter" data-level="47.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>47.1</b> Install Bioconductor</a></li>
@@ -826,7 +846,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="47.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>47.6</b> Visualization</a></li>
 <li class="chapter" data-level="47.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>47.7</b> Classification</a></li>
 <li class="chapter" data-level="47.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>47.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-14"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
+<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-15"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -850,9 +870,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="data" class="section level1">
 <h1><span class="header-section-number">Chapter 8</span> Data Classification</h1>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">library</span>(datapasta)</a>
-<a class="sourceLine" id="cb19-2" title="2"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb19-3" title="3"><span class="kw">library</span>(viridis)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data.html#cb1-1"></a><span class="kw">library</span>(datapasta)</span>
+<span id="cb1-2"><a href="data.html#cb1-2"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="data.html#cb1-3"></a><span class="kw">library</span>(viridis)</span></code></pre></div>
 <p>The starting point in any statistical design is to understand the types of data that are involved.</p>
 <p>First ask whether the variables are discrete or continuous. Then ask if they measured, ordered or sorted? Then ask which variables are controlled by the researcher and which arise as responses? The answers will point in the proper analytical direction.</p>
 <p>I cannot emphasize enough the importance of understanding data classification for mastering a statistical framework. It is the foundation. Therefore, this material covers perhaps the most important learning objectives in this course:</p>
@@ -897,14 +917,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Thus, <span class="math inline">\(Y\)</span> takes on different values as the researcher manipulates the levels of <span class="math inline">\(X\)</span>. Which explains why <span class="math inline">\(Y\)</span> depends on <span class="math inline">\(X\)</span>.</p>
 <p>For example, here’s how the data for a protein standard curve experiment would be depicted. In the R script below the variable <span class="math inline">\(X\)</span> represents known concentrations of an immunoglobulin protein standard in <span class="math inline">\(\mu g/ml\)</span>. The researcher builds this dilution series from a stock of known concentration, thus it is the independent variable.</p>
 <p>The variable <span class="math inline">\(Y\)</span> represents <span class="math inline">\(A_{595}\)</span>, light absorption in a spectrophotometer for each of the values of the standard protein. The <span class="math inline">\(A_{595}\)</span> values depend upon the immunoglobulin concentration. Estimates for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are derived from running a linear regression on the data with the <code>lm(Y~X)</code> script.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co">#Protein assay data, X units ug/ml, Y units A595.</span></a>
-<a class="sourceLine" id="cb20-2" title="2"></a>
-<a class="sourceLine" id="cb20-3" title="3">X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.25</span>, <span class="fl">2.5</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb20-4" title="4">Y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.000</span>, <span class="fl">0.029</span>, <span class="fl">0.060</span>, <span class="fl">0.129</span>, <span class="fl">0.250</span>, <span class="fl">0.371</span>, <span class="fl">0.491</span>, <span class="fl">0.630</span>)</a>
-<a class="sourceLine" id="cb20-5" title="5"></a>
-<a class="sourceLine" id="cb20-6" title="6"><span class="co">#derive the slope and intercept by linear regression</span></a>
-<a class="sourceLine" id="cb20-7" title="7"></a>
-<a class="sourceLine" id="cb20-8" title="8"><span class="kw">lm</span>(Y<span class="op">~</span>X)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="data.html#cb2-1"></a><span class="co">#Protein assay data, X units ug/ml, Y units A595.</span></span>
+<span id="cb2-2"><a href="data.html#cb2-2"></a></span>
+<span id="cb2-3"><a href="data.html#cb2-3"></a>X &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.25</span>, <span class="fl">2.5</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)</span>
+<span id="cb2-4"><a href="data.html#cb2-4"></a>Y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.000</span>, <span class="fl">0.029</span>, <span class="fl">0.060</span>, <span class="fl">0.129</span>, <span class="fl">0.250</span>, <span class="fl">0.371</span>, <span class="fl">0.491</span>, <span class="fl">0.630</span>)</span>
+<span id="cb2-5"><a href="data.html#cb2-5"></a></span>
+<span id="cb2-6"><a href="data.html#cb2-6"></a><span class="co">#derive the slope and intercept by linear regression</span></span>
+<span id="cb2-7"><a href="data.html#cb2-7"></a></span>
+<span id="cb2-8"><a href="data.html#cb2-8"></a><span class="kw">lm</span>(Y<span class="op">~</span>X)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -915,12 +935,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The output indicates the regression line intercepts the y-axis at a value very close to zero, and that every one unit increment in the value of <span class="math inline">\(X\)</span> predicts a 0.0249705 increment in the value of <span class="math inline">\(Y\)</span>.</p>
 <p>Fortunately, R functions rarely forces us to abstract by the mathematical statistics convention, X and Y. We can name variables in more comfortable terms.</p>
 <p>For example,</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="co">#Protein assay data, standard units ug/ml, absorbtion units A595.</span></a>
-<a class="sourceLine" id="cb22-2" title="2">standard &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.25</span>, <span class="fl">2.5</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb22-3" title="3">A595 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.000</span>, <span class="fl">0.029</span>, <span class="fl">0.060</span>, <span class="fl">0.129</span>, <span class="fl">0.250</span>, <span class="fl">0.371</span>, <span class="fl">0.491</span>, <span class="fl">0.630</span>)</a>
-<a class="sourceLine" id="cb22-4" title="4"></a>
-<a class="sourceLine" id="cb22-5" title="5"><span class="co">#derive the slope and intercept by linear regression</span></a>
-<a class="sourceLine" id="cb22-6" title="6"><span class="kw">lm</span>(A595 <span class="op">~</span><span class="st"> </span>standard)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="data.html#cb4-1"></a><span class="co">#Protein assay data, standard units ug/ml, absorbtion units A595.</span></span>
+<span id="cb4-2"><a href="data.html#cb4-2"></a>standard &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">1.25</span>, <span class="fl">2.5</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>)</span>
+<span id="cb4-3"><a href="data.html#cb4-3"></a>A595 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.000</span>, <span class="fl">0.029</span>, <span class="fl">0.060</span>, <span class="fl">0.129</span>, <span class="fl">0.250</span>, <span class="fl">0.371</span>, <span class="fl">0.491</span>, <span class="fl">0.630</span>)</span>
+<span id="cb4-4"><a href="data.html#cb4-4"></a></span>
+<span id="cb4-5"><a href="data.html#cb4-5"></a><span class="co">#derive the slope and intercept by linear regression</span></span>
+<span id="cb4-6"><a href="data.html#cb4-6"></a><span class="kw">lm</span>(A595 <span class="op">~</span><span class="st"> </span>standard)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = A595 ~ standard)
@@ -942,7 +962,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>First, it’s alliterative so hopefully easier to remember. It reminds me of Waffle House hash browns, which can be either scattered, smothered or covered.</p>
 <p>Different authors/software give these three types of variables different names, which creates some confusion. SPSS users must click buttons to classify data as either scalar, ordinal, or nominal, which correspond to measured, ordered and sorted. Another fairly common descriptive for the three types is interval, integer, and categorical. Conceptually, they mean the same things.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-20">Table 8.1: </span>Common synonyms for types of variables</caption>
+<caption><span id="tab:unnamed-chunk-4">Table 8.1: </span>Common synonyms for types of variables</caption>
 <thead>
 <tr class="header">
 <th align="left">measured</th>
@@ -975,7 +995,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 <p>Even if we can’t agree on names, everybody seems to agree that all variables can be reduced to three fundamental subtypes.</p>
 <p>Second, this taxonomy forms the basis for drawing a pragmatic statistical modeling heuristic to help you keep the relationship between variable type and experimental design (and analysis) straight.</p>
-<div class="figure"><span id="fig:unnamed-chunk-21"></span>
+<div class="figure"><span id="fig:unnamed-chunk-5"></span>
 <img src="images/testing_heuristic.jpg" alt="The type of data dictates how the experiment should be modeled and analyzed." width="480" />
 <p class="caption">
 Figure 8.1: The type of data dictates how the experiment should be modeled and analyzed.
@@ -987,7 +1007,7 @@ Figure 8.1: The type of data dictates how the experiment should be modeled and a
 <h3><span class="header-section-number">8.2.1</span> Measured variables</h3>
 <p>Measured variables are fairly easy to spot. Any derivative of one of the <a href="https://www.nist.gov/pml/weights-and-measures/metric-si/si-units">seven base SI units</a> will be a measured variable.</p>
 <p>The gang of seven are the ampere, second, mole, kilogram, candela, Kelvin, and meter. When in doubt, a working hack is that these variables tend to need instruments to take measurements. So if you’re using some instrument to measure something, and it is not counting events, it is a measured variable.</p>
-<div class="figure"><span id="fig:unnamed-chunk-22"></span>
+<div class="figure"><span id="fig:unnamed-chunk-6"></span>
 <img src="images/si_units.jpg" alt="The seven SI units" width="480" />
 <p class="caption">
 Figure 8.2: The seven SI units
@@ -1003,33 +1023,33 @@ Figure 8.2: The seven SI units
 <h4><span class="header-section-number">8.2.1.1</span> Visualizing measured variables</h4>
 <p>In the precourse survey biostats students self-reported their height, in cm, which is a continuous scale. Height is a measured variable.</p>
 <p>Viewed in scatter plots, it is easy to see how the height variable takes on many different values on the y-scale. (The points have been colored by sex, mostly to illustrate how cool it is to segment one variable (height) using another (sex)).</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">pcd &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;datasets/precourse.csv&quot;</span>)</a>
-<a class="sourceLine" id="cb24-2" title="2"></a>
-<a class="sourceLine" id="cb24-3" title="3"><span class="co"># omit heights &lt;125 cm and &gt;250 cm as unreliable entries</span></a>
-<a class="sourceLine" id="cb24-4" title="4"><span class="co"># nobody that short or tall has ever taken the course!</span></a>
-<a class="sourceLine" id="cb24-5" title="5"></a>
-<a class="sourceLine" id="cb24-6" title="6"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb24-7" title="7"><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb24-8" title="8"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">0</span>), <span class="dt">y =</span> height, <span class="dt">color =</span> sex), </a>
-<a class="sourceLine" id="cb24-9" title="9">              <span class="dt">height =</span> <span class="dv">0</span>, <span class="dt">width =</span> <span class="fl">0.4</span>, <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb24-10" title="10"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span> <span class="fl">0.1</span>, <span class="dt">end =</span> <span class="fl">0.6</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb24-11" title="11"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">140</span>, <span class="dv">200</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb24-12" title="12"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;biostats students&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb24-13" title="13"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;height(cm)&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb24-14" title="14"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb24-15" title="15">        <span class="dt">axis.text.x =</span> <span class="kw">element_blank</span>()</a>
-<a class="sourceLine" id="cb24-16" title="16">        )</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-23"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-23-1.png" alt="Scatterplot of biostat student heights segmented by sex" width="480" />
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="data.html#cb6-1"></a>pcd &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;datasets/precourse.csv&quot;</span>)</span>
+<span id="cb6-2"><a href="data.html#cb6-2"></a></span>
+<span id="cb6-3"><a href="data.html#cb6-3"></a><span class="co"># omit heights &lt;125 cm and &gt;250 cm as unreliable entries</span></span>
+<span id="cb6-4"><a href="data.html#cb6-4"></a><span class="co"># nobody that short or tall has ever taken the course!</span></span>
+<span id="cb6-5"><a href="data.html#cb6-5"></a></span>
+<span id="cb6-6"><a href="data.html#cb6-6"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-7"><a href="data.html#cb6-7"></a><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>)) <span class="op">+</span></span>
+<span id="cb6-8"><a href="data.html#cb6-8"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">0</span>), <span class="dt">y =</span> height, <span class="dt">color =</span> sex), </span>
+<span id="cb6-9"><a href="data.html#cb6-9"></a>              <span class="dt">height =</span> <span class="dv">0</span>, <span class="dt">width =</span> <span class="fl">0.4</span>, <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">+</span></span>
+<span id="cb6-10"><a href="data.html#cb6-10"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">begin=</span> <span class="fl">0.1</span>, <span class="dt">end =</span> <span class="fl">0.6</span>)<span class="op">+</span></span>
+<span id="cb6-11"><a href="data.html#cb6-11"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">140</span>, <span class="dv">200</span>, <span class="dv">10</span>)) <span class="op">+</span></span>
+<span id="cb6-12"><a href="data.html#cb6-12"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;biostats students&quot;</span>) <span class="op">+</span></span>
+<span id="cb6-13"><a href="data.html#cb6-13"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;height(cm)&quot;</span>) <span class="op">+</span></span>
+<span id="cb6-14"><a href="data.html#cb6-14"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>(), </span>
+<span id="cb6-15"><a href="data.html#cb6-15"></a>        <span class="dt">axis.text.x =</span> <span class="kw">element_blank</span>()</span>
+<span id="cb6-16"><a href="data.html#cb6-16"></a>        )</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-7"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-7-1.png" alt="Scatterplot of biostat student heights segmented by sex" width="480" />
 <p class="caption">
 Figure 8.3: Scatterplot of biostat student heights segmented by sex
 </p>
 </div>
 <p>It’s always important to do a quick histogram of measured data. Histograms categorize height values into bins of a given number or width. The <code>geom_histogram</code> then counts the number of values in each bin. Histograms therefore show the frequency distribution of a variable.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data=</span>pcd <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x=</span>height), <span class="dt">binwidth =</span> <span class="fl">2.5</span>, <span class="dt">color =</span> <span class="st">&quot;#f2a900&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#012169&quot;</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-24"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-24-1.png" alt="Histogram of biostat student heights, the most frequent height value is 170 +/- 1.25 cm." width="480" />
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="data.html#cb7-1"></a><span class="kw">ggplot</span>(<span class="dt">data=</span>pcd <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>)) <span class="op">+</span></span>
+<span id="cb7-2"><a href="data.html#cb7-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x=</span>height), <span class="dt">binwidth =</span> <span class="fl">2.5</span>, <span class="dt">color =</span> <span class="st">&quot;#f2a900&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#012169&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-8"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-8-1.png" alt="Histogram of biostat student heights, the most frequent height value is 170 +/- 1.25 cm." width="480" />
 <p class="caption">
 Figure 8.4: Histogram of biostat student heights, the most frequent height value is 170 +/- 1.25 cm.
 </p>
@@ -1056,7 +1076,7 @@ Figure 8.4: Histogram of biostat student heights, the most frequent height value
 <h4><span class="header-section-number">8.2.2.2</span> Visualizing sorted data</h4>
 <p>Let’s look at the precourse survey data frame we imported above. Each row represents the data for one biostats student. Notice how the values for the sex variable are characters. There are no numbers to plot!!</p>
 <p>I could assign them numbers if I wished, for example <span class="math inline">\(Male = 0\)</span> and <span class="math inline">\(Female = 1\)</span>, but that is just arbitrary numeric coding, using numbers rather than characters. The numeric values are meaningless. I could just as easily code one <span class="math inline">\(1.2345\)</span> and the other <span class="math inline">\(0.009876\)</span> and accomplish the same thing. The point being the values of sorted variables are arbitrary.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw">head</span>(pcd)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="data.html#cb8-1"></a><span class="kw">head</span>(pcd)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 6
 ##    term enthusiasm height friends sex    fav_song
 ##   &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -1069,10 +1089,10 @@ Figure 8.4: Histogram of biostat student heights, the most frequent height value
 <p>We’ll plot the sex variable data using a function, <code>geom_bar</code>. This geom not only makes bars, it also sums up the number of <code>Male</code> and <code>Female</code> instances in the variable sex. Note there are no error bars. Counts are just a sum, there is no variation.</p>
 <p>In this course, we’ll avoid bar plots for everything other than visualizing variables that summarize as counts. We could have also used pie charts or stacked bars, but those are harder to read. The chosen method is a better way to illustrate the magnitude of the counts and the difference between the two levels within the sex variable.</p>
 <p>Note how this bar plot is, effectively, a histogram of the sex variable. Here the bins are defined by the two values of the variable.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">ggplot</span>(pcd)<span class="op">+</span></a>
-<a class="sourceLine" id="cb28-2" title="2"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x=</span>sex), <span class="dt">width =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-26"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-26-1.png" alt="Use bar plots to display the relative counts of sorted variable values." width="480" />
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="data.html#cb10-1"></a><span class="kw">ggplot</span>(pcd)<span class="op">+</span></span>
+<span id="cb10-2"><a href="data.html#cb10-2"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x=</span>sex), <span class="dt">width =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-10"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-10-1.png" alt="Use bar plots to display the relative counts of sorted variable values." width="480" />
 <p class="caption">
 Figure 8.5: Use bar plots to display the relative counts of sorted variable values.
 </p>
@@ -1102,10 +1122,10 @@ Figure 8.5: Use bar plots to display the relative counts of sorted variable valu
 <p>Disability status scales are classic ordinal scales. These are used to assess neurological abnormalities, for example, those associated with experimental multiple sclerosis. Each replicate in a study is evaluated by trained researchers and assigned the most appropriate value given its condition: 0 for no disease, 1 for limp tail, 2 for mild paraparesis, 3 for moderate paraparesis, 4 for complete hind limb paralysis, and 5 for moribund.</p>
 <p>Obviously, in this ordinal scale, as the numeric value increases so to does the severity of the subject’s condition.</p>
 <p>Here’s what a very small set of ordinal data might look like. Imagine doing a small pilot study to determine whether ND4 gene deletion causes neurological impairment. Here’s how the data from a lab notebook would be transcribed into an R script to make a summary table:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">genotype &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb29-2" title="2">DSS_score &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb29-3" title="3"></a>
-<a class="sourceLine" id="cb29-4" title="4">results &lt;-<span class="st"> </span><span class="kw">tibble</span>(genotype, DSS_score); results</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="data.html#cb11-1"></a>genotype &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))</span>
+<span id="cb11-2"><a href="data.html#cb11-2"></a>DSS_score &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))</span>
+<span id="cb11-3"><a href="data.html#cb11-3"></a></span>
+<span id="cb11-4"><a href="data.html#cb11-4"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(genotype, DSS_score); results</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   genotype DSS_score
 ##   &lt;chr&gt;        &lt;int&gt;
@@ -1123,39 +1143,41 @@ Figure 8.5: Use bar plots to display the relative counts of sorted variable valu
 <h4><span class="header-section-number">8.2.2.4</span> Visualizing ordered variables</h4>
 <p>Let’s visualize the enthusiasm biostats students have for taking a course.</p>
 <p>Here’s a bar plot. Here again, <code>geom_bar</code> not only draws bars, it also counts the total number of biostat students who voted for each of the 10 levels. A bar plot of counted data is just a poor man’s histogram.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">ggplot</span>(pcd) <span class="op">+</span></a>
-<a class="sourceLine" id="cb31-2" title="2"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x=</span>enthusiasm))<span class="op">+</span></a>
-<a class="sourceLine" id="cb31-3" title="3"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">1</span>))</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="data.html#cb13-1"></a><span class="kw">ggplot</span>(pcd) <span class="op">+</span></span>
+<span id="cb13-2"><a href="data.html#cb13-2"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x=</span>enthusiasm))<span class="op">+</span></span>
+<span id="cb13-3"><a href="data.html#cb13-3"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>Viewed using the histogram function, we see the same thing, if we dial the binwidth to the unit of the ordinal scale or the number of bins to the length of the ordinal scale.</p>
 <p>It is easy to see the data are skewed a bit to the right of the scale center. I mention this because ordered data are frequently skewed. Variables of counts should not be expected to obey a symmetrical normal distribution.</p>
 <p>Although it is tempting to compute descriptives like means and standard deviations and even run t-tests and ANOVA on such data, slow down and have a thought about that. The values are arbitrary.</p>
 <p>If instead of 1, 2, 3,… the variable values were “Truly none”, “Very little”, “Slightly more than very little”, …, how exactly would you compute a mean and standard deviation?</p>
 <p>You could not.</p>
 <p>A cognitive bias is equating numeric discrete yet arbitrary scale with a continuous, equal interval scale.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">ggplot</span>(pcd) <span class="op">+</span></a>
-<a class="sourceLine" id="cb32-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x=</span>enthusiasm), </a>
-<a class="sourceLine" id="cb32-3" title="3">                 <span class="dt">binwidth =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;#f2a900&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#012169&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb32-4" title="4"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">1</span>))</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-29"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-29-1.png" alt="An ordered variable plotted as histogram." width="480" />
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="data.html#cb14-1"></a><span class="kw">ggplot</span>(pcd) <span class="op">+</span></span>
+<span id="cb14-2"><a href="data.html#cb14-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x=</span>enthusiasm), </span>
+<span id="cb14-3"><a href="data.html#cb14-3"></a>                 <span class="dt">binwidth =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;#f2a900&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;#012169&quot;</span>) <span class="op">+</span></span>
+<span id="cb14-4"><a href="data.html#cb14-4"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">1</span>))</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-13"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-13-1.png" alt="An ordered variable plotted as histogram." width="480" />
 <p class="caption">
 Figure 8.6: An ordered variable plotted as histogram.
 </p>
 </div>
 <p>Viewing scatter plots of discrete data really brings forth their discretiness. They show how there is obviously no information between levels of the ordered scale used in this survey instrument.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="co"># the height argument in geom_jitter is crucial to seeing this pattern</span></a>
-<a class="sourceLine" id="cb33-2" title="2"><span class="co"># adjust the height value to see what happens</span></a>
-<a class="sourceLine" id="cb33-3" title="3"></a>
-<a class="sourceLine" id="cb33-4" title="4"><span class="kw">ggplot</span>(pcd) <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-5" title="5"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">y=</span>enthusiasm), </a>
-<a class="sourceLine" id="cb33-6" title="6">              <span class="dt">height=</span><span class="dv">0</span>, <span class="dt">width =</span> <span class="fl">0.4</span>, <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-7" title="7"><span class="st">  </span><span class="kw">scale_y_discrete</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-8" title="8"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;biostats students&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-9" title="9"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb33-10" title="10">        <span class="dt">axis.text.x =</span> <span class="kw">element_blank</span>()</a>
-<a class="sourceLine" id="cb33-11" title="11">        ) </a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-30-1.png" width="480" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="data.html#cb15-1"></a><span class="co"># the height argument in geom_jitter is crucial to seeing this pattern</span></span>
+<span id="cb15-2"><a href="data.html#cb15-2"></a><span class="co"># adjust the height value to see what happens</span></span>
+<span id="cb15-3"><a href="data.html#cb15-3"></a></span>
+<span id="cb15-4"><a href="data.html#cb15-4"></a><span class="kw">ggplot</span>(pcd) <span class="op">+</span></span>
+<span id="cb15-5"><a href="data.html#cb15-5"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(<span class="dv">1</span>), <span class="dt">y=</span>enthusiasm), </span>
+<span id="cb15-6"><a href="data.html#cb15-6"></a>              <span class="dt">height=</span><span class="dv">0</span>, <span class="dt">width =</span> <span class="fl">0.4</span>, <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">+</span></span>
+<span id="cb15-7"><a href="data.html#cb15-7"></a><span class="st">  </span><span class="kw">scale_y_discrete</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) <span class="op">+</span></span>
+<span id="cb15-8"><a href="data.html#cb15-8"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;biostats students&quot;</span>) <span class="op">+</span></span>
+<span id="cb15-9"><a href="data.html#cb15-9"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.ticks.x =</span> <span class="kw">element_blank</span>(), </span>
+<span id="cb15-10"><a href="data.html#cb15-10"></a>        <span class="dt">axis.text.x =</span> <span class="kw">element_blank</span>()</span>
+<span id="cb15-11"><a href="data.html#cb15-11"></a>        ) </span></code></pre></div>
+<pre><code>## Warning: Continuous limits supplied to discrete scale.
+## Did you mean `limits = factor(...)` or `scale_*_continuous()`?</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-14-1.png" width="480" /></p>
 <p>Although you can calculate an mean for a variable such as this, whether you should report it to one significant digit or beyond is fraught with portent.</p>
 </div>
 </div>
@@ -1166,9 +1188,9 @@ Figure 8.6: An ordered variable plotted as histogram.
 <p>The most frequent transformation is of raw count data to percents. This usually has descriptive value but can introduce problems when used inferentially.</p>
 <p>For example, the two percent values for the sex variable below are useless for asking whether there is a statistical difference from, say, 50%. The transformation converted 386 bits of information into 2.</p>
 <p>By keeping it in counts we can test the null hypothesis that the proportion of 144/242 does not differ from 50/50, by performing a proportion test.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-2" title="2"><span class="st">  </span><span class="kw">count</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb34-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">total=</span><span class="kw">sum</span>(n), <span class="dt">percent=</span><span class="dv">100</span><span class="op">*</span>n<span class="op">/</span>total)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="data.html#cb17-1"></a>pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb17-2"><a href="data.html#cb17-2"></a><span class="st">  </span><span class="kw">count</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb17-3"><a href="data.html#cb17-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">total=</span><span class="kw">sum</span>(n), <span class="dt">percent=</span><span class="dv">100</span><span class="op">*</span>n<span class="op">/</span>total)</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 4
 ##   sex        n total percent
 ##   &lt;chr&gt;  &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
@@ -1199,16 +1221,16 @@ Figure 8.6: An ordered variable plotted as histogram.
 <p>Both variables are discrete.</p>
 <p>Saving the Rscript (or Rmarkdown) file stores the data.</p>
 <p>The function <code>tibble()</code> creates a tidyverse data frame.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co"># understand the logic of creating vector objects for the</span></a>
-<a class="sourceLine" id="cb36-2" title="2"><span class="co"># independent and the dependent variables</span></a>
-<a class="sourceLine" id="cb36-3" title="3"><span class="co"># note how a tibble-type data frame is created</span></a>
-<a class="sourceLine" id="cb36-4" title="4"></a>
-<a class="sourceLine" id="cb36-5" title="5"><span class="co"># vector objects represent the variables</span></a>
-<a class="sourceLine" id="cb36-6" title="6">genotype &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb36-7" title="7">DSS_score &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb36-8" title="8"></a>
-<a class="sourceLine" id="cb36-9" title="9"><span class="co"># put the variables in a data frame object</span></a>
-<a class="sourceLine" id="cb36-10" title="10">results &lt;-<span class="st"> </span><span class="kw">tibble</span>(genotype, DSS_score); results</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="data.html#cb19-1"></a><span class="co"># understand the logic of creating vector objects for the</span></span>
+<span id="cb19-2"><a href="data.html#cb19-2"></a><span class="co"># independent and the dependent variables</span></span>
+<span id="cb19-3"><a href="data.html#cb19-3"></a><span class="co"># note how a tibble-type data frame is created</span></span>
+<span id="cb19-4"><a href="data.html#cb19-4"></a></span>
+<span id="cb19-5"><a href="data.html#cb19-5"></a><span class="co"># vector objects represent the variables</span></span>
+<span id="cb19-6"><a href="data.html#cb19-6"></a>genotype &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))</span>
+<span id="cb19-7"><a href="data.html#cb19-7"></a>DSS_score &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))</span>
+<span id="cb19-8"><a href="data.html#cb19-8"></a></span>
+<span id="cb19-9"><a href="data.html#cb19-9"></a><span class="co"># put the variables in a data frame object</span></span>
+<span id="cb19-10"><a href="data.html#cb19-10"></a>results &lt;-<span class="st"> </span><span class="kw">tibble</span>(genotype, DSS_score); results</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   genotype DSS_score
 ##   &lt;chr&gt;        &lt;int&gt;
@@ -1218,9 +1240,9 @@ Figure 8.6: An ordered variable plotted as histogram.
 ## 4 ND4              5
 ## 5 ND4              3
 ## 6 ND4              5</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">ggplot</span>(results, <span class="kw">aes</span>(<span class="dt">x=</span>genotype, <span class="dt">y=</span>DSS_score)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb38-2" title="2"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">height=</span><span class="dv">0</span>, <span class="dt">width=</span><span class="fl">0.3</span>, <span class="dt">size=</span><span class="dv">4</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-32-1.png" width="480" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="data.html#cb21-1"></a><span class="kw">ggplot</span>(results, <span class="kw">aes</span>(<span class="dt">x=</span>genotype, <span class="dt">y=</span>DSS_score)) <span class="op">+</span></span>
+<span id="cb21-2"><a href="data.html#cb21-2"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">height=</span><span class="dv">0</span>, <span class="dt">width=</span><span class="fl">0.3</span>, <span class="dt">size=</span><span class="dv">4</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-16-1.png" width="480" /></p>
 </div>
 <div id="using-datapasta" class="section level4">
 <h4><span class="header-section-number">8.3.1.2</span> Using datapasta</h4>
@@ -1233,7 +1255,7 @@ Figure 8.6: An ordered variable plotted as histogram.
 <li><p>Click on the Addins icon below the RStudio menu bar and select an option.</p></li>
 </ol>
 <p>Here I copied the <code>fav_song</code> column (including header) from the <code>precourse.csv</code> file. Probably due to that header, datapasta coerced the values as characters. Some munging will be necessary to clean things and turn everything into numeric values. But at least it’s in R now. Woot.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">song &lt;-<span class="kw">c</span>(<span class="st">&quot;fav_song&quot;</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">&quot;570&quot;</span>, <span class="st">&quot;576&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;524&quot;</span>, <span class="st">&quot;252&quot;</span>, <span class="st">&quot;588&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;212&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="ot">NA</span>, <span class="st">&quot;265&quot;</span>, <span class="st">&quot;294&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;481&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;203&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;375&quot;</span>, <span class="st">&quot;698&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;242&quot;</span>, <span class="st">&quot;256&quot;</span>, <span class="st">&quot;288&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;273&quot;</span>, <span class="st">&quot;601&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;147&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;202.2&quot;</span>, <span class="st">&quot;274&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;555&quot;</span>, <span class="st">&quot;362&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;373&quot;</span>, <span class="st">&quot;121&quot;</span>, <span class="st">&quot;361&quot;</span>, <span class="st">&quot;179&quot;</span>, <span class="st">&quot;169&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;139&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;292&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;412&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;289&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;448&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;207&quot;</span>, <span class="st">&quot;74&quot;</span>, <span class="st">&quot;253&quot;</span>, <span class="st">&quot;256&quot;</span>, <span class="st">&quot;243&quot;</span>, <span class="st">&quot;187&quot;</span>, <span class="st">&quot;420&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;235&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;258&quot;</span>, <span class="st">&quot;213&quot;</span>, <span class="st">&quot;188&quot;</span>, <span class="st">&quot;258&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;5421&quot;</span>, <span class="st">&quot;259&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;171&quot;</span>, <span class="st">&quot;184&quot;</span>, <span class="st">&quot;220&quot;</span>, <span class="st">&quot;225&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;208&quot;</span>, <span class="st">&quot;254&quot;</span>, <span class="st">&quot;341&quot;</span>, <span class="st">&quot;233&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;455&quot;</span>, <span class="st">&quot;423&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;570&quot;</span>, <span class="st">&quot;319&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;205&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;126&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;226.93&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;298&quot;</span>, <span class="st">&quot;290&quot;</span>, <span class="st">&quot;202&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;150&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;174&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;565&quot;</span>, <span class="st">&quot;273&quot;</span>, <span class="st">&quot;245&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;174&quot;</span>, <span class="st">&quot;276&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;460&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;583&quot;</span>, <span class="st">&quot;90&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;244&quot;</span>, <span class="st">&quot;127&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;211&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;220&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;198&quot;</span>, <span class="st">&quot;133&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;296&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;212&quot;</span>, <span class="st">&quot;195.6&quot;</span>, <span class="st">&quot;187&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;183&quot;</span>, <span class="st">&quot;216&quot;</span>, <span class="st">&quot;286&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;270&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;268&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;1560&quot;</span>, <span class="st">&quot;197&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;279&quot;</span>, <span class="st">&quot;195&quot;</span>, <span class="st">&quot;251&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;461&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;218&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;257&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;199&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;331&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;190&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;284&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;235&quot;</span>, <span class="st">&quot;277&quot;</span>, <span class="st">&quot;314&quot;</span>, <span class="st">&quot;249&quot;</span>, <span class="st">&quot;75&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;277&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;209&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;402&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;205&quot;</span>, <span class="st">&quot;345&quot;</span>, <span class="st">&quot;252&quot;</span>, <span class="st">&quot;305&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;170&quot;</span>, <span class="st">&quot;213&quot;</span>, <span class="st">&quot;656&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;339&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;263&quot;</span>, <span class="st">&quot;239&quot;</span>, <span class="st">&quot;135&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;292&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;432&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;21&quot;</span>, <span class="st">&quot;215&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;247&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;253&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;355&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;332&quot;</span>, <span class="st">&quot;2450&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;379&quot;</span>, <span class="st">&quot;516&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;184&quot;</span>, <span class="st">&quot;218&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;160&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;238&quot;</span>, <span class="st">&quot;208&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;123&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;176&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;347&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;254&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;456&quot;</span>, <span class="st">&quot;223&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;190&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;288&quot;</span>, <span class="st">&quot;681&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;352&quot;</span>, <span class="st">&quot;270&quot;</span>, <span class="st">&quot;245&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;229&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="st">&quot;320&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;352&quot;</span>, <span class="st">&quot;233&quot;</span>, <span class="st">&quot;214.8&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;179&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="st">&quot;227&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;2640&quot;</span>, <span class="st">&quot;364&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;382&quot;</span>, <span class="st">&quot;243&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;298&quot;</span>, <span class="st">&quot;155&quot;</span>, <span class="st">&quot;216&quot;</span>, <span class="st">&quot;24840&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;202&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="data.html#cb22-1"></a>song &lt;-<span class="kw">c</span>(<span class="st">&quot;fav_song&quot;</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="st">&quot;570&quot;</span>, <span class="st">&quot;576&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;524&quot;</span>, <span class="st">&quot;252&quot;</span>, <span class="st">&quot;588&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;212&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="ot">NA</span>, <span class="st">&quot;265&quot;</span>, <span class="st">&quot;294&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;481&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;203&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;375&quot;</span>, <span class="st">&quot;698&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;242&quot;</span>, <span class="st">&quot;256&quot;</span>, <span class="st">&quot;288&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;273&quot;</span>, <span class="st">&quot;601&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;147&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;202.2&quot;</span>, <span class="st">&quot;274&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;555&quot;</span>, <span class="st">&quot;362&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;373&quot;</span>, <span class="st">&quot;121&quot;</span>, <span class="st">&quot;361&quot;</span>, <span class="st">&quot;179&quot;</span>, <span class="st">&quot;169&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;139&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;292&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;412&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;289&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;448&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;207&quot;</span>, <span class="st">&quot;74&quot;</span>, <span class="st">&quot;253&quot;</span>, <span class="st">&quot;256&quot;</span>, <span class="st">&quot;243&quot;</span>, <span class="st">&quot;187&quot;</span>, <span class="st">&quot;420&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;235&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;258&quot;</span>, <span class="st">&quot;213&quot;</span>, <span class="st">&quot;188&quot;</span>, <span class="st">&quot;258&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;5421&quot;</span>, <span class="st">&quot;259&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;171&quot;</span>, <span class="st">&quot;184&quot;</span>, <span class="st">&quot;220&quot;</span>, <span class="st">&quot;225&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;208&quot;</span>, <span class="st">&quot;254&quot;</span>, <span class="st">&quot;341&quot;</span>, <span class="st">&quot;233&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;455&quot;</span>, <span class="st">&quot;423&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;570&quot;</span>, <span class="st">&quot;319&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;205&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;126&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;226.93&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;298&quot;</span>, <span class="st">&quot;290&quot;</span>, <span class="st">&quot;202&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;150&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;174&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;565&quot;</span>, <span class="st">&quot;273&quot;</span>, <span class="st">&quot;245&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;174&quot;</span>, <span class="st">&quot;276&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;460&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;583&quot;</span>, <span class="st">&quot;90&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;244&quot;</span>, <span class="st">&quot;127&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;211&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;220&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;198&quot;</span>, <span class="st">&quot;133&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;296&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;212&quot;</span>, <span class="st">&quot;195.6&quot;</span>, <span class="st">&quot;187&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;183&quot;</span>, <span class="st">&quot;216&quot;</span>, <span class="st">&quot;286&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;270&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;268&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;1560&quot;</span>, <span class="st">&quot;197&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;279&quot;</span>, <span class="st">&quot;195&quot;</span>, <span class="st">&quot;251&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;461&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;218&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;257&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;199&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;331&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;190&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;284&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;235&quot;</span>, <span class="st">&quot;277&quot;</span>, <span class="st">&quot;314&quot;</span>, <span class="st">&quot;249&quot;</span>, <span class="st">&quot;75&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;277&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;209&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;402&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;205&quot;</span>, <span class="st">&quot;345&quot;</span>, <span class="st">&quot;252&quot;</span>, <span class="st">&quot;305&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;170&quot;</span>, <span class="st">&quot;213&quot;</span>, <span class="st">&quot;656&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;339&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;263&quot;</span>, <span class="st">&quot;239&quot;</span>, <span class="st">&quot;135&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;292&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;432&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;21&quot;</span>, <span class="st">&quot;215&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;247&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;253&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;355&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;332&quot;</span>, <span class="st">&quot;2450&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;379&quot;</span>, <span class="st">&quot;516&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;184&quot;</span>, <span class="st">&quot;218&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;160&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;238&quot;</span>, <span class="st">&quot;208&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;123&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;176&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;347&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;254&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;456&quot;</span>, <span class="st">&quot;223&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;190&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;288&quot;</span>, <span class="st">&quot;681&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;352&quot;</span>, <span class="st">&quot;270&quot;</span>, <span class="st">&quot;245&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;229&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="st">&quot;320&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;352&quot;</span>, <span class="st">&quot;233&quot;</span>, <span class="st">&quot;214.8&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;179&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="st">&quot;227&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;2640&quot;</span>, <span class="st">&quot;364&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;382&quot;</span>, <span class="st">&quot;243&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;298&quot;</span>, <span class="st">&quot;155&quot;</span>, <span class="st">&quot;216&quot;</span>, <span class="st">&quot;24840&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;202&quot;</span>)</span></code></pre></div>
 </div>
 <div id="reading-a-file" class="section level4">
 <h4><span class="header-section-number">8.3.1.3</span> Reading a file</h4>
@@ -1245,14 +1267,15 @@ Figure 8.6: An ordered variable plotted as histogram.
 <p>We just write a script, and change it until we get exactly what we want. The script provides the reproducible record of how the data was manipulated.</p>
 <p>We’ll (mostly) use <code>.csv</code> files as a data source in this course. The same basic reading approach used for that is applicable to all kinds of other data sources. Many different R functions exist to read from many different types of data sources.</p>
 <p>Here’s how to import the precourse survey data using the <code>read_csv</code> function from the tidyverse <code>readr</code> package.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co"># my working directory has a subdirectory named datasets</span></a>
-<a class="sourceLine" id="cb40-2" title="2"></a>
-<a class="sourceLine" id="cb40-3" title="3"><span class="co"># the precourse.csv file is in the datasets folder</span></a>
-<a class="sourceLine" id="cb40-4" title="4"></a>
-<a class="sourceLine" id="cb40-5" title="5"><span class="co"># If the csv file is in your working directory, just do: pcd &lt;- read_csv(&quot;precourse.csv)</span></a>
-<a class="sourceLine" id="cb40-6" title="6"></a>
-<a class="sourceLine" id="cb40-7" title="7">pcd &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;datasets/precourse.csv&quot;</span>)</a></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="data.html#cb23-1"></a><span class="co"># my working directory has a subdirectory named datasets</span></span>
+<span id="cb23-2"><a href="data.html#cb23-2"></a></span>
+<span id="cb23-3"><a href="data.html#cb23-3"></a><span class="co"># the precourse.csv file is in the datasets folder</span></span>
+<span id="cb23-4"><a href="data.html#cb23-4"></a></span>
+<span id="cb23-5"><a href="data.html#cb23-5"></a><span class="co"># If the csv file is in your working directory, just do: pcd &lt;- read_csv(&quot;precourse.csv)</span></span>
+<span id="cb23-6"><a href="data.html#cb23-6"></a></span>
+<span id="cb23-7"><a href="data.html#cb23-7"></a>pcd &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;datasets/precourse.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## -- Column specification --------------------------------------------------------
 ## cols(
 ##   term = col_double(),
 ##   enthusiasm = col_double(),
@@ -1262,16 +1285,16 @@ Figure 8.6: An ordered variable plotted as histogram.
 ##   fav_song = col_double()
 ## )</code></pre>
 <p>Inspect the data to make sure it is what you think it is.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="co"># get in the havit of inspecting data, several ways </span></a>
-<a class="sourceLine" id="cb42-2" title="2"></a>
-<a class="sourceLine" id="cb42-3" title="3"><span class="kw">str</span>(pcd)</a></code></pre></div>
-<pre><code>## Classes &#39;spec_tbl_df&#39;, &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;: 386 obs. of  6 variables:
-##  $ term      : num  2014 2014 2014 2014 2014 ...
-##  $ enthusiasm: num  6 7 7 10 7 5 5 10 7 10 ...
-##  $ height    : num  170 158 163 168 168 ...
-##  $ friends   : num  685 154 1333 0 250 ...
-##  $ sex       : chr  &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; ...
-##  $ fav_song  : num  NA NA NA NA NA NA NA NA NA NA ...
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="data.html#cb25-1"></a><span class="co"># get in the havit of inspecting data, several ways </span></span>
+<span id="cb25-2"><a href="data.html#cb25-2"></a></span>
+<span id="cb25-3"><a href="data.html#cb25-3"></a><span class="kw">str</span>(pcd)</span></code></pre></div>
+<pre><code>## tibble [386 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ term      : num [1:386] 2014 2014 2014 2014 2014 ...
+##  $ enthusiasm: num [1:386] 6 7 7 10 7 5 5 10 7 10 ...
+##  $ height    : num [1:386] 170 158 163 168 168 ...
+##  $ friends   : num [1:386] 685 154 1333 0 250 ...
+##  $ sex       : chr [1:386] &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; &quot;Female&quot; ...
+##  $ fav_song  : num [1:386] NA NA NA NA NA NA NA NA NA NA ...
 ##  - attr(*, &quot;spec&quot;)=
 ##   .. cols(
 ##   ..   term = col_double(),
@@ -1281,7 +1304,7 @@ Figure 8.6: An ordered variable plotted as histogram.
 ##   ..   sex = col_character(),
 ##   ..   fav_song = col_double()
 ##   .. )</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw">head</span>(pcd)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="data.html#cb27-1"></a><span class="kw">head</span>(pcd)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 6
 ##    term enthusiasm height friends sex    fav_song
 ##   &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -1291,7 +1314,7 @@ Figure 8.6: An ordered variable plotted as histogram.
 ## 4  2014         10   168        0 Female       NA
 ## 5  2014          7   168.     250 Female       NA
 ## 6  2014          5   157      476 Female       NA</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="kw">view</span>(pcd)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="data.html#cb29-1"></a><span class="kw">view</span>(pcd)</span></code></pre></div>
 <p>There are a handful of functions in R land for reading <code>.csv</code> data. They don’t all work the same,</p>
 </div>
 <div id="subsetting-transforming-and-summarizing-data" class="section level4">
@@ -1300,40 +1323,40 @@ Figure 8.6: An ordered variable plotted as histogram.
 <ol style="list-style-type: decimal">
 <li>Functions have one or more arguments, placed inside (). Commas always separate arguments, and one argument is usually some sort of data object or a function that has a data argument.</li>
 </ol>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># prototype function</span></a>
-<a class="sourceLine" id="cb47-2" title="2"><span class="kw">foo</span>(arg1, arg2, arg3, ...)</a>
-<a class="sourceLine" id="cb47-3" title="3"></a>
-<a class="sourceLine" id="cb47-4" title="4"><span class="co"># for example:</span></a>
-<a class="sourceLine" id="cb47-5" title="5"></a>
-<a class="sourceLine" id="cb47-6" title="6">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span> ,<span class="dv">5</span>, <span class="ot">NA</span>)</a>
-<a class="sourceLine" id="cb47-7" title="7"></a>
-<a class="sourceLine" id="cb47-8" title="8"><span class="co"># x is an argument</span></a>
-<a class="sourceLine" id="cb47-9" title="9"><span class="co"># na.rm = T is also an argument</span></a>
-<a class="sourceLine" id="cb47-10" title="10"></a>
-<a class="sourceLine" id="cb47-11" title="11"><span class="co"># two arguments needed because x has NA, and mean won&#39;t ignore NA unless told</span></a>
-<a class="sourceLine" id="cb47-12" title="12"></a>
-<a class="sourceLine" id="cb47-13" title="13"><span class="kw">mean</span>(x, <span class="dt">na.rm =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="data.html#cb30-1"></a><span class="co"># prototype function</span></span>
+<span id="cb30-2"><a href="data.html#cb30-2"></a><span class="kw">foo</span>(arg1, arg2, arg3, ...)</span>
+<span id="cb30-3"><a href="data.html#cb30-3"></a></span>
+<span id="cb30-4"><a href="data.html#cb30-4"></a><span class="co"># for example:</span></span>
+<span id="cb30-5"><a href="data.html#cb30-5"></a></span>
+<span id="cb30-6"><a href="data.html#cb30-6"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span> ,<span class="dv">5</span>, <span class="ot">NA</span>)</span>
+<span id="cb30-7"><a href="data.html#cb30-7"></a></span>
+<span id="cb30-8"><a href="data.html#cb30-8"></a><span class="co"># x is an argument</span></span>
+<span id="cb30-9"><a href="data.html#cb30-9"></a><span class="co"># na.rm = T is also an argument</span></span>
+<span id="cb30-10"><a href="data.html#cb30-10"></a></span>
+<span id="cb30-11"><a href="data.html#cb30-11"></a><span class="co"># two arguments needed because x has NA, and mean won&#39;t ignore NA unless told</span></span>
+<span id="cb30-12"><a href="data.html#cb30-12"></a></span>
+<span id="cb30-13"><a href="data.html#cb30-13"></a><span class="kw">mean</span>(x, <span class="dt">na.rm =</span> T)</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Functions can work sequentially inside other functions.</li>
 </ol>
 <p>The pipe function, <code>%&gt;%</code>, from the <code>dplyr</code> package will be your best friend in the course if you allow it. In English, <code>%&gt;%</code> means ‘then’ or ‘next’.</p>
 <p>For example:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># old fashioned R syntax, hard to read and write, NTTAWWT:</span></a>
-<a class="sourceLine" id="cb48-2" title="2"></a>
-<a class="sourceLine" id="cb48-3" title="3"><span class="kw">work</span>(<span class="kw">commute</span>(<span class="kw">shower</span>(<span class="kw">breakfast</span>(<span class="kw">walk_dog</span>(<span class="kw">bathroom</span>(<span class="kw">wake_up</span>(me)))))))</a>
-<a class="sourceLine" id="cb48-4" title="4"></a>
-<a class="sourceLine" id="cb48-5" title="5"><span class="co"># piping is more natural</span></a>
-<a class="sourceLine" id="cb48-6" title="6"></a>
-<a class="sourceLine" id="cb48-7" title="7">workday &lt;-<span class="st"> </span>me <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-8" title="8"><span class="st">  </span><span class="kw">wake_up</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-9" title="9"><span class="st">  </span><span class="kw">bathroom</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-10" title="10"><span class="st">  </span><span class="kw">walk_dog</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-11" title="11"><span class="st">  </span><span class="kw">breakfast</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-12" title="12"><span class="st">  </span><span class="kw">shower</span>() <span class="op">%&gt;%</span><span class="st">  </span></a>
-<a class="sourceLine" id="cb48-13" title="13"><span class="st">  </span><span class="kw">commute</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb48-14" title="14"><span class="st">  </span><span class="kw">work</span>()</a>
-<a class="sourceLine" id="cb48-15" title="15"></a>
-<a class="sourceLine" id="cb48-16" title="16"><span class="co"># I saw this analogy on twitter and wish I&#39;d invented it</span></a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="data.html#cb31-1"></a><span class="co"># old fashioned R syntax, hard to read and write, NTTAWWT:</span></span>
+<span id="cb31-2"><a href="data.html#cb31-2"></a></span>
+<span id="cb31-3"><a href="data.html#cb31-3"></a><span class="kw">work</span>(<span class="kw">commute</span>(<span class="kw">shower</span>(<span class="kw">breakfast</span>(<span class="kw">walk_dog</span>(<span class="kw">bathroom</span>(<span class="kw">wake_up</span>(me)))))))</span>
+<span id="cb31-4"><a href="data.html#cb31-4"></a></span>
+<span id="cb31-5"><a href="data.html#cb31-5"></a><span class="co"># piping is more natural</span></span>
+<span id="cb31-6"><a href="data.html#cb31-6"></a></span>
+<span id="cb31-7"><a href="data.html#cb31-7"></a>workday &lt;-<span class="st"> </span>me <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-8"><a href="data.html#cb31-8"></a><span class="st">  </span><span class="kw">wake_up</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-9"><a href="data.html#cb31-9"></a><span class="st">  </span><span class="kw">bathroom</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-10"><a href="data.html#cb31-10"></a><span class="st">  </span><span class="kw">walk_dog</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-11"><a href="data.html#cb31-11"></a><span class="st">  </span><span class="kw">breakfast</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-12"><a href="data.html#cb31-12"></a><span class="st">  </span><span class="kw">shower</span>() <span class="op">%&gt;%</span><span class="st">  </span></span>
+<span id="cb31-13"><a href="data.html#cb31-13"></a><span class="st">  </span><span class="kw">commute</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-14"><a href="data.html#cb31-14"></a><span class="st">  </span><span class="kw">work</span>()</span>
+<span id="cb31-15"><a href="data.html#cb31-15"></a></span>
+<span id="cb31-16"><a href="data.html#cb31-16"></a><span class="co"># I saw this analogy on twitter and wish I&#39;d invented it</span></span></code></pre></div>
 <p>Your process should be making sure each step works before going to the next. And if you’re not getting what you want, maybe your steps are not in the right order?</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Five MUST KNOW functions</li>
@@ -1341,14 +1364,15 @@ Figure 8.6: An ordered variable plotted as histogram.
 <p>(there will be a few more later, including <code>ggplot</code> and <code>pivot_longer</code>, nee <code>gather</code>)</p>
 <p>Here is a goal: Generate some descriptive statistics, for only valid heights of male and female biostats students, in units of inches rather than centimeters.</p>
 <p>Here is a solution.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb49-2" title="2"><span class="st">  </span><span class="kw">select</span>(height, sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb49-3" title="3"><span class="st">  </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb49-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">height =</span> height<span class="op">/</span><span class="fl">2.54</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb49-5" title="5"><span class="st">  </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb49-6" title="6"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(height),</a>
-<a class="sourceLine" id="cb49-7" title="7">            <span class="dt">sd =</span> <span class="kw">sd</span>(height),</a>
-<a class="sourceLine" id="cb49-8" title="8">            <span class="dt">n =</span> <span class="kw">length</span>(height))</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="data.html#cb32-1"></a>pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-2"><a href="data.html#cb32-2"></a><span class="st">  </span><span class="kw">select</span>(height, sex) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-3"><a href="data.html#cb32-3"></a><span class="st">  </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-4"><a href="data.html#cb32-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">height =</span> height<span class="op">/</span><span class="fl">2.54</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-5"><a href="data.html#cb32-5"></a><span class="st">  </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-6"><a href="data.html#cb32-6"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(height),</span>
+<span id="cb32-7"><a href="data.html#cb32-7"></a>            <span class="dt">sd =</span> <span class="kw">sd</span>(height),</span>
+<span id="cb32-8"><a href="data.html#cb32-8"></a>            <span class="dt">n =</span> <span class="kw">length</span>(height))</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <pre><code>## # A tibble: 2 x 4
 ##   sex     mean    sd     n
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
@@ -1365,14 +1389,14 @@ Figure 8.6: An ordered variable plotted as histogram.
 <ol start="4" style="list-style-type: decimal">
 <li>There are many ways to do the same thing, or pretty much the same thing</li>
 </ol>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># need a data frame object of random normal values?</span></a>
-<a class="sourceLine" id="cb51-2" title="2"></a>
-<a class="sourceLine" id="cb51-3" title="3">a &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb51-4" title="4">b &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb51-5" title="5"></a>
-<a class="sourceLine" id="cb51-6" title="6">oneway &lt;-<span class="st"> </span><span class="kw">data.frame</span>(a, b)</a>
-<a class="sourceLine" id="cb51-7" title="7">another &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">rnorm</span>(<span class="dv">5</span>), <span class="dt">b =</span> <span class="kw">rnorm</span>(<span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb51-8" title="8">prettyMuchSame &lt;-<span class="st"> </span><span class="kw">tibble</span>(a, b)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="data.html#cb35-1"></a><span class="co"># need a data frame object of random normal values?</span></span>
+<span id="cb35-2"><a href="data.html#cb35-2"></a></span>
+<span id="cb35-3"><a href="data.html#cb35-3"></a>a &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb35-4"><a href="data.html#cb35-4"></a>b &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb35-5"><a href="data.html#cb35-5"></a></span>
+<span id="cb35-6"><a href="data.html#cb35-6"></a>oneway &lt;-<span class="st"> </span><span class="kw">data.frame</span>(a, b)</span>
+<span id="cb35-7"><a href="data.html#cb35-7"></a>another &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">rnorm</span>(<span class="dv">5</span>), <span class="dt">b =</span> <span class="kw">rnorm</span>(<span class="dv">5</span>))</span>
+<span id="cb35-8"><a href="data.html#cb35-8"></a>prettyMuchSame &lt;-<span class="st"> </span><span class="kw">tibble</span>(a, b)</span></code></pre></div>
 </div>
 <div id="evolution-of-a-visualization" class="section level4">
 <h4><span class="header-section-number">8.3.1.5</span> Evolution of a visualization</h4>
@@ -1390,9 +1414,9 @@ Figure 8.6: An ordered variable plotted as histogram.
 <ol style="list-style-type: decimal">
 <li>The default ggplot creates the blank canvas</li>
 </ol>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="kw">ggplot</span>()</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-40"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-40-1.png" alt="Not much, but it is a start." width="144" />
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="data.html#cb36-1"></a><span class="kw">ggplot</span>()</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-24"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-24-1.png" alt="Not much, but it is a start." width="144" />
 <p class="caption">
 Figure 8.7: Not much, but it is a start.
 </p>
@@ -1400,9 +1424,9 @@ Figure 8.7: Not much, but it is a start.
 <ol start="2" style="list-style-type: decimal">
 <li>The data must be in a data frame. It’s there now, but still a blank canvas.</li>
 </ol>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-41"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-41-1.png" alt="The nothingness belies real progress" width="144" />
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="data.html#cb37-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-25"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-25-1.png" alt="The nothingness belies real progress" width="144" />
 <p class="caption">
 Figure 8.8: The nothingness belies real progress
 </p>
@@ -1410,9 +1434,9 @@ Figure 8.8: The nothingness belies real progress
 <ol start="3" style="list-style-type: decimal">
 <li>Assign variables to the canvas coordinates using the aesthetics function. No longer blank.</li>
 </ol>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd, <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height))</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-42"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-42-1.png" alt="Woot! Something happened." width="144" />
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="data.html#cb38-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd, <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height))</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-26"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-26-1.png" alt="Woot! Something happened." width="144" />
 <p class="caption">
 Figure 8.9: Woot! Something happened.
 </p>
@@ -1420,10 +1444,10 @@ Figure 8.9: Woot! Something happened.
 <ol start="4" style="list-style-type: decimal">
 <li>Geom’s bring the data into view. Aesthetics can also be argued in geom functions.</li>
 </ol>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd) <span class="op">+</span></a>
-<a class="sourceLine" id="cb55-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height))</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-43"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-43-1.png" alt="Woot! Data!" width="144" />
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="data.html#cb39-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd) <span class="op">+</span></span>
+<span id="cb39-2"><a href="data.html#cb39-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height))</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-27"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-27-1.png" alt="Woot! Data!" width="144" />
 <p class="caption">
 Figure 8.10: Woot! Data!
 </p>
@@ -1431,12 +1455,12 @@ Figure 8.10: Woot! Data!
 <ol start="5" style="list-style-type: decimal">
 <li>Ugh, outliers, no grad student is ever that tall or short. Munge the data inside the ggplot function. On the fly!</li>
 </ol>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb56-2" title="2"><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </a>
-<a class="sourceLine" id="cb56-3" title="3">       ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb56-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height))</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-44"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-44-1.png" alt="Fix the problem right in the data frame." width="144" />
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="data.html#cb40-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb40-2"><a href="data.html#cb40-2"></a><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </span>
+<span id="cb40-3"><a href="data.html#cb40-3"></a>       ) <span class="op">+</span></span>
+<span id="cb40-4"><a href="data.html#cb40-4"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height))</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-28"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-28-1.png" alt="Fix the problem right in the data frame." width="144" />
 <p class="caption">
 Figure 8.11: Fix the problem right in the data frame.
 </p>
@@ -1444,12 +1468,12 @@ Figure 8.11: Fix the problem right in the data frame.
 <ol start="6" style="list-style-type: decimal">
 <li>Not a good use case for <code>geom_point</code>.</li>
 </ol>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb57-2" title="2"><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </a>
-<a class="sourceLine" id="cb57-3" title="3">       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb57-4" title="4"><span class="st">  </span><span class="kw">geom_jitter</span>()</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-45"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-45-1.png" alt="Try a different geom." width="144" />
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="data.html#cb41-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb41-2"><a href="data.html#cb41-2"></a><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </span>
+<span id="cb41-3"><a href="data.html#cb41-3"></a>       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height)) <span class="op">+</span></span>
+<span id="cb41-4"><a href="data.html#cb41-4"></a><span class="st">  </span><span class="kw">geom_jitter</span>()</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-29"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-29-1.png" alt="Try a different geom." width="144" />
 <p class="caption">
 Figure 8.12: Try a different geom.
 </p>
@@ -1457,14 +1481,14 @@ Figure 8.12: Try a different geom.
 <ol start="7" style="list-style-type: decimal">
 <li>Customize the geom.</li>
 </ol>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb58-2" title="2"><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </a>
-<a class="sourceLine" id="cb58-3" title="3">       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb58-4" title="4"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">shape =</span> <span class="dv">22</span>, <span class="dt">height =</span> <span class="dv">0</span>, </a>
-<a class="sourceLine" id="cb58-5" title="5">              <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>,</a>
-<a class="sourceLine" id="cb58-6" title="6">              <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-46"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-46-1.png" alt="Let's call this Bob-Rossing the plot." width="144" />
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="data.html#cb42-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb42-2"><a href="data.html#cb42-2"></a><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </span>
+<span id="cb42-3"><a href="data.html#cb42-3"></a>       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height)) <span class="op">+</span></span>
+<span id="cb42-4"><a href="data.html#cb42-4"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">shape =</span> <span class="dv">22</span>, <span class="dt">height =</span> <span class="dv">0</span>, </span>
+<span id="cb42-5"><a href="data.html#cb42-5"></a>              <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb42-6"><a href="data.html#cb42-6"></a>              <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-30"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-30-1.png" alt="Let's call this Bob-Rossing the plot." width="144" />
 <p class="caption">
 Figure 8.13: Let’s call this Bob-Rossing the plot.
 </p>
@@ -1472,21 +1496,21 @@ Figure 8.13: Let’s call this Bob-Rossing the plot.
 <ol start="8" style="list-style-type: decimal">
 <li>Customize the axis</li>
 </ol>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb59-2" title="2"><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </a>
-<a class="sourceLine" id="cb59-3" title="3">       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb59-4" title="4"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">shape =</span> <span class="dv">22</span>, <span class="dt">height =</span> <span class="dv">0</span>, </a>
-<a class="sourceLine" id="cb59-5" title="5">              <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>,</a>
-<a class="sourceLine" id="cb59-6" title="6">              <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</a>
-<a class="sourceLine" id="cb59-8" title="8">       <span class="dt">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</a>
-<a class="sourceLine" id="cb59-9" title="9">       <span class="dt">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</a>
-<a class="sourceLine" id="cb59-10" title="10">       <span class="dt">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</a>
-<a class="sourceLine" id="cb59-11" title="11">       <span class="dt">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</a>
-<a class="sourceLine" id="cb59-12" title="12">       <span class="dt">y=</span><span class="st">&quot;verticality, cm&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb59-13" title="13"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels=</span> <span class="kw">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-47"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-47-1.png" alt="More Bob-Rossing." width="672" />
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="data.html#cb43-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb43-2"><a href="data.html#cb43-2"></a><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </span>
+<span id="cb43-3"><a href="data.html#cb43-3"></a>       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height)) <span class="op">+</span></span>
+<span id="cb43-4"><a href="data.html#cb43-4"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">shape =</span> <span class="dv">22</span>, <span class="dt">height =</span> <span class="dv">0</span>, </span>
+<span id="cb43-5"><a href="data.html#cb43-5"></a>              <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb43-6"><a href="data.html#cb43-6"></a>              <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>)<span class="op">+</span></span>
+<span id="cb43-7"><a href="data.html#cb43-7"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</span>
+<span id="cb43-8"><a href="data.html#cb43-8"></a>       <span class="dt">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</span>
+<span id="cb43-9"><a href="data.html#cb43-9"></a>       <span class="dt">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</span>
+<span id="cb43-10"><a href="data.html#cb43-10"></a>       <span class="dt">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</span>
+<span id="cb43-11"><a href="data.html#cb43-11"></a>       <span class="dt">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</span>
+<span id="cb43-12"><a href="data.html#cb43-12"></a>       <span class="dt">y=</span><span class="st">&quot;verticality, cm&quot;</span>)<span class="op">+</span></span>
+<span id="cb43-13"><a href="data.html#cb43-13"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels=</span> <span class="kw">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-31"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-31-1.png" alt="More Bob-Rossing." width="672" />
 <p class="caption">
 Figure 8.14: More Bob-Rossing.
 </p>
@@ -1494,22 +1518,22 @@ Figure 8.14: More Bob-Rossing.
 <ol start="9" style="list-style-type: decimal">
 <li>Customize the frame &amp; theme</li>
 </ol>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-2" title="2"><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </a>
-<a class="sourceLine" id="cb60-3" title="3">       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-4" title="4"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">shape =</span> <span class="dv">22</span>, <span class="dt">height =</span> <span class="dv">0</span>, </a>
-<a class="sourceLine" id="cb60-5" title="5">              <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>,</a>
-<a class="sourceLine" id="cb60-6" title="6">              <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb60-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</a>
-<a class="sourceLine" id="cb60-8" title="8">       <span class="dt">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</a>
-<a class="sourceLine" id="cb60-9" title="9">       <span class="dt">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</a>
-<a class="sourceLine" id="cb60-10" title="10">       <span class="dt">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</a>
-<a class="sourceLine" id="cb60-11" title="11">       <span class="dt">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</a>
-<a class="sourceLine" id="cb60-12" title="12">       <span class="dt">y=</span><span class="st">&quot;verticality, cm&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb60-13" title="13"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels=</span> <span class="kw">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb60-14" title="14"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-48"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-48-1.png" alt="And more Bob-Rossing." width="672" />
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="data.html#cb44-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb44-2"><a href="data.html#cb44-2"></a><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>), </span>
+<span id="cb44-3"><a href="data.html#cb44-3"></a>       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height)) <span class="op">+</span></span>
+<span id="cb44-4"><a href="data.html#cb44-4"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">shape =</span> <span class="dv">22</span>, <span class="dt">height =</span> <span class="dv">0</span>, </span>
+<span id="cb44-5"><a href="data.html#cb44-5"></a>              <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb44-6"><a href="data.html#cb44-6"></a>              <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.6</span>)<span class="op">+</span></span>
+<span id="cb44-7"><a href="data.html#cb44-7"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</span>
+<span id="cb44-8"><a href="data.html#cb44-8"></a>       <span class="dt">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</span>
+<span id="cb44-9"><a href="data.html#cb44-9"></a>       <span class="dt">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</span>
+<span id="cb44-10"><a href="data.html#cb44-10"></a>       <span class="dt">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</span>
+<span id="cb44-11"><a href="data.html#cb44-11"></a>       <span class="dt">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</span>
+<span id="cb44-12"><a href="data.html#cb44-12"></a>       <span class="dt">y=</span><span class="st">&quot;verticality, cm&quot;</span>)<span class="op">+</span></span>
+<span id="cb44-13"><a href="data.html#cb44-13"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels=</span> <span class="kw">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))<span class="op">+</span></span>
+<span id="cb44-14"><a href="data.html#cb44-14"></a><span class="st">  </span><span class="kw">theme_classic</span>()</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-32"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-32-1.png" alt="And more Bob-Rossing." width="672" />
 <p class="caption">
 Figure 8.15: And more Bob-Rossing.
 </p>
@@ -1517,24 +1541,24 @@ Figure 8.15: And more Bob-Rossing.
 <ol start="10" style="list-style-type: decimal">
 <li>Last minute changes. The audience won’t “get” cm. Transform variable to inches. Oh, and segment using a third variable and applying scaling colors.</li>
 </ol>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-2" title="2"><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-3" title="3"><span class="st">         </span><span class="kw">mutate</span>(<span class="dt">height =</span> height<span class="op">/</span><span class="fl">2.54</span>),</a>
-<a class="sourceLine" id="cb61-4" title="4">       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height, <span class="dt">color =</span> term)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb61-5" title="5"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">shape =</span> <span class="dv">18</span>, <span class="dt">height =</span> <span class="dv">0</span>, </a>
-<a class="sourceLine" id="cb61-6" title="6">              <span class="dt">width =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb61-7" title="7">              <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="dv">1</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb61-8" title="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</a>
-<a class="sourceLine" id="cb61-9" title="9">       <span class="dt">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</a>
-<a class="sourceLine" id="cb61-10" title="10">       <span class="dt">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</a>
-<a class="sourceLine" id="cb61-11" title="11">       <span class="dt">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</a>
-<a class="sourceLine" id="cb61-12" title="12">       <span class="dt">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</a>
-<a class="sourceLine" id="cb61-13" title="13">       <span class="dt">y=</span><span class="st">&quot;verticality, INCHES&quot;</span>)<span class="op">+</span></a>
-<a class="sourceLine" id="cb61-14" title="14"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels=</span> <span class="kw">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))<span class="op">+</span></a>
-<a class="sourceLine" id="cb61-15" title="15"><span class="st">  </span><span class="kw">theme_classic</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb61-16" title="16"><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">begin =</span> <span class="fl">0.1</span>, <span class="dt">end =</span><span class="fl">0.9</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-49"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-49-1.png" alt="Finish with a dramatic combination data munge, Bob-Rossing flourish." width="672" />
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="data.html#cb45-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pcd <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb45-2"><a href="data.html#cb45-2"></a><span class="st">         </span><span class="kw">filter</span>(height <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span> <span class="op">&amp;</span><span class="st"> </span>height <span class="op">&lt;</span><span class="st"> </span><span class="dv">250</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb45-3"><a href="data.html#cb45-3"></a><span class="st">         </span><span class="kw">mutate</span>(<span class="dt">height =</span> height<span class="op">/</span><span class="fl">2.54</span>),</span>
+<span id="cb45-4"><a href="data.html#cb45-4"></a>       <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>height, <span class="dt">color =</span> term)) <span class="op">+</span></span>
+<span id="cb45-5"><a href="data.html#cb45-5"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">shape =</span> <span class="dv">18</span>, <span class="dt">height =</span> <span class="dv">0</span>, </span>
+<span id="cb45-6"><a href="data.html#cb45-6"></a>              <span class="dt">width =</span> <span class="fl">0.2</span>,</span>
+<span id="cb45-7"><a href="data.html#cb45-7"></a>              <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="dv">1</span>)<span class="op">+</span></span>
+<span id="cb45-8"><a href="data.html#cb45-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</span>
+<span id="cb45-9"><a href="data.html#cb45-9"></a>       <span class="dt">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</span>
+<span id="cb45-10"><a href="data.html#cb45-10"></a>       <span class="dt">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</span>
+<span id="cb45-11"><a href="data.html#cb45-11"></a>       <span class="dt">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</span>
+<span id="cb45-12"><a href="data.html#cb45-12"></a>       <span class="dt">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</span>
+<span id="cb45-13"><a href="data.html#cb45-13"></a>       <span class="dt">y=</span><span class="st">&quot;verticality, INCHES&quot;</span>)<span class="op">+</span></span>
+<span id="cb45-14"><a href="data.html#cb45-14"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels=</span> <span class="kw">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))<span class="op">+</span></span>
+<span id="cb45-15"><a href="data.html#cb45-15"></a><span class="st">  </span><span class="kw">theme_classic</span>()<span class="op">+</span></span>
+<span id="cb45-16"><a href="data.html#cb45-16"></a><span class="st">  </span><span class="kw">scale_color_viridis</span>(<span class="dt">begin =</span> <span class="fl">0.1</span>, <span class="dt">end =</span><span class="fl">0.9</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-33"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-33-1.png" alt="Finish with a dramatic combination data munge, Bob-Rossing flourish." width="672" />
 <p class="caption">
 Figure 8.16: Finish with a dramatic combination data munge, Bob-Rossing flourish.
 </p>
@@ -1544,7 +1568,7 @@ Figure 8.16: Finish with a dramatic combination data munge, Bob-Rossing flourish
 </div>
 </div>
 </div>
-<div id="summary" class="section level2">
+<div id="summary-1" class="section level2">
 <h2><span class="header-section-number">8.4</span> Summary</h2>
 <p>We’re going to talk about data a lot more the rest of the semester. So far we’ve covered these fundamentals.</p>
 <ul>

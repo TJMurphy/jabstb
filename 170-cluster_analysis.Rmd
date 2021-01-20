@@ -105,9 +105,10 @@ First some housekeeping: Create a data frame because ggplot needs one, which inc
 
 ```{r}
 id <- row.names(df) 
-
-df1 <- data.frame(id,df) %>% pivot_longer(-id, names_to="variable", values_to="value")
-
+df1 <- data.frame(id,df) %>% 
+  pivot_longer(-id, 
+               names_to="variable", 
+               values_to="value")
 ```
 
 This is just a plot of some randomly selected rows. To some extent, they just look like random crappy data. The point is, looking at this you wouldn't probably imagine these datapoints come from a dataset with an underlying clustered structure. 
@@ -119,9 +120,6 @@ ggplot(df1, aes(id, value, color=variable))+
   scale_x_discrete(limits=c("S3", "S232", "S236", "S582", "S704", "S757" ))+
   labs(y="value of variable", x="case id", title="4 variables (by color) measured in each of 6 cases (for examples)")+
   theme_classic()
-  
-
-
 ```
 
 Now here is a plot of all the data. It is a bit more evident of some structure. Many, but not all, of the fuz variable is much higher than the others. But with the others it is hard to see any structure.
@@ -258,9 +256,7 @@ Now let's model this with 4 clusters. We recreate the km.df2 object, check the a
 
 ```{r}
 km.df2 <- kmeans(df2, 4, nstart=100)
-
 aggregate(df, by=list(cluster=km.df2$cluster), mean)
-
 fviz_cluster(km.df2, data=df,
              palette=c("#440154FF", "#39568CFF", "#1F968BFF", "#73D055FF"),
              geom="point",
@@ -268,7 +264,6 @@ fviz_cluster(km.df2, data=df,
              shape=1,
              pointsize=4,
              ggtheme=theme_bw())
-
 ```
 
 ## PAM and CLARA
@@ -277,7 +272,6 @@ PAM and CLARA are alternative algorithms to kmeans. All three are likely to corr
 
 ```{r}
 pam.df2 <- pam(df2, 4)
-
 fviz_cluster(pam.df2,
              palette=c("#440154FF", "#39568CFF", "#1F968BFF", "#73D055FF"),
              geom="point",
@@ -286,9 +280,9 @@ fviz_cluster(pam.df2,
              pointsize=4,
              ggtheme=theme_bw())
 ```
+
 ```{r}
 pam.df2 <- pam(df2, 3)
-
 fviz_cluster(pam.df2,
              palette=c("#440154FF", "#39568CFF", "#1F968BFF", "#73D055FF"),
              geom="point",
@@ -331,7 +325,6 @@ There are several additional hierarchical vizualizations that are possible, phyl
 Heatmaps are just a visual descriptive technique to pair the magnitude of measurements with hierarchical clusters. This particular function is also performing some clustering. This viz pretty much makes the case for four clusters. But the function's arguments could be modified to see how well that holds.
 
 ```{r}
-
 heatmap(df2, scale="column")
 ```
 

@@ -92,7 +92,7 @@ g <- ggplot(data, aes(x=t, y=dt))+
 
 If given a $t$ ratio from a comparison and also the $df$ for the test, `pt` can be used to generate a p-value.
 
-As the cumulative probability function for the $t$ distribution `dt` returns the area under the curve when given these arguments. Thus, about 96% of the area under the curve is to the left of a $t$ value of 3.3 at $df$=2, and about 4% of the AUC is to the right of that value.
+As the cumulative probability function for the $t$ distribution `pt` returns the area under the curve when given these arguments. Thus, about 96% of the area under the curve is to the left of a $t$ value of 3.3 at $df$=2, and about 4% of the AUC is to the right of that value.
 
 ```{r}
 pt(q=3.3, df=2, lower.tail =T)
@@ -102,11 +102,11 @@ pt(q=3.3, df=2, lower.tail=F)
 That's precisely what is depicted graphically here, with navy representing the lower tail and green the upper tail of the cumulative function on either side of $t_{df2}=3.3$:
 
 ```{r}
-ggplot() +
-  stat_function(aes(x=-5:5), n=150,  geom="line", fun=dt, args = list(df=2), color="black", size=2) +
-  stat_function(aes(x=-5:5), n=150, fun=dt, args=list(df=2), xlim = c(-5, 3.3), geom = "area", fill= "navy") +
-  stat_function(aes(x=-5:5), n=150, fun=dt, args=list(df=2), xlim = c(3.3, 5), geom = "area", fill= "green") +
-    scale_x_continuous(breaks=seq(-5,5,1)) +
+ggplot(data.frame(x=c(-5,5)), aes(x)) +
+  stat_function(fun=dt, args=list(df=2), geom="line", color="black") +
+  stat_function(fun=dt, args=list(df=2), xlim = c(-5, 3.3), geom = "area", fill= "navy") +
+  stat_function(fun=dt, args=list(df=2), xlim = c(3.3, 5), geom = "area", fill= "green") +
+  scale_x_continuous(breaks=seq(-5,5,1)) +
   xlab("t") +ylab("p(t)")
 ```
 
@@ -144,7 +144,8 @@ g <- ggplot(data, aes(x=x, y=qt))+
 
 Finally, the `rt` function can be used to simulate a random sample of t values for a distribution with $df$ degrees of freedom. 
 
-For example, here are 5 t values from a $df2$ and another 4 from $df20$. You're more likely to get crazy outliers from the former rather than the latter.
+For example, here are 5 t values from a $df2$ and another 4 from $df20$. 
+
 ```{r}
 set.seed(12345)
 rt(5, 2)

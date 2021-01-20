@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 47 RNA-seq with R | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 47 RNA-seq with R | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,13 +50,15 @@
 
 
 
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -65,14 +67,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -81,9 +85,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -136,21 +140,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author and book</a></li>
 <li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a><ul>
-<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#spring-2020-term-versions"><i class="fa fa-check"></i><b>3.1</b> Spring 2020 term versions</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.1.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.1.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.1.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.1.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.1.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.1.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.1.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.1.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-software-for-your-machine"><i class="fa fa-check"></i><b>3.1.5</b> Rule 4: Install the right software for your machine</a></li>
-<li class="chapter" data-level="3.1.6" data-path="software.html"><a href="software.html#rule-5-use-this-installation-guide"><i class="fa fa-check"></i><b>3.1.6</b> Rule 5: Use this installation guide</a></li>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
+<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.2</b> After installation</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.2.1</b> What is R?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#r-packages"><i class="fa fa-check"></i><b>3.2.2</b> R packages</a></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-immportant-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super immportant: Always avoid compiling</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#important-avoid-compiling"><i class="fa fa-check"></i><b>3.3</b> Important: Avoid compiling</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.3.1</b> Reasons not to compile</a></li>
-</ul></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a><ul>
 <li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
@@ -206,7 +213,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.3" data-path="data.html"><a href="data.html#working-with-data"><i class="fa fa-check"></i><b>8.3</b> Working with data</a><ul>
 <li class="chapter" data-level="8.3.1" data-path="data.html"><a href="data.html#entering-data"><i class="fa fa-check"></i><b>8.3.1</b> Entering data</a></li>
 </ul></li>
-<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
+<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary-1"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>9</b> Variability, Accuracy and Precision</a><ul>
 <li class="chapter" data-level="9.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>9.0.1</b> Data are messy</a></li>
@@ -245,14 +252,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>12</b> P Values</a><ul>
 <li class="chapter" data-level="12.1" data-path="pvalues.html"><a href="pvalues.html#definition"><i class="fa fa-check"></i><b>12.1</b> Definition</a></li>
-<li class="chapter" data-level="12.2" data-path="pvalues.html"><a href="pvalues.html#test-statistics-come-from-null-distributions"><i class="fa fa-check"></i><b>12.2</b> Test statistics come from null distributions</a><ul>
-<li class="chapter" data-level="12.2.1" data-path="pvalues.html"><a href="pvalues.html#p-value-behavior"><i class="fa fa-check"></i><b>12.2.1</b> P-value behavior</a></li>
-<li class="chapter" data-level="12.2.2" data-path="pvalues.html"><a href="pvalues.html#p-values-and-the-decision-process"><i class="fa fa-check"></i><b>12.2.2</b> P-values and the decision process</a></li>
-</ul></li>
-<li class="chapter" data-level="12.3" data-path="pvalues.html"><a href="pvalues.html#a-blood-glucose-p-value"><i class="fa fa-check"></i><b>12.3</b> A blood glucose p-value</a></li>
-<li class="chapter" data-level="12.4" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>12.4</b> How p-values should be interpreted</a></li>
-<li class="chapter" data-level="12.5" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>12.5</b> Interpretation</a></li>
-<li class="chapter" data-level="12.6" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>12.6</b> Criticisms of p-values</a></li>
+<li class="chapter" data-level="12.2" data-path="pvalues.html"><a href="pvalues.html#null-test-statistic-distributions"><i class="fa fa-check"></i><b>12.2</b> Null test statistic distributions</a></li>
+<li class="chapter" data-level="12.3" data-path="pvalues.html"><a href="pvalues.html#computing-p-values"><i class="fa fa-check"></i><b>12.3</b> Computing p-values</a></li>
+<li class="chapter" data-level="12.4" data-path="pvalues.html"><a href="pvalues.html#p-values-from-null-tests-are-uniform"><i class="fa fa-check"></i><b>12.4</b> P-values from null tests are uniform</a></li>
+<li class="chapter" data-level="12.5" data-path="pvalues.html"><a href="pvalues.html#how-p-values-become-error-probabilities"><i class="fa fa-check"></i><b>12.5</b> How P-values become error probabilities</a></li>
+<li class="chapter" data-level="12.6" data-path="pvalues.html"><a href="pvalues.html#p-values-as-dichotomous-switches"><i class="fa fa-check"></i><b>12.6</b> P-values as dichotomous switches</a></li>
+<li class="chapter" data-level="12.7" data-path="pvalues.html"><a href="pvalues.html#p-values-in-true-effects"><i class="fa fa-check"></i><b>12.7</b> P-values in true effects</a></li>
+<li class="chapter" data-level="12.8" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>12.8</b> Criticisms of p-values</a></li>
+<li class="chapter" data-level="12.9" data-path="pvalues.html"><a href="pvalues.html#summary-how-to-use-p-values"><i class="fa fa-check"></i><b>12.9</b> Summary: How to use p-values</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>13</b> Reproducible Data Munging in R</a><ul>
 <li class="chapter" data-level="13.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-data"><i class="fa fa-check"></i><b>13.1</b> Jaxwest7 data</a><ul>
@@ -261,7 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-data-into-r"><i class="fa fa-check"></i><b>13.2</b> Munge the glucose data into R</a></li>
 <li class="chapter" data-level="13.3" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-bodyweight-data"><i class="fa fa-check"></i><b>13.3</b> Munge the bodyweight data</a></li>
 <li class="chapter" data-level="13.4" data-path="jaxwest7.html"><a href="jaxwest7.html#merge-and-explore-the-glucose-and-bw-data"><i class="fa fa-check"></i><b>13.4</b> Merge and explore the glucose and bw data</a></li>
-<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-1"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
+<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-2"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>14</b> The Binomial Distribution</a><ul>
 <li class="chapter" data-level="14.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>14.1</b> dbinom</a></li>
@@ -273,8 +280,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="15.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>15.1</b> Poisson Events</a></li>
 <li class="chapter" data-level="15.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>15.2</b> dpois</a></li>
 <li class="chapter" data-level="15.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>15.3</b> ppois</a></li>
-<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.4</b> rpois</a></li>
-<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.5</b> Overdispersion</a></li>
+<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>15.4</b> qpois</a></li>
+<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.5</b> rpois</a></li>
+<li class="chapter" data-level="15.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.6</b> Overdispersion</a></li>
 </ul></li>
 <li class="chapter" data-level="16" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>16</b> The Normal Distribution</a><ul>
 <li class="chapter" data-level="16.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>16.0.1</b> The Standard Normal</a></li>
@@ -348,21 +356,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="19.3" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-deviant-data"><i class="fa fa-check"></i><b>19.3</b> Experiments involving deviant Data</a></li>
 <li class="chapter" data-level="19.4" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>19.4</b> Sign Test</a><ul>
-<li class="chapter" data-level="19.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>19.4.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation"><i class="fa fa-check"></i><b>19.4.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>19.4.2</b> Write Up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>19.5</b> Wilcoxon Sign Rank Test for One Group</a><ul>
 <li class="chapter" data-level="19.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>19.5.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
-<li class="chapter" data-level="19.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>19.5.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>19.5.2</b> Interpretation</a></li>
 <li class="chapter" data-level="19.5.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>19.5.3</b> Write Up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>19.6</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
-<li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>19.6.2</b> Write Up</a></li>
 <li class="chapter" data-level="19.6.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot"><i class="fa fa-check"></i><b>19.6.3</b> Plot</a></li>
 </ul></li>
 <li class="chapter" data-level="19.7" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>19.7</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
-<li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.7.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>19.7.2</b> Write up</a></li>
 <li class="chapter" data-level="19.7.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot-1"><i class="fa fa-check"></i><b>19.7.3</b> Plot</a></li>
 </ul></li>
@@ -372,7 +380,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="19.9" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>19.9</b> Friedman test</a><ul>
 <li class="chapter" data-level="19.9.1" data-path="nonparametrics.html"><a href="nonparametrics.html#blocked-experimental-design"><i class="fa fa-check"></i><b>19.9.1</b> Blocked experimental design</a></li>
-<li class="chapter" data-level="19.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-5"><i class="fa fa-check"></i><b>19.9.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.9.2</b> Interpretation</a></li>
 <li class="chapter" data-level="19.9.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-11"><i class="fa fa-check"></i><b>19.9.3</b> Write up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.10" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-power-calculations"><i class="fa fa-check"></i><b>19.10</b> Nonparametric power calculations</a><ul>
@@ -381,7 +389,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.10.3" data-path="nonparametrics.html"><a href="nonparametrics.html#an-example"><i class="fa fa-check"></i><b>19.10.3</b> An example</a></li>
 <li class="chapter" data-level="19.10.4" data-path="nonparametrics.html"><a href="nonparametrics.html#nonpara.pwr"><i class="fa fa-check"></i><b>19.10.4</b> nonpara.pwr</a></li>
 </ul></li>
-<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-2"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
+<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-3"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>20</b> Signed Rank Distribution</a><ul>
 <li class="chapter" data-level="20.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>20.1</b> Transformation of data into sign ranks</a><ul>
@@ -407,81 +415,93 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="22" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>22</b> The t-tests</a><ul>
-<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Data assumptions for t-tests</a></li>
-<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a><ul>
-<li class="chapter" data-level="22.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.2.1</b> One sample t tests</a></li>
-<li class="chapter" data-level="22.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.2.2</b> Unpaired t tests</a></li>
-<li class="chapter" data-level="22.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.2.3</b> Paired t tests</a></li>
+<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Assumptions for t-tests</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="ttests.html"><a href="ttests.html#strong-assumptions-t-tests-are-invalid-if-these-not-met"><i class="fa fa-check"></i><b>22.1.1</b> Strong assumptions, t-tests are invalid if these not met:</a></li>
+<li class="chapter" data-level="22.1.2" data-path="ttests.html"><a href="ttests.html#weak-assumptions-t-tests-are-less-robust-when-these-are-not-met"><i class="fa fa-check"></i><b>22.1.2</b> Weak assumptions: t-tests are less robust when these are not met:</a></li>
+<li class="chapter" data-level="22.1.3" data-path="ttests.html"><a href="ttests.html#on-random-residual-error"><i class="fa fa-check"></i><b>22.1.3</b> On random residual error</a></li>
+<li class="chapter" data-level="22.1.4" data-path="ttests.html"><a href="ttests.html#on-the-normality-assumption"><i class="fa fa-check"></i><b>22.1.4</b> On the normality assumption</a></li>
 </ul></li>
-<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.3</b> t Test Hypotheses</a><ul>
-<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.3.1</b> One-sided or two-sided??</a></li>
-<li class="chapter" data-level="22.3.2" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.3.2</b> One sample hypotheses</a></li>
-<li class="chapter" data-level="22.3.3" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.3.3</b> Unpaired hypotheses</a></li>
-<li class="chapter" data-level="22.3.4" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.3.4</b> Paired hypotheses</a></li>
+<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a></li>
+<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.3</b> One sample t tests</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#example"><i class="fa fa-check"></i><b>22.3.1</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>22.4</b> Confidence Intervals of Means</a></li>
-<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#parameters-small-samples-and-reliability"><i class="fa fa-check"></i><b>22.5</b> Parameters, small samples, and reliability</a><ul>
-<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.5.1</b> Reporting SD or SEM?</a></li>
+<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.4</b> Unpaired t tests</a><ul>
+<li class="chapter" data-level="22.4.1" data-path="ttests.html"><a href="ttests.html#students-t-test"><i class="fa fa-check"></i><b>22.4.1</b> Student’s t-test</a></li>
+<li class="chapter" data-level="22.4.2" data-path="ttests.html"><a href="ttests.html#welchs-t-test"><i class="fa fa-check"></i><b>22.4.2</b> Welch’s t-test</a></li>
+<li class="chapter" data-level="22.4.3" data-path="ttests.html"><a href="ttests.html#example-1"><i class="fa fa-check"></i><b>22.4.3</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>22.6</b> t Tests: Running the analysis</a><ul>
-<li class="chapter" data-level="22.6.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.6.1</b> One sample t test</a></li>
-<li class="chapter" data-level="22.6.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.6.2</b> Unpaired t test</a></li>
-<li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
+<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.5</b> Paired t tests</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#example-2"><i class="fa fa-check"></i><b>22.5.1</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
+<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.6</b> t Test Hypotheses</a></li>
+<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.7</b> One-sided or two-sided??</a><ul>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.7.1</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.7.3</b> Paired hypotheses</a></li>
 </ul></li>
-<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
-<li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
-<li class="chapter" data-level="22.8.2" data-path="ttests.html"><a href="ttests.html#interpretation-9"><i class="fa fa-check"></i><b>22.8.2</b> Interpretation</a></li>
-<li class="chapter" data-level="22.8.3" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.8.3</b> t-pwr: A Monte Carlo method</a></li>
+<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#confidence-intervals-1"><i class="fa fa-check"></i><b>22.8</b> Confidence Intervals</a></li>
+<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#reliability-of-small-samples"><i class="fa fa-check"></i><b>22.9</b> Reliability of small samples</a><ul>
+<li class="chapter" data-level="22.9.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.9.1</b> Reporting SD or SEM?</a></li>
 </ul></li>
-<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#summary-3"><i class="fa fa-check"></i><b>22.9</b> Summary</a></li>
+<li class="chapter" data-level="22.10" data-path="ttests.html"><a href="ttests.html#running-the-analysis-in-r"><i class="fa fa-check"></i><b>22.10</b> Running the analysis in R</a><ul>
+<li class="chapter" data-level="22.10.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.10.1</b> One sample t test</a></li>
+<li class="chapter" data-level="22.10.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.10.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="22.10.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.10.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="22.11" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.11</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="22.11.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.11.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.11.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.11.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.11.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.11.3</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="22.12" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.12</b> t Test Power</a><ul>
+<li class="chapter" data-level="22.12.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.12.1</b> pwr.t.test</a></li>
+<li class="chapter" data-level="22.12.2" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.12.2</b> t-pwr: A Monte Carlo method</a></li>
+</ul></li>
+<li class="chapter" data-level="22.13" data-path="ttests.html"><a href="ttests.html#summary-4"><i class="fa fa-check"></i><b>22.13</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="23" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>23</b> Statistical design of t-tests</a><ul>
-<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a><ul>
-<li class="chapter" data-level="23.1.1" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.1.1</b> Overview of the Monte Carlo</a></li>
-<li class="chapter" data-level="23.1.2" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-data-simulation"><i class="fa fa-check"></i><b>23.1.2</b> tl;dr on data simulation</a></li>
-<li class="chapter" data-level="23.1.3" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-the-test"><i class="fa fa-check"></i><b>23.1.3</b> tl;dr on the test</a></li>
-<li class="chapter" data-level="23.1.4" data-path="ttestmc.html"><a href="ttestmc.html#changing-n"><i class="fa fa-check"></i><b>23.1.4</b> Changing n</a></li>
-<li class="chapter" data-level="23.1.5" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.1.5</b> Diabetes drug scenario</a></li>
-<li class="chapter" data-level="23.1.6" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.1.6</b> What would be a scientifically meaningful response?</a></li>
+<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a></li>
+<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> Overview of the Monte Carlo</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#data-simulation"><i class="fa fa-check"></i><b>23.2.1</b> Data simulation</a></li>
+<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#the-test"><i class="fa fa-check"></i><b>23.2.2</b> The test</a></li>
 </ul></li>
-<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> One sample t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.2.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.2.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.2.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.2.3</b> Step 3</a></li>
-<li class="chapter" data-level="23.2.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.2.4</b> Step 4</a></li>
-<li class="chapter" data-level="23.2.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.2.5</b> Step 5</a></li>
-<li class="chapter" data-level="23.2.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.2.6</b> Step 6</a></li>
-<li class="chapter" data-level="23.2.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.2.7</b> Step 7</a></li>
+<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#changing-sample-size"><i class="fa fa-check"></i><b>23.3</b> Changing Sample Size</a></li>
+<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.4</b> Diabetes drug scenario</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.4.1</b> What would be a scientifically meaningful response?</a></li>
 </ul></li>
-<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.3</b> Unpaired t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.3.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.3.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.3.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.3.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.3.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.3.3</b> Step 3</a></li>
-<li class="chapter" data-level="23.3.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.3.4</b> Step 4</a></li>
-<li class="chapter" data-level="23.3.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.3.5</b> Step 5</a></li>
-<li class="chapter" data-level="23.3.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.3.6</b> Step 6</a></li>
-<li class="chapter" data-level="23.3.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.3.7</b> Step 7</a></li>
+<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.5</b> One sample t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.5.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.5.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.5.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.5.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.5.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.5.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.5.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.5.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.5.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.5.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.5.7</b> Step 7</a></li>
 </ul></li>
-<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.4</b> Paired t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.4.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.4.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.4.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.4.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.4.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.6</b> Unpaired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.6.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.6.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.6.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.6.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.6.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.6.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.6.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.6.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.6.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.6.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.6.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.6.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.6.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.6.7</b> Step 7</a></li>
 </ul></li>
-<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.5</b> Step 4</a><ul>
-<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.5.1</b> Step 5</a></li>
-<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.5.2</b> Step 6</a></li>
-<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.5.3</b> Step 7</a></li>
+<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.7</b> Paired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.7.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.7.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.7.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.7.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.7.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.7.3</b> Step 3</a></li>
 </ul></li>
-<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.6</b> Comparison to pwr tests</a></li>
-<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.7</b> dt</a></li>
-<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.8</b> pt</a></li>
-<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.9</b> qt</a></li>
-<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.10</b> rt</a></li>
+<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.8</b> Step 4</a><ul>
+<li class="chapter" data-level="23.8.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.8.1</b> Step 5</a></li>
+<li class="chapter" data-level="23.8.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.8.2</b> Step 6</a></li>
+<li class="chapter" data-level="23.8.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.8.3</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.9</b> Comparison to pwr tests</a></li>
+<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.10</b> dt</a></li>
+<li class="chapter" data-level="23.11" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.11</b> pt</a></li>
+<li class="chapter" data-level="23.12" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.12</b> qt</a></li>
+<li class="chapter" data-level="23.13" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.13</b> rt</a></li>
 </ul></li>
 <li class="chapter" data-level="24" data-path="simcorrelation.html"><a href="simcorrelation.html"><i class="fa fa-check"></i><b>24</b> Simulating correlated variables</a><ul>
 <li class="chapter" data-level="24.1" data-path="simcorrelation.html"><a href="simcorrelation.html#estimating-correlation-between-two-variables"><i class="fa fa-check"></i><b>24.1</b> Estimating correlation between two variables</a></li>
@@ -513,7 +533,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.10" data-path="introanova.html"><a href="introanova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>25.10</b> Alternatives to ANOVA</a><ul>
 <li class="chapter" data-level="25.10.1" data-path="introanova.html"><a href="introanova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>25.10.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
 </ul></li>
-<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-4"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
+<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-5"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="26" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>26</b> The F distribution</a><ul>
 <li class="chapter" data-level="26.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>26.1</b> Background</a><ul>
@@ -536,7 +556,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="27.4" data-path="onewayanova.html"><a href="onewayanova.html#post-hoc-pairwise-comparisons"><i class="fa fa-check"></i><b>27.4</b> Post hoc pairwise comparisons</a><ul>
 <li class="chapter" data-level="27.4.1" data-path="onewayanova.html"><a href="onewayanova.html#range-tests"><i class="fa fa-check"></i><b>27.4.1</b> Range tests</a></li>
 </ul></li>
-<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-5"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
+<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-6"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="28" data-path="onewayRM.html"><a href="onewayRM.html"><i class="fa fa-check"></i><b>28</b> One-way ANOVA Related Measures</a><ul>
 <li class="chapter" data-level="28.1" data-path="onewayRM.html"><a href="onewayRM.html#data-prep"><i class="fa fa-check"></i><b>28.1</b> Data prep</a></li>
@@ -546,13 +566,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.3" data-path="onewayRM.html"><a href="onewayRM.html#the-anova"><i class="fa fa-check"></i><b>28.3</b> The ANOVA</a><ul>
 <li class="chapter" data-level="28.3.1" data-path="onewayRM.html"><a href="onewayRM.html#running-ezanova"><i class="fa fa-check"></i><b>28.3.1</b> Running ezANOVA</a></li>
 </ul></li>
-<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-10"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
+<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-5"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
 <li class="chapter" data-level="28.5" data-path="onewayRM.html"><a href="onewayRM.html#post-hoc-analysis"><i class="fa fa-check"></i><b>28.5</b> Post-hoc analysis</a></li>
 <li class="chapter" data-level="28.6" data-path="onewayRM.html"><a href="onewayRM.html#write-up-12"><i class="fa fa-check"></i><b>28.6</b> Write up</a></li>
 </ul></li>
 <li class="chapter" data-level="29" data-path="twowayCR.html"><a href="twowayCR.html"><i class="fa fa-check"></i><b>29</b> Two-way ANOVA Completely Randomized</a><ul>
 <li class="chapter" data-level="29.1" data-path="twowayCR.html"><a href="twowayCR.html#effect-of-strain-and-diet-on-liver"><i class="fa fa-check"></i><b>29.1</b> Effect of Strain and Diet on Liver</a></li>
-<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
+<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test-1"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
 <li class="chapter" data-level="29.3" data-path="twowayCR.html"><a href="twowayCR.html#interpretation-of-2-way-cr-anova-output"><i class="fa fa-check"></i><b>29.3</b> Interpretation of 2 Way CR ANOVA Output</a><ul>
 <li class="chapter" data-level="29.3.1" data-path="twowayCR.html"><a href="twowayCR.html#levenes"><i class="fa fa-check"></i><b>29.3.1</b> Levene’s</a></li>
 <li class="chapter" data-level="29.3.2" data-path="twowayCR.html"><a href="twowayCR.html#anova-table"><i class="fa fa-check"></i><b>29.3.2</b> ANOVA Table</a></li>
@@ -562,23 +582,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="29.4.2" data-path="twowayCR.html"><a href="twowayCR.html#write-up-13"><i class="fa fa-check"></i><b>29.4.2</b> Write Up</a></li>
 <li class="chapter" data-level="29.4.3" data-path="twowayCR.html"><a href="twowayCR.html#range-tests-1"><i class="fa fa-check"></i><b>29.4.3</b> Range tests</a></li>
 </ul></li>
-<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-6"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
+<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-7"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="twowayRM.html"><a href="twowayRM.html"><i class="fa fa-check"></i><b>30</b> Two-way ANOVA Related Measures</a><ul>
 <li class="chapter" data-level="30.1" data-path="twowayRM.html"><a href="twowayRM.html#cell-culture"><i class="fa fa-check"></i><b>30.1</b> Cell culture</a></li>
-<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-1"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
+<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-2"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
 <li class="chapter" data-level="30.3" data-path="twowayRM.html"><a href="twowayRM.html#interpretation-of-the-output"><i class="fa fa-check"></i><b>30.3</b> Interpretation of the output</a><ul>
 <li class="chapter" data-level="30.3.1" data-path="twowayRM.html"><a href="twowayRM.html#anova-table-1"><i class="fa fa-check"></i><b>30.3.1</b> ANOVA Table</a></li>
 <li class="chapter" data-level="30.3.2" data-path="twowayRM.html"><a href="twowayRM.html#mauchlys-sphericity-test"><i class="fa fa-check"></i><b>30.3.2</b> Mauchly’s Sphericity Test</a></li>
 </ul></li>
 <li class="chapter" data-level="30.4" data-path="twowayRM.html"><a href="twowayRM.html#post-hoc-multiple-comparisons-1"><i class="fa fa-check"></i><b>30.4</b> Post Hoc multiple comparisons</a></li>
 <li class="chapter" data-level="30.5" data-path="twowayRM.html"><a href="twowayRM.html#write-up-14"><i class="fa fa-check"></i><b>30.5</b> Write Up</a></li>
-<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-7"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
+<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-8"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="31" data-path="twowaymixed.html"><a href="twowaymixed.html"><i class="fa fa-check"></i><b>31</b> Two-way ANOVA RM/CR</a><ul>
 <li class="chapter" data-level="31.1" data-path="twowaymixed.html"><a href="twowaymixed.html#chickweight-data-set"><i class="fa fa-check"></i><b>31.1</b> ChickWeight Data set</a></li>
 <li class="chapter" data-level="31.2" data-path="twowaymixed.html"><a href="twowaymixed.html#munge-chickweight-data"><i class="fa fa-check"></i><b>31.2</b> Munge ChickWeight data</a></li>
-<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-2"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
+<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-3"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
 <li class="chapter" data-level="31.4" data-path="twowaymixed.html"><a href="twowaymixed.html#interpreting-the-anova-output"><i class="fa fa-check"></i><b>31.4</b> Interpreting the ANOVA output</a><ul>
 <li class="chapter" data-level="31.4.1" data-path="twowaymixed.html"><a href="twowaymixed.html#anova-the-anova-table-1"><i class="fa fa-check"></i><b>31.4.1</b> $ANOVA: The ANOVA table</a></li>
 <li class="chapter" data-level="31.4.2" data-path="twowaymixed.html"><a href="twowaymixed.html#mauchlys-test-and-corrections"><i class="fa fa-check"></i><b>31.4.2</b> Mauchly’s Test and Corrections</a></li>
@@ -589,7 +609,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="31.5.3" data-path="twowaymixed.html"><a href="twowaymixed.html#heres-whats-been-discovered-by-the-tukeyhsd-test"><i class="fa fa-check"></i><b>31.5.3</b> Here’s what’s been discovered by the TukeyHSD test</a></li>
 <li class="chapter" data-level="31.5.4" data-path="twowaymixed.html"><a href="twowaymixed.html#why-is-the-tukeyhsd-result-so-different-than-the-pairwise.t.test"><i class="fa fa-check"></i><b>31.5.4</b> Why is the TukeyHSD result so different than the pairwise.t.test??</a></li>
 </ul></li>
-<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-8"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
+<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-9"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="posthoc.html"><a href="posthoc.html"><i class="fa fa-check"></i><b>32</b> ANOVA Posthoc Comparisons</a><ul>
 <li class="chapter" data-level="32.1" data-path="posthoc.html"><a href="posthoc.html#overview-of-options"><i class="fa fa-check"></i><b>32.1</b> Overview of options</a><ul>
@@ -597,7 +617,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="32.1.2" data-path="posthoc.html"><a href="posthoc.html#range-tests-2"><i class="fa fa-check"></i><b>32.1.2</b> Range tests</a></li>
 </ul></li>
 <li class="chapter" data-level="32.2" data-path="posthoc.html"><a href="posthoc.html#reporting-the-result-1"><i class="fa fa-check"></i><b>32.2</b> Reporting the result</a></li>
-<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-9"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
+<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-10"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="jaxwest2.html"><a href="jaxwest2.html"><i class="fa fa-check"></i><b>33</b> Reproducible Data Munging Mostly with Tidyverse</a><ul>
 <li class="chapter" data-level="33.1" data-path="jaxwest2.html"><a href="jaxwest2.html#look-at-the-original-data-carefully"><i class="fa fa-check"></i><b>33.1</b> Look at the original data carefully</a></li>
@@ -654,7 +674,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="35.7.1" data-path="manova.html"><a href="manova.html#manova-monte-carlo-power-analysis"><i class="fa fa-check"></i><b>35.7.1</b> MANOVA Monte Carlo Power Analysis</a></li>
 <li class="chapter" data-level="35.7.2" data-path="manova.html"><a href="manova.html#an-manova-monte-carlo-power-function"><i class="fa fa-check"></i><b>35.7.2</b> An MANOVA Monte Carlo Power function</a></li>
 </ul></li>
-<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-10"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
+<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-11"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="36" data-path="correl.html"><a href="correl.html"><i class="fa fa-check"></i><b>36</b> Correlation</a><ul>
 <li class="chapter" data-level="36.1" data-path="correl.html"><a href="correl.html#correlation-causation"><i class="fa fa-check"></i><b>36.1</b> Correlation != Causation</a></li>
@@ -690,7 +710,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="38.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#uses-for-nonlinear-regression"><i class="fa fa-check"></i><b>38.1</b> Uses for nonlinear regression</a></li>
 <li class="chapter" data-level="38.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#example-of-the-process"><i class="fa fa-check"></i><b>38.2</b> Example of the process</a><ul>
 <li class="chapter" data-level="38.2.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#it-starts-with-nonlinear-data"><i class="fa fa-check"></i><b>38.2.1</b> It starts with nonlinear data</a></li>
-<li class="chapter" data-level="38.2.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#what-nonlinear-model-describes-that-data"><i class="fa fa-check"></i><b>38.2.2</b> What nonlinear model describes that data?</a></li>
+<li class="chapter" data-level="38.2.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#which-nonlinear-model-describes-that-data"><i class="fa fa-check"></i><b>38.2.2</b> Which nonlinear model describes that data?</a></li>
 <li class="chapter" data-level="38.2.3" data-path="nonlinearintro.html"><a href="nonlinearintro.html#fitting-a-model-to-data"><i class="fa fa-check"></i><b>38.2.3</b> Fitting a model to data</a></li>
 <li class="chapter" data-level="38.2.4" data-path="nonlinearintro.html"><a href="nonlinearintro.html#interpreting-regression-model-output"><i class="fa fa-check"></i><b>38.2.4</b> Interpreting regression model output</a></li>
 <li class="chapter" data-level="38.2.5" data-path="nonlinearintro.html"><a href="nonlinearintro.html#check-the-fit-graphically"><i class="fa fa-check"></i><b>38.2.5</b> Check the fit graphically</a></li>
@@ -721,12 +741,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="39.2.3" data-path="nestedregress.html"><a href="nestedregress.html#troubleshooting-the-regression"><i class="fa fa-check"></i><b>39.2.3</b> Troubleshooting the regression</a></li>
 <li class="chapter" data-level="39.2.4" data-path="nestedregress.html"><a href="nestedregress.html#interpreting-the-parameters"><i class="fa fa-check"></i><b>39.2.4</b> Interpreting the parameters</a></li>
 <li class="chapter" data-level="39.2.5" data-path="nestedregress.html"><a href="nestedregress.html#residual-plots-to-compare-fits"><i class="fa fa-check"></i><b>39.2.5</b> Residual plots to compare fits</a></li>
-<li class="chapter" data-level="39.2.6" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>39.2.6</b> Compare AIC</a></li>
-<li class="chapter" data-level="39.2.7" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>39.2.7</b> Other ways to compare models</a></li>
-<li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.8</b> Interpretation of this one replicate</a></li>
-<li class="chapter" data-level="39.2.9" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.9</b> Alternate analysis</a></li>
+<li class="chapter" data-level="39.2.6" data-path="nestedregress.html"><a href="nestedregress.html#f-test-for-model-comparison"><i class="fa fa-check"></i><b>39.2.6</b> F test for model comparison</a></li>
+<li class="chapter" data-level="39.2.7" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>39.2.7</b> Compare AIC</a></li>
+<li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>39.2.8</b> Other ways to compare models</a></li>
+<li class="chapter" data-level="39.2.9" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.9</b> Interpretation of this one replicate</a></li>
+<li class="chapter" data-level="39.2.10" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.10</b> Alternate analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-11"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
+<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-12"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="40" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html"><i class="fa fa-check"></i><b>40</b> Nonlinear regression of independent replicates</a><ul>
 <li class="chapter" data-level="40.1" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#the-problem"><i class="fa fa-check"></i><b>40.1</b> The problem</a></li>
@@ -768,10 +789,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="43.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#mixed-models-fixed-and-random-effects"><i class="fa fa-check"></i><b>43.1</b> Mixed models, fixed and random effects</a><ul>
 <li class="chapter" data-level="43.1.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#nfat-localization-within-smooth-muscle-cells"><i class="fa fa-check"></i><b>43.1.1</b> NFAT localization within smooth muscle cells</a></li>
 </ul></li>
-<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a><ul>
-<li class="chapter" data-level="43.2.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.2.1</b> Inference</a></li>
+<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a></li>
+<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#linear-model"><i class="fa fa-check"></i><b>43.3</b> Linear model</a><ul>
+<li class="chapter" data-level="43.3.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.3.1</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.3</b> Alternative analysis</a></li>
+<li class="chapter" data-level="43.4" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.4</b> Alternative analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="44" data-path="poissonreg.html"><a href="poissonreg.html"><i class="fa fa-check"></i><b>44</b> Poisson regression</a><ul>
 <li class="chapter" data-level="44.1" data-path="poissonreg.html"><a href="poissonreg.html#why-not-anova"><i class="fa fa-check"></i><b>44.1</b> Why not ANOVA?</a><ul>
@@ -800,7 +822,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="45.6.2" data-path="surv.html"><a href="surv.html#interpretation-of-cox-regression-output"><i class="fa fa-check"></i><b>45.6.2</b> Interpretation of Cox regression output</a></li>
 <li class="chapter" data-level="45.6.3" data-path="surv.html"><a href="surv.html#write-up-18"><i class="fa fa-check"></i><b>45.6.3</b> Write up</a></li>
 </ul></li>
-<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-12"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
+<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-13"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="46" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>46</b> Classification</a><ul>
 <li class="chapter" data-level="46.1" data-path="classification.html"><a href="classification.html#distances"><i class="fa fa-check"></i><b>46.1</b> Distances</a></li>
@@ -815,7 +837,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="46.10" data-path="classification.html"><a href="classification.html#pam-and-clara"><i class="fa fa-check"></i><b>46.10</b> PAM and CLARA</a></li>
 <li class="chapter" data-level="46.11" data-path="classification.html"><a href="classification.html#hierarchical-clustering"><i class="fa fa-check"></i><b>46.11</b> Hierarchical clustering</a></li>
 <li class="chapter" data-level="46.12" data-path="classification.html"><a href="classification.html#heatmaps"><i class="fa fa-check"></i><b>46.12</b> Heatmaps</a></li>
-<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-13"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
+<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-14"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="47" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>47</b> RNA-seq with R</a><ul>
 <li class="chapter" data-level="47.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>47.1</b> Install Bioconductor</a></li>
@@ -826,7 +848,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="47.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>47.6</b> Visualization</a></li>
 <li class="chapter" data-level="47.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>47.7</b> Classification</a></li>
 <li class="chapter" data-level="47.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>47.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-14"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
+<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-15"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -850,13 +872,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="rnaseq" class="section level1">
 <h1><span class="header-section-number">Chapter 47</span> RNA-seq with R</h1>
-<div class="sourceCode" id="cb1058"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1058-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1058-2" title="2"><span class="kw">library</span>(edgeR)</a>
-<a class="sourceLine" id="cb1058-3" title="3"><span class="kw">library</span>(limma)</a>
-<a class="sourceLine" id="cb1058-4" title="4"><span class="kw">library</span>(gplots)</a>
-<a class="sourceLine" id="cb1058-5" title="5"><span class="kw">library</span>(viridis)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="rnaseq.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="rnaseq.html#cb1-2"></a><span class="kw">library</span>(edgeR)</span>
+<span id="cb1-3"><a href="rnaseq.html#cb1-3"></a><span class="kw">library</span>(limma)</span>
+<span id="cb1-4"><a href="rnaseq.html#cb1-4"></a><span class="kw">library</span>(gplots)</span>
+<span id="cb1-5"><a href="rnaseq.html#cb1-5"></a><span class="kw">library</span>(viridis)</span></code></pre></div>
 <p>This example is adopted extensively from <a href="https://combine-australia.github.io/RNAseq-R/06-rnaseq-day1.html">RNA-seq analysis in R</a> by Belinda Phips and colleagues. The data are available <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450">here</a> and <a href="https://figshare.com/s/1d788fd384d33e913a2a">here</a>.</p>
-<p>These are part of a <a href="https://combine-australia.github.io/RNAseq-R/">broader workship presented by the group</a> with very easy to follow protocols for RNA-seq analysis with R.</p>
+<p>These are part of a <a href="https://combine-australia.github.io/RNAseq-R/">broader workship presented by the group</a> with very easy to follow protocols for RNA-seq analysis with R. There is <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934518/">a publication, also</a></p>
 <p>The data below are from a study of mammary gland development showing the pro-survival gene Mcl1 as a master regulator gland development. They represent duplicate RNA-seq measurements from each of 6 groups: basal and luminal cells from virgin, pregnant and lactating mice.</p>
 <p>The purpose of having this in JABSTB at this stage is to offer a gentle introduction to RNA-seq data and analysis. The focus here is on the classification methods within this example.</p>
 <div id="install-bioconductor" class="section level2">
@@ -871,16 +893,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Do NOT compile anything</strong></p>
 <p>If you see the prompt below, always choose no:</p>
 <p><code>Do you want to install from sources the package which needs compilation (yes/no/cancel)?</code></p>
-<div class="sourceCode" id="cb1059"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1059-1" title="1"><span class="co"># if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE))</span></a>
-<a class="sourceLine" id="cb1059-2" title="2"><span class="co">#     install.packages(&quot;BiocManager&quot;)</span></a>
-<a class="sourceLine" id="cb1059-3" title="3"><span class="co"># BiocManager::install(version = &quot;3.10&quot;)</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="rnaseq.html#cb2-1"></a><span class="co"># if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE))</span></span>
+<span id="cb2-2"><a href="rnaseq.html#cb2-2"></a><span class="co">#     install.packages(&quot;BiocManager&quot;)</span></span>
+<span id="cb2-3"><a href="rnaseq.html#cb2-3"></a><span class="co"># BiocManager::install(version = &quot;3.10&quot;)</span></span></code></pre></div>
 </div>
 <div id="import-raw-count-data" class="section level2">
 <h2><span class="header-section-number">47.2</span> Import raw count data</h2>
 <p>By this point, there has already been considerable processing of the sequence data. Sequences have been matched to their genes and to each other. The values in this table are counts of the number of transcript reads per gene, in each of the 12 samples.</p>
 <p>Read them into an object.</p>
-<div class="sourceCode" id="cb1060"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1060-1" title="1">seqdata &lt;-<span class="st"> </span><span class="kw">read.delim</span>(<span class="st">&quot;datasets/GSE60450_Lactation-GenewiseCounts.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb1060-2" title="2"><span class="kw">head</span>(seqdata)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="rnaseq.html#cb3-1"></a>seqdata &lt;-<span class="st"> </span><span class="kw">read.delim</span>(<span class="st">&quot;datasets/GSE60450_Lactation-GenewiseCounts.txt&quot;</span>)</span>
+<span id="cb3-2"><a href="rnaseq.html#cb3-2"></a><span class="kw">head</span>(seqdata)</span></code></pre></div>
 <pre><code>##   EntrezGeneID Length MCL1.DG_BC2CTUACXX_ACTTGA_L002_R1
 ## 1       497097   3634                               438
 ## 2    100503874   3259                                 1
@@ -931,12 +953,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 5                                10
 ## 6                               342</code></pre>
 <p>To see the data set’s dimensions.</p>
-<div class="sourceCode" id="cb1062"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1062-1" title="1"><span class="kw">dim</span>(seqdata)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="rnaseq.html#cb5-1"></a><span class="kw">dim</span>(seqdata)</span></code></pre></div>
 <pre><code>## [1] 27179    14</code></pre>
 <p>There are 14 columns and over 27000 rows.</p>
 <p>The information about the sample will be used later. Read it into the environment now.</p>
-<div class="sourceCode" id="cb1064"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1064-1" title="1">sampleinfo &lt;-<span class="st"> </span><span class="kw">read.delim</span>(<span class="st">&quot;datasets/SampleInfo_Corrected.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb1064-2" title="2">sampleinfo</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="rnaseq.html#cb7-1"></a>sampleinfo &lt;-<span class="st"> </span><span class="kw">read.delim</span>(<span class="st">&quot;datasets/SampleInfo_Corrected.txt&quot;</span>)</span>
+<span id="cb7-2"><a href="rnaseq.html#cb7-2"></a>sampleinfo</span></code></pre></div>
 <pre><code>##                             FileName SampleName CellType   Status
 ## 1  MCL1.DG_BC2CTUACXX_ACTTGA_L002_R1    MCL1.DG    basal   virgin
 ## 2  MCL1.DH_BC2CTUACXX_CAGATC_L002_R1    MCL1.DH    basal   virgin
@@ -954,13 +976,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="munge-to-simpler-table" class="section level2">
 <h2><span class="header-section-number">47.3</span> Munge to simpler table</h2>
 <p>Create a table that has only count data so that we can do several manipulations of the gene expression data.</p>
-<div class="sourceCode" id="cb1066"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1066-1" title="1">countdata &lt;-<span class="st"> </span>seqdata[, <span class="dv">3</span><span class="op">:</span><span class="dv">14</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="rnaseq.html#cb9-1"></a>countdata &lt;-<span class="st"> </span>seqdata[, <span class="dv">3</span><span class="op">:</span><span class="dv">14</span>]</span></code></pre></div>
 <p>Note below how the EntrezGeneID is placed back in as row names. The row names are not a variable.</p>
-<div class="sourceCode" id="cb1067"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1067-1" title="1"><span class="kw">rownames</span>(countdata) &lt;-<span class="st"> </span>seqdata[,<span class="dv">1</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="rnaseq.html#cb10-1"></a><span class="kw">rownames</span>(countdata) &lt;-<span class="st"> </span>seqdata[,<span class="dv">1</span>]</span></code></pre></div>
 <p>This is a data frame now with row and column names. Each column corresponds to a biological replicate, each row a gene id. Every cell in a row is the raw transcript counts for that gene under that replicate condition.</p>
 <p>Shorten the column names. They start with 7 non-identical characters which are good identifiers.</p>
-<div class="sourceCode" id="cb1068"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1068-1" title="1"><span class="kw">colnames</span>(countdata) &lt;-<span class="st"> </span><span class="kw">substring</span>(<span class="kw">colnames</span>(countdata), <span class="dv">1</span>,<span class="dv">7</span>)</a>
-<a class="sourceLine" id="cb1068-2" title="2"><span class="kw">head</span>(countdata)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="rnaseq.html#cb11-1"></a><span class="kw">colnames</span>(countdata) &lt;-<span class="st"> </span><span class="kw">substring</span>(<span class="kw">colnames</span>(countdata), <span class="dv">1</span>,<span class="dv">7</span>)</span>
+<span id="cb11-2"><a href="rnaseq.html#cb11-2"></a><span class="kw">head</span>(countdata)</span></code></pre></div>
 <pre><code>##           MCL1.DG MCL1.DH MCL1.DI MCL1.DJ MCL1.DK MCL1.DL MCL1.LA MCL1.LB
 ## 497097        438     300      65     237     354     287       0       0
 ## 100503874       1       0       1       1       0       4       0       0
@@ -984,8 +1006,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The first step is to choose a normalization technique. RPKM (reads per kilo base per million) and CPM (counts per million) are common options. We’ll use the latter.</p>
 <p><em>Our filtering rule is to keep transcripts that have CPM &gt; 0.5 in at least two samples.</em> A CPM of 0.5 corresponds to roughly 10-15 counts per gene in this sized library. This threshold decision is a scientific judgement based upon one’s experience regarding the sensitivity of the count measurement. Thresholds of 1 or 2 CPM are not uncommon.</p>
 <p>First, convert raw counts to CPM.</p>
-<div class="sourceCode" id="cb1070"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1070-1" title="1">myCPM &lt;-<span class="st"> </span>edgeR<span class="op">::</span><span class="kw">cpm</span>(countdata)</a>
-<a class="sourceLine" id="cb1070-2" title="2"><span class="kw">head</span>(myCPM)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="rnaseq.html#cb13-1"></a>myCPM &lt;-<span class="st"> </span>edgeR<span class="op">::</span><span class="kw">cpm</span>(countdata)</span>
+<span id="cb13-2"><a href="rnaseq.html#cb13-2"></a><span class="kw">head</span>(myCPM)</span></code></pre></div>
 <pre><code>##               MCL1.DG     MCL1.DH     MCL1.DI     MCL1.DJ   MCL1.DK    MCL1.DL
 ## 497097    18.85684388 13.77543859  2.69700983 10.45648006 16.442685 14.3389690
 ## 100503874  0.04305215  0.00000000  0.04149246  0.04412017  0.000000  0.1998463
@@ -1002,8 +1024,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 27395     27.4615975 21.3744588 21.9858214 14.91706476 12.4171715 13.8701357</code></pre>
 <p>Next, impose the threshold.</p>
 <p>First, this script is a simple logical that identifies genes and groups that satisfy the first part of the filtering rule.</p>
-<div class="sourceCode" id="cb1072"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1072-1" title="1">thresh &lt;-<span class="st"> </span>myCPM <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb1072-2" title="2"><span class="kw">head</span>(thresh)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="rnaseq.html#cb15-1"></a>thresh &lt;-<span class="st"> </span>myCPM <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span></span>
+<span id="cb15-2"><a href="rnaseq.html#cb15-2"></a><span class="kw">head</span>(thresh)</span></code></pre></div>
 <pre><code>##           MCL1.DG MCL1.DH MCL1.DI MCL1.DJ MCL1.DK MCL1.DL MCL1.LA MCL1.LB
 ## 497097       TRUE    TRUE    TRUE    TRUE    TRUE    TRUE   FALSE   FALSE
 ## 100503874   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE   FALSE
@@ -1019,21 +1041,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 20671        TRUE   FALSE   FALSE   FALSE
 ## 27395        TRUE    TRUE    TRUE    TRUE</code></pre>
 <p>Here’s a summary of that result.</p>
-<div class="sourceCode" id="cb1074"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1074-1" title="1"><span class="kw">table</span>(<span class="kw">rowSums</span>(thresh))</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="rnaseq.html#cb17-1"></a><span class="kw">table</span>(<span class="kw">rowSums</span>(thresh))</span></code></pre></div>
 <pre><code>## 
 ##     0     1     2     3     4     5     6     7     8     9    10    11    12 
 ## 10857   518   544   307   346   307   652   323   547   343   579   423 11433</code></pre>
 <p>There are 10857 genes that are <span class="math inline">\(\le 0.5\)</span> CPM in all twelve samples. There are 518 genes that have greater than 0.5 CPM in only 1 sample. 544 genes have greater than 0.5 CPM in only two samples, 307 genes with greater than 0.5 CPM in 3 samples, and so on. There are 11433 genes which have greater than 0.5 CPM in all twelve samples.</p>
 <p>Second, identify the genes for which the second condition above is satisfied. This is another logical. And it just creates a long logical vector, with a True or False corresponding to each row name.</p>
-<div class="sourceCode" id="cb1076"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1076-1" title="1">keep &lt;-<span class="st"> </span><span class="kw">rowSums</span>(thresh) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb1076-2" title="2"><span class="kw">summary</span>(keep)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="rnaseq.html#cb19-1"></a>keep &lt;-<span class="st"> </span><span class="kw">rowSums</span>(thresh) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb19-2"><a href="rnaseq.html#cb19-2"></a><span class="kw">summary</span>(keep)</span></code></pre></div>
 <pre><code>##    Mode   FALSE    TRUE 
 ## logical   11375   15804</code></pre>
 <p>Thus, there are 15804 genes which have greater than 0.5 CPM in at least two samples.</p>
 <p>Here is an updated counts dataset containing only those genes that are filtered. This is the final filtered dataset which will be used for the statistical analysis.</p>
-<div class="sourceCode" id="cb1078"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1078-1" title="1"><span class="co"># Subset the rows of countdata to keep the more highly expressed genes</span></a>
-<a class="sourceLine" id="cb1078-2" title="2">counts.keep &lt;-<span class="st"> </span>countdata[keep,]</a>
-<a class="sourceLine" id="cb1078-3" title="3"><span class="kw">head</span>(counts.keep)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="rnaseq.html#cb21-1"></a><span class="co"># Subset the rows of countdata to keep the more highly expressed genes</span></span>
+<span id="cb21-2"><a href="rnaseq.html#cb21-2"></a>counts.keep &lt;-<span class="st"> </span>countdata[keep,]</span>
+<span id="cb21-3"><a href="rnaseq.html#cb21-3"></a><span class="kw">head</span>(counts.keep)</span></code></pre></div>
 <pre><code>##        MCL1.DG MCL1.DH MCL1.DI MCL1.DJ MCL1.DK MCL1.DL MCL1.LA MCL1.LB MCL1.LC
 ## 497097     438     300      65     237     354     287       0       0       0
 ## 20671      106     182      82     105      43      82      16      25      18
@@ -1053,8 +1075,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="dgelist" class="section level2">
 <h2><span class="header-section-number">47.5</span> DGEList</h2>
 <p>The <code>counts.keep</code> dataframe is converted into a list object for ease of analysis moving forward. It will be passed into other functions within the Bioconductor universe.</p>
-<div class="sourceCode" id="cb1080"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1080-1" title="1">y &lt;-<span class="st"> </span>edgeR<span class="op">::</span><span class="kw">DGEList</span>(counts.keep)</a>
-<a class="sourceLine" id="cb1080-2" title="2">y</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="rnaseq.html#cb23-1"></a>y &lt;-<span class="st"> </span>edgeR<span class="op">::</span><span class="kw">DGEList</span>(counts.keep)</span>
+<span id="cb23-2"><a href="rnaseq.html#cb23-2"></a>y</span></code></pre></div>
 <pre><code>## An object of class &quot;DGEList&quot;
 ## $counts
 ##        MCL1.DG MCL1.DH MCL1.DI MCL1.DJ MCL1.DK MCL1.DL MCL1.LA MCL1.LB MCL1.LC
@@ -1084,43 +1106,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">47.6</span> Visualization</h2>
 <p>A lot of the -omic visualizations use the plotting functions of R base. It is fairly easy to get something in the box with these plotting functions, but a bit more difficult to get them gussied up all nice and pretty.</p>
 <p>Comparing library sizes checks for any anomalies. There are none. Each sample library size is about the same.</p>
-<div class="sourceCode" id="cb1082"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1082-1" title="1"><span class="kw">barplot</span>(y<span class="op">$</span>samples<span class="op">$</span>lib.size,<span class="dt">names=</span><span class="kw">colnames</span>(y),<span class="dt">las=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb1082-2" title="2"><span class="co"># Add a title to the plot</span></a>
-<a class="sourceLine" id="cb1082-3" title="3"><span class="kw">title</span>(<span class="st">&quot;Comparison of library sizes&quot;</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-571"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-571-1.png" alt="Sizes of RNAseq libraries for each sample." width="672" />
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="rnaseq.html#cb25-1"></a><span class="kw">barplot</span>(y<span class="op">$</span>samples<span class="op">$</span>lib.size,<span class="dt">names=</span><span class="kw">colnames</span>(y),<span class="dt">las=</span><span class="dv">2</span>)</span>
+<span id="cb25-2"><a href="rnaseq.html#cb25-2"></a><span class="co"># Add a title to the plot</span></span>
+<span id="cb25-3"><a href="rnaseq.html#cb25-3"></a><span class="kw">title</span>(<span class="st">&quot;Comparison of library sizes&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-15"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-15-1.png" alt="Sizes of RNAseq libraries for each sample." width="672" />
 <p class="caption">
 Figure 47.1: Sizes of RNAseq libraries for each sample.
 </p>
 </div>
 <p>Here’s a plot of the raw counts, in order to illustrate they are not normally-distributed, which is typical of discrete count data.</p>
-<div class="sourceCode" id="cb1083"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1083-1" title="1"><span class="kw">boxplot</span>(y<span class="op">$</span>counts, <span class="dt">las=</span><span class="dv">2</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-572"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-572-1.png" alt="Distribution of counts across the 12 samples. Note they are not normally-distributed." width="672" />
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="rnaseq.html#cb26-1"></a><span class="kw">boxplot</span>(y<span class="op">$</span>counts, <span class="dt">las=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-16"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-16-1.png" alt="Distribution of counts across the 12 samples. Note they are not normally-distributed." width="672" />
 <p class="caption">
 Figure 47.2: Distribution of counts across the 12 samples. Note they are not normally-distributed.
 </p>
 </div>
 <p>Here’s a plot of the CPM, which is also not normally distributed. This illustrates that CPM is just a simple linear transform of count data.</p>
-<div class="sourceCode" id="cb1084"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1084-1" title="1"><span class="kw">boxplot</span>(<span class="kw">cpm</span>(y<span class="op">$</span>counts), <span class="dt">las=</span><span class="dv">2</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-573"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-573-1.png" alt="Distribution of CPM-transformed counts, still not normally-distributed." width="672" />
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="rnaseq.html#cb27-1"></a><span class="kw">boxplot</span>(<span class="kw">cpm</span>(y<span class="op">$</span>counts), <span class="dt">las=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-17"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-17-1.png" alt="Distribution of CPM-transformed counts, still not normally-distributed." width="672" />
 <p class="caption">
 Figure 47.3: Distribution of CPM-transformed counts, still not normally-distributed.
 </p>
 </div>
 <p>Here’s a plot of a log transformation of CPM data. This transformation yields an approximately Gaussian distribution of the count values within each sample, though there are clearly outliers.</p>
 <p>The log transformed CPM data will be used in a lot of the statistical analysis because of this Gaussian property. So we’ll go ahead and make an object for that.</p>
-<div class="sourceCode" id="cb1085"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1085-1" title="1"><span class="co"># Get log2 counts per million</span></a>
-<a class="sourceLine" id="cb1085-2" title="2">logcounts &lt;-<span class="st"> </span><span class="kw">cpm</span>(y,<span class="dt">log=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="rnaseq.html#cb28-1"></a><span class="co"># Get log2 counts per million</span></span>
+<span id="cb28-2"><a href="rnaseq.html#cb28-2"></a>logcounts &lt;-<span class="st"> </span><span class="kw">cpm</span>(y,<span class="dt">log=</span><span class="ot">TRUE</span>)</span></code></pre></div>
 <p>Now look at the <code>logcount</code> date by plotting box plots.</p>
-<div class="sourceCode" id="cb1086"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1086-1" title="1"><span class="co"># Check distributions of samples using boxplots</span></a>
-<a class="sourceLine" id="cb1086-2" title="2"><span class="kw">boxplot</span>(logcounts, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Log2 counts per million&quot;</span>,<span class="dt">las=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb1086-3" title="3"><span class="co"># Let&#39;s add a blue horizontal line that corresponds to the median logCPM</span></a>
-<a class="sourceLine" id="cb1086-4" title="4"><span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">median</span>(logcounts),<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb1086-5" title="5"><span class="kw">title</span>(<span class="st">&quot;Boxplots of logCPMs (unnormalised)&quot;</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-575"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-575-1.png" alt="Natural log transformed CPM counts, normally-distributed but some outliers." width="672" />
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="rnaseq.html#cb29-1"></a><span class="co"># Check distributions of samples using boxplots</span></span>
+<span id="cb29-2"><a href="rnaseq.html#cb29-2"></a><span class="kw">boxplot</span>(logcounts, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Log2 counts per million&quot;</span>,<span class="dt">las=</span><span class="dv">2</span>)</span>
+<span id="cb29-3"><a href="rnaseq.html#cb29-3"></a><span class="co"># Let&#39;s add a blue horizontal line that corresponds to the median logCPM</span></span>
+<span id="cb29-4"><a href="rnaseq.html#cb29-4"></a><span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">median</span>(logcounts),<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb29-5"><a href="rnaseq.html#cb29-5"></a><span class="kw">title</span>(<span class="st">&quot;Boxplots of logCPMs (unnormalised)&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-19"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-19-1.png" alt="Natural log transformed CPM counts, normally-distributed but some outliers." width="672" />
 <p class="caption">
 Figure 47.4: Natural log transformed CPM counts, normally-distributed but some outliers.
 </p>
@@ -1130,21 +1152,21 @@ Figure 47.4: Natural log transformed CPM counts, normally-distributed but some o
 <h2><span class="header-section-number">47.7</span> Classification</h2>
 <p>Multidimensional scaling is a cousin of principal component analysis. It provides a simple way to see if sample groups separate along their first and second dimensions. This is based upon a <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934518/">leading fold-change metric</a>. This examines the subset of genes that exhibit the largest fold-differences between samples.</p>
 <p>The graph below shows separation and clustering of the 12 samples, but it is a bit hard to see what is what unless you’ve remembered what each sample represents.</p>
-<div class="sourceCode" id="cb1087"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1087-1" title="1">limma<span class="op">::</span><span class="kw">plotMDS</span>(y)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-576"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-576-1.png" alt="Multi-dimensional scaling, a form of PCA." width="672" />
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="rnaseq.html#cb30-1"></a>limma<span class="op">::</span><span class="kw">plotMDS</span>(y)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-20"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-20-1.png" alt="Multi-dimensional scaling, a form of PCA." width="672" />
 <p class="caption">
 Figure 47.5: Multi-dimensional scaling, a form of PCA.
 </p>
 </div>
 <p>We’ll munge out some better plots below, focusing on the the classification of the predictor variables. Recall there are 12 samples, duplicates of gene expression in basal and luminal cells, for each of the following three conditions: the cells were derived from mice that were virgin, pregnant, or lactating.</p>
 <p>First we’ll color by the feature that involves basal and luminal.</p>
-<div class="sourceCode" id="cb1088"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1088-1" title="1"><span class="co"># Let&#39;s set up colour schemes for CellType</span></a>
-<a class="sourceLine" id="cb1088-2" title="2"><span class="co"># How many cell types and in what order are they stored?</span></a>
-<a class="sourceLine" id="cb1088-3" title="3"><span class="kw">levels</span>(sampleinfo<span class="op">$</span>CellType)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="rnaseq.html#cb31-1"></a><span class="co"># Let&#39;s set up colour schemes for CellType</span></span>
+<span id="cb31-2"><a href="rnaseq.html#cb31-2"></a><span class="co"># How many cell types and in what order are they stored?</span></span>
+<span id="cb31-3"><a href="rnaseq.html#cb31-3"></a><span class="kw">levels</span>(<span class="kw">as.factor</span>(sampleinfo<span class="op">$</span>CellType))</span></code></pre></div>
 <pre><code>## [1] &quot;basal&quot;   &quot;luminal&quot;</code></pre>
-<div class="sourceCode" id="cb1090"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1090-1" title="1">col.cell &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>)[sampleinfo<span class="op">$</span>CellType]</a>
-<a class="sourceLine" id="cb1090-2" title="2"><span class="kw">data.frame</span>(sampleinfo<span class="op">$</span>CellType,col.cell)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="rnaseq.html#cb33-1"></a>col.cell &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>)[<span class="kw">as.factor</span>(sampleinfo<span class="op">$</span>CellType)]</span>
+<span id="cb33-2"><a href="rnaseq.html#cb33-2"></a><span class="kw">data.frame</span>(sampleinfo<span class="op">$</span>CellType,col.cell)</span></code></pre></div>
 <pre><code>##    sampleinfo.CellType col.cell
 ## 1                basal  #012169
 ## 2                basal  #012169
@@ -1159,31 +1181,31 @@ Figure 47.5: Multi-dimensional scaling, a form of PCA.
 ## 11             luminal  #b58500
 ## 12             luminal  #b58500</code></pre>
 <p>The plot below clearly illustrates that the basal/luminal feature represents the first dimension of separation between the samples. In other words, the differences between basal and luminal cell gene expression accounts for most of the variation in the set.</p>
-<div class="sourceCode" id="cb1092"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1092-1" title="1"><span class="co"># Redo the MDS with cell type colouring</span></a>
-<a class="sourceLine" id="cb1092-2" title="2"><span class="kw">plotMDS</span>(y,<span class="dt">col=</span>col.cell)</a>
-<a class="sourceLine" id="cb1092-3" title="3"><span class="co"># Let&#39;s add a legend to the plot so we know which colours correspond to which cell type</span></a>
-<a class="sourceLine" id="cb1092-4" title="4"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,</a>
-<a class="sourceLine" id="cb1092-5" title="5">       <span class="dt">fill=</span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>),<span class="dt">legend=</span><span class="kw">levels</span>(sampleinfo<span class="op">$</span>CellType))</a>
-<a class="sourceLine" id="cb1092-6" title="6"><span class="co"># Add a title</span></a>
-<a class="sourceLine" id="cb1092-7" title="7"><span class="kw">title</span>(<span class="st">&quot;Cell type&quot;</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-579"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-579-1.png" alt="MDS shows variation due to cell type explains the first dimension of the data." width="672" />
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="rnaseq.html#cb35-1"></a><span class="co"># Redo the MDS with cell type colouring</span></span>
+<span id="cb35-2"><a href="rnaseq.html#cb35-2"></a><span class="kw">plotMDS</span>(y,<span class="dt">col=</span>col.cell)</span>
+<span id="cb35-3"><a href="rnaseq.html#cb35-3"></a><span class="co"># Let&#39;s add a legend to the plot so we know which colours correspond to which cell type</span></span>
+<span id="cb35-4"><a href="rnaseq.html#cb35-4"></a><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,</span>
+<span id="cb35-5"><a href="rnaseq.html#cb35-5"></a>       <span class="dt">fill=</span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>),<span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">as.factor</span>(sampleinfo<span class="op">$</span>CellType)))</span>
+<span id="cb35-6"><a href="rnaseq.html#cb35-6"></a><span class="co"># Add a title</span></span>
+<span id="cb35-7"><a href="rnaseq.html#cb35-7"></a><span class="kw">title</span>(<span class="st">&quot;Cell type&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-23"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-23-1.png" alt="MDS shows variation due to cell type explains the first dimension of the data." width="672" />
 <p class="caption">
 Figure 47.6: MDS shows variation due to cell type explains the first dimension of the data.
 </p>
 </div>
 <p>We’ll do the same coloring trick for status.</p>
-<div class="sourceCode" id="cb1093"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1093-1" title="1">col.status &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;green&quot;</span>)[sampleinfo<span class="op">$</span>Status]</a>
-<a class="sourceLine" id="cb1093-2" title="2">col.status</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="rnaseq.html#cb36-1"></a>col.status &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;green&quot;</span>)[<span class="kw">as.factor</span>(sampleinfo<span class="op">$</span>Status)]</span>
+<span id="cb36-2"><a href="rnaseq.html#cb36-2"></a>col.status</span></code></pre></div>
 <pre><code>##  [1] &quot;green&quot; &quot;green&quot; &quot;blue&quot;  &quot;blue&quot;  &quot;red&quot;   &quot;red&quot;   &quot;green&quot; &quot;green&quot; &quot;blue&quot; 
 ## [10] &quot;blue&quot;  &quot;red&quot;   &quot;red&quot;</code></pre>
 <p>The plot below colors each sample on the basis of whether it is from a virgin, pregnant, or lactating mouse. There is some separation of them along the 2nd dimension. Note how the duplicates of the same condition are very similar (the MCL1.DL lactating sample is missing for some reason?)</p>
-<div class="sourceCode" id="cb1095"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1095-1" title="1"><span class="kw">plotMDS</span>(y,<span class="dt">col=</span>col.status)</a>
-<a class="sourceLine" id="cb1095-2" title="2"><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,<span class="dt">fill=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;green&quot;</span>),</a>
-<a class="sourceLine" id="cb1095-3" title="3">       <span class="dt">legend=</span><span class="kw">levels</span>(sampleinfo<span class="op">$</span>Status),<span class="dt">cex=</span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb1095-4" title="4"><span class="kw">title</span>(<span class="st">&quot;Status&quot;</span>)</a></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-581"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-581-1.png" alt="Variation due to status represents the 2nd dimension of the data set." width="672" />
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="rnaseq.html#cb38-1"></a><span class="kw">plotMDS</span>(y,<span class="dt">col=</span>col.status)</span>
+<span id="cb38-2"><a href="rnaseq.html#cb38-2"></a><span class="kw">legend</span>(<span class="st">&quot;topleft&quot;</span>,<span class="dt">fill=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;green&quot;</span>),</span>
+<span id="cb38-3"><a href="rnaseq.html#cb38-3"></a>       <span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">as.factor</span>(sampleinfo<span class="op">$</span>Status)),<span class="dt">cex=</span><span class="fl">0.8</span>)</span>
+<span id="cb38-4"><a href="rnaseq.html#cb38-4"></a><span class="kw">title</span>(<span class="st">&quot;Status&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-25"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-25-1.png" alt="Variation due to status represents the 2nd dimension of the data set." width="672" />
 <p class="caption">
 Figure 47.7: Variation due to status represents the 2nd dimension of the data set.
 </p>
@@ -1198,27 +1220,27 @@ Figure 47.7: Variation due to status represents the 2nd dimension of the data se
 <p>We can assume the most useful approach to answer this would be to focus on the genes that have the highest expression variance across the 12 samples.</p>
 <p>Rather than cluster all 15000+ genes, we’ll cluster the 500 that are most variable. This is an arbitrary cutoff.</p>
 <p>This script creates a vector of variances with associated with each GeneID. Just like in ANOVA, when row variances are high, differences in grouping factors will be greatest.</p>
-<div class="sourceCode" id="cb1096"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1096-1" title="1">var_genes &lt;-<span class="st"> </span><span class="kw">apply</span>(logcounts, <span class="dv">1</span>, var)</a>
-<a class="sourceLine" id="cb1096-2" title="2"><span class="kw">head</span>(var_genes)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="rnaseq.html#cb39-1"></a>var_genes &lt;-<span class="st"> </span><span class="kw">apply</span>(logcounts, <span class="dv">1</span>, var)</span>
+<span id="cb39-2"><a href="rnaseq.html#cb39-2"></a><span class="kw">head</span>(var_genes)</span></code></pre></div>
 <pre><code>##     497097      20671      27395      18777      21399      58175 
 ## 13.6624115  2.7493077  0.1581944  0.1306781  0.3929526  4.8232522</code></pre>
 <p>Now produce a vector with the GeneID names for those that have the greatest to lower variances, up to the 500th.</p>
-<div class="sourceCode" id="cb1098"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1098-1" title="1"><span class="co"># Get the gene names for the top 500 most variable genes</span></a>
-<a class="sourceLine" id="cb1098-2" title="2">select_var &lt;-<span class="st"> </span><span class="kw">names</span>(<span class="kw">sort</span>(var_genes, <span class="dt">decreasing=</span><span class="ot">TRUE</span>))[<span class="dv">1</span><span class="op">:</span><span class="dv">500</span>]</a>
-<a class="sourceLine" id="cb1098-3" title="3"><span class="kw">head</span>(select_var)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="rnaseq.html#cb41-1"></a><span class="co"># Get the gene names for the top 500 most variable genes</span></span>
+<span id="cb41-2"><a href="rnaseq.html#cb41-2"></a>select_var &lt;-<span class="st"> </span><span class="kw">names</span>(<span class="kw">sort</span>(var_genes, <span class="dt">decreasing=</span><span class="ot">TRUE</span>))[<span class="dv">1</span><span class="op">:</span><span class="dv">500</span>]</span>
+<span id="cb41-3"><a href="rnaseq.html#cb41-3"></a><span class="kw">head</span>(select_var)</span></code></pre></div>
 <pre><code>## [1] &quot;22373&quot; &quot;12797&quot; &quot;11475&quot; &quot;11468&quot; &quot;14663&quot; &quot;24117&quot;</code></pre>
 <p>For your information, here is the expression pattern for the GeneID “22373” with the greatest variance. It encodes <a href="https://www.ncbi.nlm.nih.gov/gene?Db=gene&amp;Cmd=DetailsSearch&amp;Term=22373">Wap</a>, a known regulator of mammary epithelium. There is much lower expression in virgin basal cells compared to the others.</p>
-<div class="sourceCode" id="cb1100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1100-1" title="1">logcounts[<span class="st">&quot;22373&quot;</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="rnaseq.html#cb43-1"></a>logcounts[<span class="st">&quot;22373&quot;</span>,]</span></code></pre></div>
 <pre><code>##    MCL1.DG    MCL1.DH    MCL1.DI    MCL1.DJ    MCL1.DK    MCL1.DL    MCL1.LA 
 ##  0.4660671  0.9113837  7.4350797  7.8078998  9.2883180  9.3184826  6.6277452 
 ##    MCL1.LB    MCL1.LC    MCL1.LD    MCL1.LE    MCL1.LF 
 ##  6.6884102 12.1273320 13.1502579 15.6481000 15.5696858</code></pre>
 <p>From <code>logcounts</code> we select the rows corresponding to these 500 most variable genes.</p>
-<div class="sourceCode" id="cb1102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1102-1" title="1"><span class="co"># Subset logcounts matrix</span></a>
-<a class="sourceLine" id="cb1102-2" title="2">highly_variable_lcpm &lt;-<span class="st"> </span>logcounts[select_var,]</a>
-<a class="sourceLine" id="cb1102-3" title="3"><span class="kw">dim</span>(highly_variable_lcpm)</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="rnaseq.html#cb45-1"></a><span class="co"># Subset logcounts matrix</span></span>
+<span id="cb45-2"><a href="rnaseq.html#cb45-2"></a>highly_variable_lcpm &lt;-<span class="st"> </span>logcounts[select_var,]</span>
+<span id="cb45-3"><a href="rnaseq.html#cb45-3"></a><span class="kw">dim</span>(highly_variable_lcpm)</span></code></pre></div>
 <pre><code>## [1] 500  12</code></pre>
-<div class="sourceCode" id="cb1104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1104-1" title="1"><span class="kw">head</span>(highly_variable_lcpm)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="rnaseq.html#cb47-1"></a><span class="kw">head</span>(highly_variable_lcpm)</span></code></pre></div>
 <pre><code>##          MCL1.DG    MCL1.DH   MCL1.DI   MCL1.DJ   MCL1.DK   MCL1.DL    MCL1.LA
 ## 22373  0.4660671  0.9113837  7.435080  7.807900  9.288318  9.318483  6.6277452
 ## 12797 10.0429713  9.6977966 11.046567 11.358857 11.605894 11.491773  0.8529774
@@ -1235,23 +1257,22 @@ Figure 47.7: Variation due to status represents the 2nd dimension of the data se
 ## 24117 -0.5387838 -0.2280797  0.1243601 -2.9468278 -2.945610</code></pre>
 <p>Now we simply pass this select group of the 500 most variable genes into the <code>heatmap.2</code> function.</p>
 <p>The values represented here are logCPM values.</p>
-<div class="sourceCode" id="cb1106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1106-1" title="1"><span class="co"># Set up colour vector for celltype variable</span></a>
-<a class="sourceLine" id="cb1106-2" title="2">col.cell &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>)[sampleinfo<span class="op">$</span>CellType]</a>
-<a class="sourceLine" id="cb1106-3" title="3"></a>
-<a class="sourceLine" id="cb1106-4" title="4"><span class="co"># Plot the heatmap</span></a>
-<a class="sourceLine" id="cb1106-5" title="5"><span class="kw">heatmap.2</span>(highly_variable_lcpm,</a>
-<a class="sourceLine" id="cb1106-6" title="6">          <span class="dt">col=</span>viridis,</a>
-<a class="sourceLine" id="cb1106-7" title="7">          <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, </a>
-<a class="sourceLine" id="cb1106-8" title="8">          <span class="dt">main=</span><span class="st">&quot;Top 500 most variable genes across samples&quot;</span>,</a>
-<a class="sourceLine" id="cb1106-9" title="9">          <span class="dt">ColSideColors=</span>col.cell,</a>
-<a class="sourceLine" id="cb1106-10" title="10">          <span class="dt">scale=</span><span class="st">&quot;row&quot;</span>)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-587-1.png" width="672" />
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="rnaseq.html#cb49-1"></a><span class="co"># Set up colour vector for celltype variable</span></span>
+<span id="cb49-2"><a href="rnaseq.html#cb49-2"></a>col.cell &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>)[sampleinfo<span class="op">$</span>CellType]</span>
+<span id="cb49-3"><a href="rnaseq.html#cb49-3"></a><span class="co"># Plot the heatmap</span></span>
+<span id="cb49-4"><a href="rnaseq.html#cb49-4"></a><span class="kw">heatmap.2</span>(highly_variable_lcpm,</span>
+<span id="cb49-5"><a href="rnaseq.html#cb49-5"></a>          <span class="dt">col=</span>viridis,</span>
+<span id="cb49-6"><a href="rnaseq.html#cb49-6"></a>          <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, </span>
+<span id="cb49-7"><a href="rnaseq.html#cb49-7"></a>          <span class="dt">main=</span><span class="st">&quot;Top 500 most variable genes across samples&quot;</span>,</span>
+<span id="cb49-8"><a href="rnaseq.html#cb49-8"></a>          <span class="dt">ColSideColors=</span>col.cell,</span>
+<span id="cb49-9"><a href="rnaseq.html#cb49-9"></a>          <span class="dt">scale=</span><span class="st">&quot;row&quot;</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-31-1.png" width="672" />
 Expression varies from low (dark) to high (light).</p>
 <p>Inspection of the horizontal clustering illustrates how it picks up the the experimental design very well. There are two main groups (corresponding to the luminal (Emory gold) and basal (Emory blue) cell types). There are also 3 groups within each of these, corresponding to the status.</p>
 <p>The duplicates line up very well together. This is tight data.</p>
 <p>The vertical clustering is very interesting. Over 3 quarters of the genes define the cell type differentiation, while the rest differentiate the status (virgin, pregnant, lactating). There is a clear interaction between cell type and status, as well.</p>
 </div>
-<div id="summary-14" class="section level2">
+<div id="summary-15" class="section level2">
 <h2><span class="header-section-number">47.9</span> Summary</h2>
 <p>This chapter is derived from <a href="https://combine-australia.github.io/RNAseq-R/">an excellent workshop on using R to work with RNA-seq data</a>. The workshop material is an excellent starting point for learning how to work with this data.</p>
 <p>I’ve only covered a small portion of that material and made just a few very modest changes. My goal is making a gentle introduction to working with the data, keeping a focus on classification (MDS and hierarchical clustering).</p>
@@ -1261,18 +1282,6 @@ Expression varies from low (dark) to high (light).</p>
 
 </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
             </section>
 
           </div>

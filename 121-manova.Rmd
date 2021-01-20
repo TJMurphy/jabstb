@@ -8,13 +8,15 @@ library(mvtnorm)
 library(datapasta)
 ```
 
-MANOVA is a procedure to analyze experimental data involving simultaneous measurements of two or more dependent variables in response to two or more predictor groups. The basic MANOVA designs are no different than the various t-test or ANOVA designs. Paired, unpaired, one-way (one-factor), two-way (two-factor) and even three-way (three-factor) (or more way) MANOVA experiments are possible. They can be structured either as independent (completely randomized) or intrinsically-linked (related/repeated measures) or a mixture of the two. 
+MANOVA is a procedure to analyze experimental data involving simultaneous measurements of two or more dependent variables in response to two or more predictor groups. 
 
-What differs is taking measurements for more than one dependent variable. 
+The basic MANOVA designs are no different than the various t-test or ANOVA designs. Paired, unpaired, one-way (one-factor), two-way (two-factor) and even three-way (three-factor) (or more way) MANOVA experiments are possible. They can be structured either as independent (completely randomized) or intrinsically-linked (related/repeated measures) or a mixture of the two. 
+
+What differs is MANOVA designs collect measurements for more than one dependent variable from each replicate.  
 
 The statistical jargon for such experiments is they are "multivariate", whereas ANOVA is "univariate". This term is owed to a mathematical feature of underlying MANOVA which involves calculating linear combinations of these dependent variables to uncover latent "variates". The statistical test is actually performed on these latent variates.
 
-*Statistical jargon is very confusing most of the time. When we have experiments that involve more than one treatment variable (each at many levels) and only one outcome variable, such as a two-way ANOVA, we call these "multivariable" experiments. But they are also known as "univariate" tests. When we have experiments that have one or more treatment variables and multiple outcome variables, such as one- or two-way MANOVA, we call these multivariate tests. I'm sorry.*
+*Statistical jargon is very confusing most of the time. When we have experiments that involve more than one treatment variable (each at many levels) and only one outcome variable, such as a two-way ANOVA, we call these "multivariable" experiments. But they are also known as "univariate" tests because there is only one dependent variable. When we have experiments that have one or more treatment variables and multiple outcome variables, such as one- or two-way MANOVA, we call these multivariate tests. I'm sorry.*
 
 ## What does MANOVA test?
 
@@ -28,19 +30,23 @@ You'll see that the MANOVA test output per se generates an F statistic. In that 
 
 However, this is a funny F statistic. 
 
-First it is an approximated F, which is mapped to the F test statistic distribution. MANOVA data sets have one column for each dependent variable, which creates a matrix when there are multiple dependent variables. 
+First it is an approximated F, which is mapped to the F test statistic distribution. 
+
+MANOVA data sets have one column for each dependent variable, which creates a matrix when there are multiple dependent variables. 
 
 The MANOVA test statistic operates on a matrix parameter called the eigenvalue. Eigenvalues are scaling factors for eigenvectors, which are also matrix parameters. Eigenvectors are ways of reducing the complexity of matrix data. Eigenvectors represent latent variates within these multivariate datasets. Note the plural. There can be more than one eigenvector in a multivariate dataset, the number for which is related to the number of dependent and independent variables.
 
-In fact, there are four MANOVA test statistics: Wilks’ Lambda, Hotelling-Lawley Trace, Pillai’s Trace, and Roy’s Largest Root. Each are calculated differently. Given the same input data, each test statistic is then used to generate an F statistic. 
+There are four different MANOVA test statistics: Wilks’ Lambda, Hotelling-Lawley Trace, Pillai’s Trace, and Roy’s Largest Root. Each are calculated differently. Given the same input data, each test statistic is then used to generate an F statistic. 
 
-Like a lot of things in statistics, they represent different ways to achieve the same objective, but generate different results in the process. Their inventors believe they offer a better mousetrap. 
+Like a lot of things in statistics, they represent different ways to achieve the same objective, but generate different results in the process. Their eponymous inventors believe their's offers a better mousetrap. 
 
 Choosing which of the MANOVA test statistics to use for inference is not unlike choosing which multiple correction method to use following ANOVA. It can be confusing.
 
+It is not uncommon for the test statistics to yield conflicting outcomes. Therefore, it is imperative for the test statistic to be chosen in advance.
+
 ## Types of experiments
 
-We imagine a gene expression study that measures transcripts from several different genes within every sample simultaneously. Each transcript represents a unique dependent variable since they come from different genes, each with its own network of transcription factors. But we can also imagine underlying latent relationships between the genes. We might be interested in how different genes are expressed over time and in the absence or presence of certain stimuli. Time and stimuli are each predictor variables. The sample source informs whether the design is completely randomized or related/repeated measure.
+We imagine a gene expression study that measures the transcripts for several different genes simultaneously within every replicate. Each transcript represents a unique dependent variable since they come from different genes, each with its own network of transcription factors. But we can also imagine underlying latent relationships between some of the genes. For example, some of the genes may be regulated by a common transcript. We might be interested in how different genes are expressed over time and in the absence or presence of certain stimuli. Time and stimuli are each predictor variables. The sample source informs whether the design is completely randomized or related/repeated measure.
 
 Or we are interested in quantifying several different proteins simultaneously by western blot technique. We might be interested in testing how different groups of stimuli or certain mutations affects each of their levels. Or we are able to measure multiple proteins simultaneously in cells using differentially colored fluorescent tags. Each protein (each color) is a unique dependent variable.
 
@@ -605,6 +611,6 @@ manpwr(5)
 
 
 ```{r}
-sessionInfo()
+#sessionInfo()
 ```
 
