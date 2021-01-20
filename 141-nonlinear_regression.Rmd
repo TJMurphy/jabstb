@@ -1,4 +1,5 @@
 # Non-linear regression introduction {#nonlinearintro}
+
 ```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 library(tidyverse)
 library(nlfitr) #not on CRAN, devtools::install_github("TJMurphy/nlfitr")
@@ -6,25 +7,27 @@ library(cowplot)
 library(minpack.lm)
 ```
 
-Nonlinear regression is a statistical method to fit nonlinear models to the kinds of data sets that have nonlinear relationships between predictor and dependent variables. The regression fits produce estimates of the model parameters. These model parameters are useful because they provide a way to quantify some biological process (eg, rate and equilibrium constants, minimal and maximal responses, etc). 
+Nonlinear regression is a statistical method to fit nonlinear models to the kinds of data sets that have nonlinear relationships between independent and dependent variables. 
+
+These regression fits produce estimates for the parameters of a nonlinear model. These model parameters are useful because they provide a way to quantify some biological process (eg, rate and equilibrium constants, minimal and maximal responses, Km and Kd values, Hill slopes, etc). 
 
 Nonlinear regression has added importance since biological systems tend to operate in nonlinear ways.
 
-In general, models are just mathematical equations that describe how $Y$ is produced by $X$. In nonlinear regression we'll feed a model formula pairs of $X,Y$ data from an experiment. The model parameters responsible for giving nonlinear shape to the relationship between $X$ and $Y$ are then determined by the regression method.
+In general, nonlinear models are just mathematical equations that describe how $Y$ is produced by $X$. In nonlinear regression we'll fit a model formula to pairs of $X,Y$ data from an experiment. The best fitting model parameters responsible for giving nonlinear shape to the relationship between $X$ and $Y$ are then determined by the regression method.
 
 The statistical analysis involving nonlinear models is nearly identical to that for linear models. The regression technique itself customizes the fit of a chosen nonlinear model to some data produced in the lab. These best fits are determined by a minimization of the sum of the squared residuals between the model values for the response and the experimentally-derived values. The only difference is that nonlinear regression solves the problem iteratively, rather than mathematically.
 
 A common misconception is that a data set is fed into some mythical omnibus function, which then identifies the right model and fits it to the data. 
 
-Nobody really has that one...yet. There are too many ways nonlinear data can happen, yet in biology, only some of these ways are important. Therefore, it takes the expertise of a researcher to select the right model for the data.
+Nobody really has that one...yet. There are too many ways nonlinear data can happen, yet in biology, only some of these ways are important. Therefore, it takes the expertise of a researcher to select the right model for the data and test whether the model fits.
 
-By important I mean that the models have some theoretical basis. Most of the time we're working on experiments where the right models to choose are obvious. For example, if we are doing enzyme kinetics we are probably using the Michaelis-Menten model. If we are doing binding assays we are using a model based upon the mass action law. And so on.
+By important I mean that the models have some theoretical basis. Most of the time we're working on experiments where the right models to choose are obvious. For example, if we are doing enzyme kinetics we are probably using the Michaelis-Menten model. If we're measuring bacterial growth, we use model with an exponential term. If we are doing binding assays we are using a model based upon the mass action law. And so on.
 
 If there is no pre-existing theoretical framework, as a general rule, the nonlinear regression process is flexible enough to accept completely new models.
 
 ## Uses for nonlinear regression
 
-There are three big reasons why you'd use nonlinear regression:
+There are three big reasons to use nonlinear regression:
 
 * Artistic
 * Interpolation (and simulation)
@@ -57,13 +60,14 @@ edata <- nlfitr::simhetegro(x=1:10, k=0.5, ylo=100, cv=0.25, reps=3)$data
 names(edata) <- c("hours", "predicted", "A600")
 edata <- select(edata, hours, A600)
 ```
+
 ```{r echo=FALSE, fig.cap="A. Primary nonlinear data looks exponential. B. Same data as A log-transformed looks linear."}
 p1 <- ggplot(edata, aes(hours, A600))+geom_point()
 p2 <- ggplot(edata, aes(hours, log(A600)))+geom_point()
 plot_grid(p1, p2, labels="AUTO")
 ```
 
-### What nonlinear model describes that data? 
+### Which nonlinear model describes that data? 
 
 We remember enough algebra to realize an exponential function could have produced something like the data in panel A. Consistent with this, natural log transformation of the values of $Y$ linearizes the response (see panel B in the figure). 
 
@@ -362,17 +366,12 @@ Note below how it's been fed some start estimates that are a bit off the mark, g
 ```{r}
 x <- log10(c(1e-8, 3e-8, 1e-7, 3e-7, 1e-6, 3e-6, 1e-5))
 #x <- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)
-
 h <- 1
-
 logk <- log10(3e-7)
-
 ylo <- 30
 yhi <- 330
-
 #hyperbolic function
 y=ylo+((yhi-ylo)/(1+10^((logk-x)*h))) + rnorm(length(x), 0, 45)
-
 ggplot(
   data.frame(x, y), 
   aes(x, y))+
@@ -385,12 +384,10 @@ ggplot(
                         ylo=50,
                         logk=-7)
                                ),
-              se=F, #you need this line for nls graphs and it is not obvious!!
+              se=F, #need this line for nls graphs and it is not obvious!!
               color="red"
-    
   )+
   labs(title="Best fit for random Y values; Linearized X by Log10(X) transform")
-
 ```
 
 #### Smoothing
@@ -399,21 +396,16 @@ Smoothing is an artistic method to draw a nonlinear regression-ish line through 
 
 The underlying calculation is a regression run over a sliding window, called `span` in R. If that span is small, the smooth is closer to point-to-point. And if the span is larger, the smooth is smoother. You simply adjust the value of span to dial in a curve that suites your eye.
 
-```{r}
+```{r fig.cap="Smoothing tends to overfit data", message=FALSE, warning=FALSE}
 set.seed(12345)
 x <- log10(c(1e-8, 3e-8, 1e-7, 3e-7, 1e-6, 3e-6, 1e-5))
 #x <- c(-8, -7.523, -7, -6.523, -6, -5.523, -5)
-
 h <- 1
-
 logk <- log10(3e-7)
-
 ylo <- 30
 yhi <- 330
-
 #hyperbolic function
 y=ylo+((yhi-ylo)/(1+10^((logk-x)*h))) + rnorm(length(x), 0, 45)
-
 ggplot(data.frame(x,y), (aes(x, y)))+
   geom_point(size=4, color="#f2a900") +
   stat_smooth(method = "auto",
@@ -464,18 +456,14 @@ The simplest is to use a negative Hill slope in the standard hyperbolic formula.
 
 ```{r fig.cap="Inhibition: Linear and log plots", fig.height=3, fig.show="hold", fig.width=3}
 x <- c(1:60)
-
 ylo <- 0
 yhi <- 1
 h <- -1
 k <- 30
-
 y <- ylo+((yhi-ylo)*x^h)/(k^h+x^h)
-
 #linear plot
 ggplot(data.frame(x,y), aes(x,y))+
   geom_point(color="blue")
-
 #log plot
 ggplot(data.frame(x,y), aes(x,y))+
   geom_point(color="blue")+

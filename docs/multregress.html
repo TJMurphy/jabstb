@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 41 Multiple regression | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 41 Multiple regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2020-04-20" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,13 +50,15 @@
 
 
 
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -65,14 +67,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -81,9 +85,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -136,21 +140,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i><b>1</b> About the author and book</a></li>
 <li class="chapter" data-level="2" data-path="history.html"><a href="history.html"><i class="fa fa-check"></i><b>2</b> A Brief History of Experimental Design</a></li>
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a><ul>
-<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#spring-2020-term-versions"><i class="fa fa-check"></i><b>3.1</b> Spring 2020 term versions</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.1.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.1.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.1.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.1.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.1.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.1.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.1.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.1.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-software-for-your-machine"><i class="fa fa-check"></i><b>3.1.5</b> Rule 4: Install the right software for your machine</a></li>
-<li class="chapter" data-level="3.1.6" data-path="software.html"><a href="software.html#rule-5-use-this-installation-guide"><i class="fa fa-check"></i><b>3.1.6</b> Rule 5: Use this installation guide</a></li>
+<li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
+<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.2</b> After installation</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.2.1</b> What is R?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#r-packages"><i class="fa fa-check"></i><b>3.2.2</b> R packages</a></li>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-immportant-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super immportant: Always avoid compiling</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#important-avoid-compiling"><i class="fa fa-check"></i><b>3.3</b> Important: Avoid compiling</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.3.1</b> Reasons not to compile</a></li>
-</ul></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a><ul>
 <li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
@@ -206,7 +213,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.3" data-path="data.html"><a href="data.html#working-with-data"><i class="fa fa-check"></i><b>8.3</b> Working with data</a><ul>
 <li class="chapter" data-level="8.3.1" data-path="data.html"><a href="data.html#entering-data"><i class="fa fa-check"></i><b>8.3.1</b> Entering data</a></li>
 </ul></li>
-<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
+<li class="chapter" data-level="8.4" data-path="data.html"><a href="data.html#summary-1"><i class="fa fa-check"></i><b>8.4</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>9</b> Variability, Accuracy and Precision</a><ul>
 <li class="chapter" data-level="9.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>9.0.1</b> Data are messy</a></li>
@@ -245,14 +252,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="pvalues.html"><a href="pvalues.html"><i class="fa fa-check"></i><b>12</b> P Values</a><ul>
 <li class="chapter" data-level="12.1" data-path="pvalues.html"><a href="pvalues.html#definition"><i class="fa fa-check"></i><b>12.1</b> Definition</a></li>
-<li class="chapter" data-level="12.2" data-path="pvalues.html"><a href="pvalues.html#test-statistics-come-from-null-distributions"><i class="fa fa-check"></i><b>12.2</b> Test statistics come from null distributions</a><ul>
-<li class="chapter" data-level="12.2.1" data-path="pvalues.html"><a href="pvalues.html#p-value-behavior"><i class="fa fa-check"></i><b>12.2.1</b> P-value behavior</a></li>
-<li class="chapter" data-level="12.2.2" data-path="pvalues.html"><a href="pvalues.html#p-values-and-the-decision-process"><i class="fa fa-check"></i><b>12.2.2</b> P-values and the decision process</a></li>
-</ul></li>
-<li class="chapter" data-level="12.3" data-path="pvalues.html"><a href="pvalues.html#a-blood-glucose-p-value"><i class="fa fa-check"></i><b>12.3</b> A blood glucose p-value</a></li>
-<li class="chapter" data-level="12.4" data-path="pvalues.html"><a href="pvalues.html#how-p-values-should-be-interpreted"><i class="fa fa-check"></i><b>12.4</b> How p-values should be interpreted</a></li>
-<li class="chapter" data-level="12.5" data-path="pvalues.html"><a href="pvalues.html#interpretation"><i class="fa fa-check"></i><b>12.5</b> Interpretation</a></li>
-<li class="chapter" data-level="12.6" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>12.6</b> Criticisms of p-values</a></li>
+<li class="chapter" data-level="12.2" data-path="pvalues.html"><a href="pvalues.html#null-test-statistic-distributions"><i class="fa fa-check"></i><b>12.2</b> Null test statistic distributions</a></li>
+<li class="chapter" data-level="12.3" data-path="pvalues.html"><a href="pvalues.html#computing-p-values"><i class="fa fa-check"></i><b>12.3</b> Computing p-values</a></li>
+<li class="chapter" data-level="12.4" data-path="pvalues.html"><a href="pvalues.html#p-values-from-null-tests-are-uniform"><i class="fa fa-check"></i><b>12.4</b> P-values from null tests are uniform</a></li>
+<li class="chapter" data-level="12.5" data-path="pvalues.html"><a href="pvalues.html#how-p-values-become-error-probabilities"><i class="fa fa-check"></i><b>12.5</b> How P-values become error probabilities</a></li>
+<li class="chapter" data-level="12.6" data-path="pvalues.html"><a href="pvalues.html#p-values-as-dichotomous-switches"><i class="fa fa-check"></i><b>12.6</b> P-values as dichotomous switches</a></li>
+<li class="chapter" data-level="12.7" data-path="pvalues.html"><a href="pvalues.html#p-values-in-true-effects"><i class="fa fa-check"></i><b>12.7</b> P-values in true effects</a></li>
+<li class="chapter" data-level="12.8" data-path="pvalues.html"><a href="pvalues.html#criticisms-of-p-values"><i class="fa fa-check"></i><b>12.8</b> Criticisms of p-values</a></li>
+<li class="chapter" data-level="12.9" data-path="pvalues.html"><a href="pvalues.html#summary-how-to-use-p-values"><i class="fa fa-check"></i><b>12.9</b> Summary: How to use p-values</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="jaxwest7.html"><a href="jaxwest7.html"><i class="fa fa-check"></i><b>13</b> Reproducible Data Munging in R</a><ul>
 <li class="chapter" data-level="13.1" data-path="jaxwest7.html"><a href="jaxwest7.html#jaxwest7-data"><i class="fa fa-check"></i><b>13.1</b> Jaxwest7 data</a><ul>
@@ -261,7 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.2" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-glucose-data-into-r"><i class="fa fa-check"></i><b>13.2</b> Munge the glucose data into R</a></li>
 <li class="chapter" data-level="13.3" data-path="jaxwest7.html"><a href="jaxwest7.html#munge-the-bodyweight-data"><i class="fa fa-check"></i><b>13.3</b> Munge the bodyweight data</a></li>
 <li class="chapter" data-level="13.4" data-path="jaxwest7.html"><a href="jaxwest7.html#merge-and-explore-the-glucose-and-bw-data"><i class="fa fa-check"></i><b>13.4</b> Merge and explore the glucose and bw data</a></li>
-<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-1"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
+<li class="chapter" data-level="13.5" data-path="jaxwest7.html"><a href="jaxwest7.html#summary-2"><i class="fa fa-check"></i><b>13.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="binomial.html"><a href="binomial.html"><i class="fa fa-check"></i><b>14</b> The Binomial Distribution</a><ul>
 <li class="chapter" data-level="14.1" data-path="binomial.html"><a href="binomial.html#dbinom"><i class="fa fa-check"></i><b>14.1</b> dbinom</a></li>
@@ -273,8 +280,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="15.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>15.1</b> Poisson Events</a></li>
 <li class="chapter" data-level="15.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>15.2</b> dpois</a></li>
 <li class="chapter" data-level="15.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>15.3</b> ppois</a></li>
-<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.4</b> rpois</a></li>
-<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.5</b> Overdispersion</a></li>
+<li class="chapter" data-level="15.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>15.4</b> qpois</a></li>
+<li class="chapter" data-level="15.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>15.5</b> rpois</a></li>
+<li class="chapter" data-level="15.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>15.6</b> Overdispersion</a></li>
 </ul></li>
 <li class="chapter" data-level="16" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>16</b> The Normal Distribution</a><ul>
 <li class="chapter" data-level="16.0.1" data-path="normal.html"><a href="normal.html#the-standard-normal"><i class="fa fa-check"></i><b>16.0.1</b> The Standard Normal</a></li>
@@ -348,21 +356,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="19.3" data-path="nonparametrics.html"><a href="nonparametrics.html#experiments-involving-deviant-data"><i class="fa fa-check"></i><b>19.3</b> Experiments involving deviant Data</a></li>
 <li class="chapter" data-level="19.4" data-path="nonparametrics.html"><a href="nonparametrics.html#sign-test"><i class="fa fa-check"></i><b>19.4</b> Sign Test</a><ul>
-<li class="chapter" data-level="19.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>19.4.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.4.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation"><i class="fa fa-check"></i><b>19.4.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.4.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-6"><i class="fa fa-check"></i><b>19.4.2</b> Write Up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.5" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-one-group"><i class="fa fa-check"></i><b>19.5</b> Wilcoxon Sign Rank Test for One Group</a><ul>
 <li class="chapter" data-level="19.5.1" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-experimental-designs"><i class="fa fa-check"></i><b>19.5.1</b> Wilcoxon Sign Rank Experimental Designs</a></li>
-<li class="chapter" data-level="19.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>19.5.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.5.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-1"><i class="fa fa-check"></i><b>19.5.2</b> Interpretation</a></li>
 <li class="chapter" data-level="19.5.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-7"><i class="fa fa-check"></i><b>19.5.3</b> Write Up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.6" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-mann-whitney-rank-sum-test-for-2-independent-groups"><i class="fa fa-check"></i><b>19.6</b> Wilcoxon Mann Whitney Rank Sum Test for 2 independent groups</a><ul>
-<li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.6.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-2"><i class="fa fa-check"></i><b>19.6.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.6.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-8"><i class="fa fa-check"></i><b>19.6.2</b> Write Up</a></li>
 <li class="chapter" data-level="19.6.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot"><i class="fa fa-check"></i><b>19.6.3</b> Plot</a></li>
 </ul></li>
 <li class="chapter" data-level="19.7" data-path="nonparametrics.html"><a href="nonparametrics.html#wilcoxon-sign-rank-test-for-paired-groups"><i class="fa fa-check"></i><b>19.7</b> Wilcoxon Sign Rank Test for paired groups</a><ul>
-<li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
+<li class="chapter" data-level="19.7.1" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-3"><i class="fa fa-check"></i><b>19.7.1</b> Interpretation</a></li>
 <li class="chapter" data-level="19.7.2" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-9"><i class="fa fa-check"></i><b>19.7.2</b> Write up</a></li>
 <li class="chapter" data-level="19.7.3" data-path="nonparametrics.html"><a href="nonparametrics.html#plot-1"><i class="fa fa-check"></i><b>19.7.3</b> Plot</a></li>
 </ul></li>
@@ -372,7 +380,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="19.9" data-path="nonparametrics.html"><a href="nonparametrics.html#friedman-test"><i class="fa fa-check"></i><b>19.9</b> Friedman test</a><ul>
 <li class="chapter" data-level="19.9.1" data-path="nonparametrics.html"><a href="nonparametrics.html#blocked-experimental-design"><i class="fa fa-check"></i><b>19.9.1</b> Blocked experimental design</a></li>
-<li class="chapter" data-level="19.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-5"><i class="fa fa-check"></i><b>19.9.2</b> Interpretation</a></li>
+<li class="chapter" data-level="19.9.2" data-path="nonparametrics.html"><a href="nonparametrics.html#interpretation-4"><i class="fa fa-check"></i><b>19.9.2</b> Interpretation</a></li>
 <li class="chapter" data-level="19.9.3" data-path="nonparametrics.html"><a href="nonparametrics.html#write-up-11"><i class="fa fa-check"></i><b>19.9.3</b> Write up</a></li>
 </ul></li>
 <li class="chapter" data-level="19.10" data-path="nonparametrics.html"><a href="nonparametrics.html#nonparametric-power-calculations"><i class="fa fa-check"></i><b>19.10</b> Nonparametric power calculations</a><ul>
@@ -381,7 +389,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="19.10.3" data-path="nonparametrics.html"><a href="nonparametrics.html#an-example"><i class="fa fa-check"></i><b>19.10.3</b> An example</a></li>
 <li class="chapter" data-level="19.10.4" data-path="nonparametrics.html"><a href="nonparametrics.html#nonpara.pwr"><i class="fa fa-check"></i><b>19.10.4</b> nonpara.pwr</a></li>
 </ul></li>
-<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-2"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
+<li class="chapter" data-level="19.11" data-path="nonparametrics.html"><a href="nonparametrics.html#summary-3"><i class="fa fa-check"></i><b>19.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="20" data-path="signrank.html"><a href="signrank.html"><i class="fa fa-check"></i><b>20</b> Signed Rank Distribution</a><ul>
 <li class="chapter" data-level="20.1" data-path="signrank.html"><a href="signrank.html#transformation-of-data-into-sign-ranks"><i class="fa fa-check"></i><b>20.1</b> Transformation of data into sign ranks</a><ul>
@@ -407,81 +415,93 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="22" data-path="ttests.html"><a href="ttests.html"><i class="fa fa-check"></i><b>22</b> The t-tests</a><ul>
-<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#data-assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Data assumptions for t-tests</a></li>
-<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a><ul>
-<li class="chapter" data-level="22.2.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.2.1</b> One sample t tests</a></li>
-<li class="chapter" data-level="22.2.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.2.2</b> Unpaired t tests</a></li>
-<li class="chapter" data-level="22.2.3" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.2.3</b> Paired t tests</a></li>
+<li class="chapter" data-level="22.1" data-path="ttests.html"><a href="ttests.html#assumptions-for-t-tests"><i class="fa fa-check"></i><b>22.1</b> Assumptions for t-tests</a><ul>
+<li class="chapter" data-level="22.1.1" data-path="ttests.html"><a href="ttests.html#strong-assumptions-t-tests-are-invalid-if-these-not-met"><i class="fa fa-check"></i><b>22.1.1</b> Strong assumptions, t-tests are invalid if these not met:</a></li>
+<li class="chapter" data-level="22.1.2" data-path="ttests.html"><a href="ttests.html#weak-assumptions-t-tests-are-less-robust-when-these-are-not-met"><i class="fa fa-check"></i><b>22.1.2</b> Weak assumptions: t-tests are less robust when these are not met:</a></li>
+<li class="chapter" data-level="22.1.3" data-path="ttests.html"><a href="ttests.html#on-random-residual-error"><i class="fa fa-check"></i><b>22.1.3</b> On random residual error</a></li>
+<li class="chapter" data-level="22.1.4" data-path="ttests.html"><a href="ttests.html#on-the-normality-assumption"><i class="fa fa-check"></i><b>22.1.4</b> On the normality assumption</a></li>
 </ul></li>
-<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.3</b> t Test Hypotheses</a><ul>
-<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.3.1</b> One-sided or two-sided??</a></li>
-<li class="chapter" data-level="22.3.2" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.3.2</b> One sample hypotheses</a></li>
-<li class="chapter" data-level="22.3.3" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.3.3</b> Unpaired hypotheses</a></li>
-<li class="chapter" data-level="22.3.4" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.3.4</b> Paired hypotheses</a></li>
+<li class="chapter" data-level="22.2" data-path="ttests.html"><a href="ttests.html#the-t-statistic"><i class="fa fa-check"></i><b>22.2</b> The t Statistic</a></li>
+<li class="chapter" data-level="22.3" data-path="ttests.html"><a href="ttests.html#one-sample-t-tests"><i class="fa fa-check"></i><b>22.3</b> One sample t tests</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="ttests.html"><a href="ttests.html#example"><i class="fa fa-check"></i><b>22.3.1</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#confidence-intervals-of-means"><i class="fa fa-check"></i><b>22.4</b> Confidence Intervals of Means</a></li>
-<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#parameters-small-samples-and-reliability"><i class="fa fa-check"></i><b>22.5</b> Parameters, small samples, and reliability</a><ul>
-<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.5.1</b> Reporting SD or SEM?</a></li>
+<li class="chapter" data-level="22.4" data-path="ttests.html"><a href="ttests.html#unpaired-t-tests"><i class="fa fa-check"></i><b>22.4</b> Unpaired t tests</a><ul>
+<li class="chapter" data-level="22.4.1" data-path="ttests.html"><a href="ttests.html#students-t-test"><i class="fa fa-check"></i><b>22.4.1</b> Student’s t-test</a></li>
+<li class="chapter" data-level="22.4.2" data-path="ttests.html"><a href="ttests.html#welchs-t-test"><i class="fa fa-check"></i><b>22.4.2</b> Welch’s t-test</a></li>
+<li class="chapter" data-level="22.4.3" data-path="ttests.html"><a href="ttests.html#example-1"><i class="fa fa-check"></i><b>22.4.3</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-tests-running-the-analysis"><i class="fa fa-check"></i><b>22.6</b> t Tests: Running the analysis</a><ul>
-<li class="chapter" data-level="22.6.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.6.1</b> One sample t test</a></li>
-<li class="chapter" data-level="22.6.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.6.2</b> Unpaired t test</a></li>
-<li class="chapter" data-level="22.6.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.6.3</b> Paired t Test</a></li>
+<li class="chapter" data-level="22.5" data-path="ttests.html"><a href="ttests.html#paired-t-tests"><i class="fa fa-check"></i><b>22.5</b> Paired t tests</a><ul>
+<li class="chapter" data-level="22.5.1" data-path="ttests.html"><a href="ttests.html#example-2"><i class="fa fa-check"></i><b>22.5.1</b> Example</a></li>
 </ul></li>
-<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.7</b> Plotting t Tests</a><ul>
-<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.7.1</b> One-sample</a></li>
-<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired</a></li>
-<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.7.3</b> Paired</a></li>
+<li class="chapter" data-level="22.6" data-path="ttests.html"><a href="ttests.html#t-test-hypotheses"><i class="fa fa-check"></i><b>22.6</b> t Test Hypotheses</a></li>
+<li class="chapter" data-level="22.7" data-path="ttests.html"><a href="ttests.html#one-sided-or-two-sided"><i class="fa fa-check"></i><b>22.7</b> One-sided or two-sided??</a><ul>
+<li class="chapter" data-level="22.7.1" data-path="ttests.html"><a href="ttests.html#one-sample-hypotheses"><i class="fa fa-check"></i><b>22.7.1</b> One sample hypotheses</a></li>
+<li class="chapter" data-level="22.7.2" data-path="ttests.html"><a href="ttests.html#unpaired-hypotheses"><i class="fa fa-check"></i><b>22.7.2</b> Unpaired hypotheses</a></li>
+<li class="chapter" data-level="22.7.3" data-path="ttests.html"><a href="ttests.html#paired-hypotheses"><i class="fa fa-check"></i><b>22.7.3</b> Paired hypotheses</a></li>
 </ul></li>
-<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.8</b> t Test Power</a><ul>
-<li class="chapter" data-level="22.8.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.8.1</b> pwr.t.test</a></li>
-<li class="chapter" data-level="22.8.2" data-path="ttests.html"><a href="ttests.html#interpretation-9"><i class="fa fa-check"></i><b>22.8.2</b> Interpretation</a></li>
-<li class="chapter" data-level="22.8.3" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.8.3</b> t-pwr: A Monte Carlo method</a></li>
+<li class="chapter" data-level="22.8" data-path="ttests.html"><a href="ttests.html#confidence-intervals-1"><i class="fa fa-check"></i><b>22.8</b> Confidence Intervals</a></li>
+<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#reliability-of-small-samples"><i class="fa fa-check"></i><b>22.9</b> Reliability of small samples</a><ul>
+<li class="chapter" data-level="22.9.1" data-path="ttests.html"><a href="ttests.html#reporting-sd-or-sem"><i class="fa fa-check"></i><b>22.9.1</b> Reporting SD or SEM?</a></li>
 </ul></li>
-<li class="chapter" data-level="22.9" data-path="ttests.html"><a href="ttests.html#summary-3"><i class="fa fa-check"></i><b>22.9</b> Summary</a></li>
+<li class="chapter" data-level="22.10" data-path="ttests.html"><a href="ttests.html#running-the-analysis-in-r"><i class="fa fa-check"></i><b>22.10</b> Running the analysis in R</a><ul>
+<li class="chapter" data-level="22.10.1" data-path="ttests.html"><a href="ttests.html#one-sample-t-test"><i class="fa fa-check"></i><b>22.10.1</b> One sample t test</a></li>
+<li class="chapter" data-level="22.10.2" data-path="ttests.html"><a href="ttests.html#unpaired-t-test"><i class="fa fa-check"></i><b>22.10.2</b> Unpaired t test</a></li>
+<li class="chapter" data-level="22.10.3" data-path="ttests.html"><a href="ttests.html#paired-t-test"><i class="fa fa-check"></i><b>22.10.3</b> Paired t Test</a></li>
+</ul></li>
+<li class="chapter" data-level="22.11" data-path="ttests.html"><a href="ttests.html#plotting-t-tests"><i class="fa fa-check"></i><b>22.11</b> Plotting t Tests</a><ul>
+<li class="chapter" data-level="22.11.1" data-path="ttests.html"><a href="ttests.html#one-sample"><i class="fa fa-check"></i><b>22.11.1</b> One-sample</a></li>
+<li class="chapter" data-level="22.11.2" data-path="ttests.html"><a href="ttests.html#unpaired"><i class="fa fa-check"></i><b>22.11.2</b> Unpaired</a></li>
+<li class="chapter" data-level="22.11.3" data-path="ttests.html"><a href="ttests.html#paired"><i class="fa fa-check"></i><b>22.11.3</b> Paired</a></li>
+</ul></li>
+<li class="chapter" data-level="22.12" data-path="ttests.html"><a href="ttests.html#t-test-power"><i class="fa fa-check"></i><b>22.12</b> t Test Power</a><ul>
+<li class="chapter" data-level="22.12.1" data-path="ttests.html"><a href="ttests.html#pwr.t.test"><i class="fa fa-check"></i><b>22.12.1</b> pwr.t.test</a></li>
+<li class="chapter" data-level="22.12.2" data-path="ttests.html"><a href="ttests.html#t-pwr-a-monte-carlo-method"><i class="fa fa-check"></i><b>22.12.2</b> t-pwr: A Monte Carlo method</a></li>
+</ul></li>
+<li class="chapter" data-level="22.13" data-path="ttests.html"><a href="ttests.html#summary-4"><i class="fa fa-check"></i><b>22.13</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="23" data-path="ttestmc.html"><a href="ttestmc.html"><i class="fa fa-check"></i><b>23</b> Statistical design of t-tests</a><ul>
-<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a><ul>
-<li class="chapter" data-level="23.1.1" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.1.1</b> Overview of the Monte Carlo</a></li>
-<li class="chapter" data-level="23.1.2" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-data-simulation"><i class="fa fa-check"></i><b>23.1.2</b> tl;dr on data simulation</a></li>
-<li class="chapter" data-level="23.1.3" data-path="ttestmc.html"><a href="ttestmc.html#tldr-on-the-test"><i class="fa fa-check"></i><b>23.1.3</b> tl;dr on the test</a></li>
-<li class="chapter" data-level="23.1.4" data-path="ttestmc.html"><a href="ttestmc.html#changing-n"><i class="fa fa-check"></i><b>23.1.4</b> Changing n</a></li>
-<li class="chapter" data-level="23.1.5" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.1.5</b> Diabetes drug scenario</a></li>
-<li class="chapter" data-level="23.1.6" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.1.6</b> What would be a scientifically meaningful response?</a></li>
+<li class="chapter" data-level="23.1" data-path="ttestmc.html"><a href="ttestmc.html#about-this-chapter"><i class="fa fa-check"></i><b>23.1</b> About this chapter</a></li>
+<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#overview-of-the-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> Overview of the Monte Carlo</a><ul>
+<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#data-simulation"><i class="fa fa-check"></i><b>23.2.1</b> Data simulation</a></li>
+<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#the-test"><i class="fa fa-check"></i><b>23.2.2</b> The test</a></li>
 </ul></li>
-<li class="chapter" data-level="23.2" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.2</b> One sample t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.2.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.2.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.2.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.2.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.2.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.2.3</b> Step 3</a></li>
-<li class="chapter" data-level="23.2.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.2.4</b> Step 4</a></li>
-<li class="chapter" data-level="23.2.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.2.5</b> Step 5</a></li>
-<li class="chapter" data-level="23.2.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.2.6</b> Step 6</a></li>
-<li class="chapter" data-level="23.2.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.2.7</b> Step 7</a></li>
+<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#changing-sample-size"><i class="fa fa-check"></i><b>23.3</b> Changing Sample Size</a></li>
+<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#diabetes-drug-scenario"><i class="fa fa-check"></i><b>23.4</b> Diabetes drug scenario</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#what-would-be-a-scientifically-meaningful-response"><i class="fa fa-check"></i><b>23.4.1</b> What would be a scientifically meaningful response?</a></li>
 </ul></li>
-<li class="chapter" data-level="23.3" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.3</b> Unpaired t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.3.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.3.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.3.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.3.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.3.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.3.3</b> Step 3</a></li>
-<li class="chapter" data-level="23.3.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.3.4</b> Step 4</a></li>
-<li class="chapter" data-level="23.3.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.3.5</b> Step 5</a></li>
-<li class="chapter" data-level="23.3.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.3.6</b> Step 6</a></li>
-<li class="chapter" data-level="23.3.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.3.7</b> Step 7</a></li>
+<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#one-sample-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.5</b> One sample t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-2"><i class="fa fa-check"></i><b>23.5.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-2"><i class="fa fa-check"></i><b>23.5.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-2"><i class="fa fa-check"></i><b>23.5.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.5.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-2"><i class="fa fa-check"></i><b>23.5.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.5.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-2"><i class="fa fa-check"></i><b>23.5.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.5.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-2"><i class="fa fa-check"></i><b>23.5.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.5.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-1"><i class="fa fa-check"></i><b>23.5.7</b> Step 7</a></li>
 </ul></li>
-<li class="chapter" data-level="23.4" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.4</b> Paired t-test Monte Carlo</a><ul>
-<li class="chapter" data-level="23.4.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.4.1</b> Step 1</a></li>
-<li class="chapter" data-level="23.4.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.4.2</b> Step 2</a></li>
-<li class="chapter" data-level="23.4.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.4.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#unpaired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.6</b> Unpaired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.6.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-3"><i class="fa fa-check"></i><b>23.6.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.6.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-3"><i class="fa fa-check"></i><b>23.6.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.6.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-3"><i class="fa fa-check"></i><b>23.6.3</b> Step 3</a></li>
+<li class="chapter" data-level="23.6.4" data-path="ttestmc.html"><a href="ttestmc.html#step-4-3"><i class="fa fa-check"></i><b>23.6.4</b> Step 4</a></li>
+<li class="chapter" data-level="23.6.5" data-path="ttestmc.html"><a href="ttestmc.html#step-5-3"><i class="fa fa-check"></i><b>23.6.5</b> Step 5</a></li>
+<li class="chapter" data-level="23.6.6" data-path="ttestmc.html"><a href="ttestmc.html#step-6-3"><i class="fa fa-check"></i><b>23.6.6</b> Step 6</a></li>
+<li class="chapter" data-level="23.6.7" data-path="ttestmc.html"><a href="ttestmc.html#step-7-2"><i class="fa fa-check"></i><b>23.6.7</b> Step 7</a></li>
 </ul></li>
-<li class="chapter" data-level="23.5" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.5</b> Step 4</a><ul>
-<li class="chapter" data-level="23.5.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.5.1</b> Step 5</a></li>
-<li class="chapter" data-level="23.5.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.5.2</b> Step 6</a></li>
-<li class="chapter" data-level="23.5.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.5.3</b> Step 7</a></li>
+<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#paired-t-test-monte-carlo"><i class="fa fa-check"></i><b>23.7</b> Paired t-test Monte Carlo</a><ul>
+<li class="chapter" data-level="23.7.1" data-path="ttestmc.html"><a href="ttestmc.html#step-1-4"><i class="fa fa-check"></i><b>23.7.1</b> Step 1</a></li>
+<li class="chapter" data-level="23.7.2" data-path="ttestmc.html"><a href="ttestmc.html#step-2-4"><i class="fa fa-check"></i><b>23.7.2</b> Step 2</a></li>
+<li class="chapter" data-level="23.7.3" data-path="ttestmc.html"><a href="ttestmc.html#step-3-4"><i class="fa fa-check"></i><b>23.7.3</b> Step 3</a></li>
 </ul></li>
-<li class="chapter" data-level="23.6" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.6</b> Comparison to pwr tests</a></li>
-<li class="chapter" data-level="23.7" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.7</b> dt</a></li>
-<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.8</b> pt</a></li>
-<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.9</b> qt</a></li>
-<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.10</b> rt</a></li>
+<li class="chapter" data-level="23.8" data-path="ttestmc.html"><a href="ttestmc.html#step-4-4"><i class="fa fa-check"></i><b>23.8</b> Step 4</a><ul>
+<li class="chapter" data-level="23.8.1" data-path="ttestmc.html"><a href="ttestmc.html#step-5-4"><i class="fa fa-check"></i><b>23.8.1</b> Step 5</a></li>
+<li class="chapter" data-level="23.8.2" data-path="ttestmc.html"><a href="ttestmc.html#step-6-4"><i class="fa fa-check"></i><b>23.8.2</b> Step 6</a></li>
+<li class="chapter" data-level="23.8.3" data-path="ttestmc.html"><a href="ttestmc.html#step-7-3"><i class="fa fa-check"></i><b>23.8.3</b> Step 7</a></li>
+</ul></li>
+<li class="chapter" data-level="23.9" data-path="ttestmc.html"><a href="ttestmc.html#comparison-to-pwr-tests"><i class="fa fa-check"></i><b>23.9</b> Comparison to pwr tests</a></li>
+<li class="chapter" data-level="23.10" data-path="ttestmc.html"><a href="ttestmc.html#dt"><i class="fa fa-check"></i><b>23.10</b> dt</a></li>
+<li class="chapter" data-level="23.11" data-path="ttestmc.html"><a href="ttestmc.html#pt"><i class="fa fa-check"></i><b>23.11</b> pt</a></li>
+<li class="chapter" data-level="23.12" data-path="ttestmc.html"><a href="ttestmc.html#qt"><i class="fa fa-check"></i><b>23.12</b> qt</a></li>
+<li class="chapter" data-level="23.13" data-path="ttestmc.html"><a href="ttestmc.html#rt"><i class="fa fa-check"></i><b>23.13</b> rt</a></li>
 </ul></li>
 <li class="chapter" data-level="24" data-path="simcorrelation.html"><a href="simcorrelation.html"><i class="fa fa-check"></i><b>24</b> Simulating correlated variables</a><ul>
 <li class="chapter" data-level="24.1" data-path="simcorrelation.html"><a href="simcorrelation.html#estimating-correlation-between-two-variables"><i class="fa fa-check"></i><b>24.1</b> Estimating correlation between two variables</a></li>
@@ -513,7 +533,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.10" data-path="introanova.html"><a href="introanova.html#alternatives-to-anova"><i class="fa fa-check"></i><b>25.10</b> Alternatives to ANOVA</a><ul>
 <li class="chapter" data-level="25.10.1" data-path="introanova.html"><a href="introanova.html#screw-anova-just-tell-me-how-to-t-test-everything"><i class="fa fa-check"></i><b>25.10.1</b> Screw ANOVA, Just Tell Me How to t-Test Everything</a></li>
 </ul></li>
-<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-4"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
+<li class="chapter" data-level="25.11" data-path="introanova.html"><a href="introanova.html#summary-5"><i class="fa fa-check"></i><b>25.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="26" data-path="fdistr.html"><a href="fdistr.html"><i class="fa fa-check"></i><b>26</b> The F distribution</a><ul>
 <li class="chapter" data-level="26.1" data-path="fdistr.html"><a href="fdistr.html#background-1"><i class="fa fa-check"></i><b>26.1</b> Background</a><ul>
@@ -536,7 +556,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="27.4" data-path="onewayanova.html"><a href="onewayanova.html#post-hoc-pairwise-comparisons"><i class="fa fa-check"></i><b>27.4</b> Post hoc pairwise comparisons</a><ul>
 <li class="chapter" data-level="27.4.1" data-path="onewayanova.html"><a href="onewayanova.html#range-tests"><i class="fa fa-check"></i><b>27.4.1</b> Range tests</a></li>
 </ul></li>
-<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-5"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
+<li class="chapter" data-level="27.5" data-path="onewayanova.html"><a href="onewayanova.html#summary-6"><i class="fa fa-check"></i><b>27.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="28" data-path="onewayRM.html"><a href="onewayRM.html"><i class="fa fa-check"></i><b>28</b> One-way ANOVA Related Measures</a><ul>
 <li class="chapter" data-level="28.1" data-path="onewayRM.html"><a href="onewayRM.html#data-prep"><i class="fa fa-check"></i><b>28.1</b> Data prep</a></li>
@@ -546,13 +566,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.3" data-path="onewayRM.html"><a href="onewayRM.html#the-anova"><i class="fa fa-check"></i><b>28.3</b> The ANOVA</a><ul>
 <li class="chapter" data-level="28.3.1" data-path="onewayRM.html"><a href="onewayRM.html#running-ezanova"><i class="fa fa-check"></i><b>28.3.1</b> Running ezANOVA</a></li>
 </ul></li>
-<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-10"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
+<li class="chapter" data-level="28.4" data-path="onewayRM.html"><a href="onewayRM.html#interpretation-5"><i class="fa fa-check"></i><b>28.4</b> Interpretation</a></li>
 <li class="chapter" data-level="28.5" data-path="onewayRM.html"><a href="onewayRM.html#post-hoc-analysis"><i class="fa fa-check"></i><b>28.5</b> Post-hoc analysis</a></li>
 <li class="chapter" data-level="28.6" data-path="onewayRM.html"><a href="onewayRM.html#write-up-12"><i class="fa fa-check"></i><b>28.6</b> Write up</a></li>
 </ul></li>
 <li class="chapter" data-level="29" data-path="twowayCR.html"><a href="twowayCR.html"><i class="fa fa-check"></i><b>29</b> Two-way ANOVA Completely Randomized</a><ul>
 <li class="chapter" data-level="29.1" data-path="twowayCR.html"><a href="twowayCR.html#effect-of-strain-and-diet-on-liver"><i class="fa fa-check"></i><b>29.1</b> Effect of Strain and Diet on Liver</a></li>
-<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
+<li class="chapter" data-level="29.2" data-path="twowayCR.html"><a href="twowayCR.html#the-test-1"><i class="fa fa-check"></i><b>29.2</b> The test</a></li>
 <li class="chapter" data-level="29.3" data-path="twowayCR.html"><a href="twowayCR.html#interpretation-of-2-way-cr-anova-output"><i class="fa fa-check"></i><b>29.3</b> Interpretation of 2 Way CR ANOVA Output</a><ul>
 <li class="chapter" data-level="29.3.1" data-path="twowayCR.html"><a href="twowayCR.html#levenes"><i class="fa fa-check"></i><b>29.3.1</b> Levene’s</a></li>
 <li class="chapter" data-level="29.3.2" data-path="twowayCR.html"><a href="twowayCR.html#anova-table"><i class="fa fa-check"></i><b>29.3.2</b> ANOVA Table</a></li>
@@ -562,23 +582,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="29.4.2" data-path="twowayCR.html"><a href="twowayCR.html#write-up-13"><i class="fa fa-check"></i><b>29.4.2</b> Write Up</a></li>
 <li class="chapter" data-level="29.4.3" data-path="twowayCR.html"><a href="twowayCR.html#range-tests-1"><i class="fa fa-check"></i><b>29.4.3</b> Range tests</a></li>
 </ul></li>
-<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-6"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
+<li class="chapter" data-level="29.5" data-path="twowayCR.html"><a href="twowayCR.html#summary-7"><i class="fa fa-check"></i><b>29.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="twowayRM.html"><a href="twowayRM.html"><i class="fa fa-check"></i><b>30</b> Two-way ANOVA Related Measures</a><ul>
 <li class="chapter" data-level="30.1" data-path="twowayRM.html"><a href="twowayRM.html#cell-culture"><i class="fa fa-check"></i><b>30.1</b> Cell culture</a></li>
-<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-1"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
+<li class="chapter" data-level="30.2" data-path="twowayRM.html"><a href="twowayRM.html#the-test-2"><i class="fa fa-check"></i><b>30.2</b> The test</a></li>
 <li class="chapter" data-level="30.3" data-path="twowayRM.html"><a href="twowayRM.html#interpretation-of-the-output"><i class="fa fa-check"></i><b>30.3</b> Interpretation of the output</a><ul>
 <li class="chapter" data-level="30.3.1" data-path="twowayRM.html"><a href="twowayRM.html#anova-table-1"><i class="fa fa-check"></i><b>30.3.1</b> ANOVA Table</a></li>
 <li class="chapter" data-level="30.3.2" data-path="twowayRM.html"><a href="twowayRM.html#mauchlys-sphericity-test"><i class="fa fa-check"></i><b>30.3.2</b> Mauchly’s Sphericity Test</a></li>
 </ul></li>
 <li class="chapter" data-level="30.4" data-path="twowayRM.html"><a href="twowayRM.html#post-hoc-multiple-comparisons-1"><i class="fa fa-check"></i><b>30.4</b> Post Hoc multiple comparisons</a></li>
 <li class="chapter" data-level="30.5" data-path="twowayRM.html"><a href="twowayRM.html#write-up-14"><i class="fa fa-check"></i><b>30.5</b> Write Up</a></li>
-<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-7"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
+<li class="chapter" data-level="30.6" data-path="twowayRM.html"><a href="twowayRM.html#summary-8"><i class="fa fa-check"></i><b>30.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="31" data-path="twowaymixed.html"><a href="twowaymixed.html"><i class="fa fa-check"></i><b>31</b> Two-way ANOVA RM/CR</a><ul>
 <li class="chapter" data-level="31.1" data-path="twowaymixed.html"><a href="twowaymixed.html#chickweight-data-set"><i class="fa fa-check"></i><b>31.1</b> ChickWeight Data set</a></li>
 <li class="chapter" data-level="31.2" data-path="twowaymixed.html"><a href="twowaymixed.html#munge-chickweight-data"><i class="fa fa-check"></i><b>31.2</b> Munge ChickWeight data</a></li>
-<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-2"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
+<li class="chapter" data-level="31.3" data-path="twowaymixed.html"><a href="twowaymixed.html#the-test-3"><i class="fa fa-check"></i><b>31.3</b> The test</a></li>
 <li class="chapter" data-level="31.4" data-path="twowaymixed.html"><a href="twowaymixed.html#interpreting-the-anova-output"><i class="fa fa-check"></i><b>31.4</b> Interpreting the ANOVA output</a><ul>
 <li class="chapter" data-level="31.4.1" data-path="twowaymixed.html"><a href="twowaymixed.html#anova-the-anova-table-1"><i class="fa fa-check"></i><b>31.4.1</b> $ANOVA: The ANOVA table</a></li>
 <li class="chapter" data-level="31.4.2" data-path="twowaymixed.html"><a href="twowaymixed.html#mauchlys-test-and-corrections"><i class="fa fa-check"></i><b>31.4.2</b> Mauchly’s Test and Corrections</a></li>
@@ -589,7 +609,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="31.5.3" data-path="twowaymixed.html"><a href="twowaymixed.html#heres-whats-been-discovered-by-the-tukeyhsd-test"><i class="fa fa-check"></i><b>31.5.3</b> Here’s what’s been discovered by the TukeyHSD test</a></li>
 <li class="chapter" data-level="31.5.4" data-path="twowaymixed.html"><a href="twowaymixed.html#why-is-the-tukeyhsd-result-so-different-than-the-pairwise.t.test"><i class="fa fa-check"></i><b>31.5.4</b> Why is the TukeyHSD result so different than the pairwise.t.test??</a></li>
 </ul></li>
-<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-8"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
+<li class="chapter" data-level="31.6" data-path="twowaymixed.html"><a href="twowaymixed.html#summary-9"><i class="fa fa-check"></i><b>31.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="posthoc.html"><a href="posthoc.html"><i class="fa fa-check"></i><b>32</b> ANOVA Posthoc Comparisons</a><ul>
 <li class="chapter" data-level="32.1" data-path="posthoc.html"><a href="posthoc.html#overview-of-options"><i class="fa fa-check"></i><b>32.1</b> Overview of options</a><ul>
@@ -597,7 +617,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="32.1.2" data-path="posthoc.html"><a href="posthoc.html#range-tests-2"><i class="fa fa-check"></i><b>32.1.2</b> Range tests</a></li>
 </ul></li>
 <li class="chapter" data-level="32.2" data-path="posthoc.html"><a href="posthoc.html#reporting-the-result-1"><i class="fa fa-check"></i><b>32.2</b> Reporting the result</a></li>
-<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-9"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
+<li class="chapter" data-level="32.3" data-path="posthoc.html"><a href="posthoc.html#summary-10"><i class="fa fa-check"></i><b>32.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="jaxwest2.html"><a href="jaxwest2.html"><i class="fa fa-check"></i><b>33</b> Reproducible Data Munging Mostly with Tidyverse</a><ul>
 <li class="chapter" data-level="33.1" data-path="jaxwest2.html"><a href="jaxwest2.html#look-at-the-original-data-carefully"><i class="fa fa-check"></i><b>33.1</b> Look at the original data carefully</a></li>
@@ -654,7 +674,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="35.7.1" data-path="manova.html"><a href="manova.html#manova-monte-carlo-power-analysis"><i class="fa fa-check"></i><b>35.7.1</b> MANOVA Monte Carlo Power Analysis</a></li>
 <li class="chapter" data-level="35.7.2" data-path="manova.html"><a href="manova.html#an-manova-monte-carlo-power-function"><i class="fa fa-check"></i><b>35.7.2</b> An MANOVA Monte Carlo Power function</a></li>
 </ul></li>
-<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-10"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
+<li class="chapter" data-level="35.8" data-path="manova.html"><a href="manova.html#summary-11"><i class="fa fa-check"></i><b>35.8</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="36" data-path="correl.html"><a href="correl.html"><i class="fa fa-check"></i><b>36</b> Correlation</a><ul>
 <li class="chapter" data-level="36.1" data-path="correl.html"><a href="correl.html#correlation-causation"><i class="fa fa-check"></i><b>36.1</b> Correlation != Causation</a></li>
@@ -690,7 +710,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="38.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#uses-for-nonlinear-regression"><i class="fa fa-check"></i><b>38.1</b> Uses for nonlinear regression</a></li>
 <li class="chapter" data-level="38.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#example-of-the-process"><i class="fa fa-check"></i><b>38.2</b> Example of the process</a><ul>
 <li class="chapter" data-level="38.2.1" data-path="nonlinearintro.html"><a href="nonlinearintro.html#it-starts-with-nonlinear-data"><i class="fa fa-check"></i><b>38.2.1</b> It starts with nonlinear data</a></li>
-<li class="chapter" data-level="38.2.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#what-nonlinear-model-describes-that-data"><i class="fa fa-check"></i><b>38.2.2</b> What nonlinear model describes that data?</a></li>
+<li class="chapter" data-level="38.2.2" data-path="nonlinearintro.html"><a href="nonlinearintro.html#which-nonlinear-model-describes-that-data"><i class="fa fa-check"></i><b>38.2.2</b> Which nonlinear model describes that data?</a></li>
 <li class="chapter" data-level="38.2.3" data-path="nonlinearintro.html"><a href="nonlinearintro.html#fitting-a-model-to-data"><i class="fa fa-check"></i><b>38.2.3</b> Fitting a model to data</a></li>
 <li class="chapter" data-level="38.2.4" data-path="nonlinearintro.html"><a href="nonlinearintro.html#interpreting-regression-model-output"><i class="fa fa-check"></i><b>38.2.4</b> Interpreting regression model output</a></li>
 <li class="chapter" data-level="38.2.5" data-path="nonlinearintro.html"><a href="nonlinearintro.html#check-the-fit-graphically"><i class="fa fa-check"></i><b>38.2.5</b> Check the fit graphically</a></li>
@@ -721,12 +741,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="39.2.3" data-path="nestedregress.html"><a href="nestedregress.html#troubleshooting-the-regression"><i class="fa fa-check"></i><b>39.2.3</b> Troubleshooting the regression</a></li>
 <li class="chapter" data-level="39.2.4" data-path="nestedregress.html"><a href="nestedregress.html#interpreting-the-parameters"><i class="fa fa-check"></i><b>39.2.4</b> Interpreting the parameters</a></li>
 <li class="chapter" data-level="39.2.5" data-path="nestedregress.html"><a href="nestedregress.html#residual-plots-to-compare-fits"><i class="fa fa-check"></i><b>39.2.5</b> Residual plots to compare fits</a></li>
-<li class="chapter" data-level="39.2.6" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>39.2.6</b> Compare AIC</a></li>
-<li class="chapter" data-level="39.2.7" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>39.2.7</b> Other ways to compare models</a></li>
-<li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.8</b> Interpretation of this one replicate</a></li>
-<li class="chapter" data-level="39.2.9" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.9</b> Alternate analysis</a></li>
+<li class="chapter" data-level="39.2.6" data-path="nestedregress.html"><a href="nestedregress.html#f-test-for-model-comparison"><i class="fa fa-check"></i><b>39.2.6</b> F test for model comparison</a></li>
+<li class="chapter" data-level="39.2.7" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>39.2.7</b> Compare AIC</a></li>
+<li class="chapter" data-level="39.2.8" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>39.2.8</b> Other ways to compare models</a></li>
+<li class="chapter" data-level="39.2.9" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>39.2.9</b> Interpretation of this one replicate</a></li>
+<li class="chapter" data-level="39.2.10" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>39.2.10</b> Alternate analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-11"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
+<li class="chapter" data-level="39.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-12"><i class="fa fa-check"></i><b>39.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="40" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html"><i class="fa fa-check"></i><b>40</b> Nonlinear regression of independent replicates</a><ul>
 <li class="chapter" data-level="40.1" data-path="nonlinearreplicates.html"><a href="nonlinearreplicates.html#the-problem"><i class="fa fa-check"></i><b>40.1</b> The problem</a></li>
@@ -768,10 +789,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="43.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#mixed-models-fixed-and-random-effects"><i class="fa fa-check"></i><b>43.1</b> Mixed models, fixed and random effects</a><ul>
 <li class="chapter" data-level="43.1.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#nfat-localization-within-smooth-muscle-cells"><i class="fa fa-check"></i><b>43.1.1</b> NFAT localization within smooth muscle cells</a></li>
 </ul></li>
-<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a><ul>
-<li class="chapter" data-level="43.2.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.2.1</b> Inference</a></li>
+<li class="chapter" data-level="43.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>43.2</b> Data</a></li>
+<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#linear-model"><i class="fa fa-check"></i><b>43.3</b> Linear model</a><ul>
+<li class="chapter" data-level="43.3.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>43.3.1</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="43.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.3</b> Alternative analysis</a></li>
+<li class="chapter" data-level="43.4" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>43.4</b> Alternative analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="44" data-path="poissonreg.html"><a href="poissonreg.html"><i class="fa fa-check"></i><b>44</b> Poisson regression</a><ul>
 <li class="chapter" data-level="44.1" data-path="poissonreg.html"><a href="poissonreg.html#why-not-anova"><i class="fa fa-check"></i><b>44.1</b> Why not ANOVA?</a><ul>
@@ -800,7 +822,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="45.6.2" data-path="surv.html"><a href="surv.html#interpretation-of-cox-regression-output"><i class="fa fa-check"></i><b>45.6.2</b> Interpretation of Cox regression output</a></li>
 <li class="chapter" data-level="45.6.3" data-path="surv.html"><a href="surv.html#write-up-18"><i class="fa fa-check"></i><b>45.6.3</b> Write up</a></li>
 </ul></li>
-<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-12"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
+<li class="chapter" data-level="45.7" data-path="surv.html"><a href="surv.html#summary-13"><i class="fa fa-check"></i><b>45.7</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="46" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>46</b> Classification</a><ul>
 <li class="chapter" data-level="46.1" data-path="classification.html"><a href="classification.html#distances"><i class="fa fa-check"></i><b>46.1</b> Distances</a></li>
@@ -815,7 +837,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="46.10" data-path="classification.html"><a href="classification.html#pam-and-clara"><i class="fa fa-check"></i><b>46.10</b> PAM and CLARA</a></li>
 <li class="chapter" data-level="46.11" data-path="classification.html"><a href="classification.html#hierarchical-clustering"><i class="fa fa-check"></i><b>46.11</b> Hierarchical clustering</a></li>
 <li class="chapter" data-level="46.12" data-path="classification.html"><a href="classification.html#heatmaps"><i class="fa fa-check"></i><b>46.12</b> Heatmaps</a></li>
-<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-13"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
+<li class="chapter" data-level="46.13" data-path="classification.html"><a href="classification.html#summary-14"><i class="fa fa-check"></i><b>46.13</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="47" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>47</b> RNA-seq with R</a><ul>
 <li class="chapter" data-level="47.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>47.1</b> Install Bioconductor</a></li>
@@ -826,7 +848,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="47.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>47.6</b> Visualization</a></li>
 <li class="chapter" data-level="47.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>47.7</b> Classification</a></li>
 <li class="chapter" data-level="47.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>47.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-14"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
+<li class="chapter" data-level="47.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-15"><i class="fa fa-check"></i><b>47.9</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -880,12 +902,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here’s a simulation of a simple factorial experiment, comparing responses of a stimulus and its negative control. Every measurement is independent of all other measurements. Thus, the sample has 6 independent replicates.</p>
 <p>The predictor variable, FactorA, comes at two levels: control and stimulus. The response is a continuous variable. In your own mind substitute things for these. For me, the response is a transcription factor-driven luciferease activity, a negative control, and an agonist of a receptor is the stimulus.</p>
 <p>We obtain the following random sample:</p>
-<div class="sourceCode" id="cb886"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb886-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb886-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb886-3" title="3">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb886-4" title="4"></a>
-<a class="sourceLine" id="cb886-5" title="5">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)</a>
-<a class="sourceLine" id="cb886-6" title="6">data</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="multregress.html#cb1-1"></a><span class="kw">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb1-2"><a href="multregress.html#cb1-2"></a>factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</span>
+<span id="cb1-3"><a href="multregress.html#cb1-3"></a>response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>))</span>
+<span id="cb1-4"><a href="multregress.html#cb1-4"></a></span>
+<span id="cb1-5"><a href="multregress.html#cb1-5"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)</span>
+<span id="cb1-6"><a href="multregress.html#cb1-6"></a>data</span></code></pre></div>
 <pre><code>##    factorA response
 ## 1  control 48.79293
 ## 2  control 50.27743
@@ -896,8 +918,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The linear model for this experiment can be expressed as follows: <span class="math display">\[response=control+\beta \times stimulus + residual\]</span></p>
 <p>The model formula can be configured in several optional ways.</p>
 <p>Adding the term <code>+0</code> to the model formula in the <code>lm</code> function suppresses the intercept, allowing for a glance at the sample group means. These make sense with what was coded above.</p>
-<div class="sourceCode" id="cb888"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb888-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span><span class="dv">0</span>, data)</a>
-<a class="sourceLine" id="cb888-2" title="2">model</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="multregress.html#cb3-1"></a>model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span><span class="dv">0</span>, data)</span>
+<span id="cb3-2"><a href="multregress.html#cb3-2"></a>model</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA + 0, data = data)
@@ -906,8 +928,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  factorAcontrol  factorAstimulus  
 ##           50.05            74.53</code></pre>
 <p>Knowing those group mean values helps to understand the meaning of the regression coefficients derived from the more conventional approach, which is not to suppress the intercept.</p>
-<div class="sourceCode" id="cb890"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb890-1" title="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a>
-<a class="sourceLine" id="cb890-2" title="2">model</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="multregress.html#cb5-1"></a>model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</span>
+<span id="cb5-2"><a href="multregress.html#cb5-2"></a>model</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -923,7 +945,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The coefficient for the stimulus term in this model formula is not the mean of the response to the stimulus, but is instead the difference between between the mean response to the stimulus and the mean response of the control.</p>
 <p>Perhaps that reminds you of the numerator for the unpaired t-test, between two levels of a factor, control and stimulus? <span class="math display">\[t=\frac{mean_{stimulus}-mean_{control}}{SE}\]</span></p>
 <p>Let’s see if a t-test between stimulus and control gives us the same result as the linear regression. First, let’s complete the linear model analysis.</p>
-<div class="sourceCode" id="cb892"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb892-1" title="1"><span class="kw">summary</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="multregress.html#cb7-1"></a><span class="kw">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -947,7 +969,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Woohoo!</p>
 <p>To be clear, when the predictor variable was continuous, we previously discussed these <span class="math inline">\(\beta\)</span> coefficients as the “slope” of the linear regression line. That’s still the case here. R coerces a distance of 1 on the abscissa between the factorA values of control and stimulus. Thus, the difference between their means <span class="math inline">\(\Delta y\)</span> divided by 1 <span class="math inline">\(\Delta x\)</span> is the slope of an imaginary line between them.</p>
 <p>Now let’s look at an unpaired t-test between the two factors.</p>
-<div class="sourceCode" id="cb894"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb894-1" title="1"><span class="kw">t.test</span>(response<span class="op">~</span>factorA, data, <span class="dt">var.equal=</span>T)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="multregress.html#cb9-1"></a><span class="kw">t.test</span>(response<span class="op">~</span>factorA, data, <span class="dt">var.equal=</span>T)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -983,14 +1005,14 @@ That denominator is the standard error of the difference between means, which is
 <p>Using the <code>relevel</code> function provides you a bit more control to define the intercept value in linear regression compared to the default alphanumeric way.</p>
 <p>Here’s some simulated data. The predictor variable, hart, has 4 levels: art, bart, cart, and dart. It’s on an alphanumeric scale. Smelly is the response variable. As you can see, each level of hart yields a different smelly response.</p>
 <p>Even though I list the hart variable levels from <code>d</code> to <code>a</code> in the dataframe, R coerces them from <code>a</code> to <code>d</code> in the regression model, thereby forcing art to serve as the intercept</p>
-<div class="sourceCode" id="cb896"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb896-1" title="1">art &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb896-2" title="2">bart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb896-3" title="3">cart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb896-4" title="4">dart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">200</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb896-5" title="5"></a>
-<a class="sourceLine" id="cb896-6" title="6">hart &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;dart&quot;</span>, <span class="st">&quot;cart&quot;</span>, <span class="st">&quot;bart&quot;</span>, <span class="st">&quot;aart&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb896-7" title="7">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(hart, <span class="dt">smelly=</span><span class="kw">c</span>(dart, cart, bart, art))</a>
-<a class="sourceLine" id="cb896-8" title="8">data</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="multregress.html#cb11-1"></a>art &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>)</span>
+<span id="cb11-2"><a href="multregress.html#cb11-2"></a>bart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb11-3"><a href="multregress.html#cb11-3"></a>cart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb11-4"><a href="multregress.html#cb11-4"></a>dart &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">200</span>, <span class="dv">1</span>)</span>
+<span id="cb11-5"><a href="multregress.html#cb11-5"></a></span>
+<span id="cb11-6"><a href="multregress.html#cb11-6"></a>hart &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;dart&quot;</span>, <span class="st">&quot;cart&quot;</span>, <span class="st">&quot;bart&quot;</span>, <span class="st">&quot;aart&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</span>
+<span id="cb11-7"><a href="multregress.html#cb11-7"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(hart, <span class="dt">smelly=</span><span class="kw">c</span>(dart, cart, bart, art))</span>
+<span id="cb11-8"><a href="multregress.html#cb11-8"></a>data</span></code></pre></div>
 <pre><code>##    hart       smelly
 ## 1  dart 199.88971451
 ## 2  dart 199.48899049
@@ -1004,7 +1026,7 @@ That denominator is the standard error of the difference between means, which is
 ## 10 aart  49.42526004
 ## 11 aart  49.45336814
 ## 12 aart  49.43554800</code></pre>
-<div class="sourceCode" id="cb898"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb898-1" title="1"><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="multregress.html#cb13-1"></a><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = smelly ~ hart, data = data)
@@ -1015,11 +1037,11 @@ That denominator is the standard error of the difference between means, which is
 <p>What do those coefficient values mean? Well, they are all in units of smelly, referenced to the level of smelly in the presence of art. Because it begins with the letter ‘a’, art is the lowest alphanumeric value of the four predictors. Therefore, it is assigned as the intercept factor. In smelly units, the intercept is the response to art; bart is about 50 more than art; cart is about 50 less than art; and dart is about 150 more than art.</p>
 <p>But let’s say we’d instead like to reference everything to the value of cart, which has a smelly value of 0. We’d use the <code>relevel</code> function for that.</p>
 <p>First we have to define the variable hart as a factorial variable explicitly. Then, we relevel the values of hart so that cart is referenced as the intercept.</p>
-<div class="sourceCode" id="cb900"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb900-1" title="1">hart &lt;-<span class="st"> </span><span class="kw">factor</span>(hart) <span class="co">#don&#39;t skip this step, without it the next gives an error!!!</span></a>
-<a class="sourceLine" id="cb900-2" title="2">data<span class="op">$</span>hart &lt;-<span class="st"> </span><span class="kw">relevel</span>(hart, <span class="dt">ref=</span><span class="st">&quot;cart&quot;</span>)</a>
-<a class="sourceLine" id="cb900-3" title="3"></a>
-<a class="sourceLine" id="cb900-4" title="4"></a>
-<a class="sourceLine" id="cb900-5" title="5"><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="multregress.html#cb15-1"></a>hart &lt;-<span class="st"> </span><span class="kw">factor</span>(hart) <span class="co">#don&#39;t skip this step, without it the next gives an error!!!</span></span>
+<span id="cb15-2"><a href="multregress.html#cb15-2"></a>data<span class="op">$</span>hart &lt;-<span class="st"> </span><span class="kw">relevel</span>(hart, <span class="dt">ref=</span><span class="st">&quot;cart&quot;</span>)</span>
+<span id="cb15-3"><a href="multregress.html#cb15-3"></a></span>
+<span id="cb15-4"><a href="multregress.html#cb15-4"></a></span>
+<span id="cb15-5"><a href="multregress.html#cb15-5"></a><span class="kw">lm</span>(smelly<span class="op">~</span>hart, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = smelly ~ hart, data = data)
@@ -1036,14 +1058,14 @@ That denominator is the standard error of the difference between means, which is
 <p>T-tests are for comparing 2 groups. ANOVA’s are for comparing 3 or more groups. It turns out, you can use multiple linear regression to mimic an ANOVA test, too.</p>
 <p>Let’s add one more level for the predictor variable (and its responses) to the experiment. Since it now has 3 groups, and 9 independent replicates, we shouldn’t do t-tests. We could do ANOVA, but we could also do a multiple regression model, too.</p>
 <p>That model is <span class="math display">\[response=control+\beta_1 stimulus1+\beta_2 stimulus2\]</span></p>
-<div class="sourceCode" id="cb902"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb902-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb902-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb902-3" title="3">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb902-4" title="4"></a>
-<a class="sourceLine" id="cb902-5" title="5">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)</a>
-<a class="sourceLine" id="cb902-6" title="6"></a>
-<a class="sourceLine" id="cb902-7" title="7">model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a>
-<a class="sourceLine" id="cb902-8" title="8"><span class="kw">summary</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="multregress.html#cb17-1"></a><span class="kw">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb17-2"><a href="multregress.html#cb17-2"></a>factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)</span>
+<span id="cb17-3"><a href="multregress.html#cb17-3"></a>response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>))</span>
+<span id="cb17-4"><a href="multregress.html#cb17-4"></a></span>
+<span id="cb17-5"><a href="multregress.html#cb17-5"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, response)</span>
+<span id="cb17-6"><a href="multregress.html#cb17-6"></a></span>
+<span id="cb17-7"><a href="multregress.html#cb17-7"></a>model &lt;-<span class="st"> </span><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</span>
+<span id="cb17-8"><a href="multregress.html#cb17-8"></a><span class="kw">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -1066,7 +1088,7 @@ That denominator is the standard error of the difference between means, which is
 <p>Notice how the coefficient value for stimulus2 is the difference between the mean response value for stimulus2 (~175 units) and the mean response value for control (~50 units). Each coefficient t-test asks whether the value of the coefficient differs from zero.</p>
 <p>In linear regression with only a single predictor variable, that coefficient was the slope of a straight line through all the <span class="math inline">\(xy\)</span> data pairs. In multiple linear regression you have to imagine separate straight lines connecting the mean intercept response value and the response values for each of the predictors.</p>
 <p>We can compare the regression model output to that for an ANOVA test on the data. Here is the equivalent of a one-way completely randomized ANOVA.</p>
-<div class="sourceCode" id="cb904"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb904-1" title="1"><span class="kw">Anova</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="multregress.html#cb19-1"></a><span class="kw">Anova</span>(model)</span></code></pre></div>
 <pre><code>## Anova Table (Type II tests)
 ## 
 ## Response: response
@@ -1082,22 +1104,22 @@ That denominator is the standard error of the difference between means, which is
 <div id="a-two-factor-experiment-with-6-groups" class="section level3">
 <h3><span class="header-section-number">41.3.2</span> A two factor experiment with 6 groups</h3>
 <p>Now we’ll add a second factorial variable, factorB, to the design above. FactorB has two levels. The simulated design is akin to a two-way completely randomized ANOVA. We’ll also simulate in an interaction effect between the two variables.</p>
-<div class="sourceCode" id="cb906"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb906-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a>
-<a class="sourceLine" id="cb906-2" title="2">factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>), <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb906-3" title="3">factorB &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;cofactor1&quot;</span>, <span class="st">&quot;cofactor2&quot;</span>), <span class="dt">each=</span><span class="dv">9</span>)</a>
-<a class="sourceLine" id="cb906-4" title="4">response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb906-5" title="5">              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb906-6" title="6">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb906-7" title="7">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb906-8" title="8">              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb906-9" title="9">              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">700</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb906-10" title="10">              )</a>
-<a class="sourceLine" id="cb906-11" title="11"></a>
-<a class="sourceLine" id="cb906-12" title="12">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, factorB, response)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="multregress.html#cb21-1"></a><span class="kw">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb21-2"><a href="multregress.html#cb21-2"></a>factorA &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb21-3"><a href="multregress.html#cb21-3"></a>factorB &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;cofactor1&quot;</span>, <span class="st">&quot;cofactor2&quot;</span>), <span class="dt">each=</span><span class="dv">9</span>)</span>
+<span id="cb21-4"><a href="multregress.html#cb21-4"></a>response &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), </span>
+<span id="cb21-5"><a href="multregress.html#cb21-5"></a>              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), </span>
+<span id="cb21-6"><a href="multregress.html#cb21-6"></a>              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>), </span>
+<span id="cb21-7"><a href="multregress.html#cb21-7"></a>              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>), </span>
+<span id="cb21-8"><a href="multregress.html#cb21-8"></a>              <span class="kw">rnorm</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="dv">1</span>), </span>
+<span id="cb21-9"><a href="multregress.html#cb21-9"></a>              <span class="kw">rnorm</span>(<span class="dv">3</span>, <span class="dv">700</span>, <span class="dv">1</span>)</span>
+<span id="cb21-10"><a href="multregress.html#cb21-10"></a>              )</span>
+<span id="cb21-11"><a href="multregress.html#cb21-11"></a></span>
+<span id="cb21-12"><a href="multregress.html#cb21-12"></a>data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(factorA, factorB, response)</span></code></pre></div>
 <p>There are a handful of linear models we could run on this. They should be scientifically driven. Since we wouldn’t design an experiment like this unless we thought there would be an interaction between the two factors, we’ll focus on that. The coefficients for the interacting model would serve as effect sizes to describe the level of interaction that occurs.</p>
 <p>Coefficients can be confusing. Here’s a way to clarify what’s going on. It turns out, a model’s intercept is calculated differently, depending upon how the model is defined.</p>
 <p>First, a factor-less model. This output represents the grand mean of all the values in the data.</p>
-<div class="sourceCode" id="cb907"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb907-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span><span class="dv">1</span>, data)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="multregress.html#cb22-1"></a><span class="kw">lm</span>(response<span class="op">~</span><span class="dv">1</span>, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ 1, data = data)
@@ -1106,7 +1128,7 @@ That denominator is the standard error of the difference between means, which is
 ## (Intercept)  
 ##         233</code></pre>
 <p>Next is a linear model just for the 3 levels of factorA. The intercept is the mean for all the data in the control groups under both cofactor1 and cofactor2.</p>
-<div class="sourceCode" id="cb909"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb909-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="multregress.html#cb24-1"></a><span class="kw">lm</span>(response<span class="op">~</span>factorA, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -1115,7 +1137,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorAstimulus1  factorAstimulus2  
 ##            74.63            112.67            362.33</code></pre>
 <p>Here’s a linear model for the second variable alone. The intercept represents the mean of all the groups under cofactor1</p>
-<div class="sourceCode" id="cb911"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb911-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorB, data)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="multregress.html#cb26-1"></a><span class="kw">lm</span>(response<span class="op">~</span>factorB, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorB, data = data)
@@ -1124,7 +1146,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorBcofactor2  
 ##            99.67            266.59</code></pre>
 <p>Now we have the linear model for the two factors combined. This intercept is the sum of the intercepts for factorA and factorB, less the grand mean for all the data. The negative value is a hint of an interaction effect between the two factors.</p>
-<div class="sourceCode" id="cb913"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb913-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span>factorB, data)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="multregress.html#cb28-1"></a><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">+</span>factorB, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA + factorB, data = data)
@@ -1133,7 +1155,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorAstimulus1  factorAstimulus2  factorBcofactor2  
 ##           -58.66            112.67            362.33            266.59</code></pre>
 <p>Finally we have the full linear model for the two factors combined, including an interaction term. Here the intercept is the value of control. All coefficients values are the difference between their absolute effect sizes and the value for control (intercept).</p>
-<div class="sourceCode" id="cb915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb915-1" title="1"><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="multregress.html#cb30-1"></a><span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA * factorB, data = data)
@@ -1147,7 +1169,7 @@ That denominator is the standard error of the difference between means, which is
 ##                            176.39                             475.89</code></pre>
 <p>Since the values each discrete predictor variable level can take on is either 1 (if present) or 0 (if not), all of these coefficient values serve as an effect size for the indicated group, relative to control (intercept).</p>
 <p>The linear model is <span class="math display">\[Y=50.05+24.48\times stimulus1+124.39\times stimulus2+49.16\times cofactor2+176.39\times stimulus1/cofactor2 +475.89\times stimulus2/cofactor2\]</span></p>
-<div class="sourceCode" id="cb917"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb917-1" title="1"><span class="kw">summary</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="multregress.html#cb32-1"></a><span class="kw">summary</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA * factorB, data = data)
@@ -1176,7 +1198,7 @@ That denominator is the standard error of the difference between means, which is
 <p>Or something like that.</p>
 <p>The F test is a ratio of the variance associated with the model to the residual variance. It’s not particularly useful other than to announce that the model explains the data better than does residual variation.</p>
 <p>Passing the model into an the <code>Anova</code> function from the <code>car</code> package provides F tests for the main effects of each factor and for the interaction, providing the familiar ANOVA way of interpreting the data if desired.</p>
-<div class="sourceCode" id="cb919"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb919-1" title="1"><span class="kw">Anova</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="multregress.html#cb34-1"></a><span class="kw">Anova</span>(<span class="kw">lm</span>(response<span class="op">~</span>factorA<span class="op">*</span>factorB, data))</span></code></pre></div>
 <pre><code>## Anova Table (Type II tests)
 ## 
 ## Response: response
@@ -1202,15 +1224,16 @@ That denominator is the standard error of the difference between means, which is
 <p>So “mixed” multiple linear regression models have a mixture of terms for the fixed and for the random effects within an experiment. Mixed models are therefore the linear regression analogs of paired/related measure designs.</p>
 <p>The <code>sleepstudy</code> data set in the <code>lme4</code> package is one such mixed effect study. The study measured reaction times (in ms) under conditions of worsening sleep deprivation. Repeated reaction time measurements were taken from each of 18 subjects over a 9 day period of sleep deprivation. These 18 subjects represent a random sample of the type of person who might become sleep deprived.</p>
 <p>Here’s a chart showing how it went for each subject. For some, reaction times are noticeably longer. For others, reaction lengthening is less bloody obvious. For subject 335 sleep deprivation might have slightly quickened reaction times!</p>
-<div class="sourceCode" id="cb921"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb921-1" title="1"><span class="kw">ggplot</span>(sleepstudy, <span class="kw">aes</span>(Days, Reaction))<span class="op">+</span></a>
-<a class="sourceLine" id="cb921-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb921-3" title="3"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span>F)<span class="op">+</span></a>
-<a class="sourceLine" id="cb921-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Subject)</a></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-480-1.png" width="672" /></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="multregress.html#cb36-1"></a><span class="kw">ggplot</span>(sleepstudy, <span class="kw">aes</span>(Days, Reaction))<span class="op">+</span></span>
+<span id="cb36-2"><a href="multregress.html#cb36-2"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
+<span id="cb36-3"><a href="multregress.html#cb36-3"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span>F)<span class="op">+</span></span>
+<span id="cb36-4"><a href="multregress.html#cb36-4"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Subject)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p>Here’s the question everybody wants answered from this study: What effect does sleep deprivation have on reaction time?</p>
 <p>Note, the question is NOT, “is the effect of sleep deprivation on reaction time”significant?"" That’s much less compelling than actually quantifying the effect size.</p>
 <p>If we completely ignore the presumed correlation within the repeated measurements within each subject we would use the <code>lm</code> function in R’s base <code>stats</code> package.</p>
-<div class="sourceCode" id="cb922"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb922-1" title="1"><span class="kw">summary</span>(<span class="kw">lm</span>(Reaction <span class="op">~</span><span class="st"> </span>Days, sleepstudy))</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="multregress.html#cb38-1"></a><span class="kw">summary</span>(<span class="kw">lm</span>(Reaction <span class="op">~</span><span class="st"> </span>Days, sleepstudy))</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Reaction ~ Days, data = sleepstudy)
@@ -1234,9 +1257,9 @@ That denominator is the standard error of the difference between means, which is
 <p><span class="math display">\[Reaction=251.4+10.4\times Days\]</span></p>
 <p>But we shouldn’t ignore the repeated measures of the design. And it would also be nice to have some estimate for the standard deviation of the effect.</p>
 <p>For those reasons we run a mixed model regression to account for the random effect of the 18 subjects.</p>
-<div class="sourceCode" id="cb924"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb924-1" title="1">mm1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(Days<span class="op">|</span>Subject), <span class="dt">REML=</span>F, sleepstudy)</a>
-<a class="sourceLine" id="cb924-2" title="2"></a>
-<a class="sourceLine" id="cb924-3" title="3"><span class="kw">summary</span>(mm1)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="multregress.html#cb40-1"></a>mm1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(Days<span class="op">|</span>Subject), <span class="dt">REML=</span>F, sleepstudy)</span>
+<span id="cb40-2"><a href="multregress.html#cb40-2"></a></span>
+<span id="cb40-3"><a href="multregress.html#cb40-3"></a><span class="kw">summary</span>(mm1)</span></code></pre></div>
 <pre><code>## Linear mixed model fit by maximum likelihood  [&#39;lmerMod&#39;]
 ## Formula: Reaction ~ Days + (Days | Subject)
 ##    Data: sleepstudy
@@ -1273,8 +1296,8 @@ That denominator is the standard error of the difference between means, which is
 <p>Since I know a little bit about blood pressure, but mostly because blood pressure is a continuous variable, I thought it would be interesting to explore how the various cofactors might influence systolic blood pressure. So I’ll use systolic blood pressure as a response variable in the regressions below. Some of the other variables will be used as predictor variables.</p>
 <p>I should make an important point. In practice you don’t just crack open and explore a data set willy nilly. I’m not the PI of the study. I’m just writing another chapter on statistical methods using data to illustrate statistical concepts. The authors of the study were testing the hypothesis that the so-called type-A personality was at higher risk of coronary heart disease. They are bound by restricting their analysis to testing preset hypotheses.</p>
 <p>These systolic blood pressure readings are just a variable that were vacuumed up in the study design, but were not hypothesized as the intended response variable.</p>
-<div class="sourceCode" id="cb926"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb926-1" title="1"><span class="kw">data</span>(wcgs)</a>
-<a class="sourceLine" id="cb926-2" title="2"><span class="kw">head</span>(wcgs)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multregress.html#cb42-1"></a><span class="kw">data</span>(wcgs)</span>
+<span id="cb42-2"><a href="multregress.html#cb42-2"></a><span class="kw">head</span>(wcgs)</span></code></pre></div>
 <pre><code>##     id age0 height0 weight0 sbp0 dbp0 chol0 behpat0 ncigs0 dibpat0 chd69
 ## 1 2001   49      73     150  110   76   225       2     25       1     0
 ## 2 2002   42      70     160  154   84   177       2     20       1     0
@@ -1289,11 +1312,11 @@ That denominator is the standard error of the difference between means, which is
 ## 4       0    3064      0
 ## 5       1    1885      1
 ## 6       0    3102      0</code></pre>
-<div class="sourceCode" id="cb928"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb928-1" title="1">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(sbp0<span class="op">~</span>age0<span class="op">+</span>height0<span class="op">+</span>weight0<span class="op">+</span></a>
-<a class="sourceLine" id="cb928-2" title="2"><span class="st">            </span>chol0<span class="op">+</span>ncigs0<span class="op">+</span></a>
-<a class="sourceLine" id="cb928-3" title="3"><span class="st">            </span>dibpat0<span class="op">+</span>chd69, </a>
-<a class="sourceLine" id="cb928-4" title="4">          wcgs)</a>
-<a class="sourceLine" id="cb928-5" title="5"><span class="kw">summary</span>(fit)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multregress.html#cb44-1"></a>fit &lt;-<span class="st"> </span><span class="kw">lm</span>(sbp0<span class="op">~</span>age0<span class="op">+</span>height0<span class="op">+</span>weight0<span class="op">+</span></span>
+<span id="cb44-2"><a href="multregress.html#cb44-2"></a><span class="st">            </span>chol0<span class="op">+</span>ncigs0<span class="op">+</span></span>
+<span id="cb44-3"><a href="multregress.html#cb44-3"></a><span class="st">            </span>dibpat0<span class="op">+</span>chd69, </span>
+<span id="cb44-4"><a href="multregress.html#cb44-4"></a>          wcgs)</span>
+<span id="cb44-5"><a href="multregress.html#cb44-5"></a><span class="kw">summary</span>(fit)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = sbp0 ~ age0 + height0 + weight0 + chol0 + ncigs0 + 
@@ -1324,12 +1347,12 @@ That denominator is the standard error of the difference between means, which is
 <div id="sandbox" class="section level4">
 <h4><span class="header-section-number">41.5.0.1</span> Sandbox</h4>
 <p>Here’s a simulated sample. The causes of the outcome are known. Only the multiple model predicts the outcome accurately. Knowing what covariates to include in the model is not straightforward.</p>
-<div class="sourceCode" id="cb930"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb930-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb930-2" title="2">covariate &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb930-3" title="3">exposure  &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">+</span>(<span class="fl">0.3</span><span class="op">*</span>covariate)</a>
-<a class="sourceLine" id="cb930-4" title="4">outcome   &lt;-<span class="st"> </span><span class="fl">2.0</span><span class="op">+</span>(<span class="fl">0.5</span><span class="op">*</span>exposure)<span class="op">+</span>(<span class="fl">0.25</span><span class="op">*</span>covariate)</a>
-<a class="sourceLine" id="cb930-5" title="5"></a>
-<a class="sourceLine" id="cb930-6" title="6"><span class="kw">lm</span>(outcome<span class="op">~</span>exposure)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multregress.html#cb46-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb46-2"><a href="multregress.html#cb46-2"></a>covariate &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)</span>
+<span id="cb46-3"><a href="multregress.html#cb46-3"></a>exposure  &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">1</span>)<span class="op">+</span>(<span class="fl">0.3</span><span class="op">*</span>covariate)</span>
+<span id="cb46-4"><a href="multregress.html#cb46-4"></a>outcome   &lt;-<span class="st"> </span><span class="fl">2.0</span><span class="op">+</span>(<span class="fl">0.5</span><span class="op">*</span>exposure)<span class="op">+</span>(<span class="fl">0.25</span><span class="op">*</span>covariate)</span>
+<span id="cb46-5"><a href="multregress.html#cb46-5"></a></span>
+<span id="cb46-6"><a href="multregress.html#cb46-6"></a><span class="kw">lm</span>(outcome<span class="op">~</span>exposure)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = outcome ~ exposure)
@@ -1337,7 +1360,7 @@ That denominator is the standard error of the difference between means, which is
 ## Coefficients:
 ## (Intercept)     exposure  
 ##      1.9670       0.7185</code></pre>
-<div class="sourceCode" id="cb932"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb932-1" title="1"><span class="kw">lm</span>(outcome<span class="op">~</span>exposure<span class="op">+</span>covariate)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multregress.html#cb48-1"></a><span class="kw">lm</span>(outcome<span class="op">~</span>exposure<span class="op">+</span>covariate)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = outcome ~ exposure + covariate)

@@ -45,9 +45,7 @@ end_date <- c("2020-03-29", "2020-01-19", "2020-04-04", "")
 status <- c(1,1,0, "")
 treatment <- c("placebo","placebo","placebo","placebo" )
 notes <- c("", "", "left area, unenrolled", "" )
-
 study <- data.frame(id, start_date, end_date, status, treatment, notes)
-
 kable(study) %>% kable_styling(bootstrap_options = "striped", full_width = F)
 ```
 
@@ -75,9 +73,7 @@ Note how each vector is that of character strings
 
 ```{r}
 start_date <- c("2020-01-14", "2020-01-12", "2020-01-30", "2020-01-29")
-
 end_date <- c("2020-07-29", "2021-01-19", "2020-08-04", "2020-02-29")
-
 ```
 
 The simplest way to calculate the time interval is to first convert the character strings into date objects using the `ymd` function. Then subtract. 
@@ -88,26 +84,21 @@ Note how in this case, by default, time units of days are the output. Note this 
 days <- ymd(end_date) - ymd(start_date)
 days
 class(days)
-
 ```
 
 When the need is for numeric values as output rather than conversion to difftime, or when calcuating intervals greater than week (difftime does not have units of months or years), the method below takes character strings and produces numeric values in the sought for units.
 
 ```{r}
-
 # illustrating how to calculate four different time scales
 # usually there is only one scale of interest
 # The divisor can be set to any length: days(7) == week(1)
-
 dateSet <- tibble(start_date, end_date) %>% 
   mutate(days = interval(start_date, end_date)/days(1),
          weeks = interval(start_date, end_date)/weeks(1),
          months = interval(start_date, end_date)/months(1), 
          years = interval(start_date, end_date)/years(1)
          )
-
 dateSet
-
 ```
 
 ### Censor
@@ -135,7 +126,6 @@ Nt <- c(10,10,8, 7, 6, 5)
 Dt <- c("", 1, 1, 1, "", 2)
 Ct <- c("", 1, "", "", 1, "")
 Stplus1<- c(1, 0.9, 0.788, .675, .675, .404)
-
 kable(data.frame(months, Nt, Dt, Ct, Stplus1))
 ```
 
@@ -179,9 +169,7 @@ Hopefully the formula `Surv(time, event) ~ 1` below strikes as reminiscent of th
 
 ```{r}
 modelAll <- survfit(Surv(time, event) ~ 1, data = glioma)
-
 summary(modelAll)
-
 modelAll
 ```
 

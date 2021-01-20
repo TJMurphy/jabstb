@@ -8,9 +8,9 @@ library(viridis)
 
 ```
 
-Monte Carlo simulation is a great tool for experimental design. 
+Monte Carlo simulation is a great tool for statistical design of experiments. 
 
-Monte Carlo forces you to do several things that, taken together, we can characterize as good statistical hygiene.
+Monte Carlo forces us to do several things that, taken together, are characterize as good statistical hygiene.
 
 * Explicitly define predictor variables and their levels
 * Explicitly consider expected values and variation of the response variable
@@ -21,42 +21,44 @@ Monte Carlo forces you to do several things that, taken together, we can charact
 * Establish the data munging and statistical analysis _a priori_
 * Establish feasibility of the experiment _a priori_
 
-If you want to do unbiased research (and you should) Monte Carlo simulation helps you do exactly that. Design the experiment in advance. Analyze a simulation of the experiment, in advance. Figure out what you are going to do, in advance.
+If we want to do unbiased research (and we should) Monte Carlo simulation helps do exactly that. Design the experiment in advance. Analyze a simulation of the experiment, in advance. Figure out what we are going to do, in advance.
 
-Then go and conduct and analyze the experiment you designed.
+Then we go and conduct and analyze the experiment we designed.
 
-The primary output of the Monte Carlo script below is experimental power at given sample sizes. You run the script primarily to know the number of independent replicates that you'll need to observe for the effect size that you anticipate.
+The primary output of the Monte Carlo script below is experimental power at given sample sizes. We run the script primarily to know the number of independent replicates that are necessary to observe the effect size that we anticipate.
 
 But conducting a Monte Carlo offers much more than just sample size.
 
-An ability to 'see' experimental outcomes prior to running an experiment is the heartbeat of [turning predictions into strong testable hypotheses](\#hypotheses).
+An ability to 'see' experimental outcomes prior to running an experiment is the heartbeat of [turning predictions into strong testable hypotheses]. See Chapter \@ref(hypotheses).
 
-Poking around with simulated data before running an experiment helps you evaluate many of your assumptions. Which helps you see what might be missing. 
+Poking around with simulated data before running an experiment helps to critically evaluate our assumptions. This helps us see what might be missing before investing the time and expense in an experiment. 
 
-It also helps you practice an analysis. When working with **simulated** data, there is nothing unethical about p-hacking, harking and data snooping. Design the analysis in a way that gives you the best chance of observing the result you expect! 
+It also helps practice a statistical analysis. There is nothing unethical about p-hacking, harking and data snooping when playing with simulated data. All of tat helps design the analysis in a way that gives the best chance of observing the expected result! 
 
-Figuring that out *before* the real data set is in front of you helps you avoid ethical gray areas *after* the real data set is in front of you.
+Figuring that out *before* the real data set is in front of us helps avoid ethical gray areas *after* the real data set is in front of us.
 
 ## Alternatives to Monte Carlo
 
-Using R you can run the `power.anova.test`function in the base `stats` package or `pwr.anova.test` in the `pwr` package. To produce a sample size outpu t, both of these require you to enter number of groups, type1 error and type2 error tolerance.
+Using R we can run the `power.anova.test`function in the base `stats` package or `pwr.anova.test` in the `pwr` package. To produce a sample size output, both of these require an entry for number of groups, type1 error and type2 error tolerance.
 
 The former requires estimates for model (between) and residual (within) variance. These can be entered as relative values.
 
 The latter requires an entry for Cohen's $f$. \[f=\sqrt{\frac{\eta^2}{1-\eta^2}}\]
 where $\eta^2=\frac{SS_{model}}{SS_{total}}$ for a completely randomized factor, whereas for a related measures factor it is $\eta_p^2=\frac{SS_{model}}{SS_{model}+SS_{residual}}$
 
+That's great. But without a lot of experience these can be difficult values to estimate because they are not very intuitive.
+
 ## What is Monte Carlo
 
-As the name implies, Monte Carlo is based on random chance.
+As the name implies, Monte Carlo is based on random chance. Monte Carlo is a simulation tool to mimic random sampling.
 
-In a single cycle of a Monte Carlo you simulate a random sample for an experiment, running the statistical analysis and deciding whether that experiment work or not?
+In a single cycle of a Monte Carlo we simulate a random sample for an experiment, and run a statistical analysis to decide whether the experiment worked or not.
 
-Then you repeat that random sampling and analysis. Many times. Hundreds or even thousands of times. What fraction of these repetitions worked? That fraction is the experimental power. If the power is too low, re-run the simulated repetitions of the experiment on a larger sample size. Or re-design the experiment entirely.
+This is repeated many times. Hundreds or even thousands of times. What fraction of these repetes worked? That fraction is the experimental power. If the power is too low, we can adjust the experimental parameters and re-run. Or we can re-design the experiment entirely.
 
-Once the Monte Carlo simulations result gives you an acceptable power, you have a sample size by which to go and conduct the real experiment.
+Once the Monte Carlo simulations yield an acceptable power, we have a sample size for conducting the real life experiment.
 
-The process of creating a Monte Carlo script forces you to consider, explicitly, the variables in the experiment. What are their expected values? What effect size do you predict or think will be minimally scientifically significant? How many groups are in the experiment? Do these groups help you answer the question you really want answered? Should you add more groups or fewer groups?
+The process of creating a Monte Carlo script forces us to consider, explicitly, the variables in the experiment. What are their expected values? What effect size do we predict or think will be minimally scientifically significant? How many groups are in the experiment? Do these groups help us answer the question we really want answered? Should we add more groups or fewer groups?
 
 Is the experiment under- or over-designed, or even feasible?
 
@@ -64,7 +66,7 @@ Is there a better way to answer the question?
 
 Spending an hour or two going through this process *in silico*, optimizing and validating the experimental design, can save months of futile effort doing the wrong experiment in real life. 
 
-The first series of scripts below are for a one-way completely randomized ANOVA design. After that, a one-way related measures ANOVA Monte Carlo is shown. Their simulations differ in a couple of key respects.
+The first series of scripts below are for a one-way completely randomized ANOVA design. After that, a one-way related measures ANOVA Monte Carlo is shown. Their simulations differ in a couple of notable respects.
 
 ## One-way completely randomized ANOVA Monte Carlo
 
@@ -85,9 +87,9 @@ Every replicate (n) is independent of every other replicate.
 
 ### Step 1: Create initial values
 
-This is where you predict results.
+This is where we predict results.
 
-I like making these Monte Carlo projects using a stand-alone initializer section. The whole point of the script is to play around with different initial parameters! Using an initializer section means you change these in only one place.
+I like making these Monte Carlo projects using a stand-alone initializer section. The whole point of the script is to play around with different initial parameters! Using an initializer section means we change these in only one place.
 
 Here's the logic:
 
@@ -106,32 +108,23 @@ sims = 100 #number of Monte Carlo simulations to run.
 
 This produces one graph illustrating an example of the type of random samples we're generating in the Monte Carlo. No two samples will be the same, because they're each random! So this figure will change every time it is run, even with the same initial parameter values. And because variances can differ a lot between groups with small sample sizes (n<35).
 
-```{r}
-# Use this script to simulate your custom sample.
-
+```{r, fig.cap="Representative simulated random sample for a one-way completely randomized ANOVA."}
+# Use this script to simulate our custom sample.
 CRdataMaker <- function(n, b, a, f, sd) { 
-  
-  
   a1 <- rnorm(n, b, sd) #basal or negative ctrl
   a2 <- rnorm(n, (b*a), sd) #positive control or some other treatment
   a3 <- rnorm(n, (b*f), sd) #treatment effect
-    
     Outcome <- c(a1, a2, a3)
-    Predictor <- c(rep(c("a1", "a2", "a3"), each = n))
+    Predictor <- as.factor(c(rep(c("a1", "a2", "a3"), each = n)))
     ID <- as.factor(c(1:length(Predictor)))
     df <-data.frame(ID, Predictor, Outcome)
     }
-
 dat <- CRdataMaker(n,b,a,f,sd)
-
 ggplot(dat, aes(Predictor, Outcome))+
   geom_jitter(width=0.1,size = 4, alpha=0.5)
-  
-
-
 ```
 
-Is that what you expect to see? Should there be more variation? Is the effect size larger or smaller than what you anticipate? Should you add more or fewer groups? 
+Is that what we expect to see? Should there be more variation? Is the effect size larger or smaller than what we anticipate? Should we add more or fewer groups? 
 
 Edit the code in the initializer to make it as real life as possible.
 
@@ -145,12 +138,10 @@ Change n in the initializer above to see what it takes to get 80% or better powe
 Carefully look at this code. It creates an ezANOVA output object, and then goes in to collect the p-value of the ANOVA F test from the ANOVA table.
 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.cap="P-value distribution for a one-way repeated measures ANOVA Monte Carlo."}
 pval <- replicate(
   sims, {
- 
     sample.df <- CRdataMaker(n, b, a, f, sd)
-    
     sim.ezaov <- ezANOVA(
             data = sample.df, 
             wid = ID,
@@ -158,15 +149,11 @@ pval <- replicate(
             between = Predictor,
             type = 2
             )
-  
   pval <- sim.ezaov$ANOVA[1,5]
-    
     }
   )
-
 pwr.pct <- sum(pval<0.05)/sims*100
-paste(pwr.pct, sep="", "% power. Change 'n' in your initializer for higher or lower power.")
-
+paste(pwr.pct, sep="", "% power. Change 'n' in our initializer for higher or lower power.")
 ggplot(data.frame(pval))+
   geom_histogram(aes(pval), color="#d28e00")+
   labs(x="p-value")
@@ -174,19 +161,15 @@ ggplot(data.frame(pval))+
 
 This could be modified. For example, here it collects the post hoc comparison between the test group and the negative control. Why is the power so much lower for this comparison compared to the power for a positive ANOVA?
 
-```{r}
+```{r, fig.cap ="P-value distribution for a one-way completely randomized ANOVA Monte Carlo"}
 pval <- replicate(
   sims, {
- 
     sample.df <- CRdataMaker(n, b, a, f, sd)
-    
     pval <- pairwise.t.test(sample.df$Outcome, sample.df$Predictor)$p.value[2,1]
-    
     }
   )
-
 pwr.pct <- sum(pval<0.05)/sims*100
-paste(pwr.pct, sep="", "% power. Change 'n' in your initializer for higher or lower power.")
+paste(pwr.pct, sep="", "% power. Change 'n' in our initializer for higher or lower power.")
 ggplot(data.frame(pval))+
   geom_histogram(aes(pval), color="#d28e00")+
   labs(x="p-value")
@@ -194,19 +177,19 @@ ggplot(data.frame(pval))+
 
 ### Step 4: Optimize for suitable power
 
-The initializer is preconfigured with a fairly crappy experiment, comprised of a low sample size and not particularly strong effect size. As you can see the power calculation is also pretty crappy. About a third of experiments run in this way are likely to yield positive results.
+The initializer is preconfigured with a fairly crappy experiment, comprised of a low sample size and not particularly strong effect size. As we can see the power calculation is also pretty crappy. About a third of experiments run in this way are likely to yield positive results.
 
-Iteratively increase n until you get a more defensible level of power. Or maybe you need to change the estimates for the effect sizes?
+Iteratively increase n until we get a more defensible level of power. Or maybe we need to change the estimates for the effect sizes?
 
 ### Notes And Considerations
 
 At k = 3 this is the minimal ANOVA design (any fewer groups and we'd just do a t test). This k = 3 experiment represents a minimal defensible scientific experiment: It has a negative control, a positive control, and the experimental.
 
-The example above is also a simple one-way ANOVA completely randomized. Modifying the code to two-way and even three-way ANOVA designs is fairly trivial. You just add more groups. For example, if you have a second factor, Factor B and two levels, estimate the b1 and b2 results in much the same way the a1, a2 and a3 results are estimated.
+The example above is also a simple one-way ANOVA completely randomized. Modifying the code to two-way and even three-way ANOVA designs is fairly trivial. we just add more groups. For example, if we have a second factor, Factor B and two levels, estimate the b1 and b2 results in much the same way the a1, a2 and a3 results are estimated.
 
-You'll need to adjust how the data frame is created, adding a column for the levels of Factor B. 
+we'll need to adjust how the data frame is created, adding a column for the levels of Factor B. 
 
-Further modification will likely be necessary to collect a run of p-values for a specific group comparison. You may wish to grab the p-value for the interaction F test. Alternately, you may wish to go for a key posthoc comparison.
+Further modification will likely be necessary to collect a run of p-values for a specific group comparison. we may wish to grab the p-value for the interaction F test. Alternately, we may wish to go for a key posthoc comparison.
 
 ## One-way related measures ANOVA Monte Carlo
 
@@ -223,7 +206,7 @@ The intrinsically-linked measurements that are a hallmark of related measures AN
 
 ### Step 1: Initial values
 
-Here's our initializers. Note the added terms `r` and `k`. [Read this](\#simcorrelation) to understand what they represent and how you can estimate them for your own system. 
+Here's our initializers. Note the added terms `r` and `k`. Read Chapter \@ref(simcorrelation) to understand what they represent and how we can estimate them for our system. 
 
 ```{r}
 b <-  100 #expected basal outcome value
@@ -238,26 +221,20 @@ sims = 100 #number of Monte Carlo simulations to run. Keep it low to start.
 
 ### Step 2: Visualize one sample
 
-Make sure you understand how the a2 and a3 variables were each correlated to the a1 variable. Let's call a1 the pivot variable. When simulating correlated values, your pivot variable should be the lowest expected outcome value in the data set.
+Make sure we understand how the a2 and a3 variables were each correlated to the a1 variable. Let's call a1 the pivot variable. When simulating correlated values, our pivot variable should be the lowest expected outcome value in the data set.
 
-```{r}
-# Use this script to simulate your sample.
-
+```{r, fig.cap="Representative simulated results for a one-way related measures ANOVA."}
+# Use this script to simulate a sample.
 RMdataMaker <- function(n, b, a, f, sd, r, k) { 
-  
-  
   a1 <- rnorm(n, b, sd) #basal or negative ctrl
   a2 <- a1*r+k*rnorm(n, (b*a), sd) #positive control or some other treatment
   a3 <- a1*r+k*rnorm(n, (b*f), sd) #treatment effect
-    
     Outcome <- c(a1, a2, a3)
-    Predictor <- c(rep(c("a1", "a2", "a3"), each = n))
+    Predictor <- as.factor(c(rep(c("a1", "a2", "a3"), each = n)))
     ID <- rep(as.factor(c(1:n)))
     df <-data.frame(ID, Predictor, Outcome)
     }
-
 dat <- RMdataMaker(n,b,a,f,sd,r,k)
-
 ggplot(dat, 
        aes(Predictor, Outcome, color=ID, group=ID)
        )+ 
@@ -265,21 +242,16 @@ ggplot(dat,
   geom_point(size = 4, shape=5)+
   scale_color_viridis(discrete=T)+
   theme_classic()
-  
-
-
 ```
 
 ### Step 3: Run the power simulator
 
 Now we can simulate a long run of random samples like above, capturing how many of them yielded a positive result!
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.cap="P-value distribution for a one-way repeated measures ANOVA Monte Carlo"}
 pval <- replicate(
   sims, {
- 
     sample.df <- RMdataMaker(n, b, a, f, sd, r, k)
-    
     sim.ezaov <- ezANOVA(
             data = sample.df, 
             wid = ID,
@@ -287,15 +259,11 @@ pval <- replicate(
             within = Predictor,
             type = 2
             )
-  
   pval <- sim.ezaov$ANOVA[1,5]
-    
     }
   )
-
 pwr.pct <- sum(pval<0.05)/sims*100
-paste(pwr.pct, sep="", "% power. Change 'n' in your initializer for higher or lower power.")
-
+paste(pwr.pct, sep="", "% power. Change 'n' in the initializer for higher or lower power.")
 ggplot(data.frame(pval))+
   geom_histogram(aes(pval), color="#d28e00")+
   labs(x="p-value", title="p-value distribution")
@@ -303,6 +271,8 @@ ggplot(data.frame(pval))+
 
 ### Step 4: Should anything be changed?
 
-The experiment simulated above has an n=3 and power of 99%! Notice how it has the same estimated group values as for the completely randomized simulation above, which yields only ~30% power. That's the efficiency of related measures! You might want to experiment with changing correlation coefficient and sample size to see how the results are affect.
+The experiment simulated above has an n=3 and power of 99%! Notice how it has the same estimated group values as for the completely randomized simulation above, which yields only ~30% power. 
 
-As for the completely randomized scripts, this one can be easily extended by adding more groups, or even more factors. You'll need to make changes in all three script stages to customize your needs. 
+That's the efficiency of related measures! But we might want to experiment with changing correlation coefficient and sample size to see how the results are affected.
+
+As for the completely randomized scripts, this one can be easily extended by adding more groups, or even more factors. we'll need to make changes in all three script stages to customize our needs. 
