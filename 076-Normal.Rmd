@@ -6,7 +6,7 @@ library(tidyverse)
 
 ### The Standard Normal
 
-If the variable $X$ represents a population of normally distributed values with a mean $\mu$ and standard deviation $\sigma$, then the variable $Z$ \[Z=\frac{X-\mu}{\sigma}\] has a standard normal distribution with a mean of 0 and a standard deviation of 1.
+The variable $X$ represents a population of normally distributed values with a mean $\mu$ and standard deviation $\sigma$  ($X\sim N(\mu, \sigma)$), then the variable $Z$ \[Z=\frac{X-\mu}{\sigma}\] has a standard normal distribution with a mean of 0 and a standard deviation of 1.
 
 Converting experimental sample data to standard normal z-scores is very common. Assume we have a sample of 210 peoples heights, whose sample mean = 169.9 and sd = 10.5. 
 
@@ -16,21 +16,26 @@ The z-score could be interpreted this way: the tallest individual is said to be 
 
 ## dnorm
 
-`dnorm` is the normal probability density function in R: $p(x)=\frac{e^\frac{-(x-\mu)^2}{2\sigma^2}}{\sigma\sqrt{2\pi}}$
+`dnorm` is the probability density function in R for a normal distribution:
+
+\begin{equation}
+  p(x)=\frac{e^\frac{-(x-\mu)^2}{2\sigma^2}}{\sigma\sqrt{2\pi}}
+  (\#eq:dnorm)
+\end{equation}
 
 `dnorm` takes i) the scalar $x$, ii) a mean and iii) sd as arguments and returns the value of the probability, or otherwise known as the probability density, for that scalar. $x$ can be either a single value, or a vector comprised of many values.
 
 For example, assume the average height of an adult in the US is 168.8 cm with a standard deviation of 7.1 cm.
 
-Use `dnorm` to calculate the probability that a randomly selected US adult will be 176 cm tall:
+Use `dnorm` to calculate the frequency of US adults who are 176 cm tall:
 
 ```{r}
 dnorm(x=176, mean=168.8, sd=7.1 )
 ```
 
-Therefore, the probability that a randomly selected US adult would be 176 cm tall is 3.36%. 
+Therefore, 3.36% of US adults are 176 cm tall.
 
-The probable height of one specfic individual is usually not very useful or interesting to calculate. What's a bit more useful is to see how the function operates over a range of values.
+The probable height of one specfic individual is usually not very useful or interesting to calculate. What's a bit more useful is to see frequencies of heights over a range of height values.
 
 For example, we can model the distribution of adult heights using `dnorm`. We might be interested in the fraction of adults whose heights are 176cm and taller compared to the rest of the population. 
 
@@ -63,15 +68,18 @@ ggplot(df, aes(x=z,y=pz)) +
   labs(title = paste("dnorm","(","mean=", mean,",","sd=",sd,")"))
 ```
 
-## pnorm
+## pnorm{#pnorm}
 
 When a height value is given, calculating the probabilities for heights up to or greater than than that limit can be of considerable interest. 
 
 `pnorm` is the R function for that...give it the value of a normally-distributed variable, such as height, and it returns a cumulative probability for the distribution on either side of that value.
 
-Thus, `pnorm` is called the normal cumulative distribution function in R:
+Thus, `pnorm` is the cumulative distribution function in R for the normal distribution:
 
-$$p(x)=\int^x_{-\inf}\frac{e^\frac{-x^2}{2}}{\sqrt{2\pi}}$$
+\begin{equation}
+  p(x)=\int^x_{-\inf}\frac{e^\frac{-x^2}{2}}{\sqrt{2\pi}}
+  (\#eq:pnorm)
+\end{equation}
 
 By default `pnorm` will return the cumulative value of the normal pdf up to the value of the input scalar. In otherwords, given the value of a variable, `pnorm` returns the probability of that value or less.
 
