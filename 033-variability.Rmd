@@ -1,6 +1,6 @@
 # Variability, Accuracy and Precision {#dispersion}
 
-_"Your estimate can be precisely inaccurate."_
+_"Your estimate can be imprecise or inaccurate or both and it is helpful to know why you may never know it."_
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 library(tidyverse)
@@ -8,19 +8,18 @@ library(ggformula)
 ```
 
 
-One of my favorite sayings is "models are perfect, data are not", because it's a simple way to say that statistical models will always predict perfect data.^[This may sound like a contrarian view, but is not. Epidemiologists like to say that all models are wrong, but they imply the problem of choosing the wrong model for a dataset. Even a wrong model is perfect.] 
+One of my favorite sayings is "models are perfect, data are not", because it's a simple way to say that statistical models will always predict perfect data.^[This may sound like a contrarian view, but is not. Epidemiologists like to say that all models are wrong. This is true in the sense that no model ever fits data perfectly. And they use this to imply the problems of choosing the wrong model for a dataset. Still, even a wrong model is perfect.] 
 
-Experimentalists draw random samples from a population we are interested in studying. 
+We experimentalists draw random samples from a population we are interested in studying. 
 
 In statistics, the population parameters that interest us are held to have true, fixed values. Such parameters are important because they have biological meaning: a parameter can mean the differences between two treatment levels, affinities between proteins, maximum responses, enzyme activity rates, depolarization frequencies,.... Every experiment is about a population being modeled.
 
-The models we conjure up to estimate these parameters are also perfect. When you simulate data using models (without an error term) you generate data that fit the model perfectly. 
+The models we conjure up to estimate these parameters are also perfect. When you simulate data using models (without an error term) you generate data that fit the model perfectly. That's a bit of a circular logic.  
 
 I imagine a population with a mean of 5 and a standard deviation of 0. Here's data I could expect to see from such a perfect model:
 
 ```{r}
 rnorm(n=3, mean=10, sd=0)
-
 ```
 
 What's imperfect, unfortunately, are the real data that we generate through sampling. Stood up against a perfect model, they usually come off looking pretty crappy. The models aren't always good fits for the data, and very often it is ambiguous whether one model fits best, or some other should be applied. 
@@ -33,7 +32,7 @@ All of this points to the fact that it is not possible to understand statistical
 
 The reason data are messy is that sample data possess inherent variability. This means there is always some 'error' between the true values of the population parameters and their estimated values within the sample. 
 
-In running experiments on biological systems we think about two main contributors to this error. The first is biological variation between independent replicates. There are confounding factors inherent within the sampled specimens that are driving the observed variation. We don't understand them enough to know how to control for these confounders. Oddly enough, in statistical jargon the unexplained biological variation between replicates is often called random error. This is meant to imply the random biological differences between replicates are due to things we don't understand, not "random chance".
+In running experiments on biological systems we think about two main contributors to this error. The first is biological variation between independent replicates. Our models pose independent variables to account for these effects.
 
 The second source is so-called systematic error, having to do with our processes, the techniques and equipment, the way we measure the sample. 
 
@@ -41,51 +40,51 @@ These ways of thinking about different sources for variation will hopefully beco
 
 ## Illustration of a model with error
 
+I think I can illustrate error, perfect models, and all of that with a bit of R code.
+
 As you recall from middle school, a straight line drawn between two variables is described by the linear model $Y=\beta_0+\beta_1 X$. This model has two parameters, $\beta_0$ represents the y-intercept while $\beta_1$ represents the slope of the line. The predictor variable is $X$. Thus, passing values of $X$ into this model generates values for the response variable, $Y$.
 
-I mention this so I can illustrate error, perfect models, and all of that. 
-
-Here's a simulation of response data from two linear models, $Y1$ and $Y2$. 
+Here's a simulation of response data from two linear related models, $Y1$ and $Y2$. 
 
 Reading the code, you notice that one of the models, $Y1$ has no error term, so it is perfect, which is to say the values of $Y1$ are perfectly predicted by the model's intercept and slope parameters. A linear regression goes through every data point and the output of that regression yields the exact same parameter values that were input (a bit of a circular proof, if you will). The model perfectly fits its data. 
 
-The other model ($Y2$) has an error term tacked onto it. As a result it yields imperfect values of $Y2$ even when given the exact same model parameters as for $Y1$. Applying a linear regression to this data yields an imperfect fit...the line doesn't go through all of the data points.  Error is associated with the estimate (the gray shade), and the intercept and slope parameters estimated through linear regression differ somewhat from the parameter input values.
+The other model ($Y2$) has an error term tacked onto it. As a result it yields imperfect values even when given the exact same model parameters as for $Y1$. 
+
+Applying a linear regression to $Y2$ yields an imperfect fit...the line doesn't go through all of the data points.  Error is associated with the estimate (the gray shade), and the intercept and slope parameters estimated through linear regression differ somewhat from the parameter input values.
 
 ```{r fig.height=4, fig.width=5, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap = "Models are perfect, data are not."}
-
 #intital model parameter values
-
 b0 <- 0
 b1 <- 5
 X <- seq(1,10,1)
-
+set.seed(8675309)
 error <- rnorm(length(X), mean=0, sd=10)
-
 #models
-
 Y1 <- b0+b1*X
 Y2 <- b0+b1*X + error
-
-#put the simulations into a data frame so it can be plotted
-
+# long dataframe for easy plotting
 df <- data.frame(X, Y1, Y2) %>%
-  gather(model, response, -X)
-
+  pivot_longer(cols=c(Y1, Y2), 
+               names_to="model", 
+               values_to="response")
 #plotting function
-
 ggplot(df, aes(X, response))+
   geom_point()+
   geom_smooth(aes(X, response), method=lm)+
   facet_grid(cols=vars(model))
 ```
 
-You can appreciate how the second model, with the random error term, is more real life. What's even more interesting is that every time you run the second model you'll generate a completely different result. Copy and paste that code chunk into R and see for yourself. That error term is just a simulation of a random process. And that's just how random processes behave!
+You can appreciate how the second model, with the random error term, is more real life. 
+
+What's even more interesting is that every time you run the second model you'll generate a completely different result (so long as you remove the `set.seed()` function. Copy and paste that code chunk into R and see for yourself. That error term is just a simulation of a random process. And that's just how random processes behave!
 
 (Play with that code if you don't understand how it works. Run it on your machine. Change the initializers)
 
-In real life, unlike in this simulation, we wouldn't know the true values of the parameters (as we know them in this simulation). In real life we sample and test to see how well imperfect data fit a perfect model. 
+In real life we would only have the random values of the variable. 
 
-At this point in the course it's not important to interpret what all of this error analysis means. The point I'm making right now, and that hopefully you'll grow to appreciate, is that to a large extent, statistics is mostly about residual error analysis--measuring and accounting for the differences between perfect models and imperfect data. 
+Unlike in this simulation, we wouldn't know the true values of the parameters. In real life we sample, determine the model parameters, and test to see how well the imperfect data fit a perfect model with those parameters. 
+
+At this point in the course it's not important to interpret what all of this error analysis means. The point I'm making right now, and that hopefully you'll grow to appreciate, is that to a large extent, statistics is mostly about residual error analysis--measuring and accounting for the differences between perfect models and random data. 
 
 ## Variance: Quantifying variation by least squares
 
@@ -93,61 +92,84 @@ The two primary methods to quantify variation are termed "ordinary least squares
 
 Ordinary least squares is the method used for quantifying variation for most of the statistics discussed in this course. The only exception is when we get to generalized linear models. So we'll omit consideration of maximum likelihood estimation until then.
 
-Ordinary least squares arises from the theoretical basis of variance, and is a deceptively simple concept.
+Ordinary least squares arises from the theoretical basis of variance and fully depends upon the following assertion:
 
-It can be shown (by mathematicians) that the variance of a random variable, $Y$, with an expected value equivalent to its mean, $E(Y) = \mu$, is the difference between it's squared expected value and its expected value squared:
+A random variable, $Y$, has an expected value equivalent to its mean, $E(Y) = \mu$. It can be proven (by mathematicians...not me) that the variance of $Y$ is the difference between it's squared mean and its mean squared:
 
-\[Var(Y) = E(Y^2)-E(Y)^2 \]
+\begin{equation}
+  Var(Y) = E(Y^2)-E(Y)^2 
+  (\#eq:var)
+\end{equation}
 
-In practice, imagine a sample of size $n$ random independent replicates drawn from a population of the continuous random variable, $Y$. The replicate sample values for $Y$ are, $y_i$, and thus $y_1, y_2, ...y_n$ is a vector of values of the variable $Y$. 
+In practice, imagine a sample of size $n$ random independent replicates drawn from a population of the continuous random variable, $Y$. The replicate sample values for $Y$ are, $y_i$, and thus $y_1, y_2, ...y_n$. 
 
-The mean of these replicate values provides an estimate for the mean of the sampled population, $\mu$, and is 
+The mean of these replicate values provides a point estimate for the mean of the sampled population, $\mu$, and is 
 
-$$\bar y = \frac{{\sum_{i=1}^n}y_i}{n}$$
+\begin{equation}
+  \bar y = \frac{{\sum_{i=1}^n}y_i}{n}
+  (\#eq:mean)
+\end{equation}
 
 The value by which each replicate within the sample varies from the mean is $y_i-\bar y$.  __In jargon these are described alternately as a variate, or a deviate or as a residual. Each word represents the same thing.__ 
 
 A vector of sample replicates will have values that are smaller than and larger than the mean. Thus, some variate values are positive, while others are negative.
 
-In a random sample of a normally distributed variable we would expect that the values for variates are roughly equally dispersed above and below a mean. Thus, if we were to sum up the deviates (or variates or residuals) we'd expect that that sum's value to approach zero.  
+In a random sample of a normally distributed variable we would expect that the values for variates are roughly equally dispersed above and below a mean. Thus, if we were to sum up the deviates (or variates or residuals) we'd expect that that sum's value to approach zero.
 
-$$E(\sum_{i=1}^n(yi-\bar y))=0$$
+\begin{equation}
+  E(\sum_{i=1}^n(yi-\bar y))=0
+  (\#eq:deviate)
+\end{equation}
 
-By squaring the deviates, negative values of the deviates are removed, providing a parameter that paves the way to more capably describe the variation within the sample than can the sum of the deviates. This parameter is called the "sum of squares":
+By squaring the deviates, negative values of the deviates are removed, providing a parameter that paves the way to more capably describe the variation within the sample than can the sum of the deviates. This parameter is called the "sum of squares" or SS:
 
-\[SS=\sum_{i=1}^n(yi-\bar y)^2\]
+\begin{equation}
+  SS=\sum_{i=1}^n(yi-\bar y)^2
+  (\#eq:ss)
+\end{equation}
 
 ### Definition of variance
 
 A sample's variance is the sum of the squared deviates divided by the sample degrees of freedom^[The sample mean is used to calculate SS; deriving that mean cost 1 degree of freedom. Given that mean, the values for all but one replicate are free to vary for the SS to be true. ], $df=n-1$.
 
-\[s^2=\frac{\sum_{i=1}^n(yi-\bar y)^2}{n-1}\]
+\begin{equation}
+  s^2=\frac{\sum_{i=1}^n(yi-\bar y)^2}{n-1}
+  (\#eq:s2)
+\end{equation}
 
-A sample's variance, $s^2$ is used as an estimate of the variance, $\sigma^2$, of the population that was sampled, in the same way $y_bar$ estimates the population mean $\mu$.
+A sample's variance, $s^2$ is used as an estimate of the variance of the sampled population, $\sigma^2$, in the same way $y_bar$ estimates the population mean $\mu$.
 
-Since it is derived through division using a number that approximates sample size you can think of variance as an approximate average of $SS$. Therefore, a synonym for variance is "mean square", a jargon that is used in ANOVA.
+Since it is derived through division using a number that approximates sample size you can think of variance as an approximate average of $SS$. Therefore, a synonym for variance is "mean square", a jargon much used in ANOVA.
 
 The reason $s^2$ is arrived at through dividing by degrees of freedom, $n-1$, rather than by $n$ is because doing so produces a better estimate of the population variance, $\sigma^2$. [Mathematical proofs of that assertion](https://stats.stackexchange.com/questions/100041/how-exactly-did-statisticians-agree-to-using-n-1-as-the-unbiased-estimator-for) can be found all over the internet.
 
 Variance is a hard parameter to wrap the brain around. It describes the variability within a dataset, but geometrically: The units of $s^2$ are squared. For example, if your response variable is measured by the $gram$ mass of objects, then the variance units are in $grams^2$.
 
-That's weird.
+That's weird. Why do we do this?
 
-Later in the course, we'll discuss statistical testing using analysis of variance (ANOVA) procedures. The fundamental idea of ANOVA is to test for group effects by "partitioning the error". That's done with $SS$. When a factor causes some effect, the $SS$ associated with that factor get larger...by the square of the variation. Statistical testing is then done on the variance in groups, which in ANOVA jargon is called the "mean square", or $MS$. $MS$ is just another way for saying $s^2$.   
+The tl;dr answer is it is easier to detect differences when they are squared.
+
+Later in the course, we'll discuss statistical testing using analysis of variance (ANOVA) procedures. The fundamental idea of ANOVA is to test for group effects by "partitioning the error". That's actually done with $SS$...the squared variable. When a factor causes some effect, the $SS$ associated with that factor get larger...by the square of the variation.
+
+Statistical testing is then done on the variance in groups, which in ANOVA jargon is called the "mean square", or $MS$. $MS$ is just another way for saying average variance.   
 
 ## Standard deviation
 
-The sample standard deviation solves the problem of working with an unintuitive squared parameter. The standard deviation is a more pragmatic descriptive statistic than is variance. 
+The sample standard deviation solves the problem of working with an unintuitive squared parameters. The standard deviation is a more pragmatic descriptive statistic than is variance. 
 
 The standard deviation is the square root of the sample variance: 
 
-\[sd=\sqrt{\frac{\sum_{i=1}^n(y_i-\bar y)^2}{n-1}}\] 
+\begin{equation}
+  sd=\sqrt{\frac{\sum_{i=1}^n(y_i-\bar y)^2}{n-1}}
+  (\#eq:sd)
+\end{equation}
 
 Poof! The weird squared value for the varible is gone. No more need to think about blood glucose in squared units of mg/dl.
 
 ### What does the standard deviation tell us
 
 The sample standard deviation is two things at once. It is 
+
 * a statistical parameter that conveys the variability within the sample. 
 * a point estimate of the variability within the population that was sampled.
 
@@ -166,7 +188,7 @@ pnorm(1, lower.tail = F) #Calculates the AUC above a zscore of 1
 
 Explore: Use `pnorm` to calculate the AUC between z scores of -2 and 2, visualizing the outcome.
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="About 86% of the values for a normally distributed variable are within +/- one standard deviation from the mean."}
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="About 68% of the values for a normally distributed variable are within +/- one standard deviation from the mean."}
 ggplot(data.frame(zscore = c(-5, 5)), 
        aes(zscore)) +
   stat_function(fun = dnorm) +
@@ -211,7 +233,8 @@ ggplot(data.frame(glucose=seq(50, 150, 1)), aes(glucose)) +
 * Violin plots are pretty ways to illustrate the spread and density of variation graphically.
 * The coefficient of variation, $cv=\frac{sd}{mean}$, is a dimensionless index that describes the noise-to-signal ratio. 
 * Percentiles and ranges. In particular, the interquartile range. This is usually reserved for non-normal data, particularly discrete data.
-* The SEM does not describe sample variability.
+
+**The SEM does not describe sample variability.**
 
 ## Precision and Accuracy
 
@@ -221,15 +244,16 @@ My favorite illustration of this is how [estimates for the masses of subatomic p
 
 What seems very accurate today could prove to be wildly inaccurate tomorrow. In particular, just because something is measured precisely doesn't mean it is accurate. 
 
-If there is one clear take away from this it's that all such statistical estimates are provisional.
-
 ## Standard error
 
 This will sound counter-intuitive, but we can actually know how precise our estimate of some parameter is without knowing the true value. That's because precision is the repeatability of a measurement, and it is possible to repeat something very, very reliably but inaccurately. 
 
 **The standard error is the statistical parameter used to express sample precision. Standard error is calculated from standard deviation and the sample size**
 
-\[precision:\ SE = \frac{sd}{\sqrt n}\]
+\begin(equation)
+  SE = \frac{sd}{\sqrt n}
+  (\#eq:se)
+\end(equation)
 
 Thus, the SE is not something that estimates a fixed parameter of the sampled population. Since it reduces as sample size increases, it provides information only about the sample.
 
@@ -285,13 +309,11 @@ Notice how the distributions of sample means are normally distributed, even thou
 Note also that the distribution of means corresponding to the larger sample sizes has much less dispersion than that for the smaller sample sizes. That validates the second CLT prediction made above. 
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE, fig.cap="The central limit theorem in action, distributions of sample means of small (red) and large (blue) sample sizes."}
-
 meanMaker <- function(n){
  mean(runif(n))
 }
 small.sample <- replicate(1000, meanMaker(3))
 large.sample <- replicate(1000, meanMaker(30))
-
 ggplot(data.frame(small.sample, large.sample))+
   geom_histogram(aes(small.sample), fill="red")+
   geom_histogram(aes(large.sample), fill="blue", alpha=0.5 )+
@@ -321,7 +343,7 @@ There are a few.
 
 First, SEM is not a measure of dispersion in a sample. It is a measure that describes the precision by which a mean has been estimated. The SEM for the large sample size group above is much lower than that for the small sample size group. Meaning, $\mu$ is estimated more precisely by using large sample sizes. That should make intuitive sense.
 
-Second, statistically naive researchers use SEM to illustrate dispersion in their data (eg, using SEM as "error bars"). Ugh. They do this because, invariably, the SEM will be lower than the SD. And that looks cleaner. 
+Second, statistically naive researchers use SEM to illustrate dispersion in their data (eg, using SEM as "error bars"). Ugh. They do this because, invariably, the SEM will be lower than the SD. And they think that makes their results look cleaner. 
 
 But they should not do this, because SEM is not an estimator of $\sigma$. Rather, SEM estimates $\sigma_{\bar y}$. Those are two very different things.
 
@@ -329,7 +351,9 @@ When we do experiments we sample only once (with $n$ independent replicates) and
 
 We don't have the luxury or resources to re-sample again and again, as we can in simulations. However, these simulations illustrate that, due to the central limit theorem, a long run of sampling is predictably well-behaved. This predictability is actually the foundation of statistical sampling methodology.
 
-The SEM estimates a theoretical parameter ($\sigma_{\bar y}$ that we would rarely, if ever, attempt to validate. Yet, on the basis of one sample it serves a purpose by providing an estimator of precision.  In a sense, the SEM provides an estimate for how well something is estimated.
+The SEM estimates a theoretical parameter ($\sigma_{\bar y}$ that we would rarely, if ever, attempt to validate. Yet, on the basis of one sample it serves a purpose by providing an estimator of precision.  
+
+In a sense, the SEM provides an estimate for how well something is estimated.
 
 ### "Should I use SD or SEM?"
 
@@ -339,11 +363,12 @@ __The SEM does not illustrate variation. I suggest you use SEM if it is importan
 
 Confidence intervals are among the most useful yet misunderstood statistics. 
 
-* They are calculated from a sample. 
-* They are a range of values for the variable parameter being estimated. 
-* They can be calculated for virtually any variable parameters. 
+* They are calculated from a sample.
+* They include the point estimate (eg, sample mean).
+* They are a range of values of the parameter being estimated. 
+* They can be calculated for virtually any type of variable. 
 * There are many ways to calculate CIs
-* They can be set at any confidence level the researcher prefers, 95%, 90%, 99%, 87.26%
+* They can be set at any confidence level the researcher prefers, 95%, 90%, 99%, 86.75309%
 
 For example, assume the variable is blood glucose, in units of mg/dl, and the parameter we are interested in estimating is the mean blood glucose level in a population. The experiment involves taking a random sample of that population through $n$ independent replicates, measuring the blood glucose level in each. The sample mean is calculated, along with a 95% confidence interval for that mean. 
 
@@ -353,11 +378,14 @@ Let's assume our experiment involves random sampling of a population to estimate
 
 What does that 95% CI tell us?
 
-__Definition: If we repeated the same experiment many, many times, where each experiment is a fresh random sample of $n$ independent replicates, we would expect the true value of the population mean to fall within 95% of those confidence intervals.__ 
+__Definition: We can be 95% confident confident that the population mean is within the interval.__ 
 
-In other words, for any given experiment there is a 1 in 20 chance the true value of the population mean is not within the 95% CI calculated from the sample. Or, we are 95% confident our interval includes the value of the true population mean.
+In other words, for any given experiment there is a 1 in 20 chance the true value of the population mean is not within the 95% CI calculated from the sample.
 
-Let me add that this is the beating heart of the frequentism in frequentist statistics. The CI is a statistic that is calculated from the sample of one experiment...and yet its interpretation is assumes an infinite number of repeats of that experiment that we would never do. This drives people who practice Bayesian statistics apoplectic.
+Let me add that this is the beating heart of the frequentism, and it drives Bayesians apoplectic. The CI is a statistic that is calculated from the sample of one experiment...and yet its interpretation assumes an infinite number of repeats of that experiment would behave similarly. Something that we would never do.
+
+More over, we have no idea what is the value for the true population mean and can never know it. Our sample may be wildly off. There is no assurance that repeated sampling will be any more reliable. We may be very wrong about our measuring method.
+
 
 What does the 95% CI not mean?
 
@@ -365,19 +393,19 @@ What does the 95% CI not mean?
 
 We should neither say, "the probability of the point estimate is 95%" nor "the probability the true value lies within this range is 95%."
 
-The CI merely asserts our level of confidence in a range of values that might include the true parameter value. To have more or to have less confidence means that we would need to calculate some other interval, such as a 99% or 90% interval, respectively. When that is done for the same sample date, the range of the interval changes. Because our confidence in the sample changes!
+The CI merely asserts a long run level of confidence in a range of values that might include the true parameter value. To have more or to have less confidence means that we would need to calculate some other interval, such as a 99% or 90% or 86.75309% interval. Changing the confidence level changes the range of the interval. Because our confidence in the sample changes!
 
 ### Evaluating confidence intervals
 
-The CI has duality as both and inferential and descriptive statistic. Standard errors and confidence intervals and test statistics and p-values are calculated from the same sample data. So there is a bit of a circular argument at play here.
+The CI has duality as both and inferential and descriptive statistic. Standard errors and confidence intervals and test statistics and p-values are calculated from the same sample data. So there plenty of circular argument at play here.
 
 **The confidence interval serves as a statistical parameter used to express sample accuracy.**
 
 We use the variability within the sample to generate two related parameters, standard error and confidence intervals. If the former tells us about the precision of the point estimate (eg, the sample mean), let the latter speak to accuracy (eg, a range of sample means consistent with the sample that we can be confident of).
 
-To be sure, this is conditioned on the experiment's ability to detect a true point estimate. There are a lot of ways for the sample to be untrue. If the measurement machines and techniques are uncalibrated, or the sampled population is the wrong one, or there are uncontrolled confounder variables, or the experiment was underpowered, or the researcher picked and chose replicates to keep, the sample may be wildly inaccurate. 
+To be sure, this is conditioned on the experiment's ability to detect a true point estimate. There are a lot of ways for the sample to be untrue. If the measurement machines and techniques are uncalibrated, or the sampled population is the wrong one, or there are uncontrolled confounder variables, or the experiment was underpowered, or the researcher picked and chose replicates to keep creating a biased sample, the sample may be wildly inaccurate. 
 
-The CI also reports the accuracy of point estimates that are wrong. Wrong point estimates are something that can only be addressed scientifically, not statistically.
+Always realize the CI also reports the accuracy of point estimates that are wrong. Such wrong point estimates are something that can only be addressed scientifically, not statistically.
 
 **The confidence interval can be used inferentially, to make decisions on hypothesis tests**
 
@@ -397,11 +425,11 @@ CI's for the mean difference by the groups are listed:
 
 Each group is 95% confident the true mean difference in blood glucose lies within their own calculated range.
 
-The range of values in Group1 does not include the null value, zero. We can reject the null at 95% confidence. Further, given our scientific experitise in blood glucose, we also assert every value in that range is scientifically meaningful.
+The range of values in Group1 does not include the null value, zero. Using the CI alone, we can reject the null at a 95% confidence level. Further, given our scientific experitise in blood glucose, we also assert every value in that range is scientifically meaningful and may represent the true value.
 
-The range of values in Group2 does not include the null value, zero. We can reject the null at 95% confidence. However, given our scientific expertise in blood glucose, we note the range includes low values that represent scientifically inconsequential effects.
+The range of values in Group2 does not include the null value, zero. We can reject the null at a 95% confidence level. However, given our scientific expertise in blood glucose, we note the range includes low values that represent scientifically inconsequential effects. A change of 2 mg/dl may be "true" but is just not meaningful. Yet, it is in the range of possibilities. We should be extra suspicious of the reliability of the sample.
 
-The range of values in Group3 does include the value of zero, which represents no mean difference. We are not prepared to reject the null at 95% confidence. The result is inconclusive.
+The range of values in Group3 does include the value of zero, which represents no mean difference. We are not prepared to reject the null at 95% confidence. We cannot conclude the drug has no effect. But the result is inconclusive. 
 
 ### CI Simulation tools
 
@@ -419,12 +447,9 @@ The confidence interval for a sample mean is calculated as follows:
 
 \[CI=\bar x \pm t_{df(n-1)}\cdot\frac{sd}{\sqrt{n}}\]
 
-Pla
 
 ```{r message=FALSE, warning=FALSE, fig.cap="Confidence interval illustrator"}
-
-#set.seed(1234)
-
+#set.seed(8675309)
 # change these initializers
 n <- 3
 pop.mean <- 100
@@ -432,7 +457,6 @@ pop.sd <- 25
 sig.dig <- 2
 conf.level <- 0.95
 x <- c(seq(1, 200, 0.1))
-
 # this draws a sample and calculate its descriptive stats
 mysample <- rnorm(n, pop.mean, pop.sd)
 mean <- round(mean(mysample), sig.dig)
@@ -449,9 +473,7 @@ print(c(round(mysample, sig.dig),
           "sem=", sem, "CIll=", ll, 
           "CIul=", ul)))
 # graph the sample confidence interval on the population
-
 pretty <- ifelse(ll > pop.mean | ul < pop.mean, "red", "blue")
-
 #graph (note: using ggformula package)
 gf_line(dnorm(x, pop.mean, pop.sd)~x)%>%
   gf_segment(0 + 0 ~ ll + ul, 
@@ -474,7 +496,6 @@ If the two CI's overlap, one of them turns red. It's a sign the two samples migh
 Use this simulator to gain an intuitive understanding about how confidence intervals operate. Practice changing the sample size (n), the population means and standard deviations, and even the confidence level. Under what conditions are overlapping intervals diminished? What factors influence narrower intervals?
 
 ```{r message=FALSE, warning=FALSE, fig.cap="Comparing two samples using confidence intervals. Red-colored indicates the two CI overlap, meaning the two groups for that sample test out as no different."}
-
 n <- 5
 m <- 100
 conf.level=0.95
@@ -485,7 +506,6 @@ pop.sd.A <- 25
 pop.sd.B <- 25
 x <- c(seq(1, 300, 0.1))
 y <- seq(0.0005, m*0.0005, 0.0005)
-
 #simulate  
 mydat.A <- replicate(
   m, rnorm(
