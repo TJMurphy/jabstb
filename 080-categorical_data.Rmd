@@ -160,9 +160,11 @@ prop
 
 ### What A Proportion Estimates
 
-This sample proportion is a descriptive statistic. It serves as a `point estimate` of the true proportion of the population we sampled. The only way to know the true proportion would be to count every T cell in every drop of the subjects blood, which is not going to happen.  
+This sample proportion is a descriptive statistic. It serves as a `point estimate` of the true proportion of the population we sampled. 
 
-This point estimate is statistically valid if our sample meets two conditions. First, that this is a random sample of the T cells in the subject's blood. Second, if we consider every T cell in the sample as statistically independent of every other T cell.
+The only way to know the true proportion would be to count every T cell in every drop of the subjects blood, which is not going to happen obviously.   
+
+This point estimate is statistically valid when our sample meets two conditions. First, that this is a random sample of the T cells in the subject's blood. Second, if we consider every T cell in the sample as statistically independent of every other T cell.
 
 We can safely assume those conditions are met. Strictly, as an estimate this proportion only infers the population of blood borne T cells IN THAT ONE subject. We really can't generalize much further than that. Surely T cells are sequestered in other compartments (thymus, nodes, etc) that a blood draw cannot estimate. 
 
@@ -174,30 +176,30 @@ Confidence intervals (CI) have features of both descriptive and inferential stat
 
 #### Definition of a 95% CI
 
-**The range of proportions within which 95% of the time we would expect the true population proportion.** 
+**The range of proportions within which we are 95% confident the true population proportion rests.** 
 
 There's a lot going on there. 
 
-The value of the proportion we measured in the sample is a mathematical fact that is not in dispute. It is what it is. The question is, what does it represent?
+The value of the proportion we measured in the sample is an indisputable mathematical fact. It is what it is. The question is, what does it represent?
 
-Although there might be some error associated with measuring it, our single sample offers no real information about what that error might be. 
+Although there might be some mistake in its measurement, our single sample offers no real information about what that error might be. 
 
-**What is unknown is the true proportion of gradstudin+ T cells in the population we sampled.**
+**What is unknown is the true proportion of gradstudin positive T cells in the population we sampled.**
 
 CI's are designed to give us some insights into that unknown. 
 
 95% CI's are a `range estimate` of what that true population proportion might be. 
-CI's are calculated in part upon the quality of the point estimate. In the case of proportions, the quality of the point estimate is driven by the size of the sample, the number of counts that are involved in calculating the proportion. 
+CI's are calculated in part based upon the quality of the point estimate. In the case of proportions, the quality of the point estimate is driven by the size of the sample, the number of counts that are involved in calculating the proportion. 
 
-As you might imagine intuitively, the more counts we have in the sample, the more confidence we should have that our proportion provides a good estimate of the population's proportion.  
+As you might imagine intuitively, the more counts we have in the sample, the better it estimates the population's proportion.  
 
 #### Calculating CI with R
 
 Their are several ways to calculate the CI for a proportion. Because of that, when publishing CI's of proportions it is important is to state which CI method is used. 
 
-Is one better than the other? Sometimes, yes. For now, let's not worry about that. [Wilson's score interval with continuity correction](http://www.ucl.ac.uk/english-usage/staff/sean/resources/binomialpoisson.pdf)] is suggested as the most accurate for proportions.
+Is one better than the other? Sometimes, yes. [Wilson's score interval with continuity correction](http://www.ucl.ac.uk/english-usage/staff/sean/resources/binomialpoisson.pdf) is suggested as the most accurate for proportions. YMMV.
 
-Other methods are more commonly used than Wilson's because they gained traction as being easier to compute by hand, and old habits die slowly.
+Other methods are more commonly used than Wilson's because they gained traction as being easier to compute by hand in the pre-computer times, and old habits die slowly.
 
 Taking the data on cytokine induced gradstudin+ T cells, the chunk below illustrates how to use `PropCIs` to derive a Wilson score interval-based 95% CI:
 
@@ -209,19 +211,19 @@ scoreci(pos, n, conf.level=0.95)
 
 The value of our sample proportion, 0.214, falls within this 95% CI. That's not a big surprise, given the 95% CI was calculated from our proportion! 
 
-On the basis of the sample proportion, we can conclude from this CI that there is a 95% confidence the true proportion of gradstudin positive T cells falls within this very narrow range of 0.02090 to 0.2195.
+On the basis of the sample proportion, we can conclude from this CI that there is a 95% confidence the true proportion of gradstudin positive T cells falls within this range of 0.02090 to 0.2195.
 
 #### Using the CI as a quick test of statistical significance. 
  
-Let's say, for example, that we have tremendous experience and great scientific reason to expect that only 15% of T cells would be gradstudin-positive. Does our sample proportion differ from that expectation?
+Let's say, for example, that we have experience and good reason to expect that only 15% of T cells would be gradstudin-positive. Does our sample proportion differ from that expectation?
 
 Since a proportion of 0.15 is not within the 95% CI calculated above, we can conclude that the cytokine-induced sample proportion differs from this expectation at the 5% level of statistical significance.
 
-We just did a statistical test, without running any software (sorta) or generating any p-values!! And it is perfectly valid inference.
+We just did a statistical test, without running any software (sorta) or generating any p-values!! And it is perfectly valid inference so long as the assumptions of randomization and independence are met.
 
 ### A One-Sample Proportion Test
 
-Now we'll use `prop.test` to run a test that generates a p-value to decide if the sample proportion we have above differs from 0.15. If you know something about a one sample t-test, then this should sound familiar to you.
+Now we'll use `prop.test` to run a test that generates a p-value to decide if the sample proportion we have above differs from 0.15. This may sound familiar as it is a cousin of the one sample t-test.
 
 #### Hypothesis Tested in a One-Sample Proportion Test 
 
@@ -266,11 +268,13 @@ The `prop.test` conducts a chi-square analysis. The value of $\chi^2$ for this s
 
 If the null hypothesis is true in this case, the probability of a $\chi^2$ value as large or larger than we obtained is 2.2e-16, which is very, very low.
 
-The 95% CI is 0.2098 to 1.0. There is a 95% chance the population proportion is greater than 0.2098. The reason it differs from the Wilson's CI calculated above is that we used `greater`as a one-sided hypothesis argument in the prop.test. These CI's from one-sided hypothesis tests are not particularly useful when attempting to use the CI as an index of accuracy. But perhaps this oddity helps you understand how CI's are tied to the hypothesis and thus inference.
+The 95% CI is 0.2098 to 1.0. There is 95% confidence the population proportion is within the range from 0.2098 to 1.0. 
+
+The reason it differs from the Wilson's CI calculated above is that we used `greater`as a one-sided hypothesis argument in the prop.test. These CI's from one-sided hypothesis tests are not particularly useful when attempting to use the CI as an index of accuracy. But perhaps this oddity helps you understand how CI's are tied to the hypothesis and thus inference.
 
 #### How to write this up
 
-*The proportion of gradstudin positive T cells after cytokine treatment in the subject differs from an expected value of 0.15 (one-sided one-sample proportions test, p-value=2.2e-16, 95% CI = 0.209 to 1.0)*
+*The proportion of gradstudin positive T cells after cytokine treatment in the subject differs from an expected value of 0.15 (one-sided one-sample proportions test, p-value=2.2e-16, 95% CI = 0.2098 to 1.0)*
 
 ### An exact test for one proportion
 
@@ -287,7 +291,7 @@ binom.test(pos, n, p=0.15, alternative = "greater")
 
 ```
 
-The results are about the same and the write up would be the same.
+The results are about the same and the write up would be the same as for the `prop.test`.
 
 ### Comparing Two Proportions
 
@@ -362,15 +366,15 @@ We can reject the null.
 
 If we subtract prop2 from prop1 we get a value of about 0.1017, as a point estimate for the difference between the proportion of gradstudin=positive cells in the vehicle and cytokine treated samples. The 95% CI represents a range of values that might include the difference between the two proportions. 
 
-We are 95% confident that the true difference between these proportions is from 0.0638 to 01397. 
+We are 95% confident that the difference between these proportions ranges from 0.0638 to 0.1397. 
 
-The 95% CI for the difference between two proportions does not include the value of 0. Since the 95% CI does not overlap with 0, we can conclude from it alone that there is a statistical difference between the two proportions. 
+The 95% CI for the difference between two proportions does not include the value of 0. Since the 95% CI does not overlap with 0, we can conclude from it alone that there is a statistical difference between the two proportions, so long as all counts are indepedent and randomly collected. 
 
 We have to use scientific judgment to assess whether the lower and upper ranges of the CI represent values that are scientifically meaningful or relevant. It is possible for a CI to include values that are scientifically unremarkable, even if the value of zero is not included.
 
 #### Write Up
 
-*The proportion of gradstudin positive T cells after cytokine differs from that in vehicle treated cells (two-sided two-sample proportions test, p-value=4.12e-12, 95% CI for proportion difference = 0.0638 to 01397)*
+*The proportion of gradstudin positive T cells after cytokine differs from that in vehicle treated cells (two-sided two-sample proportions test, p-value=4.12e-12, the 95% CI for proportion difference is 0.0638 to 01397)*
 
 Note how we don't say "statistically significantly different".
 
@@ -386,7 +390,7 @@ We need to make a matrix of the data first, then perform the `fisher.test` on th
 
 Notice below how to enter the successes and the failures in the matrix. The matrix is also labeled with some dimension (row and column) names so it doesn't get confusing. 
 
-The fisher test is run by passing the matrix into the `fisher.test` function:
+The Fisher test is run by passing the matrix into the `fisher.test` function:
 
 ```{r}
 M <- matrix(
