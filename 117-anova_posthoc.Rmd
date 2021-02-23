@@ -8,34 +8,40 @@ library(lsr)
 ```
 
 
-Where example data is shown below it is base upon the ANOVA analysis of the chickwts data set as shown Chapter\@ref(onewayanova) .
+Where example data is shown below it is based upon the ANOVA analysis of the chickwts data set as shown Chapter\@ref(onewayanova) .
 
 ## Overview of options
 
-The major issue to address in ANOVA posthoc testing is the multiple comparison problem. We have a family of comparisons. Every comparison is a hypothesis test. Every hypothesis test carries type1 and type2 error risk. Testing too many hypotheses in a family at once leads to certain error. 
+The major issue to address in ANOVA posthoc testing is the multiple comparison problem. We have a family of comparisons. Every comparison is a hypothesis test. Every hypothesis test carries type1 and type2 error risk. Testing too many hypotheses in a family from one data set leads to certain error, if no adjustment is made for the multiple comparisons.. 
 
 There are two fundamental ways to control the family-wise error rate (FWER) after ANOVA: 1) p-value adjustments, or 2) range tests.
 
-The menagerie of options within each of these is large and confusing. That largely stems from the fact that nobody really agrees on the best way to control FWER. When a fist fight breaks out at a international statistics conference you can almost be certain it is due to FWER. In fact, it would seem everyone who has ever had a strong opinion on the matter has contributed an eponymous test.
+The menagerie of options within each of these is large and confusing.
 
-I say this to make it clear that you have a judgment to make on what the best approach is for the problem you are trying to solve with your own experiment.
+That largely stems from the fact that nobody really agrees on the best way to control FWER. When a fist fight breaks out at a international statistics conference you can almost be certain it is due to FWER. In fact, it would seem everyone who has ever had a strong opinion on the matter has contributed an eponymous test.
+
+What is less obvious but most important is that you have a judgment to make on what the best approach for the problem you are trying to solve with your own experiments.
 
 Here's what is most important to keep in mind. Sometimes we do these multi-factorial experiments in an exploratory mindset, without precise planning for the groups we might want to compare. We may even compare every group to all other groups, and sometimes that is all right. __Know that there are post hoc tests more suited for that "hit seeking" mindset compared to other tests.__
 
 Other times we've set up a severe test of a crucial scientific prediction. We have a clear idea of the comparisons we want to make. We hope the result will be the foundation of the next few years of work. We (should) have very low tolerance for type1 error in a situation like that. __Know there are post hoc tests more suited than others for protecting against type1 error in cases like that.__ 
 
+That is it in a nutshell. The adjustment method you choose should be based upon your error tolerance, given the experiment and its goals.
+
 ### Pairwise.t.test with p-value adjustments
 
-I promote posthoc testing using the `pairwise.t.test`. There are a few reasons for this. 
+I promote ANOVA posthoc testing using the `pairwise.t.test`. There are a few reasons for this. 
 
 * We are already familiar with t-tests. 
 * We only need one function for many kinds of uses. 
 * It can be used for both completely randomized (unpaired) and for related measure (paired) designs.
 * Several p-value adjustment options are available.
 
-The `pairwise.t.test` function is not the `t.test` function. The `pairwise.t.test` denominator uses standard error derived from the residual variance from the full experiment, rather than just that for each pair in a comparison. This is statistically appropriate because it takes into account the context in which all the data was collected. 
+The `pairwise.t.test` function is not the `t.test` function. The `pairwise.t.test` denominator uses standard error derived from the residual variance from the full experiment, rather than just that for each pair in a comparison. This is statistically justifiable because it takes into account the full context in which the selected two groups are compared. 
 
-A downside of using the pairwise.t.test is that the function only produces adjusted p-values. It does not produce adjusted confidence intervals. Indeed, except for the straight Bonferroni, adjusted confidence intervals are not readily derived from these step procedures. 
+A downside of using the pairwise.t.test is that the function only produces adjusted p-values. It does not produce adjusted confidence intervals. 
+
+Indeed, except for the straight Bonferroni, adjusted confidence intervals are not readily derived from these step procedures. 
 
 If confidence intervals are sought for inferential purposes, using a range test, such as the TukeyHSD, is a better post hoc option.  For that, `DescTools::PostHocTest(method = "hsd")` 
 
@@ -48,10 +54,8 @@ We reject the null for any comparisons where the adjusted p-values are lower tha
 The table below compares the performance of these adjustment algorithms on a common vector of unadjusted p-values (see the none column). The pattern from left to right is clear. Both the Bonferroni and Holm offer the most severe type1 protection, the BY is balanced between type1 and type2, the Hommel and Hochberg are liberal and perform about the same, and the BH (aka FDR) is the most liberal. 
 
 ```{r compare p-value adjustments, echo=FALSE}
-
 set.seed(1234)
 p <- runif(5, 0, 0.025)
-
 post <- tibble(none= p.adjust(p, "none"),
                BH_FDR = p.adjust(p, "BH"),
                hochberg= p.adjust(p, "hochberg"),
@@ -60,9 +64,7 @@ post <- tibble(none= p.adjust(p, "none"),
                holm=p.adjust(p, "holm"),
                bonferroni = p.adjust(p, "bonferroni"),
                )
-
 knitr::kable(post, caption="Comparison of p-values adjustment methods available in the pairwise.t.test function; most liberal on left to most conservative on right .") 
-
 ```
 
 ##### Bonferroni
@@ -79,9 +81,9 @@ Use the Bonferroni correction when seeking strong protection against type1 error
 
 Although not an option in R's `p.adjust.methods` it is easy enough to code. Sidak adjusts each p by the total number of comparisons, m, using the following relationship.
 
-\begin(equation)
+\begin{equation}
     p_{adjust}=1-(1-p)^m
-\end(equation)
+\end{equation}
 
 Use the Sidak correction when you wish strong protection against type1 error, but perhaps not as strong as Bonferroni.
 
@@ -101,17 +103,19 @@ Selecting the `"hochberg"` option in the  `p.adjust.methods` function also execu
 
 The overall outcome of the `"hochberg"` is a liberal p-value adjustment on the input array compared to the Holm and Bonferroni.
 
-\begin(equation)
+\begin{equation}
     p_{adjust}=(m+1-i)\times p
-\end(equation)
+\end{equation}
 
 Use the Hochberg correction on experiments where you want strong protection against type2 errors. For example, if the experiment is designed more exploratory, closer to a hit screen than to a true hypothesis test.
 
 ##### Hommel
 
-Everybody seems to agree the Hommel procedures is the most difficult to describe. Even if I showed the code here I'm not sure I could describe it.^[Hommel, Biometrika (1988) 75, 2, pp383-6] 
+Everybody seems to agree the Hommel procedures is the most difficult to describe. Even if I showed the formula here I'm not sure I could describe it.^[Hommel, Biometrika (1988) 75, 2, pp383-6] 
 
-As is evident from the result in the table of options, it performs along the lines of the Hochberg. As a general rule, I try to avoid using things I don't understand.
+As a general rule, I try to avoid using things I don't understand.
+
+As is evident from the result in the table of options, the Hommel adjustment performs along the lines of the Hochberg.
 
 ##### Benjamini-Hochberg (BM, FDR)
 
@@ -121,9 +125,9 @@ To perform the step-down, the unadjusted p-values are re-ranked from highest to 
 
 The net net outcome is that the Benjamini-Hochberg procedure is even more liberal than the Hochberg.
 
-\begin(equation)
+\begin{equation}
     p_{adjust}=\frac{m}{i}\times p
-\end(equation)
+\end{equation}
 
 Use the Benjamini-Hochberg correction on experiments where you want strong protection against type2 errors. For example, if the experiment is designed to be more exploratory, more like a hit screen than to a true hypothesis test. Indeed, you'll find the BH/fdr used a lot in testing for hits in procedures on large "-omics" data sets.
 
@@ -131,9 +135,9 @@ Use the Benjamini-Hochberg correction on experiments where you want strong prote
 
 Selecting the `"BY"` method applies a Hochberg-like step-down based p-value correction that is considerably more impactful on type1 error than the Benjamini-Hochberg (FDR) method. 
 
-\begin(equation)
+\begin{equation}
   p_{adjust}=(\sum_{m=1}^{m}\frac{1}{m})\times\frac{m}{i}\times p
-\end(equation)
+\end{equation}
 
 This strikes an interesting balance between very strong control of type1 error while allowing for a more liberal evasion of type2 error. This is probably a good choice for experiments with objectives that straddle severe hypothesis testing along with hit screening.
 
@@ -245,9 +249,9 @@ In contrast to what we observed running this trick on the unadjusted p-values, w
 
 These range tests are designed to test group means. They do not test the means of differences between two levels of a factor. Group means are irrelevant in related measures designs.
 
-They should only be used as posthoc for completely randomized designs. When the design is related measures, the posthoc testing should be performed using the pairwise.t.test with p-value adjustments, as covered in the section above.
+*They should only be used as posthoc for completely randomized designs. When the design is related measures, the posthoc testing should be performed using the pairwise.t.test with p-value adjustments, as covered in the section above.*
 
-These tests differ in a fundamental way from the p-value adjustments associated with pairwise.t.testing. They operate not on p-values, but on the differences between group means. Their adjusted p-values are derived from their unique "Studentized" probability distributions of these differences.  
+These tests differ in a fundamental way from the p-value adjustments associated with pairwise.t.testing. They operate not on p-values, but on the differences between group means. The p-values are derived from their unique "Studentized" probability distributions of these differences.  
 
 Range tests first calculate a critical threshold for differences between group means, then compare every group mean to this critical difference. Statistically different comparisons are those that have differences that are greater than the critical difference.
 
@@ -263,7 +267,7 @@ An array of group mean differences can be calculated from a vector of group mean
 
 Suppose we had a way of declaring some critical difference between group means. Any differences observed in our array above that critical difference value would be taken as statistically different.
 
-Imagine a set of ANOVA data comprised of $N$ total replicates. There are $n$ replicate values are in each of $k$ groups. The largest group mean for the response is $\bar y_{max}$ and the smallest is $\bar y_{min}$. The pooled variance for all replicate values in the set is $s^2$. 
+Imagine a set of ANOVA data comprised of $N$ total replicates. There are $n$ replicate values in each of $k$ groups. The largest group mean for the response is $\bar y_{max}$ and the smallest is $\bar y_{min}$. The pooled variance for all replicate values in the set is $s^2$. 
 
 Then the random variable \[q =\frac{\bar y_{max}-\bar y_{min}}{\sqrt\frac{s^2}{n}}\]
 
