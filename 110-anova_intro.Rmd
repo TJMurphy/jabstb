@@ -3,15 +3,17 @@
 library(tidyverse)
 library(RColorBrewer)
 ```
-The choice of any statistical design and analysis is always driven by the type of outcome and predictor variables involved. Recall that all variables are either continuous or discrete. Furthermore, it's helpful to think of outcome variables further classified as either [measured, ordered or sorted](\#data), where measured variables are continuous, and ordered and sorted are discrete. 
+The choice of any statistical design and analysis is always driven by the type of dependent and independent variables involved. It can be helpful to think of variables alliteratively, classified as either [measured, ordered or sorted](\#data), where measured variables are continuous, and ordered and sorted are discrete. 
 
-Once the dependent variable is deemed to be continuous measured, the model for the experiment is determined by the number of levels of the independent variables. 
+Once the dependent variable is deemed continuous measured, the model for the experiment is determined by the number of independent variables. 
 
 ```{r echo=FALSE, fig.cap="ANOVA heuristic", message=FALSE, warning=FALSE}
 knitr::include_graphics("images/anova_heuristic.jpg")
 ```
 
-The analysis of variance (ANOVA) is a method to design and evaluate experiments in which the predictor variable(s) are discrete factors with three or more levels and when the outcome variable is on some continuous measured scale. ANOVA is also univariate, in so far as the analysis involves only a single outcome variable.
+In the statistical jargon of the analysis of variance (ANOVA) independent variables are also called factors. These "factors" are applied at discrete levels before measuring responses.
+
+ANOVA is also univariate, in so far as the analysis involves only a single dependent variable. When two or more dependent variables are measured simultaneously, [we need a multivariate testing strategy, such as MANOVA](\#manova)
 
 ## Assumptions
 
@@ -22,70 +24,57 @@ Strong assumptions, do not use ANOVA when violated
 * Every replicate is independent of all others.
 * Some random process is used when generating measurements.
 
-Weaker assumptions, ANOVA is said to be robust to violations of the following
+Weaker assumptions, ANOVA can be robust to violations of the following:
 
-* The distribution for the residuals from which the outcome variable is derived is continuous random normal.
+* The distribution for the residuals for the dependent variable is continuous random normal.
 * The variances of the groups are approximately equal.
 
 With small samples it is usually difficult to conclude that these weaker assumptions are met. Both affirmative and negative results of tests of normality, tests for homogeneity of variance and outlier tests should be taken with a grain of salt. The smaller the sample size, the larger the grain of salt. 
 
-Use your judgment. Do you have any reason to believe the variable is not normally distributed? Are you not up against a zero boundary? Are you confident the variable is measured in a linear range of your assay procedure? If in doubt, analyze the data with some other procedure. 
+Use your judgment. Do you have any reason to believe the variable is not normally distributed? Are you not up against a zero boundary? Are you confident the variable is measured in a linear range of your assay procedure? If in doubt, analyze the data with some other procedure (eg, nonparametrics). 
 
-Data that appears markedly skewed can be transformed using log or reciprocal functions. The resulting distributions are ~ normal. ANOVA testing can be performed on those transformed values. As we discussed previously, the nonparametric analogs of ANOVA (Kruskal-Wallis and Friedman tests) are suitable options when normality is violated. 
+Data that appears markedly skewed can be transformed using log or reciprocal functions. The resulting distributions are approximately normal. ANOVA testing can be performed on those log transformed or reciprocal transformed values. As we discussed previously, the nonparametric analogs of one-way completely randomized ANOVA (Kruskal-Wallis) and one-way repeated measures (Friedman tests) are suitable options when normality is violated. 
 
-There are alternative analytic options as will be detailed below. In particular, there is no need to use ANOVA for discrete types of outcome data. ANOVA is not designed to analyze non-continuous data. Additionally, regression, either linear or nonlinear, is often a preferred method of analysis when the predictor variable is continuous rather than discrete.
+There are alternative analytic options as will be detailed below. In particular, there is no need to use ANOVA for discrete types of outcome data. ANOVA is not designed to analyze non-continuous data. Additionally, regression, either linear or nonlinear, is often a preferred method of analysis when the independent variable is continuous rather than discrete because those approaches lend themselves to calculating values for regression parameters. Such parameters (such as rates, equilibrium and other constants) can have important physical meanings. 
 
 ## Types of designs
 
-__tl;dr:__ ANOVA represents a family of about a dozen different statistical models. These differ by how many predictor factors are involved and whether or not the measurements are intrinsically-related. A given factor can be applied in either a completely randomized or repeated/related measures format. Experiments can involve one, two or even three factors. 
+__tl;dr:__ ANOVA represents a family of about a dozen different statistical models. These differ by how many independent factors are involved and whether or not the measurements are intrinsically-related. A given factor can be applied in either a completely randomized or repeated/related measures format. Experiments can involve one, two or even three factors. 
 
 ANOVA experiments tend to design themselves since they are fairly intuitive way of asking questions. In fact, ANOVA is probably the most widely used experimental design in the biomedical sciences. If we randomly access any article in our favorite journal, chances are it will have a figure or table depicting an ANOVA design.
 
 They tend to look something like these.
 
-```{r echo=FALSE, fig.cap="Typical graphs depicting some of the different ANOVA designs.", fig.height=3, fig.show="hold", fig.width=5, message=TRUE, warning=TRUE}
+```{r echo=FALSE, fig.cap="Typical graphs depicting some of the different ANOVA designs.", fig.height=3, fig.show="hold", fig.width=5, message=FALSE, warning=FALSE}
 
 one.way <- data.frame(
             factorA=c(
               rep("level1", 5), 
               rep("level2", 5), 
-              rep("level3", 5)
-              ),
-             
+              rep("level3", 5)),
             response=c(rnorm(5,100,20),
                        rnorm(5,200,20), 
-                       rnorm(5,300,20)
-                       )
-  )
-
+                       rnorm(5,300,20)))
 two.way <- data.frame(
             factorA=c(
               rep(c(
                 rep("level1", 5), 
                 rep("level2", 5), 
-                rep("level3", 5)
-                ), 
-                2)
-              ),
+                rep("level3", 5)), 2)),
             factorB=c(rep("level1", 15), rep("level2", 15)),
             response=c(rnorm(5,100,20),
                        rnorm(5,200,20), 
                        rnorm(5,300,20), 
                        rnorm(5, 400, 20), 
                        rnorm(5, 500, 20), 
-                       rnorm(5, 600, 20)
-                       )
-  )
-
+                       rnorm(5, 600, 20)))
 three.way <- data.frame(
             factorA=c(
               rep(c(
                 rep("level1", 5), 
                 rep("level2", 5), 
                 rep("level3", 5)
-                ), 
-                4)
-              ),
+                ), 4)),
             factorB=rep(c(rep("level1", 15), rep("level2", 15)), 2),
             factorC=c(rep("factorC level1", 30), rep("factorC level2", 30)),
             response=rep(c(rnorm(5,100,20),
@@ -93,22 +82,21 @@ three.way <- data.frame(
                        rnorm(5,300,20), 
                        rnorm(5, 400, 20), 
                        rnorm(5, 500, 20), 
-                       rnorm(5, 600, 20)
-                       ), 2)
-            
-  )
+                       rnorm(5, 600, 20)), 2))
   
 ggplot(one.way, aes(factorA, response))+
-  stat_summary(fun.y="mean", geom="bar", width=0.2, fill="#1b9e77")+
+  stat_summary(fun="mean", geom="bar", 
+               width=0.2, fill="#1b9e77")+
   labs(y="response, continuous units", title="One-way ANOVA")
 
 ggplot(two.way, aes(factorA, response, fill=factorB)) +
-  stat_summary(fun.y="mean", fun.args=list(mult=1), geom= "bar", position=position_dodge(width=1), width=0.5, size=2)+
+  stat_summary(fun="mean", fun.args=list(mult=1), geom= "bar",
+               position=position_dodge(width=1), width=0.5, size=2)+
   scale_fill_brewer(palette="Dark2")+
   labs(y="response, continuous units", title="Two-way ANOVA")
 
 ggplot(three.way, aes(factorA, response, fill=factorB))+
-  stat_summary(fun.y="mean", geom="bar", position=position_dodge())+
+  stat_summary(fun="mean", geom="bar", position=position_dodge())+
   facet_grid(cols =vars(factorC))+
   scale_fill_brewer(palette="Dark2")+
   labs(y="response, continuous units", title="Three-way ANOVA")
@@ -125,17 +113,19 @@ Third, we can test many hypotheses simultaneously or a grand hypothesis. Since e
 
 ## Jargon: Factors and levels
 
-In jargon, ANOVA predictor variables are classified as "factors". ANOVA designs are said to be factorial. They are multifactorial if more than a single factor is involved. 
+In jargon, ANOVA independent variables are classified as "factors". ANOVA designs are said to be factorial. They are multifactorial if more than a single factor is involved, as in two-way ANOVA. 
 
-In other corners, ANOVA is referred to as factorial analysis (which should not be confused with factor analysis). Where some people describe an ANOVA experiment as a "one-way ANOVA" others might describe it as "one-factor ANOVA". Yet elsewhere it is called multiple regression. It's all the same.
+In other corners, ANOVA is referred to as factorial analysis (which should not be confused with factor analysis). Where some people describe an ANOVA experiment as a "one-way ANOVA" others might describe it as "one-factor ANOVA". Yet elsewhere it is called multiple regression. 
 
-The factors of ANOVA represent categorical, discrete variables that are each applied at two or more levels. For example, a factor at three levels is a predictor variable that has three discrete values.
+It's all the same.
 
-Imagine an experiment to explore how a particular gene influences blood glucose levels. Blood glucose levels, a continuous variable, are measured in subjects that have three different genotypes for the gene: either wild-type, or heterozygous knockouts, or homozygous knockouts. Here, genotype is a discrete predictor variable, a factor, which has three levels.
+The factors of ANOVA represent categorical, discrete variables that are each applied at two or more levels. For example, a factor at three levels is an independent variable that has three discrete values.
 
-### Woring with factors in R
+Imagine an experiment to explore how a particular gene influences blood glucose levels. Blood glucose levels, a continuous variable, are measured in subjects that have three different genotypes for the gene: either wild-type, or heterozygous knockouts, or homozygous knockouts. Here, genotype is a discrete independent variable, a factor, which has three levels.
 
-R requires that ANOVA predictor variables are classified as factors in data sets. 
+### Working with factors in R
+
+R requires that ANOVA independent variables are classified as factors in data sets. 
 
 The following script creates a vector object called `genotype`. The object is a representation of the genotype variable. The data class for that vector is `character` because it is comprised of character strings. But look what happens when it is packaged into a data frame called `my.factors` using the `data.frame`. R coerces `genotype` into a factor variable with 3 levels. Which is nice.
 
@@ -192,9 +182,9 @@ drug <- c("zero", "dark", "thirty")
 
 When you forget to convert a variable to a factor, R's anova functions will bark at you and you won't know what the problem is because the error messages are confusing. R doesn't know that you don't know you should be using factors.
 
-**You can do ANOVA with continuous predictor variables. You just have to treat them as factors.**
+**You can do ANOVA with continuous independent variables. You just have to treat them as factors.**
 
-When a continuous predictor variable is used at many levels (eg, a time series, a dose series, etc), regression *per se* can be a better alternative to ANOVA. Regression allows for capturing additional information encoded within continuous variables (eg, rate constants, half-lives, etc). 
+When a continuous independent variable is used at many levels (eg, a time series, a dose series, etc), regression *per se* can be a better alternative to ANOVA. Regression allows for capturing additional information encoded within continuous variables (eg, rate constants, half-lives, etc). 
 
 But that decision is more scientific than it is statistical. 
 
@@ -288,8 +278,8 @@ That formula only illustrates how variance is calculated for a single sample gro
 
 To begin to understand that, recognize that all ANOVAs, irrespective of the specific design are assumed to have two fundamental sources of variation:
 
-1) Variation due to the experimental model, which is determined by the nature of responses to the predictor variables.
-2) Residual variation, which is variation that cannot be explained by the predictor variables.
+1) Variation due to the experimental model, which is determined by the nature of responses to the independent variables.
+2) Residual variation, which is variation that cannot be explained by the independent variables.
 
 __Law of Conservation of SS:__ That total variation within an experiment can be expressed as the sum of the squared deviates for these two sources.  \[SS_{total}=SS_{model}+SS_{residual} \]
 
@@ -459,7 +449,7 @@ The mathematical theory behind $df$ is a bit more complicated than this, but as 
 
 The degrees of freedom for total variance are $df_{total}=N-1$. We use all 15 replicates, $N$, to calculate the grand mean $\hat y$. One degree of freedom is lost for that grand mean to be true, one of those replicate values must be fixed while the others are free to vary. 
 
-We have $k$ predictor levels. The degrees of freedom for the genotype model variance are $df_{genotype}=k-1$, because the $SS_{model}$ calculation is based upon the group means, the value of one group mean must be fixed while two are free to vary.
+We have $k$ independent levels. The degrees of freedom for the genotype model variance are $df_{genotype}=k-1$, because the $SS_{model}$ calculation is based upon the group means, the value of one group mean must be fixed while two are free to vary.
 
 The residual degrees of freedom are $df_{residual}=N-k$ because although residual values are calculated for each data point, one degree of freedom is lost to calculate each group mean. 
 
@@ -619,7 +609,7 @@ The experimental model is as follows: \[SS_{model}=SS_{genotype}+SS_{drug}+SS_{g
 
 The grand mean of all the data is computed as before: \[\hat y=\frac{1}{n}\sum_{i=1}^ny_i \]
 
-There are two factors, each at two levels. Thus, there are a total of $j=4$ experimental groups. Each group has a sample size of $n_j=5$ replicates and represent a combination of predictor variables: WT/0, WT/30, KO/0, KO/30. The mean of each group is $\bar_j$. 
+There are two factors, each at two levels. Thus, there are a total of $j=4$ experimental groups. Each group has a sample size of $n_j=5$ replicates and represent a combination of independent variables: WT/0, WT/30, KO/0, KO/30. The mean of each group is $\bar_j$. 
 
 Therefore, \[SS_{model}= \sum_{j=1}^kn_j(\bar y_j-\hat y)^2 \] represents the total model variation.
 
@@ -733,7 +723,7 @@ For example, you may run multiple control groups within your experiment to signa
 
 With those reservations noted, what follows are two ways to go about this.
 
-To begin, if we have $k$ levels of predictor variables in our experiment it has a **total** of $m=k(k-1)/2$ possible comparisons that could be made.
+To begin, if we have $k$ levels of independent variables in our experiment it has a **total** of $m=k(k-1)/2$ possible comparisons that could be made.
 
 The `pairwise.t.test` is the function to use for this purpose. Use it to make the group comparisons that interest you. choosing the `p.adjust.method` that strikes your fancy. Two of the latter are listed below.
 
