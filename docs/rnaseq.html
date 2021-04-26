@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-04-24" />
+<meta name="date" content="2021-04-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -1022,7 +1022,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
 <li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
 <li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
 <li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
@@ -1520,8 +1523,8 @@ Figure 50.4: Natural log transformed CPM counts, normally-distributed but some o
 <p>This examines the subset of genes that exhibit the largest fold-differences between samples.</p>
 <p>The graph below shows separation and clustering of the 12 samples, but it is a bit hard to see what is what this shows us unless you’ve remembered what each sample represents.</p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="rnaseq.html#cb55-1" aria-hidden="true" tabindex="-1"></a>limma<span class="sc">::</span><span class="fu">plotMDS</span>(y)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-29"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-29-1.png" alt="Multi-dimensional scaling, a form of PCA." width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-28"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-28-1.png" alt="Multi-dimensional scaling, a form of PCA." width="672" />
 <p class="caption">
 Figure 50.5: Multi-dimensional scaling, a form of PCA.
 </p>
@@ -1572,8 +1575,8 @@ Figure 50.5: Multi-dimensional scaling, a form of PCA.
 <span id="cb62-5"><a href="rnaseq.html#cb62-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill=</span><span class="fu">c</span>(<span class="st">&quot;#012169&quot;</span>,<span class="st">&quot;#b58500&quot;</span>),<span class="at">legend=</span><span class="fu">levels</span>(<span class="fu">as.factor</span>(sampleinfo<span class="sc">$</span>CellType)))</span>
 <span id="cb62-6"><a href="rnaseq.html#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a title</span></span>
 <span id="cb62-7"><a href="rnaseq.html#cb62-7" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;Cell type&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-33"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-33-1.png" alt="MDS shows variation due to cell type explains the first dimension of the data." width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-32"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-32-1.png" alt="MDS shows variation due to cell type explains the first dimension of the data." width="672" />
 <p class="caption">
 Figure 50.6: MDS shows variation due to cell type explains the first dimension of the data.
 </p>
@@ -1603,8 +1606,8 @@ Figure 50.6: MDS shows variation due to cell type explains the first dimension o
 <span id="cb69-2"><a href="rnaseq.html#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>,<span class="at">fill=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;green&quot;</span>),</span>
 <span id="cb69-3"><a href="rnaseq.html#cb69-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span><span class="fu">levels</span>(<span class="fu">as.factor</span>(sampleinfo<span class="sc">$</span>Status)),<span class="at">cex=</span><span class="fl">0.8</span>)</span>
 <span id="cb69-4"><a href="rnaseq.html#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&quot;Status&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-36"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-36-1.png" alt="Variation due to status represents the 2nd dimension of the data set." width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-35"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-35-1.png" alt="Variation due to status represents the 2nd dimension of the data set." width="672" />
 <p class="caption">
 Figure 50.7: Variation due to status represents the 2nd dimension of the data set.
 </p>
@@ -1672,11 +1675,15 @@ Figure 50.7: Variation due to status represents the 2nd dimension of the data se
 <span id="cb84-4"><a href="rnaseq.html#cb84-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, </span>
 <span id="cb84-5"><a href="rnaseq.html#cb84-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">main=</span><span class="st">&quot;Top variable genes&quot;</span>,</span>
 <span id="cb84-6"><a href="rnaseq.html#cb84-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">scale=</span><span class="st">&quot;row&quot;</span>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-42-1.png" width="672" />
+<p><img src="jabstb_files/figure-html/unnamed-chunk-41-1.png" width="672" />
 Expression varies from low (dark) to high (light).</p>
-<p>Inspection of the horizontal clustering illustrates how it picks up the the experimental design very well. There are two main groups (corresponding to the luminal and basal cell types). There are also 3 groups within each of these, corresponding to the status.</p>
-<p>The status duplicates line up extremely well together. This is tight data.</p>
-<p>The vertical clustering is very interesting. Close to 90% of the genes define the cell type differentiation, while the rest differentiate the endocrine status (virgin, pregnant, lactating). There is a clear interaction between cell type and status, as well.</p>
+<p>Inspection of the horizontal clustering illustrates how it picks up the the experimental design very well. There are two main groups (corresponding to the luminal and basal cell types). There are also 3 groups within each of these, corresponding to the endocrine status.</p>
+<p>The endocrine status duplicates line up extremely well together. This is tight data.</p>
+<p>The vertical clustering is interesting. Close to 90% of the highly variable genes define the cell type differentiation, while the reminder differentiate the endocrine status (virgin, pregnant, lactating). There is a clear interaction between cell type and status, as well.</p>
+<div id="statistical-inference-on-clustering" class="section level3" number="50.9.1">
+<h3><span class="header-section-number">50.9.1</span> Statistical inference on clustering</h3>
+<p>Some progress has been made to develop an exact test for whether clusters differ. This test does not suffer from the inflated type1 error associated with using standard univariate tests. See the work of Lucy Gao <a href="https://arxiv.org/abs/2012.02936">here</a>. Information about her R package clusterpval along with tutorials are <a href="http://www.lucylgao.com/clusterpval/index.html">here</a>.</p>
+</div>
 </div>
 <div id="summary-17" class="section level2" number="50.10">
 <h2><span class="header-section-number">50.10</span> Summary</h2>

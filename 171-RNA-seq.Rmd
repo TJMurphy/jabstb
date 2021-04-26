@@ -308,13 +308,6 @@ abline(h=median(logcounts),col="blue")
 title("Boxplots of logCPMs (unnormalised for length)")
 ```
 
-```{r}
-
-```
-
-
-
-
 ## Classification
 
 Now, at last, let's do some statistical modeling.
@@ -405,8 +398,6 @@ Although these dimensions are latent, it is possible to explain what variables a
 
 The Bioconductor package `PCAtools`is a veritable smorgasbord of PCA functions and visualizations. Learning this package is strongly recommended. For more on it, [see this vignette](https://bioconductor.org/packages/release/bioc/vignettes/PCAtools/inst/doc/PCAtools.html)
 
-
-
 ## Hierarchical clustering
 
 Hierarchical clustering is a way to cluster while visualizing specific gene relationships to other clusters. 
@@ -477,11 +468,15 @@ heatmap.2(highly_variable_lcpm,
 ```
 Expression varies from low (dark) to high (light).
 
-Inspection of the horizontal clustering illustrates how it picks up the the experimental design very well. There are two main groups (corresponding to the luminal and basal cell types). There are also 3 groups within each of these, corresponding to the status.
+Inspection of the horizontal clustering illustrates how it picks up the the experimental design very well. There are two main groups (corresponding to the luminal and basal cell types). There are also 3 groups within each of these, corresponding to the endocrine status.
 
-The status duplicates line up extremely well together. This is tight data.
+The endocrine status duplicates line up extremely well together. This is tight data.
 
-The vertical clustering is very interesting. Close to 90% of the genes define the cell type differentiation, while the rest differentiate the endocrine status (virgin, pregnant, lactating). There is a clear interaction between cell type and status, as well. 
+The vertical clustering is interesting. Close to 90% of the highly variable genes define the cell type differentiation, while the reminder differentiate the endocrine status (virgin, pregnant, lactating). There is a clear interaction between cell type and status, as well. 
+
+### Statistical inference on clustering
+
+Some progress has been made to develop an exact test for whether clusters differ. This test does not suffer from the inflated type1 error associated with using standard univariate tests. See the work of Lucy Gao [here](https://arxiv.org/abs/2012.02936). Information about her R package clusterpval along with tutorials are [here](http://www.lucylgao.com/clusterpval/index.html).
 
 ## Summary
 
