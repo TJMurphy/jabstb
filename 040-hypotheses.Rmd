@@ -8,11 +8,15 @@ Testing hypotheses statistically provides a pragmatic framework for making decis
 
 When planning an experiment the primary goal should be to bring hyper-focused clarity to the hypothesis. This is the time to distill your thinking down to the exact question you want answered. What are you studying? What is not known? What is your prediction? How will you measure it? What are your variables? Are they discrete or continuous? How will you test it? How will you decide whether what you predicted happened or not? Will this actually answer the question you're asking?
 
-The statistics taught in this course are for assessing the validity of experimental outcomes in a somewhat odd way: Formally, we test the null hypothesis.
+The statistics taught in this course are for assessing the validity of experimental outcomes. The validity of the statistical test depends upon the integrity of the experimental conditions. What are the researchers intentions? Is a specific hypothesis in mind? Have test groups and replicates been planned in advance? What levels of error does the researcher tolerate? What are the independent replicates? Are they randomly selected? What types of variables are involved?
+
+The statistical tests taught in this course are valid for experiments that are planned in advance, run according to that plan, and which test a specific hypothesis.
+
+Somewhat oddly, we test the null hypothesis.
 
 The expectation is to generate observations of such extreme magnitude that we can reject the null, the hypothesis that nothing happened. At first blush that might come off as absurd. Like a Seinfeld episode, where nothing is what is most important.
 
-Hopefully this won't seem so odd after I describe what this accomplishes and explain why it is done this way.
+Hopefully this won't seem so odd after I explain why it is done this way.
 
 ## The decision process
 
@@ -22,7 +26,7 @@ The framework can be broken down into 5 key steps:
 
 i. We begin with a null hypothesis--yes, the boring one about nothing.
 ii. Experiments generate data.
-iii. The data are transformed into test statistics. 
+iii. The data are transformed into test statistics, which are essentially just signal-to-noise ratios. 
 iv. P-values are calculated from the experiment's test statistic value. 
 v. Based upon *a priori* thresholds, a decision is made to reject a null hypothesis, or not, depending upon the extremeness of the result.
 
@@ -30,11 +34,13 @@ v. Based upon *a priori* thresholds, a decision is made to reject a null hypothe
 knitr::include_graphics("images/hypothesis.jpg")
 ```
 
-Low p-values are associated with extreme values of a test statistic. Extreme values of test statistics happen when the effect sizes of the results are high. Rejecting a null on the basis of a p-value means our test statistic value is too extreme to belong in the distribution of null test statistic values. 
+Low p-values are associated with extreme values of a test statistic. The researcher gets to define what they feel is extreme.
 
-Thus, a low p-value means the effect size is improbably high if the treatment is, in fact, not truly effective.
+Extreme values of test statistics can happen either when the effect sizes are high or when the sample size is large. Rejecting a null on the basis of a p-value means our test statistic value is too extreme to belong in the distribution of null test statistic values. 
 
-If you learn nothing more in this course, learn that the statistics discussed here are tests of the null hypothesis. Learn that every p-value you see in R output is coupled to a test statistic value. These p-values represent a cumulative probability of a null test statistic distribution.
+Thus, a low p-value means the test statistic is improbably high if the treatment, in fact, is not truly effective.
+
+**If you learn nothing more in this course, learn that the statistics discussed here are tests of the null hypothesis.** 
 
 ## Popper and falsification
 
@@ -42,25 +48,34 @@ Using data to falsify an hypothesis, even if that hypothesis is the null, is a d
 
 To Popper, the grandest scientific theories are those that can be falsified. In Popperian logic, the truth of nature is unknowable and unproveable....even though it is testable. Thus, the scientific method advocated by Popper doesn't allow for proving an hypothesis, but at the same time it doesn't forbid us from rejecting hypotheses that are inconsistent with observations. 
 
-Thus enters the null hypothesis, which predicts, of course, that nothing happens. The null is an incredibly handy device because if we make observations that are extremely inconsistent with the null, meaning we have observed that something happens, we are obligated to reject the null. Thus, the null is falsifiable when we have positive results!
+Enter the null hypothesis, which predicts, of course, that nothing happens. The null is a handy device because if we make observations that are inconsistent with the null, we reject it. Thus, positive experimental results falsify the null.
 
 Imagine an experiment to test whether a drug lowers blood glucose in people who have diabetes. When the glucose-lowering effect size for the drug in the sample is large enough, we can reject the hypothesis that the drug didn't have any effect.
 
 In other words, we will accept an observation as evidence for a positive result by formally concluding that same evidence is inconsistent with a negative result.
 
-Some argue that this logic forces the researcher to test the "wrong" hypothesis and to also accept an alternate hypothesis that itself may not be true. For example, although blood glucose may be lower in the drug treatment arm of the sample, that may have occured by random chance. Or an unknown confounder variable that wasn't controlled for could be responsible for the observation that drug-treatment is associated with lower blood glucose. 
+Some argue that this logic forces the researcher to test the "wrong" hypothesis and to also accept an alternate hypothesis that itself may not be true. For example, although blood glucose may be lower in the drug treatment arm of the sample, that lowering may have occurred by random chance.
 
-__In that case we would make an error by rejecting the null when it is actually true.__
+Or an unknown confounder variable that wasn't controlled for could be responsible for the observation that drug-treatment is associated with lower blood glucose. 
 
-Of course, rejecting the null is provisional. All gained knowledge is provisional. Drawing a conclusion from one experiment doesn't preclude testing the experiment some other way. If the problem is important enough (and "real"), it will be tested from multiple angles. It will need to survive the preponderance of the evidence.
+__In these cases we would make an error by rejecting the null when it is actually true. Which is a type1 error.__
 
-I'm personally convinced the alternative approach, which is to seek out evidence that affirms an hypothesis, is not better. This lies at the heart of what Popper stood against. There is an inherent confirmation bias in seeking out affirmation of ideas. In the proper light, any evidence can be made to look attractive. Furthermore, what if, in seeking affirmation, nothing happens? Negative results are very difficult to interpret because the absence of evidence cannot be interpreted as the evidence of absence.
+The p-value gives us some idea about how likely we are to make that error. When the p-value is very low, and when the experiment is well-conducted, we can have some confidence we are not making that mistake.
 
-So I'd hope the researcher who gives this some thought will find null falsification at least pragmatic, if not ingenious. It allows us to move forward on the basis of positive evidence (granted, which may be wrong and we don't know it), while at the same time practicing a more sound, more unbiased scientific methodology (hypothesis falsification rather than affirmation). 
+Of course, rejecting the null is provisional. All gained knowledge is provisional. Drawing a conclusion from one experiment doesn't preclude testing the experiment some other way. If the problem is important enough (and "real"), it will be tested from a few complementary approaches. A good idea will need to survive the preponderance of the evidence.
+
+I'm personally convinced the alternative approach, which is to seek out evidence that affirms an hypothesis, is not better. This lies at the heart of what Popper stood against. There is an inherent confirmation bias in seeking out affirmation of ideas. In the proper light, any evidence can be made to look attractive. 
+Furthermore, what if, in seeking affirmation, nothing happens? Negative results are very difficult to interpret because the absence of evidence cannot be interpreted as the evidence of absence.
+
+So I'd hope the researcher who gives all this some thought will find null falsification if not ingenious at least pragmatic. It allows us to move forward on the basis of positive evidence (granted, which may be wrong and we don't know it), while at the same time practicing a more sound, more unbiased scientific methodology (hypothesis falsification rather than affirmation). 
+
+## Operational decisions made in advance that reduce mistakes
 
 Meanwhile, this statistical framework does allow for the possibility of designing experimental conditions to minimize false positive (type1) and false negative (type2) errors. We can operationalize our tolerance for those kinds of mistakes in meaningful ways such that we are less likely to become victims of bad luck.
 
-Finally, the decision to reject a null hypothesis can stand alone. It need not be the same as a decision to accept the alternate. Rejecting the null only asserts that the experimental evidence is inconsistent with the null. In no way does that "prove"" the alternative hypothesis.
+Specifically, we put advanced effort into planning the experiment. In particular, planning for a sample size means that we have had to make a decision about type1 & type2 error tolerance, while explicitly predicting an effect size that would be believable.
+
+The decision to reject a null hypothesis can stand alone. It need not be the same as a decision to accept the alternate. Rejecting the null only asserts that the experimental evidence is inconsistent with the null. In no way does that "prove"" the alternative hypothesis.
 
 For most, some of these concerns should become even less of a problem when the null and alternate hypotheses are explicitly framed in terms of population parameters and their **mutually exclusive and collectively exhaustive** outcomes. This approach doesn't leave much room for ambiguity about what is being declared at the decision step. 
 
