@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 R Learnings for now | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 R Learnings for now | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="sampling.html"/>
 <link rel="next" href="data.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1114,28 +1130,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">8.1.6</span> Nine MUST KNOW functions for now</h3>
 <p><code>read_csv</code> converts a csv file on your machine into a <code>tibble</code>, which is a dataframe.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="rlearn1.html#cb20-1" aria-hidden="true" tabindex="-1"></a>pcd <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;datasets/precourse.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 464 Columns: 6</code></pre>
+<pre><code>## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr (1): sex
+## dbl (4): term, enthusiasm, height, fav_song</code></pre>
 <pre><code>## 
-## -- Column specification --------------------------------------------------------
-## cols(
-##   term = col_double(),
-##   enthusiasm = col_double(),
-##   height = col_double(),
-##   friends = col_number(),
-##   sex = col_character(),
-##   fav_song = col_double()
-## )</code></pre>
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <p>Here is a goal: Generate some descriptive statistics, for only valid heights of male and female biostats students, in units of inches rather than centimeters.</p>
 <p>Here is a solution that involves six functions from the <code>dplyr</code> package.</p>
 <p><code>%&gt;%</code>, <code>select</code>, <code>filter</code>, <code>mutate</code>, <code>group_by</code>, <code>summarise</code></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="rlearn1.html#cb22-1" aria-hidden="true" tabindex="-1"></a>pcd <span class="sc">%&gt;%</span> </span>
-<span id="cb22-2"><a href="rlearn1.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, sex) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-3"><a href="rlearn1.html#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-4"><a href="rlearn1.html#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> height<span class="sc">/</span><span class="fl">2.54</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-5"><a href="rlearn1.html#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-6"><a href="rlearn1.html#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(height),</span>
-<span id="cb22-7"><a href="rlearn1.html#cb22-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(height),</span>
-<span id="cb22-8"><a href="rlearn1.html#cb22-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">length</span>(height))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="rlearn1.html#cb24-1" aria-hidden="true" tabindex="-1"></a>pcd <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="rlearn1.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="rlearn1.html#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-4"><a href="rlearn1.html#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> height<span class="sc">/</span><span class="fl">2.54</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-5"><a href="rlearn1.html#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-6"><a href="rlearn1.html#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(height),</span>
+<span id="cb24-7"><a href="rlearn1.html#cb24-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(height),</span>
+<span id="cb24-8"><a href="rlearn1.html#cb24-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">length</span>(height))</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 4
 ##   sex     mean    sd     n
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
@@ -1155,12 +1168,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="you-have-options" class="section level3" number="8.1.7">
 <h3><span class="header-section-number">8.1.7</span> You have options</h3>
 <p>There are many ways to do the same thing in R, or pretty much the same thing. The important thing is to make sure we get the right thing.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="rlearn1.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># need a data frame object of random normal values?</span></span>
-<span id="cb25-2"><a href="rlearn1.html#cb25-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
-<span id="cb25-3"><a href="rlearn1.html#cb25-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
-<span id="cb25-4"><a href="rlearn1.html#cb25-4" aria-hidden="true" tabindex="-1"></a>oneway <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(a, b)</span>
-<span id="cb25-5"><a href="rlearn1.html#cb25-5" aria-hidden="true" tabindex="-1"></a>another <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">a =</span> <span class="fu">rnorm</span>(<span class="dv">5</span>), <span class="at">b =</span> <span class="fu">rnorm</span>(<span class="dv">5</span>))</span>
-<span id="cb25-6"><a href="rlearn1.html#cb25-6" aria-hidden="true" tabindex="-1"></a>prettyMuchTheSame <span class="ot">&lt;-</span> <span class="fu">tibble</span>(a, b)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="rlearn1.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># need a data frame object of random normal values?</span></span>
+<span id="cb26-2"><a href="rlearn1.html#cb26-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb26-3"><a href="rlearn1.html#cb26-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb26-4"><a href="rlearn1.html#cb26-4" aria-hidden="true" tabindex="-1"></a>oneway <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(a, b)</span>
+<span id="cb26-5"><a href="rlearn1.html#cb26-5" aria-hidden="true" tabindex="-1"></a>another <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">a =</span> <span class="fu">rnorm</span>(<span class="dv">5</span>), <span class="at">b =</span> <span class="fu">rnorm</span>(<span class="dv">5</span>))</span>
+<span id="cb26-6"><a href="rlearn1.html#cb26-6" aria-hidden="true" tabindex="-1"></a>prettyMuchTheSame <span class="ot">&lt;-</span> <span class="fu">tibble</span>(a, b)</span></code></pre></div>
 </div>
 </div>
 <div id="working-with-variables-in-r" class="section level2" number="8.2">
@@ -1186,16 +1199,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Both variables are discrete.</p>
 <p>Saving the Rscript (or Rmarkdown) file stores the data.</p>
 <p>The function <code>tibble()</code> creates a tidyverse data frame.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="rlearn1.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># understand the logic of creating vector objects for the</span></span>
-<span id="cb26-2"><a href="rlearn1.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># independent and the dependent variables</span></span>
-<span id="cb26-3"><a href="rlearn1.html#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># note how a tibble-type data frame is created</span></span>
-<span id="cb26-4"><a href="rlearn1.html#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="rlearn1.html#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># vector objects represent the variables</span></span>
-<span id="cb26-6"><a href="rlearn1.html#cb26-6" aria-hidden="true" tabindex="-1"></a>genotype <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="fu">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))</span>
-<span id="cb26-7"><a href="rlearn1.html#cb26-7" aria-hidden="true" tabindex="-1"></a>DSS_score <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))</span>
-<span id="cb26-8"><a href="rlearn1.html#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="rlearn1.html#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># put the variables in a data frame object</span></span>
-<span id="cb26-10"><a href="rlearn1.html#cb26-10" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">tibble</span>(genotype, DSS_score); results</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="rlearn1.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># understand the logic of creating vector objects for the</span></span>
+<span id="cb27-2"><a href="rlearn1.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># independent and the dependent variables</span></span>
+<span id="cb27-3"><a href="rlearn1.html#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># note how a tibble-type data frame is created</span></span>
+<span id="cb27-4"><a href="rlearn1.html#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="rlearn1.html#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># vector objects represent the variables</span></span>
+<span id="cb27-6"><a href="rlearn1.html#cb27-6" aria-hidden="true" tabindex="-1"></a>genotype <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;wt&quot;</span>, <span class="dv">3</span>), <span class="fu">rep</span>(<span class="st">&quot;ND4&quot;</span>, <span class="dv">3</span>))</span>
+<span id="cb27-7"><a href="rlearn1.html#cb27-7" aria-hidden="true" tabindex="-1"></a>DSS_score <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">5</span>))</span>
+<span id="cb27-8"><a href="rlearn1.html#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="rlearn1.html#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># put the variables in a data frame object</span></span>
+<span id="cb27-10"><a href="rlearn1.html#cb27-10" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">tibble</span>(genotype, DSS_score); results</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   genotype DSS_score
 ##   &lt;chr&gt;        &lt;int&gt;
@@ -1205,8 +1218,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4 ND4              5
 ## 5 ND4              3
 ## 6 ND4              5</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="rlearn1.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(results, <span class="fu">aes</span>(<span class="at">x=</span>genotype, <span class="at">y=</span>DSS_score)) <span class="sc">+</span></span>
-<span id="cb28-2"><a href="rlearn1.html#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height=</span><span class="dv">0</span>, <span class="at">width=</span><span class="fl">0.3</span>, <span class="at">size=</span><span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="rlearn1.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(results, <span class="fu">aes</span>(<span class="at">x=</span>genotype, <span class="at">y=</span>DSS_score)) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="rlearn1.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height=</span><span class="dv">0</span>, <span class="at">width=</span><span class="fl">0.3</span>, <span class="at">size=</span><span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
 <p><img src="jabstb_files/figure-html/unnamed-chunk-21-1.png" width="480" /></p>
 <p>Woot! Ready to present a table and a plot in lab meeting!</p>
 </div>
@@ -1221,7 +1236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Click on the Addins icon below the RStudio menu bar and select an option.</p></li>
 </ol>
 <p>Here I copied the <code>fav_song</code> column (including header) from the <code>precourse.csv</code> file. Probably due to that header, datapasta coerced the values as characters. Some munging will be necessary to clean things and turn everything into numeric values. But at least it’s in R now. Woot.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="rlearn1.html#cb29-1" aria-hidden="true" tabindex="-1"></a>song <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;fav_song&quot;</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">&quot;570&quot;</span>, <span class="st">&quot;576&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;524&quot;</span>, <span class="st">&quot;252&quot;</span>, <span class="st">&quot;588&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;212&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;265&quot;</span>, <span class="st">&quot;294&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;481&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;203&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;375&quot;</span>, <span class="st">&quot;698&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;242&quot;</span>, <span class="st">&quot;256&quot;</span>, <span class="st">&quot;288&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;273&quot;</span>, <span class="st">&quot;601&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;147&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;202.2&quot;</span>, <span class="st">&quot;274&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;555&quot;</span>, <span class="st">&quot;362&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;373&quot;</span>, <span class="st">&quot;121&quot;</span>, <span class="st">&quot;361&quot;</span>, <span class="st">&quot;179&quot;</span>, <span class="st">&quot;169&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;139&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;292&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;412&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;289&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;448&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;207&quot;</span>, <span class="st">&quot;74&quot;</span>, <span class="st">&quot;253&quot;</span>, <span class="st">&quot;256&quot;</span>, <span class="st">&quot;243&quot;</span>, <span class="st">&quot;187&quot;</span>, <span class="st">&quot;420&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;235&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;258&quot;</span>, <span class="st">&quot;213&quot;</span>, <span class="st">&quot;188&quot;</span>, <span class="st">&quot;258&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;5421&quot;</span>, <span class="st">&quot;259&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;171&quot;</span>, <span class="st">&quot;184&quot;</span>, <span class="st">&quot;220&quot;</span>, <span class="st">&quot;225&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;208&quot;</span>, <span class="st">&quot;254&quot;</span>, <span class="st">&quot;341&quot;</span>, <span class="st">&quot;233&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;455&quot;</span>, <span class="st">&quot;423&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;570&quot;</span>, <span class="st">&quot;319&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;205&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;126&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;226.93&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;298&quot;</span>, <span class="st">&quot;290&quot;</span>, <span class="st">&quot;202&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;150&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;174&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;565&quot;</span>, <span class="st">&quot;273&quot;</span>, <span class="st">&quot;245&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;174&quot;</span>, <span class="st">&quot;276&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;460&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;583&quot;</span>, <span class="st">&quot;90&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;244&quot;</span>, <span class="st">&quot;127&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;211&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;220&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;198&quot;</span>, <span class="st">&quot;133&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;296&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;212&quot;</span>, <span class="st">&quot;195.6&quot;</span>, <span class="st">&quot;187&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;183&quot;</span>, <span class="st">&quot;216&quot;</span>, <span class="st">&quot;286&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;270&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;268&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;1560&quot;</span>, <span class="st">&quot;197&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;279&quot;</span>, <span class="st">&quot;195&quot;</span>, <span class="st">&quot;251&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;461&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;218&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;257&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;199&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;331&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;190&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;284&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;235&quot;</span>, <span class="st">&quot;277&quot;</span>, <span class="st">&quot;314&quot;</span>, <span class="st">&quot;249&quot;</span>, <span class="st">&quot;75&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;277&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;209&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;402&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;205&quot;</span>, <span class="st">&quot;345&quot;</span>, <span class="st">&quot;252&quot;</span>, <span class="st">&quot;305&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;170&quot;</span>, <span class="st">&quot;213&quot;</span>, <span class="st">&quot;656&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;339&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;263&quot;</span>, <span class="st">&quot;239&quot;</span>, <span class="st">&quot;135&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;292&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;432&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;21&quot;</span>, <span class="st">&quot;215&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;247&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;253&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;355&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;332&quot;</span>, <span class="st">&quot;2450&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;379&quot;</span>, <span class="st">&quot;516&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;184&quot;</span>, <span class="st">&quot;218&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;160&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;238&quot;</span>, <span class="st">&quot;208&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;123&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;176&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;347&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;254&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;456&quot;</span>, <span class="st">&quot;223&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;190&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;288&quot;</span>, <span class="st">&quot;681&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;352&quot;</span>, <span class="st">&quot;270&quot;</span>, <span class="st">&quot;245&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;229&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="st">&quot;320&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;352&quot;</span>, <span class="st">&quot;233&quot;</span>, <span class="st">&quot;214.8&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;179&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="st">&quot;227&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;2640&quot;</span>, <span class="st">&quot;364&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;382&quot;</span>, <span class="st">&quot;243&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;298&quot;</span>, <span class="st">&quot;155&quot;</span>, <span class="st">&quot;216&quot;</span>, <span class="st">&quot;24840&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;202&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="rlearn1.html#cb31-1" aria-hidden="true" tabindex="-1"></a>song <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;fav_song&quot;</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">&quot;570&quot;</span>, <span class="st">&quot;576&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;524&quot;</span>, <span class="st">&quot;252&quot;</span>, <span class="st">&quot;588&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;212&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="cn">NA</span>, <span class="st">&quot;265&quot;</span>, <span class="st">&quot;294&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;481&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;203&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;375&quot;</span>, <span class="st">&quot;698&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;242&quot;</span>, <span class="st">&quot;256&quot;</span>, <span class="st">&quot;288&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;273&quot;</span>, <span class="st">&quot;601&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;147&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;202.2&quot;</span>, <span class="st">&quot;274&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;555&quot;</span>, <span class="st">&quot;362&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;373&quot;</span>, <span class="st">&quot;121&quot;</span>, <span class="st">&quot;361&quot;</span>, <span class="st">&quot;179&quot;</span>, <span class="st">&quot;169&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;139&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;292&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;412&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;289&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;448&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;207&quot;</span>, <span class="st">&quot;74&quot;</span>, <span class="st">&quot;253&quot;</span>, <span class="st">&quot;256&quot;</span>, <span class="st">&quot;243&quot;</span>, <span class="st">&quot;187&quot;</span>, <span class="st">&quot;420&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;235&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;258&quot;</span>, <span class="st">&quot;213&quot;</span>, <span class="st">&quot;188&quot;</span>, <span class="st">&quot;258&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;5421&quot;</span>, <span class="st">&quot;259&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;171&quot;</span>, <span class="st">&quot;184&quot;</span>, <span class="st">&quot;220&quot;</span>, <span class="st">&quot;225&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;208&quot;</span>, <span class="st">&quot;254&quot;</span>, <span class="st">&quot;341&quot;</span>, <span class="st">&quot;233&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;455&quot;</span>, <span class="st">&quot;423&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;570&quot;</span>, <span class="st">&quot;319&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;205&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;126&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;226.93&quot;</span>, <span class="st">&quot;0&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;298&quot;</span>, <span class="st">&quot;290&quot;</span>, <span class="st">&quot;202&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;246&quot;</span>, <span class="st">&quot;232&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;150&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;174&quot;</span>, <span class="st">&quot;260&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;565&quot;</span>, <span class="st">&quot;273&quot;</span>, <span class="st">&quot;245&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;174&quot;</span>, <span class="st">&quot;276&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;460&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;583&quot;</span>, <span class="st">&quot;90&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;244&quot;</span>, <span class="st">&quot;127&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;211&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;220&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;198&quot;</span>, <span class="st">&quot;133&quot;</span>, <span class="st">&quot;272&quot;</span>, <span class="st">&quot;293&quot;</span>, <span class="st">&quot;296&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;212&quot;</span>, <span class="st">&quot;195.6&quot;</span>, <span class="st">&quot;187&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;183&quot;</span>, <span class="st">&quot;216&quot;</span>, <span class="st">&quot;286&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;270&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;268&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;1560&quot;</span>, <span class="st">&quot;197&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;279&quot;</span>, <span class="st">&quot;195&quot;</span>, <span class="st">&quot;251&quot;</span>, <span class="st">&quot;295&quot;</span>, <span class="st">&quot;461&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;218&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;257&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;199&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;331&quot;</span>, <span class="st">&quot;261&quot;</span>, <span class="st">&quot;190&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;284&quot;</span>, <span class="st">&quot;120&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;235&quot;</span>, <span class="st">&quot;277&quot;</span>, <span class="st">&quot;314&quot;</span>, <span class="st">&quot;249&quot;</span>, <span class="st">&quot;75&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;277&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;209&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;402&quot;</span>, <span class="st">&quot;360&quot;</span>, <span class="st">&quot;205&quot;</span>, <span class="st">&quot;345&quot;</span>, <span class="st">&quot;252&quot;</span>, <span class="st">&quot;305&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;170&quot;</span>, <span class="st">&quot;213&quot;</span>, <span class="st">&quot;656&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;339&quot;</span>, <span class="st">&quot;172&quot;</span>, <span class="st">&quot;263&quot;</span>, <span class="st">&quot;239&quot;</span>, <span class="st">&quot;135&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;292&quot;</span>, <span class="st">&quot;210&quot;</span>, <span class="st">&quot;432&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;21&quot;</span>, <span class="st">&quot;215&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;247&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;253&quot;</span>, <span class="st">&quot;230&quot;</span>, <span class="st">&quot;355&quot;</span>, <span class="st">&quot;214&quot;</span>, <span class="st">&quot;332&quot;</span>, <span class="st">&quot;2450&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;379&quot;</span>, <span class="st">&quot;516&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;184&quot;</span>, <span class="st">&quot;218&quot;</span>, <span class="st">&quot;222&quot;</span>, <span class="st">&quot;194&quot;</span>, <span class="st">&quot;160&quot;</span>, <span class="st">&quot;234&quot;</span>, <span class="st">&quot;238&quot;</span>, <span class="st">&quot;208&quot;</span>, <span class="st">&quot;250&quot;</span>, <span class="st">&quot;123&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;237&quot;</span>, <span class="st">&quot;176&quot;</span>, <span class="st">&quot;200&quot;</span>, <span class="st">&quot;192&quot;</span>, <span class="st">&quot;347&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;254&quot;</span>, <span class="st">&quot;255&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;480&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;456&quot;</span>, <span class="st">&quot;223&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;201&quot;</span>, <span class="st">&quot;190&quot;</span>, <span class="st">&quot;226&quot;</span>, <span class="st">&quot;300&quot;</span>, <span class="st">&quot;288&quot;</span>, <span class="st">&quot;681&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;352&quot;</span>, <span class="st">&quot;270&quot;</span>, <span class="st">&quot;245&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;229&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="st">&quot;320&quot;</span>, <span class="st">&quot;217&quot;</span>, <span class="st">&quot;236&quot;</span>, <span class="st">&quot;352&quot;</span>, <span class="st">&quot;233&quot;</span>, <span class="st">&quot;214.8&quot;</span>, <span class="st">&quot;262&quot;</span>, <span class="st">&quot;179&quot;</span>, <span class="st">&quot;221&quot;</span>, <span class="st">&quot;227&quot;</span>, <span class="st">&quot;241&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;2640&quot;</span>, <span class="st">&quot;364&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;382&quot;</span>, <span class="st">&quot;243&quot;</span>, <span class="st">&quot;204&quot;</span>, <span class="st">&quot;185&quot;</span>, <span class="st">&quot;240&quot;</span>, <span class="st">&quot;298&quot;</span>, <span class="st">&quot;155&quot;</span>, <span class="st">&quot;216&quot;</span>, <span class="st">&quot;24840&quot;</span>, <span class="st">&quot;180&quot;</span>, <span class="st">&quot;202&quot;</span>)</span></code></pre></div>
 </div>
 <div id="reading-a-file" class="section level3" number="8.3.3">
 <h3><span class="header-section-number">8.3.3</span> Reading a file</h3>
@@ -1234,24 +1249,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We’ll (mostly) use <code>.csv</code> files as a data source in this course.</p>
 <p>The same basic reading approach used for that is applicable to all kinds of other data sources. Many different R functions exist to read from many different types of data sources.</p>
 <p>Here’s how to import the precourse survey data using the <code>read_csv</code> function from the tidyverse <code>readr</code> package.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="rlearn1.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># my working directory has a subdirectory named datasets</span></span>
-<span id="cb30-2"><a href="rlearn1.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the precourse.csv file is in the datasets folder</span></span>
-<span id="cb30-3"><a href="rlearn1.html#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If the csv file is in your working directory, just do: pcd &lt;- read_csv(&quot;precourse.csv)</span></span>
-<span id="cb30-4"><a href="rlearn1.html#cb30-4" aria-hidden="true" tabindex="-1"></a>pcd <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;datasets/precourse.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="rlearn1.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># my working directory has a subdirectory named datasets</span></span>
+<span id="cb32-2"><a href="rlearn1.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the precourse.csv file is in the datasets folder</span></span>
+<span id="cb32-3"><a href="rlearn1.html#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If the csv file is in your working directory, just do: pcd &lt;- read_csv(&quot;precourse.csv)</span></span>
+<span id="cb32-4"><a href="rlearn1.html#cb32-4" aria-hidden="true" tabindex="-1"></a>pcd <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;datasets/precourse.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 464 Columns: 6</code></pre>
+<pre><code>## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr (1): sex
+## dbl (4): term, enthusiasm, height, fav_song</code></pre>
 <pre><code>## 
-## -- Column specification --------------------------------------------------------
-## cols(
-##   term = col_double(),
-##   enthusiasm = col_double(),
-##   height = col_double(),
-##   friends = col_number(),
-##   sex = col_character(),
-##   fav_song = col_double()
-## )</code></pre>
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <p>Inspect the data to make sure it is what you think it is.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="rlearn1.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get in the habit of inspecting data, several ways </span></span>
-<span id="cb32-2"><a href="rlearn1.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(pcd)</span></code></pre></div>
-<pre><code>## tibble [464 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="rlearn1.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get in the habit of inspecting data, several ways </span></span>
+<span id="cb36-2"><a href="rlearn1.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(pcd)</span></code></pre></div>
+<pre><code>## spec_tbl_df [464 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 ##  $ term      : num [1:464] 2014 2014 2014 2014 2014 ...
 ##  $ enthusiasm: num [1:464] 6 7 7 10 7 5 5 10 7 10 ...
 ##  $ height    : num [1:464] 170 158 163 168 168 ...
@@ -1266,8 +1279,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   ..   friends = col_number(),
 ##   ..   sex = col_character(),
 ##   ..   fav_song = col_double()
-##   .. )</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="rlearn1.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pcd)</span></code></pre></div>
+##   .. )
+##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="rlearn1.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pcd)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 6
 ##    term enthusiasm height friends sex    fav_song
 ##   &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -1277,7 +1291,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4  2014         10   168        0 Female       NA
 ## 5  2014          7   168.     250 Female       NA
 ## 6  2014          5   157      476 Female       NA</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="rlearn1.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(pcd)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="rlearn1.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(pcd)</span></code></pre></div>
 <p>There are a handful of functions in R land for reading <code>.csv</code> data. They don’t all work the same,</p>
 </div>
 </div>
@@ -1286,15 +1300,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The functions <code>select</code>, <code>filter</code> and <code>group_by</code> are subsetting functions.</p>
 <p>The function <code>mutate</code> is a workhorse function to rescale data through transformation.</p>
 <p>The function <code>summarise</code> let’s us calculate whatever summary statistic we wish.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="rlearn1.html#cb37-1" aria-hidden="true" tabindex="-1"></a>pcd <span class="sc">%&gt;%</span> </span>
-<span id="cb37-2"><a href="rlearn1.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, sex) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-3"><a href="rlearn1.html#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-4"><a href="rlearn1.html#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> height<span class="sc">/</span><span class="fl">2.54</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-5"><a href="rlearn1.html#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-6"><a href="rlearn1.html#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(height),</span>
-<span id="cb37-7"><a href="rlearn1.html#cb37-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(height),</span>
-<span id="cb37-8"><a href="rlearn1.html#cb37-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">length</span>(height))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="rlearn1.html#cb41-1" aria-hidden="true" tabindex="-1"></a>pcd <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="rlearn1.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(height, sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-3"><a href="rlearn1.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-4"><a href="rlearn1.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height =</span> height<span class="sc">/</span><span class="fl">2.54</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-5"><a href="rlearn1.html#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-6"><a href="rlearn1.html#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(height),</span>
+<span id="cb41-7"><a href="rlearn1.html#cb41-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(height),</span>
+<span id="cb41-8"><a href="rlearn1.html#cb41-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">length</span>(height))</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 4
 ##   sex     mean    sd     n
 ##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
@@ -1319,11 +1332,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Let’s make a plot of biostat student heights.</p>
 <div id="the-default-ggplot-function-creates-the-blank-canvas" class="section level3" number="8.5.1">
 <h3><span class="header-section-number">8.5.1</span> The default ggplot function creates the blank canvas</h3>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="rlearn1.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the function runs with its default arguments</span></span>
-<span id="cb40-2"><a href="rlearn1.html#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># note there is no error or warning message</span></span>
-<span id="cb40-3"><a href="rlearn1.html#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># this worked perfectly</span></span>
-<span id="cb40-4"><a href="rlearn1.html#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-25"></span>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="rlearn1.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the function runs with its default arguments</span></span>
+<span id="cb43-2"><a href="rlearn1.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># note there is no error or warning message</span></span>
+<span id="cb43-3"><a href="rlearn1.html#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># this worked perfectly</span></span>
+<span id="cb43-4"><a href="rlearn1.html#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-25"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-25-1.png" alt="A blank canvas. Nothing there, but it is a start." width="144" />
 <p class="caption">
 Figure 8.1: A blank canvas. Nothing there, but it is a start.
@@ -1333,8 +1346,8 @@ Figure 8.1: A blank canvas. Nothing there, but it is a start.
 <h4><span class="header-section-number">8.5.1.1</span> The data must be in a data frame.</h4>
 <p>We have to point ggplot to the dataframe containing the variables to plot.</p>
 <p>Note, we first created the <code>pcd</code> data object up above in <a href="rlearn1.html#mustknow">8.1.6</a> . We read it into the environment from our precourse.csv file. It’s still in the environment.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="rlearn1.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-26"></span>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="rlearn1.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-26"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-26-1.png" alt="The nothingness belies real progress" width="144" />
 <p class="caption">
 Figure 8.2: The nothingness belies real progress
@@ -1345,8 +1358,8 @@ Figure 8.2: The nothingness belies real progress
 <h4><span class="header-section-number">8.5.1.2</span> Assign variables to the canvas</h4>
 <p>The aesthetic mapping function <code>aes()</code> is used to define what variable goes on the x and y axis.</p>
 <p>No longer blank…but where is the data?</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="rlearn1.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd, <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height))</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-27"></span>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="rlearn1.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd, <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height))</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-27"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-27-1.png" alt="Woot! Something happened." width="144" />
 <p class="caption">
 Figure 8.3: Woot! Something happened.
@@ -1356,9 +1369,9 @@ Figure 8.3: Woot! Something happened.
 <div id="geoms-bring-the-data-into-view." class="section level4" number="8.5.1.3">
 <h4><span class="header-section-number">8.5.1.3</span> Geom’s bring the data into view.</h4>
 <p>Aesthetics can also be argued in geom functions.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="rlearn1.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd) <span class="sc">+</span></span>
-<span id="cb43-2"><a href="rlearn1.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height))</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-28"></span>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="rlearn1.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd) <span class="sc">+</span></span>
+<span id="cb46-2"><a href="rlearn1.html#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height))</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-28"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-28-1.png" alt="Woot! Data!" width="144" />
 <p class="caption">
 Figure 8.4: Woot! Data!
@@ -1368,11 +1381,11 @@ Figure 8.4: Woot! Data!
 <div id="munge-inside-ggplot" class="section level4" number="8.5.1.4">
 <h4><span class="header-section-number">8.5.1.4</span> Munge inside ggplot</h4>
 <p>Ugh, crazy outliers, no grad student is ever that tall or short. Munge the data inside the ggplot function. On the fly!</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="rlearn1.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
-<span id="cb44-2"><a href="rlearn1.html#cb44-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
-<span id="cb44-3"><a href="rlearn1.html#cb44-3" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
-<span id="cb44-4"><a href="rlearn1.html#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height))</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-29"></span>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="rlearn1.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="rlearn1.html#cb47-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
+<span id="cb47-3"><a href="rlearn1.html#cb47-3" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
+<span id="cb47-4"><a href="rlearn1.html#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height))</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-29"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-29-1.png" alt="Fix the problem right in the data frame." width="144" />
 <p class="caption">
 Figure 8.5: Fix the problem right in the data frame.
@@ -1382,11 +1395,13 @@ Figure 8.5: Fix the problem right in the data frame.
 <div id="try-different-geoms" class="section level4" number="8.5.1.5">
 <h4><span class="header-section-number">8.5.1.5</span> Try different geoms</h4>
 <p>Not a good use case for <code>geom_point</code>.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="rlearn1.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
-<span id="cb45-2"><a href="rlearn1.html#cb45-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
-<span id="cb45-3"><a href="rlearn1.html#cb45-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height)) <span class="sc">+</span></span>
-<span id="cb45-4"><a href="rlearn1.html#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>()</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-30"></span>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="rlearn1.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
+<span id="cb48-2"><a href="rlearn1.html#cb48-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
+<span id="cb48-3"><a href="rlearn1.html#cb48-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height)) <span class="sc">+</span></span>
+<span id="cb48-4"><a href="rlearn1.html#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>()</span></code></pre></div>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-30"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-30-1.png" alt="Try a different geom." width="144" />
 <p class="caption">
 Figure 8.6: Try a different geom.
@@ -1395,13 +1410,15 @@ Figure 8.6: Try a different geom.
 </div>
 <div id="customize-the-geom." class="section level4" number="8.5.1.6">
 <h4><span class="header-section-number">8.5.1.6</span> Customize the geom.</h4>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="rlearn1.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
-<span id="cb46-2"><a href="rlearn1.html#cb46-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
-<span id="cb46-3"><a href="rlearn1.html#cb46-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height)) <span class="sc">+</span></span>
-<span id="cb46-4"><a href="rlearn1.html#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">22</span>, <span class="at">height =</span> <span class="dv">0</span>, </span>
-<span id="cb46-5"><a href="rlearn1.html#cb46-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb46-6"><a href="rlearn1.html#cb46-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-31"></span>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="rlearn1.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
+<span id="cb50-2"><a href="rlearn1.html#cb50-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
+<span id="cb50-3"><a href="rlearn1.html#cb50-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height)) <span class="sc">+</span></span>
+<span id="cb50-4"><a href="rlearn1.html#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">22</span>, <span class="at">height =</span> <span class="dv">0</span>, </span>
+<span id="cb50-5"><a href="rlearn1.html#cb50-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb50-6"><a href="rlearn1.html#cb50-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-31"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-31-1.png" alt="Let's call this Bob-Rossing the plot." width="144" />
 <p class="caption">
 Figure 8.7: Let’s call this Bob-Rossing the plot.
@@ -1410,20 +1427,22 @@ Figure 8.7: Let’s call this Bob-Rossing the plot.
 </div>
 <div id="customize-the-axis-labels" class="section level4" number="8.5.1.7">
 <h4><span class="header-section-number">8.5.1.7</span> Customize the axis labels</h4>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="rlearn1.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
-<span id="cb47-2"><a href="rlearn1.html#cb47-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
-<span id="cb47-3"><a href="rlearn1.html#cb47-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height)) <span class="sc">+</span></span>
-<span id="cb47-4"><a href="rlearn1.html#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">22</span>, <span class="at">height =</span> <span class="dv">0</span>, </span>
-<span id="cb47-5"><a href="rlearn1.html#cb47-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb47-6"><a href="rlearn1.html#cb47-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>)<span class="sc">+</span></span>
-<span id="cb47-7"><a href="rlearn1.html#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># labs(title= &quot;Precourse Survey&quot;,</span></span>
-<span id="cb47-8"><a href="rlearn1.html#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      subtitle= &quot;2014-2020&quot;,</span></span>
-<span id="cb47-9"><a href="rlearn1.html#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      caption=&quot;IBS538 Spring 2020&quot;,</span></span>
-<span id="cb47-10"><a href="rlearn1.html#cb47-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      tag = &quot;Biostats&quot;,</span></span>
-<span id="cb47-11"><a href="rlearn1.html#cb47-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      x=&quot;sex chromosome&quot;,</span></span>
-<span id="cb47-12"><a href="rlearn1.html#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      y=&quot;verticality, cm&quot;)+</span></span>
-<span id="cb47-13"><a href="rlearn1.html#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-32"></span>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="rlearn1.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
+<span id="cb52-2"><a href="rlearn1.html#cb52-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
+<span id="cb52-3"><a href="rlearn1.html#cb52-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height)) <span class="sc">+</span></span>
+<span id="cb52-4"><a href="rlearn1.html#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">22</span>, <span class="at">height =</span> <span class="dv">0</span>, </span>
+<span id="cb52-5"><a href="rlearn1.html#cb52-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb52-6"><a href="rlearn1.html#cb52-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>)<span class="sc">+</span></span>
+<span id="cb52-7"><a href="rlearn1.html#cb52-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># labs(title= &quot;Precourse Survey&quot;,</span></span>
+<span id="cb52-8"><a href="rlearn1.html#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      subtitle= &quot;2014-2020&quot;,</span></span>
+<span id="cb52-9"><a href="rlearn1.html#cb52-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      caption=&quot;IBS538 Spring 2020&quot;,</span></span>
+<span id="cb52-10"><a href="rlearn1.html#cb52-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      tag = &quot;Biostats&quot;,</span></span>
+<span id="cb52-11"><a href="rlearn1.html#cb52-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      x=&quot;sex chromosome&quot;,</span></span>
+<span id="cb52-12"><a href="rlearn1.html#cb52-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#      y=&quot;verticality, cm&quot;)+</span></span>
+<span id="cb52-13"><a href="rlearn1.html#cb52-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))</span></code></pre></div>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-32"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-32-1.png" alt="More Bob-Rossing." width="672" />
 <p class="caption">
 Figure 8.8: More Bob-Rossing.
@@ -1432,21 +1451,23 @@ Figure 8.8: More Bob-Rossing.
 </div>
 <div id="customize-the-frame-theme" class="section level4" number="8.5.1.8">
 <h4><span class="header-section-number">8.5.1.8</span> Customize the frame &amp; theme</h4>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="rlearn1.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
-<span id="cb48-2"><a href="rlearn1.html#cb48-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
-<span id="cb48-3"><a href="rlearn1.html#cb48-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height)) <span class="sc">+</span></span>
-<span id="cb48-4"><a href="rlearn1.html#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">22</span>, <span class="at">height =</span> <span class="dv">0</span>, </span>
-<span id="cb48-5"><a href="rlearn1.html#cb48-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb48-6"><a href="rlearn1.html#cb48-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>)<span class="sc">+</span></span>
-<span id="cb48-7"><a href="rlearn1.html#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</span>
-<span id="cb48-8"><a href="rlearn1.html#cb48-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</span>
-<span id="cb48-9"><a href="rlearn1.html#cb48-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</span>
-<span id="cb48-10"><a href="rlearn1.html#cb48-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</span>
-<span id="cb48-11"><a href="rlearn1.html#cb48-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</span>
-<span id="cb48-12"><a href="rlearn1.html#cb48-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;verticality, cm&quot;</span>)<span class="sc">+</span></span>
-<span id="cb48-13"><a href="rlearn1.html#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))<span class="sc">+</span></span>
-<span id="cb48-14"><a href="rlearn1.html#cb48-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-33"></span>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="rlearn1.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
+<span id="cb54-2"><a href="rlearn1.html#cb54-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>), </span>
+<span id="cb54-3"><a href="rlearn1.html#cb54-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height)) <span class="sc">+</span></span>
+<span id="cb54-4"><a href="rlearn1.html#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">22</span>, <span class="at">height =</span> <span class="dv">0</span>, </span>
+<span id="cb54-5"><a href="rlearn1.html#cb54-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb54-6"><a href="rlearn1.html#cb54-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>)<span class="sc">+</span></span>
+<span id="cb54-7"><a href="rlearn1.html#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</span>
+<span id="cb54-8"><a href="rlearn1.html#cb54-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</span>
+<span id="cb54-9"><a href="rlearn1.html#cb54-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</span>
+<span id="cb54-10"><a href="rlearn1.html#cb54-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</span>
+<span id="cb54-11"><a href="rlearn1.html#cb54-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</span>
+<span id="cb54-12"><a href="rlearn1.html#cb54-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;verticality, cm&quot;</span>)<span class="sc">+</span></span>
+<span id="cb54-13"><a href="rlearn1.html#cb54-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))<span class="sc">+</span></span>
+<span id="cb54-14"><a href="rlearn1.html#cb54-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-33"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-33-1.png" alt="And more Bob-Rossing." width="672" />
 <p class="caption">
 Figure 8.9: And more Bob-Rossing.
@@ -1456,23 +1477,25 @@ Figure 8.9: And more Bob-Rossing.
 <div id="add-a-third-variable" class="section level4" number="8.5.1.9">
 <h4><span class="header-section-number">8.5.1.9</span> Add a third variable</h4>
 <p>The audience won’t “get” cm. Transform variable to inches. Oh, and segment using a third variable and applying scaling colors.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="rlearn1.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
-<span id="cb49-2"><a href="rlearn1.html#cb49-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb49-3"><a href="rlearn1.html#cb49-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">height =</span> height<span class="sc">/</span><span class="fl">2.54</span>),</span>
-<span id="cb49-4"><a href="rlearn1.html#cb49-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height, <span class="at">color =</span> term)) <span class="sc">+</span></span>
-<span id="cb49-5"><a href="rlearn1.html#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">18</span>, <span class="at">height =</span> <span class="dv">0</span>, </span>
-<span id="cb49-6"><a href="rlearn1.html#cb49-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>,</span>
-<span id="cb49-7"><a href="rlearn1.html#cb49-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb49-8"><a href="rlearn1.html#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</span>
-<span id="cb49-9"><a href="rlearn1.html#cb49-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</span>
-<span id="cb49-10"><a href="rlearn1.html#cb49-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</span>
-<span id="cb49-11"><a href="rlearn1.html#cb49-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</span>
-<span id="cb49-12"><a href="rlearn1.html#cb49-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</span>
-<span id="cb49-13"><a href="rlearn1.html#cb49-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;verticality, INCHES&quot;</span>)<span class="sc">+</span></span>
-<span id="cb49-14"><a href="rlearn1.html#cb49-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))<span class="sc">+</span></span>
-<span id="cb49-15"><a href="rlearn1.html#cb49-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
-<span id="cb49-16"><a href="rlearn1.html#cb49-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">begin =</span> <span class="fl">0.1</span>, <span class="at">end =</span><span class="fl">0.9</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-34"></span>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="rlearn1.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pcd <span class="sc">%&gt;%</span> </span>
+<span id="cb56-2"><a href="rlearn1.html#cb56-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(height <span class="sc">&gt;</span> <span class="dv">125</span> <span class="sc">&amp;</span> height <span class="sc">&lt;</span> <span class="dv">250</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb56-3"><a href="rlearn1.html#cb56-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">height =</span> height<span class="sc">/</span><span class="fl">2.54</span>),</span>
+<span id="cb56-4"><a href="rlearn1.html#cb56-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>sex, <span class="at">y=</span>height, <span class="at">color =</span> term)) <span class="sc">+</span></span>
+<span id="cb56-5"><a href="rlearn1.html#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">18</span>, <span class="at">height =</span> <span class="dv">0</span>, </span>
+<span id="cb56-6"><a href="rlearn1.html#cb56-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">width =</span> <span class="fl">0.2</span>,</span>
+<span id="cb56-7"><a href="rlearn1.html#cb56-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb56-8"><a href="rlearn1.html#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">&quot;Precourse Survey&quot;</span>,</span>
+<span id="cb56-9"><a href="rlearn1.html#cb56-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span> <span class="st">&quot;2014-2020&quot;</span>,</span>
+<span id="cb56-10"><a href="rlearn1.html#cb56-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span><span class="st">&quot;IBS538 Spring 2020&quot;</span>,</span>
+<span id="cb56-11"><a href="rlearn1.html#cb56-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">tag =</span> <span class="st">&quot;Biostats&quot;</span>,</span>
+<span id="cb56-12"><a href="rlearn1.html#cb56-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x=</span><span class="st">&quot;sex chromosome&quot;</span>,</span>
+<span id="cb56-13"><a href="rlearn1.html#cb56-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;verticality, INCHES&quot;</span>)<span class="sc">+</span></span>
+<span id="cb56-14"><a href="rlearn1.html#cb56-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels=</span> <span class="fu">c</span>(<span class="st">&quot;XX&quot;</span>, <span class="st">&quot;XY&quot;</span>))<span class="sc">+</span></span>
+<span id="cb56-15"><a href="rlearn1.html#cb56-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
+<span id="cb56-16"><a href="rlearn1.html#cb56-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">begin =</span> <span class="fl">0.1</span>, <span class="at">end =</span><span class="fl">0.9</span>)</span></code></pre></div>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-34"></span>
 <img src="jabstb_files/figure-html/unnamed-chunk-34-1.png" alt="Finish with a dramatic combination data munge, Bob-Rossing flourish." width="672" />
 <p class="caption">
 Figure 8.10: Finish with a dramatic combination data munge, Bob-Rossing flourish.
@@ -1504,7 +1527,6 @@ Figure 8.10: Finish with a dramatic combination data munge, Bob-Rossing flourish
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1523,6 +1545,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1543,10 +1566,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

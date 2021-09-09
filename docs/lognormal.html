@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 18 The lognormal distribution | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 18 The lognormal distribution | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="normal.html"/>
 <link rel="next" href="categorical.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1045,8 +1061,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="lognormal" class="section level1" number="18">
 <h1><span class="header-section-number">Chapter 18</span> The lognormal distribution</h1>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="lognormal.html#cb242-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
-<span id="cb242-2"><a href="lognormal.html#cb242-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="lognormal.html#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb251-2"><a href="lognormal.html#cb251-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <p>The importance of the lognormal distribution in biology and medicine cannot be over-emphasized. Many of the variables we study in biological systems are inherently lognormal distributed. Lognormal just seems to be the way a lot of biology is wired.</p>
 <p>How is lognormal defined?</p>
 <p>A variable <span class="math inline">\(X\)</span> on its natural scale is lognormal distributed when its logarithm, <span class="math inline">\(Z=ln(X)\)</span>, is normal distributed.</p>
@@ -1083,19 +1099,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>It is also very important to know, generally, that back transformation of a log transformed parameter yields geometric rather than arithmetic parameter values.</p>
 <p>For example the default <code>dlnorm</code> function, representing the standard lognormal, has <code>meanlog</code> and <code>sdlog</code> equal to 0 and 1, respectively. Back transformation to the natural scale via exponentiation (<code>exp(0) or exp(1)</code>) yields “geometric” values of 1 and 2.718282, respectively.</p>
 <p>Using quick simulations we quickly see these back transformed values are NOT equivalent to the mean and sd of lognormal <span class="math inline">\(X\)</span> on its natural scale.</p>
-<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="lognormal.html#cb243-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675301</span>)</span>
-<span id="cb243-2"><a href="lognormal.html#cb243-2" aria-hidden="true" tabindex="-1"></a><span class="co"># a large sample from standard lognormal</span></span>
-<span id="cb243-3"><a href="lognormal.html#cb243-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(<span class="at">n=</span><span class="fl">1e6</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
-<span id="cb243-4"><a href="lognormal.html#cb243-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="lognormal.html#cb252-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675301</span>)</span>
+<span id="cb252-2"><a href="lognormal.html#cb252-2" aria-hidden="true" tabindex="-1"></a><span class="co"># a large sample from standard lognormal</span></span>
+<span id="cb252-3"><a href="lognormal.html#cb252-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(<span class="at">n=</span><span class="fl">1e6</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb252-4"><a href="lognormal.html#cb252-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(X)</span></code></pre></div>
 <pre><code>## [1] 1.650059</code></pre>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="lognormal.html#cb245-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">mean</span>(<span class="fu">log</span>(X)))</span></code></pre></div>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="lognormal.html#cb254-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">mean</span>(<span class="fu">log</span>(X)))</span></code></pre></div>
 <pre><code>## [1] 1.000664</code></pre>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="lognormal.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="lognormal.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(X)</span></code></pre></div>
 <pre><code>## [1] 2.153168</code></pre>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="lognormal.html#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">sd</span>(<span class="fu">log</span>(X)))</span></code></pre></div>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="lognormal.html#cb258-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">sd</span>(<span class="fu">log</span>(X)))</span></code></pre></div>
 <pre><code>## [1] 2.718807</code></pre>
 <p>The parameter <span class="math inline">\(e^\mu\)</span> is the geometric mean of <span class="math inline">\(X\)</span> on its natural scale. In fact, it estimates the value of median of <span class="math inline">\(X\)</span>!</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="lognormal.html#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="lognormal.html#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(X)</span></code></pre></div>
 <pre><code>## [1] 1.000013</code></pre>
 <p>Likewise, the parameter <span class="math inline">\(e^{\sigma}\)</span> is the geometric standard deviation, and as shown above it is not equivalent to the arithmetic standard deviation of<span class="math inline">\(X\)</span>.</p>
 <p>What the geometric standard deviation tells us is harder to grasp intuitively. <span class="math inline">\(e^\sigma\)</span> has some utility as a descriptive scatter factor^(About two thirds of a lognormal distribution are bounded by the limits <span class="math inline">\(e^\mu/e^\sigma\)</span> and <span class="math inline">\(e^\mu \times e^\sigma\)</span>) or in construction of confidence intervals for lognormal data. But this is beyond the scope of this chapter.</p>
@@ -1105,22 +1121,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">18.1.2</span> Using dlnorm</h3>
 <p>Let’s imagine we study expression of a gene using a fluorescent reporter that we can quantify in arbitrary light units. Let’s imagine that the fluorescent signal is linear over the range of values from 0 to 5, and significant to three digits right of the decimal. The variable has a large dynamic range. Finally, when log transformed, a large collection of values have a meanlog of 0.8 and sdlog of 1.2.</p>
 <p>If one day we measured fluorescence and its value is 0.555. It would be weird, but we might want to know the density of that one signal value?</p>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="lognormal.html#cb253-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dlnorm</span>(<span class="at">x=</span><span class="fl">0.555</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="lognormal.html#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dlnorm</span>(<span class="at">x=</span><span class="fl">0.555</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>)</span></code></pre></div>
 <pre><code>## [1] 0.3066124</code></pre>
 <p>Alone, a single density for a given value <span class="math inline">\(x\)</span> is either kind of hard to interpret or not particularly useful. Actually, it is both.</p>
 <p>However, densities calculated over a range of of <span class="math inline">\(x\)</span> values better illuminates the <code>dlnorm</code> function. Because it illustrates the shape of the distribution that the values can take on. In particular, note how the distribution differs for variables with a few alternative values for <span class="math inline">\(meanlog\)</span> and <span class="math inline">\(sdlog\)</span>. This illustrates that lognormal data can come in an infinite array of shapes and sizes.</p>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="lognormal.html#cb255-1" aria-hidden="true" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">5</span>)</span>
-<span id="cb255-2"><a href="lognormal.html#cb255-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x=</span>range), <span class="fu">aes</span>(x)) <span class="sc">+</span></span>
-<span id="cb255-3"><a href="lognormal.html#cb255-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dlnorm, </span>
-<span id="cb255-4"><a href="lognormal.html#cb255-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">1</span>), <span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span></span>
-<span id="cb255-5"><a href="lognormal.html#cb255-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dlnorm, </span>
-<span id="cb255-6"><a href="lognormal.html#cb255-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">2</span>), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
-<span id="cb255-7"><a href="lognormal.html#cb255-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dlnorm, </span>
-<span id="cb255-8"><a href="lognormal.html#cb255-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>), <span class="at">color =</span> <span class="st">&quot;brown&quot;</span>)<span class="sc">+</span></span>
-<span id="cb255-9"><a href="lognormal.html#cb255-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">&quot;p(x)&quot;</span>, <span class="at">n.breaks=</span><span class="dv">20</span>)<span class="sc">+</span></span>
-<span id="cb255-10"><a href="lognormal.html#cb255-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">&quot;X&quot;</span>, <span class="at">n.breaks=</span><span class="dv">10</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-138"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-138-1.png" alt="Theoretical distributions of variables X that are lognormal." width="672" />
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="lognormal.html#cb264-1" aria-hidden="true" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">5</span>)</span>
+<span id="cb264-2"><a href="lognormal.html#cb264-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x=</span>range), <span class="fu">aes</span>(x)) <span class="sc">+</span></span>
+<span id="cb264-3"><a href="lognormal.html#cb264-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dlnorm, </span>
+<span id="cb264-4"><a href="lognormal.html#cb264-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">1</span>), <span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span></span>
+<span id="cb264-5"><a href="lognormal.html#cb264-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dlnorm, </span>
+<span id="cb264-6"><a href="lognormal.html#cb264-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">2</span>), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb264-7"><a href="lognormal.html#cb264-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dlnorm, </span>
+<span id="cb264-8"><a href="lognormal.html#cb264-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>), <span class="at">color =</span> <span class="st">&quot;brown&quot;</span>)<span class="sc">+</span></span>
+<span id="cb264-9"><a href="lognormal.html#cb264-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">&quot;p(x)&quot;</span>, <span class="at">n.breaks=</span><span class="dv">20</span>)<span class="sc">+</span></span>
+<span id="cb264-10"><a href="lognormal.html#cb264-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">&quot;X&quot;</span>, <span class="at">n.breaks=</span><span class="dv">10</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-137"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-137-1.png" alt="Theoretical distributions of variables X that are lognormal." width="672" />
 <p class="caption">
 Figure 18.1: Theoretical distributions of variables X that are lognormal.
 </p>
@@ -1137,23 +1153,23 @@ Figure 18.1: Theoretical distributions of variables X that are lognormal.
 <p>where <span class="math inline">\(\Phi\)</span> is the CDF for the normal distribution (see the <code>pnorm</code> function <a href="normal.html#pnorm">17.2</a>).</p>
 <p>We use this function to calculate the area under the distribution curve, to the right or left of the quantile entered.</p>
 <p>For example, the script below answers the question: What fraction of the area under the curve is to the right of <code>q=0.555</code></p>
-<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="lognormal.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plnorm</span>(<span class="fl">0.555</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="lognormal.html#cb265-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plnorm</span>(<span class="fl">0.555</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
 <pre><code>## [1] 0.8764297</code></pre>
 <p>And what fraction is to the left of that value of <code>q</code>?</p>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="lognormal.html#cb258-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plnorm</span>(<span class="fl">0.555</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>, <span class="at">lower.tail=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="lognormal.html#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plnorm</span>(<span class="fl">0.555</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>, <span class="at">lower.tail=</span>T)</span></code></pre></div>
 <pre><code>## [1] 0.1235703</code></pre>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="lognormal.html#cb260-1" aria-hidden="true" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">5</span>)</span>
-<span id="cb260-2"><a href="lognormal.html#cb260-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">q=</span>range), <span class="fu">aes</span>(q)) <span class="sc">+</span></span>
-<span id="cb260-3"><a href="lognormal.html#cb260-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>plnorm, </span>
-<span id="cb260-4"><a href="lognormal.html#cb260-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">1</span>), <span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span></span>
-<span id="cb260-5"><a href="lognormal.html#cb260-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>plnorm, </span>
-<span id="cb260-6"><a href="lognormal.html#cb260-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">2</span>), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
-<span id="cb260-7"><a href="lognormal.html#cb260-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>plnorm, </span>
-<span id="cb260-8"><a href="lognormal.html#cb260-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>), <span class="at">color =</span> <span class="st">&quot;brown&quot;</span>)<span class="sc">+</span></span>
-<span id="cb260-9"><a href="lognormal.html#cb260-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">&quot;p(x)&quot;</span>, <span class="at">n.breaks=</span><span class="dv">20</span>)<span class="sc">+</span></span>
-<span id="cb260-10"><a href="lognormal.html#cb260-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">&quot;X&quot;</span>, <span class="at">n.breaks=</span><span class="dv">10</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-139"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-139-1.png" alt="Plots of the cumulative distribution for 3 lognormal distributions. See script for details." width="672" />
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="lognormal.html#cb269-1" aria-hidden="true" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">5</span>)</span>
+<span id="cb269-2"><a href="lognormal.html#cb269-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">q=</span>range), <span class="fu">aes</span>(q)) <span class="sc">+</span></span>
+<span id="cb269-3"><a href="lognormal.html#cb269-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>plnorm, </span>
+<span id="cb269-4"><a href="lognormal.html#cb269-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">1</span>), <span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span></span>
+<span id="cb269-5"><a href="lognormal.html#cb269-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>plnorm, </span>
+<span id="cb269-6"><a href="lognormal.html#cb269-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">2</span>), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb269-7"><a href="lognormal.html#cb269-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>plnorm, </span>
+<span id="cb269-8"><a href="lognormal.html#cb269-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>), <span class="at">color =</span> <span class="st">&quot;brown&quot;</span>)<span class="sc">+</span></span>
+<span id="cb269-9"><a href="lognormal.html#cb269-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">&quot;p(x)&quot;</span>, <span class="at">n.breaks=</span><span class="dv">20</span>)<span class="sc">+</span></span>
+<span id="cb269-10"><a href="lognormal.html#cb269-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">&quot;X&quot;</span>, <span class="at">n.breaks=</span><span class="dv">10</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-138"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-138-1.png" alt="Plots of the cumulative distribution for 3 lognormal distributions. See script for details." width="672" />
 <p class="caption">
 Figure 18.2: Plots of the cumulative distribution for 3 lognormal distributions. See script for details.
 </p>
@@ -1164,21 +1180,21 @@ Figure 18.2: Plots of the cumulative distribution for 3 lognormal distributions.
 <p>The <code>qlnorm</code> function in R is the inverse of the cumulative distribution function <code>plnorm</code>.</p>
 <p>This function takes a percentile as an argument and returns values of the lognormal variable on its natural scale.</p>
 <p>The output can answer this question: What value of a lognormal distributed variable on its native scale corresponds to the 50th percentile?.</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="lognormal.html#cb261-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qlnorm</span>(<span class="fl">0.5</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="lognormal.html#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qlnorm</span>(<span class="fl">0.5</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>)</span></code></pre></div>
 <pre><code>## [1] 2.225541</code></pre>
 <p>Thus, half of all values of <span class="math inline">\(X\)</span> are less than 2.225541.</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="lognormal.html#cb263-1" aria-hidden="true" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
-<span id="cb263-2"><a href="lognormal.html#cb263-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">p=</span>range), <span class="fu">aes</span>(<span class="at">x=</span>p)) <span class="sc">+</span></span>
-<span id="cb263-3"><a href="lognormal.html#cb263-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>qlnorm, </span>
-<span id="cb263-4"><a href="lognormal.html#cb263-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">1</span>), <span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span></span>
-<span id="cb263-5"><a href="lognormal.html#cb263-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>qlnorm, </span>
-<span id="cb263-6"><a href="lognormal.html#cb263-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">2</span>), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
-<span id="cb263-7"><a href="lognormal.html#cb263-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>qlnorm, </span>
-<span id="cb263-8"><a href="lognormal.html#cb263-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>), <span class="at">color =</span> <span class="st">&quot;brown&quot;</span>)<span class="sc">+</span></span>
-<span id="cb263-9"><a href="lognormal.html#cb263-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">&quot;X&quot;</span>, <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">n.breaks=</span><span class="dv">20</span>)<span class="sc">+</span></span>
-<span id="cb263-10"><a href="lognormal.html#cb263-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">&quot;p(x)&quot;</span>, <span class="at">n.breaks=</span><span class="dv">10</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-140"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-140-1.png" alt="Plots of the inverse cumulative distribution" width="672" />
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="lognormal.html#cb272-1" aria-hidden="true" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb272-2"><a href="lognormal.html#cb272-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">p=</span>range), <span class="fu">aes</span>(<span class="at">x=</span>p)) <span class="sc">+</span></span>
+<span id="cb272-3"><a href="lognormal.html#cb272-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>qlnorm, </span>
+<span id="cb272-4"><a href="lognormal.html#cb272-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">1</span>), <span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span></span>
+<span id="cb272-5"><a href="lognormal.html#cb272-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>qlnorm, </span>
+<span id="cb272-6"><a href="lognormal.html#cb272-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="dv">0</span>, <span class="at">sdlog=</span><span class="dv">2</span>), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb272-7"><a href="lognormal.html#cb272-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>qlnorm, </span>
+<span id="cb272-8"><a href="lognormal.html#cb272-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>), <span class="at">color =</span> <span class="st">&quot;brown&quot;</span>)<span class="sc">+</span></span>
+<span id="cb272-9"><a href="lognormal.html#cb272-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name=</span><span class="st">&quot;X&quot;</span>, <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">n.breaks=</span><span class="dv">20</span>)<span class="sc">+</span></span>
+<span id="cb272-10"><a href="lognormal.html#cb272-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">&quot;p(x)&quot;</span>, <span class="at">n.breaks=</span><span class="dv">10</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-139"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-139-1.png" alt="Plots of the inverse cumulative distribution" width="672" />
 <p class="caption">
 Figure 18.3: Plots of the inverse cumulative distribution
 </p>
@@ -1188,18 +1204,23 @@ Figure 18.3: Plots of the inverse cumulative distribution
 <h2><span class="header-section-number">18.4</span> rlnorm</h2>
 <p>R’s <code>rlnorm</code> function is used to simulate <span class="math inline">\(n\)</span> values of a lognormal variable with any parameter values for <span class="math inline">\(meanlog\)</span> and <span class="math inline">\(sdlog\)</span>. The values generated by the <code>rlnorm</code> function are on the natural scale of the variable.</p>
 <p>Let’s imagine 100 measurements of that fluorescent reporter gene in arbitrary light units. A scatter plot of the simulated data on its natural scale, sampled from a lognormal population along with the data log-transformed, would look something like this:</p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="lognormal.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675309</span>)</span>
-<span id="cb264-2"><a href="lognormal.html#cb264-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span><span class="fu">tibble</span>(<span class="at">fluorescence=</span><span class="fu">rlnorm</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>), </span>
-<span id="cb264-3"><a href="lognormal.html#cb264-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">gene=</span><span class="st">&quot;gene&quot;</span>), </span>
-<span id="cb264-4"><a href="lognormal.html#cb264-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>gene, <span class="at">y=</span>fluorescence))<span class="sc">+</span></span>
-<span id="cb264-5"><a href="lognormal.html#cb264-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>)</span>
-<span id="cb264-6"><a href="lognormal.html#cb264-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span><span class="fu">tibble</span>(<span class="at">log_fluorescence=</span><span class="fu">log</span>(<span class="fu">rlnorm</span>(<span class="dv">100</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>)), </span>
-<span id="cb264-7"><a href="lognormal.html#cb264-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">gene=</span><span class="st">&quot;gene&quot;</span>), </span>
-<span id="cb264-8"><a href="lognormal.html#cb264-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>gene, <span class="at">y=</span>log_fluorescence))<span class="sc">+</span></span>
-<span id="cb264-9"><a href="lognormal.html#cb264-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>)</span>
-<span id="cb264-10"><a href="lognormal.html#cb264-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(p1, p2)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-141"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-141-1.png" alt="Left panel: Simulated lognormal distributed fluorescence data. The units are fluorescence in arbitray light units. Note their skewness. Right panel: The same data after log transformation. Note the symmetry. The plot on the right has a mean of ~ 0.8 and sd ~1.2, in units of log_fluorscence." width="672" />
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="lognormal.html#cb273-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675309</span>)</span>
+<span id="cb273-2"><a href="lognormal.html#cb273-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span><span class="fu">tibble</span>(<span class="at">fluorescence=</span><span class="fu">rlnorm</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>), </span>
+<span id="cb273-3"><a href="lognormal.html#cb273-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">gene=</span><span class="st">&quot;gene&quot;</span>), </span>
+<span id="cb273-4"><a href="lognormal.html#cb273-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>gene, <span class="at">y=</span>fluorescence))<span class="sc">+</span></span>
+<span id="cb273-5"><a href="lognormal.html#cb273-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>)</span>
+<span id="cb273-6"><a href="lognormal.html#cb273-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span><span class="fu">tibble</span>(<span class="at">log_fluorescence=</span><span class="fu">log</span>(<span class="fu">rlnorm</span>(<span class="dv">100</span>, <span class="at">meanlog=</span><span class="fl">0.8</span>, <span class="at">sdlog=</span><span class="fl">1.2</span>)), </span>
+<span id="cb273-7"><a href="lognormal.html#cb273-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">gene=</span><span class="st">&quot;gene&quot;</span>), </span>
+<span id="cb273-8"><a href="lognormal.html#cb273-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>gene, <span class="at">y=</span>log_fluorescence))<span class="sc">+</span></span>
+<span id="cb273-9"><a href="lognormal.html#cb273-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.5</span>)</span>
+<span id="cb273-10"><a href="lognormal.html#cb273-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(p1, p2)</span></code></pre></div>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used
+
+## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-140"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-140-1.png" alt="Left panel: Simulated lognormal distributed fluorescence data. The units are fluorescence in arbitray light units. Note their skewness. Right panel: The same data after log transformation. Note the symmetry. The plot on the right has a mean of ~ 0.8 and sd ~1.2, in units of log_fluorscence." width="672" />
 <p class="caption">
 Figure 18.4: Left panel: Simulated lognormal distributed fluorescence data. The units are fluorescence in arbitray light units. Note their skewness. Right panel: The same data after log transformation. Note the symmetry. The plot on the right has a mean of ~ 0.8 and sd ~1.2, in units of log_fluorscence.
 </p>
@@ -1224,7 +1245,6 @@ Figure 18.4: Left panel: Simulated lognormal distributed fluorescence data. The 
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1243,6 +1263,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1263,10 +1284,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

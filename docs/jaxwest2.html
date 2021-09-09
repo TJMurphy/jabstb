@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 36 Reproducible Data Munging Mostly with Tidyverse | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 36 Reproducible Data Munging Mostly with Tidyverse | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="posthoc.html"/>
 <link rel="next" href="anovamc.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1045,9 +1061,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="jaxwest2" class="section level1" number="36">
 <h1><span class="header-section-number">Chapter 36</span> Reproducible Data Munging Mostly with Tidyverse</h1>
-<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb762-1"><a href="jaxwest2.html#cb762-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb762-2"><a href="jaxwest2.html#cb762-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb762-3"><a href="jaxwest2.html#cb762-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code></pre></div>
+<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb774-1"><a href="jaxwest2.html#cb774-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb774-2"><a href="jaxwest2.html#cb774-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb774-3"><a href="jaxwest2.html#cb774-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code></pre></div>
 <p>Reproducibility is when someone who has your data can conduct the same analysis, arriving at the same parameter estimates and conclusions. The data processing steps of an analysis are perhaps the most critical determinant of reproducibility. Ideally, this is performed using a breadcrumbs process, where each step is traceable.</p>
 <p>That’s what R scripts do and why they are better than munging data in GUI software, such as excel or other stats packages.</p>
 <p>Here’s an example of what I mean by an R script munge. I thought it would be interesting to try and pull this off using mostly tidyverse functions, if possible.</p>
@@ -1090,22 +1106,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>They explain how, except for the first header row, <code>jw2</code> contains all of the data in the first sheet of the source file.</p>
 <p>Skipping a useless, incomplete row helps us immensely. And R is stupid, we have tell it explicitly what sheet to read.</p>
 <p>Note that <code>jaxwest2.xls</code> is otherwise untouched. No changes have been made locally to the original source file. That’s important because it is good reproducible practice.</p>
-<div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb763-1"><a href="jaxwest2.html#cb763-1" aria-hidden="true" tabindex="-1"></a>jw2 <span class="ot">&lt;-</span><span class="st">&quot;datasets/jaxwest2.xls&quot;</span> <span class="sc">%&gt;%</span></span>
-<span id="cb763-2"><a href="jaxwest2.html#cb763-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(</span>
-<span id="cb763-3"><a href="jaxwest2.html#cb763-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">skip=</span><span class="dv">1</span>, </span>
-<span id="cb763-4"><a href="jaxwest2.html#cb763-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sheet=</span><span class="dv">1</span></span>
-<span id="cb763-5"><a href="jaxwest2.html#cb763-5" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb763-6"><a href="jaxwest2.html#cb763-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb763-7"><a href="jaxwest2.html#cb763-7" aria-hidden="true" tabindex="-1"></a><span class="co"># remove whitespace</span></span>
-<span id="cb763-8"><a href="jaxwest2.html#cb763-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(jw2) <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">names</span>(jw2),<span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb775-1"><a href="jaxwest2.html#cb775-1" aria-hidden="true" tabindex="-1"></a>jw2 <span class="ot">&lt;-</span><span class="st">&quot;datasets/jaxwest2.xls&quot;</span> <span class="sc">%&gt;%</span></span>
+<span id="cb775-2"><a href="jaxwest2.html#cb775-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(</span>
+<span id="cb775-3"><a href="jaxwest2.html#cb775-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">skip=</span><span class="dv">1</span>, </span>
+<span id="cb775-4"><a href="jaxwest2.html#cb775-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sheet=</span><span class="dv">1</span></span>
+<span id="cb775-5"><a href="jaxwest2.html#cb775-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb775-6"><a href="jaxwest2.html#cb775-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb775-7"><a href="jaxwest2.html#cb775-7" aria-hidden="true" tabindex="-1"></a><span class="co"># remove whitespace</span></span>
+<span id="cb775-8"><a href="jaxwest2.html#cb775-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(jw2) <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">names</span>(jw2),<span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <p>Note: Here is an optional method to read in the data. In two parts. This forces the bulk of the numeric data to be read in as numeric. You’ll see in a moment why this matters.</p>
-<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb764-1"><a href="jaxwest2.html#cb764-1" aria-hidden="true" tabindex="-1"></a>right <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;datasets/jaxwest2.xls&quot;</span>, <span class="at">skip=</span><span class="dv">1</span>, <span class="at">sheet=</span><span class="dv">1</span>, <span class="at">range=</span><span class="st">&quot;I2:CY37&quot;</span>, <span class="at">col_types=</span><span class="st">&quot;numeric&quot;</span>)</span>
-<span id="cb764-2"><a href="jaxwest2.html#cb764-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb764-3"><a href="jaxwest2.html#cb764-3" aria-hidden="true" tabindex="-1"></a>left <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;datasets/jaxwest2.xls&quot;</span>, <span class="at">skip=</span><span class="dv">1</span>, <span class="at">sheet=</span><span class="dv">1</span>, <span class="at">range=</span><span class="st">&quot;A2:H37&quot;</span>)</span>
-<span id="cb764-4"><a href="jaxwest2.html#cb764-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb764-5"><a href="jaxwest2.html#cb764-5" aria-hidden="true" tabindex="-1"></a>alt <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(left, right)</span>
-<span id="cb764-6"><a href="jaxwest2.html#cb764-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb764-7"><a href="jaxwest2.html#cb764-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(alt) <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">names</span>(alt), <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb776-1"><a href="jaxwest2.html#cb776-1" aria-hidden="true" tabindex="-1"></a>right <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;datasets/jaxwest2.xls&quot;</span>, <span class="at">skip=</span><span class="dv">1</span>, <span class="at">sheet=</span><span class="dv">1</span>, <span class="at">range=</span><span class="st">&quot;I2:CY37&quot;</span>, <span class="at">col_types=</span><span class="st">&quot;numeric&quot;</span>)</span>
+<span id="cb776-2"><a href="jaxwest2.html#cb776-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb776-3"><a href="jaxwest2.html#cb776-3" aria-hidden="true" tabindex="-1"></a>left <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;datasets/jaxwest2.xls&quot;</span>, <span class="at">skip=</span><span class="dv">1</span>, <span class="at">sheet=</span><span class="dv">1</span>, <span class="at">range=</span><span class="st">&quot;A2:H37&quot;</span>)</span>
+<span id="cb776-4"><a href="jaxwest2.html#cb776-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb776-5"><a href="jaxwest2.html#cb776-5" aria-hidden="true" tabindex="-1"></a>alt <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(left, right)</span>
+<span id="cb776-6"><a href="jaxwest2.html#cb776-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb776-7"><a href="jaxwest2.html#cb776-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(alt) <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">names</span>(alt), <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 </div>
 <div id="step-2-select-the-variables" class="section level2" number="36.4">
 <h2><span class="header-section-number">36.4</span> Step 2: Select the variables</h2>
@@ -1116,21 +1132,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The function <code>contains</code> is super helpful because the tumor volume variables for each day of measurement have a slightly different name, yet each contain the characters <code>tumor_vol_</code> as a common stem.</p>
 <p>Give it a shot. Try to grab a different set of variables using <code>contains</code>.</p>
 <p>We’ll create a new object, <code>jw2vol</code> to represent the data only for tumor volumes. Notice how in subsequent chunks <code>jw2vol</code> is modified as we successively munge the data into shape.</p>
-<div class="sourceCode" id="cb765"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb765-1"><a href="jaxwest2.html#cb765-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2 <span class="sc">%&gt;%</span> </span>
-<span id="cb765-2"><a href="jaxwest2.html#cb765-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb765-3"><a href="jaxwest2.html#cb765-3" aria-hidden="true" tabindex="-1"></a>    mouse_ID, </span>
-<span id="cb765-4"><a href="jaxwest2.html#cb765-4" aria-hidden="true" tabindex="-1"></a>    test_group, </span>
-<span id="cb765-5"><a href="jaxwest2.html#cb765-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">contains</span>(<span class="st">&quot;tumor_vol_&quot;</span>)</span>
-<span id="cb765-6"><a href="jaxwest2.html#cb765-6" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb777-1"><a href="jaxwest2.html#cb777-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2 <span class="sc">%&gt;%</span> </span>
+<span id="cb777-2"><a href="jaxwest2.html#cb777-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb777-3"><a href="jaxwest2.html#cb777-3" aria-hidden="true" tabindex="-1"></a>    mouse_ID, </span>
+<span id="cb777-4"><a href="jaxwest2.html#cb777-4" aria-hidden="true" tabindex="-1"></a>    test_group, </span>
+<span id="cb777-5"><a href="jaxwest2.html#cb777-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">contains</span>(<span class="st">&quot;tumor_vol_&quot;</span>)</span>
+<span id="cb777-6"><a href="jaxwest2.html#cb777-6" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 </div>
 <div id="step-3-trim-the-cases" class="section level2" number="36.5">
 <h2><span class="header-section-number">36.5</span> Step 3: Trim the cases</h2>
 <p>As described in the preamble, we only want a subset of the test_groups. We can omit a lot of rows.</p>
 <p>Looking at <code>jw2vol</code> we can see those happen to be the first 11 cases in the data set. We’ll <code>slice</code> them out, throwing away the rest.</p>
-<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb766-1"><a href="jaxwest2.html#cb766-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
-<span id="cb766-2"><a href="jaxwest2.html#cb766-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb766-3"><a href="jaxwest2.html#cb766-3" aria-hidden="true" tabindex="-1"></a>    test_group <span class="sc">==</span> <span class="st">&quot;Control (no vehicle)&quot;</span></span>
-<span id="cb766-4"><a href="jaxwest2.html#cb766-4" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb778-1"><a href="jaxwest2.html#cb778-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
+<span id="cb778-2"><a href="jaxwest2.html#cb778-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb778-3"><a href="jaxwest2.html#cb778-3" aria-hidden="true" tabindex="-1"></a>    test_group <span class="sc">==</span> <span class="st">&quot;Control (no vehicle)&quot;</span></span>
+<span id="cb778-4"><a href="jaxwest2.html#cb778-4" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 </div>
 <div id="step-4-we-have-a-variable-problem-to-fix" class="section level2" number="36.6">
 <h2><span class="header-section-number">36.6</span> Step 4: We have a variable problem to fix</h2>
@@ -1146,26 +1162,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>And the principles of reproducible data handling demand that we fix both of these problems in R, not in the original data excel data file.</p>
 <p><strong>Fix the Munge</strong></p>
 <p>We need to convert every tumor_vol column from class_character to class numeric. We’ll get an NA warning but that is OK, we expect it.</p>
-<div class="sourceCode" id="cb767"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb767-1"><a href="jaxwest2.html#cb767-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> <span class="fu">mutate_at</span>(<span class="fu">vars</span>(tumor_vol_17<span class="sc">:</span>tumor_vol_44), as.numeric)</span></code></pre></div>
-<pre><code>## Warning: Problem with `mutate()` input `tumor_vol_17`.
-## i NAs introduced by coercion
-## i Input `tumor_vol_17` is `.Primitive(&quot;as.double&quot;)(tumor_vol_17)`.</code></pre>
-<pre><code>## Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion</code></pre>
-<div class="sourceCode" id="cb770"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb770-1"><a href="jaxwest2.html#cb770-1" aria-hidden="true" tabindex="-1"></a>jw2vol</span></code></pre></div>
+<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb779-1"><a href="jaxwest2.html#cb779-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> <span class="fu">mutate_at</span>(<span class="fu">vars</span>(tumor_vol_17<span class="sc">:</span>tumor_vol_44), as.numeric)</span></code></pre></div>
+<pre><code>## Warning in mask$eval_all_mutate(quo): NAs introduced by coercion</code></pre>
+<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb781-1"><a href="jaxwest2.html#cb781-1" aria-hidden="true" tabindex="-1"></a>jw2vol</span></code></pre></div>
 <pre><code>## # A tibble: 11 x 15
-##    mouse_ID test_group tumor_vol_17 tumor_vol_18 tumor_vol_19 tumor_vol_22
-##       &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
-##  1       38 Control (~        27.2          54.8         77.6        104. 
-##  2       39 Control (~        12.6          15.8         24.8         36.5
-##  3       43 Control (~        NA            30.0         54.9         75.6
-##  4       48 Control (~         7.88         30.2         31.0         53.6
-##  5       51 Control (~        16.2          25.8         28.6         60.6
-##  6       58 Control (~        61.5         105.          93.2        136. 
-##  7       62 Control (~        20.1          44.1         60.1         70.3
-##  8       63 Control (~        56.1          93.1        104.         164. 
-##  9       64 Control (~        17.1          78.1         79.8        120. 
-## 10       66 Control (~        15.1          32.3         35.4         40.3
-## 11       67 Control (~        21.7          27.0         44.6         68.8
+##    mouse_ID test_group       tumor_vol_17 tumor_vol_18 tumor_vol_19 tumor_vol_22
+##       &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
+##  1       38 Control (no veh~        27.2          54.8         77.6        104. 
+##  2       39 Control (no veh~        12.6          15.8         24.8         36.5
+##  3       43 Control (no veh~        NA            30.0         54.9         75.6
+##  4       48 Control (no veh~         7.88         30.2         31.0         53.6
+##  5       51 Control (no veh~        16.2          25.8         28.6         60.6
+##  6       58 Control (no veh~        61.5         105.          93.2        136. 
+##  7       62 Control (no veh~        20.1          44.1         60.1         70.3
+##  8       63 Control (no veh~        56.1          93.1        104.         164. 
+##  9       64 Control (no veh~        17.1          78.1         79.8        120. 
+## 10       66 Control (no veh~        15.1          32.3         35.4         40.3
+## 11       67 Control (no veh~        21.7          27.0         44.6         68.8
 ## # ... with 9 more variables: tumor_vol_24 &lt;dbl&gt;, tumor_vol_26 &lt;dbl&gt;,
 ## #   tumor_vol_29 &lt;dbl&gt;, tumor_vol_31 &lt;dbl&gt;, tumor_vol_33 &lt;dbl&gt;,
 ## #   tumor_vol_36 &lt;dbl&gt;, tumor_vol_38 &lt;dbl&gt;, tumor_vol_40 &lt;dbl&gt;,
@@ -1175,10 +1188,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">36.7</span> Step 5: Impute or Delete</h2>
 <p>Now that we have numeric variables, we can hunt for NA values within and then do something about it.</p>
 <p>First, where are they?</p>
-<div class="sourceCode" id="cb772"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb772-1"><a href="jaxwest2.html#cb772-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We couldn&#39;t do is.na on character vectors. </span></span>
-<span id="cb772-2"><a href="jaxwest2.html#cb772-2" aria-hidden="true" tabindex="-1"></a><span class="co"># well, we can but it doesn&#39;t work, it would yield false negatives</span></span>
-<span id="cb772-3"><a href="jaxwest2.html#cb772-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb772-4"><a href="jaxwest2.html#cb772-4" aria-hidden="true" tabindex="-1"></a><span class="fu">map_df</span>(jw2vol, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code></pre></div>
+<div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb783-1"><a href="jaxwest2.html#cb783-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We couldn&#39;t do is.na on character vectors. </span></span>
+<span id="cb783-2"><a href="jaxwest2.html#cb783-2" aria-hidden="true" tabindex="-1"></a><span class="co"># well, we can but it doesn&#39;t work, it would yield false negatives</span></span>
+<span id="cb783-3"><a href="jaxwest2.html#cb783-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb783-4"><a href="jaxwest2.html#cb783-4" aria-hidden="true" tabindex="-1"></a><span class="fu">map_df</span>(jw2vol, <span class="cf">function</span>(x) <span class="fu">sum</span>(<span class="fu">is.na</span>(x)))</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 15
 ##   mouse_ID test_group tumor_vol_17 tumor_vol_18 tumor_vol_19 tumor_vol_22
 ##      &lt;int&gt;      &lt;int&gt;        &lt;int&gt;        &lt;int&gt;        &lt;int&gt;        &lt;int&gt;
@@ -1197,23 +1210,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>But what number do we use?</p>
 <p>One option is to replace the NA with the mean of all other tumor_vols for mouse_ID 43. The other option is to replace using the mean of all other tumor_vols on day 17. In this case, since all later volume measures inflate, the mean of the ID will be biased high.</p>
 <p>So we’ll use the mean of the grouped variable instead.</p>
-<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb774-1"><a href="jaxwest2.html#cb774-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> <span class="fu">replace_na</span>(</span>
-<span id="cb774-2"><a href="jaxwest2.html#cb774-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">tumor_vol_17 =</span> <span class="fu">mean</span>(jw2vol<span class="sc">$</span>tumor_vol_17, <span class="at">na.rm=</span>T)))</span></code></pre></div>
+<div class="sourceCode" id="cb785"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb785-1"><a href="jaxwest2.html#cb785-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> <span class="fu">replace_na</span>(</span>
+<span id="cb785-2"><a href="jaxwest2.html#cb785-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">tumor_vol_17 =</span> <span class="fu">mean</span>(jw2vol<span class="sc">$</span>tumor_vol_17, <span class="at">na.rm=</span>T)))</span></code></pre></div>
 </div>
 <div id="step-6-go-long" class="section level2" number="36.8">
 <h2><span class="header-section-number">36.8</span> Step 6: Go long</h2>
 <p>The iteration above is 15 columns wide. Next we use the <code>pivot_longer</code> function to make it long. Go <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">here</a> and carefully look at the examples. What happens in this step is just a copy of what they do for their <code>billboard</code> example.</p>
 <p>We want a column each for mouse ID, the test group, the day of measurement, and the tumor vol measurement values. The first two of these are done.</p>
 <p>The pivot_longer function lets us make the latter two.</p>
-<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb775-1"><a href="jaxwest2.html#cb775-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
-<span id="cb775-2"><a href="jaxwest2.html#cb775-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb775-3"><a href="jaxwest2.html#cb775-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">starts_with</span>(<span class="st">&quot;tumor_vol_&quot;</span>),</span>
-<span id="cb775-4"><a href="jaxwest2.html#cb775-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to=</span><span class="st">&quot;day&quot;</span>,</span>
-<span id="cb775-5"><a href="jaxwest2.html#cb775-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">&quot;tumor_vol_&quot;</span>, </span>
-<span id="cb775-6"><a href="jaxwest2.html#cb775-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;vol&quot;</span>, </span>
-<span id="cb775-7"><a href="jaxwest2.html#cb775-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_drop_na =</span> <span class="cn">TRUE</span></span>
-<span id="cb775-8"><a href="jaxwest2.html#cb775-8" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb775-9"><a href="jaxwest2.html#cb775-9" aria-hidden="true" tabindex="-1"></a>jw2vol</span></code></pre></div>
+<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb786-1"><a href="jaxwest2.html#cb786-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
+<span id="cb786-2"><a href="jaxwest2.html#cb786-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb786-3"><a href="jaxwest2.html#cb786-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">starts_with</span>(<span class="st">&quot;tumor_vol_&quot;</span>),</span>
+<span id="cb786-4"><a href="jaxwest2.html#cb786-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to=</span><span class="st">&quot;day&quot;</span>,</span>
+<span id="cb786-5"><a href="jaxwest2.html#cb786-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">&quot;tumor_vol_&quot;</span>, </span>
+<span id="cb786-6"><a href="jaxwest2.html#cb786-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;vol&quot;</span>, </span>
+<span id="cb786-7"><a href="jaxwest2.html#cb786-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_drop_na =</span> <span class="cn">TRUE</span></span>
+<span id="cb786-8"><a href="jaxwest2.html#cb786-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb786-9"><a href="jaxwest2.html#cb786-9" aria-hidden="true" tabindex="-1"></a>jw2vol</span></code></pre></div>
 <pre><code>## # A tibble: 143 x 4
 ##    mouse_ID test_group           day     vol
 ##       &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt; &lt;dbl&gt;
@@ -1233,12 +1246,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">36.9</span> Step 7: Convert other variables to factor</h2>
 <p>ANOVA are called factorial analyses.</p>
 <p>The predictor variable must be a factor. Here, the predictor is day</p>
-<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb777-1"><a href="jaxwest2.html#cb777-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
-<span id="cb777-2"><a href="jaxwest2.html#cb777-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb777-3"><a href="jaxwest2.html#cb777-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mouse_ID=</span><span class="fu">as.factor</span>(mouse_ID),</span>
-<span id="cb777-4"><a href="jaxwest2.html#cb777-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">test_group=</span><span class="fu">as.factor</span>(test_group)</span>
-<span id="cb777-5"><a href="jaxwest2.html#cb777-5" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb777-6"><a href="jaxwest2.html#cb777-6" aria-hidden="true" tabindex="-1"></a>jw2vol</span></code></pre></div>
+<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb788-1"><a href="jaxwest2.html#cb788-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
+<span id="cb788-2"><a href="jaxwest2.html#cb788-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb788-3"><a href="jaxwest2.html#cb788-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mouse_ID=</span><span class="fu">as.factor</span>(mouse_ID),</span>
+<span id="cb788-4"><a href="jaxwest2.html#cb788-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">test_group=</span><span class="fu">as.factor</span>(test_group)</span>
+<span id="cb788-5"><a href="jaxwest2.html#cb788-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb788-6"><a href="jaxwest2.html#cb788-6" aria-hidden="true" tabindex="-1"></a>jw2vol</span></code></pre></div>
 <pre><code>## # A tibble: 143 x 4
 ##    mouse_ID test_group           day     vol
 ##    &lt;fct&gt;    &lt;fct&gt;                &lt;chr&gt; &lt;dbl&gt;
@@ -1259,13 +1272,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Repeated measures on subjects is the primary feature of this data set. Within each mouse_ID, every measurement is intrinsically-related to every other measurement. Point-to-point graphing illustrates this.</p>
 <p>This calls for a spaghetti plot.</p>
 <p>Here’s all the data! It’s beautiful.</p>
-<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb779-1"><a href="jaxwest2.html#cb779-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(jw2vol, <span class="fu">aes</span>(<span class="fu">as.numeric</span>(day), vol, <span class="at">color=</span>mouse_ID, <span class="at">group=</span>mouse_ID))<span class="sc">+</span></span>
-<span id="cb779-2"><a href="jaxwest2.html#cb779-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)<span class="sc">+</span></span>
-<span id="cb779-3"><a href="jaxwest2.html#cb779-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>)<span class="sc">+</span></span>
-<span id="cb779-4"><a href="jaxwest2.html#cb779-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
-<span id="cb779-5"><a href="jaxwest2.html#cb779-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day after implant&quot;</span>)<span class="sc">+</span></span>
-<span id="cb779-6"><a href="jaxwest2.html#cb779-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Tumor volume&quot;</span>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-376-1.png" width="672" /></p>
+<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb790-1"><a href="jaxwest2.html#cb790-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(jw2vol, <span class="fu">aes</span>(<span class="fu">as.numeric</span>(day), vol, <span class="at">color=</span>mouse_ID, <span class="at">group=</span>mouse_ID))<span class="sc">+</span></span>
+<span id="cb790-2"><a href="jaxwest2.html#cb790-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)<span class="sc">+</span></span>
+<span id="cb790-3"><a href="jaxwest2.html#cb790-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb790-4"><a href="jaxwest2.html#cb790-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb790-5"><a href="jaxwest2.html#cb790-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day after implant&quot;</span>)<span class="sc">+</span></span>
+<span id="cb790-6"><a href="jaxwest2.html#cb790-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Tumor volume&quot;</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-375-1.png" width="672" /></p>
 </div>
 <div id="step-9-run-the-anova" class="section level2" number="36.11">
 <h2><span class="header-section-number">36.11</span> Step 9: Run the ANOVA</h2>
@@ -1283,7 +1296,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1302,6 +1314,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1322,10 +1335,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

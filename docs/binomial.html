@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 15 The Binomial Distribution | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 15 The Binomial Distribution | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="jaxwest7.html"/>
 <link rel="next" href="poisson.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1045,7 +1061,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="binomial" class="section level1" number="15">
 <h1><span class="header-section-number">Chapter 15</span> The Binomial Distribution</h1>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="binomial.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="binomial.html#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
 <p>The binomial probability distribution models the discrete outcomes of dichotomous processes. In other words, events that can be categorized as either a successes or as a failure.</p>
 <div id="dbinom" class="section level2" number="15.1">
 <h2><span class="header-section-number">15.1</span> dbinom</h2>
@@ -1054,27 +1070,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 Where <span class="math inline">\(n\)</span> is the number of trials, <span class="math inline">\(x\)</span> is the value of the number of successes, <span class="math inline">\(p\)</span> is the probability of a single success, and therefore <span class="math inline">\(1-p\)</span> is the probability of a single failure.</p>
 <p>The coin toss serves as the classic explainer for binomial events. A fair coin can land as either heads, or tails with equal probabilities. Unless you’re Patriot’s quarterback Tom Brady, for whom it always lands as heads.</p>
 <p>If Matt Ryan tossed a coin 10 times, what’s the probability of him getting EXACTLY 7 heads?</p>
-<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="binomial.html#cb161-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x=</span><span class="dv">7</span>, <span class="at">size=</span><span class="dv">10</span>, <span class="at">prob=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="binomial.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x=</span><span class="dv">7</span>, <span class="at">size=</span><span class="dv">10</span>, <span class="at">prob=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <pre><code>## [1] 0.1171875</code></pre>
 <p>That’s almost a 12% chance! Eight heads would be even more unlikely. And so on.</p>
 <p>Female mice enter estrus one out of five days. This implies that if a female mouse is mated on any random day, the probability of any single mating resulting in pregnancy is 0.2.</p>
 <p>On a given day, if you set up 12 female mize for mating, what’s the probability that exactly half of them would become pregnant?</p>
-<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="binomial.html#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x=</span><span class="dv">6</span>, <span class="at">size=</span><span class="dv">12</span>, <span class="at">prob=</span><span class="fl">0.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="binomial.html#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x=</span><span class="dv">6</span>, <span class="at">size=</span><span class="dv">12</span>, <span class="at">prob=</span><span class="fl">0.2</span>)</span></code></pre></div>
 <pre><code>## [1] 0.01550215</code></pre>
 <p>There’s only a 1.55% chance of getting EXACTLY 6 dams out of that mating set up.</p>
 <p>The script below illustrates the probabilities over a full range of possible pregnancy outcomes, for a trial of size 12 (ie, 12 matings set up)</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="binomial.html#cb165-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb165-2"><a href="binomial.html#cb165-2" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="dv">12</span></span>
-<span id="cb165-3"><a href="binomial.html#cb165-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb165-4"><a href="binomial.html#cb165-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-5"><a href="binomial.html#cb165-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, <span class="at">px=</span><span class="fu">dbinom</span>(x, size, prob)) </span>
-<span id="cb165-6"><a href="binomial.html#cb165-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-7"><a href="binomial.html#cb165-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, px)) <span class="sc">+</span> </span>
-<span id="cb165-8"><a href="binomial.html#cb165-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb165-9"><a href="binomial.html#cb165-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;x, number of successes&quot;</span>) <span class="sc">+</span></span>
-<span id="cb165-10"><a href="binomial.html#cb165-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;p(x)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb165-11"><a href="binomial.html#cb165-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;dbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-99-1.png" width="672" /></p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="binomial.html#cb172-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb172-2"><a href="binomial.html#cb172-2" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb172-3"><a href="binomial.html#cb172-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb172-4"><a href="binomial.html#cb172-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-5"><a href="binomial.html#cb172-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, <span class="at">px=</span><span class="fu">dbinom</span>(x, size, prob)) </span>
+<span id="cb172-6"><a href="binomial.html#cb172-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-7"><a href="binomial.html#cb172-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, px)) <span class="sc">+</span> </span>
+<span id="cb172-8"><a href="binomial.html#cb172-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb172-9"><a href="binomial.html#cb172-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;x, number of successes&quot;</span>) <span class="sc">+</span></span>
+<span id="cb172-10"><a href="binomial.html#cb172-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;p(x)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb172-11"><a href="binomial.html#cb172-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;dbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
 <p>It’s evident that binomial distributions where the probabilities of successes and failures are uneven are skewed. The only way to make these appear more normally distributed is to have equal probabilities for successes and failures.</p>
 </div>
 <div id="pbinom" class="section level2" number="15.2">
@@ -1082,80 +1098,80 @@ Where <span class="math inline">\(n\)</span> is the number of trials, <span clas
 <p>R’s <code>pbinom</code> is the cumulative probability distribution function for the binomial. <span class="math display">\[p(x)={\sum_{i=0}^{x}}{n\choose i}(p)^i(1-p)^{(n-i)}\]</span></p>
 <p>This function returns the cumulative probability value for a number of successes in n trials. This can be a very useful value to model.</p>
 <p>For example, if you set up 12 matings of mice, where each had a 0.2 probability of pregnancy, what is the probability that you would have up to 6 pregnant dams?</p>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="binomial.html#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">6</span>, <span class="dv">12</span>, <span class="fl">0.2</span>, <span class="at">lower.tail=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="binomial.html#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">6</span>, <span class="dv">12</span>, <span class="fl">0.2</span>, <span class="at">lower.tail=</span>T)</span></code></pre></div>
 <pre><code>## [1] 0.9960969</code></pre>
 <p>There’s is a very high probability of getting UP TO 6 pregnancies from 12 matings!</p>
 <p>If we turn the <code>lower.tail</code> argument from TRUE to FALSE the <code>pbinom</code> returns a p-value like probability.</p>
 <p>What’s the probability of getting 6 or more pregnancies from 12 matings where the probability of a single pregnancy is 0.2?</p>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="binomial.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">6</span>, <span class="dv">12</span>, <span class="fl">0.2</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="binomial.html#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">6</span>, <span class="dv">12</span>, <span class="fl">0.2</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
 <pre><code>## [1] 0.003903132</code></pre>
 <p>That’s about 0.39%! Which would be a very rare outcome from the mating trial, indeed! Maybe even scientifically significant were it to occur.</p>
 <p>Perhaps it’s useful to visualize both the upper and lower tails of this cumulative function:</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="binomial.html#cb170-1" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb170-2"><a href="binomial.html#cb170-2" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="dv">12</span></span>
-<span id="cb170-3"><a href="binomial.html#cb170-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb170-4"><a href="binomial.html#cb170-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-5"><a href="binomial.html#cb170-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(q, <span class="at">px=</span><span class="fu">pbinom</span>(q, size, prob)) </span>
-<span id="cb170-6"><a href="binomial.html#cb170-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-7"><a href="binomial.html#cb170-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(q, px)) <span class="sc">+</span> </span>
-<span id="cb170-8"><a href="binomial.html#cb170-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb170-9"><a href="binomial.html#cb170-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;x, number of successes&quot;</span>) <span class="sc">+</span></span>
-<span id="cb170-10"><a href="binomial.html#cb170-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;p(x)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb170-11"><a href="binomial.html#cb170-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;pbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;lower.tail=TRUE&quot;</span>,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-102-1.png" width="672" /></p>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="binomial.html#cb171-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(q, <span class="at">px=</span><span class="fu">pbinom</span>(q, size, prob, <span class="at">lower.tail=</span>F)) </span>
-<span id="cb171-2"><a href="binomial.html#cb171-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb171-3"><a href="binomial.html#cb171-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(q, px)) <span class="sc">+</span> </span>
-<span id="cb171-4"><a href="binomial.html#cb171-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb171-5"><a href="binomial.html#cb171-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;x, number of successes&quot;</span>) <span class="sc">+</span></span>
-<span id="cb171-6"><a href="binomial.html#cb171-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;p(x)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb171-7"><a href="binomial.html#cb171-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;pbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;lower.tail=FALSE&quot;</span>,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-102-2.png" width="672" /></p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="binomial.html#cb177-1" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb177-2"><a href="binomial.html#cb177-2" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb177-3"><a href="binomial.html#cb177-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb177-4"><a href="binomial.html#cb177-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-5"><a href="binomial.html#cb177-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(q, <span class="at">px=</span><span class="fu">pbinom</span>(q, size, prob)) </span>
+<span id="cb177-6"><a href="binomial.html#cb177-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-7"><a href="binomial.html#cb177-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(q, px)) <span class="sc">+</span> </span>
+<span id="cb177-8"><a href="binomial.html#cb177-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb177-9"><a href="binomial.html#cb177-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;x, number of successes&quot;</span>) <span class="sc">+</span></span>
+<span id="cb177-10"><a href="binomial.html#cb177-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;p(x)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb177-11"><a href="binomial.html#cb177-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;pbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;lower.tail=TRUE&quot;</span>,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-101-1.png" width="672" /></p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="binomial.html#cb178-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(q, <span class="at">px=</span><span class="fu">pbinom</span>(q, size, prob, <span class="at">lower.tail=</span>F)) </span>
+<span id="cb178-2"><a href="binomial.html#cb178-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-3"><a href="binomial.html#cb178-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(q, px)) <span class="sc">+</span> </span>
+<span id="cb178-4"><a href="binomial.html#cb178-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb178-5"><a href="binomial.html#cb178-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;x, number of successes&quot;</span>) <span class="sc">+</span></span>
+<span id="cb178-6"><a href="binomial.html#cb178-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;p(x)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb178-7"><a href="binomial.html#cb178-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;pbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;lower.tail=FALSE&quot;</span>,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-101-2.png" width="672" /></p>
 </div>
 <div id="qbinom" class="section level2" number="15.3">
 <h2><span class="header-section-number">15.3</span> qbinom</h2>
 <p>The quantile binomial distribution function in R is <code>qbinom</code>.</p>
 <p><code>qbinom</code> is the inverse of the <code>pbinom</code> function. This predicts the number of successes that might occur given a percentile of the distribution.</p>
 <p>Assuming 12 matings are set up, where the probability of any one pregnancy success is 0.2, what number of pregnancies would be expected if the group performed at the 90th percentile?</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="binomial.html#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qbinom</span>(<span class="at">p=</span><span class="fl">0.90</span>, <span class="at">size=</span><span class="dv">12</span>, <span class="at">prob=</span><span class="fl">0.2</span>, <span class="at">lower.tail=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="binomial.html#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qbinom</span>(<span class="at">p=</span><span class="fl">0.90</span>, <span class="at">size=</span><span class="dv">12</span>, <span class="at">prob=</span><span class="fl">0.2</span>, <span class="at">lower.tail=</span>T)</span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <p>That’s only 4 litters. That should make sense, since only 1 in 5 would be pregnant on average. To out perform this expectation at the 90th percentile is still not a very large numer</p>
 <p>The graph below illustrates this. Notice the step-wise distribution, which is diagnostic of discrete functions.</p>
-<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="binomial.html#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="co">#define variables</span></span>
-<span id="cb174-2"><a href="binomial.html#cb174-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, .<span class="dv">99</span>, <span class="fl">0.03</span>) <span class="co">#cumulative probability quantiles</span></span>
-<span id="cb174-3"><a href="binomial.html#cb174-3" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="dv">12</span> <span class="co">#number of trials</span></span>
-<span id="cb174-4"><a href="binomial.html#cb174-4" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fl">0.2</span> <span class="co">#probability of success of one trial</span></span>
-<span id="cb174-5"><a href="binomial.html#cb174-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb174-6"><a href="binomial.html#cb174-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(p, <span class="at">q=</span><span class="fu">qbinom</span>(p, size, prob)) </span>
-<span id="cb174-7"><a href="binomial.html#cb174-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb174-8"><a href="binomial.html#cb174-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(p, q)) <span class="sc">+</span> </span>
-<span id="cb174-9"><a href="binomial.html#cb174-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb174-10"><a href="binomial.html#cb174-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;p(q)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb174-11"><a href="binomial.html#cb174-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;q&quot;</span>) <span class="sc">+</span></span>
-<span id="cb174-12"><a href="binomial.html#cb174-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;qbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-104-1.png" width="672" /></p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="binomial.html#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="co">#define variables</span></span>
+<span id="cb181-2"><a href="binomial.html#cb181-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, .<span class="dv">99</span>, <span class="fl">0.03</span>) <span class="co">#cumulative probability quantiles</span></span>
+<span id="cb181-3"><a href="binomial.html#cb181-3" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="dv">12</span> <span class="co">#number of trials</span></span>
+<span id="cb181-4"><a href="binomial.html#cb181-4" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fl">0.2</span> <span class="co">#probability of success of one trial</span></span>
+<span id="cb181-5"><a href="binomial.html#cb181-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb181-6"><a href="binomial.html#cb181-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(p, <span class="at">q=</span><span class="fu">qbinom</span>(p, size, prob)) </span>
+<span id="cb181-7"><a href="binomial.html#cb181-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb181-8"><a href="binomial.html#cb181-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(p, q)) <span class="sc">+</span> </span>
+<span id="cb181-9"><a href="binomial.html#cb181-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb181-10"><a href="binomial.html#cb181-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;p(q)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb181-11"><a href="binomial.html#cb181-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;q&quot;</span>) <span class="sc">+</span></span>
+<span id="cb181-12"><a href="binomial.html#cb181-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;qbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-103-1.png" width="672" /></p>
 </div>
 <div id="rbinom" class="section level2" number="15.4">
 <h2><span class="header-section-number">15.4</span> rbinom</h2>
 <p>The <code>rbinom</code> function is for random simulation of n binomial trials of a given size and event probability. The output is the number of successful events per trial.</p>
 <p>Let’s simulate 12 matings 12 times, as if we do one a mating involving 12 females, once per month. How many successes will we see per month?</p>
 <p>The output below represents the number of litters we would produce on each of those months. The point is, we don’t get the average every month. Some times its more successes, others its fewer. Models are perfect, data are not.</p>
-<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="binomial.html#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="at">n=</span><span class="dv">12</span>, <span class="at">size=</span><span class="dv">12</span>, <span class="at">prob=</span><span class="fl">0.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="binomial.html#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="at">n=</span><span class="dv">12</span>, <span class="at">size=</span><span class="dv">12</span>, <span class="at">prob=</span><span class="fl">0.2</span>)</span></code></pre></div>
 <pre><code>##  [1] 1 4 3 2 3 3 0 5 1 1 3 4</code></pre>
 <p>Here’s a histogram from a very large number of simulations of the same scenario. You can clearly see the binomial distribution for this trial size and probability of success is skewed. You can also clearly see the average of the distribution…which is somewhere between 2 and 3.</p>
-<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="binomial.html#cb177-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co">#number of simulations</span></span>
-<span id="cb177-2"><a href="binomial.html#cb177-2" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="dv">12</span> <span class="co">#number of trials</span></span>
-<span id="cb177-3"><a href="binomial.html#cb177-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fl">0.2</span> <span class="co">#probability of success of one trial</span></span>
-<span id="cb177-4"><a href="binomial.html#cb177-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-5"><a href="binomial.html#cb177-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">rbinom</span>(n, size, prob)) <span class="co">#x=number of successful trials</span></span>
-<span id="cb177-6"><a href="binomial.html#cb177-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-7"><a href="binomial.html#cb177-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df, <span class="fu">aes</span>(df<span class="sc">$</span>x)) <span class="sc">+</span> </span>
-<span id="cb177-8"><a href="binomial.html#cb177-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_count</span>(<span class="at">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb177-9"><a href="binomial.html#cb177-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;x&quot;</span>)<span class="sc">+</span></span>
-<span id="cb177-10"><a href="binomial.html#cb177-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;count&quot;</span>)<span class="sc">+</span></span>
-<span id="cb177-11"><a href="binomial.html#cb177-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;rbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;number=&quot;</span>,n,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="binomial.html#cb184-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co">#number of simulations</span></span>
+<span id="cb184-2"><a href="binomial.html#cb184-2" aria-hidden="true" tabindex="-1"></a>size <span class="ot">&lt;-</span> <span class="dv">12</span> <span class="co">#number of trials</span></span>
+<span id="cb184-3"><a href="binomial.html#cb184-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fl">0.2</span> <span class="co">#probability of success of one trial</span></span>
+<span id="cb184-4"><a href="binomial.html#cb184-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-5"><a href="binomial.html#cb184-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">rbinom</span>(n, size, prob)) <span class="co">#x=number of successful trials</span></span>
+<span id="cb184-6"><a href="binomial.html#cb184-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-7"><a href="binomial.html#cb184-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df, <span class="fu">aes</span>(df<span class="sc">$</span>x)) <span class="sc">+</span> </span>
+<span id="cb184-8"><a href="binomial.html#cb184-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_count</span>(<span class="at">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb184-9"><a href="binomial.html#cb184-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;x&quot;</span>)<span class="sc">+</span></span>
+<span id="cb184-10"><a href="binomial.html#cb184-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;count&quot;</span>)<span class="sc">+</span></span>
+<span id="cb184-11"><a href="binomial.html#cb184-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;rbinom&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;number=&quot;</span>,n,<span class="st">&quot;trial size=&quot;</span>,size,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;p=&quot;</span>,prob,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
 <pre><code>## Warning: Use of `df$x` is discouraged. Use `x` instead.</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-106-1.png" width="672" /></p>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-105-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -1169,7 +1185,6 @@ Where <span class="math inline">\(n\)</span> is the number of trials, <span clas
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1188,6 +1203,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1208,10 +1224,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

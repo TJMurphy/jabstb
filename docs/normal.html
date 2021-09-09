@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 17 The Normal Distribution | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 17 The Normal Distribution | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="poisson.html"/>
 <link rel="next" href="lognormal.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1062,34 +1078,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><code>dnorm</code> takes i) the scalar <span class="math inline">\(x\)</span>, ii) a mean and iii) sd as arguments and returns the value of the probability, or otherwise known as the probability density, for that scalar. <span class="math inline">\(x\)</span> can be either a single value, or a vector comprised of many values.</p>
 <p>For example, assume the average height of an adult in the US is 168.8 cm with a standard deviation of 7.1 cm.</p>
 <p>Use <code>dnorm</code> to calculate the frequency of US adults who are 176 cm tall:</p>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="normal.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x=</span><span class="dv">176</span>, <span class="at">mean=</span><span class="fl">168.8</span>, <span class="at">sd=</span><span class="fl">7.1</span> )</span></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="normal.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x=</span><span class="dv">176</span>, <span class="at">mean=</span><span class="fl">168.8</span>, <span class="at">sd=</span><span class="fl">7.1</span> )</span></code></pre></div>
 <pre><code>## [1] 0.03360041</code></pre>
 <p>Therefore, 3.36% of US adults are 176 cm tall.</p>
 <p>The probable height of one specfic individual is usually not very useful or interesting to calculate. What’s a bit more useful is to see frequencies of heights over a range of height values.</p>
 <p>For example, we can model the distribution of adult heights using <code>dnorm</code>. We might be interested in the fraction of adults whose heights are 176cm and taller compared to the rest of the population.</p>
 <p>To illustrate the answer with a plot, we pass a range of x values <code>range = c(130, 210)</code> into the <code>dnorm</code> function, rather than a single value. <code>dnorm</code> calculates probabilities over that full range. We can make a plot to visualize the answer, shading anybody as tall or taller than 176 in blue:</p>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="normal.html#cb202-1" aria-hidden="true" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">130</span>,<span class="dv">210</span>)</span>
-<span id="cb202-2"><a href="normal.html#cb202-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean=</span><span class="fl">168.8</span>, <span class="at">sd=</span><span class="fl">7.1</span>)</span>
-<span id="cb202-3"><a href="normal.html#cb202-3" aria-hidden="true" tabindex="-1"></a>auc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">176</span>,<span class="dv">210</span>)</span>
-<span id="cb202-4"><a href="normal.html#cb202-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x=</span>range), <span class="fu">aes</span>(x)) <span class="sc">+</span></span>
-<span id="cb202-5"><a href="normal.html#cb202-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dnorm, <span class="at">args =</span> pop, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb202-6"><a href="normal.html#cb202-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dnorm, <span class="at">args =</span> pop, <span class="at">xlim =</span> auc, <span class="at">geom=</span><span class="st">&quot;area&quot;</span>, <span class="at">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb202-7"><a href="normal.html#cb202-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;heights, cm&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;p(heights)&quot;</span>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="normal.html#cb211-1" aria-hidden="true" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">130</span>,<span class="dv">210</span>)</span>
+<span id="cb211-2"><a href="normal.html#cb211-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean=</span><span class="fl">168.8</span>, <span class="at">sd=</span><span class="fl">7.1</span>)</span>
+<span id="cb211-3"><a href="normal.html#cb211-3" aria-hidden="true" tabindex="-1"></a>auc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">176</span>,<span class="dv">210</span>)</span>
+<span id="cb211-4"><a href="normal.html#cb211-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x=</span>range), <span class="fu">aes</span>(x)) <span class="sc">+</span></span>
+<span id="cb211-5"><a href="normal.html#cb211-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dnorm, <span class="at">args =</span> pop, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb211-6"><a href="normal.html#cb211-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dnorm, <span class="at">args =</span> pop, <span class="at">xlim =</span> auc, <span class="at">geom=</span><span class="st">&quot;area&quot;</span>, <span class="at">fill=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb211-7"><a href="normal.html#cb211-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;heights, cm&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;p(heights)&quot;</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-120-1.png" width="672" /></p>
 <p>Later on, we’ll use other functions to quantify the blue shaded area.</p>
 <p>Here’s plot of the standard normal distribution over a range of z-values that are 4 SD’s below and above the mean:</p>
-<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="normal.html#cb203-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>,<span class="fl">0.1</span>)</span>
-<span id="cb203-2"><a href="normal.html#cb203-2" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb203-3"><a href="normal.html#cb203-3" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb203-4"><a href="normal.html#cb203-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb203-5"><a href="normal.html#cb203-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(z, <span class="at">pz=</span><span class="fu">dnorm</span>(z, mean, sd))</span>
-<span id="cb203-6"><a href="normal.html#cb203-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb203-7"><a href="normal.html#cb203-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>z,<span class="at">y=</span>pz)) <span class="sc">+</span></span>
-<span id="cb203-8"><a href="normal.html#cb203-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb203-9"><a href="normal.html#cb203-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;z&quot;</span>) <span class="sc">+</span></span>
-<span id="cb203-10"><a href="normal.html#cb203-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;p(z)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb203-11"><a href="normal.html#cb203-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;dnorm&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;mean=&quot;</span>, mean,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;sd=&quot;</span>,sd,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-122-1.png" width="672" /></p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="normal.html#cb212-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>,<span class="fl">0.1</span>)</span>
+<span id="cb212-2"><a href="normal.html#cb212-2" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb212-3"><a href="normal.html#cb212-3" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb212-4"><a href="normal.html#cb212-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb212-5"><a href="normal.html#cb212-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(z, <span class="at">pz=</span><span class="fu">dnorm</span>(z, mean, sd))</span>
+<span id="cb212-6"><a href="normal.html#cb212-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb212-7"><a href="normal.html#cb212-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span>z,<span class="at">y=</span>pz)) <span class="sc">+</span></span>
+<span id="cb212-8"><a href="normal.html#cb212-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb212-9"><a href="normal.html#cb212-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;z&quot;</span>) <span class="sc">+</span></span>
+<span id="cb212-10"><a href="normal.html#cb212-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;p(z)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb212-11"><a href="normal.html#cb212-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;dnorm&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;mean=&quot;</span>, mean,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;sd=&quot;</span>,sd,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
 </div>
 <div id="pnorm" class="section level2" number="17.2">
 <h2><span class="header-section-number">17.2</span> pnorm</h2>
@@ -1104,32 +1120,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>However, this can be reversed by changing to the <code>lower.tail=FALSE</code> argument. <em>In this case, <code>pnorm</code> returns something akin to a p-value.</em> Given some value of a variable, <code>pnorm</code> returns the probability of that value or greater.</p>
 <p>The first line in the script below calculates the probability that a US adult will be less than or equal to 175.9 tall, which in this instance turns out to be 1 sd taller than the mean height. It returns a value of about 84%.</p>
 <p>The second line calculates the probability that a US adult will be greater than or equal to 175.9 cm tall. It returns a value of about 16%.</p>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="normal.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="normal.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> T)</span></code></pre></div>
 <pre><code>## [1] 0.8413447</code></pre>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="normal.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="normal.html#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> F)</span></code></pre></div>
 <pre><code>## [1] 0.1586553</code></pre>
 <p>Subtracting the latter from the form illustrates that about 68% of US adults will be within 1 standard deviation of the average US adult height:</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="normal.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> T) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="normal.html#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> T) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fl">175.9</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> F)</span></code></pre></div>
 <pre><code>## [1] 0.6826895</code></pre>
 <p>About 95% of the values for any continuous, normally-distributed variable will be between 2 standard deviations of the mean:</p>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="normal.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q=</span><span class="dv">2</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">lower.tail=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="normal.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q=</span><span class="dv">2</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">lower.tail=</span>T)</span></code></pre></div>
 <pre><code>## [1] 0.9772499</code></pre>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="normal.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="normal.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
 <pre><code>## [1] 0.02275013</code></pre>
-<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="normal.html#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">2</span>) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">2</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="normal.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">2</span>) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">2</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
 <pre><code>## [1] 0.9544997</code></pre>
 <p>(The script above illustrates a few of the different shorthands that can be taken working with R’s probability functions).</p>
 <div id="calculating-p-values-using-pnorm" class="section level3 unnumbered">
 <h3>Calculating “p-values”" using pnorm</h3>
 <p>Let’s go back to human heights. What’s the probability of an US adult being as tall or taller than 205 cm? Notice the <code>lower.tail=F</code> argument:</p>
-<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="normal.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">205</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="normal.html#cb225-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">205</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
 <pre><code>## [1] 1.71095e-07</code></pre>
 <p>That’s a very low probability value, because the height is so extreme.</p>
 </div>
 <div id="calculating-percentiles-using-pnorm" class="section level3 unnumbered">
 <h3>Calculating percentiles using pnorm</h3>
 <p>What is the height percentile of a 205 cm tall US adult?</p>
-<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="normal.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">205</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)<span class="sc">*</span><span class="dv">100</span></span></code></pre></div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="normal.html#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">205</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)<span class="sc">*</span><span class="dv">100</span></span></code></pre></div>
 <pre><code>## [1] 99.99998</code></pre>
 </div>
 </div>
@@ -1138,49 +1154,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><code>qnorm</code> is the inverse of the cumulative distribution function of a continuous normally-distributed variable.</p>
 <p>By default, <code>qnorm</code> takes a cumulative probability value (eg, a percentile) as an argument (along with the mean and sd of the variable) and returns a limit value for that continuous random variable.</p>
 <p>Here’s what the <code>qnorm</code> distribution looks like:</p>
-<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="normal.html#cb220-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.01</span>)</span>
-<span id="cb220-2"><a href="normal.html#cb220-2" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb220-3"><a href="normal.html#cb220-3" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb220-4"><a href="normal.html#cb220-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb220-5"><a href="normal.html#cb220-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(p, <span class="at">z=</span><span class="fu">qnorm</span>(p, mean, sd))</span>
-<span id="cb220-6"><a href="normal.html#cb220-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb220-7"><a href="normal.html#cb220-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(p, z)) <span class="sc">+</span></span>
-<span id="cb220-8"><a href="normal.html#cb220-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb220-9"><a href="normal.html#cb220-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;p(z)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb220-10"><a href="normal.html#cb220-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;z&quot;</span>) <span class="sc">+</span></span>
-<span id="cb220-11"><a href="normal.html#cb220-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;qnorm&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;mean=&quot;</span>, mean,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;sd=&quot;</span>,sd,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-128-1.png" width="672" /></p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="normal.html#cb229-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.01</span>)</span>
+<span id="cb229-2"><a href="normal.html#cb229-2" aria-hidden="true" tabindex="-1"></a>mean <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb229-3"><a href="normal.html#cb229-3" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb229-4"><a href="normal.html#cb229-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb229-5"><a href="normal.html#cb229-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(p, <span class="at">z=</span><span class="fu">qnorm</span>(p, mean, sd))</span>
+<span id="cb229-6"><a href="normal.html#cb229-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb229-7"><a href="normal.html#cb229-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(p, z)) <span class="sc">+</span></span>
+<span id="cb229-8"><a href="normal.html#cb229-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb229-9"><a href="normal.html#cb229-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;p(z)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb229-10"><a href="normal.html#cb229-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;z&quot;</span>) <span class="sc">+</span></span>
+<span id="cb229-11"><a href="normal.html#cb229-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">&quot;qnorm&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="st">&quot;mean=&quot;</span>, mean,<span class="st">&quot;,&quot;</span>,<span class="st">&quot;sd=&quot;</span>,sd,<span class="st">&quot;)&quot;</span>))</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
 <p>You’re probably very familiar with quantiles since percentiles are a class of quantiles. For example, if your standardized exam score is in the 90th percentile, then you did as well or better than 90% of test takers.</p>
 <p>If you forgot your score, but remember your percentile, you could use <code>qnorm</code> to return your specific test score…so long as you also know the mean and sd values of the test scores.</p>
 <p>Back to heights.</p>
 <p>What’s the height in cm of a US adult who is at the 99th percentile? What about the 5th percentile?</p>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="normal.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.99</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="normal.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.99</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)</span></code></pre></div>
 <pre><code>## [1] 185.3171</code></pre>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="normal.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.05</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="normal.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.05</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>)</span></code></pre></div>
 <pre><code>## [1] 157.1215</code></pre>
 <p>The first script below returns the height of the 84th% quantile of US adults. 84% are about 175.9 cm tall or less. The 84th is the upper 1 SD quantile.</p>
 <p>The second script returns the height of the <em>complement</em> of the 84th quantile of US adults, by switching the default <code>lower.tail</code> argument. This complement is the lower 1 SD quantile.</p>
-<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="normal.html#cb225-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.84</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="normal.html#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.84</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> T)</span></code></pre></div>
 <pre><code>## [1] 175.8607</code></pre>
-<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="normal.html#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.84</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="normal.html#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.84</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail =</span> F)</span></code></pre></div>
 <pre><code>## [1] 161.7393</code></pre>
 <p>About two thirds of US adults are between 161.7 and 175.9 cm tall.</p>
 <div id="confidence-interval-limits-and-qnorm" class="section level5" number="17.3.0.0.1">
 <h5><span class="header-section-number">17.3.0.0.1</span> Confidence interval limits and qnorm</h5>
 <p>The <code>qnorm</code> distributon has pragmatic utility for finding the limits for confidence intervals when using the normal distribution as a model for the data.</p>
 <p>In a standard normal distribution, the limits for the lower and upper 2.5% of the distribution are about <span class="math inline">\(\pm\)</span> 1.96 standard deviation units. Thus, the 95% confidence interval for standard normal z-values is -1.96 to 1.96.</p>
-<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="normal.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.025</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="normal.html#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.025</span>)</span></code></pre></div>
 <pre><code>## [1] -1.959964</code></pre>
-<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="normal.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="normal.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="at">lower.tail=</span>F)</span></code></pre></div>
 <pre><code>## [1] 1.959964</code></pre>
 <p>Based upon the average height and sd of US adults, the 95% confidence interval for US adult height is:</p>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="normal.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="fu">round</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>),<span class="dv">1</span>), <span class="st">&quot;to&quot;</span>, <span class="fu">round</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail=</span>F),<span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="normal.html#cb242-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="fu">round</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>),<span class="dv">1</span>), <span class="st">&quot;to&quot;</span>, <span class="fu">round</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>, <span class="at">lower.tail=</span>F),<span class="dv">1</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;154.9 to 182.7&quot;</code></pre>
 <p>The confidence interval means there is a 95% chance the true average US adult is within that range.</p>
 <p>Rember that height sample from near the very start of this document?</p>
 <p>It had 210 replicates, a mean = 169.9, sd = 10.5.</p>
 <p>What is the 95% confidence interval of US adult heights, based upon that sample?</p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="normal.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="fu">round</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">169.9</span>, <span class="fl">10.5</span>),<span class="dv">1</span>), <span class="st">&quot;to&quot;</span>, <span class="fu">round</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">169.9</span>, <span class="fl">10.5</span>, <span class="at">lower.tail=</span>F),<span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="normal.html#cb244-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="fu">round</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">169.9</span>, <span class="fl">10.5</span>),<span class="dv">1</span>), <span class="st">&quot;to&quot;</span>, <span class="fu">round</span>(<span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="fl">169.9</span>, <span class="fl">10.5</span>, <span class="at">lower.tail=</span>F),<span class="dv">1</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;149.3 to 190.5&quot;</code></pre>
 <p>Drawing inference to the whole population on the basis of this sample, and assuming a normal model, there is a 95% chance the true US adult height is within this slightly wider range.</p>
 <p>The truth is, a better model to derive confidence intervals for normally-distributed samples is the t-distribution.</p>
@@ -1193,8 +1209,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>For example, here is a randomly generated sample of 10 US adult heights, rounded to 1 significant digit.</p>
 <p>We’ll use this function a LOT in this course to generate normally-distributed data for various purposes.</p>
 <p>Here’s 10 random, simulated heights of US adults, rounded to the first digit to make it cleaner looking:</p>
-<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="normal.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>), <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>##  [1] 158.3 171.9 181.6 184.0 168.1 161.9 165.3 165.0 176.8 174.1</code></pre>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="normal.html#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="fl">168.8</span>, <span class="fl">7.1</span>), <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##  [1] 170.8 159.6 168.3 159.6 177.2 175.0 172.6 166.5 165.7 165.1</code></pre>
 <div id="plotting-histograms-of-some-rnorm-samples" class="section level3" number="17.4.1">
 <h3><span class="header-section-number">17.4.1</span> Plotting histograms of some rnorm samples</h3>
 <p>Histograms are a powerful way to explore the underlying structure in a dataset. They are a descriptive tool. Adjusting the bin parameters provides a way to evaluate the data.</p>
@@ -1211,19 +1227,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Because histograms are so common<code>ggplot2</code> has a <code>geom_histogram</code> function to simplify creating the plots. The default argument creates a histogram of values of a random variable of interest. To create a histogram of densities, use a density <code>aes</code> argument in the function, instead as you’ll see below.</p>
 <p>Counts are the number of cases within a given bin. Density is the fraction of all counts within a given bin.</p>
 <p>Here are 1000 random, simulated heights, plotted as a histogram of counts.</p>
-<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="normal.html#cb239-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb239-2"><a href="normal.html#cb239-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">s=</span><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mean=</span><span class="fl">168.8</span>, <span class="at">sd=</span><span class="fl">7.1</span>))</span>
-<span id="cb239-3"><a href="normal.html#cb239-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb239-4"><a href="normal.html#cb239-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(s)) <span class="sc">+</span></span>
-<span id="cb239-5"><a href="normal.html#cb239-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">100</span>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-135-1.png" width="672" /></p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="normal.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb248-2"><a href="normal.html#cb248-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">s=</span><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mean=</span><span class="fl">168.8</span>, <span class="at">sd=</span><span class="fl">7.1</span>))</span>
+<span id="cb248-3"><a href="normal.html#cb248-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb248-4"><a href="normal.html#cb248-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(s)) <span class="sc">+</span></span>
+<span id="cb248-5"><a href="normal.html#cb248-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">100</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-134-1.png" width="672" /></p>
 <p>Same thing, plotted as a probability density:</p>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="normal.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb240-2"><a href="normal.html#cb240-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">s=</span><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mean=</span><span class="fl">168.8</span>, <span class="at">sd=</span><span class="fl">7.1</span>))</span>
-<span id="cb240-3"><a href="normal.html#cb240-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb240-4"><a href="normal.html#cb240-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(s)) <span class="sc">+</span></span>
-<span id="cb240-5"><a href="normal.html#cb240-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins=</span><span class="dv">100</span>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-136-1.png" width="672" /></p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="normal.html#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb249-2"><a href="normal.html#cb249-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">s=</span><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mean=</span><span class="fl">168.8</span>, <span class="at">sd=</span><span class="fl">7.1</span>))</span>
+<span id="cb249-3"><a href="normal.html#cb249-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-4"><a href="normal.html#cb249-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(s)) <span class="sc">+</span></span>
+<span id="cb249-5"><a href="normal.html#cb249-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins=</span><span class="dv">100</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-135-1.png" width="672" /></p>
 </div>
 <div id="hdplots" class="section level4" number="17.4.2.2">
 <h4><span class="header-section-number">17.4.2.2</span> Histogram with Distribution</h4>
@@ -1231,15 +1247,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>By eyeball, the model seems to be a decent fit for the sample. But it is not a perfect fit.</p>
 <p>It’s not the model’s fault. Models are perfect, data are not.</p>
 <p>How does the sample size affect how well the model fits the data?</p>
-<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="normal.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb241-2"><a href="normal.html#cb241-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">s=</span><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>))</span>
-<span id="cb241-3"><a href="normal.html#cb241-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb241-4"><a href="normal.html#cb241-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(s)) <span class="sc">+</span></span>
-<span id="cb241-5"><a href="normal.html#cb241-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins=</span><span class="dv">100</span>) <span class="sc">+</span></span>
-<span id="cb241-6"><a href="normal.html#cb241-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm,</span>
-<span id="cb241-7"><a href="normal.html#cb241-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">args=</span><span class="fu">list</span>(<span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>),</span>
-<span id="cb241-8"><a href="normal.html#cb241-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="normal.html#cb250-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb250-2"><a href="normal.html#cb250-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">s=</span><span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>))</span>
+<span id="cb250-3"><a href="normal.html#cb250-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb250-4"><a href="normal.html#cb250-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(s)) <span class="sc">+</span></span>
+<span id="cb250-5"><a href="normal.html#cb250-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">bins=</span><span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb250-6"><a href="normal.html#cb250-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm,</span>
+<span id="cb250-7"><a href="normal.html#cb250-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">args=</span><span class="fu">list</span>(<span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>),</span>
+<span id="cb250-8"><a href="normal.html#cb250-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-136-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -1255,7 +1271,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1274,6 +1289,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1294,10 +1310,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

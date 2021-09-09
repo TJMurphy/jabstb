@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 31 One-way ANOVA Related Measures | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 31 One-way ANOVA Related Measures | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="onewayanova.html"/>
 <link rel="next" href="twowayCR.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1045,11 +1061,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="onewayRM" class="section level1" number="31">
 <h1><span class="header-section-number">Chapter 31</span> One-way ANOVA Related Measures</h1>
-<div class="sourceCode" id="cb660"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb660-1"><a href="onewayRM.html#cb660-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb660-2"><a href="onewayRM.html#cb660-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb660-3"><a href="onewayRM.html#cb660-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
-<span id="cb660-4"><a href="onewayRM.html#cb660-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ez)</span>
-<span id="cb660-5"><a href="onewayRM.html#cb660-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span></code></pre></div>
+<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb673-1"><a href="onewayRM.html#cb673-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb673-2"><a href="onewayRM.html#cb673-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb673-3"><a href="onewayRM.html#cb673-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb673-4"><a href="onewayRM.html#cb673-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ez)</span>
+<span id="cb673-5"><a href="onewayRM.html#cb673-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span></code></pre></div>
 <p>The analysis, interpretation and presentation of a one-way ANOVA related/repeated measures experimental design is covered in this chapter.</p>
 <p>This design has one predictor variable that is imposed at three or more levels.</p>
 <p>But the essential feature of the RM design that distinguishes it from a CR design is that the measurements of the outcome variable are intrinsically related for all levels of the predictor <strong>within each independent replicate</strong>.</p>
@@ -1065,63 +1081,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">31.1</span> Data prep</h2>
 <p>The data are in a file called <code>Jaxwest2.xls</code>, which can be downloaded from the Jackson Labs <a href="https://phenome.jax.org/projects/Jaxwest2">here</a>. That site offers more details about the study design than are listed here.</p>
 <p>The munge <a href="jaxwest2.html#jaxwest2">has already been done conducted</a>. For clarity, the script won’t be shown again here. However, it is used in this chapter to create a data frame object by the same name, <code>jw2vol</code> to be used for plotting and statistical analysis.</p>
-<div class="sourceCode" id="cb661"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb661-1"><a href="onewayRM.html#cb661-1" aria-hidden="true" tabindex="-1"></a>jw2 <span class="ot">&lt;-</span><span class="st">&quot;datasets/jaxwest2.xls&quot;</span> <span class="sc">%&gt;%</span></span>
-<span id="cb661-2"><a href="onewayRM.html#cb661-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(</span>
-<span id="cb661-3"><a href="onewayRM.html#cb661-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">skip=</span><span class="dv">1</span>, </span>
-<span id="cb661-4"><a href="onewayRM.html#cb661-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sheet=</span><span class="dv">1</span></span>
-<span id="cb661-5"><a href="onewayRM.html#cb661-5" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb661-6"><a href="onewayRM.html#cb661-6" aria-hidden="true" tabindex="-1"></a><span class="co"># remove whitespace</span></span>
-<span id="cb661-7"><a href="onewayRM.html#cb661-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(jw2) <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">names</span>(jw2),<span class="st">&quot; &quot;</span>)</span>
-<span id="cb661-8"><a href="onewayRM.html#cb661-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb661-9"><a href="onewayRM.html#cb661-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb661-10"><a href="onewayRM.html#cb661-10" aria-hidden="true" tabindex="-1"></a><span class="co"># trim columns</span></span>
-<span id="cb661-11"><a href="onewayRM.html#cb661-11" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2 <span class="sc">%&gt;%</span> </span>
-<span id="cb661-12"><a href="onewayRM.html#cb661-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb661-13"><a href="onewayRM.html#cb661-13" aria-hidden="true" tabindex="-1"></a>    mouse_ID, </span>
-<span id="cb661-14"><a href="onewayRM.html#cb661-14" aria-hidden="true" tabindex="-1"></a>    test_group, </span>
-<span id="cb661-15"><a href="onewayRM.html#cb661-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">contains</span>(<span class="st">&quot;tumor_vol_&quot;</span>)</span>
-<span id="cb661-16"><a href="onewayRM.html#cb661-16" aria-hidden="true" tabindex="-1"></a>    ) </span>
-<span id="cb661-17"><a href="onewayRM.html#cb661-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb661-18"><a href="onewayRM.html#cb661-18" aria-hidden="true" tabindex="-1"></a><span class="co"># trim cases</span></span>
-<span id="cb661-19"><a href="onewayRM.html#cb661-19" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
-<span id="cb661-20"><a href="onewayRM.html#cb661-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb661-21"><a href="onewayRM.html#cb661-21" aria-hidden="true" tabindex="-1"></a>    test_group <span class="sc">==</span> <span class="st">&quot;Control (no vehicle)&quot;</span></span>
-<span id="cb661-22"><a href="onewayRM.html#cb661-22" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb661-23"><a href="onewayRM.html#cb661-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb661-24"><a href="onewayRM.html#cb661-24" aria-hidden="true" tabindex="-1"></a><span class="co"># convert to numeric</span></span>
-<span id="cb661-25"><a href="onewayRM.html#cb661-25" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
-<span id="cb661-26"><a href="onewayRM.html#cb661-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(tumor_vol_17<span class="sc">:</span>tumor_vol_44), </span>
-<span id="cb661-27"><a href="onewayRM.html#cb661-27" aria-hidden="true" tabindex="-1"></a>            as.numeric</span>
-<span id="cb661-28"><a href="onewayRM.html#cb661-28" aria-hidden="true" tabindex="-1"></a>            )</span></code></pre></div>
-<pre><code>## Warning: Problem with `mutate()` input `tumor_vol_17`.
-## i NAs introduced by coercion
-## i Input `tumor_vol_17` is `.Primitive(&quot;as.double&quot;)(tumor_vol_17)`.</code></pre>
-<pre><code>## Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion</code></pre>
-<div class="sourceCode" id="cb664"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb664-1"><a href="onewayRM.html#cb664-1" aria-hidden="true" tabindex="-1"></a><span class="co"># impute</span></span>
-<span id="cb664-2"><a href="onewayRM.html#cb664-2" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
-<span id="cb664-3"><a href="onewayRM.html#cb664-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_na</span>(</span>
-<span id="cb664-4"><a href="onewayRM.html#cb664-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">tumor_vol_17 =</span> </span>
-<span id="cb664-5"><a href="onewayRM.html#cb664-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mean</span>(jw2vol<span class="sc">$</span>tumor_vol_17, <span class="at">na.rm=</span>T)))</span>
-<span id="cb664-6"><a href="onewayRM.html#cb664-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb664-7"><a href="onewayRM.html#cb664-7" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot long</span></span>
-<span id="cb664-8"><a href="onewayRM.html#cb664-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb664-9"><a href="onewayRM.html#cb664-9" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
-<span id="cb664-10"><a href="onewayRM.html#cb664-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb664-11"><a href="onewayRM.html#cb664-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">starts_with</span>(<span class="st">&quot;tumor_vol_&quot;</span>),</span>
-<span id="cb664-12"><a href="onewayRM.html#cb664-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to=</span><span class="st">&quot;day&quot;</span>,</span>
-<span id="cb664-13"><a href="onewayRM.html#cb664-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">&quot;tumor_vol_&quot;</span>, </span>
-<span id="cb664-14"><a href="onewayRM.html#cb664-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;vol&quot;</span></span>
-<span id="cb664-15"><a href="onewayRM.html#cb664-15" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb664-16"><a href="onewayRM.html#cb664-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb664-17"><a href="onewayRM.html#cb664-17" aria-hidden="true" tabindex="-1"></a><span class="co"># factorize</span></span>
-<span id="cb664-18"><a href="onewayRM.html#cb664-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb664-19"><a href="onewayRM.html#cb664-19" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span>jw2vol <span class="sc">%&gt;%</span></span>
-<span id="cb664-20"><a href="onewayRM.html#cb664-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb664-21"><a href="onewayRM.html#cb664-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">mouse_ID=</span><span class="fu">as.factor</span>(mouse_ID),</span>
-<span id="cb664-22"><a href="onewayRM.html#cb664-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">test_group=</span><span class="fu">as.factor</span>(test_group)</span>
-<span id="cb664-23"><a href="onewayRM.html#cb664-23" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb664-24"><a href="onewayRM.html#cb664-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb664-25"><a href="onewayRM.html#cb664-25" aria-hidden="true" tabindex="-1"></a>jw2vol</span></code></pre></div>
+<div class="sourceCode" id="cb674"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb674-1"><a href="onewayRM.html#cb674-1" aria-hidden="true" tabindex="-1"></a>jw2 <span class="ot">&lt;-</span><span class="st">&quot;datasets/jaxwest2.xls&quot;</span> <span class="sc">%&gt;%</span></span>
+<span id="cb674-2"><a href="onewayRM.html#cb674-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_excel</span>(</span>
+<span id="cb674-3"><a href="onewayRM.html#cb674-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">skip=</span><span class="dv">1</span>, </span>
+<span id="cb674-4"><a href="onewayRM.html#cb674-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sheet=</span><span class="dv">1</span></span>
+<span id="cb674-5"><a href="onewayRM.html#cb674-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb674-6"><a href="onewayRM.html#cb674-6" aria-hidden="true" tabindex="-1"></a><span class="co"># remove whitespace</span></span>
+<span id="cb674-7"><a href="onewayRM.html#cb674-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(jw2) <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(<span class="fu">names</span>(jw2),<span class="st">&quot; &quot;</span>)</span>
+<span id="cb674-8"><a href="onewayRM.html#cb674-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb674-9"><a href="onewayRM.html#cb674-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb674-10"><a href="onewayRM.html#cb674-10" aria-hidden="true" tabindex="-1"></a><span class="co"># trim columns</span></span>
+<span id="cb674-11"><a href="onewayRM.html#cb674-11" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2 <span class="sc">%&gt;%</span> </span>
+<span id="cb674-12"><a href="onewayRM.html#cb674-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb674-13"><a href="onewayRM.html#cb674-13" aria-hidden="true" tabindex="-1"></a>    mouse_ID, </span>
+<span id="cb674-14"><a href="onewayRM.html#cb674-14" aria-hidden="true" tabindex="-1"></a>    test_group, </span>
+<span id="cb674-15"><a href="onewayRM.html#cb674-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">contains</span>(<span class="st">&quot;tumor_vol_&quot;</span>)</span>
+<span id="cb674-16"><a href="onewayRM.html#cb674-16" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb674-17"><a href="onewayRM.html#cb674-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb674-18"><a href="onewayRM.html#cb674-18" aria-hidden="true" tabindex="-1"></a><span class="co"># trim cases</span></span>
+<span id="cb674-19"><a href="onewayRM.html#cb674-19" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
+<span id="cb674-20"><a href="onewayRM.html#cb674-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb674-21"><a href="onewayRM.html#cb674-21" aria-hidden="true" tabindex="-1"></a>    test_group <span class="sc">==</span> <span class="st">&quot;Control (no vehicle)&quot;</span></span>
+<span id="cb674-22"><a href="onewayRM.html#cb674-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb674-23"><a href="onewayRM.html#cb674-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb674-24"><a href="onewayRM.html#cb674-24" aria-hidden="true" tabindex="-1"></a><span class="co"># convert to numeric</span></span>
+<span id="cb674-25"><a href="onewayRM.html#cb674-25" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
+<span id="cb674-26"><a href="onewayRM.html#cb674-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(tumor_vol_17<span class="sc">:</span>tumor_vol_44), </span>
+<span id="cb674-27"><a href="onewayRM.html#cb674-27" aria-hidden="true" tabindex="-1"></a>            as.numeric</span>
+<span id="cb674-28"><a href="onewayRM.html#cb674-28" aria-hidden="true" tabindex="-1"></a>            )</span></code></pre></div>
+<pre><code>## Warning in mask$eval_all_mutate(quo): NAs introduced by coercion</code></pre>
+<div class="sourceCode" id="cb676"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb676-1"><a href="onewayRM.html#cb676-1" aria-hidden="true" tabindex="-1"></a><span class="co"># impute</span></span>
+<span id="cb676-2"><a href="onewayRM.html#cb676-2" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
+<span id="cb676-3"><a href="onewayRM.html#cb676-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_na</span>(</span>
+<span id="cb676-4"><a href="onewayRM.html#cb676-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">tumor_vol_17 =</span> </span>
+<span id="cb676-5"><a href="onewayRM.html#cb676-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mean</span>(jw2vol<span class="sc">$</span>tumor_vol_17, <span class="at">na.rm=</span>T)))</span>
+<span id="cb676-6"><a href="onewayRM.html#cb676-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb676-7"><a href="onewayRM.html#cb676-7" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot long</span></span>
+<span id="cb676-8"><a href="onewayRM.html#cb676-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb676-9"><a href="onewayRM.html#cb676-9" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span> </span>
+<span id="cb676-10"><a href="onewayRM.html#cb676-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb676-11"><a href="onewayRM.html#cb676-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">starts_with</span>(<span class="st">&quot;tumor_vol_&quot;</span>),</span>
+<span id="cb676-12"><a href="onewayRM.html#cb676-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to=</span><span class="st">&quot;day&quot;</span>,</span>
+<span id="cb676-13"><a href="onewayRM.html#cb676-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">&quot;tumor_vol_&quot;</span>, </span>
+<span id="cb676-14"><a href="onewayRM.html#cb676-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;vol&quot;</span></span>
+<span id="cb676-15"><a href="onewayRM.html#cb676-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb676-16"><a href="onewayRM.html#cb676-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb676-17"><a href="onewayRM.html#cb676-17" aria-hidden="true" tabindex="-1"></a><span class="co"># factorize</span></span>
+<span id="cb676-18"><a href="onewayRM.html#cb676-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb676-19"><a href="onewayRM.html#cb676-19" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span>jw2vol <span class="sc">%&gt;%</span></span>
+<span id="cb676-20"><a href="onewayRM.html#cb676-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb676-21"><a href="onewayRM.html#cb676-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">mouse_ID=</span><span class="fu">as.factor</span>(mouse_ID),</span>
+<span id="cb676-22"><a href="onewayRM.html#cb676-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">test_group=</span><span class="fu">as.factor</span>(test_group)</span>
+<span id="cb676-23"><a href="onewayRM.html#cb676-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb676-24"><a href="onewayRM.html#cb676-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb676-25"><a href="onewayRM.html#cb676-25" aria-hidden="true" tabindex="-1"></a>jw2vol</span></code></pre></div>
 <pre><code>## # A tibble: 143 x 4
 ##    mouse_ID test_group           day     vol
 ##    &lt;fct&gt;    &lt;fct&gt;                &lt;chr&gt; &lt;dbl&gt;
@@ -1144,14 +1157,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This is a repeated measures design. Tumor volume is measured on multiple days within each replicate.</p>
 <p>The spaghetti plot and grouping by color illustrates the design of the experiment. The measurements within each color are intrinsically-liked. Not every point is an independent replicate. The number of independent replicates is far fewer. The number of colors is the number of independent replicates.</p>
 <p>Plots like this show all of the data for an experiment.</p>
-<div class="sourceCode" id="cb666"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb666-1"><a href="onewayRM.html#cb666-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(jw2vol, <span class="fu">aes</span>(<span class="fu">as.numeric</span>(day), vol, <span class="at">color=</span>mouse_ID, <span class="at">group=</span>mouse_ID))<span class="sc">+</span></span>
-<span id="cb666-2"><a href="onewayRM.html#cb666-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)<span class="sc">+</span></span>
-<span id="cb666-3"><a href="onewayRM.html#cb666-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>)<span class="sc">+</span></span>
-<span id="cb666-4"><a href="onewayRM.html#cb666-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
-<span id="cb666-5"><a href="onewayRM.html#cb666-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day after implant&quot;</span>)<span class="sc">+</span></span>
-<span id="cb666-6"><a href="onewayRM.html#cb666-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Tumor volume&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-315"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-315-1.png" alt="Tumor volume in each mose by days post transplantation" width="672" />
+<div class="sourceCode" id="cb678"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb678-1"><a href="onewayRM.html#cb678-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(jw2vol, <span class="fu">aes</span>(<span class="fu">as.numeric</span>(day), vol, <span class="at">color=</span>mouse_ID, <span class="at">group=</span>mouse_ID))<span class="sc">+</span></span>
+<span id="cb678-2"><a href="onewayRM.html#cb678-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)<span class="sc">+</span></span>
+<span id="cb678-3"><a href="onewayRM.html#cb678-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb678-4"><a href="onewayRM.html#cb678-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb678-5"><a href="onewayRM.html#cb678-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Day after implant&quot;</span>)<span class="sc">+</span></span>
+<span id="cb678-6"><a href="onewayRM.html#cb678-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Tumor volume&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-314"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-314-1.png" alt="Tumor volume in each mose by days post transplantation" width="672" />
 <p class="caption">
 Figure 31.1: Tumor volume in each mose by days post transplantation
 </p>
@@ -1164,59 +1177,59 @@ Figure 31.1: Tumor volume in each mose by days post transplantation
 <p>The repeated measures statistical analysis operates not on group means, but on the means of differences between levels of a factor, in the same way a paired t-test is about the difference between treatment effects.</p>
 <p>The following illustrates this.</p>
 <p>The code below calculates the difference in tumor volume within each mouse between successive days. For example, for mouse #38, the day 40 volume is subtracted from day 44, 38 from 40, 36 from 38, and so on. The function <code>lag</code> helps do this automagically.</p>
-<div class="sourceCode" id="cb667"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb667-1"><a href="onewayRM.html#cb667-1" aria-hidden="true" tabindex="-1"></a>sum <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span>  </span>
-<span id="cb667-2"><a href="onewayRM.html#cb667-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ensure sequential</span></span>
-<span id="cb667-3"><a href="onewayRM.html#cb667-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(day), as.numeric) <span class="sc">%&gt;%</span> </span>
-<span id="cb667-4"><a href="onewayRM.html#cb667-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(mouse_ID) <span class="sc">%&gt;%</span> </span>
-<span id="cb667-5"><a href="onewayRM.html#cb667-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff=</span>vol<span class="sc">-</span><span class="fu">lag</span>(vol, <span class="at">default=</span><span class="fu">first</span>(vol)))</span></code></pre></div>
+<div class="sourceCode" id="cb679"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb679-1"><a href="onewayRM.html#cb679-1" aria-hidden="true" tabindex="-1"></a>sum <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span>  </span>
+<span id="cb679-2"><a href="onewayRM.html#cb679-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ensure sequential</span></span>
+<span id="cb679-3"><a href="onewayRM.html#cb679-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(day), as.numeric) <span class="sc">%&gt;%</span> </span>
+<span id="cb679-4"><a href="onewayRM.html#cb679-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(mouse_ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb679-5"><a href="onewayRM.html#cb679-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff=</span>vol<span class="sc">-</span><span class="fu">lag</span>(vol, <span class="at">default=</span><span class="fu">first</span>(vol)))</span></code></pre></div>
 <p>We might be interested in those differences between two sequential measurement days for scientific reasons. For example, it might be useful for detecting a significant acceleration in tumor growth.</p>
-<div class="sourceCode" id="cb668"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb668-1"><a href="onewayRM.html#cb668-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sum, <span class="fu">aes</span>(day, diff, <span class="at">color =</span> <span class="fu">as.factor</span>(mouse_ID)))<span class="sc">+</span></span>
-<span id="cb668-2"><a href="onewayRM.html#cb668-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)<span class="sc">+</span></span>
-<span id="cb668-3"><a href="onewayRM.html#cb668-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span><span class="dv">0</span>), </span>
-<span id="cb668-4"><a href="onewayRM.html#cb668-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, </span>
-<span id="cb668-5"><a href="onewayRM.html#cb668-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
-<span id="cb668-6"><a href="onewayRM.html#cb668-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">250</span>, <span class="dv">1000</span>))<span class="sc">+</span></span>
-<span id="cb668-7"><a href="onewayRM.html#cb668-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data=</span>mean_sdl, <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>), </span>
-<span id="cb668-8"><a href="onewayRM.html#cb668-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">geom=</span><span class="st">&quot;errorbar&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
-<span id="cb668-9"><a href="onewayRM.html#cb668-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.y=</span>mean, <span class="at">geom=</span><span class="st">&quot;point&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
-<span id="cb668-10"><a href="onewayRM.html#cb668-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>)<span class="sc">+</span></span>
-<span id="cb668-11"><a href="onewayRM.html#cb668-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Lead day&quot;</span>)<span class="sc">+</span></span>
-<span id="cb668-12"><a href="onewayRM.html#cb668-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Tumor vol difference </span><span class="sc">\n</span><span class="st"> (diff::lead day - lag day)&quot;</span>)<span class="sc">+</span></span>
-<span id="cb668-13"><a href="onewayRM.html#cb668-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span><span class="st">&quot;mouse_id&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb680"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb680-1"><a href="onewayRM.html#cb680-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sum, <span class="fu">aes</span>(day, diff, <span class="at">color =</span> <span class="fu">as.factor</span>(mouse_ID)))<span class="sc">+</span></span>
+<span id="cb680-2"><a href="onewayRM.html#cb680-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)<span class="sc">+</span></span>
+<span id="cb680-3"><a href="onewayRM.html#cb680-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span><span class="dv">0</span>), </span>
+<span id="cb680-4"><a href="onewayRM.html#cb680-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, </span>
+<span id="cb680-5"><a href="onewayRM.html#cb680-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
+<span id="cb680-6"><a href="onewayRM.html#cb680-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">250</span>, <span class="dv">1000</span>))<span class="sc">+</span></span>
+<span id="cb680-7"><a href="onewayRM.html#cb680-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data=</span>mean_sdl, <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>), </span>
+<span id="cb680-8"><a href="onewayRM.html#cb680-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">geom=</span><span class="st">&quot;errorbar&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb680-9"><a href="onewayRM.html#cb680-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.y=</span>mean, <span class="at">geom=</span><span class="st">&quot;point&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb680-10"><a href="onewayRM.html#cb680-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb680-11"><a href="onewayRM.html#cb680-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Lead day&quot;</span>)<span class="sc">+</span></span>
+<span id="cb680-12"><a href="onewayRM.html#cb680-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Tumor vol difference </span><span class="sc">\n</span><span class="st"> (diff::lead day - lag day)&quot;</span>)<span class="sc">+</span></span>
+<span id="cb680-13"><a href="onewayRM.html#cb680-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span><span class="st">&quot;mouse_id&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
 <pre><code>## Warning: Computation failed in `stat_summary()`:
 ## Can&#39;t convert a double vector to function</code></pre>
-<div class="figure"><span id="fig:unnamed-chunk-317"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-317-1.png" alt="Differences in tumor volume from prior measurement in each mouse." width="672" />
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-316"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-316-1.png" alt="Differences in tumor volume from prior measurement in each mouse." width="672" />
 <p class="caption">
 Figure 31.2: Differences in tumor volume from prior measurement in each mouse.
 </p>
 </div>
 <p>Alternately, we might be interested in the earliest detectable difference in tumor growth relative to, for example, the first day of measurements. At what point is it clear the tumore is growing? Here are the mean differences within the mice from each day of measurement back to the volume measured on day 17.</p>
 <p>This is the type of analysis we would do for repeated measure data rather than the Dunnett’s test, which is for unpaired comparisons.</p>
-<div class="sourceCode" id="cb671"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb671-1"><a href="onewayRM.html#cb671-1" aria-hidden="true" tabindex="-1"></a>sum2 <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span>  </span>
-<span id="cb671-2"><a href="onewayRM.html#cb671-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ensure sequential</span></span>
-<span id="cb671-3"><a href="onewayRM.html#cb671-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(day), as.numeric) <span class="sc">%&gt;%</span> </span>
-<span id="cb671-4"><a href="onewayRM.html#cb671-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(mouse_ID) <span class="sc">%&gt;%</span> </span>
-<span id="cb671-5"><a href="onewayRM.html#cb671-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff=</span>vol<span class="sc">-</span><span class="fu">first</span>(vol))</span></code></pre></div>
-<div class="sourceCode" id="cb672"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb672-1"><a href="onewayRM.html#cb672-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sum2, <span class="fu">aes</span>(day, diff, <span class="at">color =</span> <span class="fu">as.factor</span>(mouse_ID)))<span class="sc">+</span></span>
-<span id="cb672-2"><a href="onewayRM.html#cb672-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)<span class="sc">+</span></span>
-<span id="cb672-3"><a href="onewayRM.html#cb672-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span><span class="dv">0</span>), </span>
-<span id="cb672-4"><a href="onewayRM.html#cb672-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, </span>
-<span id="cb672-5"><a href="onewayRM.html#cb672-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
-<span id="cb672-6"><a href="onewayRM.html#cb672-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">250</span>, <span class="dv">2000</span>))<span class="sc">+</span></span>
-<span id="cb672-7"><a href="onewayRM.html#cb672-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data=</span>mean_sdl, <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>), </span>
-<span id="cb672-8"><a href="onewayRM.html#cb672-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">geom=</span><span class="st">&quot;errorbar&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
-<span id="cb672-9"><a href="onewayRM.html#cb672-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.y=</span>mean, <span class="at">geom=</span><span class="st">&quot;point&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
-<span id="cb672-10"><a href="onewayRM.html#cb672-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>)<span class="sc">+</span></span>
-<span id="cb672-11"><a href="onewayRM.html#cb672-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Lead Day&quot;</span>)<span class="sc">+</span></span>
-<span id="cb672-12"><a href="onewayRM.html#cb672-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Tumor vol difference </span><span class="sc">\n</span><span class="st"> (diff::lead day - first day)&quot;</span>)<span class="sc">+</span></span>
-<span id="cb672-13"><a href="onewayRM.html#cb672-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span><span class="st">&quot;mouse_id&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="onewayRM.html#cb683-1" aria-hidden="true" tabindex="-1"></a>sum2 <span class="ot">&lt;-</span> jw2vol <span class="sc">%&gt;%</span>  </span>
+<span id="cb683-2"><a href="onewayRM.html#cb683-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ensure sequential</span></span>
+<span id="cb683-3"><a href="onewayRM.html#cb683-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(day), as.numeric) <span class="sc">%&gt;%</span> </span>
+<span id="cb683-4"><a href="onewayRM.html#cb683-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(mouse_ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb683-5"><a href="onewayRM.html#cb683-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff=</span>vol<span class="sc">-</span><span class="fu">first</span>(vol))</span></code></pre></div>
+<div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb684-1"><a href="onewayRM.html#cb684-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sum2, <span class="fu">aes</span>(day, diff, <span class="at">color =</span> <span class="fu">as.factor</span>(mouse_ID)))<span class="sc">+</span></span>
+<span id="cb684-2"><a href="onewayRM.html#cb684-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)<span class="sc">+</span></span>
+<span id="cb684-3"><a href="onewayRM.html#cb684-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span><span class="dv">0</span>), </span>
+<span id="cb684-4"><a href="onewayRM.html#cb684-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, </span>
+<span id="cb684-5"><a href="onewayRM.html#cb684-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
+<span id="cb684-6"><a href="onewayRM.html#cb684-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">250</span>, <span class="dv">2000</span>))<span class="sc">+</span></span>
+<span id="cb684-7"><a href="onewayRM.html#cb684-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data=</span>mean_sdl, <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>), </span>
+<span id="cb684-8"><a href="onewayRM.html#cb684-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">geom=</span><span class="st">&quot;errorbar&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb684-9"><a href="onewayRM.html#cb684-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.y=</span>mean, <span class="at">geom=</span><span class="st">&quot;point&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb684-10"><a href="onewayRM.html#cb684-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb684-11"><a href="onewayRM.html#cb684-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Lead Day&quot;</span>)<span class="sc">+</span></span>
+<span id="cb684-12"><a href="onewayRM.html#cb684-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Tumor vol difference </span><span class="sc">\n</span><span class="st"> (diff::lead day - first day)&quot;</span>)<span class="sc">+</span></span>
+<span id="cb684-13"><a href="onewayRM.html#cb684-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span><span class="st">&quot;mouse_id&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
 <pre><code>## Warning: Computation failed in `stat_summary()`:
 ## Can&#39;t convert a double vector to function</code></pre>
-<div class="figure"><span id="fig:unnamed-chunk-319"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-319-1.png" alt="Differences in tumor volume from day 17 measurement in each mouse. " width="672" />
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-318"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-318-1.png" alt="Differences in tumor volume from day 17 measurement in each mouse. " width="672" />
 <p class="caption">
 Figure 31.3: Differences in tumor volume from day 17 measurement in each mouse.
 </p>
@@ -1245,13 +1258,13 @@ and so
 <p>Strictly, we ask does “day” have any influence on tumor growth?</p>
 <p>A detailed ANOVA table is called. There are additional arguments that could be made for custom situations. Consult <code>?ezANOVA</code> for more information.</p>
 <p>There are a few ways to output the analysis. Here’s the simplest:</p>
-<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb675-1"><a href="onewayRM.html#cb675-1" aria-hidden="true" tabindex="-1"></a>one_wayRM <span class="ot">&lt;-</span> <span class="fu">ezANOVA</span>(<span class="at">data =</span> jw2vol,</span>
-<span id="cb675-2"><a href="onewayRM.html#cb675-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dv =</span> vol,</span>
-<span id="cb675-3"><a href="onewayRM.html#cb675-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">wid =</span> mouse_ID,</span>
-<span id="cb675-4"><a href="onewayRM.html#cb675-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">within =</span> day,</span>
-<span id="cb675-5"><a href="onewayRM.html#cb675-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">detailed=</span>T,</span>
-<span id="cb675-6"><a href="onewayRM.html#cb675-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type=</span><span class="dv">1</span>)</span>
-<span id="cb675-7"><a href="onewayRM.html#cb675-7" aria-hidden="true" tabindex="-1"></a>one_wayRM</span></code></pre></div>
+<div class="sourceCode" id="cb687"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb687-1"><a href="onewayRM.html#cb687-1" aria-hidden="true" tabindex="-1"></a>one_wayRM <span class="ot">&lt;-</span> <span class="fu">ezANOVA</span>(<span class="at">data =</span> jw2vol,</span>
+<span id="cb687-2"><a href="onewayRM.html#cb687-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dv =</span> vol,</span>
+<span id="cb687-3"><a href="onewayRM.html#cb687-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">wid =</span> mouse_ID,</span>
+<span id="cb687-4"><a href="onewayRM.html#cb687-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">within =</span> day,</span>
+<span id="cb687-5"><a href="onewayRM.html#cb687-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">detailed=</span>T,</span>
+<span id="cb687-6"><a href="onewayRM.html#cb687-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type=</span><span class="dv">1</span>)</span>
+<span id="cb687-7"><a href="onewayRM.html#cb687-7" aria-hidden="true" tabindex="-1"></a>one_wayRM</span></code></pre></div>
 <pre><code>## $ANOVA
 ##   Effect DFn DFd      SSn     SSd        F            p p&lt;.05       ges
 ## 1    day  12 120 27138034 3115733 87.09999 2.830845e-53     * 0.8970134</code></pre>
@@ -1283,18 +1296,18 @@ The value of 0.897 can be interpreted as follows: 89.7% of the observed variatio
 <p>First, all pairwise comparisons are made using a paired t-test to generate a matrix of all unadjusted p-values.</p>
 <p>Second, a vector of select p-values will be collected from this matrix. These p-values will then passed into the <code>p.adjust</code> function so that they are adjusted for a fewer number of multiple comparisons.</p>
 <p>First, the pairwise t-test. Note the arguments. No adjustment is made (yet) and a two-sided paired t-test is called. The output of the function is stored in an object named <code>m</code>.</p>
-<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb677-1"><a href="onewayRM.html#cb677-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span>jw2vol <span class="sc">%&gt;%</span></span>
-<span id="cb677-2"><a href="onewayRM.html#cb677-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb677-3"><a href="onewayRM.html#cb677-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">day=</span><span class="fu">as.factor</span>(day)</span>
-<span id="cb677-4"><a href="onewayRM.html#cb677-4" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb677-5"><a href="onewayRM.html#cb677-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb677-6"><a href="onewayRM.html#cb677-6" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(<span class="at">x =</span> jw2vol<span class="sc">$</span>vol, </span>
-<span id="cb677-7"><a href="onewayRM.html#cb677-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">g =</span> jw2vol<span class="sc">$</span>day, </span>
-<span id="cb677-8"><a href="onewayRM.html#cb677-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">p.adjust =</span> <span class="st">&quot;none&quot;</span>, </span>
-<span id="cb677-9"><a href="onewayRM.html#cb677-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">paired =</span> T,</span>
-<span id="cb677-10"><a href="onewayRM.html#cb677-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span></span>
-<span id="cb677-11"><a href="onewayRM.html#cb677-11" aria-hidden="true" tabindex="-1"></a>                     )</span>
-<span id="cb677-12"><a href="onewayRM.html#cb677-12" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
+<div class="sourceCode" id="cb689"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb689-1"><a href="onewayRM.html#cb689-1" aria-hidden="true" tabindex="-1"></a>jw2vol <span class="ot">&lt;-</span>jw2vol <span class="sc">%&gt;%</span></span>
+<span id="cb689-2"><a href="onewayRM.html#cb689-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb689-3"><a href="onewayRM.html#cb689-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">day=</span><span class="fu">as.factor</span>(day)</span>
+<span id="cb689-4"><a href="onewayRM.html#cb689-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb689-5"><a href="onewayRM.html#cb689-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb689-6"><a href="onewayRM.html#cb689-6" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(<span class="at">x =</span> jw2vol<span class="sc">$</span>vol, </span>
+<span id="cb689-7"><a href="onewayRM.html#cb689-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">g =</span> jw2vol<span class="sc">$</span>day, </span>
+<span id="cb689-8"><a href="onewayRM.html#cb689-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">p.adjust =</span> <span class="st">&quot;none&quot;</span>, </span>
+<span id="cb689-9"><a href="onewayRM.html#cb689-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">paired =</span> T,</span>
+<span id="cb689-10"><a href="onewayRM.html#cb689-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span></span>
+<span id="cb689-11"><a href="onewayRM.html#cb689-11" aria-hidden="true" tabindex="-1"></a>                     )</span>
+<span id="cb689-12"><a href="onewayRM.html#cb689-12" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using paired t tests 
 ## 
@@ -1329,7 +1342,7 @@ The value of 0.897 can be interpreted as follows: 89.7% of the observed variatio
 ## 
 ## P value adjustment method: none</code></pre>
 <p>The <code>pairwise.t.test output</code> <code>m</code> is a list of 4 elements.</p>
-<div class="sourceCode" id="cb679"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb679-1"><a href="onewayRM.html#cb679-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(m)</span></code></pre></div>
+<div class="sourceCode" id="cb691"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb691-1"><a href="onewayRM.html#cb691-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(m)</span></code></pre></div>
 <pre><code>## List of 4
 ##  $ method         : chr &quot;paired t tests&quot;
 ##  $ data.name      : chr &quot;jw2vol$vol and jw2vol$day&quot;
@@ -1340,22 +1353,22 @@ The value of 0.897 can be interpreted as follows: 89.7% of the observed variatio
 ##  $ p.adjust.method: chr &quot;none&quot;
 ##  - attr(*, &quot;class&quot;)= chr &quot;pairwise.htest&quot;</code></pre>
 <p>The most important of these is <code>$p.value</code>, which you can see is a matrix.</p>
-<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb681-1"><a href="onewayRM.html#cb681-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(m<span class="sc">$</span>p.value)</span></code></pre></div>
+<div class="sourceCode" id="cb693"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb693-1"><a href="onewayRM.html#cb693-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(m<span class="sc">$</span>p.value)</span></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
 <p>The matrix contains p-values that represent the outcome of paired t-tests for tumor_vol between all possible combinations of days.</p>
 <p>Thus, the p-value in the cell defined by the second row and second column of the matrix (<code>m$p.value[2,2]=0.00182</code>) reflects that for the mean difference in tumor_vol between the 17th and 18th days. (note: day 22 is out of order)</p>
 <p>The first column of p-values, <code>m$p.value[,1]</code>, are paired t-test comparisons of tumor_vol between the 22th day and each of the days 18 through 44.</p>
-<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="onewayRM.html#cb683-1" aria-hidden="true" tabindex="-1"></a>pv <span class="ot">&lt;-</span> m<span class="sc">$</span>p.value[,<span class="dv">1</span>]</span>
-<span id="cb683-2"><a href="onewayRM.html#cb683-2" aria-hidden="true" tabindex="-1"></a>pv</span></code></pre></div>
+<div class="sourceCode" id="cb695"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb695-1"><a href="onewayRM.html#cb695-1" aria-hidden="true" tabindex="-1"></a>pv <span class="ot">&lt;-</span> m<span class="sc">$</span>p.value[,<span class="dv">1</span>]</span>
+<span id="cb695-2"><a href="onewayRM.html#cb695-2" aria-hidden="true" tabindex="-1"></a>pv</span></code></pre></div>
 <pre><code>##           18           19           22           24           26           29 
 ## 1.813199e-03 6.836240e-05 4.047601e-05 4.184046e-04 6.397132e-05 2.285676e-05 
 ##           31           33           36           38           40           44 
 ## 1.434113e-05 1.320992e-05 1.030436e-06 1.298778e-06 6.341427e-06 7.020905e-07</code></pre>
 <p>To create the adjusted p-values, we pass the vector of p-values <code>pv</code> selected from the p-value matrix <code>m</code> into the <code>p.adjust</code> function. Use your judgement to select an adjustment method that you deem most appropriate.</p>
-<div class="sourceCode" id="cb685"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb685-1"><a href="onewayRM.html#cb685-1" aria-hidden="true" tabindex="-1"></a><span class="fu">p.adjust</span>(<span class="at">p =</span> pv,</span>
-<span id="cb685-2"><a href="onewayRM.html#cb685-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">&quot;bonferroni&quot;</span>,</span>
-<span id="cb685-3"><a href="onewayRM.html#cb685-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">n =</span> <span class="fu">length</span>(pv)</span>
-<span id="cb685-4"><a href="onewayRM.html#cb685-4" aria-hidden="true" tabindex="-1"></a>         )</span></code></pre></div>
+<div class="sourceCode" id="cb697"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb697-1"><a href="onewayRM.html#cb697-1" aria-hidden="true" tabindex="-1"></a><span class="fu">p.adjust</span>(<span class="at">p =</span> pv,</span>
+<span id="cb697-2"><a href="onewayRM.html#cb697-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">&quot;bonferroni&quot;</span>,</span>
+<span id="cb697-3"><a href="onewayRM.html#cb697-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">n =</span> <span class="fu">length</span>(pv)</span>
+<span id="cb697-4"><a href="onewayRM.html#cb697-4" aria-hidden="true" tabindex="-1"></a>         )</span></code></pre></div>
 <pre><code>##           18           19           22           24           26           29 
 ## 2.175839e-02 8.203488e-04 4.857121e-04 5.020856e-03 7.676558e-04 2.742811e-04 
 ##           31           33           36           38           40           44 
@@ -1381,7 +1394,6 @@ The value of 0.897 can be interpreted as follows: 89.7% of the observed variatio
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1400,6 +1412,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1420,10 +1433,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

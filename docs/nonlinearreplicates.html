@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 43 Nonlinear regression of independent replicates | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 43 Nonlinear regression of independent replicates | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="nestedregress.html"/>
 <link rel="next" href="multregress.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1045,12 +1061,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="nonlinearreplicates" class="section level1" number="43">
 <h1><span class="header-section-number">Chapter 43</span> Nonlinear regression of independent replicates</h1>
-<div class="sourceCode" id="cb913"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb913-1"><a href="nonlinearreplicates.html#cb913-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb913-2"><a href="nonlinearreplicates.html#cb913-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
-<span id="cb913-3"><a href="nonlinearreplicates.html#cb913-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
-<span id="cb913-4"><a href="nonlinearreplicates.html#cb913-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb913-5"><a href="nonlinearreplicates.html#cb913-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlfitr)</span>
-<span id="cb913-6"><a href="nonlinearreplicates.html#cb913-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(minpack.lm)</span></code></pre></div>
+<div class="sourceCode" id="cb924"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb924-1"><a href="nonlinearreplicates.html#cb924-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb924-2"><a href="nonlinearreplicates.html#cb924-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb924-3"><a href="nonlinearreplicates.html#cb924-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb924-4"><a href="nonlinearreplicates.html#cb924-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb924-5"><a href="nonlinearreplicates.html#cb924-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlfitr)</span>
+<span id="cb924-6"><a href="nonlinearreplicates.html#cb924-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(minpack.lm)</span></code></pre></div>
 <p>This chapter illustrates how to analyze independent replicates of nonlinear data while testing an hypothesis that a predictor variable changes an outcome response.</p>
 <p>To some extent, this is a chapter about munging a lot of data into a form for nonlinear regression. Then it provides one common approach to conducting statistical inference on the results.</p>
 <div id="the-problem" class="section level2" number="43.1">
@@ -1069,9 +1085,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">43.2</span> The dataset</h2>
 <p>The experimental data are in two separate csv files. One file contains the replicates for the smoke-exposed rats (subjects Q, R and S). The other file contains the unexposed rats (subjects T, U and V). Each replicate is comprised of duplicate measurements.</p>
 <p>It’s not unusual in this kind of work for the absolute values for the response variable to vary between replicates but be tight within replicates.</p>
-<div class="sourceCode" id="cb914"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb914-1"><a href="nonlinearreplicates.html#cb914-1" aria-hidden="true" tabindex="-1"></a><span class="co">#stringsAsFactors prevents some warnings in later steps</span></span>
-<span id="cb914-2"><a href="nonlinearreplicates.html#cb914-2" aria-hidden="true" tabindex="-1"></a>smokers <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;datasets/smoketheo.csv&quot;</span>, <span class="at">stringsAsFactors =</span> F)</span>
-<span id="cb914-3"><a href="nonlinearreplicates.html#cb914-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(smokers)</span></code></pre></div>
+<div class="sourceCode" id="cb925"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb925-1"><a href="nonlinearreplicates.html#cb925-1" aria-hidden="true" tabindex="-1"></a><span class="co">#stringsAsFactors prevents some warnings in later steps</span></span>
+<span id="cb925-2"><a href="nonlinearreplicates.html#cb925-2" aria-hidden="true" tabindex="-1"></a>smokers <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;datasets/smoketheo.csv&quot;</span>, <span class="at">stringsAsFactors =</span> F)</span>
+<span id="cb925-3"><a href="nonlinearreplicates.html#cb925-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(smokers)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    61 obs. of  8 variables:
 ##  $ min  : int  0 2 4 6 8 10 12 14 16 18 ...
 ##  $ smoke: chr  &quot;Y&quot; &quot;Y&quot; &quot;Y&quot; &quot;Y&quot; ...
@@ -1081,8 +1097,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  $ r2   : num  159 139 135 128 102 ...
 ##  $ s1   : num  236 208 198 178 169 ...
 ##  $ s2   : num  228 216 204 185 172 ...</code></pre>
-<div class="sourceCode" id="cb916"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb916-1"><a href="nonlinearreplicates.html#cb916-1" aria-hidden="true" tabindex="-1"></a>nonsmokers <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;datasets/nosmoketheo.csv&quot;</span>, <span class="at">stringsAsFactors =</span> F)</span>
-<span id="cb916-2"><a href="nonlinearreplicates.html#cb916-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nonsmokers)</span></code></pre></div>
+<div class="sourceCode" id="cb927"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb927-1"><a href="nonlinearreplicates.html#cb927-1" aria-hidden="true" tabindex="-1"></a>nonsmokers <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;datasets/nosmoketheo.csv&quot;</span>, <span class="at">stringsAsFactors =</span> F)</span>
+<span id="cb927-2"><a href="nonlinearreplicates.html#cb927-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nonsmokers)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    61 obs. of  8 variables:
 ##  $ min  : int  0 2 4 6 8 10 12 14 16 18 ...
 ##  $ smoke: chr  &quot;N&quot; &quot;N&quot; &quot;N&quot; &quot;N&quot; ...
@@ -1098,23 +1114,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="average-the-technical-replicates" class="section level3" number="43.3.1">
 <h3><span class="header-section-number">43.3.1</span> Average the technical replicates</h3>
 <p>We have a few data processing steps to clean things up. First, let’s average the technical duplicates for each time point.</p>
-<div class="sourceCode" id="cb918"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb918-1"><a href="nonlinearreplicates.html#cb918-1" aria-hidden="true" tabindex="-1"></a>smokers1 <span class="ot">&lt;-</span> <span class="fu">group_by</span>(smokers, smoke, min) <span class="sc">%&gt;%</span> </span>
-<span id="cb918-2"><a href="nonlinearreplicates.html#cb918-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb918-3"><a href="nonlinearreplicates.html#cb918-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">q=</span><span class="fu">mean</span>(<span class="fu">c</span>(q1,q2)),</span>
-<span id="cb918-4"><a href="nonlinearreplicates.html#cb918-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">r=</span><span class="fu">mean</span>(<span class="fu">c</span>(r1,r2)),</span>
-<span id="cb918-5"><a href="nonlinearreplicates.html#cb918-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">s=</span><span class="fu">mean</span>(<span class="fu">c</span>(s1,s2))</span>
-<span id="cb918-6"><a href="nonlinearreplicates.html#cb918-6" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
-<pre><code>## `summarise()` regrouping output by &#39;smoke&#39; (override with `.groups` argument)</code></pre>
-<div class="sourceCode" id="cb920"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb920-1"><a href="nonlinearreplicates.html#cb920-1" aria-hidden="true" tabindex="-1"></a>nonsmokers1 <span class="ot">&lt;-</span> <span class="fu">group_by</span>(nonsmokers, smoke, min) <span class="sc">%&gt;%</span> </span>
-<span id="cb920-2"><a href="nonlinearreplicates.html#cb920-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb920-3"><a href="nonlinearreplicates.html#cb920-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">t=</span><span class="fu">mean</span>(<span class="fu">c</span>(t1,t2)),</span>
-<span id="cb920-4"><a href="nonlinearreplicates.html#cb920-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">u=</span><span class="fu">mean</span>(<span class="fu">c</span>(u1,u2)),</span>
-<span id="cb920-5"><a href="nonlinearreplicates.html#cb920-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">v=</span><span class="fu">mean</span>(<span class="fu">c</span>(v1,v2))</span>
-<span id="cb920-6"><a href="nonlinearreplicates.html#cb920-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<pre><code>## `summarise()` regrouping output by &#39;smoke&#39; (override with `.groups` argument)</code></pre>
-<div class="sourceCode" id="cb922"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb922-1"><a href="nonlinearreplicates.html#cb922-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check to see if it worked!</span></span>
-<span id="cb922-2"><a href="nonlinearreplicates.html#cb922-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(smokers1); <span class="fu">str</span>(nonsmokers1)</span></code></pre></div>
-<pre><code>## tibble [61 x 5] (S3: grouped_df/tbl_df/tbl/data.frame)
+<div class="sourceCode" id="cb929"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb929-1"><a href="nonlinearreplicates.html#cb929-1" aria-hidden="true" tabindex="-1"></a>smokers1 <span class="ot">&lt;-</span> <span class="fu">group_by</span>(smokers, smoke, min) <span class="sc">%&gt;%</span> </span>
+<span id="cb929-2"><a href="nonlinearreplicates.html#cb929-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb929-3"><a href="nonlinearreplicates.html#cb929-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">q=</span><span class="fu">mean</span>(<span class="fu">c</span>(q1,q2)),</span>
+<span id="cb929-4"><a href="nonlinearreplicates.html#cb929-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">r=</span><span class="fu">mean</span>(<span class="fu">c</span>(r1,r2)),</span>
+<span id="cb929-5"><a href="nonlinearreplicates.html#cb929-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">s=</span><span class="fu">mean</span>(<span class="fu">c</span>(s1,s2))</span>
+<span id="cb929-6"><a href="nonlinearreplicates.html#cb929-6" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;smoke&#39;. You can override using the `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb931"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb931-1"><a href="nonlinearreplicates.html#cb931-1" aria-hidden="true" tabindex="-1"></a>nonsmokers1 <span class="ot">&lt;-</span> <span class="fu">group_by</span>(nonsmokers, smoke, min) <span class="sc">%&gt;%</span> </span>
+<span id="cb931-2"><a href="nonlinearreplicates.html#cb931-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb931-3"><a href="nonlinearreplicates.html#cb931-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">t=</span><span class="fu">mean</span>(<span class="fu">c</span>(t1,t2)),</span>
+<span id="cb931-4"><a href="nonlinearreplicates.html#cb931-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">u=</span><span class="fu">mean</span>(<span class="fu">c</span>(u1,u2)),</span>
+<span id="cb931-5"><a href="nonlinearreplicates.html#cb931-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">v=</span><span class="fu">mean</span>(<span class="fu">c</span>(v1,v2))</span>
+<span id="cb931-6"><a href="nonlinearreplicates.html#cb931-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;smoke&#39;. You can override using the `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb933"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb933-1"><a href="nonlinearreplicates.html#cb933-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check to see if it worked!</span></span>
+<span id="cb933-2"><a href="nonlinearreplicates.html#cb933-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(smokers1); <span class="fu">str</span>(nonsmokers1)</span></code></pre></div>
+<pre><code>## grouped_df [61 x 5] (S3: grouped_df/tbl_df/tbl/data.frame)
 ##  $ smoke: chr [1:61] &quot;Y&quot; &quot;Y&quot; &quot;Y&quot; &quot;Y&quot; ...
 ##  $ min  : int [1:61] 0 2 4 6 8 10 12 14 16 18 ...
 ##  $ q    : num [1:61] 191 181 168 150 134 ...
@@ -1126,7 +1142,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   .. ..$ : int [1:61] 1 2 3 4 5 6 7 8 9 10 ...
 ##   .. ..@ ptype: int(0) 
 ##   ..- attr(*, &quot;.drop&quot;)= logi TRUE</code></pre>
-<pre><code>## tibble [61 x 5] (S3: grouped_df/tbl_df/tbl/data.frame)
+<pre><code>## grouped_df [61 x 5] (S3: grouped_df/tbl_df/tbl/data.frame)
 ##  $ smoke: chr [1:61] &quot;N&quot; &quot;N&quot; &quot;N&quot; &quot;N&quot; ...
 ##  $ min  : int [1:61] 0 2 4 6 8 10 12 14 16 18 ...
 ##  $ t    : num [1:61] 276 266 257 242 232 ...
@@ -1142,13 +1158,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="create-one-table" class="section level3" number="43.3.2">
 <h3><span class="header-section-number">43.3.2</span> Create one table</h3>
 <p>There are a couple of ways to combine the data into one table. One way is to convert each table into long format, before binding them together.</p>
-<div class="sourceCode" id="cb925"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb925-1"><a href="nonlinearreplicates.html#cb925-1" aria-hidden="true" tabindex="-1"></a>smokers1<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">gather</span>(smokers1, id, theo, <span class="sc">-</span>smoke, <span class="sc">-</span>min)</span>
-<span id="cb925-2"><a href="nonlinearreplicates.html#cb925-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb925-3"><a href="nonlinearreplicates.html#cb925-3" aria-hidden="true" tabindex="-1"></a>nonsmokers1<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">gather</span>(nonsmokers1, id, theo, <span class="sc">-</span>smoke, <span class="sc">-</span>min)</span>
-<span id="cb925-4"><a href="nonlinearreplicates.html#cb925-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb925-5"><a href="nonlinearreplicates.html#cb925-5" aria-hidden="true" tabindex="-1"></a>theodata <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(smokers1<span class="fl">.1</span>, nonsmokers1<span class="fl">.1</span>)</span>
-<span id="cb925-6"><a href="nonlinearreplicates.html#cb925-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb925-7"><a href="nonlinearreplicates.html#cb925-7" aria-hidden="true" tabindex="-1"></a>theodata</span></code></pre></div>
+<div class="sourceCode" id="cb936"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb936-1"><a href="nonlinearreplicates.html#cb936-1" aria-hidden="true" tabindex="-1"></a>smokers1<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">gather</span>(smokers1, id, theo, <span class="sc">-</span>smoke, <span class="sc">-</span>min)</span>
+<span id="cb936-2"><a href="nonlinearreplicates.html#cb936-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb936-3"><a href="nonlinearreplicates.html#cb936-3" aria-hidden="true" tabindex="-1"></a>nonsmokers1<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">gather</span>(nonsmokers1, id, theo, <span class="sc">-</span>smoke, <span class="sc">-</span>min)</span>
+<span id="cb936-4"><a href="nonlinearreplicates.html#cb936-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb936-5"><a href="nonlinearreplicates.html#cb936-5" aria-hidden="true" tabindex="-1"></a>theodata <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(smokers1<span class="fl">.1</span>, nonsmokers1<span class="fl">.1</span>)</span>
+<span id="cb936-6"><a href="nonlinearreplicates.html#cb936-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb936-7"><a href="nonlinearreplicates.html#cb936-7" aria-hidden="true" tabindex="-1"></a>theodata</span></code></pre></div>
 <pre><code>## # A tibble: 366 x 4
 ## # Groups:   smoke [2]
 ##    smoke   min id     theo
@@ -1168,12 +1184,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="plot-the-data" class="section level3" number="43.3.3">
 <h3><span class="header-section-number">43.3.3</span> Plot the data</h3>
 <p>It’s a good idea to visualize each replicate prior any transformations. It’s not clear from this view that cigarette smoke has any effect on half-life, is it?</p>
-<div class="sourceCode" id="cb927"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb927-1"><a href="nonlinearreplicates.html#cb927-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(theodata, <span class="fu">aes</span>(min, theo, <span class="at">group=</span>id))<span class="sc">+</span></span>
-<span id="cb927-2"><a href="nonlinearreplicates.html#cb927-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
-<span id="cb927-3"><a href="nonlinearreplicates.html#cb927-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color=</span>smoke))<span class="sc">+</span></span>
-<span id="cb927-4"><a href="nonlinearreplicates.html#cb927-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-457"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-457-1.png" alt="Replicate rat microsomal theophylline metabolism data." width="672" />
+<div class="sourceCode" id="cb938"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb938-1"><a href="nonlinearreplicates.html#cb938-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(theodata, <span class="fu">aes</span>(min, theo, <span class="at">group=</span>id))<span class="sc">+</span></span>
+<span id="cb938-2"><a href="nonlinearreplicates.html#cb938-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb938-3"><a href="nonlinearreplicates.html#cb938-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color=</span>smoke))<span class="sc">+</span></span>
+<span id="cb938-4"><a href="nonlinearreplicates.html#cb938-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-456"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-456-1.png" alt="Replicate rat microsomal theophylline metabolism data." width="672" />
 <p class="caption">
 Figure 43.1: Replicate rat microsomal theophylline metabolism data.
 </p>
@@ -1187,29 +1203,29 @@ Figure 43.1: Replicate rat microsomal theophylline metabolism data.
 <li><code>sapply</code> ‘feeds’ values of <code>reps</code> into the function one-by-one, each time generating an <code>nls</code> object for that replicate</li>
 <li><code>output</code> is a list of six <code>nls</code> class objects; lists are a pain</li>
 </ul>
-<div class="sourceCode" id="cb928"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb928-1"><a href="nonlinearreplicates.html#cb928-1" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
-<span id="cb928-2"><a href="nonlinearreplicates.html#cb928-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb928-3"><a href="nonlinearreplicates.html#cb928-3" aria-hidden="true" tabindex="-1"></a>  reps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;t&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;v&quot;</span>),</span>
-<span id="cb928-4"><a href="nonlinearreplicates.html#cb928-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb928-5"><a href="nonlinearreplicates.html#cb928-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(reps) <span class="fu">nlsLM</span>(theo<span class="sc">~</span>(yhi<span class="sc">-</span>ylo)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>k<span class="sc">*</span>min)<span class="sc">+</span>ylo, </span>
-<span id="cb928-6"><a href="nonlinearreplicates.html#cb928-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">start=</span><span class="fu">list</span>(</span>
-<span id="cb928-7"><a href="nonlinearreplicates.html#cb928-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">yhi=</span><span class="dv">200</span>, </span>
-<span id="cb928-8"><a href="nonlinearreplicates.html#cb928-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">ylo=</span><span class="dv">50</span>,</span>
-<span id="cb928-9"><a href="nonlinearreplicates.html#cb928-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">k=</span><span class="fl">0.03</span>),</span>
-<span id="cb928-10"><a href="nonlinearreplicates.html#cb928-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data=</span><span class="fu">subset</span>(theodata, id<span class="sc">==</span>reps)</span>
-<span id="cb928-11"><a href="nonlinearreplicates.html#cb928-11" aria-hidden="true" tabindex="-1"></a>  ), </span>
-<span id="cb928-12"><a href="nonlinearreplicates.html#cb928-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">simplify =</span> F</span>
-<span id="cb928-13"><a href="nonlinearreplicates.html#cb928-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb939"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb939-1"><a href="nonlinearreplicates.html#cb939-1" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
+<span id="cb939-2"><a href="nonlinearreplicates.html#cb939-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb939-3"><a href="nonlinearreplicates.html#cb939-3" aria-hidden="true" tabindex="-1"></a>  reps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;t&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;v&quot;</span>),</span>
+<span id="cb939-4"><a href="nonlinearreplicates.html#cb939-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb939-5"><a href="nonlinearreplicates.html#cb939-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(reps) <span class="fu">nlsLM</span>(theo<span class="sc">~</span>(yhi<span class="sc">-</span>ylo)<span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span>k<span class="sc">*</span>min)<span class="sc">+</span>ylo, </span>
+<span id="cb939-6"><a href="nonlinearreplicates.html#cb939-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">start=</span><span class="fu">list</span>(</span>
+<span id="cb939-7"><a href="nonlinearreplicates.html#cb939-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">yhi=</span><span class="dv">200</span>, </span>
+<span id="cb939-8"><a href="nonlinearreplicates.html#cb939-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">ylo=</span><span class="dv">50</span>,</span>
+<span id="cb939-9"><a href="nonlinearreplicates.html#cb939-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">k=</span><span class="fl">0.03</span>),</span>
+<span id="cb939-10"><a href="nonlinearreplicates.html#cb939-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data=</span><span class="fu">subset</span>(theodata, id<span class="sc">==</span>reps)</span>
+<span id="cb939-11"><a href="nonlinearreplicates.html#cb939-11" aria-hidden="true" tabindex="-1"></a>  ), </span>
+<span id="cb939-12"><a href="nonlinearreplicates.html#cb939-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">simplify =</span> F</span>
+<span id="cb939-13"><a href="nonlinearreplicates.html#cb939-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Here’s how to do the same thing using <code>nlfitr</code>. The output includes parameter estimates for each of the independent replicates</p>
-<div class="sourceCode" id="cb929"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb929-1"><a href="nonlinearreplicates.html#cb929-1" aria-hidden="true" tabindex="-1"></a>nloutput <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
-<span id="cb929-2"><a href="nonlinearreplicates.html#cb929-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb929-3"><a href="nonlinearreplicates.html#cb929-3" aria-hidden="true" tabindex="-1"></a>  reps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;t&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;v&quot;</span>),</span>
-<span id="cb929-4"><a href="nonlinearreplicates.html#cb929-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb929-5"><a href="nonlinearreplicates.html#cb929-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(reps) <span class="fu">fitdecay1</span>(min, theo, <span class="at">data=</span><span class="fu">subset</span>(theodata, id<span class="sc">==</span>reps), </span>
-<span id="cb929-6"><a href="nonlinearreplicates.html#cb929-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">k=</span><span class="fl">0.03</span>, <span class="at">ylo=</span><span class="dv">50</span>, <span class="at">yhi=</span><span class="dv">200</span>, <span class="at">weigh=</span>F),</span>
-<span id="cb929-7"><a href="nonlinearreplicates.html#cb929-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">simplify =</span> F</span>
-<span id="cb929-8"><a href="nonlinearreplicates.html#cb929-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb929-9"><a href="nonlinearreplicates.html#cb929-9" aria-hidden="true" tabindex="-1"></a>nloutput</span></code></pre></div>
+<div class="sourceCode" id="cb940"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb940-1"><a href="nonlinearreplicates.html#cb940-1" aria-hidden="true" tabindex="-1"></a>nloutput <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
+<span id="cb940-2"><a href="nonlinearreplicates.html#cb940-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb940-3"><a href="nonlinearreplicates.html#cb940-3" aria-hidden="true" tabindex="-1"></a>  reps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;t&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;v&quot;</span>),</span>
+<span id="cb940-4"><a href="nonlinearreplicates.html#cb940-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb940-5"><a href="nonlinearreplicates.html#cb940-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(reps) <span class="fu">fitdecay1</span>(min, theo, <span class="at">data=</span><span class="fu">subset</span>(theodata, id<span class="sc">==</span>reps), </span>
+<span id="cb940-6"><a href="nonlinearreplicates.html#cb940-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">k=</span><span class="fl">0.03</span>, <span class="at">ylo=</span><span class="dv">50</span>, <span class="at">yhi=</span><span class="dv">200</span>, <span class="at">weigh=</span>F),</span>
+<span id="cb940-7"><a href="nonlinearreplicates.html#cb940-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">simplify =</span> F</span>
+<span id="cb940-8"><a href="nonlinearreplicates.html#cb940-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb940-9"><a href="nonlinearreplicates.html#cb940-9" aria-hidden="true" tabindex="-1"></a>nloutput</span></code></pre></div>
 <pre><code>## $q
 ## Nonlinear regression model
 ##   model: theo ~ (yhi - ylo) * exp(-1 * k * min) + ylo
@@ -1285,13 +1301,13 @@ Figure 43.1: Replicate rat microsomal theophylline metabolism data.
 <li><code>onephaseFits</code> is just a tidy way of listing all of the parameter estimates from the <code>output</code> list</li>
 <li>We use <code>kable</code> to print out only the rate constants, <code>k</code></li>
 </ul>
-<div class="sourceCode" id="cb931"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb931-1"><a href="nonlinearreplicates.html#cb931-1" aria-hidden="true" tabindex="-1"></a>onephaseFits <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb931-2"><a href="nonlinearreplicates.html#cb931-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(nloutput, tidy)) <span class="sc">%&gt;%</span> </span>
-<span id="cb931-3"><a href="nonlinearreplicates.html#cb931-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_column</span>(</span>
-<span id="cb931-4"><a href="nonlinearreplicates.html#cb931-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">reps=</span><span class="fu">rep</span>(reps, <span class="at">each=</span><span class="dv">3</span>), </span>
-<span id="cb931-5"><a href="nonlinearreplicates.html#cb931-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.before=</span>T)</span>
-<span id="cb931-6"><a href="nonlinearreplicates.html#cb931-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb931-7"><a href="nonlinearreplicates.html#cb931-7" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(onephaseFits[<span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">18</span>,<span class="dv">3</span>),])</span></code></pre></div>
+<div class="sourceCode" id="cb942"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb942-1"><a href="nonlinearreplicates.html#cb942-1" aria-hidden="true" tabindex="-1"></a>onephaseFits <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb942-2"><a href="nonlinearreplicates.html#cb942-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(nloutput, tidy)) <span class="sc">%&gt;%</span> </span>
+<span id="cb942-3"><a href="nonlinearreplicates.html#cb942-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_column</span>(</span>
+<span id="cb942-4"><a href="nonlinearreplicates.html#cb942-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">reps=</span><span class="fu">rep</span>(reps, <span class="at">each=</span><span class="dv">3</span>), </span>
+<span id="cb942-5"><a href="nonlinearreplicates.html#cb942-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.before=</span>T)</span>
+<span id="cb942-6"><a href="nonlinearreplicates.html#cb942-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb942-7"><a href="nonlinearreplicates.html#cb942-7" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(onephaseFits[<span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">18</span>,<span class="dv">3</span>),])</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1443,17 +1459,17 @@ k
 <div id="t-test-on-half-lives" class="section level2" number="43.4">
 <h2><span class="header-section-number">43.4</span> T-test on half-lives</h2>
 <p>We now just need to create a results table for the half-lives, which we’ll use to pass into a t-test function.</p>
-<div class="sourceCode" id="cb932"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb932-1"><a href="nonlinearreplicates.html#cb932-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">select</span>(</span>
-<span id="cb932-2"><a href="nonlinearreplicates.html#cb932-2" aria-hidden="true" tabindex="-1"></a>  onephaseFits[<span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">18</span>,<span class="dv">3</span>),], </span>
-<span id="cb932-3"><a href="nonlinearreplicates.html#cb932-3" aria-hidden="true" tabindex="-1"></a>  reps, </span>
-<span id="cb932-4"><a href="nonlinearreplicates.html#cb932-4" aria-hidden="true" tabindex="-1"></a>  estimate</span>
-<span id="cb932-5"><a href="nonlinearreplicates.html#cb932-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb932-6"><a href="nonlinearreplicates.html#cb932-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb932-7"><a href="nonlinearreplicates.html#cb932-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">halflife=</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span>estimate</span>
-<span id="cb932-8"><a href="nonlinearreplicates.html#cb932-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
-<span id="cb932-9"><a href="nonlinearreplicates.html#cb932-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(<span class="at">smoke=</span><span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;N&quot;</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
-<span id="cb932-10"><a href="nonlinearreplicates.html#cb932-10" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb932-11"><a href="nonlinearreplicates.html#cb932-11" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results)</span></code></pre></div>
+<div class="sourceCode" id="cb943"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb943-1"><a href="nonlinearreplicates.html#cb943-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">select</span>(</span>
+<span id="cb943-2"><a href="nonlinearreplicates.html#cb943-2" aria-hidden="true" tabindex="-1"></a>  onephaseFits[<span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">18</span>,<span class="dv">3</span>),], </span>
+<span id="cb943-3"><a href="nonlinearreplicates.html#cb943-3" aria-hidden="true" tabindex="-1"></a>  reps, </span>
+<span id="cb943-4"><a href="nonlinearreplicates.html#cb943-4" aria-hidden="true" tabindex="-1"></a>  estimate</span>
+<span id="cb943-5"><a href="nonlinearreplicates.html#cb943-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb943-6"><a href="nonlinearreplicates.html#cb943-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb943-7"><a href="nonlinearreplicates.html#cb943-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">halflife=</span><span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span>estimate</span>
+<span id="cb943-8"><a href="nonlinearreplicates.html#cb943-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb943-9"><a href="nonlinearreplicates.html#cb943-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(<span class="at">smoke=</span><span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;N&quot;</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
+<span id="cb943-10"><a href="nonlinearreplicates.html#cb943-10" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb943-11"><a href="nonlinearreplicates.html#cb943-11" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(results)</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1558,25 +1574,24 @@ N
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb933"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb933-1"><a href="nonlinearreplicates.html#cb933-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(results, smoke) <span class="sc">%&gt;%</span> </span>
-<span id="cb933-2"><a href="nonlinearreplicates.html#cb933-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb933-3"><a href="nonlinearreplicates.html#cb933-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean=</span><span class="fu">mean</span>(halflife),</span>
-<span id="cb933-4"><a href="nonlinearreplicates.html#cb933-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd=</span><span class="fu">sd</span>(halflife)</span>
-<span id="cb933-5"><a href="nonlinearreplicates.html#cb933-5" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb944"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb944-1"><a href="nonlinearreplicates.html#cb944-1" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(results, smoke) <span class="sc">%&gt;%</span> </span>
+<span id="cb944-2"><a href="nonlinearreplicates.html#cb944-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb944-3"><a href="nonlinearreplicates.html#cb944-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean=</span><span class="fu">mean</span>(halflife),</span>
+<span id="cb944-4"><a href="nonlinearreplicates.html#cb944-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd=</span><span class="fu">sd</span>(halflife)</span>
+<span id="cb944-5"><a href="nonlinearreplicates.html#cb944-5" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
 ##   smoke  mean    sd
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 N      29.4 0.632
 ## 2 Y      15.9 0.957</code></pre>
 <p>And now, finally, the t-test. This evaluates the null hypothesis that theophylline half-lives in smoking and nonsmoking microsomes are the same.</p>
-<div class="sourceCode" id="cb936"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb936-1"><a href="nonlinearreplicates.html#cb936-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(halflife<span class="sc">~</span>smoke, <span class="at">data=</span>results, <span class="at">var.equal=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb946"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb946-1"><a href="nonlinearreplicates.html#cb946-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(halflife<span class="sc">~</span>smoke, <span class="at">data=</span>results, <span class="at">var.equal=</span>T)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
 ## data:  halflife by smoke
 ## t = 20.382, df = 4, p-value = 3.421e-05
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group N and group Y is not equal to 0
 ## 95 percent confidence interval:
 ##  11.65775 15.33457
 ## sample estimates:
@@ -1595,8 +1610,8 @@ N
 <h2><span class="header-section-number">43.6</span> Summary figure</h2>
 <p>The figure above is not quite ready for publication or presentation. The absolute values of theophylline differ from replicate to replicate. The figure also fails to convey, from a glance, that the smoke exposure has any effect.</p>
 <p>It is very simple to rescale the data and replot. There are a few conceivable ways to do this, but one is percent of maximum within each replicate.</p>
-<div class="sourceCode" id="cb938"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb938-1"><a href="nonlinearreplicates.html#cb938-1" aria-hidden="true" tabindex="-1"></a>theodatapm <span class="ot">&lt;-</span> <span class="fu">group_by</span>(theodata, id) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">pmax=</span><span class="dv">100</span><span class="sc">*</span>theo<span class="sc">/</span><span class="fu">max</span>(theo))</span>
-<span id="cb938-2"><a href="nonlinearreplicates.html#cb938-2" aria-hidden="true" tabindex="-1"></a>theodatapm</span></code></pre></div>
+<div class="sourceCode" id="cb948"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb948-1"><a href="nonlinearreplicates.html#cb948-1" aria-hidden="true" tabindex="-1"></a>theodatapm <span class="ot">&lt;-</span> <span class="fu">group_by</span>(theodata, id) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">pmax=</span><span class="dv">100</span><span class="sc">*</span>theo<span class="sc">/</span><span class="fu">max</span>(theo))</span>
+<span id="cb948-2"><a href="nonlinearreplicates.html#cb948-2" aria-hidden="true" tabindex="-1"></a>theodatapm</span></code></pre></div>
 <pre><code>## # A tibble: 366 x 5
 ## # Groups:   id [6]
 ##    smoke   min id     theo  pmax
@@ -1615,20 +1630,20 @@ N
 <p>Finally, a plot of the results.</p>
 <p>A couple of important things happen to the data on-the-fly within the ggplot function. Means and standard deviations are calculated to derive data points with error bars. And the nonlinear regression best fit line is calculated and drawn.</p>
 <p>This is a convincing result showing a marked effect of cigarette exposure on caffeine metabolism.</p>
-<div class="sourceCode" id="cb940"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb940-1"><a href="nonlinearreplicates.html#cb940-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(theodatapm, <span class="fu">aes</span>(min, pmax, <span class="at">color=</span>smoke, <span class="at">group=</span>smoke))<span class="sc">+</span></span>
-<span id="cb940-2"><a href="nonlinearreplicates.html#cb940-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data=</span> <span class="st">&quot;mean_sdl&quot;</span>, </span>
-<span id="cb940-3"><a href="nonlinearreplicates.html#cb940-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>)</span>
-<span id="cb940-4"><a href="nonlinearreplicates.html#cb940-4" aria-hidden="true" tabindex="-1"></a>               )<span class="sc">+</span></span>
-<span id="cb940-5"><a href="nonlinearreplicates.html#cb940-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method=</span><span class="st">&quot;nls&quot;</span>,</span>
-<span id="cb940-6"><a href="nonlinearreplicates.html#cb940-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args=</span><span class="fu">list</span>(</span>
-<span id="cb940-7"><a href="nonlinearreplicates.html#cb940-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">start=</span><span class="fu">c</span>(<span class="at">yhi=</span><span class="dv">100</span>, <span class="at">ylo=</span><span class="dv">10</span>, <span class="at">k=</span><span class="fl">0.03</span>)),</span>
-<span id="cb940-8"><a href="nonlinearreplicates.html#cb940-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula=</span><span class="st">&quot;y~ylo+((yhi-ylo)*exp(-k*x))&quot;</span>,</span>
-<span id="cb940-9"><a href="nonlinearreplicates.html#cb940-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">se=</span>F</span>
-<span id="cb940-10"><a href="nonlinearreplicates.html#cb940-10" aria-hidden="true" tabindex="-1"></a>              )<span class="sc">+</span></span>
-<span id="cb940-11"><a href="nonlinearreplicates.html#cb940-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Theophylline, % of maximum&quot;</span>, </span>
-<span id="cb940-12"><a href="nonlinearreplicates.html#cb940-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;minutes&quot;</span></span>
-<span id="cb940-13"><a href="nonlinearreplicates.html#cb940-13" aria-hidden="true" tabindex="-1"></a>       )<span class="sc">+</span></span>
-<span id="cb940-14"><a href="nonlinearreplicates.html#cb940-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb950"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb950-1"><a href="nonlinearreplicates.html#cb950-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(theodatapm, <span class="fu">aes</span>(min, pmax, <span class="at">color=</span>smoke, <span class="at">group=</span>smoke))<span class="sc">+</span></span>
+<span id="cb950-2"><a href="nonlinearreplicates.html#cb950-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data=</span> <span class="st">&quot;mean_sdl&quot;</span>, </span>
+<span id="cb950-3"><a href="nonlinearreplicates.html#cb950-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>)</span>
+<span id="cb950-4"><a href="nonlinearreplicates.html#cb950-4" aria-hidden="true" tabindex="-1"></a>               )<span class="sc">+</span></span>
+<span id="cb950-5"><a href="nonlinearreplicates.html#cb950-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method=</span><span class="st">&quot;nls&quot;</span>,</span>
+<span id="cb950-6"><a href="nonlinearreplicates.html#cb950-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args=</span><span class="fu">list</span>(</span>
+<span id="cb950-7"><a href="nonlinearreplicates.html#cb950-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">start=</span><span class="fu">c</span>(<span class="at">yhi=</span><span class="dv">100</span>, <span class="at">ylo=</span><span class="dv">10</span>, <span class="at">k=</span><span class="fl">0.03</span>)),</span>
+<span id="cb950-8"><a href="nonlinearreplicates.html#cb950-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula=</span><span class="st">&quot;y~ylo+((yhi-ylo)*exp(-k*x))&quot;</span>,</span>
+<span id="cb950-9"><a href="nonlinearreplicates.html#cb950-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">se=</span>F</span>
+<span id="cb950-10"><a href="nonlinearreplicates.html#cb950-10" aria-hidden="true" tabindex="-1"></a>              )<span class="sc">+</span></span>
+<span id="cb950-11"><a href="nonlinearreplicates.html#cb950-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Theophylline, % of maximum&quot;</span>, </span>
+<span id="cb950-12"><a href="nonlinearreplicates.html#cb950-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;minutes&quot;</span></span>
+<span id="cb950-13"><a href="nonlinearreplicates.html#cb950-13" aria-hidden="true" tabindex="-1"></a>       )<span class="sc">+</span></span>
+<span id="cb950-14"><a href="nonlinearreplicates.html#cb950-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis</span>(<span class="at">discrete=</span>T)</span></code></pre></div>
 <p><img src="jabstb_files/figure-html/percent%20max%20replicate%20nonlinear%20regressions-1.png" width="672" /></p>
 
 </div>
@@ -1643,7 +1658,6 @@ N
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1662,6 +1676,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1682,10 +1697,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

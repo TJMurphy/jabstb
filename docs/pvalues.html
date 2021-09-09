@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 13 P Values | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 13 P Values | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="error.html"/>
 <link rel="next" href="jaxwest7.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1045,7 +1061,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="pvalues" class="section level1" number="13">
 <h1><span class="header-section-number">Chapter 13</span> P Values</h1>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="pvalues.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="pvalues.html#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <p><em>The p-value represents the probability that your dataset is too small.</em></p>
 <p>-Karendeep Singh on <a href="https://twitter.com/kdpsinghlab">twitter</a></p>
 <p>The p-value is an instrument by which a decision will be made. As such, it is worth understanding how that instrument works.</p>
@@ -1060,7 +1076,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This definition includes some inferential slight of hand.</p>
 <p>The test statistic probability distributions are also called sampling distributions, because they represent all of the test statistic values that could be produced from an infinite number of experimental samples.</p>
 <p>And the probability it represents represents what is also called <em>an error probability</em> because every time we do an experiment we assume we are sampling from a null distribution.</p>
-<p>The p-value is therefore taken as the probability we would “mistakenly declare there to be evidence against the null” in our data.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<p>The p-value is therefore taken as the probability we would “mistakenly declare there to be evidence against the null” in our data.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 <p>Read further below to understand that one.</p>
 <p>Mathematically, p-values are just simple frequency probabilities. Areas under the curve of a function. They convey what proportion of the total area under a curve is represented by a range of test-statistic values.</p>
 <p>They take on additional inferential meaning only when the intention is to test a hypothesis.</p>
@@ -1083,33 +1099,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>But we know even these extreme values are null, because the code is set up to compare two identical populations.</p>
 <p>We can conclude those extreme test statistic values simply arise by random chance.</p>
 <p>A real life experiment comparing two populations is very different. The most important difference is we don’t know for sure whether the two populations differ. The othr important difference is we only get to draw one sample, not 10,000, and we have to conclude from that one sample whether the two populations differ. We could make an error doing that.</p>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="pvalues.html#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>) <span class="co">#this is for reproduciblity</span></span>
-<span id="cb105-2"><a href="pvalues.html#cb105-2" aria-hidden="true" tabindex="-1"></a>  ssims<span class="ot">=</span><span class="dv">10000</span> <span class="co">#number of repeat cycles to run</span></span>
-<span id="cb105-3"><a href="pvalues.html#cb105-3" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co">#empty vector, to be filled in the repeat</span></span>
-<span id="cb105-4"><a href="pvalues.html#cb105-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co">#ditto</span></span>
-<span id="cb105-5"><a href="pvalues.html#cb105-5" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="dv">1</span>   <span class="co">#an index value, for counting</span></span>
-<span id="cb105-6"><a href="pvalues.html#cb105-6" aria-hidden="true" tabindex="-1"></a> <span class="cf">repeat</span>{</span>
-<span id="cb105-7"><a href="pvalues.html#cb105-7" aria-hidden="true" tabindex="-1"></a>    groupA <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>); <span class="co">#generates 5 independent random replicates from N(100,10)</span></span>
-<span id="cb105-8"><a href="pvalues.html#cb105-8" aria-hidden="true" tabindex="-1"></a>    groupB <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>); <span class="co">#ditto</span></span>
-<span id="cb105-9"><a href="pvalues.html#cb105-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb105-10"><a href="pvalues.html#cb105-10" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(groupA, groupB, </span>
-<span id="cb105-11"><a href="pvalues.html#cb105-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">paired=</span>F, </span>
-<span id="cb105-12"><a href="pvalues.html#cb105-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">var.equal=</span>F,</span>
-<span id="cb105-13"><a href="pvalues.html#cb105-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative =</span> <span class="st">&quot;greater&quot;</span>,</span>
-<span id="cb105-14"><a href="pvalues.html#cb105-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">conf.level=</span><span class="fl">0.95</span>)  <span class="co">#&#39;result&#39; is a list of t-test output</span></span>
-<span id="cb105-15"><a href="pvalues.html#cb105-15" aria-hidden="true" tabindex="-1"></a>    t[i] <span class="ot">&lt;-</span> result<span class="sc">$</span>statistic[[<span class="dv">1</span>]] <span class="co">#grabs t-test statistic value</span></span>
-<span id="cb105-16"><a href="pvalues.html#cb105-16" aria-hidden="true" tabindex="-1"></a>    p[i] <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value        <span class="co">#ditto but for p-value</span></span>
-<span id="cb105-17"><a href="pvalues.html#cb105-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i<span class="sc">==</span>ssims) <span class="cf">break</span>           <span class="co">#logic for ending repeat function</span></span>
-<span id="cb105-18"><a href="pvalues.html#cb105-18" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">=</span> i<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb105-19"><a href="pvalues.html#cb105-19" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb105-20"><a href="pvalues.html#cb105-20" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">tibble</span>(t, p)  <span class="co">#need this to ggplot</span></span>
-<span id="cb105-21"><a href="pvalues.html#cb105-21" aria-hidden="true" tabindex="-1"></a><span class="co">#draws canvas, adds histogram, adds blue line, then customizes x scale</span></span>
-<span id="cb105-22"><a href="pvalues.html#cb105-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (output, <span class="fu">aes</span>(<span class="at">x=</span>t))<span class="sc">+</span></span>
-<span id="cb105-23"><a href="pvalues.html#cb105-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y=</span>..density..), <span class="at">binwidth=</span><span class="fl">0.05</span>)<span class="sc">+</span></span>
-<span id="cb105-24"><a href="pvalues.html#cb105-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dt, <span class="at">args=</span><span class="fu">list</span>(<span class="at">df=</span><span class="dv">8</span>), <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb105-25"><a href="pvalues.html#cb105-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;t Statistic&quot;</span>, <span class="at">breaks=</span><span class="sc">-</span><span class="dv">8</span><span class="sc">:</span><span class="dv">8</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-68"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-68-1.png" alt="The distribution of null t-tests includes extreme values of the test statistic." width="672" />
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="pvalues.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>) <span class="co">#this is for reproduciblity</span></span>
+<span id="cb112-2"><a href="pvalues.html#cb112-2" aria-hidden="true" tabindex="-1"></a>  ssims<span class="ot">=</span><span class="dv">10000</span> <span class="co">#number of repeat cycles to run</span></span>
+<span id="cb112-3"><a href="pvalues.html#cb112-3" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co">#empty vector, to be filled in the repeat</span></span>
+<span id="cb112-4"><a href="pvalues.html#cb112-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">c</span>() <span class="co">#ditto</span></span>
+<span id="cb112-5"><a href="pvalues.html#cb112-5" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="dv">1</span>   <span class="co">#an index value, for counting</span></span>
+<span id="cb112-6"><a href="pvalues.html#cb112-6" aria-hidden="true" tabindex="-1"></a> <span class="cf">repeat</span>{</span>
+<span id="cb112-7"><a href="pvalues.html#cb112-7" aria-hidden="true" tabindex="-1"></a>    groupA <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>); <span class="co">#generates 5 independent random replicates from N(100,10)</span></span>
+<span id="cb112-8"><a href="pvalues.html#cb112-8" aria-hidden="true" tabindex="-1"></a>    groupB <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>); <span class="co">#ditto</span></span>
+<span id="cb112-9"><a href="pvalues.html#cb112-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb112-10"><a href="pvalues.html#cb112-10" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(groupA, groupB, </span>
+<span id="cb112-11"><a href="pvalues.html#cb112-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">paired=</span>F, </span>
+<span id="cb112-12"><a href="pvalues.html#cb112-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">var.equal=</span>F,</span>
+<span id="cb112-13"><a href="pvalues.html#cb112-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative =</span> <span class="st">&quot;greater&quot;</span>,</span>
+<span id="cb112-14"><a href="pvalues.html#cb112-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">conf.level=</span><span class="fl">0.95</span>)  <span class="co">#&#39;result&#39; is a list of t-test output</span></span>
+<span id="cb112-15"><a href="pvalues.html#cb112-15" aria-hidden="true" tabindex="-1"></a>    t[i] <span class="ot">&lt;-</span> result<span class="sc">$</span>statistic[[<span class="dv">1</span>]] <span class="co">#grabs t-test statistic value</span></span>
+<span id="cb112-16"><a href="pvalues.html#cb112-16" aria-hidden="true" tabindex="-1"></a>    p[i] <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value        <span class="co">#ditto but for p-value</span></span>
+<span id="cb112-17"><a href="pvalues.html#cb112-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i<span class="sc">==</span>ssims) <span class="cf">break</span>           <span class="co">#logic for ending repeat function</span></span>
+<span id="cb112-18"><a href="pvalues.html#cb112-18" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">=</span> i<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb112-19"><a href="pvalues.html#cb112-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb112-20"><a href="pvalues.html#cb112-20" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">tibble</span>(t, p)  <span class="co">#need this to ggplot</span></span>
+<span id="cb112-21"><a href="pvalues.html#cb112-21" aria-hidden="true" tabindex="-1"></a><span class="co">#draws canvas, adds histogram, adds blue line, then customizes x scale</span></span>
+<span id="cb112-22"><a href="pvalues.html#cb112-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (output, <span class="fu">aes</span>(<span class="at">x=</span>t))<span class="sc">+</span></span>
+<span id="cb112-23"><a href="pvalues.html#cb112-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y=</span>..density..), <span class="at">binwidth=</span><span class="fl">0.05</span>)<span class="sc">+</span></span>
+<span id="cb112-24"><a href="pvalues.html#cb112-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dt, <span class="at">args=</span><span class="fu">list</span>(<span class="at">df=</span><span class="dv">8</span>), <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb112-25"><a href="pvalues.html#cb112-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;t Statistic&quot;</span>, <span class="at">breaks=</span><span class="sc">-</span><span class="dv">8</span><span class="sc">:</span><span class="dv">8</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-67"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-67-1.png" alt="The distribution of null t-tests includes extreme values of the test statistic." width="672" />
 <p class="caption">
 Figure 13.1: The distribution of null t-tests includes extreme values of the test statistic.
 </p>
@@ -1120,22 +1136,22 @@ Figure 13.1: The distribution of null t-tests includes extreme values of the tes
 <p>P-values are derived from test statistic values, according to the cumulative probability distribution function for that statistic.</p>
 <p>The easiest way to understand what the output means is by playing with R’s cumulative probability distribution functions. The <code>pt</code> function is that for the t-statistic. <code>pt</code> produces a p-value when fed a t-statistic value and the degrees of freedom for a test. See Chapter <a href="tdist.html#tdist">26</a> for more on the R functions for the t- distribution.</p>
 <p>To see how this works, let’s randomly select a t-statistic value from our function above, and then calculate a p-value for it.</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="pvalues.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675309</span>)</span>
-<span id="cb106-2"><a href="pvalues.html#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;here&#39;s a random t-statistic:&quot;</span>, <span class="fu">sample</span>(output<span class="sc">$</span>t, <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="pvalues.html#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8675309</span>)</span>
+<span id="cb113-2"><a href="pvalues.html#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;here&#39;s a random t-statistic:&quot;</span>, <span class="fu">sample</span>(output<span class="sc">$</span>t, <span class="dv">1</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;here&#39;s a random t-statistic: 1.5364988920531&quot;</code></pre>
 <p>Now we’ll use <code>pt</code> to calculate the p-value.</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="pvalues.html#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;here is its p-value: &quot;</span>, <span class="fu">pt</span>(<span class="at">q=</span><span class="fl">1.536499</span>, <span class="at">df =</span> <span class="dv">8</span>, <span class="at">lower.tail =</span>F))</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="pvalues.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;here is its p-value: &quot;</span>, <span class="fu">pt</span>(<span class="at">q=</span><span class="fl">1.536499</span>, <span class="at">df =</span> <span class="dv">8</span>, <span class="at">lower.tail =</span>F))</span></code></pre></div>
 <pre><code>## [1] &quot;here is its p-value:  0.0814845608085302&quot;</code></pre>
 <p>Viewed graphically, the p-value for t = 1.536499 is the gold shaded area under the blue curve.</p>
 <p>Strictly, the gold area represents 8.1484…% of the total area under the blue curve.</p>
 <p>So when stripped of all inferential meaning a p-value is just a fraction of the area under a test statistic distribution curve.</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="pvalues.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (output, <span class="fu">aes</span>(<span class="at">x=</span>t))<span class="sc">+</span></span>
-<span id="cb110-2"><a href="pvalues.html#cb110-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y=</span>..density..), <span class="at">binwidth=</span><span class="fl">0.05</span>)<span class="sc">+</span></span>
-<span id="cb110-3"><a href="pvalues.html#cb110-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dt, <span class="at">args=</span><span class="fu">list</span>(<span class="at">df=</span><span class="dv">8</span>), <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb110-4"><a href="pvalues.html#cb110-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dt, <span class="at">args=</span><span class="fu">list</span>(<span class="at">df=</span><span class="dv">8</span>), <span class="at">geom=</span><span class="st">&quot;area&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="fl">1.536499</span>, <span class="dv">8</span>), <span class="at">fill=</span><span class="st">&quot;gold&quot;</span>)<span class="sc">+</span></span>
-<span id="cb110-5"><a href="pvalues.html#cb110-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;t Statistic&quot;</span>, <span class="at">breaks=</span><span class="sc">-</span><span class="dv">8</span><span class="sc">:</span><span class="dv">8</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-71"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-71-1.png" alt="The p-value for t = 1.536499 is the gold shaded area under the curve." width="672" />
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="pvalues.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (output, <span class="fu">aes</span>(<span class="at">x=</span>t))<span class="sc">+</span></span>
+<span id="cb117-2"><a href="pvalues.html#cb117-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y=</span>..density..), <span class="at">binwidth=</span><span class="fl">0.05</span>)<span class="sc">+</span></span>
+<span id="cb117-3"><a href="pvalues.html#cb117-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dt, <span class="at">args=</span><span class="fu">list</span>(<span class="at">df=</span><span class="dv">8</span>), <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb117-4"><a href="pvalues.html#cb117-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dt, <span class="at">args=</span><span class="fu">list</span>(<span class="at">df=</span><span class="dv">8</span>), <span class="at">geom=</span><span class="st">&quot;area&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="fl">1.536499</span>, <span class="dv">8</span>), <span class="at">fill=</span><span class="st">&quot;gold&quot;</span>)<span class="sc">+</span></span>
+<span id="cb117-5"><a href="pvalues.html#cb117-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;t Statistic&quot;</span>, <span class="at">breaks=</span><span class="sc">-</span><span class="dv">8</span><span class="sc">:</span><span class="dv">8</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-70"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-70-1.png" alt="The p-value for t = 1.536499 is the gold shaded area under the curve." width="672" />
 <p class="caption">
 Figure 13.2: The p-value for t = 1.536499 is the gold shaded area under the curve.
 </p>
@@ -1144,17 +1160,17 @@ Figure 13.2: The p-value for t = 1.536499 is the gold shaded area under the curv
 <div id="p-values-from-null-tests-are-uniform" class="section level2" number="13.4">
 <h2><span class="header-section-number">13.4</span> P-values from null tests are uniform</h2>
 <p>Now one last really important point about p-values from null tests.</p>
-<p>Let’s make a histogram of the distribution of p-values from those 10,000 null tests above. Clearly, no p-value occurs more frequently than another. They have a classic uniform distribution.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="pvalues.html#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(output, <span class="fu">aes</span>(<span class="at">x=</span>p))<span class="sc">+</span> </span>
-<span id="cb111-2"><a href="pvalues.html#cb111-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fill=</span><span class="st">&quot;blue&quot;</span>, <span class="at">binwidth=</span><span class="fl">0.05</span>, <span class="at">na.rm=</span>T)<span class="sc">+</span></span>
-<span id="cb111-3"><a href="pvalues.html#cb111-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;p-value&quot;</span>, <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-72"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-72-1.png" alt="The distribution of p-values from tests between identical populations is uniform." width="672" />
+<p>Let’s make a histogram of the distribution of p-values from those 10,000 null tests above. Clearly, no p-value occurs more frequently than another. They have a classic uniform distribution.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="pvalues.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(output, <span class="fu">aes</span>(<span class="at">x=</span>p))<span class="sc">+</span> </span>
+<span id="cb118-2"><a href="pvalues.html#cb118-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fill=</span><span class="st">&quot;blue&quot;</span>, <span class="at">binwidth=</span><span class="fl">0.05</span>, <span class="at">na.rm=</span>T)<span class="sc">+</span></span>
+<span id="cb118-3"><a href="pvalues.html#cb118-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;p-value&quot;</span>, <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-71"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-71-1.png" alt="The distribution of p-values from tests between identical populations is uniform." width="672" />
 <p class="caption">
 Figure 13.3: The distribution of p-values from tests between identical populations is uniform.
 </p>
 </div>
-<p>When testing between two identical populations a low p-value (&lt;0.05) is just as likely as a high p-value (&gt;0.95) or as an intermediate p-value (0.50).<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
+<p>When testing between two identical populations a low p-value (&lt;0.05) is just as likely as a high p-value (&gt;0.95) or as an intermediate p-value (0.50).<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p>
 <p>Importantly, note how there are even very low p-values. By random chance, even though the two populations are identical, it is possible to draw a sample whose test generates a p-value below, <em>hmmm…searching for some meaningful threshold, I dunno, say,</em> 0.05.</p>
 </div>
 <div id="how-p-values-become-error-probabilities" class="section level2" number="13.5">
@@ -1164,7 +1180,7 @@ Figure 13.3: The distribution of p-values from tests between identical populatio
 <p>Now let’s pretend, in the simulation above, that we don’t know that the two populations are actually the same. Let’s also imagine that we want to test the hypothesis that the mean of one of the simulated populations is greater than the mean of the other. Let’s also imagine we only draw a single random sample, just like in a real life experiment.</p>
 <p>Let’s also imagine that we make a rule that we will declare one of the population means will be statistically greater if the p-value associated with our single test is less than 0.05.</p>
 <p>Imagine by random chance, we just happen to draw a sample that causes a very extreme test statistic value. The p-value is very low.</p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="pvalues.html#cb112-1" aria-hidden="true" tabindex="-1"></a>output <span class="sc">%&gt;%</span> <span class="fu">filter</span>(t<span class="sc">==</span><span class="fu">max</span>(t))</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="pvalues.html#cb119-1" aria-hidden="true" tabindex="-1"></a>output <span class="sc">%&gt;%</span> <span class="fu">filter</span>(t<span class="sc">==</span><span class="fu">max</span>(t))</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 2
 ##       t         p
 ##   &lt;dbl&gt;     &lt;dbl&gt;
@@ -1189,44 +1205,44 @@ Figure 13.3: The distribution of p-values from tests between identical populatio
 <p>Take the simulation script from above and change only one element. Now the mean of Group A is higher than the other, by 25 units.</p>
 <p>The first thing to note is the distribution of test-statistic values is right-shifted, dramatically, away from the null distribution for the test statistic.</p>
 <p>Higher test statistic values are more likely when group differences are true. But note how they are not all extreme. With random sampling it is possible to generate test statistic values consistent with the null distribution, even when differences are true. Those are type2 errors, of course.</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="pvalues.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb114-2"><a href="pvalues.html#cb114-2" aria-hidden="true" tabindex="-1"></a>  ssims<span class="ot">=</span><span class="dv">10000</span></span>
-<span id="cb114-3"><a href="pvalues.html#cb114-3" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
-<span id="cb114-4"><a href="pvalues.html#cb114-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
-<span id="cb114-5"><a href="pvalues.html#cb114-5" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="dv">1</span>   </span>
-<span id="cb114-6"><a href="pvalues.html#cb114-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span>{</span>
-<span id="cb114-7"><a href="pvalues.html#cb114-7" aria-hidden="true" tabindex="-1"></a>    groupA <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean=</span><span class="dv">125</span>, <span class="at">sd=</span><span class="dv">10</span>); <span class="co">#the mean value is the only difference</span></span>
-<span id="cb114-8"><a href="pvalues.html#cb114-8" aria-hidden="true" tabindex="-1"></a>    groupB <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>); </span>
-<span id="cb114-9"><a href="pvalues.html#cb114-9" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(groupA, groupB, </span>
-<span id="cb114-10"><a href="pvalues.html#cb114-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">paired=</span>F, </span>
-<span id="cb114-11"><a href="pvalues.html#cb114-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative=</span><span class="st">&quot;greater&quot;</span>, </span>
-<span id="cb114-12"><a href="pvalues.html#cb114-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">var.equal=</span>F,</span>
-<span id="cb114-13"><a href="pvalues.html#cb114-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">conf.level=</span><span class="fl">0.95</span>)  </span>
-<span id="cb114-14"><a href="pvalues.html#cb114-14" aria-hidden="true" tabindex="-1"></a>    t[i] <span class="ot">&lt;-</span> result<span class="sc">$</span>statistic[[<span class="dv">1</span>]] </span>
-<span id="cb114-15"><a href="pvalues.html#cb114-15" aria-hidden="true" tabindex="-1"></a>    p[i] <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value        </span>
-<span id="cb114-16"><a href="pvalues.html#cb114-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i<span class="sc">==</span>ssims) <span class="cf">break</span>         </span>
-<span id="cb114-17"><a href="pvalues.html#cb114-17" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">=</span> i<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb114-18"><a href="pvalues.html#cb114-18" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb114-19"><a href="pvalues.html#cb114-19" aria-hidden="true" tabindex="-1"></a>output2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(t, p) </span>
-<span id="cb114-20"><a href="pvalues.html#cb114-20" aria-hidden="true" tabindex="-1"></a><span class="co">#I&#39;ll draw our new distribution next to the theoretical null</span></span>
-<span id="cb114-21"><a href="pvalues.html#cb114-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (output2)<span class="sc">+</span></span>
-<span id="cb114-22"><a href="pvalues.html#cb114-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>t, <span class="at">y=</span>..density..), <span class="at">binwidth=</span><span class="fl">0.05</span>, <span class="at">na.rm=</span>T)<span class="sc">+</span></span>
-<span id="cb114-23"><a href="pvalues.html#cb114-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dt, <span class="at">args=</span><span class="fu">list</span>(<span class="at">df=</span><span class="dv">8</span>), <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb114-24"><a href="pvalues.html#cb114-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;t-statistic value&quot;</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>,<span class="dv">30</span>), <span class="at">breaks=</span><span class="sc">-</span><span class="dv">8</span><span class="sc">:</span><span class="dv">30</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-74"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-74-1.png" alt="A true difference between groups generates many more extreme values of the test statistic than in tests of null groups." width="672" />
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="pvalues.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb121-2"><a href="pvalues.html#cb121-2" aria-hidden="true" tabindex="-1"></a>  ssims<span class="ot">=</span><span class="dv">10000</span></span>
+<span id="cb121-3"><a href="pvalues.html#cb121-3" aria-hidden="true" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
+<span id="cb121-4"><a href="pvalues.html#cb121-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">c</span>() </span>
+<span id="cb121-5"><a href="pvalues.html#cb121-5" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="dv">1</span>   </span>
+<span id="cb121-6"><a href="pvalues.html#cb121-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span>{</span>
+<span id="cb121-7"><a href="pvalues.html#cb121-7" aria-hidden="true" tabindex="-1"></a>    groupA <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean=</span><span class="dv">125</span>, <span class="at">sd=</span><span class="dv">10</span>); <span class="co">#the mean value is the only difference</span></span>
+<span id="cb121-8"><a href="pvalues.html#cb121-8" aria-hidden="true" tabindex="-1"></a>    groupB <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>); </span>
+<span id="cb121-9"><a href="pvalues.html#cb121-9" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(groupA, groupB, </span>
+<span id="cb121-10"><a href="pvalues.html#cb121-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">paired=</span>F, </span>
+<span id="cb121-11"><a href="pvalues.html#cb121-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative=</span><span class="st">&quot;greater&quot;</span>, </span>
+<span id="cb121-12"><a href="pvalues.html#cb121-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">var.equal=</span>F,</span>
+<span id="cb121-13"><a href="pvalues.html#cb121-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">conf.level=</span><span class="fl">0.95</span>)  </span>
+<span id="cb121-14"><a href="pvalues.html#cb121-14" aria-hidden="true" tabindex="-1"></a>    t[i] <span class="ot">&lt;-</span> result<span class="sc">$</span>statistic[[<span class="dv">1</span>]] </span>
+<span id="cb121-15"><a href="pvalues.html#cb121-15" aria-hidden="true" tabindex="-1"></a>    p[i] <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value        </span>
+<span id="cb121-16"><a href="pvalues.html#cb121-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i<span class="sc">==</span>ssims) <span class="cf">break</span>         </span>
+<span id="cb121-17"><a href="pvalues.html#cb121-17" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">=</span> i<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb121-18"><a href="pvalues.html#cb121-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb121-19"><a href="pvalues.html#cb121-19" aria-hidden="true" tabindex="-1"></a>output2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(t, p) </span>
+<span id="cb121-20"><a href="pvalues.html#cb121-20" aria-hidden="true" tabindex="-1"></a><span class="co">#I&#39;ll draw our new distribution next to the theoretical null</span></span>
+<span id="cb121-21"><a href="pvalues.html#cb121-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (output2)<span class="sc">+</span></span>
+<span id="cb121-22"><a href="pvalues.html#cb121-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>t, <span class="at">y=</span>..density..), <span class="at">binwidth=</span><span class="fl">0.05</span>, <span class="at">na.rm=</span>T)<span class="sc">+</span></span>
+<span id="cb121-23"><a href="pvalues.html#cb121-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun=</span>dt, <span class="at">args=</span><span class="fu">list</span>(<span class="at">df=</span><span class="dv">8</span>), <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb121-24"><a href="pvalues.html#cb121-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;t-statistic value&quot;</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>,<span class="dv">30</span>), <span class="at">breaks=</span><span class="sc">-</span><span class="dv">8</span><span class="sc">:</span><span class="dv">30</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-73"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-73-1.png" alt="A true difference between groups generates many more extreme values of the test statistic than in tests of null groups." width="672" />
 <p class="caption">
 Figure 13.4: A true difference between groups generates many more extreme values of the test statistic than in tests of null groups.
 </p>
 </div>
 <p>The second thing to note is that the distribution of p-values in tests of non-null groups is not uniform, as was the case under the null distribution. They are much, much more skewed to lower values.</p>
 <p>When there is a true effect we’re much more likely to generate low than high values.</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="pvalues.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(output2, <span class="fu">aes</span>(<span class="at">x=</span>p))<span class="sc">+</span> </span>
-<span id="cb115-2"><a href="pvalues.html#cb115-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">binwidth=</span><span class="fl">0.005</span>, <span class="at">na.rm=</span>T)<span class="sc">+</span></span>
-<span id="cb115-3"><a href="pvalues.html#cb115-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;p-value&quot;</span>, <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))<span class="sc">+</span></span>
-<span id="cb115-4"><a href="pvalues.html#cb115-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3000</span>))</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-75"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-75-1.png" alt="Tests of non-null groups yields skewed p-value distributions" width="672" />
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="pvalues.html#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(output2, <span class="fu">aes</span>(<span class="at">x=</span>p))<span class="sc">+</span> </span>
+<span id="cb122-2"><a href="pvalues.html#cb122-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">binwidth=</span><span class="fl">0.005</span>, <span class="at">na.rm=</span>T)<span class="sc">+</span></span>
+<span id="cb122-3"><a href="pvalues.html#cb122-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;p-value&quot;</span>, <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb122-4"><a href="pvalues.html#cb122-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3000</span>))</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-74"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-74-1.png" alt="Tests of non-null groups yields skewed p-value distributions" width="672" />
 <p class="caption">
 Figure 13.5: Tests of non-null groups yields skewed p-value distributions
 </p>
@@ -1272,12 +1288,12 @@ Figure 13.5: Tests of non-null groups yields skewed p-value distributions
 <p>We now fully understand that the test statistic from null distributions can have extreme values all by chance alone. Such values, however, occur at acceptably low frequencies. We accept we might be in error in concluding a low p-values is associated with a true effect.</p>
 <p>And that’s why the p-value is the probability we are making this error.</p>
 <p>Over the long run of many experiments we could anticipate making that error 5% of the time. The next figure illustrates all of the samples that we would have reject as null, in error.</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="pvalues.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (output, <span class="fu">aes</span>(<span class="at">x=</span>t))<span class="sc">+</span></span>
-<span id="cb116-2"><a href="pvalues.html#cb116-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="fl">0.05</span>)<span class="sc">+</span></span>
-<span id="cb116-3"><a href="pvalues.html#cb116-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;t Statistic&quot;</span>, <span class="at">breaks=</span><span class="sc">-</span><span class="dv">8</span><span class="sc">:</span><span class="dv">8</span>)<span class="sc">+</span></span>
-<span id="cb116-4"><a href="pvalues.html#cb116-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">data=</span>output <span class="sc">%&gt;%</span> <span class="fu">filter</span>(t<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> p<span class="sc">&lt;</span><span class="fl">0.05</span>), <span class="fu">aes</span>(<span class="at">x=</span>t), <span class="at">binwidth=</span><span class="fl">0.05</span>, <span class="at">fill =</span><span class="st">&quot;gold&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-76"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-76-1.png" alt="When the two populations are in fact identical, the samples we would erroneously declare as statistically different are gold colored. In a one-sided test" width="672" />
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="pvalues.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (output, <span class="fu">aes</span>(<span class="at">x=</span>t))<span class="sc">+</span></span>
+<span id="cb123-2"><a href="pvalues.html#cb123-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth=</span><span class="fl">0.05</span>)<span class="sc">+</span></span>
+<span id="cb123-3"><a href="pvalues.html#cb123-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;t Statistic&quot;</span>, <span class="at">breaks=</span><span class="sc">-</span><span class="dv">8</span><span class="sc">:</span><span class="dv">8</span>)<span class="sc">+</span></span>
+<span id="cb123-4"><a href="pvalues.html#cb123-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">data=</span>output <span class="sc">%&gt;%</span> <span class="fu">filter</span>(t<span class="sc">&gt;</span><span class="dv">0</span> <span class="sc">&amp;</span> p<span class="sc">&lt;</span><span class="fl">0.05</span>), <span class="fu">aes</span>(<span class="at">x=</span>t), <span class="at">binwidth=</span><span class="fl">0.05</span>, <span class="at">fill =</span><span class="st">&quot;gold&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-75"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-75-1.png" alt="When the two populations are in fact identical, the samples we would erroneously declare as statistically different are gold colored. In a one-sided test" width="672" />
 <p class="caption">
 Figure 13.6: When the two populations are in fact identical, the samples we would erroneously declare as statistically different are gold colored. In a one-sided test
 </p>
@@ -1287,10 +1303,10 @@ Figure 13.6: When the two populations are in fact identical, the samples we woul
 </div>
 <div class="footnotes">
 <hr />
-<ol start="5">
-<li id="fn5"><p>Cox, D. R. &amp; Hinkley, D. V. (1974). Theoretical Statistics, London, Chapman &amp; Hall., p66<a href="pvalues.html#fnref5" class="footnote-back">↩︎</a></p></li>
-<li id="fn6"><p>To understand how a uniform distribution works, play with R’s uniform distribution functions: <code>dunif</code>, <code>punif</code>, <code>qunif</code> and <code>runif</code><a href="pvalues.html#fnref6" class="footnote-back">↩︎</a></p></li>
-<li id="fn7"><p>Think about this the next time you hear someone declare, “disappointing result, but at least the p-value was trending toward significance.” It can be said equally that the p-values was trending toward non-significance.<a href="pvalues.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<ol start="4">
+<li id="fn4"><p>Cox, D. R. &amp; Hinkley, D. V. (1974). Theoretical Statistics, London, Chapman &amp; Hall., p66<a href="pvalues.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>To understand how a uniform distribution works, play with R’s uniform distribution functions: <code>dunif</code>, <code>punif</code>, <code>qunif</code> and <code>runif</code><a href="pvalues.html#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Think about this the next time you hear someone declare, “disappointing result, but at least the p-value was trending toward significance.” It can be said equally that the p-values was trending toward non-significance.<a href="pvalues.html#fnref6" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -1303,7 +1319,6 @@ Figure 13.6: When the two populations are in fact identical, the samples we woul
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1322,6 +1337,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1342,10 +1358,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

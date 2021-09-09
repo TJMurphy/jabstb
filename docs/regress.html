@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 40 Linear Regression | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 40 Linear Regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="correl.html"/>
 <link rel="next" href="nonlinearintro.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1106,13 +1122,13 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
 <div id="linear-regression-in-r" class="section level2" number="40.5">
 <h2><span class="header-section-number">40.5</span> Linear regression in R</h2>
 <p>First we create vectors for the values of our Y and our X variables. Although a data frame is not necessary to run the linear regression function, it will be useful for plotting latter.</p>
-<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb846-1"><a href="regress.html#cb846-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">18</span>)</span>
-<span id="cb846-2"><a href="regress.html#cb846-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
-<span id="cb846-3"><a href="regress.html#cb846-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb846-4"><a href="regress.html#cb846-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(X, Y)</span></code></pre></div>
+<div class="sourceCode" id="cb858"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb858-1"><a href="regress.html#cb858-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">18</span>)</span>
+<span id="cb858-2"><a href="regress.html#cb858-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
+<span id="cb858-3"><a href="regress.html#cb858-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb858-4"><a href="regress.html#cb858-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(X, Y)</span></code></pre></div>
 <p>Think of a regression model not so much as describing a relationship between X and Y, but the degree by which the values of X predicts the values of Y.</p>
 <p>Thus, the command <code>lm(Y~X)</code> in English would read, “linear model for Y predicted by X,” or “Y by X.” Let’s name an object ‘model,’ run it and print the results. In regression, it’s almost always useful to create objects like ‘model’ since there are so many additional functions that can be run on the model:</p>
-<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb847-1"><a href="regress.html#cb847-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y<span class="sc">~</span>X); model</span></code></pre></div>
+<div class="sourceCode" id="cb859"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb859-1"><a href="regress.html#cb859-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y<span class="sc">~</span>X); model</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -1122,13 +1138,13 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
 ##      14.190       -0.619</code></pre>
 <p>The sparse output yields two model parameters, or cryptically named coefficients: the y-intercept (intercept) and the slope (X). There’s actually quite a bit more information not being printed, including all the residual values, which you can explore by typing <code>str(lim(Y~X))</code> in the console.</p>
 <p>Because 95% confidence intervals are always useful, use the <code>confit</code> function to calculate these ranges for both model parameters!</p>
-<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb849-1"><a href="regress.html#cb849-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model, <span class="at">level=</span><span class="fl">0.95</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb861"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb861-1"><a href="regress.html#cb861-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model, <span class="at">level=</span><span class="fl">0.95</span>)</span></code></pre></div>
 <pre><code>##                 2.5 %     97.5 %
 ## (Intercept)  5.828676 22.5522765
 ## X           -1.358133  0.1200381</code></pre>
 <p>Thus, there is a 95% chance the true y-intercept is between 5.8 and 22.5, while the sample estimates the true slope is between -1.358 and 0.12. The fact that the latter range of values includes the value of zero foreshadows that the slope will not differ from zero upon statistical testing!</p>
 <p>R’s <code>summary</code> function is the standard way to print additional detail about the model and its analysis.</p>
-<div class="sourceCode" id="cb851"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb851-1"><a href="regress.html#cb851-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb863-1"><a href="regress.html#cb863-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X)
@@ -1183,7 +1199,7 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
 <div id="f-statistic" class="section level3" number="40.6.5">
 <h3><span class="header-section-number">40.6.5</span> F-statistic</h3>
 <p>The F-statistic in linear regression is the same F-statistic that we saw in ANOVA. In fact, you can run an ANOVA on the model and get some of the same results as you see in the <code>summary(model)</code> output, just in different form. For example, the F statistic, df’s and the p-value’s are all identical!</p>
-<div class="sourceCode" id="cb853"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb853-1"><a href="regress.html#cb853-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb865-1"><a href="regress.html#cb865-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Response: Y
@@ -1207,51 +1223,51 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
 <div id="plotting-regression-results" class="section level3" number="40.6.6">
 <h3><span class="header-section-number">40.6.6</span> Plotting regression results</h3>
 <p>This is very simple to do using <code>ggplot</code>. The basic plotting function is shown below. The <code>stat_smooth</code> function is quite versatile. By default, it produces an error band for the regression to illustrate the uncertainty. Note how the error varies across the range of predictor values and is greatest for extreme values of the predictor. It is typical for such confidence bands of regressions to have this ‘bow tie’ look.</p>
-<div class="sourceCode" id="cb855"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb855-1"><a href="regress.html#cb855-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(X, Y)) <span class="sc">+</span></span>
-<span id="cb855-2"><a href="regress.html#cb855-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb855-3"><a href="regress.html#cb855-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="dv">5</span></span>
-<span id="cb855-4"><a href="regress.html#cb855-4" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
-<span id="cb855-5"><a href="regress.html#cb855-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(</span>
-<span id="cb855-6"><a href="regress.html#cb855-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method=</span><span class="st">&quot;lm&quot;</span>, </span>
-<span id="cb855-7"><a href="regress.html#cb855-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">&quot;#002878&quot;</span></span>
-<span id="cb855-8"><a href="regress.html#cb855-8" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
-<span id="cb855-9"><a href="regress.html#cb855-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(</span>
-<span id="cb855-10"><a href="regress.html#cb855-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb855-11"><a href="regress.html#cb855-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb867"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb867-1"><a href="regress.html#cb867-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(X, Y)) <span class="sc">+</span></span>
+<span id="cb867-2"><a href="regress.html#cb867-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb867-3"><a href="regress.html#cb867-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="dv">5</span></span>
+<span id="cb867-4"><a href="regress.html#cb867-4" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
+<span id="cb867-5"><a href="regress.html#cb867-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(</span>
+<span id="cb867-6"><a href="regress.html#cb867-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method=</span><span class="st">&quot;lm&quot;</span>, </span>
+<span id="cb867-7"><a href="regress.html#cb867-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">&quot;#002878&quot;</span></span>
+<span id="cb867-8"><a href="regress.html#cb867-8" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
+<span id="cb867-9"><a href="regress.html#cb867-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(</span>
+<span id="cb867-10"><a href="regress.html#cb867-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb867-11"><a href="regress.html#cb867-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-415-1.png" width="672" /></p>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-414-1.png" width="672" /></p>
 </div>
 <div id="visualizing-residuals" class="section level3" number="40.6.7">
 <h3><span class="header-section-number">40.6.7</span> Visualizing residuals</h3>
 <p>Residuals are used to evaluate, visually, how well the model fits the data. For example, a linear model may not fit well some part of the data set.</p>
 <p>To create residual plots, we can grab the residual values (for completeness) and also the predicted values (to plot) for the <code>model</code> object by passing our model through the <code>residuals</code> and <code>predict</code> functions, respectively. Recall we created the object <code>model</code> above and promised that it could be put to a lot of use. We can call produce the data while simultaneously adding them to <code>data</code>, our original data frame:</p>
-<div class="sourceCode" id="cb857"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb857-1"><a href="regress.html#cb857-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>residuals <span class="ot">&lt;-</span> <span class="fu">residuals</span>(model)</span>
-<span id="cb857-2"><a href="regress.html#cb857-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb869"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb869-1"><a href="regress.html#cb869-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>residuals <span class="ot">&lt;-</span> <span class="fu">residuals</span>(model)</span>
+<span id="cb869-2"><a href="regress.html#cb869-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(model)</span></code></pre></div>
 <p>To plot residuals, we just add things by layer:</p>
-<div class="sourceCode" id="cb858"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb858-1"><a href="regress.html#cb858-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(X, Y))<span class="sc">+</span></span>
-<span id="cb858-2"><a href="regress.html#cb858-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb858-3"><a href="regress.html#cb858-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">xend=</span>X, <span class="at">yend=</span>predicted)</span>
-<span id="cb858-4"><a href="regress.html#cb858-4" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
-<span id="cb858-5"><a href="regress.html#cb858-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(</span>
-<span id="cb858-6"><a href="regress.html#cb858-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">method=</span><span class="st">&quot;lm&quot;</span>, </span>
-<span id="cb858-7"><a href="regress.html#cb858-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">size=</span><span class="dv">1</span>, </span>
-<span id="cb858-8"><a href="regress.html#cb858-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">se=</span>F, </span>
-<span id="cb858-9"><a href="regress.html#cb858-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">color =</span> <span class="st">&quot;gray&quot;</span></span>
-<span id="cb858-10"><a href="regress.html#cb858-10" aria-hidden="true" tabindex="-1"></a>     )<span class="sc">+</span></span>
-<span id="cb858-11"><a href="regress.html#cb858-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb858-12"><a href="regress.html#cb858-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">&quot;#002878&quot;</span>, </span>
-<span id="cb858-13"><a href="regress.html#cb858-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="dv">2</span></span>
-<span id="cb858-14"><a href="regress.html#cb858-14" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
-<span id="cb858-15"><a href="regress.html#cb858-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb858-16"><a href="regress.html#cb858-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y=</span>predicted), </span>
-<span id="cb858-17"><a href="regress.html#cb858-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">&quot;#d28e00&quot;</span>, </span>
-<span id="cb858-18"><a href="regress.html#cb858-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="dv">3</span></span>
-<span id="cb858-19"><a href="regress.html#cb858-19" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
-<span id="cb858-20"><a href="regress.html#cb858-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(</span>
-<span id="cb858-21"><a href="regress.html#cb858-21" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb858-22"><a href="regress.html#cb858-22" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb870"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb870-1"><a href="regress.html#cb870-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(X, Y))<span class="sc">+</span></span>
+<span id="cb870-2"><a href="regress.html#cb870-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb870-3"><a href="regress.html#cb870-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">xend=</span>X, <span class="at">yend=</span>predicted)</span>
+<span id="cb870-4"><a href="regress.html#cb870-4" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
+<span id="cb870-5"><a href="regress.html#cb870-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(</span>
+<span id="cb870-6"><a href="regress.html#cb870-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">method=</span><span class="st">&quot;lm&quot;</span>, </span>
+<span id="cb870-7"><a href="regress.html#cb870-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">size=</span><span class="dv">1</span>, </span>
+<span id="cb870-8"><a href="regress.html#cb870-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">se=</span>F, </span>
+<span id="cb870-9"><a href="regress.html#cb870-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">color =</span> <span class="st">&quot;gray&quot;</span></span>
+<span id="cb870-10"><a href="regress.html#cb870-10" aria-hidden="true" tabindex="-1"></a>     )<span class="sc">+</span></span>
+<span id="cb870-11"><a href="regress.html#cb870-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb870-12"><a href="regress.html#cb870-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">&quot;#002878&quot;</span>, </span>
+<span id="cb870-13"><a href="regress.html#cb870-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="dv">2</span></span>
+<span id="cb870-14"><a href="regress.html#cb870-14" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
+<span id="cb870-15"><a href="regress.html#cb870-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb870-16"><a href="regress.html#cb870-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y=</span>predicted), </span>
+<span id="cb870-17"><a href="regress.html#cb870-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">&quot;#d28e00&quot;</span>, </span>
+<span id="cb870-18"><a href="regress.html#cb870-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="dv">3</span></span>
+<span id="cb870-19"><a href="regress.html#cb870-19" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
+<span id="cb870-20"><a href="regress.html#cb870-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(</span>
+<span id="cb870-21"><a href="regress.html#cb870-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb870-22"><a href="regress.html#cb870-22" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-417-1.png" width="672" /></p>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-416-1.png" width="672" /></p>
 <p>The effect isn’t particular dramatic with this trivial data set, But these residual plots become much more interesting when working with more complex models or data sets with far more values and complexity. For example, if the residuals “fit” better on one end of the predictor scale but not the other, we would probably seek out a better model and see if that fits the data better.</p>
 
 </div>
@@ -1267,7 +1283,6 @@ rearrange, <span class="math display">\[\epsilon_i=y_i-\hat\alpha+\hat\beta x_i\
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1286,6 +1301,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1306,10 +1322,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>
