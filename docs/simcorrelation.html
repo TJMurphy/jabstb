@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 27 Simulating correlated variables | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 27 Simulating correlated variables | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="tdist.html"/>
 <link rel="next" href="introanova.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1045,8 +1061,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="simcorrelation" class="section level1" number="27">
 <h1><span class="header-section-number">Chapter 27</span> Simulating correlated variables</h1>
-<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb564-1"><a href="simcorrelation.html#cb564-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pwr)</span>
-<span id="cb564-2"><a href="simcorrelation.html#cb564-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb578-1"><a href="simcorrelation.html#cb578-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pwr)</span>
+<span id="cb578-2"><a href="simcorrelation.html#cb578-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <p>Experimental designs involving paired (or related/repeated) measures are executed when two or more groups of measurements are expected to be intrinsically-linked.</p>
 <p>Take for example, a before and after design. A measure is taken before the imposition of some level of a predictor variable. Then the measure is taken afterwards. The difference between those two measures is the size of the effect.</p>
 <p>Those two measures are intrinsically-linked because they arise from a common subject. Subjects are tuned differently. You can imagine a subject who displays a low basal level of the measure will generate a low-end response after some inducer, whereas one with a high basal level will generate a high-end response.</p>
@@ -1062,7 +1078,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 Here’s the experimental data:
 <table>
 <caption>
-<span id="tab:unnamed-chunk-269">Table 27.1: </span>NFAT-Luciferase reporter values of different replicates. P11, P12… represent different passages of a cell line.
+<span id="tab:unnamed-chunk-268">Table 27.1: </span>NFAT-Luciferase reporter values of different replicates. P11, P12… represent different passages of a cell line.
 </caption>
 <thead>
 <tr>
@@ -1126,11 +1142,11 @@ P14
 </table>
 <p>The data show that the luciferase values in response to vehicle wanders substantially across passages over a 10-fold range. Yet the drug response as a ratio to the vehicle is more consistent from passage to passage.</p>
 <p>In fact, the two variables, vehicle and drug, are actually very highly correlated:</p>
-<div class="sourceCode" id="cb565"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb565-1"><a href="simcorrelation.html#cb565-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(df<span class="sc">$</span>vehicle, df<span class="sc">$</span>drug)</span></code></pre></div>
+<div class="sourceCode" id="cb579"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb579-1"><a href="simcorrelation.html#cb579-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(df<span class="sc">$</span>vehicle, df<span class="sc">$</span>drug)</span></code></pre></div>
 <pre><code>## [1] 0.9955158</code></pre>
-<div class="sourceCode" id="cb567"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb567-1"><a href="simcorrelation.html#cb567-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(vehicle, drug))<span class="sc">+</span></span>
-<span id="cb567-2"><a href="simcorrelation.html#cb567-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>, <span class="at">color=</span><span class="st">&quot;#012169&quot;</span>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-271-1.png" width="384" /></p>
+<div class="sourceCode" id="cb581"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb581-1"><a href="simcorrelation.html#cb581-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(vehicle, drug))<span class="sc">+</span></span>
+<span id="cb581-2"><a href="simcorrelation.html#cb581-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>, <span class="at">color=</span><span class="st">&quot;#012169&quot;</span>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-270-1.png" width="384" /></p>
 <p>This example points to how you can derive an estimate for the correlation coefficient between two variables. Simply plot out their replicates as <span class="math inline">\(XY\)</span> pairs and calculate their correlation coefficient using R’s <code>cor</code> function.</p>
 <p>Where do you find values for these variables? They can come from pilot or from published data.</p>
 </div>
@@ -1140,79 +1156,79 @@ P14
 <p>Thus, we can first simulate a random pair of <span class="math inline">\(X,Y\)</span> values, then convert the values of <span class="math inline">\(Y\)</span> into <span class="math inline">\(Z\)</span>, such that the <span class="math inline">\(X,Z\)</span> values are correlated.</p>
 <p>Using the luciferase example above, here’s some code to accomplish that. Each pair is initially uncorrelated, but then becomes correlated after using the relationship above.</p>
 <p>There is a slight twist in this. When using an <code>rnorm</code> function with the means and sd estimates from the table above, negative values will be produced. However, the luciferase values are a ratio scale, with an absolute 0 value. The code below uses the <code>abs</code>to simulate only positive values. This generates a skewed normal distribution</p>
-<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb568-1"><a href="simcorrelation.html#cb568-1" aria-hidden="true" tabindex="-1"></a><span class="co">#first simulate and view uncorrelated random variables</span></span>
-<span id="cb568-2"><a href="simcorrelation.html#cb568-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb568-3"><a href="simcorrelation.html#cb568-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="dv">10000</span>, <span class="dv">10</span>, <span class="dv">8</span>))</span>
-<span id="cb568-4"><a href="simcorrelation.html#cb568-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="dv">10000</span>, <span class="dv">17</span>, <span class="dv">15</span>))</span>
-<span id="cb568-5"><a href="simcorrelation.html#cb568-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x,y)</span></code></pre></div>
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb582-1"><a href="simcorrelation.html#cb582-1" aria-hidden="true" tabindex="-1"></a><span class="co">#first simulate and view uncorrelated random variables</span></span>
+<span id="cb582-2"><a href="simcorrelation.html#cb582-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb582-3"><a href="simcorrelation.html#cb582-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="dv">10000</span>, <span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb582-4"><a href="simcorrelation.html#cb582-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="dv">10000</span>, <span class="dv">17</span>, <span class="dv">15</span>))</span>
+<span id="cb582-5"><a href="simcorrelation.html#cb582-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x,y)</span></code></pre></div>
 <pre><code>## [1] 0.004357573</code></pre>
-<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb570-1"><a href="simcorrelation.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="co">#scatter plot the simulated vectors</span></span>
-<span id="cb570-2"><a href="simcorrelation.html#cb570-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(x,y), <span class="fu">aes</span>(x,y))<span class="sc">+</span></span>
-<span id="cb570-3"><a href="simcorrelation.html#cb570-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-272-1.png" width="672" /></p>
-<div class="sourceCode" id="cb571"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb571-1"><a href="simcorrelation.html#cb571-1" aria-hidden="true" tabindex="-1"></a><span class="co">#now convert y to z, so that it correlates to x</span></span>
-<span id="cb571-2"><a href="simcorrelation.html#cb571-2" aria-hidden="true" tabindex="-1"></a>r<span class="ot">=</span><span class="fl">0.99</span></span>
-<span id="cb571-3"><a href="simcorrelation.html#cb571-3" aria-hidden="true" tabindex="-1"></a>k<span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>r<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb571-4"><a href="simcorrelation.html#cb571-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> r<span class="sc">*</span>x<span class="sc">+</span>k<span class="sc">*</span>y</span>
-<span id="cb571-5"><a href="simcorrelation.html#cb571-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb571-6"><a href="simcorrelation.html#cb571-6" aria-hidden="true" tabindex="-1"></a><span class="co">#confirm the correlation</span></span>
-<span id="cb571-7"><a href="simcorrelation.html#cb571-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(x,z), <span class="fu">aes</span>(x,z))<span class="sc">+</span></span>
-<span id="cb571-8"><a href="simcorrelation.html#cb571-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-272-2.png" width="672" /></p>
-<div class="sourceCode" id="cb572"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb572-1"><a href="simcorrelation.html#cb572-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x, z)</span></code></pre></div>
+<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb584-1"><a href="simcorrelation.html#cb584-1" aria-hidden="true" tabindex="-1"></a><span class="co">#scatter plot the simulated vectors</span></span>
+<span id="cb584-2"><a href="simcorrelation.html#cb584-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(x,y), <span class="fu">aes</span>(x,y))<span class="sc">+</span></span>
+<span id="cb584-3"><a href="simcorrelation.html#cb584-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-271-1.png" width="672" /></p>
+<div class="sourceCode" id="cb585"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb585-1"><a href="simcorrelation.html#cb585-1" aria-hidden="true" tabindex="-1"></a><span class="co">#now convert y to z, so that it correlates to x</span></span>
+<span id="cb585-2"><a href="simcorrelation.html#cb585-2" aria-hidden="true" tabindex="-1"></a>r<span class="ot">=</span><span class="fl">0.99</span></span>
+<span id="cb585-3"><a href="simcorrelation.html#cb585-3" aria-hidden="true" tabindex="-1"></a>k<span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>r<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb585-4"><a href="simcorrelation.html#cb585-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> r<span class="sc">*</span>x<span class="sc">+</span>k<span class="sc">*</span>y</span>
+<span id="cb585-5"><a href="simcorrelation.html#cb585-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb585-6"><a href="simcorrelation.html#cb585-6" aria-hidden="true" tabindex="-1"></a><span class="co">#confirm the correlation</span></span>
+<span id="cb585-7"><a href="simcorrelation.html#cb585-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(x,z), <span class="fu">aes</span>(x,z))<span class="sc">+</span></span>
+<span id="cb585-8"><a href="simcorrelation.html#cb585-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-271-2.png" width="672" /></p>
+<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb586-1"><a href="simcorrelation.html#cb586-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(x, z)</span></code></pre></div>
 <pre><code>## [1] 0.9673284</code></pre>
-<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb574-1"><a href="simcorrelation.html#cb574-1" aria-hidden="true" tabindex="-1"></a><span class="co">#explore the distribution of z</span></span>
-<span id="cb574-2"><a href="simcorrelation.html#cb574-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(x,z))<span class="sc">+</span></span>
-<span id="cb574-3"><a href="simcorrelation.html#cb574-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(z))<span class="sc">+</span></span>
-<span id="cb574-4"><a href="simcorrelation.html#cb574-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(x))</span></code></pre></div>
+<div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb588-1"><a href="simcorrelation.html#cb588-1" aria-hidden="true" tabindex="-1"></a><span class="co">#explore the distribution of z</span></span>
+<span id="cb588-2"><a href="simcorrelation.html#cb588-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(x,z))<span class="sc">+</span></span>
+<span id="cb588-3"><a href="simcorrelation.html#cb588-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(z))<span class="sc">+</span></span>
+<span id="cb588-4"><a href="simcorrelation.html#cb588-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(x))</span></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-272-3.png" width="672" /></p>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-271-3.png" width="672" /></p>
 </div>
 <div id="monte-carlo-simulation" class="section level2" number="27.3">
 <h2><span class="header-section-number">27.3</span> Monte Carlo simulation</h2>
 <p>Here’s a Monte Carlo simulation of a paired t-test between an A and a B group. The “true” effect size programmed to be very modest. The code also factors in a fairly strong correlation between the two measures of the variable.</p>
-<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb576-1"><a href="simcorrelation.html#cb576-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial Parameters</span></span>
-<span id="cb576-2"><a href="simcorrelation.html#cb576-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sample A intial true parameters</span></span>
-<span id="cb576-3"><a href="simcorrelation.html#cb576-3" aria-hidden="true" tabindex="-1"></a>nA <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb576-4"><a href="simcorrelation.html#cb576-4" aria-hidden="true" tabindex="-1"></a>meanA <span class="ot">&lt;-</span> <span class="fl">1.5</span></span>
-<span id="cb576-5"><a href="simcorrelation.html#cb576-5" aria-hidden="true" tabindex="-1"></a>sdA <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb576-6"><a href="simcorrelation.html#cb576-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb576-7"><a href="simcorrelation.html#cb576-7" aria-hidden="true" tabindex="-1"></a><span class="co"># sample B intial true parameters</span></span>
-<span id="cb576-8"><a href="simcorrelation.html#cb576-8" aria-hidden="true" tabindex="-1"></a>nB <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb576-9"><a href="simcorrelation.html#cb576-9" aria-hidden="true" tabindex="-1"></a>meanB <span class="ot">&lt;-</span> <span class="fl">2.0</span></span>
-<span id="cb576-10"><a href="simcorrelation.html#cb576-10" aria-hidden="true" tabindex="-1"></a>sdB <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb576-11"><a href="simcorrelation.html#cb576-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb576-12"><a href="simcorrelation.html#cb576-12" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
-<span id="cb576-13"><a href="simcorrelation.html#cb576-13" aria-hidden="true" tabindex="-1"></a>nSims <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co">#number of simulated experiments</span></span>
-<span id="cb576-14"><a href="simcorrelation.html#cb576-14" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span><span class="fu">numeric</span>(nSims) <span class="co">#set up empty container for all simulated p-values</span></span>
-<span id="cb576-15"><a href="simcorrelation.html#cb576-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb576-16"><a href="simcorrelation.html#cb576-16" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation coefficient</span></span>
-<span id="cb576-17"><a href="simcorrelation.html#cb576-17" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
-<span id="cb576-18"><a href="simcorrelation.html#cb576-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb576-19"><a href="simcorrelation.html#cb576-19" aria-hidden="true" tabindex="-1"></a><span class="co"># the monte carlo function</span></span>
-<span id="cb576-20"><a href="simcorrelation.html#cb576-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb576-21"><a href="simcorrelation.html#cb576-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nSims){ <span class="co">#for each simulated experiment</span></span>
-<span id="cb576-22"><a href="simcorrelation.html#cb576-22" aria-hidden="true" tabindex="-1"></a>  x<span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="at">n =</span> nA, <span class="at">mean =</span> meanA, <span class="at">sd =</span> sdA) <span class="co">#produce n simulated participants</span></span>
-<span id="cb576-23"><a href="simcorrelation.html#cb576-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">#with mean and SD</span></span>
-<span id="cb576-24"><a href="simcorrelation.html#cb576-24" aria-hidden="true" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="at">n =</span> nB, <span class="at">mean =</span> meanB, <span class="at">sd =</span> sdB) <span class="co">#produce n simulated participants</span></span>
-<span id="cb576-25"><a href="simcorrelation.html#cb576-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">#with mean and SD</span></span>
-<span id="cb576-26"><a href="simcorrelation.html#cb576-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#correlated</span></span>
-<span id="cb576-27"><a href="simcorrelation.html#cb576-27" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> r<span class="sc">*</span>x<span class="sc">+</span><span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>r<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>y</span>
-<span id="cb576-28"><a href="simcorrelation.html#cb576-28" aria-hidden="true" tabindex="-1"></a>  z<span class="ot">&lt;-</span><span class="fu">t.test</span>(x,w, <span class="at">paired=</span>T) <span class="co">#perform the t-test</span></span>
-<span id="cb576-29"><a href="simcorrelation.html#cb576-29" aria-hidden="true" tabindex="-1"></a>  p[i]<span class="ot">&lt;-</span>z<span class="sc">$</span>p.value <span class="co">#get the p-value and store it</span></span>
-<span id="cb576-30"><a href="simcorrelation.html#cb576-30" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb576-31"><a href="simcorrelation.html#cb576-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb576-32"><a href="simcorrelation.html#cb576-32" aria-hidden="true" tabindex="-1"></a><span class="co"># the output</span></span>
-<span id="cb576-33"><a href="simcorrelation.html#cb576-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb576-34"><a href="simcorrelation.html#cb576-34" aria-hidden="true" tabindex="-1"></a>hits <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">which</span>(p <span class="sc">&lt;</span> alpha));hits</span></code></pre></div>
+<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb590-1"><a href="simcorrelation.html#cb590-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Initial Parameters</span></span>
+<span id="cb590-2"><a href="simcorrelation.html#cb590-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sample A intial true parameters</span></span>
+<span id="cb590-3"><a href="simcorrelation.html#cb590-3" aria-hidden="true" tabindex="-1"></a>nA <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb590-4"><a href="simcorrelation.html#cb590-4" aria-hidden="true" tabindex="-1"></a>meanA <span class="ot">&lt;-</span> <span class="fl">1.5</span></span>
+<span id="cb590-5"><a href="simcorrelation.html#cb590-5" aria-hidden="true" tabindex="-1"></a>sdA <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb590-6"><a href="simcorrelation.html#cb590-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-7"><a href="simcorrelation.html#cb590-7" aria-hidden="true" tabindex="-1"></a><span class="co"># sample B intial true parameters</span></span>
+<span id="cb590-8"><a href="simcorrelation.html#cb590-8" aria-hidden="true" tabindex="-1"></a>nB <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb590-9"><a href="simcorrelation.html#cb590-9" aria-hidden="true" tabindex="-1"></a>meanB <span class="ot">&lt;-</span> <span class="fl">2.0</span></span>
+<span id="cb590-10"><a href="simcorrelation.html#cb590-10" aria-hidden="true" tabindex="-1"></a>sdB <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb590-11"><a href="simcorrelation.html#cb590-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-12"><a href="simcorrelation.html#cb590-12" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb590-13"><a href="simcorrelation.html#cb590-13" aria-hidden="true" tabindex="-1"></a>nSims <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="co">#number of simulated experiments</span></span>
+<span id="cb590-14"><a href="simcorrelation.html#cb590-14" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span><span class="fu">numeric</span>(nSims) <span class="co">#set up empty container for all simulated p-values</span></span>
+<span id="cb590-15"><a href="simcorrelation.html#cb590-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-16"><a href="simcorrelation.html#cb590-16" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation coefficient</span></span>
+<span id="cb590-17"><a href="simcorrelation.html#cb590-17" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb590-18"><a href="simcorrelation.html#cb590-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-19"><a href="simcorrelation.html#cb590-19" aria-hidden="true" tabindex="-1"></a><span class="co"># the monte carlo function</span></span>
+<span id="cb590-20"><a href="simcorrelation.html#cb590-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-21"><a href="simcorrelation.html#cb590-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nSims){ <span class="co">#for each simulated experiment</span></span>
+<span id="cb590-22"><a href="simcorrelation.html#cb590-22" aria-hidden="true" tabindex="-1"></a>  x<span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="at">n =</span> nA, <span class="at">mean =</span> meanA, <span class="at">sd =</span> sdA) <span class="co">#produce n simulated participants</span></span>
+<span id="cb590-23"><a href="simcorrelation.html#cb590-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">#with mean and SD</span></span>
+<span id="cb590-24"><a href="simcorrelation.html#cb590-24" aria-hidden="true" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="at">n =</span> nB, <span class="at">mean =</span> meanB, <span class="at">sd =</span> sdB) <span class="co">#produce n simulated participants</span></span>
+<span id="cb590-25"><a href="simcorrelation.html#cb590-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">#with mean and SD</span></span>
+<span id="cb590-26"><a href="simcorrelation.html#cb590-26" aria-hidden="true" tabindex="-1"></a>  <span class="co">#correlated</span></span>
+<span id="cb590-27"><a href="simcorrelation.html#cb590-27" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> r<span class="sc">*</span>x<span class="sc">+</span><span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>r<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>y</span>
+<span id="cb590-28"><a href="simcorrelation.html#cb590-28" aria-hidden="true" tabindex="-1"></a>  z<span class="ot">&lt;-</span><span class="fu">t.test</span>(x,w, <span class="at">paired=</span>T) <span class="co">#perform the t-test</span></span>
+<span id="cb590-29"><a href="simcorrelation.html#cb590-29" aria-hidden="true" tabindex="-1"></a>  p[i]<span class="ot">&lt;-</span>z<span class="sc">$</span>p.value <span class="co">#get the p-value and store it</span></span>
+<span id="cb590-30"><a href="simcorrelation.html#cb590-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb590-31"><a href="simcorrelation.html#cb590-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-32"><a href="simcorrelation.html#cb590-32" aria-hidden="true" tabindex="-1"></a><span class="co"># the output</span></span>
+<span id="cb590-33"><a href="simcorrelation.html#cb590-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-34"><a href="simcorrelation.html#cb590-34" aria-hidden="true" tabindex="-1"></a>hits <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">which</span>(p <span class="sc">&lt;</span> alpha));hits</span></code></pre></div>
 <pre><code>## [1] 7027</code></pre>
-<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb578-1"><a href="simcorrelation.html#cb578-1" aria-hidden="true" tabindex="-1"></a>power <span class="ot">&lt;-</span> hits<span class="sc">/</span>nSims;power</span></code></pre></div>
+<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb592-1"><a href="simcorrelation.html#cb592-1" aria-hidden="true" tabindex="-1"></a>power <span class="ot">&lt;-</span> hits<span class="sc">/</span>nSims;power</span></code></pre></div>
 <pre><code>## [1] 0.7027</code></pre>
-<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb580-1"><a href="simcorrelation.html#cb580-1" aria-hidden="true" tabindex="-1"></a><span class="co">#now plot the histogram</span></span>
-<span id="cb580-2"><a href="simcorrelation.html#cb580-2" aria-hidden="true" tabindex="-1"></a><span class="co">#main=&quot;Histogram of p-values under the null&quot;,</span></span>
-<span id="cb580-3"><a href="simcorrelation.html#cb580-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(p, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10000</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">1.0</span>), <span class="at">main =</span><span class="st">&quot;Histogram of simulated p-values&quot;</span>, <span class="at">xlab=</span>(<span class="st">&quot;Observed p-value&quot;</span>))</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-273-1.png" width="672" /></p>
+<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb594-1"><a href="simcorrelation.html#cb594-1" aria-hidden="true" tabindex="-1"></a><span class="co">#now plot the histogram</span></span>
+<span id="cb594-2"><a href="simcorrelation.html#cb594-2" aria-hidden="true" tabindex="-1"></a><span class="co">#main=&quot;Histogram of p-values under the null&quot;,</span></span>
+<span id="cb594-3"><a href="simcorrelation.html#cb594-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(p, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10000</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">1.0</span>), <span class="at">main =</span><span class="st">&quot;Histogram of simulated p-values&quot;</span>, <span class="at">xlab=</span>(<span class="st">&quot;Observed p-value&quot;</span>))</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-272-1.png" width="672" /></p>
 <p>The result as written above is a bit underpowered, but not too shabby.</p>
 <p>Now run the code by dialing down the correlation to an r = 0. How much more underpowered is the planned experiment? Factoring in the correlation between variables makes a huge difference.</p>
 
@@ -1228,7 +1244,6 @@ P14
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1247,6 +1262,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1267,10 +1283,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

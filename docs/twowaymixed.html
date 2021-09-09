@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 34 Two-way ANOVA RM/CR | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 34 Two-way ANOVA RM/CR | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="twowayRM.html"/>
 <link rel="next" href="posthoc.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1045,11 +1061,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="twowaymixed" class="section level1" number="34">
 <h1><span class="header-section-number">Chapter 34</span> Two-way ANOVA RM/CR</h1>
-<div class="sourceCode" id="cb709"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb709-1"><a href="twowaymixed.html#cb709-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(magrittr)</span></span>
-<span id="cb709-2"><a href="twowaymixed.html#cb709-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb709-3"><a href="twowaymixed.html#cb709-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
-<span id="cb709-4"><a href="twowaymixed.html#cb709-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ez)</span>
-<span id="cb709-5"><a href="twowaymixed.html#cb709-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span></code></pre></div>
+<div class="sourceCode" id="cb721"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb721-1"><a href="twowaymixed.html#cb721-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(magrittr)</span></span>
+<span id="cb721-2"><a href="twowaymixed.html#cb721-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb721-3"><a href="twowaymixed.html#cb721-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
+<span id="cb721-4"><a href="twowaymixed.html#cb721-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ez)</span>
+<span id="cb721-5"><a href="twowaymixed.html#cb721-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)</span></code></pre></div>
 <p>Two-way ANOVA experiments allow for simultaneously testing the effects of two predictor variables.</p>
 <p>In a two way completely randomized ANOVA, all of the levels of both factors are randomly allocated to individual experimental units. Each experimental unit represents an independent replicate and each generates a single measurement for analysis.</p>
 <p>In a two-way related/repeated measures ANOVA, all of the levels for both factors are measured within a single experimental unit. The experimental unit represents the independent replicate, and therefore the data set contains many intrinsically-related measurements from each replicate.</p>
@@ -1070,71 +1086,71 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Step 1: Plot it for a quick visualization</p>
 <p>Note how each point-to-point line represents a unique chick replicate. You can get a sense from this visual how weight correlates with the replicates by time. Heavier chicks are heavy throughout the time course, lighter chicks are lighter throughout the time course. This serves as an interesting visualization of biological variation.</p>
 <p>Visually, can you tell if any of the diets differ from the others?</p>
-<div class="sourceCode" id="cb710"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb710-1"><a href="twowaymixed.html#cb710-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ChickWeight, </span>
-<span id="cb710-2"><a href="twowaymixed.html#cb710-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Time, </span>
-<span id="cb710-3"><a href="twowaymixed.html#cb710-3" aria-hidden="true" tabindex="-1"></a>           weight,</span>
-<span id="cb710-4"><a href="twowaymixed.html#cb710-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">group=</span>Chick, </span>
-<span id="cb710-5"><a href="twowaymixed.html#cb710-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">color=</span>Chick)</span>
-<span id="cb710-6"><a href="twowaymixed.html#cb710-6" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
-<span id="cb710-7"><a href="twowaymixed.html#cb710-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb710-8"><a href="twowaymixed.html#cb710-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb710-9"><a href="twowaymixed.html#cb710-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb710-10"><a href="twowaymixed.html#cb710-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
-<span id="cb710-11"><a href="twowaymixed.html#cb710-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb710-12"><a href="twowaymixed.html#cb710-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
-<span id="cb710-13"><a href="twowaymixed.html#cb710-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(</span>
-<span id="cb710-14"><a href="twowaymixed.html#cb710-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb710-15"><a href="twowaymixed.html#cb710-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb710-16"><a href="twowaymixed.html#cb710-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb710-17"><a href="twowaymixed.html#cb710-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(</span>
-<span id="cb710-18"><a href="twowaymixed.html#cb710-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb710-19"><a href="twowaymixed.html#cb710-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb710-20"><a href="twowaymixed.html#cb710-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(</span>
-<span id="cb710-21"><a href="twowaymixed.html#cb710-21" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>Diet) </span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-341-1.png" width="672" /></p>
+<div class="sourceCode" id="cb722"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb722-1"><a href="twowaymixed.html#cb722-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ChickWeight, </span>
+<span id="cb722-2"><a href="twowaymixed.html#cb722-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Time, </span>
+<span id="cb722-3"><a href="twowaymixed.html#cb722-3" aria-hidden="true" tabindex="-1"></a>           weight,</span>
+<span id="cb722-4"><a href="twowaymixed.html#cb722-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">group=</span>Chick, </span>
+<span id="cb722-5"><a href="twowaymixed.html#cb722-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">color=</span>Chick)</span>
+<span id="cb722-6"><a href="twowaymixed.html#cb722-6" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">+</span></span>
+<span id="cb722-7"><a href="twowaymixed.html#cb722-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb722-8"><a href="twowaymixed.html#cb722-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb722-9"><a href="twowaymixed.html#cb722-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb722-10"><a href="twowaymixed.html#cb722-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
+<span id="cb722-11"><a href="twowaymixed.html#cb722-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb722-12"><a href="twowaymixed.html#cb722-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb722-13"><a href="twowaymixed.html#cb722-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(</span>
+<span id="cb722-14"><a href="twowaymixed.html#cb722-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb722-15"><a href="twowaymixed.html#cb722-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb722-16"><a href="twowaymixed.html#cb722-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb722-17"><a href="twowaymixed.html#cb722-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(</span>
+<span id="cb722-18"><a href="twowaymixed.html#cb722-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb722-19"><a href="twowaymixed.html#cb722-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb722-20"><a href="twowaymixed.html#cb722-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(</span>
+<span id="cb722-21"><a href="twowaymixed.html#cb722-21" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>Diet) </span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-340-1.png" width="672" /></p>
 <p>Step 2: First, check for missing data on the within factor, chicks.</p>
 <p>We can’t have any for a RM design. ezDesign is a slick function in the ez package with which to check for missing values:</p>
-<div class="sourceCode" id="cb711"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb711-1"><a href="twowaymixed.html#cb711-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ezDesign</span>(</span>
-<span id="cb711-2"><a href="twowaymixed.html#cb711-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> ChickWeight,</span>
-<span id="cb711-3"><a href="twowaymixed.html#cb711-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> .(Time),</span>
-<span id="cb711-4"><a href="twowaymixed.html#cb711-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> .(Chick), </span>
-<span id="cb711-5"><a href="twowaymixed.html#cb711-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="cn">NULL</span>, </span>
-<span id="cb711-6"><a href="twowaymixed.html#cb711-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="cn">NULL</span>, </span>
-<span id="cb711-7"><a href="twowaymixed.html#cb711-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cell_border_size =</span> <span class="dv">1</span></span>
-<span id="cb711-8"><a href="twowaymixed.html#cb711-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-342-1.png" width="672" />
+<div class="sourceCode" id="cb723"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb723-1"><a href="twowaymixed.html#cb723-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ezDesign</span>(</span>
+<span id="cb723-2"><a href="twowaymixed.html#cb723-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> ChickWeight,</span>
+<span id="cb723-3"><a href="twowaymixed.html#cb723-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> .(Time),</span>
+<span id="cb723-4"><a href="twowaymixed.html#cb723-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> .(Chick), </span>
+<span id="cb723-5"><a href="twowaymixed.html#cb723-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="cn">NULL</span>, </span>
+<span id="cb723-6"><a href="twowaymixed.html#cb723-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="cn">NULL</span>, </span>
+<span id="cb723-7"><a href="twowaymixed.html#cb723-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cell_border_size =</span> <span class="dv">1</span></span>
+<span id="cb723-8"><a href="twowaymixed.html#cb723-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-341-1.png" width="672" />
 Step 3: Remove Chicks for which full Time series is missing, while creating a repaired dataset.</p>
 <p>Here’s a hemi dplyr-based way to do that:</p>
-<div class="sourceCode" id="cb712"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb712-1"><a href="twowaymixed.html#cb712-1" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(</span>
-<span id="cb712-2"><a href="twowaymixed.html#cb712-2" aria-hidden="true" tabindex="-1"></a>  ChickWeight<span class="sc">%&gt;%</span></span>
-<span id="cb712-3"><a href="twowaymixed.html#cb712-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Chick)<span class="sc">%&gt;%</span></span>
-<span id="cb712-4"><a href="twowaymixed.html#cb712-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
-<span id="cb712-5"><a href="twowaymixed.html#cb712-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb712-6"><a href="twowaymixed.html#cb712-6" aria-hidden="true" tabindex="-1"></a><span class="co"># show only the Chick replicates that have incomplete measures on time</span></span>
-<span id="cb712-7"><a href="twowaymixed.html#cb712-7" aria-hidden="true" tabindex="-1"></a>temp[temp<span class="sc">$</span>n<span class="sc">&lt;</span><span class="dv">12</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb724"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb724-1"><a href="twowaymixed.html#cb724-1" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(</span>
+<span id="cb724-2"><a href="twowaymixed.html#cb724-2" aria-hidden="true" tabindex="-1"></a>  ChickWeight<span class="sc">%&gt;%</span></span>
+<span id="cb724-3"><a href="twowaymixed.html#cb724-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Chick)<span class="sc">%&gt;%</span></span>
+<span id="cb724-4"><a href="twowaymixed.html#cb724-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span>
+<span id="cb724-5"><a href="twowaymixed.html#cb724-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb724-6"><a href="twowaymixed.html#cb724-6" aria-hidden="true" tabindex="-1"></a><span class="co"># show only the Chick replicates that have incomplete measures on time</span></span>
+<span id="cb724-7"><a href="twowaymixed.html#cb724-7" aria-hidden="true" tabindex="-1"></a>temp[temp<span class="sc">$</span>n<span class="sc">&lt;</span><span class="dv">12</span>, ]</span></code></pre></div>
 <pre><code>##    Chick  n
 ## 1     18  2
 ## 2     16  7
 ## 3     15  8
 ## 8      8 11
 ## 41    44 10</code></pre>
-<div class="sourceCode" id="cb714"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb714-1"><a href="twowaymixed.html#cb714-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create new dataframe for ANOVA analysis in which the incomplete replicates are removed</span></span>
-<span id="cb714-2"><a href="twowaymixed.html#cb714-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb714-3"><a href="twowaymixed.html#cb714-3" aria-hidden="true" tabindex="-1"></a>ChickWeight1 <span class="ot">&lt;-</span>  ChickWeight[<span class="sc">!</span>(ChickWeight<span class="sc">$</span>Chick <span class="sc">%in%</span> temp<span class="sc">$</span>Chick[temp<span class="sc">$</span>n<span class="sc">&lt;</span><span class="dv">12</span>]),]</span></code></pre></div>
+<div class="sourceCode" id="cb726"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb726-1"><a href="twowaymixed.html#cb726-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create new dataframe for ANOVA analysis in which the incomplete replicates are removed</span></span>
+<span id="cb726-2"><a href="twowaymixed.html#cb726-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb726-3"><a href="twowaymixed.html#cb726-3" aria-hidden="true" tabindex="-1"></a>ChickWeight1 <span class="ot">&lt;-</span>  ChickWeight[<span class="sc">!</span>(ChickWeight<span class="sc">$</span>Chick <span class="sc">%in%</span> temp<span class="sc">$</span>Chick[temp<span class="sc">$</span>n<span class="sc">&lt;</span><span class="dv">12</span>]),]</span></code></pre></div>
 <p>Step 4: Check to make sure the new dataframe from the previous step is clean, that incomplete replicates are out</p>
-<div class="sourceCode" id="cb715"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb715-1"><a href="twowaymixed.html#cb715-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ezDesign</span>(</span>
-<span id="cb715-2"><a href="twowaymixed.html#cb715-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> ChickWeight1</span>
-<span id="cb715-3"><a href="twowaymixed.html#cb715-3" aria-hidden="true" tabindex="-1"></a>    , <span class="at">x =</span> .(Time)</span>
-<span id="cb715-4"><a href="twowaymixed.html#cb715-4" aria-hidden="true" tabindex="-1"></a>    , <span class="at">y =</span> .(Chick)</span>
-<span id="cb715-5"><a href="twowaymixed.html#cb715-5" aria-hidden="true" tabindex="-1"></a>    , <span class="at">row =</span> <span class="cn">NULL</span></span>
-<span id="cb715-6"><a href="twowaymixed.html#cb715-6" aria-hidden="true" tabindex="-1"></a>    , <span class="at">col =</span> <span class="cn">NULL</span></span>
-<span id="cb715-7"><a href="twowaymixed.html#cb715-7" aria-hidden="true" tabindex="-1"></a>    , <span class="at">cell_border_size =</span> <span class="dv">1</span></span>
-<span id="cb715-8"><a href="twowaymixed.html#cb715-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-344-1.png" width="672" /></p>
+<div class="sourceCode" id="cb727"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb727-1"><a href="twowaymixed.html#cb727-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ezDesign</span>(</span>
+<span id="cb727-2"><a href="twowaymixed.html#cb727-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> ChickWeight1</span>
+<span id="cb727-3"><a href="twowaymixed.html#cb727-3" aria-hidden="true" tabindex="-1"></a>    , <span class="at">x =</span> .(Time)</span>
+<span id="cb727-4"><a href="twowaymixed.html#cb727-4" aria-hidden="true" tabindex="-1"></a>    , <span class="at">y =</span> .(Chick)</span>
+<span id="cb727-5"><a href="twowaymixed.html#cb727-5" aria-hidden="true" tabindex="-1"></a>    , <span class="at">row =</span> <span class="cn">NULL</span></span>
+<span id="cb727-6"><a href="twowaymixed.html#cb727-6" aria-hidden="true" tabindex="-1"></a>    , <span class="at">col =</span> <span class="cn">NULL</span></span>
+<span id="cb727-7"><a href="twowaymixed.html#cb727-7" aria-hidden="true" tabindex="-1"></a>    , <span class="at">cell_border_size =</span> <span class="dv">1</span></span>
+<span id="cb727-8"><a href="twowaymixed.html#cb727-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-343-1.png" width="672" /></p>
 <p>Step 5: The ChickWeight dataframe has Time as a numeric, which needs to be converted to a factor to get stuff to work.</p>
-<div class="sourceCode" id="cb716"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb716-1"><a href="twowaymixed.html#cb716-1" aria-hidden="true" tabindex="-1"></a>ChickWeight1<span class="sc">$</span>Time <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(ChickWeight1<span class="sc">$</span>Time)</span></code></pre></div>
+<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb728-1"><a href="twowaymixed.html#cb728-1" aria-hidden="true" tabindex="-1"></a>ChickWeight1<span class="sc">$</span>Time <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(ChickWeight1<span class="sc">$</span>Time)</span></code></pre></div>
 <p>One last check of the data structure:</p>
-<div class="sourceCode" id="cb717"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb717-1"><a href="twowaymixed.html#cb717-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ChickWeight1)</span></code></pre></div>
+<div class="sourceCode" id="cb729"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb729-1"><a href="twowaymixed.html#cb729-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ChickWeight1)</span></code></pre></div>
 <pre><code>## Grouped Data: weight ~ Time | Chick
 ##   weight Time Chick Diet
 ## 1     42    0     1    1
@@ -1143,7 +1159,7 @@ Step 3: Remove Chicks for which full Time series is missing, while creating a re
 ## 4     64    6     1    1
 ## 5     76    8     1    1
 ## 6     93   10     1    1</code></pre>
-<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb719-1"><a href="twowaymixed.html#cb719-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ChickWeight1)</span></code></pre></div>
+<div class="sourceCode" id="cb731"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb731-1"><a href="twowaymixed.html#cb731-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ChickWeight1)</span></code></pre></div>
 <pre><code>## Classes &#39;nfnGroupedData&#39;, &#39;nfGroupedData&#39;, &#39;groupedData&#39; and &#39;data.frame&#39;:   540 obs. of  4 variables:
 ##  $ weight: num  42 51 59 64 76 93 106 125 149 171 ...
 ##  $ Time  : Factor w/ 12 levels &quot;0&quot;,&quot;2&quot;,&quot;4&quot;,&quot;6&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
@@ -1174,16 +1190,16 @@ Step 3: Remove Chicks for which full Time series is missing, while creating a re
 <p>But we’re not explicitly applying a rate model to the data to derive growth rate constants that might be compared. The growth rate is more implicit…it’s the information buried within the repeated measures.</p>
 <p>We just want to know if the four diets differ from each other. The Diet variable is completely randomized. Every weight measurement for a chick on diet 1 is independent of every measurement for a chick on diet 2, and so on. No chick is receiving all four diets, yet every chick is receiving all timed measurements.</p>
 <p>To encode a two-way mixed ANOVA using ezANOVA, simply configure the arguments such that the repeated measure factor is <code>within</code> and the completely randomized factor is <code>between</code>. An object named <code>two_wayMM</code>, which could have been named foo, is used to store the ANOVA output.</p>
-<div class="sourceCode" id="cb721"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb721-1"><a href="twowaymixed.html#cb721-1" aria-hidden="true" tabindex="-1"></a>two_wayMM <span class="ot">&lt;-</span> <span class="fu">ezANOVA</span>(<span class="at">data =</span> ChickWeight1,</span>
-<span id="cb721-2"><a href="twowaymixed.html#cb721-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dv =</span> weight,</span>
-<span id="cb721-3"><a href="twowaymixed.html#cb721-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">wid =</span> Chick,</span>
-<span id="cb721-4"><a href="twowaymixed.html#cb721-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">between =</span> Diet,</span>
-<span id="cb721-5"><a href="twowaymixed.html#cb721-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">within =</span> Time,</span>
-<span id="cb721-6"><a href="twowaymixed.html#cb721-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="dv">3</span>,</span>
-<span id="cb721-7"><a href="twowaymixed.html#cb721-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">detailed =</span> T,</span>
-<span id="cb721-8"><a href="twowaymixed.html#cb721-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">return_aov=</span>F</span>
-<span id="cb721-9"><a href="twowaymixed.html#cb721-9" aria-hidden="true" tabindex="-1"></a>                     )</span>
-<span id="cb721-10"><a href="twowaymixed.html#cb721-10" aria-hidden="true" tabindex="-1"></a>two_wayMM</span></code></pre></div>
+<div class="sourceCode" id="cb733"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb733-1"><a href="twowaymixed.html#cb733-1" aria-hidden="true" tabindex="-1"></a>two_wayMM <span class="ot">&lt;-</span> <span class="fu">ezANOVA</span>(<span class="at">data =</span> ChickWeight1,</span>
+<span id="cb733-2"><a href="twowaymixed.html#cb733-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dv =</span> weight,</span>
+<span id="cb733-3"><a href="twowaymixed.html#cb733-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">wid =</span> Chick,</span>
+<span id="cb733-4"><a href="twowaymixed.html#cb733-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">between =</span> Diet,</span>
+<span id="cb733-5"><a href="twowaymixed.html#cb733-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">within =</span> Time,</span>
+<span id="cb733-6"><a href="twowaymixed.html#cb733-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="dv">3</span>,</span>
+<span id="cb733-7"><a href="twowaymixed.html#cb733-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">detailed =</span> T,</span>
+<span id="cb733-8"><a href="twowaymixed.html#cb733-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">return_aov=</span>F</span>
+<span id="cb733-9"><a href="twowaymixed.html#cb733-9" aria-hidden="true" tabindex="-1"></a>                     )</span>
+<span id="cb733-10"><a href="twowaymixed.html#cb733-10" aria-hidden="true" tabindex="-1"></a>two_wayMM</span></code></pre></div>
 <pre><code>## $ANOVA
 ##        Effect DFn DFd        SSn      SSd           F             p p&lt;.05
 ## 1 (Intercept)   1  41 8404690.44 313495.0 1099.195477  3.122264e-31     *
@@ -1245,8 +1261,8 @@ Step 3: Remove Chicks for which full Time series is missing, while creating a re
 <h3><span class="header-section-number">34.5.1</span> Pairwise.t.tests</h3>
 <p>As has been made clear, we only care whether any of the 4 diets differ from each other.</p>
 <p>Therefore, we test all differences between each of the diets, making a p-value adjustment for multiple comparisons. This test focuses in on the diets. By using the pooled SD we take into account all of the variation within the experiment. Note how a method for p-value adjustment</p>
-<div class="sourceCode" id="cb723"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb723-1"><a href="twowaymixed.html#cb723-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.t.test</span>(ChickWeight1<span class="sc">$</span>weight, ChickWeight1<span class="sc">$</span>Diet, </span>
-<span id="cb723-2"><a href="twowaymixed.html#cb723-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">paired=</span>F, <span class="at">conf.level=</span><span class="fl">0.95</span>, <span class="at">p.adjust=</span><span class="st">&quot;holm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb735-1"><a href="twowaymixed.html#cb735-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.t.test</span>(ChickWeight1<span class="sc">$</span>weight, ChickWeight1<span class="sc">$</span>Diet, </span>
+<span id="cb735-2"><a href="twowaymixed.html#cb735-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">paired=</span>F, <span class="at">conf.level=</span><span class="fl">0.95</span>, <span class="at">p.adjust=</span><span class="st">&quot;holm&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using t tests with pooled SD 
 ## 
@@ -1268,9 +1284,9 @@ Step 3: Remove Chicks for which full Time series is missing, while creating a re
 <p>The first step is to create a linear model of the design. The second step is to create an anova object from that model. And the third step is the reason for the first two. The TukeyHSD test function takes an aov object as its data source before running the group comparisons.</p>
 <p>Because it has a related measures component, the two-way mixed ANOVA experimental design is also known as a linear mixed-effects model. Exactly what this means will be more clear when we get to discussing linear models.</p>
 <p>We use the <code>lme</code> function from the <code>nlme</code> package to regress the model on the ChickWeight1 dataset, generating a large table of coefficients for all the model elements.</p>
-<div class="sourceCode" id="cb725"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb725-1"><a href="twowaymixed.html#cb725-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lme</span>(weight <span class="sc">~</span> Diet <span class="sc">+</span> Time <span class="sc">+</span> Diet<span class="sc">*</span>Time, <span class="at">data=</span>ChickWeight1, <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>Chick)</span></code></pre></div>
+<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb737-1"><a href="twowaymixed.html#cb737-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lme</span>(weight <span class="sc">~</span> Diet <span class="sc">+</span> Time <span class="sc">+</span> Diet<span class="sc">*</span>Time, <span class="at">data=</span>ChickWeight1, <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>Chick)</span></code></pre></div>
 <p>Next, that linear model is passed into the <code>aov</code> function, to create an aov object. Because R is cool, we do that inside the <code>PostHocTest</code> function from the <code>DescTools</code> package. We specify Diet so that this only performs comparisons between Diet groups. (If you remove the <code>which</code> argument it will return all possible combinations of every group in the experiment!)</p>
-<div class="sourceCode" id="cb726"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb726-1"><a href="twowaymixed.html#cb726-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PostHocTest</span>(<span class="fu">aov</span>(model,<span class="at">data=</span>ChickWeight1), <span class="at">which=</span><span class="st">&quot;Diet&quot;</span>, <span class="at">method=</span><span class="st">&quot;hsd&quot;</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb738"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb738-1"><a href="twowaymixed.html#cb738-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PostHocTest</span>(<span class="fu">aov</span>(model,<span class="at">data=</span>ChickWeight1), <span class="at">which=</span><span class="st">&quot;Diet&quot;</span>, <span class="at">method=</span><span class="st">&quot;hsd&quot;</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>)</span></code></pre></div>
 <pre><code>## 
 ##   Posthoc multiple comparisons of means : Tukey HSD 
 ##     95% family-wise confidence level
@@ -1324,7 +1340,6 @@ Step 3: Remove Chicks for which full Time series is missing, while creating a re
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1343,6 +1358,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1363,10 +1379,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

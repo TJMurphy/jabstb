@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 24 The t-tests | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 24 The t-tests | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="ranksum.html"/>
 <link rel="next" href="ttestmc.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1085,11 +1101,11 @@ E(Y) = \beta_0 +\beta_1X+\epsilon
 <p>Think of <span class="math inline">\(\beta_0\)</span> as the background or basal or control level the dependent variable. <span class="math inline">\(\beta_1\)</span> is the magnitude of the change in the dependent variable caused by one unit of <span class="math inline">\(X\)</span>.</p>
 <p>We assume that both population parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> have fixed values…but we don’t know for sure what those values are (that’s why they are in Greek letters). Our job as researchers is to use sampling-based experiments to estimate these fixed values.</p>
 <p>Let’s say I come up with the following estimates for the betas. Then I want to run an experiment to determine values of <span class="math inline">\(Y\)</span> in response to two different values of <span class="math inline">\(X\)</span>. I just run it as an R code model.</p>
-<div class="sourceCode" id="cb469"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb469-1"><a href="ttests.html#cb469-1" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb469-2"><a href="ttests.html#cb469-2" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb469-3"><a href="ttests.html#cb469-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span> , <span class="dv">2</span>)</span>
-<span id="cb469-4"><a href="ttests.html#cb469-4" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> beta0 <span class="sc">+</span>beta1<span class="sc">*</span>X</span>
-<span id="cb469-5"><a href="ttests.html#cb469-5" aria-hidden="true" tabindex="-1"></a>Y</span></code></pre></div>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="ttests.html#cb482-1" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb482-2"><a href="ttests.html#cb482-2" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb482-3"><a href="ttests.html#cb482-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span> , <span class="dv">2</span>)</span>
+<span id="cb482-4"><a href="ttests.html#cb482-4" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> beta0 <span class="sc">+</span>beta1<span class="sc">*</span>X</span>
+<span id="cb482-5"><a href="ttests.html#cb482-5" aria-hidden="true" tabindex="-1"></a>Y</span></code></pre></div>
 <pre><code>## [1] 3 5</code></pre>
 <p>That’s a perfect model and it generates perfect data. Every time I run the chunk I get exactly the same result. Perfectly. There is no variation.</p>
 <p>Of course, data are never that perfect in real life.</p>
@@ -1098,9 +1114,9 @@ E(Y) = \beta_0 +\beta_1X+\epsilon
 <p>Gauss discovered that a property of continuous data is that residual error, <span class="math inline">\(\epsilon\)</span>, <a href="https://www.maa.org/sites/default/files/pdf/upload_library/22/Allendoerfer/stahl96.pdf">tends to be normally distributed.</a></p>
 <p>The R code model is updated below to account for residual error. Notice how we’re adding a term to the model. This term is the random normal <span class="math inline">\(N(\mu=0,\sigma=1)\)</span> and it represents the residual error term, <span class="math inline">\(\epsilon\)</span>, from equation<a href="ttests.html#eq:lm">(24.1)</a>.</p>
 <p>If we run that model, you get a different result every time…due to the random normal term. Our only explanation for the variation is that it comes from a random normal process. This is why incorporate a protocol in our experimental design to allocate treatments using some random process!</p>
-<div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb471-1"><a href="ttests.html#cb471-1" aria-hidden="true" tabindex="-1"></a><span class="co"># everytime you run this chunk you&#39;ll get a different outcome</span></span>
-<span id="cb471-2"><a href="ttests.html#cb471-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> beta0 <span class="sc">+</span>beta1<span class="sc">*</span>X <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(X))</span>
-<span id="cb471-3"><a href="ttests.html#cb471-3" aria-hidden="true" tabindex="-1"></a>Y</span></code></pre></div>
+<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="ttests.html#cb484-1" aria-hidden="true" tabindex="-1"></a><span class="co"># everytime you run this chunk you&#39;ll get a different outcome</span></span>
+<span id="cb484-2"><a href="ttests.html#cb484-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> beta0 <span class="sc">+</span>beta1<span class="sc">*</span>X <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(X))</span>
+<span id="cb484-3"><a href="ttests.html#cb484-3" aria-hidden="true" tabindex="-1"></a>Y</span></code></pre></div>
 <pre><code>## [1] 2.882296 4.819684</code></pre>
 </div>
 <div id="on-the-normality-assumption" class="section level3" number="24.1.4">
@@ -1123,8 +1139,8 @@ E(Y) = \beta_0 +\beta_1X+\epsilon
 <p>I’m not a fan of these “normality” tests. The smaller the sample size, the more suspicious I am of their utility or that I have enough information to heed the weaker assumptions. That’s mostly why I don’t teach them in the course. The other big reason is that, in practice, these decision trees tend to be made up as you go rather than pre-planned protocol. That’s hacking.</p>
 <p>If you actually wrote these into the statistical design in advance, it would read pretty hackish, too. Something like this: “then I will do normality tests, and if normalization doesn’t fix the problem, I’ll start tossing data…”</p>
 <p>What most are really asking from a normality test is for permission to p-hack, perhaps hoping to rescue “statistical significance” from an otherwise moribund result.</p>
-<div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb473-1"><a href="ttests.html#cb473-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;images/phacking.jpg&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:p-hacking"></span>
+<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="ttests.html#cb486-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;images/phacking.jpg&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:p-hacking"></span>
 <img src="images/phacking.jpg" alt="This is p-hacking. Uncritical allegiance to t-testing's weaker assumptions is frequently a gateway to an integrity crisis." width="640" />
 <p class="caption">
 Figure 24.1: This is p-hacking. Uncritical allegiance to t-testing’s weaker assumptions is frequently a gateway to an integrity crisis.
@@ -1136,7 +1152,7 @@ Figure 24.1: This is p-hacking. Uncritical allegiance to t-testing’s weaker as
 <p>The performance of t-tests compared to their nonparametric counterparts are virtually identical when the normality and homoscedasticity assumptions are met (see the right panel in the next graph).</p>
 <p>The t-tests are generally held to be robust (aka, perform well) to violations of the weaker assumptions. But YMMV.</p>
 <p>Here’s an illustration for when t-tests are not robust. The panel on the left shows a scenario where the data is lognormal and the nonparametric test has far greater power than the t-test to detect true differences.</p>
-<div class="figure"><span id="fig:unnamed-chunk-221"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-220"></span>
 <img src="images/pwr_tvw_tests.jpeg" alt="Comparison of Wilcoxon test (w) power to t-tests when sampling from skewed (lognormal) and normal distributions." width="441" />
 <p class="caption">
 Figure 24.2: Comparison of Wilcoxon test (w) power to t-tests when sampling from skewed (lognormal) and normal distributions.
@@ -1299,11 +1315,11 @@ Figure 24.2: Comparison of Wilcoxon test (w) power to t-tests when sampling from
 \tag{24.8}
 \end{equation}\]</span></p>
 <p>For example, given a sample size of n=3, the mean is 100. and the standard deviation is 25:</p>
-<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb474-1"><a href="ttests.html#cb474-1" aria-hidden="true" tabindex="-1"></a>upper.limit <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">+</span><span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="dv">2</span>)<span class="sc">*</span>(<span class="dv">25</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">3</span>))</span>
-<span id="cb474-2"><a href="ttests.html#cb474-2" aria-hidden="true" tabindex="-1"></a>lower.limit <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">-</span><span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="dv">2</span>)<span class="sc">*</span>(<span class="dv">25</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">3</span>))</span>
-<span id="cb474-3"><a href="ttests.html#cb474-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;upper limit=&quot;</span>, upper.limit)</span></code></pre></div>
+<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb487-1"><a href="ttests.html#cb487-1" aria-hidden="true" tabindex="-1"></a>upper.limit <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">+</span><span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="dv">2</span>)<span class="sc">*</span>(<span class="dv">25</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">3</span>))</span>
+<span id="cb487-2"><a href="ttests.html#cb487-2" aria-hidden="true" tabindex="-1"></a>lower.limit <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">-</span><span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="dv">2</span>)<span class="sc">*</span>(<span class="dv">25</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">3</span>))</span>
+<span id="cb487-3"><a href="ttests.html#cb487-3" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;upper limit=&quot;</span>, upper.limit)</span></code></pre></div>
 <pre><code>## [1] &quot;upper limit= 162.103442793758&quot;</code></pre>
-<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="ttests.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;lower limit=&quot;</span>,lower.limit)</span></code></pre></div>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb489-1"><a href="ttests.html#cb489-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;lower limit=&quot;</span>,lower.limit)</span></code></pre></div>
 <pre><code>## [1] &quot;lower limit= 37.8965572062417&quot;</code></pre>
 <p>Thus, the point estimate for the mean is 100 and, <em>on the basis of this single sample</em>, we can assert 95% confidence the true population mean lies between 37.89 and 162.10.</p>
 <p>A slightly more accurate way to think about this is in frequentist terms. If we sampled 100 times, where each sample has n independent replicates, 95% of the resulting confidence intervals would include our point estimate of 100, but their point estimates could range from 37.89 to 162.10.</p>
@@ -1322,8 +1338,8 @@ Figure 24.2: Comparison of Wilcoxon test (w) power to t-tests when sampling from
 <p>At this stage we know enough to make worthwile pointing out the relationship between sample size and the properties of these parameters.</p>
 <p>The figure below illustrates the outcome of repeated random sampling from the <strong>known</strong> population <span class="math inline">\(N(\mu=100, \sigma=25)\)</span>. The coefficient of variation for this simulation is <span class="math inline">\(cv=\frac{\sigma}{\mu}=0.25\)</span>, which my sense says is pretty typical for bio-variable with a well behaved signal to noise ratio. But YMMV.</p>
 <p>At first, this script samples at size <span class="math inline">\(n=2\)</span>, repeating the sampling 50 times. For each of these 50 samples it calculates the sample <span class="math inline">\(\bar y\)</span>, <span class="math inline">\(sd\)</span>, and <span class="math inline">\(SEM\)</span>. Then it moves up to a sample size of <span class="math inline">\(n=3\)</span>, collecting these parameter values from each sample. And so on and so on up to a sample size of <span class="math inline">\(n=100\)</span></p>
-<div class="figure"><span id="fig:unnamed-chunk-223"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-223-1.png" alt="Simulation of the relationships between the sample parameters used in t-tests. These can represent either group parameters or the parameters for the difference between groups." width="672" />
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-222"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-222-1.png" alt="Simulation of the relationships between the sample parameters used in t-tests. These can represent either group parameters or the parameters for the difference between groups." width="672" />
 <p class="caption">
 Figure 24.3: Simulation of the relationships between the sample parameters used in t-tests. These can represent either group parameters or the parameters for the difference between groups.
 </p>
@@ -1340,7 +1356,7 @@ Figure 24.3: Simulation of the relationships between the sample parameters used 
 <p>The second thing big thing this illustrator reveals is that <span class="math inline">\(sd\)</span> and <span class="math inline">\(sem\)</span> are not telling us the same thing.</p>
 <p>The sample <span class="math inline">\(sd\)</span> measures dispersion in the sample, but that is also an estimate of <span class="math inline">\(\sigma\)</span>, the dispersion in the population. This is in the same way that the sample mean <span class="math inline">\(\bar y\)</span> estimates the population mean <span class="math inline">\(\mu\)</span>.</p>
 <p>As sample size increases the <span class="math inline">\(sem\)</span> gets lower and lower. That is due to math because <span class="math inline">\(sem=\frac{sd}{\sqrt n}\)</span>.</p>
-<p>The <span class="math inline">\(sem\)</span> in fact is the standard deviation of a theoretical population of sample means. This concept is derived from the central limit theorem<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p>
+<p>The <span class="math inline">\(sem\)</span> in fact is the standard deviation of a theoretical population of sample means. This concept is derived from the central limit theorem<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a></p>
 <p>As a result, we infer from the <span class="math inline">\(sem\)</span> of a single sample how precisely that sample estimates the population mean. As you can see from this illustrator, the precision by which a mean is estimated improves as the sample size used to estimate that mean increases. Whereas <span class="math inline">\(sd\)</span> oscillates with each sample around a fixed value, like the mean, reflective of the dispersion of values in the population, <span class="math inline">\(sem\)</span> gets better and better (when one assumes low is better).</p>
 <div id="reporting-sd-or-sem" class="section level3" number="24.9.1">
 <h3><span class="header-section-number">24.9.1</span> Reporting SD or SEM?</h3>
@@ -1360,23 +1376,23 @@ Figure 24.3: Simulation of the relationships between the sample parameters used 
 <div id="one-sample-t-test" class="section level3" number="24.10.1">
 <h3><span class="header-section-number">24.10.1</span> One sample t test</h3>
 <p>Let’s say a standard to measure against is the value of 100. We can ask if a random sample that is 2-fold greater is different than 100, less than 100, or greater than 100:</p>
-<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb478-1"><a href="ttests.html#cb478-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this makes the sample reproducible</span></span>
-<span id="cb478-2"><a href="ttests.html#cb478-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb478-3"><a href="ttests.html#cb478-3" aria-hidden="true" tabindex="-1"></a><span class="co"># here&#39;s a random sample</span></span>
-<span id="cb478-4"><a href="ttests.html#cb478-4" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">200</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
-<span id="cb478-5"><a href="ttests.html#cb478-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb478-6"><a href="ttests.html#cb478-6" aria-hidden="true" tabindex="-1"></a><span class="co"># you can run t.test without naming it as an object</span></span>
-<span id="cb478-7"><a href="ttests.html#cb478-7" aria-hidden="true" tabindex="-1"></a>one2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, <span class="at">mu=</span><span class="dv">100</span>, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="at">conf.level=</span><span class="fl">0.95</span> )</span>
-<span id="cb478-8"><a href="ttests.html#cb478-8" aria-hidden="true" tabindex="-1"></a>oneL <span class="ot">&lt;-</span><span class="fu">t.test</span>(a, <span class="at">mu=</span><span class="dv">100</span>, <span class="at">alternative=</span><span class="st">&quot;less&quot;</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>)</span>
-<span id="cb478-9"><a href="ttests.html#cb478-9" aria-hidden="true" tabindex="-1"></a>oneG <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, <span class="at">mu=</span><span class="dv">100</span>, <span class="at">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>)</span>
-<span id="cb478-10"><a href="ttests.html#cb478-10" aria-hidden="true" tabindex="-1"></a><span class="co"># the following line makes jabstb more readable</span></span>
-<span id="cb478-11"><a href="ttests.html#cb478-11" aria-hidden="true" tabindex="-1"></a><span class="co"># broom::tidy is a function to clean up R test output</span></span>
-<span id="cb478-12"><a href="ttests.html#cb478-12" aria-hidden="true" tabindex="-1"></a><span class="co"># not a bad trick to have for functions or writing clean reports </span></span>
-<span id="cb478-13"><a href="ttests.html#cb478-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">bind_rows</span>(<span class="fu">tidy</span>(one2), <span class="fu">tidy</span>(oneL), <span class="fu">tidy</span>(oneG)), </span>
-<span id="cb478-14"><a href="ttests.html#cb478-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;One-sample t-test output. Read text for interpretation.&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="ttests.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this makes the sample reproducible</span></span>
+<span id="cb491-2"><a href="ttests.html#cb491-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb491-3"><a href="ttests.html#cb491-3" aria-hidden="true" tabindex="-1"></a><span class="co"># here&#39;s a random sample</span></span>
+<span id="cb491-4"><a href="ttests.html#cb491-4" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">200</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
+<span id="cb491-5"><a href="ttests.html#cb491-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-6"><a href="ttests.html#cb491-6" aria-hidden="true" tabindex="-1"></a><span class="co"># you can run t.test without naming it as an object</span></span>
+<span id="cb491-7"><a href="ttests.html#cb491-7" aria-hidden="true" tabindex="-1"></a>one2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, <span class="at">mu=</span><span class="dv">100</span>, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="at">conf.level=</span><span class="fl">0.95</span> )</span>
+<span id="cb491-8"><a href="ttests.html#cb491-8" aria-hidden="true" tabindex="-1"></a>oneL <span class="ot">&lt;-</span><span class="fu">t.test</span>(a, <span class="at">mu=</span><span class="dv">100</span>, <span class="at">alternative=</span><span class="st">&quot;less&quot;</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>)</span>
+<span id="cb491-9"><a href="ttests.html#cb491-9" aria-hidden="true" tabindex="-1"></a>oneG <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, <span class="at">mu=</span><span class="dv">100</span>, <span class="at">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>)</span>
+<span id="cb491-10"><a href="ttests.html#cb491-10" aria-hidden="true" tabindex="-1"></a><span class="co"># the following line makes jabstb more readable</span></span>
+<span id="cb491-11"><a href="ttests.html#cb491-11" aria-hidden="true" tabindex="-1"></a><span class="co"># broom::tidy is a function to clean up R test output</span></span>
+<span id="cb491-12"><a href="ttests.html#cb491-12" aria-hidden="true" tabindex="-1"></a><span class="co"># not a bad trick to have for functions or writing clean reports </span></span>
+<span id="cb491-13"><a href="ttests.html#cb491-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">bind_rows</span>(<span class="fu">tidy</span>(one2), <span class="fu">tidy</span>(oneL), <span class="fu">tidy</span>(oneG)), </span>
+<span id="cb491-14"><a href="ttests.html#cb491-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;One-sample t-test output. Read text for interpretation.&quot;</span>)</span></code></pre></div>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-224">Table 24.1: </span>One-sample t-test output. Read text for interpretation.
+<span id="tab:unnamed-chunk-223">Table 24.1: </span>One-sample t-test output. Read text for interpretation.
 </caption>
 <thead>
 <tr>
@@ -1510,17 +1526,17 @@ greater
 <div id="unpaired-t-test" class="section level3" number="24.10.2">
 <h3><span class="header-section-number">24.10.2</span> Unpaired t test</h3>
 <p>Now we will pull two random samples: one from a normal distribution that has a mean of 200, and the second from a distribution that has a mean of 100. Both have standard deviations of 25. We have the option to run three different hypotheses.</p>
-<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb479-1"><a href="ttests.html#cb479-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb479-2"><a href="ttests.html#cb479-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">200</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
-<span id="cb479-3"><a href="ttests.html#cb479-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
-<span id="cb479-4"><a href="ttests.html#cb479-4" aria-hidden="true" tabindex="-1"></a>up2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="at">var.equal =</span> F )</span>
-<span id="cb479-5"><a href="ttests.html#cb479-5" aria-hidden="true" tabindex="-1"></a>upL <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative=</span><span class="st">&quot;less&quot;</span>, <span class="at">var.equal =</span> F)</span>
-<span id="cb479-6"><a href="ttests.html#cb479-6" aria-hidden="true" tabindex="-1"></a>upG <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a,b, <span class="at">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="at">var.equal =</span> F)</span>
-<span id="cb479-7"><a href="ttests.html#cb479-7" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">bind_rows</span>(<span class="fu">tidy</span>(up2), <span class="fu">tidy</span>(upL), <span class="fu">tidy</span>(upG)), </span>
-<span id="cb479-8"><a href="ttests.html#cb479-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;Unpaired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common to all tests.&quot;</span>)   </span></code></pre></div>
+<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb492-1"><a href="ttests.html#cb492-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb492-2"><a href="ttests.html#cb492-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">200</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
+<span id="cb492-3"><a href="ttests.html#cb492-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
+<span id="cb492-4"><a href="ttests.html#cb492-4" aria-hidden="true" tabindex="-1"></a>up2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="at">var.equal =</span> F )</span>
+<span id="cb492-5"><a href="ttests.html#cb492-5" aria-hidden="true" tabindex="-1"></a>upL <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative=</span><span class="st">&quot;less&quot;</span>, <span class="at">var.equal =</span> F)</span>
+<span id="cb492-6"><a href="ttests.html#cb492-6" aria-hidden="true" tabindex="-1"></a>upG <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a,b, <span class="at">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="at">var.equal =</span> F)</span>
+<span id="cb492-7"><a href="ttests.html#cb492-7" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">bind_rows</span>(<span class="fu">tidy</span>(up2), <span class="fu">tidy</span>(upL), <span class="fu">tidy</span>(upG)), </span>
+<span id="cb492-8"><a href="ttests.html#cb492-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;Unpaired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common to all tests.&quot;</span>)   </span></code></pre></div>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-225">Table 24.2: </span>Unpaired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common to all tests.
+<span id="tab:unnamed-chunk-224">Table 24.2: </span>Unpaired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common to all tests.
 </caption>
 <thead>
 <tr>
@@ -1676,24 +1692,24 @@ greater
 <p>In fact, although two levels of a predictor variable are involved, there are not two groups of replicates. There is only one group. The test calculates the mean and its standard error for the differences between matched measurements within each replicate. The test asks, “what is the relationship of these differences to zero?” Thus. it is much more like the one-sample t-test than it is like the unpaired t-test.</p>
 <p>The structure of the data input matters strictly. If entered as two vectors (like below), the first value of the first vector will be paired with the first value of the second vector, and so on.</p>
 <p>Alternately, like all t-tests, you can run it using the formula method, which reads columns from a tidy dataframe. Good practice is to include replicate id’s in these data frames. Though not necessary to run the t-test, replicate ids are necessary to plot the results correctly.</p>
-<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="ttests.html#cb480-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb480-2"><a href="ttests.html#cb480-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">200</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
-<span id="cb480-3"><a href="ttests.html#cb480-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
-<span id="cb480-4"><a href="ttests.html#cb480-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="at">paired=</span>T)</span>
-<span id="cb480-5"><a href="ttests.html#cb480-5" aria-hidden="true" tabindex="-1"></a>pL <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative=</span><span class="st">&quot;less&quot;</span>, <span class="at">paired=</span>T)</span>
-<span id="cb480-6"><a href="ttests.html#cb480-6" aria-hidden="true" tabindex="-1"></a>pG <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="at">paired=</span>T)</span>
-<span id="cb480-7"><a href="ttests.html#cb480-7" aria-hidden="true" tabindex="-1"></a><span class="co">#make a data frame suitable for the formula argument</span></span>
-<span id="cb480-8"><a href="ttests.html#cb480-8" aria-hidden="true" tabindex="-1"></a>long <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">replicate_id=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, a, b) <span class="sc">%&gt;%</span>  </span>
-<span id="cb480-9"><a href="ttests.html#cb480-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>replicate_id, </span>
-<span id="cb480-10"><a href="ttests.html#cb480-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;predictor&quot;</span>, </span>
-<span id="cb480-11"><a href="ttests.html#cb480-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;response&quot;</span>)</span>
-<span id="cb480-12"><a href="ttests.html#cb480-12" aria-hidden="true" tabindex="-1"></a><span class="co">#running the formula argument</span></span>
-<span id="cb480-13"><a href="ttests.html#cb480-13" aria-hidden="true" tabindex="-1"></a>l2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(response <span class="sc">~</span> predictor, <span class="at">data=</span>long, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="at">paired=</span>T)</span>
-<span id="cb480-14"><a href="ttests.html#cb480-14" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">bind_rows</span>(<span class="fu">tidy</span>(l2), <span class="fu">tidy</span>(p2), <span class="fu">tidy</span>(pL), <span class="fu">tidy</span>(pG)), </span>
-<span id="cb480-15"><a href="ttests.html#cb480-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;Paired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common in all tests.&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="ttests.html#cb493-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb493-2"><a href="ttests.html#cb493-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">200</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
+<span id="cb493-3"><a href="ttests.html#cb493-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">25</span>)</span>
+<span id="cb493-4"><a href="ttests.html#cb493-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="at">paired=</span>T)</span>
+<span id="cb493-5"><a href="ttests.html#cb493-5" aria-hidden="true" tabindex="-1"></a>pL <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative=</span><span class="st">&quot;less&quot;</span>, <span class="at">paired=</span>T)</span>
+<span id="cb493-6"><a href="ttests.html#cb493-6" aria-hidden="true" tabindex="-1"></a>pG <span class="ot">&lt;-</span> <span class="fu">t.test</span>(a, b, <span class="at">alternative =</span><span class="st">&quot;greater&quot;</span>, <span class="at">paired=</span>T)</span>
+<span id="cb493-7"><a href="ttests.html#cb493-7" aria-hidden="true" tabindex="-1"></a><span class="co">#make a data frame suitable for the formula argument</span></span>
+<span id="cb493-8"><a href="ttests.html#cb493-8" aria-hidden="true" tabindex="-1"></a>long <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">replicate_id=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, a, b) <span class="sc">%&gt;%</span>  </span>
+<span id="cb493-9"><a href="ttests.html#cb493-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>replicate_id, </span>
+<span id="cb493-10"><a href="ttests.html#cb493-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;predictor&quot;</span>, </span>
+<span id="cb493-11"><a href="ttests.html#cb493-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;response&quot;</span>)</span>
+<span id="cb493-12"><a href="ttests.html#cb493-12" aria-hidden="true" tabindex="-1"></a><span class="co">#running the formula argument</span></span>
+<span id="cb493-13"><a href="ttests.html#cb493-13" aria-hidden="true" tabindex="-1"></a>l2 <span class="ot">&lt;-</span> <span class="fu">t.test</span>(response <span class="sc">~</span> predictor, <span class="at">data=</span>long, <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, <span class="at">paired=</span>T)</span>
+<span id="cb493-14"><a href="ttests.html#cb493-14" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">bind_rows</span>(<span class="fu">tidy</span>(l2), <span class="fu">tidy</span>(p2), <span class="fu">tidy</span>(pL), <span class="fu">tidy</span>(pG)), </span>
+<span id="cb493-15"><a href="ttests.html#cb493-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;Paired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common in all tests.&quot;</span>)</span></code></pre></div>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-226">Table 24.3: </span>Paired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common in all tests.
+<span id="tab:unnamed-chunk-225">Table 24.3: </span>Paired t-test output. See text for interpretation. See interpretation of one-sample tests for details omitted here common in all tests.
 </caption>
 <thead>
 <tr>
@@ -1853,26 +1869,26 @@ greater
 <div id="one-sample" class="section level3" number="24.11.1">
 <h3><span class="header-section-number">24.11.1</span> One-sample</h3>
 <p>The one-sample t-test compares a group mean to a reference value. So the plot should only show one group, ideally as scatter points instead of a bar graph. The reference value should be highlighted. A geom to illustrate the mean and standard deviation or confidence interval is a nice touch.</p>
-<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="ttests.html#cb481-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the values for a were created in a code chunk above</span></span>
-<span id="cb481-2"><a href="ttests.html#cb481-2" aria-hidden="true" tabindex="-1"></a>data.o <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">treatment=</span>a)</span></code></pre></div>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="ttests.html#cb494-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the values for a were created in a code chunk above</span></span>
+<span id="cb494-2"><a href="ttests.html#cb494-2" aria-hidden="true" tabindex="-1"></a>data.o <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">treatment=</span>a)</span></code></pre></div>
 <p>The main trick here is to code a dummy factorial variable for the x-axis within the ggplot aesthetic.</p>
-<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="ttests.html#cb482-1" aria-hidden="true" tabindex="-1"></a><span class="co"># note dummy x axis variable</span></span>
-<span id="cb482-2"><a href="ttests.html#cb482-2" aria-hidden="true" tabindex="-1"></a><span class="co"># reference value is 100</span></span>
-<span id="cb482-3"><a href="ttests.html#cb482-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data.o, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">factor</span>(<span class="dv">1</span>), <span class="at">y=</span>treatment))<span class="sc">+</span></span>
-<span id="cb482-4"><a href="ttests.html#cb482-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> mean_sdl, </span>
-<span id="cb482-5"><a href="ttests.html#cb482-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>), </span>
-<span id="cb482-6"><a href="ttests.html#cb482-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">geom=</span><span class="st">&quot;crossbar&quot;</span>, </span>
-<span id="cb482-7"><a href="ttests.html#cb482-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">width=</span><span class="fl">0.1</span>, </span>
-<span id="cb482-8"><a href="ttests.html#cb482-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">&quot;red&quot;</span></span>
-<span id="cb482-9"><a href="ttests.html#cb482-9" aria-hidden="true" tabindex="-1"></a>               )<span class="sc">+</span></span>
-<span id="cb482-10"><a href="ttests.html#cb482-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>)<span class="sc">+</span></span>
-<span id="cb482-11"><a href="ttests.html#cb482-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span><span class="dv">100</span>), </span>
-<span id="cb482-12"><a href="ttests.html#cb482-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">2</span>, </span>
-<span id="cb482-13"><a href="ttests.html#cb482-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
-<span id="cb482-14"><a href="ttests.html#cb482-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">250</span>))<span class="sc">+</span></span>
-<span id="cb482-15"><a href="ttests.html#cb482-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;treatment&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-228"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-228-1.png" alt="Plotting one-sample t-test data" width="672" />
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="ttests.html#cb495-1" aria-hidden="true" tabindex="-1"></a><span class="co"># note dummy x axis variable</span></span>
+<span id="cb495-2"><a href="ttests.html#cb495-2" aria-hidden="true" tabindex="-1"></a><span class="co"># reference value is 100</span></span>
+<span id="cb495-3"><a href="ttests.html#cb495-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data.o, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">factor</span>(<span class="dv">1</span>), <span class="at">y=</span>treatment))<span class="sc">+</span></span>
+<span id="cb495-4"><a href="ttests.html#cb495-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> mean_sdl, </span>
+<span id="cb495-5"><a href="ttests.html#cb495-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>), </span>
+<span id="cb495-6"><a href="ttests.html#cb495-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">geom=</span><span class="st">&quot;crossbar&quot;</span>, </span>
+<span id="cb495-7"><a href="ttests.html#cb495-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">width=</span><span class="fl">0.1</span>, </span>
+<span id="cb495-8"><a href="ttests.html#cb495-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">&quot;red&quot;</span></span>
+<span id="cb495-9"><a href="ttests.html#cb495-9" aria-hidden="true" tabindex="-1"></a>               )<span class="sc">+</span></span>
+<span id="cb495-10"><a href="ttests.html#cb495-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>)<span class="sc">+</span></span>
+<span id="cb495-11"><a href="ttests.html#cb495-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span><span class="dv">100</span>), </span>
+<span id="cb495-12"><a href="ttests.html#cb495-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">2</span>, </span>
+<span id="cb495-13"><a href="ttests.html#cb495-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
+<span id="cb495-14"><a href="ttests.html#cb495-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">250</span>))<span class="sc">+</span></span>
+<span id="cb495-15"><a href="ttests.html#cb495-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;treatment&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-227"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-227-1.png" alt="Plotting one-sample t-test data" width="672" />
 <p class="caption">
 Figure 24.4: Plotting one-sample t-test data
 </p>
@@ -1882,24 +1898,24 @@ Figure 24.4: Plotting one-sample t-test data
 <h3><span class="header-section-number">24.11.2</span> Unpaired</h3>
 <p>An unpaired t-test compares two means. So the plot should show two means.</p>
 <p>Tidy the data, which makes it simple to create a descriptive statistics summary table:</p>
-<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb483-1"><a href="ttests.html#cb483-1" aria-hidden="true" tabindex="-1"></a><span class="co"># munge data that was simulated above</span></span>
-<span id="cb483-2"><a href="ttests.html#cb483-2" aria-hidden="true" tabindex="-1"></a>data.u <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">replicate=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">control=</span>b, <span class="at">treatment=</span>a) <span class="sc">%&gt;%</span></span>
-<span id="cb483-3"><a href="ttests.html#cb483-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(control, treatment),</span>
-<span id="cb483-4"><a href="ttests.html#cb483-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;Predictor&quot;</span>,</span>
-<span id="cb483-5"><a href="ttests.html#cb483-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;Response&quot;</span>)</span>
-<span id="cb483-6"><a href="ttests.html#cb483-6" aria-hidden="true" tabindex="-1"></a><span class="co">#summary statistics table to have</span></span>
-<span id="cb483-7"><a href="ttests.html#cb483-7" aria-hidden="true" tabindex="-1"></a>data.y <span class="ot">&lt;-</span> data.u<span class="sc">%&gt;%</span></span>
-<span id="cb483-8"><a href="ttests.html#cb483-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Predictor) <span class="sc">%&gt;%</span></span>
-<span id="cb483-9"><a href="ttests.html#cb483-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb483-10"><a href="ttests.html#cb483-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">mean=</span><span class="fu">mean</span>(Response),</span>
-<span id="cb483-11"><a href="ttests.html#cb483-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">sd=</span><span class="fu">sd</span>(Response),</span>
-<span id="cb483-12"><a href="ttests.html#cb483-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">n=</span><span class="fu">length</span>(Response),</span>
-<span id="cb483-13"><a href="ttests.html#cb483-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">sem=</span><span class="fu">mean</span>(Response)<span class="sc">/</span><span class="fu">sqrt</span>(n),</span>
-<span id="cb483-14"><a href="ttests.html#cb483-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
-<span id="cb483-15"><a href="ttests.html#cb483-15" aria-hidden="true" tabindex="-1"></a>     </span>
-<span id="cb483-16"><a href="ttests.html#cb483-16" aria-hidden="true" tabindex="-1"></a>           )</span>
-<span id="cb483-17"><a href="ttests.html#cb483-17" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data.y, </span>
-<span id="cb483-18"><a href="ttests.html#cb483-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;Summary statistics for a two group sample.&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="ttests.html#cb496-1" aria-hidden="true" tabindex="-1"></a><span class="co"># munge data that was simulated above</span></span>
+<span id="cb496-2"><a href="ttests.html#cb496-2" aria-hidden="true" tabindex="-1"></a>data.u <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">replicate=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">control=</span>b, <span class="at">treatment=</span>a) <span class="sc">%&gt;%</span></span>
+<span id="cb496-3"><a href="ttests.html#cb496-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(control, treatment),</span>
+<span id="cb496-4"><a href="ttests.html#cb496-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;Predictor&quot;</span>,</span>
+<span id="cb496-5"><a href="ttests.html#cb496-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;Response&quot;</span>)</span>
+<span id="cb496-6"><a href="ttests.html#cb496-6" aria-hidden="true" tabindex="-1"></a><span class="co">#summary statistics table to have</span></span>
+<span id="cb496-7"><a href="ttests.html#cb496-7" aria-hidden="true" tabindex="-1"></a>data.y <span class="ot">&lt;-</span> data.u<span class="sc">%&gt;%</span></span>
+<span id="cb496-8"><a href="ttests.html#cb496-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Predictor) <span class="sc">%&gt;%</span></span>
+<span id="cb496-9"><a href="ttests.html#cb496-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb496-10"><a href="ttests.html#cb496-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">mean=</span><span class="fu">mean</span>(Response),</span>
+<span id="cb496-11"><a href="ttests.html#cb496-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">sd=</span><span class="fu">sd</span>(Response),</span>
+<span id="cb496-12"><a href="ttests.html#cb496-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">n=</span><span class="fu">length</span>(Response),</span>
+<span id="cb496-13"><a href="ttests.html#cb496-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">sem=</span><span class="fu">mean</span>(Response)<span class="sc">/</span><span class="fu">sqrt</span>(n),</span>
+<span id="cb496-14"><a href="ttests.html#cb496-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb496-15"><a href="ttests.html#cb496-15" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb496-16"><a href="ttests.html#cb496-16" aria-hidden="true" tabindex="-1"></a>           )</span>
+<span id="cb496-17"><a href="ttests.html#cb496-17" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data.y, </span>
+<span id="cb496-18"><a href="ttests.html#cb496-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;Summary statistics for a two group sample.&quot;</span>)</span></code></pre></div>
 <table>
 <caption>
 (#tab:summary stats for unpaired t)Summary statistics for a two group sample.
@@ -1961,25 +1977,27 @@ treatment
 </tbody>
 </table>
 <p>Unless there is a scientific reason to report precision (and there rarely is a good reason to show the standard errors of the means) plot the data points with mean +/- standard deviation.</p>
-<p>A straight forward ways to add error bars is by use of the <code>stat_summary</code> function. A few ways exist to do this. I use the <code>crossbar</code> geom because it is a bit quicker. Note the <code>mean_sdl</code> is from the <code>Hmisc</code>package. The package has related funtions for standard error and confidence intervals.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
-<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="ttests.html#cb484-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data.u, <span class="fu">aes</span>(Predictor, Response)) <span class="sc">+</span></span>
-<span id="cb484-2"><a href="ttests.html#cb484-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.15</span>, <span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb484-3"><a href="ttests.html#cb484-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> mean_sdl, </span>
-<span id="cb484-4"><a href="ttests.html#cb484-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>), </span>
-<span id="cb484-5"><a href="ttests.html#cb484-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">geom=</span><span class="st">&quot;crossbar&quot;</span>, </span>
-<span id="cb484-6"><a href="ttests.html#cb484-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">width=</span><span class="fl">0.2</span>, </span>
-<span id="cb484-7"><a href="ttests.html#cb484-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">&quot;red&quot;</span></span>
-<span id="cb484-8"><a href="ttests.html#cb484-8" aria-hidden="true" tabindex="-1"></a>               )</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-229"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-229-1.png" alt="Journals want data as scatter plots. Stat_summary geoms add error bars. The argument mult=1 coupled with mean_sdl function draws +/- 1 SD" width="672" />
+<p>A straight forward ways to add error bars is by use of the <code>stat_summary</code> function. A few ways exist to do this. I use the <code>crossbar</code> geom because it is a bit quicker. Note the <code>mean_sdl</code> is from the <code>Hmisc</code>package. The package has related funtions for standard error and confidence intervals.<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a></p>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="ttests.html#cb497-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data.u, <span class="fu">aes</span>(Predictor, Response)) <span class="sc">+</span></span>
+<span id="cb497-2"><a href="ttests.html#cb497-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width=</span><span class="fl">0.15</span>, <span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb497-3"><a href="ttests.html#cb497-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> mean_sdl, </span>
+<span id="cb497-4"><a href="ttests.html#cb497-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">1</span>), </span>
+<span id="cb497-5"><a href="ttests.html#cb497-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">geom=</span><span class="st">&quot;crossbar&quot;</span>, </span>
+<span id="cb497-6"><a href="ttests.html#cb497-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">width=</span><span class="fl">0.2</span>, </span>
+<span id="cb497-7"><a href="ttests.html#cb497-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">&quot;red&quot;</span></span>
+<span id="cb497-8"><a href="ttests.html#cb497-8" aria-hidden="true" tabindex="-1"></a>               )</span></code></pre></div>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-228"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-228-1.png" alt="Journals want data as scatter plots. Stat_summary geoms add error bars. The argument mult=1 coupled with mean_sdl function draws +/- 1 SD" width="672" />
 <p class="caption">
 Figure 24.5: Journals want data as scatter plots. Stat_summary geoms add error bars. The argument mult=1 coupled with mean_sdl function draws +/- 1 SD
 </p>
 </div>
-<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb485-1"><a href="ttests.html#cb485-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># or if you prefer</span></span>
-<span id="cb485-2"><a href="ttests.html#cb485-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># stat_summary(fun.data=&quot;mean_sdl&quot;, fun.args=list(mult=1), </span></span>
-<span id="cb485-3"><a href="ttests.html#cb485-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#              geom=&quot;errorbar&quot;, color=&quot;red&quot;, width=0.2) +</span></span>
-<span id="cb485-4"><a href="ttests.html#cb485-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># stat_summary(fun.y=mean, geom=&quot;point&quot;, color=&quot;red&quot;, shape=&quot;plus&quot;, size=5)</span></span></code></pre></div>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="ttests.html#cb499-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># or if you prefer</span></span>
+<span id="cb499-2"><a href="ttests.html#cb499-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># stat_summary(fun.data=&quot;mean_sdl&quot;, fun.args=list(mult=1), </span></span>
+<span id="cb499-3"><a href="ttests.html#cb499-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#              geom=&quot;errorbar&quot;, color=&quot;red&quot;, width=0.2) +</span></span>
+<span id="cb499-4"><a href="ttests.html#cb499-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># stat_summary(fun.y=mean, geom=&quot;point&quot;, color=&quot;red&quot;, shape=&quot;plus&quot;, size=5)</span></span></code></pre></div>
 </div>
 <div id="paired" class="section level3" number="24.11.3">
 <h3><span class="header-section-number">24.11.3</span> Paired</h3>
@@ -1987,20 +2005,20 @@ Figure 24.5: Journals want data as scatter plots. Stat_summary geoms add error b
 <p>The means of the two groups of observations are irrelevant. The difference between each pair of observations is relevant. The mean of these differences is also relevant</p>
 <p>The design tests for the <em>difference</em> the treatment causes within each pair, which the slope of the line illustrates. For example, a horizontal line connects a replicate pair would indicate no effect of the predictor variable!</p>
 <p>Munge the data into a long data frame format. Adding an ID for each replicate is necessary as a grouping variable. This grouping variable is used to connect point pairs with a line and to calculate differences between pairs.</p>
-<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="ttests.html#cb486-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the response values a and b were simulated above</span></span>
-<span id="cb486-2"><a href="ttests.html#cb486-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb486-3"><a href="ttests.html#cb486-3" aria-hidden="true" tabindex="-1"></a>data.w <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">control=</span>b, <span class="at">treatment=</span>a, <span class="at">id=</span><span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb486-4"><a href="ttests.html#cb486-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(control, treatment),</span>
-<span id="cb486-5"><a href="ttests.html#cb486-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;Predictor&quot;</span>,</span>
-<span id="cb486-6"><a href="ttests.html#cb486-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;Response&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="ttests.html#cb500-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the response values a and b were simulated above</span></span>
+<span id="cb500-2"><a href="ttests.html#cb500-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-3"><a href="ttests.html#cb500-3" aria-hidden="true" tabindex="-1"></a>data.w <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">control=</span>b, <span class="at">treatment=</span>a, <span class="at">id=</span><span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb500-4"><a href="ttests.html#cb500-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="fu">c</span>(control, treatment),</span>
+<span id="cb500-5"><a href="ttests.html#cb500-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;Predictor&quot;</span>,</span>
+<span id="cb500-6"><a href="ttests.html#cb500-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;Response&quot;</span>)</span></code></pre></div>
 <p>The grouping variable is also used for creating a second plot to illustrate the computed values of the differences.</p>
-<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb487-1"><a href="ttests.html#cb487-1" aria-hidden="true" tabindex="-1"></a>data.wd <span class="ot">&lt;-</span> data.w <span class="sc">%&gt;%</span> </span>
-<span id="cb487-2"><a href="ttests.html#cb487-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, Predictor, Response) <span class="sc">%&gt;%</span> </span>
-<span id="cb487-3"><a href="ttests.html#cb487-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span> </span>
-<span id="cb487-4"><a href="ttests.html#cb487-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">dif=</span><span class="fu">diff</span>(Response),</span>
-<span id="cb487-5"><a href="ttests.html#cb487-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups=</span><span class="st">&quot;drop&quot;</span>)</span>
-<span id="cb487-6"><a href="ttests.html#cb487-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb487-7"><a href="ttests.html#cb487-7" aria-hidden="true" tabindex="-1"></a>data.wd</span></code></pre></div>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="ttests.html#cb501-1" aria-hidden="true" tabindex="-1"></a>data.wd <span class="ot">&lt;-</span> data.w <span class="sc">%&gt;%</span> </span>
+<span id="cb501-2"><a href="ttests.html#cb501-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, Predictor, Response) <span class="sc">%&gt;%</span> </span>
+<span id="cb501-3"><a href="ttests.html#cb501-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span> </span>
+<span id="cb501-4"><a href="ttests.html#cb501-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">dif=</span><span class="fu">diff</span>(Response),</span>
+<span id="cb501-5"><a href="ttests.html#cb501-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups=</span><span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb501-6"><a href="ttests.html#cb501-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb501-7"><a href="ttests.html#cb501-7" aria-hidden="true" tabindex="-1"></a>data.wd</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   id      dif
 ##   &lt;chr&gt; &lt;dbl&gt;
@@ -2008,26 +2026,26 @@ Figure 24.5: Journals want data as scatter plots. Stat_summary geoms add error b
 ## 2 B      96.2
 ## 3 C     114.</code></pre>
 <p>The code and the proper way(s) to plot the results of a paired experimental design are shown below. Most people fail to plot paired data correctly. The most commone error is to plot paired data as if it were unpaired.</p>
-<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb489-1"><a href="ttests.html#cb489-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data.w, <span class="fu">aes</span>(Predictor, Response, <span class="at">group=</span>id)) <span class="sc">+</span></span>
-<span id="cb489-2"><a href="ttests.html#cb489-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb489-3"><a href="ttests.html#cb489-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb490-1"><a href="ttests.html#cb490-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data.wd, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">factor</span>(<span class="st">&quot;Treatment - Control&quot;</span>), <span class="at">y=</span>dif))<span class="sc">+</span></span>
-<span id="cb490-2"><a href="ttests.html#cb490-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb490-3"><a href="ttests.html#cb490-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> mean_cl_normal,</span>
-<span id="cb490-4"><a href="ttests.html#cb490-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">conf.int=</span><span class="fl">0.99</span>),</span>
-<span id="cb490-5"><a href="ttests.html#cb490-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">geom=</span><span class="st">&quot;crossbar&quot;</span>, </span>
-<span id="cb490-6"><a href="ttests.html#cb490-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">width=</span><span class="fl">0.2</span>, </span>
-<span id="cb490-7"><a href="ttests.html#cb490-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">&quot;red&quot;</span></span>
-<span id="cb490-8"><a href="ttests.html#cb490-8" aria-hidden="true" tabindex="-1"></a>               )<span class="sc">+</span></span>
-<span id="cb490-9"><a href="ttests.html#cb490-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span><span class="dv">0</span>), </span>
-<span id="cb490-10"><a href="ttests.html#cb490-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">2</span>, </span>
-<span id="cb490-11"><a href="ttests.html#cb490-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
-<span id="cb490-12"><a href="ttests.html#cb490-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">300</span>)) <span class="sc">+</span></span>
-<span id="cb490-13"><a href="ttests.html#cb490-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Response difference&quot;</span>, <span class="at">x=</span><span class="st">&quot;Predictor&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb503-1"><a href="ttests.html#cb503-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data.w, <span class="fu">aes</span>(Predictor, Response, <span class="at">group=</span>id)) <span class="sc">+</span></span>
+<span id="cb503-2"><a href="ttests.html#cb503-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb503-3"><a href="ttests.html#cb503-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb504-1"><a href="ttests.html#cb504-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data.wd, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">factor</span>(<span class="st">&quot;Treatment - Control&quot;</span>), <span class="at">y=</span>dif))<span class="sc">+</span></span>
+<span id="cb504-2"><a href="ttests.html#cb504-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb504-3"><a href="ttests.html#cb504-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> mean_cl_normal,</span>
+<span id="cb504-4"><a href="ttests.html#cb504-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">conf.int=</span><span class="fl">0.99</span>),</span>
+<span id="cb504-5"><a href="ttests.html#cb504-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">geom=</span><span class="st">&quot;crossbar&quot;</span>, </span>
+<span id="cb504-6"><a href="ttests.html#cb504-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">width=</span><span class="fl">0.2</span>, </span>
+<span id="cb504-7"><a href="ttests.html#cb504-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">color=</span><span class="st">&quot;red&quot;</span></span>
+<span id="cb504-8"><a href="ttests.html#cb504-8" aria-hidden="true" tabindex="-1"></a>               )<span class="sc">+</span></span>
+<span id="cb504-9"><a href="ttests.html#cb504-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span><span class="dv">0</span>), </span>
+<span id="cb504-10"><a href="ttests.html#cb504-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">&quot;blue&quot;</span>, <span class="at">size=</span><span class="dv">2</span>, </span>
+<span id="cb504-11"><a href="ttests.html#cb504-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
+<span id="cb504-12"><a href="ttests.html#cb504-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">300</span>)) <span class="sc">+</span></span>
+<span id="cb504-13"><a href="ttests.html#cb504-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Response difference&quot;</span>, <span class="at">x=</span><span class="st">&quot;Predictor&quot;</span>)</span></code></pre></div>
 <p>Think of the plot in A as showing how each replicate performed. The plot in B illustrates a summary for a paired t-test. It shows the difference between each replicate pair, the mean of those differences, and the confidence interval for the mean of the differences. As long as the confidence interval doesn’t include the value of zero, the plot illustrates a statistical difference from the null of zero. And no asterisks were consumed to convey this vital information!</p>
-<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="ttests.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(p1, p2, <span class="at">labels=</span><span class="st">&quot;AUTO&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-230"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-230-1.png" alt="Paired responses (A) and within pair differences with 99% confidence interval (B)." width="672" />
+<div class="sourceCode" id="cb505"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb505-1"><a href="ttests.html#cb505-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(p1, p2, <span class="at">labels=</span><span class="st">&quot;AUTO&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-229"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-229-1.png" alt="Paired responses (A) and within pair differences with 99% confidence interval (B)." width="672" />
 <p class="caption">
 Figure 24.6: Paired responses (A) and within pair differences with 99% confidence interval (B).
 </p>
@@ -2056,7 +2074,7 @@ Figure 24.6: Paired responses (A) and within pair differences with 99% confidenc
 <p>You also believe the average response to a negative control or basal level of the independent variable will be around 50 units. Also, based upon your scientific understanding of the system, in your mind, a minimally scientifically valid treatment effect will have a 100 unit response, or 2-fold above the negative control.</p>
 <p>The signal will be 100-50=50, and the noise will be 25. Cohen’s <span class="math inline">\(\delta\)</span> will therefore be 50/25=2.</p>
 <p>A power calculation for a one-sided hypothesis at a 95% confidence level is illustrated for an unpaired design for a Cohen’s <span class="math inline">\(\delta=2\)</span> :</p>
-<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb492-1"><a href="ttests.html#cb492-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d=</span><span class="dv">2</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.8</span>, <span class="at">type=</span><span class="st">&quot;two.sample&quot;</span>, <span class="at">alternative=</span><span class="st">&quot;greater&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="ttests.html#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d=</span><span class="dv">2</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.8</span>, <span class="at">type=</span><span class="st">&quot;two.sample&quot;</span>, <span class="at">alternative=</span><span class="st">&quot;greater&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ##      Two-sample t test power calculation 
 ## 
@@ -2080,7 +2098,7 @@ Figure 24.6: Paired responses (A) and within pair differences with 99% confidenc
 <p>When designing an experiment temper your hoped for effect size with a sense of what you consider to be a minimally scientifically relevant effect size. In some systems, 2-fold is huge, whereas in other systems (with a lot of variation) a 2-fold response might be deemed insignificant scientifically.</p>
 <p>It is crucial to give the standard deviation a lot of thought. In my experience, students tend to under-estimate standard deviations. Perhaps because they conflate SD for SEM?</p>
 <p>The right SD estimate is important. For example, here is a power calculation for when all else is equal to the example above but the the standard deviation is twice what was estimated above. It has a dramatic effect on sample size.</p>
-<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="ttests.html#cb494-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d=</span><span class="dv">1</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.8</span>, <span class="at">type=</span><span class="st">&quot;two.sample&quot;</span>, <span class="at">alternative=</span><span class="st">&quot;greater&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="ttests.html#cb508-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pwr.t.test</span>(<span class="at">d=</span><span class="dv">1</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, <span class="at">power=</span><span class="fl">0.8</span>, <span class="at">type=</span><span class="st">&quot;two.sample&quot;</span>, <span class="at">alternative=</span><span class="st">&quot;greater&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ##      Two-sample t test power calculation 
 ## 
@@ -2105,59 +2123,59 @@ Figure 24.6: Paired responses (A) and within pair differences with 99% confidenc
 <p>To customize for a specific application, modify the initializer values and the t.test arguments.</p>
 <p>What means and standard deviations should you estimate?</p>
 <p>Either the values you predict will happen, OR values that you believe would be the minimal scientifically meaningful effect size.</p>
-<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="ttests.html#cb496-1" aria-hidden="true" tabindex="-1"></a>t.pwr <span class="ot">&lt;-</span> <span class="cf">function</span>(n){</span>
-<span id="cb496-2"><a href="ttests.html#cb496-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb496-3"><a href="ttests.html#cb496-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Intitializers. Place expected values for the means and </span></span>
-<span id="cb496-4"><a href="ttests.html#cb496-4" aria-hidden="true" tabindex="-1"></a><span class="co"># standard deviations of two groups to be compared here.</span></span>
-<span id="cb496-5"><a href="ttests.html#cb496-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb496-6"><a href="ttests.html#cb496-6" aria-hidden="true" tabindex="-1"></a>    m1<span class="ot">=</span><span class="dv">50</span> <span class="co">#mean of group 1</span></span>
-<span id="cb496-7"><a href="ttests.html#cb496-7" aria-hidden="true" tabindex="-1"></a>    sd1<span class="ot">=</span><span class="dv">25</span> <span class="co">#standard deviation of group 1</span></span>
-<span id="cb496-8"><a href="ttests.html#cb496-8" aria-hidden="true" tabindex="-1"></a>    m2<span class="ot">=</span> <span class="dv">100</span> <span class="co">#mean of group 2</span></span>
-<span id="cb496-9"><a href="ttests.html#cb496-9" aria-hidden="true" tabindex="-1"></a>    sd2<span class="ot">=</span><span class="dv">25</span> <span class="co">#standard deviation of group 2</span></span>
-<span id="cb496-10"><a href="ttests.html#cb496-10" aria-hidden="true" tabindex="-1"></a>    alpha<span class="ot">=</span><span class="fl">0.05</span> <span class="co">#type1 error tolerance</span></span>
-<span id="cb496-11"><a href="ttests.html#cb496-11" aria-hidden="true" tabindex="-1"></a>    ssims<span class="ot">=</span><span class="dv">100</span> <span class="co">#number of function cycles</span></span>
-<span id="cb496-12"><a href="ttests.html#cb496-12" aria-hidden="true" tabindex="-1"></a>    p.values <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb496-13"><a href="ttests.html#cb496-13" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb496-14"><a href="ttests.html#cb496-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span>{</span>
-<span id="cb496-15"><a href="ttests.html#cb496-15" aria-hidden="true" tabindex="-1"></a>    x<span class="ot">=</span><span class="fu">rnorm</span>(n, m1, sd1); </span>
-<span id="cb496-16"><a href="ttests.html#cb496-16" aria-hidden="true" tabindex="-1"></a>    y<span class="ot">=</span><span class="fu">rnorm</span>(n, m2, sd2);</span>
-<span id="cb496-17"><a href="ttests.html#cb496-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># optional for paired, we must account for </span></span>
-<span id="cb496-18"><a href="ttests.html#cb496-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># correlation of measurements within pairs</span></span>
-<span id="cb496-19"><a href="ttests.html#cb496-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># transform y from above given r coefficient</span></span>
-<span id="cb496-20"><a href="ttests.html#cb496-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># y=r*x + y*sqrt(1-r^2)</span></span>
-<span id="cb496-21"><a href="ttests.html#cb496-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># and change test to paired=T</span></span>
-<span id="cb496-22"><a href="ttests.html#cb496-22" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">t.test</span>(x, y, </span>
-<span id="cb496-23"><a href="ttests.html#cb496-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">paired=</span>F, </span>
-<span id="cb496-24"><a href="ttests.html#cb496-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, </span>
-<span id="cb496-25"><a href="ttests.html#cb496-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">var.equal=</span>T,</span>
-<span id="cb496-26"><a href="ttests.html#cb496-26" aria-hidden="true" tabindex="-1"></a>                <span class="at">conf.level=</span><span class="dv">1</span><span class="sc">-</span>alpha)<span class="sc">$</span>p.value</span>
-<span id="cb496-27"><a href="ttests.html#cb496-27" aria-hidden="true" tabindex="-1"></a>    p.values[i] <span class="ot">&lt;-</span> p</span>
-<span id="cb496-28"><a href="ttests.html#cb496-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb496-29"><a href="ttests.html#cb496-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i<span class="sc">==</span>ssims) <span class="cf">break</span></span>
-<span id="cb496-30"><a href="ttests.html#cb496-30" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">=</span> i<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb496-31"><a href="ttests.html#cb496-31" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb496-32"><a href="ttests.html#cb496-32" aria-hidden="true" tabindex="-1"></a>    pwr <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">which</span>(p.values<span class="sc">&lt;</span>alpha))<span class="sc">/</span>ssims</span>
-<span id="cb496-33"><a href="ttests.html#cb496-33" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb496-34"><a href="ttests.html#cb496-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(pwr)</span>
-<span id="cb496-35"><a href="ttests.html#cb496-35" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="ttests.html#cb510-1" aria-hidden="true" tabindex="-1"></a>t.pwr <span class="ot">&lt;-</span> <span class="cf">function</span>(n){</span>
+<span id="cb510-2"><a href="ttests.html#cb510-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb510-3"><a href="ttests.html#cb510-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Intitializers. Place expected values for the means and </span></span>
+<span id="cb510-4"><a href="ttests.html#cb510-4" aria-hidden="true" tabindex="-1"></a><span class="co"># standard deviations of two groups to be compared here.</span></span>
+<span id="cb510-5"><a href="ttests.html#cb510-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb510-6"><a href="ttests.html#cb510-6" aria-hidden="true" tabindex="-1"></a>    m1<span class="ot">=</span><span class="dv">50</span> <span class="co">#mean of group 1</span></span>
+<span id="cb510-7"><a href="ttests.html#cb510-7" aria-hidden="true" tabindex="-1"></a>    sd1<span class="ot">=</span><span class="dv">25</span> <span class="co">#standard deviation of group 1</span></span>
+<span id="cb510-8"><a href="ttests.html#cb510-8" aria-hidden="true" tabindex="-1"></a>    m2<span class="ot">=</span> <span class="dv">100</span> <span class="co">#mean of group 2</span></span>
+<span id="cb510-9"><a href="ttests.html#cb510-9" aria-hidden="true" tabindex="-1"></a>    sd2<span class="ot">=</span><span class="dv">25</span> <span class="co">#standard deviation of group 2</span></span>
+<span id="cb510-10"><a href="ttests.html#cb510-10" aria-hidden="true" tabindex="-1"></a>    alpha<span class="ot">=</span><span class="fl">0.05</span> <span class="co">#type1 error tolerance</span></span>
+<span id="cb510-11"><a href="ttests.html#cb510-11" aria-hidden="true" tabindex="-1"></a>    ssims<span class="ot">=</span><span class="dv">100</span> <span class="co">#number of function cycles</span></span>
+<span id="cb510-12"><a href="ttests.html#cb510-12" aria-hidden="true" tabindex="-1"></a>    p.values <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb510-13"><a href="ttests.html#cb510-13" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb510-14"><a href="ttests.html#cb510-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">repeat</span>{</span>
+<span id="cb510-15"><a href="ttests.html#cb510-15" aria-hidden="true" tabindex="-1"></a>    x<span class="ot">=</span><span class="fu">rnorm</span>(n, m1, sd1); </span>
+<span id="cb510-16"><a href="ttests.html#cb510-16" aria-hidden="true" tabindex="-1"></a>    y<span class="ot">=</span><span class="fu">rnorm</span>(n, m2, sd2);</span>
+<span id="cb510-17"><a href="ttests.html#cb510-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># optional for paired, we must account for </span></span>
+<span id="cb510-18"><a href="ttests.html#cb510-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># correlation of measurements within pairs</span></span>
+<span id="cb510-19"><a href="ttests.html#cb510-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># transform y from above given r coefficient</span></span>
+<span id="cb510-20"><a href="ttests.html#cb510-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># y=r*x + y*sqrt(1-r^2)</span></span>
+<span id="cb510-21"><a href="ttests.html#cb510-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># and change test to paired=T</span></span>
+<span id="cb510-22"><a href="ttests.html#cb510-22" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">t.test</span>(x, y, </span>
+<span id="cb510-23"><a href="ttests.html#cb510-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">paired=</span>F, </span>
+<span id="cb510-24"><a href="ttests.html#cb510-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative=</span><span class="st">&quot;two.sided&quot;</span>, </span>
+<span id="cb510-25"><a href="ttests.html#cb510-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">var.equal=</span>T,</span>
+<span id="cb510-26"><a href="ttests.html#cb510-26" aria-hidden="true" tabindex="-1"></a>                <span class="at">conf.level=</span><span class="dv">1</span><span class="sc">-</span>alpha)<span class="sc">$</span>p.value</span>
+<span id="cb510-27"><a href="ttests.html#cb510-27" aria-hidden="true" tabindex="-1"></a>    p.values[i] <span class="ot">&lt;-</span> p</span>
+<span id="cb510-28"><a href="ttests.html#cb510-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb510-29"><a href="ttests.html#cb510-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i<span class="sc">==</span>ssims) <span class="cf">break</span></span>
+<span id="cb510-30"><a href="ttests.html#cb510-30" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">=</span> i<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb510-31"><a href="ttests.html#cb510-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb510-32"><a href="ttests.html#cb510-32" aria-hidden="true" tabindex="-1"></a>    pwr <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">which</span>(p.values<span class="sc">&lt;</span>alpha))<span class="sc">/</span>ssims</span>
+<span id="cb510-33"><a href="ttests.html#cb510-33" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb510-34"><a href="ttests.html#cb510-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(pwr)</span>
+<span id="cb510-35"><a href="ttests.html#cb510-35" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <div id="how-to-use" class="section level4" number="24.12.2.1">
 <h4><span class="header-section-number">24.12.2.1</span> How to use</h4>
 <p>What is the power for a two-sided, unpaired experiment with those initializer estimates when run at a sample size of 4?</p>
 <p>After running the <code>t.pwr</code> function into the environment, do this:</p>
-<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="ttests.html#cb497-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.pwr</span>(<span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb511"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb511-1"><a href="ttests.html#cb511-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.pwr</span>(<span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## [1] 0.68</code></pre>
 <p>Or run t.pwr over a range of sample sizes and plot a power vs sample size curve:</p>
-<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="ttests.html#cb499-1" aria-hidden="true" tabindex="-1"></a>frame <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">50</span>)</span>
-<span id="cb499-2"><a href="ttests.html#cb499-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(frame, </span>
-<span id="cb499-3"><a href="ttests.html#cb499-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">power=</span><span class="fu">apply</span>(frame, <span class="dv">1</span>, t.pwr))</span>
-<span id="cb499-4"><a href="ttests.html#cb499-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb499-5"><a href="ttests.html#cb499-5" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
-<span id="cb499-6"><a href="ttests.html#cb499-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(n, power))<span class="sc">+</span></span>
-<span id="cb499-7"><a href="ttests.html#cb499-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb499-8"><a href="ttests.html#cb499-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))<span class="sc">+</span></span>
-<span id="cb499-9"><a href="ttests.html#cb499-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">2</span>)))</span></code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-233"></span>
-<img src="jabstb_files/figure-html/unnamed-chunk-233-1.png" alt="Power curve for two-sided, unpaired t-test, delta=2" width="672" />
+<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb513-1"><a href="ttests.html#cb513-1" aria-hidden="true" tabindex="-1"></a>frame <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">50</span>)</span>
+<span id="cb513-2"><a href="ttests.html#cb513-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(frame, </span>
+<span id="cb513-3"><a href="ttests.html#cb513-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">power=</span><span class="fu">apply</span>(frame, <span class="dv">1</span>, t.pwr))</span>
+<span id="cb513-4"><a href="ttests.html#cb513-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb513-5"><a href="ttests.html#cb513-5" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
+<span id="cb513-6"><a href="ttests.html#cb513-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(n, power))<span class="sc">+</span></span>
+<span id="cb513-7"><a href="ttests.html#cb513-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb513-8"><a href="ttests.html#cb513-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)))<span class="sc">+</span></span>
+<span id="cb513-9"><a href="ttests.html#cb513-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">2</span>)))</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-232"></span>
+<img src="jabstb_files/figure-html/unnamed-chunk-232-1.png" alt="Power curve for two-sided, unpaired t-test, delta=2" width="672" />
 <p class="caption">
 Figure 24.7: Power curve for two-sided, unpaired t-test, delta=2
 </p>
@@ -2190,9 +2208,9 @@ Figure 24.7: Power curve for two-sided, unpaired t-test, delta=2
 </div>
 <div class="footnotes">
 <hr />
-<ol start="11">
-<li id="fn11"><p>In fact, the <code>sampler</code> function basically simulates the central limit theorem. Each blue point is a mean. Imagine calculating the mean and standard deviation of the 50 blue means at each value of <span class="math inline">\(n\)</span>. The standard deviation of the 50 means at each <span class="math inline">\(n\)</span> is the <span class="math inline">\(sem\)</span>!<a href="ttests.html#fnref11" class="footnote-back">↩︎</a></p></li>
-<li id="fn12"><p>I’ve seen several instances where Hmisc functions throw errors on the machines of some students. These errors have not been reproduced by the package author, so they remain unresolved. When <code>mean_sdl</code> doesn’t work the parameter values can be computed readily.<a href="ttests.html#fnref12" class="footnote-back">↩︎</a></p></li>
+<ol start="10">
+<li id="fn10"><p>In fact, the <code>sampler</code> function basically simulates the central limit theorem. Each blue point is a mean. Imagine calculating the mean and standard deviation of the 50 blue means at each value of <span class="math inline">\(n\)</span>. The standard deviation of the 50 means at each <span class="math inline">\(n\)</span> is the <span class="math inline">\(sem\)</span>!<a href="ttests.html#fnref10" class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>I’ve seen several instances where Hmisc functions throw errors on the machines of some students. These errors have not been reproduced by the package author, so they remain unresolved. When <code>mean_sdl</code> doesn’t work the parameter values can be computed readily.<a href="ttests.html#fnref11" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -2205,7 +2223,6 @@ Figure 24.7: Power curve for two-sided, unpaired t-test, delta=2
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -2224,6 +2241,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -2244,10 +2262,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>

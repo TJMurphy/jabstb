@@ -7,46 +7,33 @@ library(tidyverse)
 library(ggformula)
 ```
 
+Experimentalists draw random samples from a population we are interested in studying. 
 
-One of my favorite sayings is "models are perfect, data are not", because it's a simple way to say that statistical models will always predict perfect data.^[This may sound like a contrarian view, but is not. Epidemiologists like to say that all models are wrong. This is true in the sense that no model ever fits data perfectly. And they use this to imply the problems of choosing the wrong model for a dataset. Still, even a wrong model is perfect.] 
+In statistical thinking, the population parameters that interest us are held to have true, fixed values. The random sample provides a way to estimate the value of these parameters.
 
-We experimentalists draw random samples from a population we are interested in studying. 
+The random sample will have variation. Even under the best of conditions, by random chance we will draw a sample that provides either a good or a not-so-good estimate of these fixed population parameters.
 
-In statistics, the population parameters that interest us are held to have true, fixed values. Such parameters are important because they have biological meaning: a parameter can mean the differences between two treatment levels, affinities between proteins, maximum responses, enzyme activity rates, depolarization frequencies,.... Every experiment is about a population being modeled.
+A major focus of statistics is about quantifying the uncertainty of how reliable are our parameter estimates. Which is very important because in turn that addresses the reliability of our understanding of the system that we are researching. 
 
-The models we conjure up to estimate these parameters are also perfect. When you simulate data using models (without an error term) you generate data that fit the model perfectly. That's a bit of a circular logic.  
+It is not possible to understand statistical analysis without wrapping our heads around the concepts related to data dispersion: variability, accuracy and precision. Together, these concepts comprise ways of thinking about and describing the uncertainty of data.
 
-I imagine a population with a mean of 5 and a standard deviation of 0. Here's data I could expect to see from such a perfect model:
-
-```{r}
-rnorm(n=3, mean=10, sd=0)
-```
-
-What's imperfect, unfortunately, are the real data that we generate through sampling. Stood up against a perfect model, they usually come off looking pretty crappy. The models aren't always good fits for the data, and very often it is ambiguous whether one model fits best, or some other should be applied. 
-
-Therefore, a major focus of statistics is to evaluate how well our perfect models are fit by these messy data. Quantifying the uncertainty of that fit is one basis for asserting how reliable are our parameter estimates. Which is very important because in turn that addresses how realiable is our understanding of the system that we are researching. 
-
-All of this points to the fact that it is not possible to understand statistical analysis without wrapping our heads around the concepts related to data dispersion: variability, accuracy and precision. Together, these concepts comprise ways of thinking about and describing the uncertainty of data.
-
-### Data are messy
+## Data are messy
 
 The reason data are messy is that sample data possess inherent variability. This means there is always some 'error' between the true values of the population parameters and their estimated values within the sample. 
 
-In running experiments on biological systems we think about two main contributors to this error. The first is biological variation between independent replicates. Our models pose independent variables to account for these effects.
+In running experiments on biological systems we think about two main contributors to this error. The first is biological variation between independent replicates.
 
-The second source is so-called systematic error, having to do with our processes, the techniques and equipment, the way we measure the sample. 
+The second source is so-called systematic error. These are related to our our processes, the techniques and equipment, the way we measure the sample. 
 
 These ways of thinking about different sources for variation will hopefully become more clear when we get to ANOVA and to regression.
 
 ## Illustration of a model with error
 
-I think I can illustrate error, perfect models, and all of that with a bit of R code.
-
-As you recall from middle school, a straight line drawn between two variables is described by the linear model $Y=\beta_0+\beta_1 X$. This model has two parameters, $\beta_0$ represents the y-intercept while $\beta_1$ represents the slope of the line. The predictor variable is $X$. Thus, passing values of $X$ into this model generates values for the response variable, $Y$.
+As you recall from middle school, a straight line drawn between two variables is described by the linear model $Y=\beta_0+\beta_1 X$. This model has two parameters, the parameter $\beta_0$ represents the y-intercept while the parameter $\beta_1$ represents the slope of the line. The independent variable (levels of which are controlled by the researcher) is $X$. Thus, passing values of $X$ into this model generates values for the response variable, $Y$.
 
 Here's a simulation of response data from two linear related models, $Y1$ and $Y2$. 
 
-Reading the code, you notice that one of the models, $Y1$ has no error term, so it is perfect, which is to say the values of $Y1$ are perfectly predicted by the model's intercept and slope parameters. A linear regression goes through every data point and the output of that regression yields the exact same parameter values that were input (a bit of a circular proof, if you will). The model perfectly fits its data. 
+Reading the code, you notice that one of the models, $Y1$ has no error term. So it is perfect, which is to say the values of $Y1$ are perfectly predicted by the model's intercept and slope parameters. A linear regression goes through every data point and the output of that regression yields the exact same parameter values that were input (a bit of a circular proof, if you will). The model perfectly fits its data. 
 
 The other model ($Y2$) has an error term tacked onto it. As a result it yields imperfect values even when given the exact same model parameters as for $Y1$. 
 

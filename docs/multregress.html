@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 44 Multiple regression | JABSTB: Statistical Design and Analysis of Experiments with R</title>
   <meta name="description" content="Experimental biostatistics using R." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 44 Multiple regression | JABSTB: Statistical Design and Analysis of Experiments with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-01-30" />
+<meta name="date" content="2021-09-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="nonlinearreplicates.html"/>
 <link rel="next" href="logregress.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,7 +51,8 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -59,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -119,6 +122,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -141,45 +145,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="software.html"><a href="software.html"><i class="fa fa-check"></i><b>3</b> Installing and Understanding the software</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="software.html"><a href="software.html#tldr"><i class="fa fa-check"></i><b>3.1</b> tl;dr</a></li>
-<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#spring-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Spring 2021 term versions</a>
+<li class="chapter" data-level="3.2" data-path="software.html"><a href="software.html#fall-2021-term-versions"><i class="fa fa-check"></i><b>3.2</b> Fall 2021 term versions</a>
 <ul>
 <li class="chapter" data-level="3.2.1" data-path="software.html"><a href="software.html#what-are-these"><i class="fa fa-check"></i><b>3.2.1</b> What are these?</a></li>
-<li class="chapter" data-level="3.2.2" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.2.2</b> Rule 1: Install R first, install RStudio second</a></li>
-<li class="chapter" data-level="3.2.3" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.2.3</b> Rule 2: Don’t pay!</a></li>
-<li class="chapter" data-level="3.2.4" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.2.4</b> Rule 3: Don’t compile!</a></li>
-<li class="chapter" data-level="3.2.5" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.2.5</b> Rule 4: Install the right R software for your machine</a></li>
-<li class="chapter" data-level="3.2.6" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.2.6</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.3</b> After installation</a></li>
-<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.4</b> What is R?</a></li>
-<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#more-on-packages"><i class="fa fa-check"></i><b>3.5</b> More on packages</a></li>
-<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.6</b> How to install and use packages</a></li>
-<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.7</b> Packages we’ll need</a></li>
-<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.8</b> Super important: Always avoid compiling</a>
+<li class="chapter" data-level="3.3" data-path="software.html"><a href="software.html#please-follow-these-rules"><i class="fa fa-check"></i><b>3.3</b> Please follow these rules</a>
 <ul>
-<li class="chapter" data-level="3.8.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.8.1</b> Reasons not to compile</a></li>
+<li class="chapter" data-level="3.3.1" data-path="software.html"><a href="software.html#rule-1-install-r-first-install-rstudio-second"><i class="fa fa-check"></i><b>3.3.1</b> Rule 1: Install R first, install RStudio second</a></li>
+<li class="chapter" data-level="3.3.2" data-path="software.html"><a href="software.html#rule-2-dont-pay"><i class="fa fa-check"></i><b>3.3.2</b> Rule 2: Don’t pay!</a></li>
+<li class="chapter" data-level="3.3.3" data-path="software.html"><a href="software.html#rule-3-dont-compile"><i class="fa fa-check"></i><b>3.3.3</b> Rule 3: Don’t compile!</a></li>
+<li class="chapter" data-level="3.3.4" data-path="software.html"><a href="software.html#rule-4-install-the-right-r-software-for-your-machine"><i class="fa fa-check"></i><b>3.3.4</b> Rule 4: Install the right R software for your machine</a></li>
+<li class="chapter" data-level="3.3.5" data-path="software.html"><a href="software.html#doubts"><i class="fa fa-check"></i><b>3.3.5</b> Doubts?</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.9</b> Summary</a></li>
+<li class="chapter" data-level="3.4" data-path="software.html"><a href="software.html#after-installation"><i class="fa fa-check"></i><b>3.4</b> After installation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="software.html"><a href="software.html#problems"><i class="fa fa-check"></i><b>3.4.1</b> Problems?</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
+<li class="chapter" data-level="3.5" data-path="software.html"><a href="software.html#what-is-r"><i class="fa fa-check"></i><b>3.5</b> What is R?</a></li>
+<li class="chapter" data-level="3.6" data-path="software.html"><a href="software.html#what-are-r-packages"><i class="fa fa-check"></i><b>3.6</b> What are R packages?</a></li>
+<li class="chapter" data-level="3.7" data-path="software.html"><a href="software.html#how-to-install-and-use-packages"><i class="fa fa-check"></i><b>3.7</b> How to install and use packages</a></li>
+<li class="chapter" data-level="3.8" data-path="software.html"><a href="software.html#packages-well-need"><i class="fa fa-check"></i><b>3.8</b> Packages we’ll need</a></li>
+<li class="chapter" data-level="3.9" data-path="software.html"><a href="software.html#super-important-always-avoid-compiling"><i class="fa fa-check"></i><b>3.9</b> Super important: Always avoid compiling</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="getting-started.html"><a href="getting-started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-started.html"><a href="getting-started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="getting-started.html"><a href="getting-started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+<li class="chapter" data-level="3.9.1" data-path="software.html"><a href="software.html#reasons-not-to-compile"><i class="fa fa-check"></i><b>3.9.1</b> Reasons not to compile</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="getting-started.html"><a href="getting-started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<li class="chapter" data-level="3.10" data-path="software.html"><a href="software.html#summary"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting_started.html"><a href="getting_started.html"><i class="fa fa-check"></i><b>4</b> Start Learning R</a>
 <ul>
-<li class="chapter" data-level="4.3.1" data-path="getting-started.html"><a href="getting-started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
-<li class="chapter" data-level="4.3.2" data-path="getting-started.html"><a href="getting-started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
-<li class="chapter" data-level="4.3.3" data-path="getting-started.html"><a href="getting-started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
-<li class="chapter" data-level="4.3.4" data-path="getting-started.html"><a href="getting-started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
-<li class="chapter" data-level="4.3.5" data-path="getting-started.html"><a href="getting-started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
+<li class="chapter" data-level="4.1" data-path="getting_started.html"><a href="getting_started.html#digging-in-with-rrstudio"><i class="fa fa-check"></i><b>4.1</b> Digging in with R/RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="getting_started.html"><a href="getting_started.html#the-tidyverse-package"><i class="fa fa-check"></i><b>4.2</b> The tidyverse package</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="getting_started.html"><a href="getting_started.html#do-swirlstats"><i class="fa fa-check"></i><b>4.2.1</b> Do swirlstats</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="getting_started.html"><a href="getting_started.html#other-resources"><i class="fa fa-check"></i><b>4.3</b> Other resources</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="getting_started.html"><a href="getting_started.html#internet-search"><i class="fa fa-check"></i><b>4.3.1</b> Internet search</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting_started.html"><a href="getting_started.html#help-documents"><i class="fa fa-check"></i><b>4.3.2</b> Help Documents</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting_started.html"><a href="getting_started.html#package-vignettes"><i class="fa fa-check"></i><b>4.3.3</b> Package Vignettes</a></li>
+<li class="chapter" data-level="4.3.4" data-path="getting_started.html"><a href="getting_started.html#people"><i class="fa fa-check"></i><b>4.3.4</b> People</a></li>
+<li class="chapter" data-level="4.3.5" data-path="getting_started.html"><a href="getting_started.html#typos"><i class="fa fa-check"></i><b>4.3.5</b> typos</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="philos.html"><a href="philos.html"><i class="fa fa-check"></i><b>5</b> What is your philosophy?</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.1</b> Exploration and uncertainty</a></li>
+<li class="chapter" data-level="5.1" data-path="philos.html"><a href="philos.html#our-philosophy-matters"><i class="fa fa-check"></i><b>5.1</b> Our philosophy matters</a></li>
+<li class="chapter" data-level="5.2" data-path="philos.html"><a href="philos.html#exploration-and-uncertainty"><i class="fa fa-check"></i><b>5.2</b> Exploration and uncertainty</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="bigpic.html"><a href="bigpic.html"><i class="fa fa-check"></i><b>6</b> Stats: The Big Picture</a>
 <ul>
@@ -255,36 +266,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="10" data-path="dispersion.html"><a href="dispersion.html"><i class="fa fa-check"></i><b>10</b> Variability, Accuracy and Precision</a>
 <ul>
-<li class="chapter" data-level="10.0.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.0.1</b> Data are messy</a></li>
-<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.1</b> Illustration of a model with error</a></li>
-<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.2</b> Variance: Quantifying variation by least squares</a>
+<li class="chapter" data-level="10.1" data-path="dispersion.html"><a href="dispersion.html#data-are-messy"><i class="fa fa-check"></i><b>10.1</b> Data are messy</a></li>
+<li class="chapter" data-level="10.2" data-path="dispersion.html"><a href="dispersion.html#illustration-of-a-model-with-error"><i class="fa fa-check"></i><b>10.2</b> Illustration of a model with error</a></li>
+<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#variance-quantifying-variation-by-least-squares"><i class="fa fa-check"></i><b>10.3</b> Variance: Quantifying variation by least squares</a>
 <ul>
-<li class="chapter" data-level="10.2.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.2.1</b> Definition of variance</a></li>
+<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#definition-of-variance"><i class="fa fa-check"></i><b>10.3.1</b> Definition of variance</a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.3</b> Standard deviation</a>
+<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#standard-deviation"><i class="fa fa-check"></i><b>10.4</b> Standard deviation</a>
 <ul>
-<li class="chapter" data-level="10.3.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.3.1</b> What does the standard deviation tell us</a></li>
-<li class="chapter" data-level="10.3.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.3.2</b> Ways of describing sample variability</a></li>
+<li class="chapter" data-level="10.4.1" data-path="dispersion.html"><a href="dispersion.html#what-does-the-standard-deviation-tell-us"><i class="fa fa-check"></i><b>10.4.1</b> What does the standard deviation tell us</a></li>
+<li class="chapter" data-level="10.4.2" data-path="dispersion.html"><a href="dispersion.html#ways-of-describing-sample-variability"><i class="fa fa-check"></i><b>10.4.2</b> Ways of describing sample variability</a></li>
 </ul></li>
-<li class="chapter" data-level="10.4" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.4</b> Precision and Accuracy</a></li>
-<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.5</b> Standard error</a>
+<li class="chapter" data-level="10.5" data-path="dispersion.html"><a href="dispersion.html#precision-and-accuracy"><i class="fa fa-check"></i><b>10.5</b> Precision and Accuracy</a></li>
+<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#standard-error"><i class="fa fa-check"></i><b>10.6</b> Standard error</a>
 <ul>
-<li class="chapter" data-level="10.5.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.5.1</b> What exactly does the standard error represent?</a></li>
-<li class="chapter" data-level="10.5.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.5.2</b> “Should I use SD or SEM?”</a></li>
+<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#what-exactly-does-the-standard-error-represent"><i class="fa fa-check"></i><b>10.6.1</b> What exactly does the standard error represent?</a></li>
+<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#should-i-use-sd-or-sem"><i class="fa fa-check"></i><b>10.6.2</b> “Should I use SD or SEM?”</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.6</b> Confidence intervals</a>
+<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#confidence-intervals"><i class="fa fa-check"></i><b>10.7</b> Confidence intervals</a>
 <ul>
-<li class="chapter" data-level="10.6.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.6.1</b> CI Definition</a></li>
-<li class="chapter" data-level="10.6.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.6.2</b> Evaluating confidence intervals</a></li>
-<li class="chapter" data-level="10.6.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.6.3</b> CI Simulation tools</a></li>
+<li class="chapter" data-level="10.7.1" data-path="dispersion.html"><a href="dispersion.html#ci-definition"><i class="fa fa-check"></i><b>10.7.1</b> CI Definition</a></li>
+<li class="chapter" data-level="10.7.2" data-path="dispersion.html"><a href="dispersion.html#evaluating-confidence-intervals"><i class="fa fa-check"></i><b>10.7.2</b> Evaluating confidence intervals</a></li>
+<li class="chapter" data-level="10.7.3" data-path="dispersion.html"><a href="dispersion.html#ci-simulation-tools"><i class="fa fa-check"></i><b>10.7.3</b> CI Simulation tools</a></li>
 </ul></li>
-<li class="chapter" data-level="10.7" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.7</b> Key take aways</a></li>
+<li class="chapter" data-level="10.8" data-path="dispersion.html"><a href="dispersion.html#key-take-aways"><i class="fa fa-check"></i><b>10.8</b> Key take aways</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="hypotheses.html"><a href="hypotheses.html"><i class="fa fa-check"></i><b>11</b> Framing statistical hypotheses</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="hypotheses.html"><a href="hypotheses.html#the-decision-process"><i class="fa fa-check"></i><b>11.1</b> The decision process</a></li>
 <li class="chapter" data-level="11.2" data-path="hypotheses.html"><a href="hypotheses.html#popper-and-falsification"><i class="fa fa-check"></i><b>11.2</b> Popper and falsification</a></li>
-<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.3</b> Statistical hypothesis rubric</a></li>
+<li class="chapter" data-level="11.3" data-path="hypotheses.html"><a href="hypotheses.html#operational-decisions-made-in-advance-that-reduce-mistakes"><i class="fa fa-check"></i><b>11.3</b> Operational decisions made in advance that reduce mistakes</a></li>
+<li class="chapter" data-level="11.4" data-path="hypotheses.html"><a href="hypotheses.html#statistical-hypothesis-rubric"><i class="fa fa-check"></i><b>11.4</b> Statistical hypothesis rubric</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="error.html"><a href="error.html"><i class="fa fa-check"></i><b>12</b> Error</a>
 <ul>
@@ -624,7 +636,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28.2" data-path="introanova.html"><a href="introanova.html#types-of-designs"><i class="fa fa-check"></i><b>28.2</b> Types of designs</a></li>
 <li class="chapter" data-level="28.3" data-path="introanova.html"><a href="introanova.html#jargon-factors-and-levels"><i class="fa fa-check"></i><b>28.3</b> Jargon: Factors and levels</a>
 <ul>
-<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#woring-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Woring with factors in R</a></li>
+<li class="chapter" data-level="28.3.1" data-path="introanova.html"><a href="introanova.html#working-with-factors-in-r"><i class="fa fa-check"></i><b>28.3.1</b> Working with factors in R</a></li>
 </ul></li>
 <li class="chapter" data-level="28.4" data-path="introanova.html"><a href="introanova.html#anova-models-one--two--and-three-way"><i class="fa fa-check"></i><b>28.4</b> ANOVA models: One-, Two-, and Three-way</a></li>
 <li class="chapter" data-level="28.5" data-path="introanova.html"><a href="introanova.html#inference"><i class="fa fa-check"></i><b>28.5</b> Inference</a>
@@ -1013,15 +1025,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="50" data-path="rnaseq.html"><a href="rnaseq.html"><i class="fa fa-check"></i><b>50</b> RNA-seq with R</a>
 <ul>
-<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.1</b> Install Bioconductor</a></li>
-<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.2</b> Import raw count data</a></li>
-<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.3</b> Munge to simpler table</a></li>
-<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.4</b> Filtering</a></li>
-<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.5</b> DGEList</a></li>
-<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.6</b> Visualization</a></li>
-<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.7</b> Classification</a></li>
-<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.8</b> Hierarchical clustering</a></li>
-<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.9</b> Summary</a></li>
+<li class="chapter" data-level="50.1" data-path="rnaseq.html"><a href="rnaseq.html#overview"><i class="fa fa-check"></i><b>50.1</b> Overview</a></li>
+<li class="chapter" data-level="50.2" data-path="rnaseq.html"><a href="rnaseq.html#install-bioconductor"><i class="fa fa-check"></i><b>50.2</b> Install Bioconductor</a></li>
+<li class="chapter" data-level="50.3" data-path="rnaseq.html"><a href="rnaseq.html#import-raw-count-data"><i class="fa fa-check"></i><b>50.3</b> Import raw count data</a></li>
+<li class="chapter" data-level="50.4" data-path="rnaseq.html"><a href="rnaseq.html#munge-to-simpler-table"><i class="fa fa-check"></i><b>50.4</b> Munge to simpler table</a></li>
+<li class="chapter" data-level="50.5" data-path="rnaseq.html"><a href="rnaseq.html#filtering"><i class="fa fa-check"></i><b>50.5</b> Filtering</a></li>
+<li class="chapter" data-level="50.6" data-path="rnaseq.html"><a href="rnaseq.html#dgelist"><i class="fa fa-check"></i><b>50.6</b> DGEList</a></li>
+<li class="chapter" data-level="50.7" data-path="rnaseq.html"><a href="rnaseq.html#visualization"><i class="fa fa-check"></i><b>50.7</b> Visualization</a></li>
+<li class="chapter" data-level="50.8" data-path="rnaseq.html"><a href="rnaseq.html#classification-1"><i class="fa fa-check"></i><b>50.8</b> Classification</a></li>
+<li class="chapter" data-level="50.9" data-path="rnaseq.html"><a href="rnaseq.html#hierarchical-clustering-1"><i class="fa fa-check"></i><b>50.9</b> Hierarchical clustering</a>
+<ul>
+<li class="chapter" data-level="50.9.1" data-path="rnaseq.html"><a href="rnaseq.html#statistical-inference-on-clustering"><i class="fa fa-check"></i><b>50.9.1</b> Statistical inference on clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="50.10" data-path="rnaseq.html"><a href="rnaseq.html#summary-17"><i class="fa fa-check"></i><b>50.10</b> Summary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1075,12 +1091,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here’s a simulation of a simple factorial experiment, comparing responses of a stimulus and its negative control. Every measurement is independent of all other measurements. Thus, the sample has 6 independent replicates.</p>
 <p>The predictor variable, FactorA, comes at two levels: control and stimulus. The response is a continuous variable. In your own mind substitute things for these. For me, the response is a transcription factor-driven luciferease activity, a negative control, and an agonist of a receptor is the stimulus.</p>
 <p>We obtain the following random sample:</p>
-<div class="sourceCode" id="cb941"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb941-1"><a href="multregress.html#cb941-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb941-2"><a href="multregress.html#cb941-2" aria-hidden="true" tabindex="-1"></a>factorA <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus&quot;</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
-<span id="cb941-3"><a href="multregress.html#cb941-3" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>))</span>
-<span id="cb941-4"><a href="multregress.html#cb941-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb941-5"><a href="multregress.html#cb941-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(factorA, response)</span>
-<span id="cb941-6"><a href="multregress.html#cb941-6" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
+<div class="sourceCode" id="cb951"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb951-1"><a href="multregress.html#cb951-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb951-2"><a href="multregress.html#cb951-2" aria-hidden="true" tabindex="-1"></a>factorA <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus&quot;</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
+<span id="cb951-3"><a href="multregress.html#cb951-3" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>))</span>
+<span id="cb951-4"><a href="multregress.html#cb951-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb951-5"><a href="multregress.html#cb951-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(factorA, response)</span>
+<span id="cb951-6"><a href="multregress.html#cb951-6" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
 <pre><code>##    factorA response
 ## 1  control 48.79293
 ## 2  control 50.27743
@@ -1091,8 +1107,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The linear model for this experiment can be expressed as follows: <span class="math display">\[response=control+\beta \times stimulus + residual\]</span></p>
 <p>The model formula can be configured in several optional ways.</p>
 <p>Adding the term <code>+0</code> to the model formula in the <code>lm</code> function suppresses the intercept, allowing for a glance at the sample group means. These make sense with what was coded above.</p>
-<div class="sourceCode" id="cb943"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb943-1"><a href="multregress.html#cb943-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">+</span><span class="dv">0</span>, data)</span>
-<span id="cb943-2"><a href="multregress.html#cb943-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
+<div class="sourceCode" id="cb953"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb953-1"><a href="multregress.html#cb953-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">+</span><span class="dv">0</span>, data)</span>
+<span id="cb953-2"><a href="multregress.html#cb953-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA + 0, data = data)
@@ -1101,8 +1117,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  factorAcontrol  factorAstimulus  
 ##           50.05            74.53</code></pre>
 <p>Knowing those group mean values helps to understand the meaning of the regression coefficients derived from the more conventional approach, which is not to suppress the intercept.</p>
-<div class="sourceCode" id="cb945"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb945-1"><a href="multregress.html#cb945-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(response<span class="sc">~</span>factorA, data)</span>
-<span id="cb945-2"><a href="multregress.html#cb945-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
+<div class="sourceCode" id="cb955"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb955-1"><a href="multregress.html#cb955-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(response<span class="sc">~</span>factorA, data)</span>
+<span id="cb955-2"><a href="multregress.html#cb955-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -1118,7 +1134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The coefficient for the stimulus term in this model formula is not the mean of the response to the stimulus, but is instead the difference between between the mean response to the stimulus and the mean response of the control.</p>
 <p>Perhaps that reminds you of the numerator for the unpaired t-test, between two levels of a factor, control and stimulus? <span class="math display">\[t=\frac{mean_{stimulus}-mean_{control}}{SE}\]</span></p>
 <p>Let’s see if a t-test between stimulus and control gives us the same result as the linear regression. First, let’s complete the linear model analysis.</p>
-<div class="sourceCode" id="cb947"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb947-1"><a href="multregress.html#cb947-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb957"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb957-1"><a href="multregress.html#cb957-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -1142,13 +1158,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Woohoo!</p>
 <p>To be clear, when the predictor variable was continuous, we previously discussed these <span class="math inline">\(\beta\)</span> coefficients as the “slope” of the linear regression line. That’s still the case here. R coerces a distance of 1 on the abscissa between the factorA values of control and stimulus. Thus, the difference between their means <span class="math inline">\(\Delta y\)</span> divided by 1 <span class="math inline">\(\Delta x\)</span> is the slope of an imaginary line between them.</p>
 <p>Now let’s look at an unpaired t-test between the two factors.</p>
-<div class="sourceCode" id="cb949"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb949-1"><a href="multregress.html#cb949-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(response<span class="sc">~</span>factorA, data, <span class="at">var.equal=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb959"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb959-1"><a href="multregress.html#cb959-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(response<span class="sc">~</span>factorA, data, <span class="at">var.equal=</span>T)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
 ## data:  response by factorA
 ## t = -21.224, df = 4, p-value = 2.914e-05
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group control and group stimulus is not equal to 0
 ## 95 percent confidence interval:
 ##  -27.68045 -21.27600
 ## sample estimates:
@@ -1178,14 +1194,14 @@ That denominator is the standard error of the difference between means, which is
 <p>Using the <code>relevel</code> function provides you a bit more control to define the intercept value in linear regression compared to the default alphanumeric way.</p>
 <p>Here’s some simulated data. The predictor variable, hart, has 4 levels: art, bart, cart, and dart. It’s on an alphanumeric scale. Smelly is the response variable. As you can see, each level of hart yields a different smelly response.</p>
 <p>Even though I list the hart variable levels from <code>d</code> to <code>a</code> in the dataframe, R coerces them from <code>a</code> to <code>d</code> in the regression model, thereby forcing art to serve as the intercept</p>
-<div class="sourceCode" id="cb951"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb951-1"><a href="multregress.html#cb951-1" aria-hidden="true" tabindex="-1"></a>art <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>)</span>
-<span id="cb951-2"><a href="multregress.html#cb951-2" aria-hidden="true" tabindex="-1"></a>bart <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>)</span>
-<span id="cb951-3"><a href="multregress.html#cb951-3" aria-hidden="true" tabindex="-1"></a>cart <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb951-4"><a href="multregress.html#cb951-4" aria-hidden="true" tabindex="-1"></a>dart <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">200</span>, <span class="dv">1</span>)</span>
-<span id="cb951-5"><a href="multregress.html#cb951-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb951-6"><a href="multregress.html#cb951-6" aria-hidden="true" tabindex="-1"></a>hart <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;dart&quot;</span>, <span class="st">&quot;cart&quot;</span>, <span class="st">&quot;bart&quot;</span>, <span class="st">&quot;aart&quot;</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
-<span id="cb951-7"><a href="multregress.html#cb951-7" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(hart, <span class="at">smelly=</span><span class="fu">c</span>(dart, cart, bart, art))</span>
-<span id="cb951-8"><a href="multregress.html#cb951-8" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
+<div class="sourceCode" id="cb961"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb961-1"><a href="multregress.html#cb961-1" aria-hidden="true" tabindex="-1"></a>art <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>)</span>
+<span id="cb961-2"><a href="multregress.html#cb961-2" aria-hidden="true" tabindex="-1"></a>bart <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb961-3"><a href="multregress.html#cb961-3" aria-hidden="true" tabindex="-1"></a>cart <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb961-4"><a href="multregress.html#cb961-4" aria-hidden="true" tabindex="-1"></a>dart <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">200</span>, <span class="dv">1</span>)</span>
+<span id="cb961-5"><a href="multregress.html#cb961-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb961-6"><a href="multregress.html#cb961-6" aria-hidden="true" tabindex="-1"></a>hart <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;dart&quot;</span>, <span class="st">&quot;cart&quot;</span>, <span class="st">&quot;bart&quot;</span>, <span class="st">&quot;aart&quot;</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
+<span id="cb961-7"><a href="multregress.html#cb961-7" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(hart, <span class="at">smelly=</span><span class="fu">c</span>(dart, cart, bart, art))</span>
+<span id="cb961-8"><a href="multregress.html#cb961-8" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
 <pre><code>##    hart       smelly
 ## 1  dart 199.88971451
 ## 2  dart 199.48899049
@@ -1199,7 +1215,7 @@ That denominator is the standard error of the difference between means, which is
 ## 10 aart  49.42526004
 ## 11 aart  49.45336814
 ## 12 aart  49.43554800</code></pre>
-<div class="sourceCode" id="cb953"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb953-1"><a href="multregress.html#cb953-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(smelly<span class="sc">~</span>hart, data)</span></code></pre></div>
+<div class="sourceCode" id="cb963"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb963-1"><a href="multregress.html#cb963-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(smelly<span class="sc">~</span>hart, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = smelly ~ hart, data = data)
@@ -1210,11 +1226,11 @@ That denominator is the standard error of the difference between means, which is
 <p>What do those coefficient values mean? Well, they are all in units of smelly, referenced to the level of smelly in the presence of art. Because it begins with the letter ‘a,’ art is the lowest alphanumeric value of the four predictors. Therefore, it is assigned as the intercept factor. In smelly units, the intercept is the response to art; bart is about 50 more than art; cart is about 50 less than art; and dart is about 150 more than art.</p>
 <p>But let’s say we’d instead like to reference everything to the value of cart, which has a smelly value of 0. We’d use the <code>relevel</code> function for that.</p>
 <p>First we have to define the variable hart as a factorial variable explicitly. Then, we relevel the values of hart so that cart is referenced as the intercept.</p>
-<div class="sourceCode" id="cb955"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb955-1"><a href="multregress.html#cb955-1" aria-hidden="true" tabindex="-1"></a>hart <span class="ot">&lt;-</span> <span class="fu">factor</span>(hart) <span class="co">#don&#39;t skip this step, without it the next gives an error!!!</span></span>
-<span id="cb955-2"><a href="multregress.html#cb955-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>hart <span class="ot">&lt;-</span> <span class="fu">relevel</span>(hart, <span class="at">ref=</span><span class="st">&quot;cart&quot;</span>)</span>
-<span id="cb955-3"><a href="multregress.html#cb955-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb955-4"><a href="multregress.html#cb955-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb955-5"><a href="multregress.html#cb955-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(smelly<span class="sc">~</span>hart, data)</span></code></pre></div>
+<div class="sourceCode" id="cb965"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb965-1"><a href="multregress.html#cb965-1" aria-hidden="true" tabindex="-1"></a>hart <span class="ot">&lt;-</span> <span class="fu">factor</span>(hart) <span class="co">#don&#39;t skip this step, without it the next gives an error!!!</span></span>
+<span id="cb965-2"><a href="multregress.html#cb965-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>hart <span class="ot">&lt;-</span> <span class="fu">relevel</span>(hart, <span class="at">ref=</span><span class="st">&quot;cart&quot;</span>)</span>
+<span id="cb965-3"><a href="multregress.html#cb965-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb965-4"><a href="multregress.html#cb965-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb965-5"><a href="multregress.html#cb965-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(smelly<span class="sc">~</span>hart, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = smelly ~ hart, data = data)
@@ -1231,14 +1247,14 @@ That denominator is the standard error of the difference between means, which is
 <p>T-tests are for comparing 2 groups. ANOVA’s are for comparing 3 or more groups. It turns out, you can use multiple linear regression to mimic an ANOVA test, too.</p>
 <p>Let’s add one more level for the predictor variable (and its responses) to the experiment. Since it now has 3 groups, and 9 independent replicates, we shouldn’t do t-tests. We could do ANOVA, but we could also do a multiple regression model, too.</p>
 <p>That model is <span class="math display">\[response=control+\beta_1 stimulus1+\beta_2 stimulus2\]</span></p>
-<div class="sourceCode" id="cb957"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb957-1"><a href="multregress.html#cb957-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb957-2"><a href="multregress.html#cb957-2" aria-hidden="true" tabindex="-1"></a>factorA <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
-<span id="cb957-3"><a href="multregress.html#cb957-3" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>))</span>
-<span id="cb957-4"><a href="multregress.html#cb957-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb957-5"><a href="multregress.html#cb957-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(factorA, response)</span>
-<span id="cb957-6"><a href="multregress.html#cb957-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb957-7"><a href="multregress.html#cb957-7" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(response<span class="sc">~</span>factorA, data)</span>
-<span id="cb957-8"><a href="multregress.html#cb957-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb967"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb967-1"><a href="multregress.html#cb967-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb967-2"><a href="multregress.html#cb967-2" aria-hidden="true" tabindex="-1"></a>factorA <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="at">each=</span><span class="dv">3</span>)</span>
+<span id="cb967-3"><a href="multregress.html#cb967-3" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>))</span>
+<span id="cb967-4"><a href="multregress.html#cb967-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb967-5"><a href="multregress.html#cb967-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(factorA, response)</span>
+<span id="cb967-6"><a href="multregress.html#cb967-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb967-7"><a href="multregress.html#cb967-7" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(response<span class="sc">~</span>factorA, data)</span>
+<span id="cb967-8"><a href="multregress.html#cb967-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -1261,7 +1277,7 @@ That denominator is the standard error of the difference between means, which is
 <p>Notice how the coefficient value for stimulus2 is the difference between the mean response value for stimulus2 (~175 units) and the mean response value for control (~50 units). Each coefficient t-test asks whether the value of the coefficient differs from zero.</p>
 <p>In linear regression with only a single predictor variable, that coefficient was the slope of a straight line through all the <span class="math inline">\(xy\)</span> data pairs. In multiple linear regression you have to imagine separate straight lines connecting the mean intercept response value and the response values for each of the predictors.</p>
 <p>We can compare the regression model output to that for an ANOVA test on the data. Here is the equivalent of a one-way completely randomized ANOVA.</p>
-<div class="sourceCode" id="cb959"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb959-1"><a href="multregress.html#cb959-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Anova</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb969"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb969-1"><a href="multregress.html#cb969-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Anova</span>(model)</span></code></pre></div>
 <pre><code>## Anova Table (Type II tests)
 ## 
 ## Response: response
@@ -1277,22 +1293,22 @@ That denominator is the standard error of the difference between means, which is
 <div id="a-two-factor-experiment-with-6-groups" class="section level3" number="44.3.2">
 <h3><span class="header-section-number">44.3.2</span> A two factor experiment with 6 groups</h3>
 <p>Now we’ll add a second factorial variable, factorB, to the design above. FactorB has two levels. The simulated design is akin to a two-way completely randomized ANOVA. We’ll also simulate in an interaction effect between the two variables.</p>
-<div class="sourceCode" id="cb961"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb961-1"><a href="multregress.html#cb961-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb961-2"><a href="multregress.html#cb961-2" aria-hidden="true" tabindex="-1"></a>factorA <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="at">each=</span><span class="dv">3</span>), <span class="dv">2</span>)</span>
-<span id="cb961-3"><a href="multregress.html#cb961-3" aria-hidden="true" tabindex="-1"></a>factorB <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;cofactor1&quot;</span>, <span class="st">&quot;cofactor2&quot;</span>), <span class="at">each=</span><span class="dv">9</span>)</span>
-<span id="cb961-4"><a href="multregress.html#cb961-4" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), </span>
-<span id="cb961-5"><a href="multregress.html#cb961-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), </span>
-<span id="cb961-6"><a href="multregress.html#cb961-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>), </span>
-<span id="cb961-7"><a href="multregress.html#cb961-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>), </span>
-<span id="cb961-8"><a href="multregress.html#cb961-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="dv">1</span>), </span>
-<span id="cb961-9"><a href="multregress.html#cb961-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">700</span>, <span class="dv">1</span>)</span>
-<span id="cb961-10"><a href="multregress.html#cb961-10" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb961-11"><a href="multregress.html#cb961-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb961-12"><a href="multregress.html#cb961-12" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(factorA, factorB, response)</span></code></pre></div>
+<div class="sourceCode" id="cb971"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb971-1"><a href="multregress.html#cb971-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb971-2"><a href="multregress.html#cb971-2" aria-hidden="true" tabindex="-1"></a>factorA <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;stimulus1&quot;</span>, <span class="st">&quot;stimulus2&quot;</span>), <span class="at">each=</span><span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb971-3"><a href="multregress.html#cb971-3" aria-hidden="true" tabindex="-1"></a>factorB <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;cofactor1&quot;</span>, <span class="st">&quot;cofactor2&quot;</span>), <span class="at">each=</span><span class="dv">9</span>)</span>
+<span id="cb971-4"><a href="multregress.html#cb971-4" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">50</span>, <span class="dv">1</span>), </span>
+<span id="cb971-5"><a href="multregress.html#cb971-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>,<span class="dv">75</span>,<span class="dv">1</span>), </span>
+<span id="cb971-6"><a href="multregress.html#cb971-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">175</span>, <span class="dv">1</span>), </span>
+<span id="cb971-7"><a href="multregress.html#cb971-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">1</span>), </span>
+<span id="cb971-8"><a href="multregress.html#cb971-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>,<span class="dv">300</span>,<span class="dv">1</span>), </span>
+<span id="cb971-9"><a href="multregress.html#cb971-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">rnorm</span>(<span class="dv">3</span>, <span class="dv">700</span>, <span class="dv">1</span>)</span>
+<span id="cb971-10"><a href="multregress.html#cb971-10" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb971-11"><a href="multregress.html#cb971-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb971-12"><a href="multregress.html#cb971-12" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(factorA, factorB, response)</span></code></pre></div>
 <p>There are a handful of linear models we could run on this. They should be scientifically driven. Since we wouldn’t design an experiment like this unless we thought there would be an interaction between the two factors, we’ll focus on that. The coefficients for the interacting model would serve as effect sizes to describe the level of interaction that occurs.</p>
 <p>Coefficients can be confusing. Here’s a way to clarify what’s going on. It turns out, a model’s intercept is calculated differently, depending upon how the model is defined.</p>
 <p>First, a factor-less model. This output represents the grand mean of all the values in the data.</p>
-<div class="sourceCode" id="cb962"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb962-1"><a href="multregress.html#cb962-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span><span class="dv">1</span>, data)</span></code></pre></div>
+<div class="sourceCode" id="cb972"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb972-1"><a href="multregress.html#cb972-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span><span class="dv">1</span>, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ 1, data = data)
@@ -1301,7 +1317,7 @@ That denominator is the standard error of the difference between means, which is
 ## (Intercept)  
 ##         233</code></pre>
 <p>Next is a linear model just for the 3 levels of factorA. The intercept is the mean for all the data in the control groups under both cofactor1 and cofactor2.</p>
-<div class="sourceCode" id="cb964"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb964-1"><a href="multregress.html#cb964-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span>factorA, data)</span></code></pre></div>
+<div class="sourceCode" id="cb974"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb974-1"><a href="multregress.html#cb974-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span>factorA, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA, data = data)
@@ -1310,7 +1326,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorAstimulus1  factorAstimulus2  
 ##            74.63            112.67            362.33</code></pre>
 <p>Here’s a linear model for the second variable alone. The intercept represents the mean of all the groups under cofactor1</p>
-<div class="sourceCode" id="cb966"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb966-1"><a href="multregress.html#cb966-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span>factorB, data)</span></code></pre></div>
+<div class="sourceCode" id="cb976"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb976-1"><a href="multregress.html#cb976-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span>factorB, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorB, data = data)
@@ -1319,7 +1335,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorBcofactor2  
 ##            99.67            266.59</code></pre>
 <p>Now we have the linear model for the two factors combined. This intercept is the sum of the intercepts for factorA and factorB, less the grand mean for all the data. The negative value is a hint of an interaction effect between the two factors.</p>
-<div class="sourceCode" id="cb968"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb968-1"><a href="multregress.html#cb968-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">+</span>factorB, data)</span></code></pre></div>
+<div class="sourceCode" id="cb978"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb978-1"><a href="multregress.html#cb978-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">+</span>factorB, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA + factorB, data = data)
@@ -1328,7 +1344,7 @@ That denominator is the standard error of the difference between means, which is
 ##      (Intercept)  factorAstimulus1  factorAstimulus2  factorBcofactor2  
 ##           -58.66            112.67            362.33            266.59</code></pre>
 <p>Finally we have the full linear model for the two factors combined, including an interaction term. Here the intercept is the value of control. All coefficients values are the difference between their absolute effect sizes and the value for control (intercept).</p>
-<div class="sourceCode" id="cb970"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb970-1"><a href="multregress.html#cb970-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">*</span>factorB, data)</span></code></pre></div>
+<div class="sourceCode" id="cb980"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb980-1"><a href="multregress.html#cb980-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">*</span>factorB, data)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA * factorB, data = data)
@@ -1342,7 +1358,7 @@ That denominator is the standard error of the difference between means, which is
 ##                            176.39                             475.89</code></pre>
 <p>Since the values each discrete predictor variable level can take on is either 1 (if present) or 0 (if not), all of these coefficient values serve as an effect size for the indicated group, relative to control (intercept).</p>
 <p>The linear model is <span class="math display">\[Y=50.05+24.48\times stimulus1+124.39\times stimulus2+49.16\times cofactor2+176.39\times stimulus1/cofactor2 +475.89\times stimulus2/cofactor2\]</span></p>
-<div class="sourceCode" id="cb972"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb972-1"><a href="multregress.html#cb972-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">*</span>factorB, data))</span></code></pre></div>
+<div class="sourceCode" id="cb982"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb982-1"><a href="multregress.html#cb982-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">*</span>factorB, data))</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = response ~ factorA * factorB, data = data)
@@ -1371,7 +1387,7 @@ That denominator is the standard error of the difference between means, which is
 <p>Or something like that.</p>
 <p>The F test is a ratio of the variance associated with the model to the residual variance. It’s not particularly useful other than to announce that the model explains the data better than does residual variation.</p>
 <p>Passing the model into an the <code>Anova</code> function from the <code>car</code> package provides F tests for the main effects of each factor and for the interaction, providing the familiar ANOVA way of interpreting the data if desired.</p>
-<div class="sourceCode" id="cb974"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb974-1"><a href="multregress.html#cb974-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Anova</span>(<span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">*</span>factorB, data))</span></code></pre></div>
+<div class="sourceCode" id="cb984"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb984-1"><a href="multregress.html#cb984-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Anova</span>(<span class="fu">lm</span>(response<span class="sc">~</span>factorA<span class="sc">*</span>factorB, data))</span></code></pre></div>
 <pre><code>## Anova Table (Type II tests)
 ## 
 ## Response: response
@@ -1397,16 +1413,16 @@ That denominator is the standard error of the difference between means, which is
 <p>So “mixed” multiple linear regression models have a mixture of terms for the fixed and for the random effects within an experiment. Mixed models are therefore the linear regression analogs of paired/related measure designs.</p>
 <p>The <code>sleepstudy</code> data set in the <code>lme4</code> package is one such mixed effect study. The study measured reaction times (in ms) under conditions of worsening sleep deprivation. Repeated reaction time measurements were taken from each of 18 subjects over a 9 day period of sleep deprivation. These 18 subjects represent a random sample of the type of person who might become sleep deprived.</p>
 <p>Here’s a chart showing how it went for each subject. For some, reaction times are noticeably longer. For others, reaction lengthening is less bloody obvious. For subject 335 sleep deprivation might have slightly quickened reaction times!</p>
-<div class="sourceCode" id="cb976"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb976-1"><a href="multregress.html#cb976-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sleepstudy, <span class="fu">aes</span>(Days, Reaction))<span class="sc">+</span></span>
-<span id="cb976-2"><a href="multregress.html#cb976-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb976-3"><a href="multregress.html#cb976-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">&quot;lm&quot;</span>, <span class="at">se=</span>F)<span class="sc">+</span></span>
-<span id="cb976-4"><a href="multregress.html#cb976-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Subject)</span></code></pre></div>
+<div class="sourceCode" id="cb986"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb986-1"><a href="multregress.html#cb986-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sleepstudy, <span class="fu">aes</span>(Days, Reaction))<span class="sc">+</span></span>
+<span id="cb986-2"><a href="multregress.html#cb986-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb986-3"><a href="multregress.html#cb986-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">&quot;lm&quot;</span>, <span class="at">se=</span>F)<span class="sc">+</span></span>
+<span id="cb986-4"><a href="multregress.html#cb986-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Subject)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="jabstb_files/figure-html/unnamed-chunk-482-1.png" width="672" /></p>
+<p><img src="jabstb_files/figure-html/unnamed-chunk-481-1.png" width="672" /></p>
 <p>Here’s the question everybody wants answered from this study: What effect does sleep deprivation have on reaction time?</p>
 <p>Note, the question is NOT, “is the effect of sleep deprivation on reaction time”significant?"" That’s much less compelling than actually quantifying the effect size.</p>
 <p>If we completely ignore the presumed correlation within the repeated measurements within each subject we would use the <code>lm</code> function in R’s base <code>stats</code> package.</p>
-<div class="sourceCode" id="cb978"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb978-1"><a href="multregress.html#cb978-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(Reaction <span class="sc">~</span> Days, sleepstudy))</span></code></pre></div>
+<div class="sourceCode" id="cb988"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb988-1"><a href="multregress.html#cb988-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(Reaction <span class="sc">~</span> Days, sleepstudy))</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Reaction ~ Days, data = sleepstudy)
@@ -1430,9 +1446,9 @@ That denominator is the standard error of the difference between means, which is
 <p><span class="math display">\[Reaction=251.4+10.4\times Days\]</span></p>
 <p>But we shouldn’t ignore the repeated measures of the design. And it would also be nice to have some estimate for the standard deviation of the effect.</p>
 <p>For those reasons we run a mixed model regression to account for the random effect of the 18 subjects.</p>
-<div class="sourceCode" id="cb980"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb980-1"><a href="multregress.html#cb980-1" aria-hidden="true" tabindex="-1"></a>mm1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(Reaction <span class="sc">~</span> Days <span class="sc">+</span> (Days<span class="sc">|</span>Subject), <span class="at">REML=</span>F, sleepstudy)</span>
-<span id="cb980-2"><a href="multregress.html#cb980-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb980-3"><a href="multregress.html#cb980-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mm1)</span></code></pre></div>
+<div class="sourceCode" id="cb990"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb990-1"><a href="multregress.html#cb990-1" aria-hidden="true" tabindex="-1"></a>mm1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(Reaction <span class="sc">~</span> Days <span class="sc">+</span> (Days<span class="sc">|</span>Subject), <span class="at">REML=</span>F, sleepstudy)</span>
+<span id="cb990-2"><a href="multregress.html#cb990-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb990-3"><a href="multregress.html#cb990-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mm1)</span></code></pre></div>
 <pre><code>## Linear mixed model fit by maximum likelihood  [&#39;lmerMod&#39;]
 ## Formula: Reaction ~ Days + (Days | Subject)
 ##    Data: sleepstudy
@@ -1469,8 +1485,8 @@ That denominator is the standard error of the difference between means, which is
 <p>Since I know a little bit about blood pressure, but mostly because blood pressure is a continuous variable, I thought it would be interesting to explore how the various cofactors might influence systolic blood pressure. So I’ll use systolic blood pressure as a response variable in the regressions below. Some of the other variables will be used as predictor variables.</p>
 <p>I should make an important point. In practice you don’t just crack open and explore a data set willy nilly. I’m not the PI of the study. I’m just writing another chapter on statistical methods using data to illustrate statistical concepts. The authors of the study were testing the hypothesis that the so-called type-A personality was at higher risk of coronary heart disease. They are bound by restricting their analysis to testing preset hypotheses.</p>
 <p>These systolic blood pressure readings are just a variable that were vacuumed up in the study design, but were not hypothesized as the intended response variable.</p>
-<div class="sourceCode" id="cb982"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb982-1"><a href="multregress.html#cb982-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(wcgs)</span>
-<span id="cb982-2"><a href="multregress.html#cb982-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wcgs)</span></code></pre></div>
+<div class="sourceCode" id="cb992"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb992-1"><a href="multregress.html#cb992-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(wcgs)</span>
+<span id="cb992-2"><a href="multregress.html#cb992-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wcgs)</span></code></pre></div>
 <pre><code>##     id age0 height0 weight0 sbp0 dbp0 chol0 behpat0 ncigs0 dibpat0 chd69
 ## 1 2001   49      73     150  110   76   225       2     25       1     0
 ## 2 2002   42      70     160  154   84   177       2     20       1     0
@@ -1485,11 +1501,11 @@ That denominator is the standard error of the difference between means, which is
 ## 4       0    3064      0
 ## 5       1    1885      1
 ## 6       0    3102      0</code></pre>
-<div class="sourceCode" id="cb984"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb984-1"><a href="multregress.html#cb984-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp0<span class="sc">~</span>age0<span class="sc">+</span>height0<span class="sc">+</span>weight0<span class="sc">+</span></span>
-<span id="cb984-2"><a href="multregress.html#cb984-2" aria-hidden="true" tabindex="-1"></a>            chol0<span class="sc">+</span>ncigs0<span class="sc">+</span></span>
-<span id="cb984-3"><a href="multregress.html#cb984-3" aria-hidden="true" tabindex="-1"></a>            dibpat0<span class="sc">+</span>chd69, </span>
-<span id="cb984-4"><a href="multregress.html#cb984-4" aria-hidden="true" tabindex="-1"></a>          wcgs)</span>
-<span id="cb984-5"><a href="multregress.html#cb984-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code></pre></div>
+<div class="sourceCode" id="cb994"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb994-1"><a href="multregress.html#cb994-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp0<span class="sc">~</span>age0<span class="sc">+</span>height0<span class="sc">+</span>weight0<span class="sc">+</span></span>
+<span id="cb994-2"><a href="multregress.html#cb994-2" aria-hidden="true" tabindex="-1"></a>            chol0<span class="sc">+</span>ncigs0<span class="sc">+</span></span>
+<span id="cb994-3"><a href="multregress.html#cb994-3" aria-hidden="true" tabindex="-1"></a>            dibpat0<span class="sc">+</span>chd69, </span>
+<span id="cb994-4"><a href="multregress.html#cb994-4" aria-hidden="true" tabindex="-1"></a>          wcgs)</span>
+<span id="cb994-5"><a href="multregress.html#cb994-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = sbp0 ~ age0 + height0 + weight0 + chol0 + ncigs0 + 
@@ -1520,12 +1536,12 @@ That denominator is the standard error of the difference between means, which is
 <div id="sandbox" class="section level4" number="44.5.0.1">
 <h4><span class="header-section-number">44.5.0.1</span> Sandbox</h4>
 <p>Here’s a simulated sample. The causes of the outcome are known. Only the multiple model predicts the outcome accurately. Knowing what covariates to include in the model is not straightforward.</p>
-<div class="sourceCode" id="cb986"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb986-1"><a href="multregress.html#cb986-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb986-2"><a href="multregress.html#cb986-2" aria-hidden="true" tabindex="-1"></a>covariate <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb986-3"><a href="multregress.html#cb986-3" aria-hidden="true" tabindex="-1"></a>exposure  <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span>(<span class="fl">0.3</span><span class="sc">*</span>covariate)</span>
-<span id="cb986-4"><a href="multregress.html#cb986-4" aria-hidden="true" tabindex="-1"></a>outcome   <span class="ot">&lt;-</span> <span class="fl">2.0</span><span class="sc">+</span>(<span class="fl">0.5</span><span class="sc">*</span>exposure)<span class="sc">+</span>(<span class="fl">0.25</span><span class="sc">*</span>covariate)</span>
-<span id="cb986-5"><a href="multregress.html#cb986-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb986-6"><a href="multregress.html#cb986-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(outcome<span class="sc">~</span>exposure)</span></code></pre></div>
+<div class="sourceCode" id="cb996"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb996-1"><a href="multregress.html#cb996-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb996-2"><a href="multregress.html#cb996-2" aria-hidden="true" tabindex="-1"></a>covariate <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb996-3"><a href="multregress.html#cb996-3" aria-hidden="true" tabindex="-1"></a>exposure  <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span>(<span class="fl">0.3</span><span class="sc">*</span>covariate)</span>
+<span id="cb996-4"><a href="multregress.html#cb996-4" aria-hidden="true" tabindex="-1"></a>outcome   <span class="ot">&lt;-</span> <span class="fl">2.0</span><span class="sc">+</span>(<span class="fl">0.5</span><span class="sc">*</span>exposure)<span class="sc">+</span>(<span class="fl">0.25</span><span class="sc">*</span>covariate)</span>
+<span id="cb996-5"><a href="multregress.html#cb996-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb996-6"><a href="multregress.html#cb996-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(outcome<span class="sc">~</span>exposure)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = outcome ~ exposure)
@@ -1533,7 +1549,7 @@ That denominator is the standard error of the difference between means, which is
 ## Coefficients:
 ## (Intercept)     exposure  
 ##      1.9888       0.6965</code></pre>
-<div class="sourceCode" id="cb988"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb988-1"><a href="multregress.html#cb988-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(outcome<span class="sc">~</span>exposure<span class="sc">+</span>covariate)</span></code></pre></div>
+<div class="sourceCode" id="cb998"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb998-1"><a href="multregress.html#cb998-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(outcome<span class="sc">~</span>exposure<span class="sc">+</span>covariate)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = outcome ~ exposure + covariate)
@@ -1555,7 +1571,6 @@ That denominator is the standard error of the difference between means, which is
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1574,6 +1589,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1594,10 +1610,13 @@ gitbook.start({
 "text": null
 },
 "download": ["jabstb.pdf", "jabstb.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
-},
-"search": true
+}
 });
 });
 </script>
