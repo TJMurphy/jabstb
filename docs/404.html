@@ -24,7 +24,7 @@
 <meta name="author" content="TJ Murphy PhD, Department of Pharmacology and Chemical Biology, School of Medicine, Emory University, Atlanta, GA biostats538@gmail.com" />
 
 
-<meta name="date" content="2021-09-09" />
+<meta name="date" content="2021-10-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,8 +53,6 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -343,8 +341,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="16.1" data-path="poisson.html"><a href="poisson.html#poisson-events"><i class="fa fa-check"></i><b>16.1</b> Poisson Events</a></li>
 <li class="chapter" data-level="16.2" data-path="poisson.html"><a href="poisson.html#dpois"><i class="fa fa-check"></i><b>16.2</b> dpois</a></li>
 <li class="chapter" data-level="16.3" data-path="poisson.html"><a href="poisson.html#ppois"><i class="fa fa-check"></i><b>16.3</b> ppois</a></li>
-<li class="chapter" data-level="16.4" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>16.4</b> rpois</a></li>
-<li class="chapter" data-level="16.5" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>16.5</b> Overdispersion</a></li>
+<li class="chapter" data-level="16.4" data-path="poisson.html"><a href="poisson.html#qpois"><i class="fa fa-check"></i><b>16.4</b> qpois</a></li>
+<li class="chapter" data-level="16.5" data-path="poisson.html"><a href="poisson.html#rpois"><i class="fa fa-check"></i><b>16.5</b> rpois</a></li>
+<li class="chapter" data-level="16.6" data-path="poisson.html"><a href="poisson.html#overdispersion"><i class="fa fa-check"></i><b>16.6</b> Overdispersion</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="normal.html"><a href="normal.html"><i class="fa fa-check"></i><b>17</b> The Normal Distribution</a>
 <ul>
@@ -909,10 +908,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="42.2.3" data-path="nestedregress.html"><a href="nestedregress.html#troubleshooting-the-regression"><i class="fa fa-check"></i><b>42.2.3</b> Troubleshooting the regression</a></li>
 <li class="chapter" data-level="42.2.4" data-path="nestedregress.html"><a href="nestedregress.html#interpreting-the-parameters"><i class="fa fa-check"></i><b>42.2.4</b> Interpreting the parameters</a></li>
 <li class="chapter" data-level="42.2.5" data-path="nestedregress.html"><a href="nestedregress.html#residual-plots-to-compare-fits"><i class="fa fa-check"></i><b>42.2.5</b> Residual plots to compare fits</a></li>
-<li class="chapter" data-level="42.2.6" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>42.2.6</b> Compare AIC</a></li>
-<li class="chapter" data-level="42.2.7" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>42.2.7</b> Other ways to compare models</a></li>
-<li class="chapter" data-level="42.2.8" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>42.2.8</b> Interpretation of this one replicate</a></li>
-<li class="chapter" data-level="42.2.9" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>42.2.9</b> Alternate analysis</a></li>
+<li class="chapter" data-level="42.2.6" data-path="nestedregress.html"><a href="nestedregress.html#f-test-for-model-comparison"><i class="fa fa-check"></i><b>42.2.6</b> F test for model comparison</a></li>
+<li class="chapter" data-level="42.2.7" data-path="nestedregress.html"><a href="nestedregress.html#compare-aic"><i class="fa fa-check"></i><b>42.2.7</b> Compare AIC</a></li>
+<li class="chapter" data-level="42.2.8" data-path="nestedregress.html"><a href="nestedregress.html#other-ways-to-compare-models"><i class="fa fa-check"></i><b>42.2.8</b> Other ways to compare models</a></li>
+<li class="chapter" data-level="42.2.9" data-path="nestedregress.html"><a href="nestedregress.html#interpretation-of-this-one-replicate"><i class="fa fa-check"></i><b>42.2.9</b> Interpretation of this one replicate</a></li>
+<li class="chapter" data-level="42.2.10" data-path="nestedregress.html"><a href="nestedregress.html#alternate-analysis"><i class="fa fa-check"></i><b>42.2.10</b> Alternate analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="42.3" data-path="nestedregress.html"><a href="nestedregress.html#summary-14"><i class="fa fa-check"></i><b>42.3</b> Summary</a></li>
 </ul></li>
@@ -966,11 +966,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="46.1.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#nfat-localization-within-smooth-muscle-cells"><i class="fa fa-check"></i><b>46.1.1</b> NFAT localization within smooth muscle cells</a></li>
 </ul></li>
-<li class="chapter" data-level="46.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>46.2</b> Data</a>
+<li class="chapter" data-level="46.2" data-path="mixedlogistic.html"><a href="mixedlogistic.html#data-2"><i class="fa fa-check"></i><b>46.2</b> Data</a></li>
+<li class="chapter" data-level="46.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#linear-model"><i class="fa fa-check"></i><b>46.3</b> Linear model</a>
 <ul>
-<li class="chapter" data-level="46.2.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>46.2.1</b> Inference</a></li>
+<li class="chapter" data-level="46.3.1" data-path="mixedlogistic.html"><a href="mixedlogistic.html#inference-2"><i class="fa fa-check"></i><b>46.3.1</b> Inference</a></li>
 </ul></li>
-<li class="chapter" data-level="46.3" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>46.3</b> Alternative analysis</a></li>
+<li class="chapter" data-level="46.4" data-path="mixedlogistic.html"><a href="mixedlogistic.html#alternative-analysis"><i class="fa fa-check"></i><b>46.4</b> Alternative analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="47" data-path="poissonreg.html"><a href="poissonreg.html"><i class="fa fa-check"></i><b>47</b> Poisson regression</a>
 <ul>
